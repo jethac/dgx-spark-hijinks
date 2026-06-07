@@ -229,3 +229,43 @@ Interpretation:
 - The QAT-unquantized snapshot loads and serves in vLLM with the same corrected batching setting.
 - It is not a direct quantized/NVFP4 serving row in this image. The engine config reported `quantization=None`, `dtype=torch.bfloat16`, and the same `TRITON Unquantized MoE` backend.
 - If the campaign needs to prove NVFP4 end-to-end impact, this snapshot name is not enough. The run must prove the actual quantization/backend path from logs or profiler evidence.
+
+## 2026-06-07: llama.cpp Gemma 4 26B Q4_0 Practical Serving Row
+
+Target:
+
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`
+- build: `308f61c31 (9536)`
+- model: `/home/jethac/gemma4-vllm/models/gemma-4-26B_q4_0-it.gguf`
+- alias: `gemma4-26b-q4_0-gguf`
+- settings: `--ctx-size 8192 --gpu-layers all --reasoning off`
+
+Artifacts:
+
+- smoke: `results/llamacpp_gemma4_26b_q4_0_chat_smoke_20260607T135911Z.json`
+- serving benchmark: `results/llamacpp_gemma4_26b_q4_0_compact_20260607T135911Z.json`
+- `llama-bench`: `results/llamacpp_gemma4_26b_q4_0_bench_20260607T135911Z.txt`
+- server log: `results/llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log`
+- `spark_doctor`: `results/spark_doctor_llamacpp_gemma4_26b_q4_0_20260607T135911Z.md`
+- logprobs probe: `results/gguf_logprobs_probe_llamacpp_b9536_reasoning_off_20260607T135911Z.json`
+
+Result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 0.107 | 0.939 | 76.94 |
+| `medium_decode` | 40 | 192 | 0.106 | 2.633 | 75.97 |
+
+`llama-bench`:
+
+| test | throughput |
+|---|---:|
+| `pp512` | 3021.76 +/- 34.41 tok/s |
+| `tg128` | 77.35 +/- 0.13 tok/s |
+
+Interpretation:
+
+- llama.cpp is now blessed as a practical single-Spark serving path for this GGUF model.
+- `--reasoning off` is required for normal OpenAI chat `message.content` output on this Gemma 4 server path.
+- Server logs confirm CUDA on `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, and `BLACKWELL_NATIVE_FP4 = 1`.
+- GGUF lm-eval accuracy remains blocked. The same server still exposes logprobs under `choices[0].logprobs.content`, not the `tokens` and `token_logprobs` shape expected by the existing lm-eval adapter.

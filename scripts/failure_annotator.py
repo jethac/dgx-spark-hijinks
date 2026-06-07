@@ -216,6 +216,29 @@ def json_annotations(path: Path) -> list[Annotation]:
                 },
             )
         )
+    elif data.get("schema") == "gguf-logprobs-probe/v1" and not data.get("ok"):
+        classification = data.get("classification") or {}
+        notes = classification.get("notes") or []
+        evidence = "; ".join(notes) or "GGUF logprobs probe returned ok=false"
+        failure_class, confidence, causes = classify_text(evidence)
+        if failure_class == "unknown_failure":
+            failure_class = "api_schema_mismatch"
+            confidence = "high"
+            causes = ["gguf_loglikelihood_adapter"]
+        annotations.append(
+            Annotation(
+                source=str(path),
+                source_type="gguf_logprobs_probe",
+                backend="llama.cpp",
+                model=(data.get("payload") or {}).get("model"),
+                status="probe_failed",
+                failure_class=failure_class,
+                confidence=confidence,
+                suspected_causes=causes,
+                evidence=evidence,
+                details=classification,
+            )
+        )
     return annotations
 
 

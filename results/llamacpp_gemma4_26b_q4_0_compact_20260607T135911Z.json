@@ -1,0 +1,118 @@
+{
+  "backend": "llamacpp-b9536-gemma4-26b-q4_0",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 387,
+      "content_preview": "A local AI workstation benefits from fast memory primarily because large-scale machine learning tasks are frequently bottlenecked by the speed at which data can be moved between the storage components and the processor. During model training and inference, the system must constantly shuttle massive datasets and complex weight matrices through the memory bus; if the memory bandwidth is",
+      "decode_s": 0.8318651000154205,
+      "decode_tok_s": 76.93555120753788,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780840776,
+        "id": "chatcmpl-eIzQkSFhRWWwjsI4b2VtuO4EtxpaNU3E",
+        "model": "gemma4-26b-q4_0-gguf",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "b9536-308f61c31",
+        "timings": {
+          "cache_n": 1,
+          "predicted_ms": 835.723,
+          "predicted_n": 64,
+          "predicted_per_second": 76.58039805055024,
+          "predicted_per_token_ms": 13.058171875,
+          "prompt_ms": 66.695,
+          "prompt_n": 27,
+          "prompt_per_second": 404.82794812204816,
+          "prompt_per_token_ms": 2.470185185185185
+        },
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "prompt_tokens_details": {
+            "cached_tokens": 1
+          },
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 0.9385108000133187,
+      "ttft_s": 0.10664569999789819,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "prompt_tokens_details": {
+          "cached_tokens": 1
+        },
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "content_chars": 864,
+      "content_preview": "**Engineering Note: Validation of LLM Kernel Execution**\n\n**Objective:** To verify that the LLM inference server is executing the intended optimized kernels (e.g., FlashAttention, PagedAttention, or custom Triton kernels) rather than falling back to generic PyTorch/CUDA implementations.\n\n### 1. Methodology\nValidation must occur at the hardware-software interface. Relying on application logs is insufficient, as they often report \"success\" without indicating the specific computational path taken. ",
+      "decode_s": 2.5273655999917537,
+      "decode_tok_s": 75.96843131861353,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780840779,
+        "id": "chatcmpl-XbW4VvLjSU1XLDgbaJQygw8pUH2klb9z",
+        "model": "gemma4-26b-q4_0-gguf",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "b9536-308f61c31",
+        "timings": {
+          "cache_n": 0,
+          "predicted_ms": 2527.652,
+          "predicted_n": 192,
+          "predicted_per_second": 75.95982358330973,
+          "predicted_per_token_ms": 13.164854166666666,
+          "prompt_ms": 81.978,
+          "prompt_n": 40,
+          "prompt_per_second": 487.9357876503452,
+          "prompt_per_token_ms": 2.0494499999999998
+        },
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 2.6329537999699824,
+      "ttft_s": 0.10558819997822866,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 232
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T13:59:40Z",
+  "model": "gemma4-26b-q4_0-gguf",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "llamacpp-gemma4-26b-q4_0-compact-20260607T135911Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T13:59:36Z",
+  "url": "http://thinkstationpgx-00b4:18082"
+}

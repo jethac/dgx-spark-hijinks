@@ -923,6 +923,58 @@
       "task": "arc_challenge"
     },
     {
+      "backend": "llama.cpp",
+      "confidence": "high",
+      "details": {
+        "has_choices": true,
+        "has_logprobs": true,
+        "has_token_logprobs": false,
+        "has_tokens": false,
+        "looks_lm_eval_compatible": false,
+        "notes": [
+          "logprobs object exists but does not expose both tokens and token_logprobs"
+        ]
+      },
+      "evidence": "logprobs object exists but does not expose both tokens and token_logprobs",
+      "failure_class": "api_schema_mismatch",
+      "model": "unused",
+      "returncode": null,
+      "row": null,
+      "source": "results\\gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json",
+      "source_type": "gguf_logprobs_probe",
+      "status": "probe_failed",
+      "suspected_causes": [
+        "gguf_loglikelihood_adapter"
+      ],
+      "task": null
+    },
+    {
+      "backend": "llama.cpp",
+      "confidence": "high",
+      "details": {
+        "has_choices": true,
+        "has_logprobs": true,
+        "has_token_logprobs": false,
+        "has_tokens": false,
+        "looks_lm_eval_compatible": false,
+        "notes": [
+          "logprobs object exists but does not expose both tokens and token_logprobs"
+        ]
+      },
+      "evidence": "logprobs object exists but does not expose both tokens and token_logprobs",
+      "failure_class": "api_schema_mismatch",
+      "model": "gemma4-26b-q4_0-gguf",
+      "returncode": null,
+      "row": null,
+      "source": "results\\gguf_logprobs_probe_llamacpp_b9536_reasoning_off_20260607T135911Z.json",
+      "source_type": "gguf_logprobs_probe",
+      "status": "probe_failed",
+      "suspected_causes": [
+        "gguf_loglikelihood_adapter"
+      ],
+      "task": null
+    },
+    {
       "backend": "sglang",
       "confidence": "medium",
       "details": {
@@ -1016,19 +1068,19 @@
       "task": null
     }
   ],
-  "count": 47,
+  "count": 49,
   "results_dir": "results",
   "schema": "spark-failure-annotations/v1",
   "summary": {
     "by_backend": {
       "hf": 4,
-      "llama.cpp": 29,
+      "llama.cpp": 31,
       "sglang": 1,
       "unknown": 4,
       "vllm": 9
     },
     "by_failure_class": {
-      "api_schema_mismatch": 29,
+      "api_schema_mismatch": 31,
       "configuration_error": 3,
       "invalid_or_empty_response": 1,
       "process_error": 9,

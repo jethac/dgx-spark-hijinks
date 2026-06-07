@@ -1,0 +1,10 @@
+run_id=llamacpp-serving-20260607T135911Z
+binary=/home/jethac/src/llama.cpp-b9536/build/bin/llama-server
+model=/home/jethac/gemma4-vllm/models/gemma-4-26B_q4_0-it.gguf
+alias=gemma4-26b-q4_0-gguf
+port=18082
+host=0.0.0.0
+ctx_size=8192
+gpu_layers=all
+reasoning=off
+started_utc=20260607T135911Z
