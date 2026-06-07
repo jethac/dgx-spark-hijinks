@@ -23,7 +23,7 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 10. GB10 SM count and memory tuning | partial | Hardware comparison keys include compute capability and SM count; scripts collect `multi_processor_count`. | Performance tuning and regression thresholds across model families remain mostly unproven. |
 | 11. Multi-Spark | missing | Single-unit assumption is documented. | No multi-Spark hardware or TP>1 validation. |
 | 12. Upstream forks/worktrees | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes. | No upstream PRs until matched before/after GB10 story is proven. |
-| 13. Public issue tracking | partial | GitHub issues track vLLM, SGLang, NVFP4, llama.cpp, Qwen, and benchmark protocol progress. | A recurring compatibility board or release-style status cadence is still missing. |
+| 13. Public issue tracking | partial | GitHub issues track vLLM, SGLang, NVFP4, llama.cpp, Qwen, and benchmark protocol progress; `docs/COMPATIBILITY_BOARD.md` now provides the recurring runtime/status board and live-proof queue. | Keep the board current as new rows land; a release-style cadence still needs ongoing maintenance, not just the first board. |
 
 ## Highest-Leverage Next Proofs
 

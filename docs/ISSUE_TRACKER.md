@@ -14,7 +14,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | llama.cpp / lm-eval GGUF accuracy | native loglikelihood adapter prototype and tiny JSONL task harness added; live llama-server proof pending | [#8](https://github.com/jethac/dgx-spark-hijinks/issues/8) |
 | HF fallback telemetry and containment | telemetry wrapper added | [#9](https://github.com/jethac/dgx-spark-hijinks/issues/9) |
 | single-machine benchmark redesign | smoke-suite orchestrator added; HF and MTP telemetry wrapped | [#10](https://github.com/jethac/dgx-spark-hijinks/issues/10) |
-| public recipes and blessed stack docs | vLLM/SGLang recipes now require build/JIT target audit paths | [#11](https://github.com/jethac/dgx-spark-hijinks/issues/11) |
+| public recipes and blessed stack docs | vLLM/SGLang recipes require build/JIT target audit paths; compatibility board added | [#11](https://github.com/jethac/dgx-spark-hijinks/issues/11) |
 | multi-Spark future work | blocked on hardware | [#12](https://github.com/jethac/dgx-spark-hijinks/issues/12) |
 | Spark-specific performance tuning | FlashInfer proxy null result recorded; SM-count-aware run keys added; serving-path tuning pending | [#13](https://github.com/jethac/dgx-spark-hijinks/issues/13) |
 | SGLang Spark runtime path | BF16 Qwen passed; Gemma E2B failed; NVFP4 tracked in #18 | [#14](https://github.com/jethac/dgx-spark-hijinks/issues/14) |

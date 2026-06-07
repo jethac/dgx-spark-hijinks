@@ -228,6 +228,10 @@
   - dry-run artifact: `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json`
   - validation: Python compile, task dry-run, no-server failure path, and `git diff --check` passed.
   - interpretation: this makes the next live GGUF accuracy proof one command after starting llama-server; it still does not prove paper-comparable GGUF accuracy until run against the server.
+- Added the public compatibility board.
+  - doc: `docs/COMPATIBILITY_BOARD.md`
+  - purpose: recurring runtime/status view covering vLLM, SGLang, llama.cpp, FlashInfer, LiteRT-LM, HF fallback, model lanes, live proof queue, and update cadence.
+  - interpretation: this closes the documentation gap where issues existed but there was no single compatibility board; maintaining it remains part of every future row update.
 
 ## First Benchmark Campaign Summary
 

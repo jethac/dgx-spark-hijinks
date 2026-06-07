@@ -17,6 +17,7 @@ Next vLLM proof lane: AEON Gemma is now locally reproduced; AEON Qwen3.6 NVFP4+D
 - Diagnosis: [docs/DGX_SPARK_DIAGNOSIS.md](docs/DGX_SPARK_DIAGNOSIS.md)
 - Full solution plan: [docs/DGX_SPARK_SOLUTIONS.md](docs/DGX_SPARK_SOLUTIONS.md)
 - Solution status: [docs/SOLUTIONS_STATUS.md](docs/SOLUTIONS_STATUS.md)
+- Compatibility board: [docs/COMPATIBILITY_BOARD.md](docs/COMPATIBILITY_BOARD.md)
 - Initial benchmark report: [docs/BENCHMARKING_REPORT.md](docs/BENCHMARKING_REPORT.md)
 - Problems encountered: [docs/GEMMA4_ON_DGX_SPARK.md](docs/GEMMA4_ON_DGX_SPARK.md)
 - GGUF/llama.cpp status: [docs/GGUF_LLAMA_CPP_STATUS.md](docs/GGUF_LLAMA_CPP_STATUS.md)
