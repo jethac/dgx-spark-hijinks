@@ -22,8 +22,8 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | LiteRT-LM on Spark | optional side runtime; CPU path proven; GPU chat crash open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | blessed for Gemma 4 26B Q4_0 and Qwen2.5 1.5B Q4_K_M serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | `jethac/sglang@98ad46961` clears SM12x FP4 KV gate and alias blockers; patched overlay shows 1.78x fp8 pool potential and can serve only with graph paths disabled at 0.276 tok/s; clean graph-compatible serving still pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
-| before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
-| Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 weights downloaded and `jethac/vllm@6804e1b` now carries AEON source fixes, but image pull/registration and host reachability still block vLLM serving | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
+| before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys and Qwen speed-lane runner added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
+| Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 weights downloaded and `jethac/vllm@6804e1b` now carries AEON source fixes; `scripts/qwen_speed_lane.py` now records already-running Qwen servers, but image pull/registration and host reachability still block vLLM serving | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 
 ## Triage Rules
 

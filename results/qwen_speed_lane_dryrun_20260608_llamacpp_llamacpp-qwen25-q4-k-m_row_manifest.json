@@ -1,0 +1,96 @@
+{
+  "artifacts": {
+    "chat_smoke": "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_chat_smoke.json",
+    "gguf_logprobs_probe": "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_gguf_logprobs_probe.json",
+    "openai_benchmark": "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_openai_benchmark.json",
+    "runtime_probe": "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_runtime_probe.json"
+  },
+  "backend": "llamacpp",
+  "commands": {
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:18082",
+        "--model",
+        "qwen25-1.5b-q4_k_m-gguf",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_chat_smoke.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.2179341
+    },
+    "gguf_logprobs_probe": {
+      "command": [
+        "python",
+        "scripts/gguf_logprobs_probe.py",
+        "--url",
+        "http://127.0.0.1:18082",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_gguf_logprobs_probe.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.2189326
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:18082",
+        "--model",
+        "qwen25-1.5b-q4_k_m-gguf",
+        "--backend",
+        "llamacpp",
+        "--phase",
+        "before",
+        "--run-id",
+        "qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_openai_benchmark.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.2179341
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:18082",
+        "--match",
+        "llama-server",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_runtime_probe.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.2179341
+    }
+  },
+  "dry_run": true,
+  "hardware": {},
+  "metadata": {
+    "attention_backend": "llama.cpp-cuda",
+    "container_digest": null,
+    "container_image": null,
+    "cuda_graph_mode": "enabled",
+    "kv_cache_dtype": "default",
+    "model_revision": null,
+    "quantization": "gguf-q4_k_m",
+    "runtime_ref": "llama.cpp 308f61c31"
+  },
+  "model": "qwen25-1.5b-q4_k_m-gguf",
+  "ok": true,
+  "phase": "before",
+  "run_id": "qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m",
+  "schema": "openai-serving-row-manifest/v1"
+}

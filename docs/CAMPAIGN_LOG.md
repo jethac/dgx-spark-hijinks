@@ -240,6 +240,12 @@
   - Qwen is the clean first lane for SM121a throughput, speculative decode, NVFP4 weights, and fp8-vs-NVFP4 KV capacity.
   - Gemma remains required for the original workload and harder model-family compatibility path.
   - llama.cpp Qwen2.5 GGUF evidence is now recorded in the llama.cpp serving recipe instead of being left as a stale template-only section.
+- Added a Qwen speed-lane runner.
+  - script: `scripts/qwen_speed_lane.py`
+  - sample rows: `tasks/qwen_speed_lane_sample.jsonl`
+  - dry-run artifact: `results/qwen_speed_lane_dryrun_20260608_summary.json`
+  - purpose: record already-running vLLM, SGLang, and llama.cpp Qwen servers through the shared `record_openai_serving_row.py` manifest path.
+  - interpretation: this does not replace the missing vLLM Qwen36 live result; it makes the next live Qwen campaign repeatable once the host and image acquisition are healthy.
 
 ## First Benchmark Campaign Summary
 

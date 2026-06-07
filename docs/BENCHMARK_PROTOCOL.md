@@ -90,6 +90,7 @@ python3 scripts/cuda_build_target_audit.py \
    - short prompt / short output
    - long prompt / short output
    - short prompt / long output
+   - for Qwen rows, prefer `scripts/qwen_speed_lane.py` with a JSONL row file so vLLM, SGLang, and llama.cpp evidence share the same manifest shape
 
 Example:
 

@@ -24,6 +24,7 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 11. Multi-Spark | missing | Single-unit assumption is documented. | No multi-Spark hardware or TP>1 validation. |
 | 12. Upstream forks/worktrees | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes. | No upstream PRs until matched before/after GB10 story is proven. |
 | 13. Public issue tracking | partial | GitHub issues track vLLM, SGLang, NVFP4, llama.cpp, Qwen, and benchmark protocol progress; `docs/COMPATIBILITY_BOARD.md` now provides the recurring runtime/status board and live-proof queue. | Keep the board current as new rows land; a release-style cadence still needs ongoing maintenance, not just the first board. |
+| 14. Qwen speed lane runner | partial | `scripts/qwen_speed_lane.py` and `tasks/qwen_speed_lane_sample.jsonl` can record already-running vLLM, SGLang, and llama.cpp Qwen servers through the shared row manifest wrapper. | Live GB10 run against all target servers, including vLLM Qwen36 NVFP4+DFlash once image acquisition is fixed. |
 
 ## Highest-Leverage Next Proofs
 
@@ -31,7 +32,8 @@ Live GB10 required:
 
 1. Reconnect to the host and finish AEON Qwen3.6 NVFP4+DFlash acquisition with `scripts/pull_container_with_evidence.sh`.
 2. If the image registers, run `scripts/run_aeon_vllm_reproduction.sh qwen36-dflash ...` with `RECORD=1`.
-3. Run a clean vLLM/SGLang fp8-vs-NVFP4 KV after-row with quality checks before blessing FP4 KV.
+3. Run `scripts/qwen_speed_lane.py --input tasks/qwen_speed_lane_sample.jsonl ...` against the live Qwen servers so vLLM, SGLang, and llama.cpp rows share one manifest shape.
+4. Run a clean vLLM/SGLang fp8-vs-NVFP4 KV after-row with quality checks before blessing FP4 KV.
 
 Offline or low-GPU work:
 

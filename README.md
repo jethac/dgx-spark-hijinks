@@ -120,6 +120,15 @@ python3 scripts/record_openai_serving_row.py \
   --server-log results/RUN_ID_server.log
 ```
 
+To record the required Qwen speed lane against already-running servers:
+
+```bash
+python3 scripts/qwen_speed_lane.py \
+  --input tasks/qwen_speed_lane_sample.jsonl \
+  --campaign-id qwen_speed_lane_RUN_ID \
+  --continue-on-error
+```
+
 To reproduce AEON-7's vLLM NVFP4+DFlash rows:
 
 ```bash
@@ -188,6 +197,7 @@ It is complete when the repo contains a tested, reproducible stack where:
 - the machine is identified as GB10 / `sm_121`
 - the installed stack is ARM64 + CUDA 13 compatible
 - vLLM can serve a Gemma-class model without dependency surgery
+- Qwen speed/capacity rows exist for the runtime paths being claimed
 - SGLang and LiteRT-LM have explicit go/no-go decisions
 - llama.cpp GGUF throughput and lm-eval accuracy paths are separated and validated
 - HF fallback failures include memory/process telemetry

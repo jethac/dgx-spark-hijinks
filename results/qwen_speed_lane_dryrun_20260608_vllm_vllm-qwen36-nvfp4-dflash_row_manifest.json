@@ -1,0 +1,98 @@
+{
+  "artifacts": {
+    "chat_smoke": "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_chat_smoke.json",
+    "cuda_so_audit": "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_cuda_so_audit.json",
+    "openai_benchmark": "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_openai_benchmark.json",
+    "runtime_probe": "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_runtime_probe.json"
+  },
+  "backend": "vllm",
+  "commands": {
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_chat_smoke.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.0374615
+    },
+    "cuda_so_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_so_audit.py",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_cuda_so_audit.json",
+        "--package",
+        "vllm",
+        "--package",
+        "flashinfer"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.0384583
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4",
+        "--backend",
+        "vllm",
+        "--phase",
+        "after",
+        "--run-id",
+        "qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_openai_benchmark.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.0374615
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--match",
+        "vllm",
+        "--output",
+        "results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_runtime_probe.json"
+      ],
+      "dry_run": true,
+      "ok": true,
+      "returncode": null,
+      "started_unix": 1780868803.0384583
+    }
+  },
+  "dry_run": true,
+  "hardware": {},
+  "metadata": {
+    "attention_backend": "flash_attn",
+    "container_digest": null,
+    "container_image": "ghcr.io/aeon-7/vllm-spark-omni-q36:v2",
+    "cuda_graph_mode": "enabled",
+    "kv_cache_dtype": "auto",
+    "model_revision": null,
+    "quantization": "nvfp4",
+    "runtime_ref": null
+  },
+  "model": "AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4",
+  "ok": true,
+  "phase": "after",
+  "run_id": "qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash",
+  "schema": "openai-serving-row-manifest/v1"
+}

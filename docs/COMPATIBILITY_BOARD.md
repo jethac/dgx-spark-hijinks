@@ -63,6 +63,17 @@ scripts/run_aeon_vllm_reproduction.sh \
   qwen36-dflash aeon_qwen36_dflash_YYYYMMDDTHHMMJST
 ```
 
+### Qwen Speed Lane
+
+After the target Qwen servers are already running:
+
+```bash
+python3 scripts/qwen_speed_lane.py \
+  --input tasks/qwen_speed_lane_sample.jsonl \
+  --campaign-id qwen_speed_lane_YYYYMMDDTHHMMJST \
+  --continue-on-error
+```
+
 ### llama.cpp Native Loglikelihood
 
 After starting the target llama-server:
