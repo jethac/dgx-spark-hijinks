@@ -276,6 +276,11 @@
   - sample artifact: `results/nvfp4_checkpoint_audit_sample_20260608.json`
   - purpose: classify compressed-tensors versus ModelOpt NVFP4 markers, flag quantized router/vision/visual tensors, and check Gemma EOS/control-token metadata without loading tensor data or using GPU time.
   - interpretation: this does not prove a live Qwen or Gemma speed row; it prevents future NVFP4-weight serving or GGUF conversion rows from silently using a bad checkpoint format.
+- Added a counterpart evidence audit for AEON-derived non-vLLM work.
+  - script: `scripts/counterpart_evidence_audit.py`
+  - artifact: `results/counterpart_evidence_audit_20260608.json`
+  - result: all seven counterpart proof rows are still missing, partial, or blocked: SGLang Gemma NVFP4 ordinary-KV serving, SGLang clean FP4-KV after-row, SGLang DFlash/EAGLE Qwen, vLLM Qwen3.6 NVFP4+DFlash serving, larger Qwen llama.cpp GGUF, llama.cpp native FP4 GGUF, and live llama.cpp loglikelihood.
+  - interpretation: AEON source-port coverage is useful but does not satisfy the SGLang/llama.cpp counterpart acceptance tests.
 
 ## First Benchmark Campaign Summary
 

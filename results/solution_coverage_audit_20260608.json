@@ -65,7 +65,7 @@
       "plan_ids": [
         "8"
       ],
-      "status": "native loglikelihood adapter prototype and tiny JSONL task harness added; live llama-server proof pending"
+      "status": "native loglikelihood adapter prototype and tiny JSONL task harness added; counterpart audit keeps live llama-server proof pending"
     },
     {
       "area": "HF fallback telemetry and containment",
@@ -124,7 +124,7 @@
         "14",
         "14a"
       ],
-      "status": "FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed; vLLM Qwen branch advanced to AEON source patch coverage; AEON port map added for SGLang/llama.cpp counterpart decisions"
+      "status": "FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed; vLLM Qwen branch advanced to AEON source patch coverage; AEON port map and counterpart evidence audit added for SGLang/llama.cpp decisions"
     },
     {
       "area": "LiteRT-LM on Spark",

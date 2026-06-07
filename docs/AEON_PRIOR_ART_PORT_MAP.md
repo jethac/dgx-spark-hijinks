@@ -32,6 +32,15 @@ python3 scripts/aeon_prior_art_audit.py \
 
 Current validation artifact: `results/aeon_prior_art_audit_20260608.json`.
 
+Use the counterpart evidence audit to keep source-marker checks separate from live proof:
+
+```bash
+python3 scripts/counterpart_evidence_audit.py \
+  --output results/counterpart_evidence_audit_YYYYMMDD.json
+```
+
+Current validation artifact: `results/counterpart_evidence_audit_20260608.json`. It intentionally reports all seven counterpart proof rows as missing, partial, or blocked; AEON source coverage is not the same thing as SGLang/llama.cpp serving evidence.
+
 ## Literal AEON Qwen Patch Inventory
 
 | AEON patch | purpose | current vLLM status | SGLang counterpart | llama.cpp counterpart |
@@ -71,6 +80,8 @@ AEON's DFlash result is the main single-stream multiplier, but the port story is
 5. llama.cpp larger Qwen3/Qwen3.6 GGUF rows.
 6. llama.cpp native NVFP4/MXFP4 GGUF tensor-core proof, separate from Q4_0/Q4_K serving.
 7. llama.cpp live native loglikelihood task proof before paper-comparable GGUF accuracy claims.
+
+These seven rows are now mechanically tracked by `scripts/counterpart_evidence_audit.py`.
 
 ## Explicit Non-Ports
 

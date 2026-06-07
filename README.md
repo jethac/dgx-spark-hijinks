@@ -163,6 +163,13 @@ python3 scripts/solution_coverage_audit.py \
   --output results/solution_coverage_audit_RUN_ID.json
 ```
 
+To audit whether AEON-derived SGLang/llama.cpp counterpart evidence has actual live artifacts yet:
+
+```bash
+python3 scripts/counterpart_evidence_audit.py \
+  --output results/counterpart_evidence_audit_RUN_ID.json
+```
+
 To reproduce AEON-7's vLLM NVFP4+DFlash rows:
 
 ```bash

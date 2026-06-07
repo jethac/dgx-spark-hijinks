@@ -1,0 +1,316 @@
+{
+  "all_claim_ready": false,
+  "claim_ready_count": 0,
+  "missing_or_partial": [
+    "sglang_gemma_nvfp4_ordinary_kv",
+    "sglang_clean_fp4_kv_after_row",
+    "sglang_dflash_or_eagle_qwen",
+    "vllm_qwen36_nvfp4_dflash",
+    "llamacpp_larger_qwen_gguf",
+    "llamacpp_native_fp4_gguf",
+    "llamacpp_live_loglikelihood"
+  ],
+  "missing_or_partial_count": 7,
+  "repo_root": ".",
+  "requirement_count": 7,
+  "requirements": [
+    {
+      "acceptance": "SGLang serves a Gemma NVFP4-weight checkpoint with BF16/fp8 ordinary KV, deterministic output sanity, backend logs, and row manifest.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/sglang*gemma*nvfp4*row_manifest.json",
+            "results/sglang*gemma*nvfp4*openai_benchmark.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/sglang*gemma*nvfp4*checkpoint_audit.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [],
+      "model_family": "gemma",
+      "name": "sglang_gemma_nvfp4_ordinary_kv",
+      "partial_matches": [
+        "results/sglang_gemma4_e2b_w4a16_20260607T121536Z_health_status.txt",
+        "results/sglang_gemma4_e2b_w4a16_20260607T121536Z_server.log",
+        "results/sglang_gemma4_e2b_w4a16_language_only_20260607T121751Z_health_status.txt",
+        "results/sglang_gemma4_e2b_w4a16_language_only_20260607T121751Z_server.log"
+      ],
+      "runtime": "sglang",
+      "status": "partial-evidence-only",
+      "title": "SGLang Gemma NVFP4-weight serving with ordinary KV"
+    },
+    {
+      "acceptance": "Clean fork/container SGLang FP4 KV row serves with graphs or a justified graph policy, quality check, fp8 comparator, and row manifest.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/sglang*fp4kv*row_manifest.json",
+            "results/sglang*fp4_e2m1*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [
+            "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json"
+          ],
+          "ok": false,
+          "patterns": [
+            "results/sglang*fp4kv*openai_benchmark.json",
+            "results/sglang*fp4_e2m1*openai_benchmark.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [
+        "_patched_",
+        "_nograph",
+        "_nographs",
+        "_startup"
+      ],
+      "ignored_claim_matches": [
+        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json"
+      ],
+      "model_family": "qwen",
+      "name": "sglang_clean_fp4_kv_after_row",
+      "partial_matches": [
+        "results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md",
+        "results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md",
+        "results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md",
+        "results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log",
+        "results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log",
+        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_20260608T0352JST_startup.log",
+        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nograph_20260608T0400JST_startup.log",
+        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json",
+        "results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log"
+      ],
+      "runtime": "sglang",
+      "status": "partial-evidence-only",
+      "title": "SGLang graph-compatible FP4 KV after-row"
+    },
+    {
+      "acceptance": "SGLang Qwen-class speculative row records target/drafter, accepted-draft metrics, quality, and speed against a non-speculative comparator.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/sglang*dflash*row_manifest.json",
+            "results/sglang*eagle*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/sglang*nodflash*row_manifest.json",
+            "results/sglang*baseline*row_manifest.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [],
+      "model_family": "qwen",
+      "name": "sglang_dflash_or_eagle_qwen",
+      "partial_matches": [
+        "results/aeon_prior_art_audit_20260608.json"
+      ],
+      "runtime": "sglang",
+      "status": "partial-evidence-only",
+      "title": "SGLang DFlash/EAGLE Qwen counterpart"
+    },
+    {
+      "acceptance": "AEON Qwen3.6 NVFP4+DFlash or matched jethac/vLLM row starts, serves, records backend/DFlash evidence, and captures a serving manifest.",
+      "blocked_matches": [
+        "results/aeon_qwen36_dflash_20260608T0501JST_summary.md",
+        "results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md"
+      ],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [
+            "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
+          ],
+          "ok": false,
+          "patterns": [
+            "results/*qwen36*dflash*row_manifest.json",
+            "results/*qwen3.6*dflash*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/*qwen36*dflash*openai_benchmark.json",
+            "results/*qwen3.6*dflash*openai_benchmark.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [
+        "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
+      ],
+      "model_family": "qwen",
+      "name": "vllm_qwen36_nvfp4_dflash",
+      "partial_matches": [
+        "results/aeon_qwen36_dflash_20260608T0501JST_summary.md",
+        "results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md",
+        "results/vllm_aeon_qwen_patch_port_20260608T0619JST.md"
+      ],
+      "runtime": "vllm",
+      "status": "blocked-or-stop-point",
+      "title": "vLLM Qwen3.6 NVFP4+DFlash local serving row"
+    },
+    {
+      "acceptance": "llama.cpp serves a Qwen3/Qwen3.6-class GGUF with build-target evidence, llama-bench, OpenAI smoke, and row manifest.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp*qwen3*row_manifest.json",
+            "results/llamacpp*qwen36*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp*qwen3*llama_bench.txt",
+            "results/llamacpp*qwen36*llama_bench.txt"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [],
+      "model_family": "qwen",
+      "name": "llamacpp_larger_qwen_gguf",
+      "partial_matches": [
+        "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_openai_benchmark.json",
+        "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json"
+      ],
+      "runtime": "llamacpp",
+      "status": "partial-evidence-only",
+      "title": "llama.cpp larger Qwen3/Qwen3.6 GGUF row"
+    },
+    {
+      "acceptance": "NVFP4/MXFP4 GGUF model uses a native FP4 path with build-target and runtime dispatch proof, separate from Q4_0/Q4_K practical serving.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp*nvfp4*row_manifest.json",
+            "results/llamacpp*mxfp4*row_manifest.json",
+            "results/llamacpp*native_fp4*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp*nvfp4*build_target_audit.json",
+            "results/llamacpp*mxfp4*build_target_audit.json",
+            "results/llamacpp*native_fp4*build_target_audit.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [],
+      "model_family": "qwen_or_gemma",
+      "name": "llamacpp_native_fp4_gguf",
+      "partial_matches": [
+        "results/llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log",
+        "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json",
+        "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log"
+      ],
+      "runtime": "llamacpp",
+      "status": "partial-evidence-only",
+      "title": "llama.cpp native NVFP4/MXFP4 GGUF tensor-core proof"
+    },
+    {
+      "acceptance": "Native llama.cpp loglikelihood probe and tiny JSONL task run against a live server and prove arbitrary continuation-token logprobs.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
+            "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json"
+          ],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp_native_loglikelihood_probe_*.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
+          ],
+          "ok": false,
+          "patterns": [
+            "results/llamacpp_native_loglikelihood_task_*.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [
+        "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
+        "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
+        "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
+      ],
+      "model_family": "qwen_or_gemma",
+      "name": "llamacpp_live_loglikelihood",
+      "partial_matches": [
+        "results/gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json",
+        "results/gguf_logprobs_probe_llamacpp_b9536_reasoning_off_20260607T135911Z.json",
+        "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
+        "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
+        "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json",
+        "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_gguf_logprobs_probe.json"
+      ],
+      "runtime": "llamacpp",
+      "status": "partial-evidence-only",
+      "title": "llama.cpp live native loglikelihood task proof"
+    }
+  ],
+  "schema": "counterpart-evidence-audit/v1"
+}
