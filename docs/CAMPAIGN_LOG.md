@@ -210,6 +210,12 @@
   - artifact: `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`
   - blocker: the `v2` pull had been started and partially observed, but the GB10 host later stopped answering SSH and ping before final pull status could be inspected.
   - interpretation: Qwen speed remains a required benchmark lane alongside Gemma; this stop point is an acquisition/reachability failure, not a Qwen model/runtime/kernel result.
+- Advanced the vLLM Qwen/DFlash branch to cover the remaining AEON source patches that apply to the current fork.
+  - fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+  - artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
+  - changes: Qwen3.5/3.6 text registry entries, hybrid KV `block_size=None` safety, Mamba block-size fallback, and text-only M-RoPE fallback, on top of the existing lazy import and CUDA graph alignment fixes.
+  - validation: Python compile and `git diff --check` passed; targeted pytest is blocked by missing local vLLM test dependency `tblib`.
+  - interpretation: the fork is closer to the AEON Qwen runtime shape, but it is still not a Qwen speed result. The required next benchmark is still AEON Qwen36 NVFP4+DFlash serving, then a matched `jethac` fork row.
 
 ## First Benchmark Campaign Summary
 

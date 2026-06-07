@@ -28,6 +28,13 @@ Then test our forked stack:
 - `jethac/flashinfer` with SM121 `mm_fp4` dispatch and FA2 NVFP4-KV stride/page/deswizzle changes
 - paired fp8-vs-NVFP4 KV runs on the same model, prompts, context length, memory fraction, graph mode, and concurrency
 
+Current vLLM fork stop point:
+
+- branch: `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a`
+- commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- source coverage: AEON lazy import fallback, CUDA graph alignment, Qwen3.5/3.6 text registry, hybrid KV `block_size=None` handling, Mamba block-size fallback, and text-only M-RoPE fallback
+- artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
+
 Current local setup:
 
 - `scripts/run_aeon_vllm_reproduction.sh qwen36-dflash RUN_ID` records the AEON Qwen reproduction row when `RECORD=1`.

@@ -62,16 +62,21 @@ All four required HF repos are public and non-gated from the GB10 host:
 
 ## Patch Triage
 
-The `jethac/vllm` branch `spark/hijinks-020-aeon-qwen-dflash-sm121a` already carries the two high-confidence general AEON fixes:
+The `jethac/vllm` branch `spark/hijinks-020-aeon-qwen-dflash-sm121a` carries the AEON Qwen source fixes that apply cleanly to the current fork:
 
 - guarded lazy fallback import for `_C_stable_libtorch` in `vllm/platforms/cuda.py`
 - speculative-decode CUDA graph capture-size alignment for every non-`NONE` graph mode in `vllm/config/compilation.py`
-
-Remaining AEON Qwen patch candidates are narrower and should be gated by a failing local reproduction before porting:
-
-- Qwen hybrid/Mamba `block_size=None` safety in `vllm/v1/core/kv_cache_utils.py`, `vllm/v1/engine/core.py`, `vllm/v1/worker/gpu_model_runner.py`, and `vllm/model_executor/layers/mamba/abstract.py`
-- text-only Qwen3.5/3.6 registry entries in `vllm/model_executor/models/registry.py`
+- Qwen3.5/3.6 text-only registry entries in `vllm/model_executor/models/registry.py`
+- hybrid KV cache `block_size=None` safety in `vllm/v1/engine/core.py` and `vllm/v1/worker/gpu_model_runner.py`
+- Mamba block-size fallback in `vllm/model_executor/layers/mamba/abstract.py`
 - text-only M-RoPE fallback in `vllm/v1/worker/gpu_model_runner.py`
+
+Current fork evidence:
+
+- first patch artifact: `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md`
+- full AEON Qwen source-port artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
+- fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- limitation: this is source verification only; GB10 Qwen3.6 NVFP4+DFlash serving remains pending
 
 The old Qwen `language_model.` prefix stripping is a model-conversion helper, not a vLLM source patch for the current AEON v2 multimodal weights.
 
