@@ -21,6 +21,7 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
+- Upstream latest release audit: [docs/UPSTREAM_LATEST_RELEASE_AUDIT.md](docs/UPSTREAM_LATEST_RELEASE_AUDIT.md)
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
 - PyTorch sm121 support: [docs/PYTORCH_SM121_SUPPORT.md](docs/PYTORCH_SM121_SUPPORT.md)
 
