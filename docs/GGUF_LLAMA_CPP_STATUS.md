@@ -102,6 +102,19 @@ python3 scripts/llamacpp_native_loglikelihood_probe.py \
 
 The probe deliberately tests both a likely continuation and an unlikely continuation. Recovering only the generated top token is not enough for lm-eval.
 
+The probe now also accepts explicit context/continuation pairs and emits an lm-eval-shaped tuple:
+
+```bash
+python3 scripts/llamacpp_native_loglikelihood_probe.py \
+  --url http://127.0.0.1:8080 \
+  --n-probs 512 \
+  --pair 'The capital of Japan is||| Tokyo' \
+  --pair 'The capital of Japan is||| zebra' \
+  --output results/llamacpp_native_loglikelihood_probe_pairs.json
+```
+
+For each pair, `target_logprob_sum` is the sum over continuation-token logprobs and `all_tokens_greedy` is the greedy-match boolean needed by an lm-eval-style loglikelihood adapter. Artifact `results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json` proves the parser/classifier logic locally, but it is not live server proof.
+
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 
 ## Practical Serving Note

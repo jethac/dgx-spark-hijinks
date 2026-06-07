@@ -88,35 +88,163 @@ def find_token_logprob(entries: list[dict[str, Any]], token_id: int) -> float | 
     return None
 
 
+def token_list(value: Any) -> list[int]:
+    if not isinstance(value, list):
+        return []
+    try:
+        return token_ids({"tokens": value})
+    except ValueError:
+        return []
+
+
+def top_token_id(entries: list[dict[str, Any]]) -> int | None:
+    if not entries:
+        return None
+    value = entries[0].get("id")
+    return value if isinstance(value, int) else None
+
+
 def classify(results: list[dict[str, Any]]) -> dict[str, Any]:
     all_scored = bool(results) and all(item.get("target_found") for item in results)
     has_unlikely = any(item.get("case") == "unlikely" for item in results)
     unlikely_scored = any(
         item.get("case") == "unlikely" and item.get("target_found") for item in results
     )
+    all_greedy_known = bool(results) and all(
+        item.get("all_tokens_greedy") is not None for item in results
+    )
     notes = []
     if not all_scored:
         notes.append(
             "native endpoint returns top-N probabilities; lm-eval needs every continuation token"
         )
+    if not has_unlikely:
+        notes.append(
+            "no explicit unlikely-continuation case was provided; arbitrary-token coverage is weaker"
+        )
     return {
         "all_targets_scored": all_scored,
         "unlikely_target_scored": unlikely_scored,
-        "looks_lm_eval_candidate": all_scored and has_unlikely and unlikely_scored,
+        "all_greedy_known": all_greedy_known,
+        "looks_lm_eval_candidate": all_scored
+        and (not has_unlikely or unlikely_scored),
         "notes": notes,
     }
+
+
+def score_case(
+    case_name: str,
+    context: str,
+    continuation: str,
+    tokenize_url: str,
+    completion_url: str,
+    n_probs: int,
+    timeout: int,
+) -> dict[str, Any]:
+    context_response = post_json(
+        tokenize_url,
+        {
+            "content": context,
+            "add_special": True,
+            "with_pieces": True,
+        },
+        timeout,
+    )
+    continuation_response = post_json(
+        tokenize_url,
+        {
+            "content": continuation,
+            "add_special": False,
+            "with_pieces": True,
+        },
+        timeout,
+    )
+    context_tokens = token_ids(context_response)
+    continuation_tokens = token_ids(continuation_response)
+    scored_tokens: list[dict[str, Any]] = []
+    previous: list[int] = []
+
+    for index, target_id in enumerate(continuation_tokens):
+        payload = {
+            "prompt": context_tokens + previous,
+            "n_predict": 1,
+            "n_probs": n_probs,
+            "return_tokens": True,
+            "temperature": -1,
+            "cache_prompt": False,
+        }
+        completion_response = post_json(completion_url, payload, timeout)
+        entries = extract_top_entries(completion_response)
+        logprob = find_token_logprob(entries, target_id)
+        generated_tokens = token_list(completion_response.get("tokens"))
+        top_id = top_token_id(entries)
+        greedy_match = (
+            target_id == generated_tokens[0]
+            if generated_tokens
+            else target_id == top_id
+        )
+        scored_tokens.append(
+            {
+                "index": index,
+                "target_id": target_id,
+                "target_found": logprob is not None,
+                "target_logprob": logprob,
+                "target_is_greedy": greedy_match,
+                "top_token_id": top_id,
+                "top_entry_count": len(entries),
+                "generated_tokens": completion_response.get("tokens"),
+            }
+        )
+        previous.append(target_id)
+
+    target_found = all(item["target_found"] for item in scored_tokens)
+    target_logprob_sum = (
+        sum(float(item["target_logprob"]) for item in scored_tokens)
+        if target_found
+        else None
+    )
+    all_tokens_greedy = (
+        all(bool(item["target_is_greedy"]) for item in scored_tokens)
+        if scored_tokens
+        else None
+    )
+    return {
+        "case": case_name,
+        "context": context,
+        "continuation": continuation,
+        "context_tokens": context_response.get("tokens"),
+        "continuation_tokens": continuation_response.get("tokens"),
+        "target_found": target_found,
+        "target_logprob_sum": target_logprob_sum,
+        "all_tokens_greedy": all_tokens_greedy,
+        "lm_eval_loglikelihood_tuple": [target_logprob_sum, all_tokens_greedy],
+        "scored_tokens": scored_tokens,
+    }
+
+
+def parse_pairs(args: argparse.Namespace) -> list[tuple[str, str, str]]:
+    if not args.pair:
+        return [
+            ("likely", args.context, args.likely_continuation),
+            ("unlikely", args.context, args.unlikely_continuation),
+        ]
+
+    cases: list[tuple[str, str, str]] = []
+    for index, raw in enumerate(args.pair, start=1):
+        parts = raw.split("|||", 1)
+        if len(parts) != 2:
+            raise ValueError("--pair must be formatted as CONTEXT|||CONTINUATION")
+        cases.append((f"pair_{index}", parts[0], parts[1]))
+    return cases
 
 
 def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     base_url = args.url.rstrip("/")
     tokenize_url = base_url + "/tokenize"
     completion_url = base_url + "/completion"
-    cases = [
-        ("likely", args.context, args.likely_continuation),
-        ("unlikely", args.context, args.unlikely_continuation),
-    ]
+    cases = parse_pairs(args)
     report: dict[str, Any] = {
-        "schema": "llamacpp-native-loglikelihood-probe/v1",
+        "schema": "llamacpp-native-loglikelihood-probe/v2",
         "tokenize_endpoint": tokenize_url,
         "completion_endpoint": completion_url,
         "n_probs": args.n_probs,
@@ -125,62 +253,16 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     }
 
     for case_name, context, continuation in cases:
-        context_response = post_json(
-            tokenize_url,
-            {
-                "content": context,
-                "add_special": True,
-                "with_pieces": True,
-            },
-            args.timeout,
-        )
-        continuation_response = post_json(
-            tokenize_url,
-            {
-                "content": continuation,
-                "add_special": False,
-                "with_pieces": True,
-            },
-            args.timeout,
-        )
-        context_tokens = token_ids(context_response)
-        continuation_tokens = token_ids(continuation_response)
-        scored_tokens: list[dict[str, Any]] = []
-        previous: list[int] = []
-        for index, target_id in enumerate(continuation_tokens):
-            payload = {
-                "prompt": context_tokens + previous,
-                "n_predict": 1,
-                "n_probs": args.n_probs,
-                "return_tokens": True,
-                "temperature": -1,
-                "cache_prompt": False,
-            }
-            completion_response = post_json(completion_url, payload, args.timeout)
-            entries = extract_top_entries(completion_response)
-            logprob = find_token_logprob(entries, target_id)
-            scored_tokens.append(
-                {
-                    "index": index,
-                    "target_id": target_id,
-                    "target_found": logprob is not None,
-                    "target_logprob": logprob,
-                    "top_entry_count": len(entries),
-                    "generated_tokens": completion_response.get("tokens"),
-                }
-            )
-            previous.append(target_id)
-        target_found = all(item["target_found"] for item in scored_tokens)
         report["cases"].append(
-            {
-                "case": case_name,
-                "context": context,
-                "continuation": continuation,
-                "context_tokens": context_response.get("tokens"),
-                "continuation_tokens": continuation_response.get("tokens"),
-                "target_found": target_found,
-                "scored_tokens": scored_tokens,
-            }
+            score_case(
+                case_name,
+                context,
+                continuation,
+                tokenize_url,
+                completion_url,
+                args.n_probs,
+                args.timeout,
+            )
         )
 
     report["classification"] = classify(report["cases"])
@@ -206,8 +288,16 @@ def run_self_test() -> dict[str, Any]:
         == -7.5,
         "missing_extract": find_token_logprob(extract_top_entries(missing_response), 202)
         is None,
+        "top_token_id": top_token_id(extract_top_entries(good_response)) == 101,
+        "token_list": token_list([{"id": 10}, {"id": 11}]) == [10, 11],
         "tokenize_ints": token_ids({"tokens": [1, 2, 3]}) == [1, 2, 3],
         "tokenize_objects": token_ids({"tokens": [{"id": 1}, {"id": 2}]}) == [1, 2],
+        "classify_default": classify(
+            [
+                {"case": "likely", "target_found": True, "all_tokens_greedy": True},
+                {"case": "unlikely", "target_found": True, "all_tokens_greedy": False},
+            ]
+        )["looks_lm_eval_candidate"],
     }
     return {
         "schema": "llamacpp-native-loglikelihood-probe-self-test/v1",
@@ -224,6 +314,11 @@ def main() -> int:
     parser.add_argument("--context", default="The capital of Japan is")
     parser.add_argument("--likely-continuation", default=" Tokyo")
     parser.add_argument("--unlikely-continuation", default=" zebra")
+    parser.add_argument(
+        "--pair",
+        action="append",
+        help="Score an explicit CONTEXT|||CONTINUATION pair. Can be repeated.",
+    )
     parser.add_argument("--output")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
@@ -233,7 +328,7 @@ def main() -> int:
         report = run_self_test() if args.self_test else run_probe(args)
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ValueError) as exc:
         report = {
-            "schema": "llamacpp-native-loglikelihood-probe/v1",
+            "schema": "llamacpp-native-loglikelihood-probe/v2",
             "ok": False,
             "error": repr(exc),
         }

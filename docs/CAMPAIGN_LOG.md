@@ -216,6 +216,12 @@
   - changes: Qwen3.5/3.6 text registry entries, hybrid KV `block_size=None` safety, Mamba block-size fallback, and text-only M-RoPE fallback, on top of the existing lazy import and CUDA graph alignment fixes.
   - validation: Python compile and `git diff --check` passed; targeted pytest is blocked by missing local vLLM test dependency `tblib`.
   - interpretation: the fork is closer to the AEON Qwen runtime shape, but it is still not a Qwen speed result. The required next benchmark is still AEON Qwen36 NVFP4+DFlash serving, then a matched `jethac` fork row.
+- Extended the llama.cpp native loglikelihood probe toward a GGUF lm-eval adapter.
+  - script: `scripts/llamacpp_native_loglikelihood_probe.py`
+  - artifact: `results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json`
+  - changes: explicit `--pair CONTEXT|||CONTINUATION` scoring, continuation-token logprob summation, greedy-match metadata, and an `lm_eval_loglikelihood_tuple` field.
+  - validation: Python compile and self-test passed.
+  - interpretation: this is adapter-shape readiness only. GGUF accuracy is still blocked until the native probe passes against a live llama-server and a tiny lm-eval task.
 
 ## First Benchmark Campaign Summary
 
