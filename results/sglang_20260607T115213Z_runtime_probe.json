@@ -1,0 +1,177 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 0 %"
+    }
+  },
+  "finished_utc": "2026-06-07T11:58:30Z",
+  "match": "sglang",
+  "packages": {
+    "flashinfer": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.11.post2"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/torch/__init__.py",
+      "version": "2.11.0+cu130"
+    },
+    "transformers": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/transformers/__init__.py",
+      "version": "5.10.2"
+    },
+    "triton": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/triton/__init__.py",
+      "version": "3.6.0"
+    },
+    "vllm": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/__init__.py",
+      "version": "0.22.1"
+    }
+  },
+  "pids": [
+    414639,
+    414960,
+    414961
+  ],
+  "platform": {
+    "executable": "/home/jethac/gemma4-evals/.venv/bin/python",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "python3",
+        "-m",
+        "sglang.launch_server",
+        "--model-path",
+        "Qwen/Qwen2.5-1.5B-Instruct",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "30000",
+        "--tp",
+        "1",
+        "--dtype",
+        "bfloat16",
+        "--mem-fraction-static",
+        "0.20"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 414639,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "python3",
+        "PPid": "414616",
+        "Pid": "414639",
+        "State": "S (sleeping)",
+        "Tgid": "414639",
+        "Threads": "71",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1288716 kB",
+        "VmRSS": "1048444 kB",
+        "VmSize": "23689328 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::scheduler"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 414960,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::schedul",
+        "PPid": "414639",
+        "Pid": "414960",
+        "State": "R (running)",
+        "Tgid": "414960",
+        "Threads": "118",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "4682684 kB",
+        "VmRSS": "3740264 kB",
+        "VmSize": "40863028 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::detokenizer"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 414961,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::detoken",
+        "PPid": "414639",
+        "Pid": "414961",
+        "State": "S (sleeping)",
+        "Tgid": "414961",
+        "Threads": "43",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1140544 kB",
+        "VmRSS": "952908 kB",
+        "VmSize": "23713488 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780833510,
+          "id": "Qwen/Qwen2.5-1.5B-Instruct",
+          "max_model_len": 32768,
+          "object": "model",
+          "owned_by": "sglang",
+          "parent": null,
+          "root": "Qwen/Qwen2.5-1.5B-Instruct"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-07T11:58:26Z",
+  "url": "http://127.0.0.1:30000"
+}

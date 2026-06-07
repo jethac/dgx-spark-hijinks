@@ -1,0 +1,95 @@
+W0607 11:58:35.405000 712 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0607 11:58:35.416000 712 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+{
+  "cuobjdump": "/usr/local/cuda/bin/cuobjdump",
+  "inputs": {
+    "packages": [
+      "sglang",
+      "sgl_kernel",
+      "flashinfer"
+    ],
+    "paths": []
+  },
+  "objects": [
+    {
+      "architectures": [
+        "sm_80",
+        "sm_86",
+        "sm_90a"
+      ],
+      "path": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/flash_ops.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: flash_ops.abi3.1.sm_90a.cubin\nELF file    2: flash_ops.abi3.2.sm_80.cubin\nELF file    3: flash_ops.abi3.3.sm_86.cubin\nELF file    4: flash_ops.abi3.4.sm_90a.cubin\nELF file    5: flash_ops.abi3.5.sm_80.cubin\nELF file    6: flash_ops.abi3.6.sm_86.cubin\nELF file    7: flash_ops.abi3.7.sm_90a.cubin\nELF file    8: flash_ops.abi3.8.sm_80.cubin\nELF file    9: flash_ops.abi3.9.sm_86.cubin\nELF file   10: flash_ops.abi3.10.sm_90a.cubin\nELF file   11: flash_ops.abi3.11.sm_80.cubin\nELF file   12: flash_ops.abi3.12.sm_86.cubin\nELF file   13: flash_ops.abi3.13.sm_90a.cubin\nELF file   14: flash_ops.abi3.14.sm_80.cubin\nELF file   15: flash_ops.abi3.15.sm_86.cubin\nELF file   16: flash_ops.abi3.16.sm_90a.cubin\nELF file   17: flash_ops.abi3.17.sm_80.cubin\nELF file   18: flash_ops.abi3.18.sm_86.cubin\nELF file   19: flash_ops.abi3.19.sm_90a.cubin\nELF file   20: flash_ops.abi3.20.sm_80.cubin\nELF file   21: flash_ops.abi3.21.sm_86.cubin\nELF file   22: flash_ops.abi3.22.sm_90a.cubin\nELF file   23: flash_ops.abi3.23.sm_80.cubin\nELF file   24: flash_ops.abi3.24.sm_86.cubin\nELF file   25: flash_ops.abi3.25.sm_90a.cubin\nELF file   26: flash_ops.abi3.26.sm_80.cubin\nELF file   27: flash_ops.abi3.27.sm_86.cubin\nELF file   28: flash_ops.abi3.28.sm_90a.cubin\nELF file   29: flash_ops.abi3.29.sm_80.cubin\nELF file   30: flash_ops.abi3.30.sm_86.cubin\nELF file   31: flash_ops.abi3.31.sm_90a.cubin\nELF file   32: flash_ops.abi3.32.sm_80.cubin\nELF file   33: flash_ops.abi3.33.sm_86.cubin\nELF file   34: flash_ops.abi3.34.sm_90a.cubin\nELF file   35: flash_ops.abi3.35.sm_80.cubin\nELF file   36: flash_ops.abi3.36.sm_86.cubin\nELF file   37: flash_ops.abi3.37.sm_90a.cubin\nELF file   38: flash_ops.abi3.38.sm_80.cubin\nELF file   39: flash_ops.abi3.39.sm_86.cubin\nELF file   40: flash_ops.abi3.40.sm_90a.cubin\nELF file   41: flash_ops.abi3.41.sm_80.cubin\nELF file   42: flash_ops.abi3.42.sm_86.cubin\nELF file   43: flash_ops.abi3.43.sm_90a.cubin\nELF file   44: flash_ops.abi3.44.sm_80.cubin\nELF file   45:"
+    },
+    {
+      "architectures": [
+        "sm_100a",
+        "sm_103a",
+        "sm_90a"
+      ],
+      "path": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/flashmla_ops.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: flashmla_ops.abi3.1.sm_90a.cubin\nELF file    2: flashmla_ops.abi3.2.sm_100a.cubin\nELF file    3: flashmla_ops.abi3.3.sm_103a.cubin\nELF file    4: flashmla_ops.abi3.4.sm_90a.cubin\nELF file    5: flashmla_ops.abi3.5.sm_100a.cubin\nELF file    6: flashmla_ops.abi3.6.sm_103a.cubin\nELF file    7: flashmla_ops.abi3.7.sm_90a.cubin\nELF file    8: flashmla_ops.abi3.8.sm_100a.cubin\nELF file    9: flashmla_ops.abi3.9.sm_103a.cubin\nELF file   10: flashmla_ops.abi3.10.sm_90a.cubin\nELF file   11: flashmla_ops.abi3.11.sm_100a.cubin\nELF file   12: flashmla_ops.abi3.12.sm_103a.cubin\nELF file   13: flashmla_ops.abi3.13.sm_90a.cubin\nELF file   14: flashmla_ops.abi3.14.sm_100a.cubin\nELF file   15: flashmla_ops.abi3.15.sm_103a.cubin\nELF file   16: flashmla_ops.abi3.16.sm_90a.cubin\nELF file   17: flashmla_ops.abi3.17.sm_100a.cubin\nELF file   18: flashmla_ops.abi3.18.sm_103a.cubin\nELF file   19: flashmla_ops.abi3.19.sm_90a.cubin\nELF file   20: flashmla_ops.abi3.20.sm_100a.cubin\nELF file   21: flashmla_ops.abi3.21.sm_103a.cubin\nELF file   22: flashmla_ops.abi3.22.sm_90a.cubin\nELF file   23: flashmla_ops.abi3.23.sm_100a.cubin\nELF file   24: flashmla_ops.abi3.24.sm_103a.cubin\nELF file   25: flashmla_ops.abi3.25.sm_90a.cubin\nELF file   26: flashmla_ops.abi3.26.sm_100a.cubin\nELF file   27: flashmla_ops.abi3.27.sm_103a.cubin\nELF file   28: flashmla_ops.abi3.28.sm_90a.cubin\nELF file   29: flashmla_ops.abi3.29.sm_100a.cubin\nELF file   30: flashmla_ops.abi3.30.sm_103a.cubin\nELF file   31: flashmla_ops.abi3.31.sm_90a.cubin\nELF file   32: flashmla_ops.abi3.32.sm_100a.cubin\nELF file   33: flashmla_ops.abi3.33.sm_103a.cubin\nELF file   34: flashmla_ops.abi3.34.sm_90a.cubin\nELF file   35: flashmla_ops.abi3.35.sm_100a.cubin\nELF file   36: flashmla_ops.abi3.36.sm_103a.cubin\nELF file   37: flashmla_ops.abi3.37.sm_90a.cubin\nELF file   38: flashmla_ops.abi3.38.sm_100a.cubin\nELF file   39: flashmla_ops.abi3.39.sm_103a.cubin\nELF file   40: flashmla_ops.abi3.40.sm_90a.cubin\nELF file   41: flashmla"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110a",
+        "sm_120",
+        "sm_80",
+        "sm_86",
+        "sm_90a"
+      ],
+      "path": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: common_ops.abi3.1.sm_80.cubin\nELF file    2: common_ops.abi3.2.sm_86.cubin\nELF file    3: common_ops.abi3.3.sm_90a.cubin\nELF file    4: common_ops.abi3.4.sm_100.cubin\nELF file    5: common_ops.abi3.5.sm_110a.cubin\nELF file    6: common_ops.abi3.6.sm_120.cubin\nELF file    7: common_ops.abi3.7.sm_80.cubin\nELF file    8: common_ops.abi3.8.sm_86.cubin\nELF file    9: common_ops.abi3.9.sm_90a.cubin\nELF file   10: common_ops.abi3.10.sm_100.cubin\nELF file   11: common_ops.abi3.11.sm_110a.cubin\nELF file   12: common_ops.abi3.12.sm_120.cubin\nELF file   13: common_ops.abi3.13.sm_80.cubin\nELF file   14: common_ops.abi3.14.sm_86.cubin\nELF file   15: common_ops.abi3.15.sm_90a.cubin\nELF file   16: common_ops.abi3.16.sm_100.cubin\nELF file   17: common_ops.abi3.17.sm_110a.cubin\nELF file   18: common_ops.abi3.18.sm_120.cubin\nELF file   19: common_ops.abi3.19.sm_80.cubin\nELF file   20: common_ops.abi3.20.sm_86.cubin\nELF file   21: common_ops.abi3.21.sm_90a.cubin\nELF file   22: common_ops.abi3.22.sm_100.cubin\nELF file   23: common_ops.abi3.23.sm_110a.cubin\nELF file   24: common_ops.abi3.24.sm_120.cubin\nELF file   25: common_ops.abi3.25.sm_80.cubin\nELF file   26: common_ops.abi3.26.sm_86.cubin\nELF file   27: common_ops.abi3.27.sm_90a.cubin\nELF file   28: common_ops.abi3.28.sm_100.cubin\nELF file   29: common_ops.abi3.29.sm_110a.cubin\nELF file   30: common_ops.abi3.30.sm_120.cubin\nELF file   31: common_ops.abi3.31.sm_80.cubin\nELF file   32: common_ops.abi3.32.sm_86.cubin\nELF file   33: common_ops.abi3.33.sm_90a.cubin\nELF file   34: common_ops.abi3.34.sm_100.cubin\nELF file   35: common_ops.abi3.35.sm_110a.cubin\nELF file   36: common_ops.abi3.36.sm_120.cubin\nELF file   37: common_ops.abi3.37.sm_80.cubin\nELF file   38: common_ops.abi3.38.sm_86.cubin\nELF file   39: common_ops.abi3.39.sm_90a.cubin\nELF file   40: common_ops.abi3.40.sm_100.cubin\nELF file   41: common_ops.abi3.41.sm_110a.cubin\nELF file   42: common_ops.abi3.42.sm_120.cubin\nELF file   43: common_ops.abi3.43.sm_80.cu"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110a",
+        "sm_120",
+        "sm_80",
+        "sm_86",
+        "sm_90a"
+      ],
+      "path": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm90/common_ops.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: common_ops.abi3.1.sm_80.cubin\nELF file    2: common_ops.abi3.2.sm_86.cubin\nELF file    3: common_ops.abi3.3.sm_90a.cubin\nELF file    4: common_ops.abi3.4.sm_100.cubin\nELF file    5: common_ops.abi3.5.sm_110a.cubin\nELF file    6: common_ops.abi3.6.sm_120.cubin\nELF file    7: common_ops.abi3.7.sm_80.cubin\nELF file    8: common_ops.abi3.8.sm_86.cubin\nELF file    9: common_ops.abi3.9.sm_90a.cubin\nELF file   10: common_ops.abi3.10.sm_100.cubin\nELF file   11: common_ops.abi3.11.sm_110a.cubin\nELF file   12: common_ops.abi3.12.sm_120.cubin\nELF file   13: common_ops.abi3.13.sm_80.cubin\nELF file   14: common_ops.abi3.14.sm_86.cubin\nELF file   15: common_ops.abi3.15.sm_90a.cubin\nELF file   16: common_ops.abi3.16.sm_100.cubin\nELF file   17: common_ops.abi3.17.sm_110a.cubin\nELF file   18: common_ops.abi3.18.sm_120.cubin\nELF file   19: common_ops.abi3.19.sm_80.cubin\nELF file   20: common_ops.abi3.20.sm_86.cubin\nELF file   21: common_ops.abi3.21.sm_90a.cubin\nELF file   22: common_ops.abi3.22.sm_100.cubin\nELF file   23: common_ops.abi3.23.sm_110a.cubin\nELF file   24: common_ops.abi3.24.sm_120.cubin\nELF file   25: common_ops.abi3.25.sm_80.cubin\nELF file   26: common_ops.abi3.26.sm_86.cubin\nELF file   27: common_ops.abi3.27.sm_90a.cubin\nELF file   28: common_ops.abi3.28.sm_100.cubin\nELF file   29: common_ops.abi3.29.sm_110a.cubin\nELF file   30: common_ops.abi3.30.sm_120.cubin\nELF file   31: common_ops.abi3.31.sm_80.cubin\nELF file   32: common_ops.abi3.32.sm_86.cubin\nELF file   33: common_ops.abi3.33.sm_90a.cubin\nELF file   34: common_ops.abi3.34.sm_100.cubin\nELF file   35: common_ops.abi3.35.sm_110a.cubin\nELF file   36: common_ops.abi3.36.sm_120.cubin\nELF file   37: common_ops.abi3.37.sm_80.cubin\nELF file   38: common_ops.abi3.38.sm_86.cubin\nELF file   39: common_ops.abi3.39.sm_90a.cubin\nELF file   40: common_ops.abi3.40.sm_100.cubin\nELF file   41: common_ops.abi3.41.sm_110a.cubin\nELF file   42: common_ops.abi3.42.sm_120.cubin\nELF file   43: common_ops.abi3.43.sm_80.cu"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110a",
+        "sm_120",
+        "sm_80",
+        "sm_86",
+        "sm_90a"
+      ],
+      "path": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/spatial_ops.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: spatial_ops.abi3.1.sm_80.cubin\nELF file    2: spatial_ops.abi3.2.sm_86.cubin\nELF file    3: spatial_ops.abi3.3.sm_90a.cubin\nELF file    4: spatial_ops.abi3.4.sm_100.cubin\nELF file    5: spatial_ops.abi3.5.sm_110a.cubin\nELF file    6: spatial_ops.abi3.6.sm_120.cubin\n"
+    }
+  ],
+  "schema": "cuda-so-audit/v1",
+  "summary": {
+    "architecture_counts": {
+      "sm_100": 3,
+      "sm_100a": 1,
+      "sm_103a": 1,
+      "sm_110a": 3,
+      "sm_120": 3,
+      "sm_80": 4,
+      "sm_86": 4,
+      "sm_90a": 5
+    },
+    "object_count": 5,
+    "objects_with_sm_120": 3,
+    "objects_with_sm_121": 0
+  }
+}

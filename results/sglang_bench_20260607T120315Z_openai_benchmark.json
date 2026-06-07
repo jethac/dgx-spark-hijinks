@@ -1,0 +1,80 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 412,
+      "content_preview": "A local AI workstation benefits from fast memory because it allows for efficient storage and processing of large amounts of data, which is crucial in the field of artificial intelligence. Fast memory enables quicker access to information, reducing latency and improving overall system performance. This speed is particularly important when dealing with complex algorithms and machine learning models that require",
+      "decode_s": 1.0578797459893394,
+      "decode_tok_s": 60.49836972740846,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.7047610330046155,
+      "ttft_s": 0.646881287015276,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "content_chars": 909,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is utilizing the correct and intended GPU kernels for optimal performance.\n\n### Methodology:\n\n1. **Identify Relevant Kernels:**\n   - Determine which specific GPU kernels are required by your LLM model.\n   - List these kernels in a clear, organized manner.\n\n2. **Monitor System Logs:**\n   - Use system logs to track kernel usage patterns over time.\n   - Look for an",
+      "decode_s": 3.182225845986977,
+      "decode_tok_s": 60.33512682392617,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.2178066479973495,
+      "ttft_s": 0.03558080201037228,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 2,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "ok": false,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 0.03516646701609716,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 1,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T12:04:42Z",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "sglang_bench_20260607T120315Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T12:04:37Z",
+  "url": "http://127.0.0.1:30000"
+}

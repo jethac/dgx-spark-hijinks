@@ -1,0 +1,4 @@
+RUN_ID=sglang_bench_20260607T120315Z
+IMAGE=nvcr.io/nvidia/sglang:26.05-py3
+MODEL=Qwen/Qwen2.5-1.5B-Instruct
+MEM_FRACTION=0.20

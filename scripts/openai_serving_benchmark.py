@@ -78,6 +78,9 @@ def stream_chat(url: str, payload: dict[str, Any], timeout: int) -> dict[str, An
     content_parts: list[str] = []
     usage = None
     chunk_count = 0
+    finish_reason = None
+    matched_stop = None
+    last_event = None
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         for raw in resp:
             line = raw.decode("utf-8", errors="replace").strip()
@@ -93,10 +96,16 @@ def stream_chat(url: str, payload: dict[str, Any], timeout: int) -> dict[str, An
                 continue
             if event.get("usage"):
                 usage = event["usage"]
+            last_event = event
             choices = event.get("choices") or []
             if not choices:
                 continue
-            delta = choices[0].get("delta") or {}
+            choice = choices[0]
+            if choice.get("finish_reason") is not None:
+                finish_reason = choice.get("finish_reason")
+            if choice.get("matched_stop") is not None:
+                matched_stop = choice.get("matched_stop")
+            delta = choice.get("delta") or {}
             text = delta.get("content")
             if text:
                 if first_token_s is None:
@@ -108,6 +117,9 @@ def stream_chat(url: str, payload: dict[str, Any], timeout: int) -> dict[str, An
         "total_s": total_s,
         "chunk_count": chunk_count,
         "content": "".join(content_parts),
+        "finish_reason": finish_reason,
+        "last_event": last_event,
+        "matched_stop": matched_stop,
         "usage": usage,
     }
 
@@ -164,6 +176,9 @@ def run_case(args: argparse.Namespace, model: str, case_name: str, case: dict[st
                 "content_chars": len(content),
                 "content_preview": content[:500],
                 "chunk_count": result.get("chunk_count"),
+                "finish_reason": result.get("finish_reason"),
+                "last_event": result.get("last_event"),
+                "matched_stop": result.get("matched_stop"),
             }
         )
     except Exception as exc:
@@ -217,4 +232,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

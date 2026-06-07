@@ -22,7 +22,7 @@ Summary:
 | vLLM | installed in benchmark venv; live server running |
 | FlashInfer | installed in benchmark venv |
 | PyTorch | installed in benchmark venv as `2.11.0+cu130` |
-| SGLang | not installed in benchmark venv; no command found |
+| SGLang | not installed in benchmark venv; NVIDIA `nvcr.io/nvidia/sglang:26.05-py3` container smoke passed |
 | LiteRT-LM | not installed in benchmark venv; no command found |
 | TensorFlow/LiteRT Python modules | not installed in benchmark venv |
 | llama.cpp | built under `/home/jethac/src`, but not on shell `PATH` |
@@ -39,7 +39,7 @@ Docker images currently present include:
 
 ## Next Runtime Actions
 
-1. SGLang: run the container smoke with `nvcr.io/nvidia/sglang:26.05-py3`; fall back to `lmsysorg/sglang:latest-cu130-runtime` if CUDA 13.2 / driver compatibility blocks it.
+1. SGLang: move from Qwen BF16 smoke to a Gemma smoke, then test fp8 vs NVFP4 quality/performance.
 2. LiteRT-LM: install `litert-lm==0.13.1` in a clean venv, prove CPU E2B generation, then test whether `--backend=gpu` uses a useful GB10 path.
 3. llama.cpp: pin the build/commit as a practical serving path; keep GGUF lm-eval accuracy blocked until logprobs compatibility is fixed.
 4. vLLM: use the current baseline as the before row for future patched/container comparisons.

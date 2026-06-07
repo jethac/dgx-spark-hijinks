@@ -22,6 +22,7 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
+- PyTorch sm121 support: [docs/PYTORCH_SM121_SUPPORT.md](docs/PYTORCH_SM121_SUPPORT.md)
 
 ## First Commands
 
@@ -105,6 +106,6 @@ It is complete when the repo contains a tested, reproducible stack where:
 
 ## Current State
 
-This repo starts from the first Gemma 4 benchmark campaign. That run showed useful vLLM safetensors results for several model rows, but also exposed ecosystem problems around `sm_121` packaging, vLLM model support, HF fallback reliability, GGUF lm-eval logprobs, long benchmark design, and missing observability.
+This repo starts from the first Gemma 4 benchmark campaign. That run showed useful vLLM safetensors results for several model rows, but also exposed ecosystem problems around `sm_121` packaging, vLLM model support, HF fallback reliability, GGUF lm-eval logprobs, long benchmark design, and missing observability. A first NVIDIA SGLang 26.05 container smoke now passes on GB10, but it still needs Gemma and NVFP4 validation.
 
 The GitHub Issues are the source of truth for active work. If we need source changes to upstream libraries, the change goes through a `jethac` fork, a submodule under `third_party/`, and an issue-named worktree.

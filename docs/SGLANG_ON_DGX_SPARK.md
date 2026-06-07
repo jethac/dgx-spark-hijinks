@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: draft, not blessed.
+Status: BF16 container smoke passed, not NVFP4-blessed.
 
 Target: DGX Spark / ThinkStation PGX / GB10 = compute capability 12.1 = `sm_121`.
 
@@ -23,13 +23,53 @@ That is SM120 RTX Blackwell evidence. It is not Spark validation. Our target is 
 
 Before NVFP4:
 
-- install or run SGLang on the single GB10 unit
-- capture `spark_doctor`
-- start an OpenAI-compatible server
-- run `scripts/openai_chat_smoke.py`
-- establish BF16 or fp8 KV quality and speed
+- install or run SGLang on the single GB10 unit: done for `nvcr.io/nvidia/sglang:26.05-py3`
+- capture `spark_doctor`: done for `sglang_20260607T115213Z`
+- start an OpenAI-compatible server: done on port `30000`
+- run `scripts/openai_chat_smoke.py`: passed
+- establish BF16 or fp8 KV quality and speed: partial BF16 baseline captured
 
 Only then test `fp4_e2m1`.
+
+## 2026-06-07 Smoke Result
+
+Image:
+
+- `nvcr.io/nvidia/sglang:26.05-py3`
+- manifest included `linux/arm64`
+- in-container versions: SGLang `0.5.11+nv26.5.51621272`, `sglang-kernel` `0.4.2+nv26.5.51621272`, FlashInfer `0.6.10+cf494fca.nv26.5.cu132.50619265`, PyTorch `2.12.0a0+5aff3928d8.nv26.5.50603568`
+
+Model:
+
+- `Qwen/Qwen2.5-1.5B-Instruct`
+- dtype `bfloat16`
+- KV cache dtype `torch.bfloat16`
+- attention backend `flashinfer`
+- CUDA graphs enabled
+
+Artifacts:
+
+- `results/sglang_20260607T115213Z_chat_smoke.json`
+- `results/sglang_20260607T115213Z_python_versions.txt`
+- `results/sglang_20260607T115213Z_cuda_so_audit_sglang.json`
+- `results/sglang_20260607T115213Z_server.log`
+- `results/sglang_bench_20260607T120315Z_openai_benchmark.json`
+- `results/sglang_bench_longprefill_20260607T120614Z_openai_benchmark.json`
+
+Interpretation:
+
+- Basic OpenAI-compatible serving works on the GB10.
+- Short and medium decode measured around 60 tok/s with `mem_fraction_static=0.20`.
+- The first long-prefill benchmark failed because the server exposed too small a KV token budget in that run.
+- Retrying only long-prefill with `mem_fraction_static=0.40` succeeded: 2,369 prompt tokens, 64 completion tokens, TTFT 0.683 s, total 1.763 s, decode 59.23 tok/s.
+- This is a SGLang runtime baseline, not a Gemma baseline and not an NVFP4 validation.
+
+Remaining sm121-specific concern:
+
+- The container reports the device as `NVIDIA GB10 (12, 1)`, but `torch.cuda.get_arch_list()` has `sm_120` and `compute_120`, not explicit `sm_121`.
+- The CUDA shared-object audit found `objects_with_sm_121: 0` and `objects_with_sm_120: 3`.
+- The server log says `SM120 (Blackwell) detected: auto-selecting fp4-gemm-backend=flashinfer_cudnn` on a GB10 `sm_121` device.
+- Treat this as a dispatch/packaging validation issue before calling the path fully Spark-native.
 
 ## Preferred First Container
 

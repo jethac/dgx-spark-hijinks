@@ -1,0 +1,52 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "long_prefill",
+      "chunk_count": 67,
+      "content_chars": 331,
+      "content_preview": "1. Capture environment metadata: Gather information about the hardware, software configuration, and system settings of the local inference server.\n2. Backend selection: Determine which backend (e.g., TensorFlow Serving, ONNX Runtime) will be used for inference.\n3. Cold-start time: Measure the time it takes to initialize and start",
+      "decode_s": 1.0805403340200428,
+      "decode_tok_s": 59.22962612778587,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780834057,
+        "id": "3c5fb14c19b844689215b392df82e4e4",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2433
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.7631991770176683,
+      "ttft_s": 0.6826588429976255,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2433
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T12:07:37Z",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "sglang_bench_longprefill_20260607T120614Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T12:07:35Z",
+  "url": "http://127.0.0.1:30000"
+}

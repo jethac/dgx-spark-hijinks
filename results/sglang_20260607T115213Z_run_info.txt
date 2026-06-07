@@ -1,0 +1,3 @@
+RUN_ID=sglang_20260607T115213Z
+IMAGE=nvcr.io/nvidia/sglang:26.05-py3
+MODEL=Qwen/Qwen2.5-1.5B-Instruct
