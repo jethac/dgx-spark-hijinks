@@ -82,6 +82,12 @@
   - adds wrapper-routing regression coverage and updates vLLM's attention backend design doc.
   - verification: Python syntax compile and staged `git diff --check` passed.
   - limitations: local `ruff` is unavailable and pytest collection is blocked by missing `tblib`; no clean GB10 vLLM plus FlashInfer build or serving proof yet.
+- Ran a PGX source-file routing probe for `jethac/vllm@2c1405dd129d873d268b8baea78c5739cd384951`.
+  - result: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json`
+  - host/GPU: `thinkstationpgx-00b4`, `NVIDIA GB10`, capability `[12, 1]`
+  - installed dependency context: vLLM `0.22.1`, Torch `2.11.0+cu130`, CUDA `13.0`
+  - outcome: SM12x NVFP4 KV wrapper routing selects FlashInfer `fa2`; SM100-style NVFP4 still selects `trtllm-gen`; non-NVFP4 still selects `auto`
+  - limitation: this loads the forked `flashinfer.py` source file against installed compiled dependencies. It does not install the full fork, build FlashInfer kernels, start a server, or prove correctness/capacity/performance.
 
 ## First Benchmark Campaign Summary
 

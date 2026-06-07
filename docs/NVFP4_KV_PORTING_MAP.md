@@ -82,6 +82,15 @@ Local verification:
 - `git diff --cached --check` passed before commit.
 - `python -m ruff check ...` is blocked in this Windows workspace because `ruff` is not installed.
 - `python -m pytest tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py -q` is blocked in this Windows workspace because vLLM's `tests/conftest.py` imports missing `tblib`.
+- PGX source-file routing probe passed on real GB10/SM121:
+  - result: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json`
+  - source revision: `2c1405dd129d873d268b8baea78c5739cd384951`
+  - GPU: `NVIDIA GB10`
+  - Torch CUDA capability: `[12, 1]`
+  - vLLM platform capability: `[12, 1]`
+  - SM12x NVFP4 KV prefill/decode wrapper backend: `fa2`
+  - SM100-style NVFP4 fallback case still selects `trtllm-gen`
+  - non-NVFP4 case still selects `auto`
 
 Missing verification:
 

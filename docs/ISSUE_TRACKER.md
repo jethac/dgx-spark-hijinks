@@ -9,8 +9,8 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
 | kernel dispatch and backend observability | open | [#4](https://github.com/jethac/dgx-spark-hijinks/issues/4) |
 | `spark-doctor` environment evidence | in progress | [#5](https://github.com/jethac/dgx-spark-hijinks/issues/5) |
-| vLLM Spark runtime path | SM12x NVFP4 KV routing patch pushed; clean GB10 serving proof pending | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
-| NVFP4 on Spark | SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing branches pushed; SGLang integration and GB10 KV proof pending | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
+| vLLM Spark runtime path | SM12x NVFP4 KV routing probe passed on GB10; clean build/serving proof pending | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
+| NVFP4 on Spark | SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing branches pushed; vLLM routing probe passed on GB10; SGLang integration and serving proof pending | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
 | llama.cpp / lm-eval GGUF accuracy | open | [#8](https://github.com/jethac/dgx-spark-hijinks/issues/8) |
 | HF fallback telemetry and containment | telemetry wrapper added | [#9](https://github.com/jethac/dgx-spark-hijinks/issues/9) |
 | single-machine benchmark redesign | smoke-suite orchestrator added; HF and MTP telemetry wrapped | [#10](https://github.com/jethac/dgx-spark-hijinks/issues/10) |

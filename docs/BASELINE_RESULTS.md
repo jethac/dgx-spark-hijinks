@@ -209,6 +209,36 @@ Interpretation:
 - The model-shaped proxy result is not a speedup. Dense-decode proxies were mixed, and all MoE-shaped proxy cases were slower than the installed SGLang container path.
 - This makes the FlashInfer predicate patch a correctness/enablement fix. The remaining performance question must be answered in fused serving paths, NVFP4 KV, model-specific quantization plumbing, CUDA graph behavior, or clean package builds.
 
+## 2026-06-07: vLLM SM12x NVFP4 KV Routing Probe
+
+Artifact:
+
+- `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json`
+
+Environment:
+
+- host: `thinkstationpgx-00b4`
+- GPU: `NVIDIA GB10`
+- Torch CUDA capability: `[12, 1]`
+- vLLM platform capability: `[12, 1]`
+- Torch: `2.11.0+cu130`
+- CUDA: `13.0`
+- installed vLLM dependency context: `0.22.1`
+- fork source revision: `jethac/vllm@2c1405dd129d873d268b8baea78c5739cd384951`
+
+Result:
+
+- SM12x NVFP4 KV prefill wrapper backend: `fa2`
+- SM12x NVFP4 KV decode wrapper backend: `fa2`
+- SM100-style NVFP4 fallback case remains `trtllm-gen`
+- non-NVFP4 case remains `auto`
+- probe result: `all_ok: true`
+
+Interpretation:
+
+- This proves the vLLM fork's routing predicate behaves correctly on real GB10/SM121.
+- This does not prove the full vLLM fork installs cleanly, that FlashInfer FA2 NVFP4 KV kernels build/run, or that serving correctness/capacity/performance improves.
+
 ## 2026-06-07: vLLM Gemma 4 26B A4B Compact MoE Serving Check
 
 Target:

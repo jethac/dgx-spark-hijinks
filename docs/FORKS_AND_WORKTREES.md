@@ -171,6 +171,7 @@ vLLM SM12x NVFP4 KV routing patch:
 - local verification: Python syntax compile and staged `git diff --check` passed
 - local pytest limitation: vLLM pytest collection is blocked in this Windows workspace because `tblib` is not installed
 - local lint limitation: `ruff` is not installed in this Windows workspace
+- PGX verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121
 - missing verification: clean vLLM plus FlashInfer build on GB10 and a serving proof selecting FA2 native NVFP4 KV
 
 Other forks should still be created only when the corresponding issue is ready to carry code.
