@@ -1,0 +1,99 @@
+{
+  "all_ok": true,
+  "created_unix": 1780855537.0232105,
+  "environment": {
+    "flashinfer_extra_cudaflags": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+    "flashinfer_file": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/__init__.py",
+    "flashinfer_source_paths": {
+      "cccl": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/cccl",
+      "csrc": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/csrc",
+      "cutlass": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/cutlass",
+      "include": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include",
+      "source_root": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121",
+      "spdlog": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/spdlog"
+    },
+    "flashinfer_version": "0.0.0+unknown",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "torch_version": "2.11.0+cu130"
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 2,
+    "cosine_threshold": 0.995,
+    "deswizzle_flag_requested": true,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121",
+    "head_dim": 256,
+    "kv_len": 1024,
+    "layouts": [
+      "NHD",
+      "HND"
+    ],
+    "max_abs_threshold": 0.25,
+    "num_kv_heads": 8,
+    "num_qo_heads": 16,
+    "page_size": 16,
+    "qo_len": 128
+  },
+  "results": [
+    {
+      "cosine": 0.9999961853027344,
+      "elapsed_sec": 0.3926853580051102,
+      "layout": "NHD",
+      "max_abs": 0.0078125,
+      "mean_abs": 0.0012612342834472656,
+      "operation": "decode",
+      "passed": true
+    },
+    {
+      "cosine": 0.9999973177909851,
+      "elapsed_sec": 0.024592166009824723,
+      "layout": "NHD",
+      "max_abs": 0.015625,
+      "mean_abs": 0.0008859224617481232,
+      "operation": "prefill",
+      "passed": true
+    },
+    {
+      "cosine": 0.9999961853027344,
+      "elapsed_sec": 0.003674645005958155,
+      "layout": "HND",
+      "max_abs": 0.015625,
+      "mean_abs": 0.0012507438659667969,
+      "operation": "decode",
+      "passed": true
+    },
+    {
+      "cosine": 0.9999973773956299,
+      "elapsed_sec": 0.004555938008707017,
+      "layout": "HND",
+      "max_abs": 0.015625,
+      "mean_abs": 0.000885549932718277,
+      "operation": "prefill",
+      "passed": true
+    }
+  ],
+  "schema": "flashinfer-nvfp4-kv-probe/v1"
+}

@@ -137,6 +137,12 @@
 - Added `scripts/cuda_build_target_audit.py` for build/JIT log target evidence before `.so` inspection.
   - first smoke artifact: `results/llamacpp_gemma4_26b_q4_0_build_target_audit_20260608T0325JST.json`
   - result: the existing llama.cpp server log contains accepted Spark target evidence through `CUDA : ARCHS = 1210`.
+- Ran Gemma 4 26B-shaped FlashInfer FA2 NVFP4 KV probes.
+  - sliding/local artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_1024_20260608T0340JST.json`
+  - global/full artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json`
+  - outcome: sliding/local shape `H_q=16`, `H_kv=8`, `D=256`, `page=16` passed NHD/HND decode and prefill at `kv_len=1024`, `qo_len=128`.
+  - blocker: global/full shape `H_q=16`, `H_kv=2`, `D=512`, `page=16` failed all NHD/HND decode/prefill operations with FlashInfer FA2 invalid configuration from `prefill.cuh:3215`.
+  - conclusion: Gemma 4 26B NVFP4 KV cannot be called ready for serving until the global-attention path is fixed or routed to a proven fallback.
 
 ## First Benchmark Campaign Summary
 

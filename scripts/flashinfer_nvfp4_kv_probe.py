@@ -9,6 +9,7 @@ import math
 import os
 import sys
 import time
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -342,21 +343,30 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     for layout in args.layouts:
         for op_name, op in (("decode", _run_decode), ("prefill", _run_prefill)):
             started = time.perf_counter()
-            metrics = op(torch, flashinfer, args, layout, dtype)
+            item = {
+                "operation": op_name,
+                "layout": layout,
+                "passed": False,
+            }
+            try:
+                metrics = op(torch, flashinfer, args, layout, dtype)
+            except Exception as exc:  # pragma: no cover - diagnostic path
+                item.update(
+                    {
+                        "elapsed_sec": time.perf_counter() - started,
+                        "error": repr(exc),
+                        "traceback": traceback.format_exc(limit=20),
+                    }
+                )
+                results.append(item)
+                continue
             elapsed = time.perf_counter() - started
             passed = (
                 metrics["cosine"] >= args.cosine_threshold
                 and metrics["max_abs"] <= args.max_abs_threshold
             )
-            results.append(
-                {
-                    "operation": op_name,
-                    "layout": layout,
-                    "elapsed_sec": elapsed,
-                    "passed": passed,
-                    **metrics,
-                }
-            )
+            item.update({"elapsed_sec": elapsed, "passed": passed, **metrics})
+            results.append(item)
 
     return {
         "schema": "flashinfer-nvfp4-kv-probe/v1",

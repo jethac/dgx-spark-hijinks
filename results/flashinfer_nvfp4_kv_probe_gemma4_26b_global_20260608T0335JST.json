@@ -1,0 +1,95 @@
+{
+  "all_ok": false,
+  "created_unix": 1780855477.1690521,
+  "environment": {
+    "flashinfer_extra_cudaflags": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+    "flashinfer_file": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/__init__.py",
+    "flashinfer_source_paths": {
+      "cccl": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/cccl",
+      "csrc": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/csrc",
+      "cutlass": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/cutlass",
+      "include": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include",
+      "source_root": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121",
+      "spdlog": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/3rdparty/spdlog"
+    },
+    "flashinfer_version": "0.0.0+unknown",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "torch_version": "2.11.0+cu130"
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 2,
+    "cosine_threshold": 0.995,
+    "deswizzle_flag_requested": true,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": "/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121",
+    "head_dim": 512,
+    "kv_len": 128,
+    "layouts": [
+      "NHD",
+      "HND"
+    ],
+    "max_abs_threshold": 0.25,
+    "num_kv_heads": 2,
+    "num_qo_heads": 16,
+    "page_size": 16,
+    "qo_len": 16
+  },
+  "results": [
+    {
+      "elapsed_sec": 0.307186805002857,
+      "error": "RuntimeError(\"Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\")",
+      "layout": "NHD",
+      "operation": "decode",
+      "passed": false,
+      "traceback": "Traceback (most recent call last):\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 352, in run\n    metrics = op(torch, flashinfer, args, layout, dtype)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 244, in _run_decode\n    actual = wrapper.run(\n             ^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/decode.py\", line 1696, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n"
+    },
+    {
+      "elapsed_sec": 0.013625351013615727,
+      "error": "RuntimeError(\"Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\")",
+      "layout": "NHD",
+      "operation": "prefill",
+      "passed": false,
+      "traceback": "Traceback (most recent call last):\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 352, in run\n    metrics = op(torch, flashinfer, args, layout, dtype)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 298, in _run_prefill\n    actual = wrapper.run(\n             ^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 2563, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n"
+    },
+    {
+      "elapsed_sec": 0.001326091994997114,
+      "error": "RuntimeError(\"Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\")",
+      "layout": "HND",
+      "operation": "decode",
+      "passed": false,
+      "traceback": "Traceback (most recent call last):\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 352, in run\n    metrics = op(torch, flashinfer, args, layout, dtype)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 244, in _run_decode\n    actual = wrapper.run(\n             ^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/decode.py\", line 1696, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n"
+    },
+    {
+      "elapsed_sec": 0.0018514670082367957,
+      "error": "RuntimeError(\"Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\")",
+      "layout": "HND",
+      "operation": "prefill",
+      "passed": false,
+      "traceback": "Traceback (most recent call last):\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 352, in run\n    metrics = op(torch, flashinfer, args, layout, dtype)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/scripts/flashinfer_nvfp4_kv_probe.py\", line 298, in _run_prefill\n    actual = wrapper.run(\n             ^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 2563, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n"
+    }
+  ],
+  "schema": "flashinfer-nvfp4-kv-probe/v1"
+}

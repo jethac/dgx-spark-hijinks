@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness proof passes; clean vLLM/SGLang serving and capacity proof pending.
+Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness passes for small and Gemma 4 26B sliding-attention shapes; Gemma 4 26B global-attention `D=512` fails FlashInfer FA2 configuration; clean vLLM/SGLang serving and capacity proof pending.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -74,6 +74,17 @@ GB10 runtime verification:
 - result: NHD decode, NHD prefill, HND decode, and HND prefill all passed with cosine >= `0.99999946` and max absolute error <= `0.0078125`.
 - limitations: this is a standalone FlashInfer FA2 paged-KV correctness probe with vLLM-style swizzled V scale factors and in-kernel de-swizzle enabled. It does not prove clean wheel packaging, vLLM metadata integration, KV capacity gain, output quality, CUDA graph replay, or serving throughput.
 
+Gemma 4 26B-shaped verification:
+
+- config source: cached `google/gemma-4-26B-A4B-it` config
+- sliding/local attention artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_1024_20260608T0340JST.json`
+  - shape: `H_q=16`, `H_kv=8`, `D=256`, `page=16`, `kv_len=1024`, `qo_len=128`
+  - result: NHD/HND decode and prefill all passed; minimum cosine `0.9999961853`
+- global/full attention artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json`
+  - shape: `H_q=16`, `H_kv=2`, `D=512`, `page=16`, `kv_len=128`, `qo_len=16`
+  - result: NHD/HND decode and prefill all failed with FlashInfer FA2 invalid configuration from `prefill.cuh:3215`
+- conclusion: the first model-shaped proof is mixed. Gemma 4 26B local attention is viable in the standalone patched FlashInfer path, but global attention is currently a blocker for Gemma 4 26B NVFP4-KV serving.
+
 ## vLLM Reference Map
 
 Current `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` patch:
@@ -145,7 +156,9 @@ Likely `jethac/flashinfer` work:
 - Ported in `e152cf4d`: FA2 page layout support for independent K/V page strides and offsets.
 - Ported in `e152cf4d`: compile-time gated B2-style V scale-factor de-swizzle; the vLLM branch must enable this path when using the interleaved vLLM cache layout.
 - Passed: GB10 standalone harness coverage for NHD/HND paged KV at `H_q=4`, `H_kv=2`, `D=128`, `page=16`, with swizzled V scale factors and de-swizzle enabled.
-- Still pending: larger model-shaped KV harness coverage before serving.
+- Passed: Gemma 4 26B sliding/local attention shape `H_q=16`, `H_kv=8`, `D=256`, `page=16`, `kv_len=1024`, `qo_len=128`.
+- Failed: Gemma 4 26B global/full attention shape `H_q=16`, `H_kv=2`, `D=512`, `page=16` with FlashInfer invalid configuration.
+- Still pending: fix or fallback route for `D=512` global attention before Gemma 4 26B serving.
 - Still pending: clean wheel/container build proof and runtime logs proving native FA2 NVFP4 KV selection.
 
 Patch ownership from the SM120 vLLM reference:
@@ -247,7 +260,7 @@ Current upstream SGLang risk:
 
 1. Keep existing NVIDIA SGLang 26.05 Qwen BF16 and vLLM 26B/12B rows as baselines; do not merge them into NVFP4-KV claims.
 2. Port FlashInfer FA2 stride/page work into a clean `jethac/flashinfer` branch.
-3. Extend the standalone GB10 layout harness from the small passed shape to target model shapes with a fresh JIT cache.
+3. Fix or route around the Gemma 4 26B global/full attention `D=512` FlashInfer FA2 invalid-configuration failure.
 4. Start vLLM with `--kv-cache-dtype nvfp4`; logs must prove FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback or trtllm-gen.
 5. Compare fp8 and NVFP4 on the same model, prompts, memory utilization, CUDA graph mode, and concurrency.
 6. Record KV pool tokens, maximum concurrency, memory telemetry, deterministic output, quality/PPL or retrieval sanity, TTFT, and warmed decode tok/s.

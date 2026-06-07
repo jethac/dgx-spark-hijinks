@@ -286,6 +286,43 @@ Interpretation:
 - It is stronger than the vLLM routing probe because it executes FlashInfer kernels and compares against dequantized reference attention for both NHD and HND layouts.
 - It is still not an end-to-end vLLM serving proof. It does not prove clean wheel packaging, vLLM metadata integration, fp8-vs-NVFP4 KV capacity, output quality, CUDA graph replay, or serving throughput.
 
+## 2026-06-08: Gemma 4 26B-Shaped FlashInfer NVFP4 KV Probe
+
+Artifacts:
+
+- `results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_1024_20260608T0340JST.json`
+- `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json`
+
+Config source:
+
+- cached `google/gemma-4-26B-A4B-it` config under the benchmark host's Hugging Face cache
+- text attention heads: `num_attention_heads=16`
+- sliding/local KV heads: `num_key_value_heads=8`
+- global/full KV heads: `num_global_key_value_heads=2`
+- sliding/local `head_dim=256`
+- global/full `global_head_dim=512`
+- page size tested: `16`
+
+Sliding/local result:
+
+- shape: `batch_size=2`, `kv_len=1024`, `qo_len=128`, `num_qo_heads=16`, `num_kv_heads=8`, `head_dim=256`
+- outcome: NHD decode, NHD prefill, HND decode, and HND prefill all passed.
+- minimum cosine: `0.9999961853`
+- maximum absolute error: `0.015625`
+
+Global/full result:
+
+- shape: `batch_size=2`, `kv_len=128`, `qo_len=16`, `num_qo_heads=16`, `num_kv_heads=2`, `head_dim=512`
+- outcome: all NHD/HND decode/prefill operations failed before numerical comparison.
+- failure class: FlashInfer FA2 paged KV invalid configuration from `include/flashinfer/attention/prefill.cuh:3215`
+- representative message: `Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 ...`
+
+Interpretation:
+
+- This narrows the vLLM NVFP4-KV blocker. The patched FlashInfer FA2 path is correct for Gemma 4 26B sliding/local attention geometry, including vLLM-style V-scale-factor de-swizzle.
+- Gemma 4 26B also has global/full attention layers with `global_head_dim=512`; that geometry currently fails in the standalone FlashInfer probe.
+- Do not start or bless a Gemma 4 26B vLLM `--kv-cache-dtype nvfp4` serving row until the `D=512` global path is fixed, routed to a proven fallback, or shown irrelevant for the specific model path.
+
 ## 2026-06-07: vLLM Gemma 4 26B A4B Compact MoE Serving Check
 
 Target:
