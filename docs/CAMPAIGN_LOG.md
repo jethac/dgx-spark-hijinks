@@ -281,6 +281,12 @@
   - artifact: `results/counterpart_evidence_audit_20260608.json`
   - result: all seven counterpart proof rows are still missing, partial, or blocked: SGLang Gemma NVFP4 ordinary-KV serving, SGLang clean FP4-KV after-row, SGLang DFlash/EAGLE Qwen, vLLM Qwen3.6 NVFP4+DFlash serving, larger Qwen llama.cpp GGUF, llama.cpp native FP4 GGUF, and live llama.cpp loglikelihood.
   - interpretation: AEON source-port coverage is useful but does not satisfy the SGLang/llama.cpp counterpart acceptance tests.
+- Added live task contracts for the missing counterpart rows.
+  - task file: `tasks/counterpart_evidence_tasks.jsonl`
+  - validator: `scripts/counterpart_task_matrix.py`
+  - artifact: `results/counterpart_task_matrix_20260608.json`
+  - result: all seven missing or partial counterpart requirements have concrete command templates and expected claim artifacts.
+  - interpretation: this is runbook readiness, not live proof. The counterpart evidence audit remains the source of truth for whether those rows have actually landed.
 
 ## First Benchmark Campaign Summary
 

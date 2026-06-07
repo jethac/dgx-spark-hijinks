@@ -81,7 +81,7 @@
       "plan_ids": [
         "12"
       ],
-      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, and MTP/spec-decode wrapping exist"
+      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, MTP/spec-decode wrapping, and counterpart task matrix exist"
     },
     {
       "area": "public recipes and blessed stack docs",
@@ -124,7 +124,7 @@
         "14",
         "14a"
       ],
-      "status": "FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed; vLLM Qwen branch advanced to AEON source patch coverage; AEON port map and counterpart evidence audit added for SGLang/llama.cpp decisions"
+      "status": "FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed; vLLM Qwen branch advanced to AEON source patch coverage; AEON port map, counterpart evidence audit, and live task matrix added for SGLang/llama.cpp decisions"
     },
     {
       "area": "LiteRT-LM on Spark",

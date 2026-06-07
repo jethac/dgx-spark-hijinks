@@ -22,10 +22,10 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 9. HF fallback containment | partial | Telemetry wrapper and failure annotator exist. | Historical `returncode=-9` rows need stronger OOM/resource evidence if HF fallback remains in comparisons. |
 | 10. GB10 SM count and memory tuning | partial | Hardware comparison keys include compute capability and SM count; scripts collect `multi_processor_count`. | Performance tuning and regression thresholds across model families remain mostly unproven. |
 | 11. Multi-Spark | missing | Single-unit assumption is documented. | No multi-Spark hardware or TP>1 validation. |
-| 12. Improve benchmark design | partial | `scripts/spark_smoke_suite.py`, `scripts/openai_serving_benchmark.py`, telemetry wrapping, failure annotation, `scripts/qwen_speed_lane.py`, and `scripts/serving_manifest_audit.py` split smoke, serving, Qwen speed/capacity, fragile fallback, and claim-readiness evidence into narrower phases. | Live rows still need consistent phase completion, size-aware timeout policy, row-level failure explanations, and matched before/after manifests for every claimed runtime path. |
+| 12. Improve benchmark design | partial | `scripts/spark_smoke_suite.py`, `scripts/openai_serving_benchmark.py`, telemetry wrapping, failure annotation, `scripts/qwen_speed_lane.py`, `scripts/serving_manifest_audit.py`, and `scripts/counterpart_task_matrix.py` split smoke, serving, Qwen speed/capacity, fragile fallback, claim-readiness, and missing-counterpart task contracts into narrower phases. | Live rows still need consistent phase completion, size-aware timeout policy, row-level failure explanations, and matched before/after manifests for every claimed runtime path. |
 | 13. Observability | partial | `spark_doctor`, `cuda_so_audit`, `cuda_build_target_audit`, `container_target_audit`, runtime process probes, SM-count-aware hardware keys, server-log artifact capture, and serving-manifest audits exist. | Each blessed runtime still needs a no-silent-fallback artifact proving selected attention, quantization, KV, CUDA graph, and build/JIT targets before and after benchmarks; current AEON Gemma vLLM manifest has family/PTX container evidence but still lacks accepted native build-target evidence. |
 | 14. Coordinate upstream ownership | partial | GitHub issues track the layer split; `docs/COMPATIBILITY_BOARD.md`, `docs/WHEEL_CONTAINER_MATRIX.md`, and `docs/AEON_PRIOR_ART_PORT_MAP.md` give maintainers a public status board, install matrix, and prior-art map. | Need recurring blessed-stack updates, public reproduction bundles, and upstream issue/PR taxonomy once matched GB10 before/after evidence exists. |
-| 14a. Forks, submodules, worktrees, and subagents | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work; `scripts/counterpart_evidence_audit.py` tracks whether those counterpart rows have live artifacts. | No upstream PRs until matched before/after GB10 story is proven; every future fork change still needs issue branch, worktree path, commit SHA, and reproduction command. |
+| 14a. Forks, submodules, worktrees, and subagents | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work; `scripts/counterpart_evidence_audit.py` tracks whether those counterpart rows have live artifacts; `tasks/counterpart_evidence_tasks.jsonl` defines the seven missing live task contracts. | No upstream PRs until matched before/after GB10 story is proven; every future fork change still needs issue branch, worktree path, commit SHA, and reproduction command. |
 | 15. Publish honest recipes | partial | Runtime recipes, compatibility board, wheel/container matrix, blessed-stack notes, and Qwen/Gemma docs now record what works, what is slow, what is broken, and what remains untested. | A clean-unit reproduction for the blessed vLLM/SGLang/llama.cpp stack is still missing, and the recipes must stay tied to exact commands, versions, artifacts, and go/no-go decisions. |
 
 ## Cross-Cutting Required Lanes
@@ -58,6 +58,15 @@ python3 scripts/counterpart_evidence_audit.py \
   --output results/counterpart_evidence_audit_20260608.json
 ```
 
+Run this before the next live GB10 session to confirm every missing counterpart row has a task contract:
+
+```bash
+python3 scripts/counterpart_task_matrix.py \
+  --tasks tasks/counterpart_evidence_tasks.jsonl \
+  --audit results/counterpart_evidence_audit_20260608.json \
+  --output results/counterpart_task_matrix_20260608.json
+```
+
 ## Highest-Leverage Next Proofs
 
 Live GB10 required:
@@ -71,4 +80,5 @@ Offline or low-GPU work:
 
 1. Validate `scripts/llamacpp_native_loglikelihood_probe.py` and `scripts/llamacpp_native_loglikelihood_task.py` against a live llama-server, then wire the same scoring shape into a tiny GGUF lm-eval/loglikelihood task.
 2. Keep the acceptance table above current as each artifact lands.
-3. Continue porting AEON/hikarioyama-compatible changes only when local evidence shows the corresponding blocker.
+3. Keep `tasks/counterpart_evidence_tasks.jsonl` aligned with `results/counterpart_evidence_audit_20260608.json` as rows move from missing to live evidence.
+4. Continue porting AEON/hikarioyama-compatible changes only when local evidence shows the corresponding blocker.

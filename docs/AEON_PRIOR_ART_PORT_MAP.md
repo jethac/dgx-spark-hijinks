@@ -41,6 +41,17 @@ python3 scripts/counterpart_evidence_audit.py \
 
 Current validation artifact: `results/counterpart_evidence_audit_20260608.json`. It intentionally reports all seven counterpart proof rows as missing, partial, or blocked; AEON source coverage is not the same thing as SGLang/llama.cpp serving evidence.
 
+The command contracts for those seven rows live in `tasks/counterpart_evidence_tasks.jsonl` and are validated by:
+
+```bash
+python3 scripts/counterpart_task_matrix.py \
+  --tasks tasks/counterpart_evidence_tasks.jsonl \
+  --audit results/counterpart_evidence_audit_20260608.json \
+  --output results/counterpart_task_matrix_20260608.json
+```
+
+Current validation artifact: `results/counterpart_task_matrix_20260608.json`.
+
 ## Literal AEON Qwen Patch Inventory
 
 | AEON patch | purpose | current vLLM status | SGLang counterpart | llama.cpp counterpart |

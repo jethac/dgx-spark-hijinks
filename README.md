@@ -170,6 +170,15 @@ python3 scripts/counterpart_evidence_audit.py \
   --output results/counterpart_evidence_audit_RUN_ID.json
 ```
 
+To verify that every missing counterpart row has a concrete live task definition:
+
+```bash
+python3 scripts/counterpart_task_matrix.py \
+  --tasks tasks/counterpart_evidence_tasks.jsonl \
+  --audit results/counterpart_evidence_audit_RUN_ID.json \
+  --output results/counterpart_task_matrix_RUN_ID.json
+```
+
 To reproduce AEON-7's vLLM NVFP4+DFlash rows:
 
 ```bash
