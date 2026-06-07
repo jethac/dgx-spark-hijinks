@@ -44,11 +44,12 @@ Patch branch:
 
 - fork: `jethac/flashinfer`
 - branch: `spark/hijinks-004-sm121-flashinfer`
-- commit: `e07a6392`
+- commit: `6b7513ee`
 - changes:
   - `_heuristic_func_mm_fp4` now treats all SM12x devices as b12x candidates for CUDA 13 + NVFP4.
   - release and nightly aarch64 JIT-cache builds for CUDA 12.9+/13 include `12.1a`.
   - install docs show the DGX Spark `FLASHINFER_CUDA_ARCH_LIST` including `12.1a`.
+  - XQA/MLA error messages now say SM12x or the correct SM121a CUDA 12.9 minimum.
 - not yet proven:
   - build success on the Spark
   - `cuobjdump`/JIT-cache evidence showing `sm_121a`

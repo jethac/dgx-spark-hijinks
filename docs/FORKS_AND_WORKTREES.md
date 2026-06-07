@@ -94,7 +94,7 @@ Active submodules:
 
 FlashInfer patch:
 
-- commit: `e07a6392`
+- commit: `6b7513ee`
 - branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-004-sm121-flashinfer
 - purpose: treat SM121 as SM12x for FP4 auto-dispatch and add `12.1a` to CUDA 12.9+/13 aarch64 JIT-cache build targets
 - local verification: Python syntax compile for touched Python files
