@@ -78,6 +78,8 @@ def stream_chat(url: str, payload: dict[str, Any], timeout: int) -> dict[str, An
     started = time.perf_counter()
     first_token_s = None
     content_parts: list[str] = []
+    reasoning_parts: list[str] = []
+    legacy_reasoning_parts: list[str] = []
     usage = None
     chunk_count = 0
     finish_reason = None
@@ -109,16 +111,25 @@ def stream_chat(url: str, payload: dict[str, Any], timeout: int) -> dict[str, An
                 matched_stop = choice.get("matched_stop")
             delta = choice.get("delta") or {}
             text = delta.get("content")
-            if text:
+            reasoning = delta.get("reasoning_content")
+            legacy_reasoning = delta.get("reasoning")
+            if text or reasoning or legacy_reasoning:
                 if first_token_s is None:
                     first_token_s = time.perf_counter() - started
+            if text:
                 content_parts.append(text)
+            if reasoning:
+                reasoning_parts.append(reasoning)
+            if legacy_reasoning:
+                legacy_reasoning_parts.append(legacy_reasoning)
     total_s = time.perf_counter() - started
     return {
         "ttft_s": first_token_s,
         "total_s": total_s,
         "chunk_count": chunk_count,
         "content": "".join(content_parts),
+        "reasoning_content": "".join(reasoning_parts),
+        "reasoning": "".join(legacy_reasoning_parts),
         "finish_reason": finish_reason,
         "last_event": last_event,
         "matched_stop": matched_stop,
@@ -157,26 +168,38 @@ def run_case(args: argparse.Namespace, model: str, case_name: str, case: dict[st
     try:
         result = stream_chat(endpoint, payload, args.timeout)
         content = result.get("content") or ""
+        reasoning_content = result.get("reasoning_content") or ""
+        output_text = content if content.strip() else reasoning_content
         usage = result.get("usage") or {}
         completion_tokens = usage.get("completion_tokens")
         total_s = result.get("total_s")
         ttft_s = result.get("ttft_s")
         decode_s = None
         decode_tok_s = None
+        completion_tok_s_total = None
         if total_s is not None and ttft_s is not None:
             decode_s = max(total_s - ttft_s, 0.0)
         if completion_tokens and decode_s and decode_s > 0:
             decode_tok_s = completion_tokens / decode_s
+        if completion_tokens and total_s and total_s > 0:
+            completion_tok_s_total = completion_tokens / total_s
+        legacy_reasoning = result.get("reasoning") or ""
         report.update(
             {
-                "ok": bool(content.strip()),
                 "ttft_s": ttft_s,
                 "total_s": total_s,
                 "decode_s": decode_s,
                 "decode_tok_s": decode_tok_s,
+                "completion_tok_s_total": completion_tok_s_total,
                 "usage": usage,
+                "ok": bool(output_text.strip()),
                 "content_chars": len(content),
                 "content_preview": content[:500],
+                "reasoning_content_chars": len(reasoning_content),
+                "reasoning_content_preview": reasoning_content[:500],
+                "reasoning_chars": len(legacy_reasoning),
+                "reasoning_preview": legacy_reasoning[:500],
+                "output_chars": len(output_text),
                 "chunk_count": result.get("chunk_count"),
                 "finish_reason": result.get("finish_reason"),
                 "last_event": result.get("last_event"),

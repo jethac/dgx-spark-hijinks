@@ -119,6 +119,9 @@ REQUIREMENTS = (
         partial_patterns=(
             "results/aeon_qwen36_dflash*_summary.md",
             "results/aeon_qwen36_dflash*_stop_point.md",
+            "results/aeon_qwen36_dflash_tailnet*_row_manifest.json",
+            "results/aeon_qwen36_dflash_tailnet*_server.log",
+            "results/aeon_qwen36_dflash_tailnet*_nvfp4_checkpoint_audit.json",
             "results/vllm_aeon_qwen_patch_port_*.md",
         ),
         blocked_patterns=(
@@ -231,8 +234,20 @@ def is_dry_run_or_selftest(path: str, root: Path) -> bool:
     return False
 
 
+def is_failed_claim_artifact(path: str, root: Path) -> bool:
+    data = load_json(root / path)
+    if not isinstance(data, dict):
+        return False
+    return data.get("ok") is False
+
+
 def filter_claim_matches(root: Path, matches: list[str]) -> list[str]:
-    return [path for path in matches if not is_dry_run_or_selftest(path, root)]
+    return [
+        path
+        for path in matches
+        if not is_dry_run_or_selftest(path, root)
+        and not is_failed_claim_artifact(path, root)
+    ]
 
 
 def audit_requirement(root: Path, req: EvidenceRequirement) -> dict[str, Any]:
@@ -263,10 +278,10 @@ def audit_requirement(root: Path, req: EvidenceRequirement) -> dict[str, Any]:
     claim_ready = all(group["ok"] for group in claim_groups)
     if claim_ready:
         status = "claim-evidence-present"
-    elif blocked:
-        status = "blocked-or-stop-point"
     elif partial:
         status = "partial-evidence-only"
+    elif blocked:
+        status = "blocked-or-stop-point"
     else:
         status = "missing"
     return {

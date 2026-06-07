@@ -1,0 +1,86 @@
+{
+  "config": {
+    "architectures": [
+      "Qwen3_5MoeForConditionalGeneration"
+    ],
+    "error": null,
+    "exists": true,
+    "model_type": "qwen3_5_moe"
+  },
+  "eos_check": {
+    "expected_gemma_eos_ids": [],
+    "generation_config_error": null,
+    "generation_config_exists": true,
+    "looks_gemma": false,
+    "missing_gemma_eos_ids": [],
+    "observed_eos_ids": [
+      248044,
+      248046
+    ],
+    "ok": true
+  },
+  "format_guess": {
+    "compressed_tensors_marker_count": 123520,
+    "config_markers": {
+      "mentions_compressed_tensors": true,
+      "mentions_modelopt": false,
+      "mentions_nvfp4": true
+    },
+    "guess": "compressed_tensors_nvfp4",
+    "modelopt_marker_count": 0,
+    "sample_compressed_tensors_keys": [
+      "model.language_model.layers.0.mlp.experts.0.down_proj.input_global_scale",
+      "model.language_model.layers.0.mlp.experts.0.down_proj.weight_global_scale",
+      "model.language_model.layers.0.mlp.experts.0.down_proj.weight_packed",
+      "model.language_model.layers.0.mlp.experts.0.down_proj.weight_scale",
+      "model.language_model.layers.0.mlp.experts.0.gate_proj.input_global_scale",
+      "model.language_model.layers.0.mlp.experts.0.gate_proj.weight_global_scale",
+      "model.language_model.layers.0.mlp.experts.0.gate_proj.weight_packed",
+      "model.language_model.layers.0.mlp.experts.0.gate_proj.weight_scale",
+      "model.language_model.layers.0.mlp.experts.0.up_proj.input_global_scale",
+      "model.language_model.layers.0.mlp.experts.0.up_proj.weight_global_scale"
+    ],
+    "sample_modelopt_keys": []
+  },
+  "index_error_count": 0,
+  "index_errors": [],
+  "key_count": 124306,
+  "key_source": "safetensors",
+  "model_dir": "/models/target",
+  "ok": true,
+  "safe_for_gemma_nvfp4_serving": true,
+  "safetensors_error_count": 0,
+  "safetensors_errors": [],
+  "safetensors_loaded": true,
+  "schema": "nvfp4-checkpoint-audit/v1",
+  "sensitive_quantization": {
+    "ok": true,
+    "quantized_sensitive_bases": [],
+    "quantized_sensitive_key_count": 0,
+    "sample_quantized_sensitive_keys": [],
+    "sample_sensitive_keys": [
+      "model.language_model.visual.blocks.0.attn.proj.bias",
+      "model.language_model.visual.blocks.0.attn.proj.weight",
+      "model.language_model.visual.blocks.0.attn.qkv.bias",
+      "model.language_model.visual.blocks.0.attn.qkv.weight",
+      "model.language_model.visual.blocks.0.mlp.linear_fc1.bias",
+      "model.language_model.visual.blocks.0.mlp.linear_fc1.weight",
+      "model.language_model.visual.blocks.0.mlp.linear_fc2.bias",
+      "model.language_model.visual.blocks.0.mlp.linear_fc2.weight",
+      "model.language_model.visual.blocks.0.norm1.bias",
+      "model.language_model.visual.blocks.0.norm1.weight",
+      "model.language_model.visual.blocks.0.norm2.bias",
+      "model.language_model.visual.blocks.0.norm2.weight",
+      "model.language_model.visual.blocks.1.attn.proj.bias",
+      "model.language_model.visual.blocks.1.attn.proj.weight",
+      "model.language_model.visual.blocks.1.attn.qkv.bias",
+      "model.language_model.visual.blocks.1.attn.qkv.weight",
+      "model.language_model.visual.blocks.1.mlp.linear_fc1.bias",
+      "model.language_model.visual.blocks.1.mlp.linear_fc1.weight",
+      "model.language_model.visual.blocks.1.mlp.linear_fc2.bias",
+      "model.language_model.visual.blocks.1.mlp.linear_fc2.weight"
+    ],
+    "sensitive_key_count": 333
+  },
+  "warnings": []
+}

@@ -8,7 +8,7 @@ Qwen is a first-class Spark target alongside Gemma, not a secondary check. Gemma
 
 | runtime | row | status |
 |---|---|---|
-| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | target/drafter weights downloaded locally; `v1.2` image pulls did not register; `v2` pull was started but the host became unreachable before status could be inspected, so serving reproduction is blocked before model load |
+| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | `v2` image and weights are local; server starts, loads target/drafter, records NVFP4/DFlash/backend evidence, and generates completion tokens, but smoke/benchmark output validation fails because responses expose no normal content |
 | SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
@@ -42,8 +42,15 @@ Current local setup:
 - `scripts/pull_container_with_evidence.sh ghcr.io/aeon-7/vllm-spark-omni-q36:v2 RUN_ID` is the preferred image acquisition path when Docker pulls stall or fail to register.
 - `scripts/qwen_speed_lane.py --input tasks/qwen_speed_lane_sample.jsonl --campaign-id RUN_ID` records already-running vLLM, SGLang, and llama.cpp Qwen servers with the shared row manifest wrapper.
 - preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
-- current blocker: the target and drafter weights are downloaded, but `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not finish/register after multiple pulls and the follow-up `v2` pull could not be inspected because the GB10 host became unreachable. See `results/aeon_qwen36_dflash_20260608T0501JST_summary.md` and `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`.
-- remaining proof: acquire or rebuild the image, start the server, and capture the first local vLLM Qwen36 NVFP4+DFlash row.
+- current blocker: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2` now starts, but `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json` is `ok=false`; chat smoke produced `message.reasoning` only and benchmark streams exposed no normal content.
+- remaining proof: fix the Qwen response/content path, rerun smoke and benchmark with the updated harness, and capture the first passing local vLLM Qwen36 NVFP4+DFlash row.
+
+Current local AEON Qwen evidence:
+
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`: `ok=true`, compressed-tensors NVFP4, `124306` safetensors keys, `0` quantized sensitive keys.
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`: target `Qwen3_5MoeForConditionalGeneration`, drafter `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, `585168` KV tokens, `4.73x` max concurrency at 262k context.
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_build_target_audit.json`: no accepted native `sm_121` or `sm_121a` target evidence in the server log.
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json`: completion token counts exist, but output validation fails; do not use it as a speed row.
 
 Do not claim a fork speedup until server logs prove the selected kernel path and the before/after rows are matched.
 

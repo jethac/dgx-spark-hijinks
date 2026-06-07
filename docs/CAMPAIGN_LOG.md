@@ -287,6 +287,20 @@
   - artifact: `results/counterpart_task_matrix_20260608.json`
   - result: all seven missing or partial counterpart requirements have concrete command templates and expected claim artifacts.
   - interpretation: this is runbook readiness, not live proof. The counterpart evidence audit remains the source of truth for whether those rows have actually landed.
+- Reconnected to the GB10 host through Tailscale and captured fresh doctor evidence.
+  - reachable host: `thinkstationpgx-00b4.tail740c8d.ts.net`
+  - reachable IP: `100.113.98.11`
+  - stale/unreachable LAN IP from this client: `192.168.68.112`
+  - artifacts: `results/spark_doctor_tailnet_reconnect_20260608T074035JST.json`, `results/spark_doctor_tailnet_reconnect_20260608T074035JST.md`, `results/counterpart_task_matrix_tailnet_reconnect_20260608T074035JST.json`
+  - result: live doctor confirms Linux `aarch64`, `NVIDIA GB10`, compute capability `12.1`, driver `580.159.03`, and CUDA `13.0`.
+  - caveat: system Python has no Torch, so this reconnect artifact does not record SM count; use a runtime/container doctor for SM-count-backed benchmark rows.
+- Ran the first local AEON Qwen3.6 NVFP4+DFlash vLLM attempt after reconnect.
+  - run id: `aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST`
+  - image/model state: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2` was present; target and drafter weights were present under `/home/jethac/models/aeon`.
+  - checkpoint audit: `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`, `ok=true`, compressed-tensors NVFP4, `124306` safetensors keys, `0` quantized sensitive keys.
+  - backend evidence: server log resolved `Qwen3_5MoeForConditionalGeneration` and `DFlashDraftModel`, selected `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, and `585168` KV tokens.
+  - failure: row manifest is `ok=false`; chat smoke produced `message.reasoning` but no normal content and no `spark-ok`; benchmark recorded completion-token counts but no valid output text, so this is not a speed row.
+  - interpretation: image acquisition and model startup are no longer the vLLM Qwen blocker; the next blocker is response/content validation plus native-target proof.
 
 ## First Benchmark Campaign Summary
 

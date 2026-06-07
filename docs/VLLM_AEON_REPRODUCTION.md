@@ -1,6 +1,6 @@
 # vLLM AEON Reproduction
 
-Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash is blocked before serving by image-pull/registration and host-reachability failure.
+Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash now starts from the AEON `v2` image and generates completion tokens, but the row is not claim-ready because smoke/benchmark output validation failed.
 
 AEON-7's public Gemma and Qwen recipes are currently the highest-leverage vLLM prior art for this campaign because they target GB10 / `sm_121a`, NVFP4 weights, and DFlash speculative decoding. Treat them as external evidence until our local artifacts exist.
 
@@ -44,6 +44,9 @@ Qwen reproduction attempt artifacts:
 
 - `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`
 - `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json`
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`
+- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`
 
 ## Preflight Result
 
@@ -76,7 +79,7 @@ Current fork evidence:
 - first patch artifact: `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md`
 - full AEON Qwen source-port artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
-- limitation: this is source verification only; GB10 Qwen3.6 NVFP4+DFlash serving remains pending
+- limitation: this is source verification only; the local AEON Qwen3.6 container starts, but the `jethac` fork still needs a clean install/container parity row
 
 The old Qwen `language_model.` prefix stripping is a model-conversion helper, not a vLLM source patch for the current AEON v2 multimodal weights.
 
@@ -88,7 +91,7 @@ This lane is different from the FlashInfer `b12x` and FA2 NVFP4-KV work:
 
 - Gemma 4's immediate vLLM win comes from NVFP4 weights, correct compressed-tensors loading, FlashInfer CUTLASS NVFP4 linear kernels, vLLM CUTLASS NvFp4 MoE, Triton target attention, CUDA graphs, and DFlash.
 - FA2 NVFP4 KV remains a Qwen/standard-attention capacity lane first; it is not the current Gemma 4 DFlash recipe.
-- The next useful proof is unblocking the Qwen3.6 image/container path, then recording a matched serving row.
+- The next useful proof is fixing the Qwen3.6 output path and recording a matched serving row with normal content, backend logs, and quality checks.
 
 ## 2026-06-08 Gemma 26B Result
 
@@ -172,3 +175,44 @@ ssh: connect to host 192.168.68.112 port 22: Connection timed out
 This remains an acquisition/reachability blocker. It is not a Qwen model-load, DFlash, vLLM, FlashInfer, or `sm_121` runtime result.
 
 If the image did not register, use `scripts/pull_container_with_evidence.sh` before trying another hand-run pull.
+
+## 2026-06-08 Qwen3.6 Tailnet Retry
+
+After reconnecting through Tailscale, `ghcr.io/aeon-7/vllm-spark-omni-q36:v2` was present locally and the AEON Qwen3.6 target and drafter weights were present under `/home/jethac/models/aeon`.
+
+Target:
+
+- image: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
+- target model: `/home/jethac/models/aeon/qwen36-nvfp4`
+- drafter: `/home/jethac/models/aeon/qwen36-dflash`
+- run id: `aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST`
+
+Checkpoint audit:
+
+- artifact: `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`
+- result: `ok=true`
+- format guess: `compressed_tensors_nvfp4`
+- loaded keys: `124306` from safetensors
+- compressed-tensors markers: `123520`
+- quantized sensitive key count: `0`
+
+Server/backend evidence from `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`:
+
+- resolved target architecture: `Qwen3_5MoeForConditionalGeneration`
+- resolved drafter architecture: `DFlashDraftModel`
+- selected `FlashInferCutlassNvFp4LinearKernel` for NVFP4 GEMM
+- selected `MARLIN` NvFp4 MoE backend
+- used FlashAttention version 2
+- logged `GPU KV cache size: 585,168 tokens`
+- logged maximum concurrency `4.73x` at `262,144` tokens/request
+- captured CUDA graphs
+
+Failure:
+
+- row manifest: `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json`, `ok=false`
+- chat smoke: `content=null`; vLLM returned text under `message.reasoning`, not normal content, and did not produce `spark-ok`
+- compact benchmark: completion token counts were present, but streamed content and `reasoning_content` were empty, so the row has no valid decode-quality output
+- build-target audit: no CUDA architecture target evidence found in the server log
+- server warning: the GPU was reported as lacking native FP4 computation for this path, so weight-only FP4 compression used Marlin and may degrade compute-heavy workloads
+
+Interpretation: image acquisition and model startup are no longer the blocker for AEON Qwen3.6. The blocker moved to output validation and native-target/kernel proof. This is a useful partial vLLM Qwen row, but it must not be counted as a passing serving benchmark or a fork speedup.

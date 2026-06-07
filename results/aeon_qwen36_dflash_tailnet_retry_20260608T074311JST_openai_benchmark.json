@@ -1,0 +1,126 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 11,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780872735,
+        "id": "chatcmpl-a1bc7f63f2b04dc2",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 25,
+          "total_tokens": 89
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 0.526102556992555,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 25,
+        "total_tokens": 89
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 58,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780872736,
+        "id": "chatcmpl-82dcd2a355ad034a",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 37,
+          "total_tokens": 229
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 2.7986916700028814,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 37,
+        "total_tokens": 229
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 14,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780872739,
+        "id": "chatcmpl-86cdb40e0da30272",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2269,
+          "total_tokens": 2333
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.089763820025837,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2269,
+        "total_tokens": 2333
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T22:52:20Z",
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "qwen36-fast",
+  "models_response": null,
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "aeon_qwen36_dflash_tailnet_retry_20260608T074311JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T22:52:15Z",
+  "url": "http://127.0.0.1:8000"
+}

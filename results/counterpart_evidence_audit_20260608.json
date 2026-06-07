@@ -151,6 +151,8 @@
         {
           "accepted_matches": [],
           "ignored_matches": [
+            "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
+            "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
             "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
           ],
           "ok": false,
@@ -161,7 +163,10 @@
         },
         {
           "accepted_matches": [],
-          "ignored_matches": [],
+          "ignored_matches": [
+            "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json",
+            "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_openai_benchmark.json"
+          ],
           "ok": false,
           "patterns": [
             "results/*qwen36*dflash*openai_benchmark.json",
@@ -173,17 +178,27 @@
       "claim_ready": false,
       "forbidden_claim_fragments": [],
       "ignored_claim_matches": [
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
+        "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_openai_benchmark.json",
+        "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
         "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
       ],
       "model_family": "qwen",
       "name": "vllm_qwen36_nvfp4_dflash",
       "partial_matches": [
         "results/aeon_qwen36_dflash_20260608T0501JST_summary.md",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log",
+        "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_nvfp4_checkpoint_audit.json",
+        "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
+        "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_server.log",
         "results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md",
         "results/vllm_aeon_qwen_patch_port_20260608T0619JST.md"
       ],
       "runtime": "vllm",
-      "status": "blocked-or-stop-point",
+      "status": "partial-evidence-only",
       "title": "vLLM Qwen3.6 NVFP4+DFlash local serving row"
     },
     {

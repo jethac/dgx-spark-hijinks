@@ -13,14 +13,16 @@
   ],
   "inputs": [
     "results/aeon_gemma26_dflash_20260608T0436JST_row_manifest.json",
+    "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
+    "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
     "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json",
     "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_row_manifest.json",
     "results/qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8_row_manifest.json",
     "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
   ],
-  "live_row_count": 2,
+  "live_row_count": 4,
   "ok": true,
-  "row_count": 5,
+  "row_count": 7,
   "rows": [
     {
       "backend": "vllm",
@@ -91,6 +93,138 @@
           "NVFP4"
         ],
         "path": "results/aeon_gemma26_dflash_20260608T0436JST_server.log"
+      }
+    },
+    {
+      "backend": "vllm",
+      "benchmark": {
+        "case_count": 3,
+        "exists": true,
+        "hardware_ok": false,
+        "ok": false
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "exists": true,
+        "missing_or_unaccepted_count": 1,
+        "native_fp4_log_count": 0
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": true,
+        "chat_smoke": false,
+        "container_target_audit": false,
+        "openai_benchmark": false,
+        "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
+      },
+      "dry_run": false,
+      "findings": [
+        "OpenAI benchmark artifact is missing or not fully ok",
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": false,
+      "missing_metadata": [],
+      "model": "qwen36-fast",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
+      "phase": "exploratory",
+      "run_id": "aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST",
+      "runtime_probe": {
+        "exists": true,
+        "hardware_ok": true,
+        "process_count": 4,
+        "server_models_ok": true
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "exists": true,
+        "has_backend_marker": true,
+        "matched_markers": [
+          "FlashInfer",
+          "FLASH_ATTN",
+          "VLLM_CUTLASS",
+          "CUDAGraph",
+          "CUDA graph",
+          "DFlash",
+          "NvFp4",
+          "NVFP4"
+        ],
+        "path": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log"
+      }
+    },
+    {
+      "backend": "vllm",
+      "benchmark": {
+        "case_count": 3,
+        "exists": true,
+        "hardware_ok": false,
+        "ok": false
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "exists": true,
+        "missing_or_unaccepted_count": 1,
+        "native_fp4_log_count": 0
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": true,
+        "chat_smoke": false,
+        "container_target_audit": false,
+        "openai_benchmark": false,
+        "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
+      },
+      "dry_run": false,
+      "findings": [
+        "OpenAI benchmark artifact is missing or not fully ok",
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": false,
+      "missing_metadata": [],
+      "model": "qwen36-fast",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
+      "phase": "exploratory",
+      "run_id": "aeon_qwen36_dflash_tailnet_retry_20260608T074311JST",
+      "runtime_probe": {
+        "exists": true,
+        "hardware_ok": true,
+        "process_count": 4,
+        "server_models_ok": true
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "exists": true,
+        "has_backend_marker": true,
+        "matched_markers": [
+          "FlashInfer",
+          "FLASH_ATTN",
+          "VLLM_CUTLASS",
+          "CUDAGraph",
+          "CUDA graph",
+          "DFlash",
+          "NvFp4",
+          "NVFP4"
+        ],
+        "path": "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_server.log"
       }
     },
     {

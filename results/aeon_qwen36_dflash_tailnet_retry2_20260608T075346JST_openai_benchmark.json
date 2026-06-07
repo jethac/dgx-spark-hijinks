@@ -1,0 +1,135 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 10,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780873418,
+        "id": "chatcmpl-ad226133413b6543",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 25,
+          "total_tokens": 89
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "output_chars": 0,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "total_s": 0.48584780999226496,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 25,
+        "total_tokens": 89
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 61,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780873418,
+        "id": "chatcmpl-8a6e67a1881a56bc",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 37,
+          "total_tokens": 229
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "output_chars": 0,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "total_s": 2.9228198059718125,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 37,
+        "total_tokens": 229
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 11,
+      "content_chars": 0,
+      "content_preview": "",
+      "decode_s": null,
+      "decode_tok_s": null,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780873421,
+        "id": "chatcmpl-a3da48c0e6f0723c",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2269,
+          "total_tokens": 2333
+        }
+      },
+      "matched_stop": null,
+      "ok": false,
+      "output_chars": 0,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "total_s": 0.9325062959978823,
+      "ttft_s": null,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2269,
+        "total_tokens": 2333
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T23:03:42Z",
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "qwen36-fast",
+  "models_response": null,
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T23:03:38Z",
+  "url": "http://127.0.0.1:8000"
+}

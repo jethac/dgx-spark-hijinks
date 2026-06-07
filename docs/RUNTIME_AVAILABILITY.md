@@ -14,12 +14,13 @@ Tracked by:
 Artifact:
 
 - `results/runtime_availability_20260607T1155Z.json`
+- `results/spark_doctor_tailnet_reconnect_20260608T074035JST.json`
 
 Summary:
 
 | runtime | current state |
 |---|---|
-| vLLM | installed in benchmark venv; live server running |
+| vLLM | installed in benchmark venv; AEON Gemma and Qwen containers have local evidence; no live server is assumed |
 | FlashInfer | installed in benchmark venv |
 | PyTorch | installed in benchmark venv as `2.11.0+cu130` |
 | SGLang | not installed in benchmark venv; NVIDIA `nvcr.io/nvidia/sglang:26.05-py3` container smoke passed |
@@ -29,12 +30,21 @@ Summary:
 | Ollama | no command found |
 | Docker | available |
 
+2026-06-08 reconnect note:
+
+- reachable hostname: `thinkstationpgx-00b4.tail740c8d.ts.net`
+- reachable Tailscale IP: `100.113.98.11`
+- stale/unreachable LAN IP from this client: `192.168.68.112`
+- live doctor result: Linux `aarch64`, `NVIDIA GB10`, compute capability `12.1`, driver `580.159.03`, CUDA `13.0`
+- caveat: the reconnect doctor used system Python, where Torch is unavailable, so that artifact does not record SM count
+
 Docker images currently present include:
 
 - `gemma4-vllm:v0.22.1-pip`
 - `gemma4-vllm:tf-main`
 - `vllm/vllm-openai:latest-cu130`
 - `vllm/vllm-openai:cu130-nightly-aarch64`
+- `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
 - `nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04`
 
 ## Next Runtime Actions

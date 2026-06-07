@@ -1,0 +1,106 @@
+{
+  "artifacts": {
+    "build_target_audit": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_build_target_audit.json",
+    "chat_smoke": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_chat_smoke.json",
+    "openai_benchmark": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json",
+    "runtime_probe": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_runtime_probe.json",
+    "server_log": "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log"
+  },
+  "backend": "vllm",
+  "commands": {
+    "build_target_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_build_target_audit.py",
+        "--log",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log",
+        "--output",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_build_target_audit.json"
+      ],
+      "finished_unix": 1780873422.913924,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780873422.8862367
+    },
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "qwen36-fast",
+        "--output",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_chat_smoke.json"
+      ],
+      "finished_unix": 1780873418.415725,
+      "ok": false,
+      "returncode": 2,
+      "started_unix": 1780873385.032113
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "qwen36-fast",
+        "--backend",
+        "vllm",
+        "--phase",
+        "exploratory",
+        "--run-id",
+        "aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST",
+        "--output",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json"
+      ],
+      "finished_unix": 1780873422.7950556,
+      "ok": false,
+      "returncode": 2,
+      "started_unix": 1780873418.4158108
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--match",
+        "vllm",
+        "--output",
+        "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_runtime_probe.json"
+      ],
+      "finished_unix": 1780873422.8859544,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780873422.795413
+    }
+  },
+  "dry_run": false,
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "metadata": {
+    "attention_backend": "flash_attn",
+    "container_digest": null,
+    "container_image": "ghcr.io/aeon-7/vllm-spark-omni-q36:v2",
+    "cuda_graph_mode": "enabled",
+    "kv_cache_dtype": "auto",
+    "model_revision": null,
+    "quantization": "compressed-tensors-nvfp4",
+    "runtime_ref": "ghcr.io/aeon-7/vllm-spark-omni-q36:v2"
+  },
+  "model": "qwen36-fast",
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST",
+  "schema": "openai-serving-row-manifest/v1"
+}

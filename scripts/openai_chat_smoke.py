@@ -56,14 +56,21 @@ def main() -> int:
     try:
         response = post_json(endpoint, payload, args.timeout)
         report["response"] = response
-        content = (
-            response.get("choices", [{}])[0]
-            .get("message", {})
-            .get("content", "")
-            .strip()
-        )
+        message = response.get("choices", [{}])[0].get("message", {})
+        raw_content = message.get("content")
+        raw_reasoning = message.get("reasoning_content")
+        raw_reasoning_legacy = message.get("reasoning")
+        content = raw_content if isinstance(raw_content, str) else ""
+        reasoning = raw_reasoning if isinstance(raw_reasoning, str) else ""
+        reasoning_legacy = raw_reasoning_legacy if isinstance(raw_reasoning_legacy, str) else ""
         report["content"] = content
-        report["ok"] = "spark-ok" in content.lower()
+        report["reasoning_content"] = reasoning
+        report["reasoning"] = reasoning_legacy
+        report["content_chars"] = len(content)
+        report["reasoning_content_chars"] = len(reasoning)
+        report["reasoning_chars"] = len(reasoning_legacy)
+        combined = "\n".join([content, reasoning, reasoning_legacy])
+        report["ok"] = "spark-ok" in combined.lower()
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
         report["error"] = repr(exc)
     finally:
@@ -79,4 +86,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
