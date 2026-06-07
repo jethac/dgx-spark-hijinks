@@ -1,0 +1,91 @@
+{
+  "all_ok": true,
+  "deswizzle_flag_probe": {
+    "enabled": true,
+    "env_after": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+    "env_before": null,
+    "helper_available": true
+  },
+  "host": "thinkstationpgx-00b4",
+  "installed_modules": {
+    "flashinfer": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.11.post2"
+    },
+    "torch": {
+      "capability": [
+        12,
+        1
+      ],
+      "cuda": "13.0",
+      "cuda_available": true,
+      "gpu": "NVIDIA GB10",
+      "version": "2.11.0+cu130"
+    },
+    "vllm": {
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/__init__.py",
+      "is_capability_family_12": false,
+      "is_capability_family_120": true,
+      "platform_capability": [
+        12,
+        1
+      ],
+      "version": "0.22.1"
+    }
+  },
+  "limitations": [
+    "This does not install the full vLLM fork as an editable package.",
+    "This does not build or run FlashInfer FA2 NVFP4 KV kernels.",
+    "This does not start a vLLM server or prove serving correctness/capacity/performance."
+  ],
+  "platform": {
+    "executable": "/home/jethac/gemma4-evals/.venv/bin/python",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "probe_type": "source-file routing probe using installed vLLM compiled dependencies",
+  "routing_results": [
+    {
+      "decode_backend": "fa2",
+      "expected": "fa2",
+      "is_kvcache_nvfp4": true,
+      "name": "sm12x_nvfp4_kv",
+      "ok": true,
+      "prefill_backend": "fa2",
+      "use_fa2_nvfp4_kv": true
+    },
+    {
+      "decode_backend": "trtllm-gen",
+      "expected": "trtllm-gen",
+      "is_kvcache_nvfp4": true,
+      "name": "sm100_style_nvfp4_kv",
+      "ok": true,
+      "prefill_backend": "trtllm-gen",
+      "use_fa2_nvfp4_kv": false
+    },
+    {
+      "decode_backend": "auto",
+      "expected": "auto",
+      "is_kvcache_nvfp4": false,
+      "name": "non_nvfp4_kv",
+      "ok": true,
+      "prefill_backend": "auto",
+      "use_fa2_nvfp4_kv": false
+    }
+  ],
+  "schema": "vllm-nvfp4-sm12x-routing-probe/v1",
+  "source_branch": "spark/hijinks-007-nvfp4-kv-sm121",
+  "source_checks": {
+    "mentions_device_capability_family_12": false,
+    "mentions_device_capability_family_120": true,
+    "mentions_fa2_nvfp4_kv": true,
+    "mentions_trtllm_gen": true,
+    "mentions_v_scale_deswizzle_define": true
+  },
+  "source_file": "/root/spark-validation/vllm-nvfp4-kv-sm121/vllm/v1/attention/backends/flashinfer.py",
+  "source_repo": "https://github.com/jethac/vllm.git",
+  "source_rev": "8916796bc50926fd61e606718b194a71e2e31a24",
+  "user": "root"
+}

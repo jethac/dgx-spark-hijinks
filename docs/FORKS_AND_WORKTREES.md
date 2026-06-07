@@ -128,7 +128,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `2c1405d` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2; GB10 build/runtime proof pending |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `8916796` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2 and enables vLLM V-scale deswizzle; GB10 build/runtime proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` at `67c7967` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | SM12x FP4 KV compatibility gates pushed; native pool/backend work pending |
 
 FlashInfer patch:
@@ -163,16 +163,17 @@ FlashInfer FA2 NVFP4 KV patch:
 
 vLLM SM12x NVFP4 KV routing patch:
 
-- commit: `2c1405dd129d873d268b8baea78c5739cd384951`
+- commit: `8916796bc50926fd61e606718b194a71e2e31a24`
 - branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-007-nvfp4-kv-sm121
 - purpose: route SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 while preserving the existing SM100 TRTLLM NVFP4 path
+- vLLM-specific layout fix: enable FlashInfer's `FLASHINFER_PAGED_V_SF_DESWIZZLE` JIT path because vLLM's NVFP4 cache writer stores V scale factors swizzled for the old SM100 TRTLLM path
 - touched files: `vllm/v1/attention/backends/flashinfer.py`, `tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py`, `docs/design/attention_backends.md`
 - upstream guidance checked: `CONTRIBUTING.md`, `docs/contributing/README.md`, and `AGENTS.md`; commit was made with DCO sign-off
 - local verification: Python syntax compile and staged `git diff --check` passed
 - local pytest limitation: vLLM pytest collection is blocked in this Windows workspace because `tblib` is not installed
 - local lint limitation: `ruff` is not installed in this Windows workspace
-- PGX verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121
-- missing verification: clean vLLM plus FlashInfer build on GB10 and a serving proof selecting FA2 native NVFP4 KV
+- PGX verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121 and that the deswizzle JIT flag helper enables `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
+- missing verification: clean vLLM plus FlashInfer build on GB10, hikari-style layout/cosine harness proof, and a serving proof selecting FA2 native NVFP4 KV
 
 SGLang SM12x FP4 KV gate patch:
 
@@ -183,6 +184,7 @@ SGLang SM12x FP4 KV gate patch:
 - local verification: Python syntax compile and `git diff --check` passed
 - local pytest limitation: Windows collection fails because SGLang imports the POSIX-only `resource` module
 - local lint limitation: `ruff` is not installed in this Windows workspace
-- missing verification: Linux/PGX unit test run, native FP4 KV pool/backend wrapper patch, and GB10 `fp4_e2m1` serving proof
+- PGX verification: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md` confirms Linux/aarch64 branch checkout and `python3 -m py_compile` for touched files
+- missing verification: Linux/PGX targeted pytest with SGLang test dependencies, native FP4 KV pool/backend wrapper patch, and GB10 `fp4_e2m1` serving proof
 
 Other forks should still be created only when the corresponding issue is ready to carry code.
