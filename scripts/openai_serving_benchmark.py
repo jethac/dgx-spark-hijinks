@@ -10,6 +10,8 @@ import urllib.error
 import urllib.request
 from typing import Any
 
+from spark_hardware import collect_cuda_hardware
+
 
 PROMPTS = {
     "short_decode": {
@@ -199,11 +201,13 @@ def main() -> int:
     args = parser.parse_args()
 
     started = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    hardware = collect_cuda_hardware()
     report: dict[str, Any] = {
         "schema": "openai-serving-benchmark/v1",
         "run_id": args.run_id,
         "phase": args.phase,
         "backend": args.backend,
+        "hardware": hardware,
         "url": args.url,
         "started_utc": started,
         "cases": [],

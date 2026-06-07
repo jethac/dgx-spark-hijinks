@@ -18,6 +18,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from spark_hardware import collect_cuda_hardware
+
 
 def run(cmd: list[str], timeout: int = 20) -> dict[str, Any]:
     try:
@@ -164,6 +166,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         ]
     }
     modules["torch"] = torch_info()
+    hardware = collect_cuda_hardware()
 
     env_keys = [
         "CUDA_VISIBLE_DEVICES",
@@ -184,6 +187,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         },
         "environment": {key: os.environ.get(key) for key in env_keys},
         "commands": commands,
+        "hardware": hardware,
         "modules": modules,
         "shared_objects": inspect_so(args.inspect_so),
         "findings": [],
@@ -196,10 +200,13 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         first = devices[0]
         cap = first.get("capability")
         name = first.get("name", "")
+        sm_count = first.get("multi_processor_count")
         if cap == [12, 1]:
             findings.append("OK: first CUDA device reports compute capability 12.1 / sm_121.")
         else:
             findings.append(f"WARN: first CUDA device is {name!r} with capability {cap}, not sm_121.")
+        if sm_count is not None:
+            findings.append(f"INFO: first CUDA device reports {sm_count} SMs.")
     else:
         findings.append("WARN: PyTorch did not report an available CUDA device.")
 
@@ -228,6 +235,8 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
     elif query:
         findings.append("WARN: nvidia-smi query did not clearly identify GB10 / 12.1.")
 
+    findings.extend(hardware.get("warnings", []))
+
     return report
 
 
@@ -240,6 +249,20 @@ def markdown(report: dict[str, Any]) -> str:
     lines.append("## Platform")
     for key, value in report["platform"].items():
         lines.append(f"- `{key}`: `{value}`")
+    lines.append("")
+    lines.append("## CUDA Hardware")
+    for device in report.get("hardware", {}).get("devices", []):
+        lines.append(
+            "- `{index}`: `{name}`, capability `{capability}`, SMs `{sms}`, key `{key}`".format(
+                index=device.get("index"),
+                name=device.get("name"),
+                capability=device.get("capability"),
+                sms=device.get("multi_processor_count"),
+                key=device.get("comparison_key"),
+            )
+        )
+    for warning in report.get("hardware", {}).get("warnings", []):
+        lines.append(f"- warning: {warning}")
     lines.append("")
     lines.append("## Commands")
     for key, value in report["commands"].items():

@@ -18,6 +18,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from spark_hardware import collect_cuda_hardware
+
 
 def utc_stamp() -> str:
     return time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
@@ -503,6 +505,7 @@ def main() -> int:
         "schema": "spark-smoke-suite/v1",
         "run_id": args.run_id,
         "started_utc": iso_utc(),
+        "hardware": collect_cuda_hardware(),
         "host": os.uname().nodename if hasattr(os, "uname") else None,
         "repo_root": str(repo_root),
         "results_dir": str(results_dir),

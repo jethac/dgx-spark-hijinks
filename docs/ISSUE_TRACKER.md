@@ -16,13 +16,13 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | single-machine benchmark redesign | smoke-suite orchestrator added; HF and MTP telemetry wrapped | [#10](https://github.com/jethac/dgx-spark-hijinks/issues/10) |
 | public recipes and blessed stack docs | open | [#11](https://github.com/jethac/dgx-spark-hijinks/issues/11) |
 | multi-Spark future work | blocked on hardware | [#12](https://github.com/jethac/dgx-spark-hijinks/issues/12) |
-| Spark-specific performance tuning | FlashInfer proxy null result recorded; serving-path tuning pending | [#13](https://github.com/jethac/dgx-spark-hijinks/issues/13) |
+| Spark-specific performance tuning | FlashInfer proxy null result recorded; SM-count-aware run keys added; serving-path tuning pending | [#13](https://github.com/jethac/dgx-spark-hijinks/issues/13) |
 | SGLang Spark runtime path | BF16 Qwen passed; Gemma E2B failed; NVFP4 tracked in #18 | [#14](https://github.com/jethac/dgx-spark-hijinks/issues/14) |
 | upstream forks, submodules, and worktrees | FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed and submodules advanced | [#15](https://github.com/jethac/dgx-spark-hijinks/issues/15) |
 | LiteRT-LM on Spark | optional side runtime; CPU path proven; GPU chat crash open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | blessed for 26B Q4_0 serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
-| SGLang NVFP4 KV on Spark | SM12x FP4 KV compatibility gate patch pushed; PGX py_compile passed; targeted pytest, native pool/backend work, and GB10 `fp4_e2m1` serving validation pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
-| before/after GB10 benchmark protocol | open | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
+| SGLang NVFP4 KV on Spark | SM12x FP4 KV compatibility gate patch pushed; Linux/aarch64 py_compile passed on GB10; targeted pytest, native pool/backend work, and GB10 `fp4_e2m1` serving validation pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
+| before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
 
 ## Triage Rules
 

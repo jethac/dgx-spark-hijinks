@@ -19,6 +19,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from spark_hardware import collect_cuda_hardware
+
 
 def run_capture(cmd: list[str], timeout: int = 10) -> dict[str, Any]:
     try:
@@ -183,6 +185,7 @@ def classify_returncode(returncode: int | None) -> str:
 def run_with_telemetry(args: argparse.Namespace) -> dict[str, Any]:
     started = time.time()
     started_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started))
+    hardware = collect_cuda_hardware()
     pre_memory = memory_snapshot()
     proc = subprocess.Popen(
         args.command,
@@ -225,6 +228,7 @@ def run_with_telemetry(args: argparse.Namespace) -> dict[str, Any]:
         "backend": args.backend,
         "model": args.model,
         "command": args.command,
+        "hardware": hardware,
         "started_utc": started_utc,
         "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(finished)),
         "elapsed_s": finished - started,

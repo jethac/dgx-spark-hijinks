@@ -228,20 +228,23 @@ Acceptance test:
 - A failed HF row records enough telemetry to say whether it was OOM/resource pressure or a real model error.
 - Reports never mix HF fallback accuracy into vLLM comparisons without labeling it.
 
-## 10. Tune For 48 SMs And Unified LPDDR5x
+## 10. Tune For GB10 SM Count And Unified LPDDR5x
 
 Weakness: "it runs" is not the same as "it is tuned for Spark."
 
 Plan:
 
 - Build a Spark-specific performance suite: prefill, decode, mixed prompt lengths, small-batch serving, long-context KV pressure.
-- Tune tile sizes, occupancy, batch defaults, and graph capture sizes for GB10 instead of copying RTX PRO 6000 or B200 values. The first `spark_doctor` snapshot reported 48 CUDA multiprocessors on the available GB10 unit.
+- Tune tile sizes, occupancy, batch defaults, and graph capture sizes for GB10 instead of copying RTX PRO 6000 or B200 values.
+- Treat SM count as a performance key, not a correctness gate. The current DGX Spark-class GB10 unit reports 48 CUDA multiprocessors, but binned GB10 / `sm_121` parts can have fewer SMs while sharing the same ISA.
+- Derive performance heuristics from runtime device properties such as `cudaDeviceProp.multiProcessorCount` or `torch.cuda.get_device_properties(0).multi_processor_count`; do not hardcode 48 into upstream kernels or benchmark conclusions.
 - Track memory bandwidth limits explicitly; 128 GB unified memory is the feature, but LPDDR5x bandwidth is the constraint.
 - Add regression dashboards by model family and quantization type.
 
 Acceptance test:
 
 - Each blessed recipe has baseline tokens/sec, latency, memory, and backend metadata.
+- Every before/after row records CUDA compute capability and `multi_processor_count`; performance rows are only compared within the same SM count unless explicitly normalized.
 - A release cannot claim Spark support if it only passes functional tests and misses performance baselines by a large margin.
 
 ## 11. Handle Multi-Spark Correctly

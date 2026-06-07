@@ -82,7 +82,7 @@
   - adds wrapper-routing regression coverage and updates vLLM's attention backend design doc.
   - verification: Python syntax compile and staged `git diff --check` passed.
   - limitations: local `ruff` is unavailable and pytest collection is blocked by missing `tblib`; no clean GB10 vLLM plus FlashInfer build or serving proof yet.
-- Ran a PGX source-file routing probe for `jethac/vllm@2c1405dd129d873d268b8baea78c5739cd384951`.
+- Ran a GB10 source-file routing probe for `jethac/vllm@2c1405dd129d873d268b8baea78c5739cd384951`.
   - result: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json`
   - host/GPU: `thinkstationpgx-00b4`, `NVIDIA GB10`, capability `[12, 1]`
   - installed dependency context: vLLM `0.22.1`, Torch `2.11.0+cu130`, CUDA `13.0`
@@ -92,7 +92,7 @@
   - reason: vLLM's native NVFP4 cache writer stores V scale factors in a swizzled layout for the old SM100 TRTLLM path, so the SM12x FA2 path must enable FlashInfer's in-kernel V-SF deswizzle variant.
   - scope: still keyed only on `kv_cache_dtype == "nvfp4"` and the SM12x consumer-Blackwell family helper; fp8/auto routing remains unchanged.
   - family note: vLLM reporting GB10 as capability family `120` is correct for FA2 NVFP4 KV routing, but native FP4/MXFP4 MMA work still needs Spark-appropriate `sm_121a` or validated compatible targets.
-- Ran the scripted PGX routing/deswizzle probe for `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`.
+- Ran the scripted GB10 routing/deswizzle probe for `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`.
   - result: `results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json`
   - outcome: SM12x NVFP4 KV wrapper routing selects FlashInfer `fa2`, SM100-style NVFP4 still selects `trtllm-gen`, non-NVFP4 still selects `auto`, and the deswizzle helper sets `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`.
   - limitation: this is still routing/JIT-flag evidence only. It does not replace hikari-style NHD/HND cosine checks or an end-to-end serving proof.
@@ -102,10 +102,17 @@
   - adds server-args unit coverage for SM12x FlashInfer MHA KV4 gates.
   - verification: Python syntax compile and `git diff --check` passed.
   - limitations: local `ruff` is unavailable and pytest collection is blocked on Windows by missing POSIX `resource`; native FP4 KV memory-pool/backend wrapper work and GB10 serving proof are still pending.
-- Ran a PGX/Linux verification pass for `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`.
+- Ran a Linux/aarch64 verification pass on the GB10 host for `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`.
   - result: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md`
   - outcome: Linux/aarch64 branch fetch and detached worktree checkout passed; `python3 -m py_compile` passed for the touched SGLang files.
-  - limitation: targeted `KV4Compatibility` pytest was not run because PGX has no `python` shim and `python3` does not have `pytest` installed.
+  - limitation: targeted `KV4Compatibility` pytest was not run because the host has no `python` shim and `python3` does not have `pytest` installed.
+- Added SM-count awareness to diagnostics and benchmark harnesses.
+  - new helper: `scripts/spark_hardware.py`
+  - updated scripts: `spark_doctor.py`, `run_with_telemetry.py`, `openai_serving_benchmark.py`, `spark_smoke_suite.py`
+  - new evidence: `results/spark_doctor_smcount_20260607T172142Z.md`
+  - current GB10 comparison key: `NVIDIA_GB10:sm_121:sms_48`
+  - audit doc: `docs/SM_COUNT_AWARENESS.md`
+  - conclusion: current fork patches do not hardcode a 48-SM performance heuristic; future performance rows must still match `multi_processor_count`.
 
 ## First Benchmark Campaign Summary
 
