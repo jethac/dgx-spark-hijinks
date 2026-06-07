@@ -44,12 +44,19 @@ Patch branch:
 
 - fork: `jethac/flashinfer`
 - branch: `spark/hijinks-004-sm121-flashinfer`
-- commit: `6b7513ee`
+- commit: `a42c8f07`
 - changes:
   - `_heuristic_func_mm_fp4` now treats all SM12x devices as b12x candidates for CUDA 13 + NVFP4.
   - release and nightly aarch64 JIT-cache builds for CUDA 12.9+/13 include `12.1a`.
   - install docs show the DGX Spark `FLASHINFER_CUDA_ARCH_LIST` including `12.1a`.
   - XQA/MLA error messages now say SM12x or the correct SM121a CUDA 12.9 minimum.
+  - `tests/gemm/test_mm_fp4.py` adds a monkeypatched regression proving SM121 + CUDA 13 + NVFP4 auto-dispatch prefers `b12x`, then `cutlass`, then `cudnn`.
+- upstream guidance:
+  - FlashInfer `CONTRIBUTING.md` was checked before shaping the fork patch.
+  - The patch follows the documented pattern: Python interface change, unit test under `tests/`, documentation update, and release build-matrix update.
+- local verification:
+  - `python -m py_compile tests\gemm\test_mm_fp4.py flashinfer\gemm\gemm_base.py flashinfer\xqa.py flashinfer\mla\_core.py`
+  - targeted pytest collection currently fails in this Windows workspace because `tvm_ffi` is not installed; this is an environment dependency required by FlashInfer's test conftest.
 - not yet proven:
   - build success on the Spark
   - `cuobjdump`/JIT-cache evidence showing `sm_121a`

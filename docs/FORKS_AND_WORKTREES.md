@@ -95,18 +95,19 @@ Active submodules:
 
 FlashInfer patch:
 
-- commit: `6b7513ee`
+- commit: `a42c8f07`
 - branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-004-sm121-flashinfer
 - purpose: treat SM121 as SM12x for FP4 auto-dispatch and add `12.1a` to CUDA 12.9+/13 aarch64 JIT-cache build targets
-- local verification: Python syntax compile for touched Python files
+- test coverage: added `test_mm_fp4_auto_prefers_b12x_for_sm121_nvfp4` under `tests/gemm/test_mm_fp4.py`
+- local verification: Python syntax compile for touched Python files and the new test file
 - upstream guidance checked: `CONTRIBUTING.md`
 - relevant upstream process:
   - use editable install with `pip install --no-build-isolation -e . -v`
-  - initialize submodules recursively
-  - add unit tests and benchmarks where the patch changes behavior
-  - run linting through `pre-commit run -a` or repo lint scripts when available
+  - add unit tests in `tests/`
+  - update docs when Python documentation changes
   - public CI may require a `ci-users` approval comment or `run-ci` label for outside contributors
   - Spark internal CI exists as `unit_test_spark` but is manual-trigger only
+- local pytest limitation: targeted pytest collection fails in this Windows workspace because FlashInfer imports `tvm_ffi` through `tests/conftest.py`, and that dependency is not installed here.
 - missing verification: FlashInfer runtime tests on GB10 and upstream CI
 
 Other forks should still be created only when the corresponding issue is ready to carry code.
