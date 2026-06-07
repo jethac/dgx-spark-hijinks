@@ -1,0 +1,165 @@
+{
+  "cuobjdump": "/usr/local/cuda/bin/cuobjdump",
+  "inputs": {
+    "packages": [
+      "vllm",
+      "flashinfer"
+    ],
+    "paths": []
+  },
+  "objects": [
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_75",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _C.abi3.1.sm_80.cubin\nELF file    2: _C.abi3.2.sm_87.cubin\nELF file    3: _C.abi3.3.sm_89.cubin\nELF file    4: _C.abi3.4.sm_90.cubin\nELF file    5: _C.abi3.5.sm_100.cubin\nELF file    6: _C.abi3.6.sm_110.cubin\nELF file    7: _C.abi3.7.sm_120.cubin\nELF file    8: _C.abi3.8.sm_80.cubin\nELF file    9: _C.abi3.9.sm_87.cubin\nELF file   10: _C.abi3.10.sm_89.cubin\nELF file   11: _C.abi3.11.sm_90.cubin\nELF file   12: _C.abi3.12.sm_100.cubin\nELF file   13: _C.abi3.13.sm_110.cubin\nELF file   14: _C.abi3.14.sm_120.cubin\nELF file   15: _C.abi3.15.sm_80.cubin\nELF file   16: _C.abi3.16.sm_87.cubin\nELF file   17: _C.abi3.17.sm_89.cubin\nELF file   18: _C.abi3.18.sm_90.cubin\nELF file   19: _C.abi3.19.sm_100.cubin\nELF file   20: _C.abi3.20.sm_110.cubin\nELF file   21: _C.abi3.21.sm_120.cubin\nELF file   22: _C.abi3.22.sm_80.cubin\nELF file   23: _C.abi3.23.sm_87.cubin\nELF file   24: _C.abi3.24.sm_89.cubin\nELF file   25: _C.abi3.25.sm_90.cubin\nELF file   26: _C.abi3.26.sm_100.cubin\nELF file   27: _C.abi3.27.sm_110.cubin\nELF file   28: _C.abi3.28.sm_120.cubin\nELF file   29: _C.abi3.29.sm_80.cubin\nELF file   30: _C.abi3.30.sm_87.cubin\nELF file   31: _C.abi3.31.sm_89.cubin\nELF file   32: _C.abi3.32.sm_90.cubin\nELF file   33: _C.abi3.33.sm_100.cubin\nELF file   34: _C.abi3.34.sm_110.cubin\nELF file   35: _C.abi3.35.sm_120.cubin\nELF file   36: _C.abi3.36.sm_80.cubin\nELF file   37: _C.abi3.37.sm_87.cubin\nELF file   38: _C.abi3.38.sm_89.cubin\nELF file   39: _C.abi3.39.sm_90.cubin\nELF file   40: _C.abi3.40.sm_100.cubin\nELF file   41: _C.abi3.41.sm_110.cubin\nELF file   42: _C.abi3.42.sm_120.cubin\nELF file   43: _C.abi3.43.sm_80.cubin\nELF file   44: _C.abi3.44.sm_87.cubin\nELF file   45: _C.abi3.45.sm_89.cubin\nELF file   46: _C.abi3.46.sm_90.cubin\nELF file   47: _C.abi3.47.sm_100.cubin\nELF file   48: _C.abi3.48.sm_110.cubin\nELF file   49: _C.abi3.49.sm_120.cubin\nELF file   50: _C.abi3.50.sm_80.cubin\nELF file   51: _C.abi3.51.sm_87.cubin\nELF file   52: _C.abi3.52.sm_89.cubin\nELF file   5"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/_C_stable_libtorch.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _C_stable_libtorch.abi3.1.sm_80.cubin\nELF file    2: _C_stable_libtorch.abi3.2.sm_87.cubin\nELF file    3: _C_stable_libtorch.abi3.3.sm_89.cubin\nELF file    4: _C_stable_libtorch.abi3.4.sm_90.cubin\nELF file    5: _C_stable_libtorch.abi3.5.sm_100.cubin\nELF file    6: _C_stable_libtorch.abi3.6.sm_110.cubin\nELF file    7: _C_stable_libtorch.abi3.7.sm_120.cubin\nELF file    8: _C_stable_libtorch.abi3.8.sm_80.cubin\nELF file    9: _C_stable_libtorch.abi3.9.sm_87.cubin\nELF file   10: _C_stable_libtorch.abi3.10.sm_89.cubin\nELF file   11: _C_stable_libtorch.abi3.11.sm_90.cubin\nELF file   12: _C_stable_libtorch.abi3.12.sm_100.cubin\nELF file   13: _C_stable_libtorch.abi3.13.sm_110.cubin\nELF file   14: _C_stable_libtorch.abi3.14.sm_120.cubin\nELF file   15: _C_stable_libtorch.abi3.15.sm_80.cubin\nELF file   16: _C_stable_libtorch.abi3.16.sm_87.cubin\nELF file   17: _C_stable_libtorch.abi3.17.sm_89.cubin\nELF file   18: _C_stable_libtorch.abi3.18.sm_90.cubin\nELF file   19: _C_stable_libtorch.abi3.19.sm_100.cubin\nELF file   20: _C_stable_libtorch.abi3.20.sm_110.cubin\nELF file   21: _C_stable_libtorch.abi3.21.sm_120.cubin\nELF file   22: _C_stable_libtorch.abi3.22.sm_80.cubin\nELF file   23: _C_stable_libtorch.abi3.23.sm_87.cubin\nELF file   24: _C_stable_libtorch.abi3.24.sm_89.cubin\nELF file   25: _C_stable_libtorch.abi3.25.sm_90.cubin\nELF file   26: _C_stable_libtorch.abi3.26.sm_100.cubin\nELF file   27: _C_stable_libtorch.abi3.27.sm_110.cubin\nELF file   28: _C_stable_libtorch.abi3.28.sm_120.cubin\nELF file   29: _C_stable_libtorch.abi3.29.sm_80.cubin\nELF file   30: _C_stable_libtorch.abi3.30.sm_87.cubin\nELF file   31: _C_stable_libtorch.abi3.31.sm_89.cubin\nELF file   32: _C_stable_libtorch.abi3.32.sm_90.cubin\nELF file   33: _C_stable_libtorch.abi3.33.sm_100.cubin\nELF file   34: _C_stable_libtorch.abi3.34.sm_110.cubin\nELF file   35: _C_stable_libtorch.abi3.35.sm_120.cubin\nELF file   36: _C_stable_libtorch.abi3.36.sm_80.cubin\nELF file   37: _C_stable_libtorch.abi3.37.sm_87.cu"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/_flashmla_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _flashmla_C.abi3.1.sm_90a.cubin\nELF file    2: _flashmla_C.abi3.2.sm_100.cubin\nELF file    3: _flashmla_C.abi3.3.sm_90a.cubin\nELF file    4: _flashmla_C.abi3.4.sm_100.cubin\nELF file    5: _flashmla_C.abi3.5.sm_90a.cubin\nELF file    6: _flashmla_C.abi3.6.sm_100.cubin\nELF file    7: _flashmla_C.abi3.7.sm_90a.cubin\nELF file    8: _flashmla_C.abi3.8.sm_100.cubin\nELF file    9: _flashmla_C.abi3.9.sm_90a.cubin\nELF file   10: _flashmla_C.abi3.10.sm_100.cubin\nELF file   11: _flashmla_C.abi3.11.sm_90a.cubin\nELF file   12: _flashmla_C.abi3.12.sm_100.cubin\nELF file   13: _flashmla_C.abi3.13.sm_90a.cubin\nELF file   14: _flashmla_C.abi3.14.sm_100.cubin\nELF file   15: _flashmla_C.abi3.15.sm_90a.cubin\nELF file   16: _flashmla_C.abi3.16.sm_100.cubin\nELF file   17: _flashmla_C.abi3.17.sm_90a.cubin\nELF file   18: _flashmla_C.abi3.18.sm_100.cubin\nELF file   19: _flashmla_C.abi3.19.sm_90a.cubin\nELF file   20: _flashmla_C.abi3.20.sm_100.cubin\nELF file   21: _flashmla_C.abi3.21.sm_90a.cubin\nELF file   22: _flashmla_C.abi3.22.sm_100.cubin\nELF file   23: _flashmla_C.abi3.23.sm_90a.cubin\nELF file   24: _flashmla_C.abi3.24.sm_100.cubin\nELF file   25: _flashmla_C.abi3.25.sm_90a.cubin\nELF file   26: _flashmla_C.abi3.26.sm_100.cubin\nELF file   27: _flashmla_C.abi3.27.sm_90a.cubin\nELF file   28: _flashmla_C.abi3.28.sm_100.cubin\nELF file   29: _flashmla_C.abi3.29.sm_90a.cubin\nELF file   30: _flashmla_C.abi3.30.sm_100.cubin\nELF file   31: _flashmla_C.abi3.31.sm_90a.cubin\nELF file   32: _flashmla_C.abi3.32.sm_100.cubin\nELF file   33: _flashmla_C.abi3.33.sm_90a.cubin\nELF file   34: _flashmla_C.abi3.34.sm_100.cubin\nELF file   35: _flashmla_C.abi3.35.sm_90a.cubin\nELF file   36: _flashmla_C.abi3.36.sm_100.cubin\nELF file   37: _flashmla_C.abi3.37.sm_90a.cubin\nELF file   38: _flashmla_C.abi3.38.sm_100.cubin\nELF file   39: _flashmla_C.abi3.39.sm_90a.cubin\nELF file   40: _flashmla_C.abi3.40.sm_100.cubin\nELF file   41: _flashmla_C.abi3.41.sm_90a.cubin\nELF file   42: _flashmla_C.abi3.42.sm_100"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/_flashmla_extension_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _flashmla_extension_C.abi3.1.sm_90a.cubin\nELF file    2: _flashmla_extension_C.abi3.2.sm_100.cubin\nELF file    3: _flashmla_extension_C.abi3.3.sm_90a.cubin\nELF file    4: _flashmla_extension_C.abi3.4.sm_100.cubin\n"
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/_moe_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _moe_C.abi3.1.sm_80.cubin\nELF file    2: _moe_C.abi3.2.sm_87.cubin\nELF file    3: _moe_C.abi3.3.sm_89.cubin\nELF file    4: _moe_C.abi3.4.sm_90.cubin\nELF file    5: _moe_C.abi3.5.sm_100.cubin\nELF file    6: _moe_C.abi3.6.sm_110.cubin\nELF file    7: _moe_C.abi3.7.sm_120.cubin\nELF file    8: _moe_C.abi3.8.sm_80.cubin\nELF file    9: _moe_C.abi3.9.sm_87.cubin\nELF file   10: _moe_C.abi3.10.sm_89.cubin\nELF file   11: _moe_C.abi3.11.sm_90.cubin\nELF file   12: _moe_C.abi3.12.sm_100.cubin\nELF file   13: _moe_C.abi3.13.sm_110.cubin\nELF file   14: _moe_C.abi3.14.sm_120.cubin\nELF file   15: _moe_C.abi3.15.sm_80.cubin\nELF file   16: _moe_C.abi3.16.sm_87.cubin\nELF file   17: _moe_C.abi3.17.sm_89.cubin\nELF file   18: _moe_C.abi3.18.sm_90.cubin\nELF file   19: _moe_C.abi3.19.sm_100.cubin\nELF file   20: _moe_C.abi3.20.sm_110.cubin\nELF file   21: _moe_C.abi3.21.sm_120.cubin\nELF file   22: _moe_C.abi3.22.sm_80.cubin\nELF file   23: _moe_C.abi3.23.sm_87.cubin\nELF file   24: _moe_C.abi3.24.sm_89.cubin\nELF file   25: _moe_C.abi3.25.sm_90.cubin\nELF file   26: _moe_C.abi3.26.sm_100.cubin\nELF file   27: _moe_C.abi3.27.sm_110.cubin\nELF file   28: _moe_C.abi3.28.sm_120.cubin\nELF file   29: _moe_C.abi3.29.sm_80.cubin\nELF file   30: _moe_C.abi3.30.sm_87.cubin\nELF file   31: _moe_C.abi3.31.sm_89.cubin\nELF file   32: _moe_C.abi3.32.sm_90.cubin\nELF file   33: _moe_C.abi3.33.sm_100.cubin\nELF file   34: _moe_C.abi3.34.sm_110.cubin\nELF file   35: _moe_C.abi3.35.sm_120.cubin\nELF file   36: _moe_C.abi3.36.sm_80.cubin\nELF file   37: _moe_C.abi3.37.sm_87.cubin\nELF file   38: _moe_C.abi3.38.sm_89.cubin\nELF file   39: _moe_C.abi3.39.sm_90.cubin\nELF file   40: _moe_C.abi3.40.sm_100.cubin\nELF file   41: _moe_C.abi3.41.sm_110.cubin\nELF file   42: _moe_C.abi3.42.sm_120.cubin\nELF file   43: _moe_C.abi3.43.sm_80.cubin\nELF file   44: _moe_C.abi3.44.sm_87.cubin\nELF file   45: _moe_C.abi3.45.sm_89.cubin\nELF file   46: _moe_C.abi3.46.sm_90.cubin\nELF file   47: _moe_C.abi3.47.sm_100.cubin\nELF file   48: _"
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/cumem_allocator.abi3.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/cumem_allocator.abi3.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/spinloop.abi3.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/spinloop.abi3.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-310-aarch64-linux-gnu.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-310-aarch64-linux-gnu.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-311-aarch64-linux-gnu.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-311-aarch64-linux-gnu.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-312-aarch64-linux-gnu.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-313-aarch64-linux-gnu.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-313-aarch64-linux-gnu.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-314-aarch64-linux-gnu.so",
+      "returncode": 255,
+      "stderr_head": "cuobjdump info    : File '/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/third_party/deep_gemm/_C.cpython-314-aarch64-linux-gnu.so' does not contain device code\n",
+      "stdout_head": ""
+    },
+    {
+      "architectures": [
+        "sm_80"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _vllm_fa2_C.abi3.1.sm_80.cubin\nELF file    2: _vllm_fa2_C.abi3.2.sm_80.cubin\nELF file    3: _vllm_fa2_C.abi3.3.sm_80.cubin\nELF file    4: _vllm_fa2_C.abi3.4.sm_80.cubin\nELF file    5: _vllm_fa2_C.abi3.5.sm_80.cubin\nELF file    6: _vllm_fa2_C.abi3.6.sm_80.cubin\nELF file    7: _vllm_fa2_C.abi3.7.sm_80.cubin\nELF file    8: _vllm_fa2_C.abi3.8.sm_80.cubin\nELF file    9: _vllm_fa2_C.abi3.9.sm_80.cubin\nELF file   10: _vllm_fa2_C.abi3.10.sm_80.cubin\nELF file   11: _vllm_fa2_C.abi3.11.sm_80.cubin\nELF file   12: _vllm_fa2_C.abi3.12.sm_80.cubin\nELF file   13: _vllm_fa2_C.abi3.13.sm_80.cubin\nELF file   14: _vllm_fa2_C.abi3.14.sm_80.cubin\nELF file   15: _vllm_fa2_C.abi3.15.sm_80.cubin\nELF file   16: _vllm_fa2_C.abi3.16.sm_80.cubin\nELF file   17: _vllm_fa2_C.abi3.17.sm_80.cubin\nELF file   18: _vllm_fa2_C.abi3.18.sm_80.cubin\nELF file   19: _vllm_fa2_C.abi3.19.sm_80.cubin\nELF file   20: _vllm_fa2_C.abi3.20.sm_80.cubin\nELF file   21: _vllm_fa2_C.abi3.21.sm_80.cubin\nELF file   22: _vllm_fa2_C.abi3.22.sm_80.cubin\nELF file   23: _vllm_fa2_C.abi3.23.sm_80.cubin\nELF file   24: _vllm_fa2_C.abi3.24.sm_80.cubin\nELF file   25: _vllm_fa2_C.abi3.25.sm_80.cubin\nELF file   26: _vllm_fa2_C.abi3.26.sm_80.cubin\nELF file   27: _vllm_fa2_C.abi3.27.sm_80.cubin\nELF file   28: _vllm_fa2_C.abi3.28.sm_80.cubin\nELF file   29: _vllm_fa2_C.abi3.29.sm_80.cubin\nELF file   30: _vllm_fa2_C.abi3.30.sm_80.cubin\nELF file   31: _vllm_fa2_C.abi3.31.sm_80.cubin\nELF file   32: _vllm_fa2_C.abi3.32.sm_80.cubin\nELF file   33: _vllm_fa2_C.abi3.33.sm_80.cubin\nELF file   34: _vllm_fa2_C.abi3.34.sm_80.cubin\nELF file   35: _vllm_fa2_C.abi3.35.sm_80.cubin\nELF file   36: _vllm_fa2_C.abi3.36.sm_80.cubin\nELF file   37: _vllm_fa2_C.abi3.37.sm_80.cubin\nELF file   38: _vllm_fa2_C.abi3.38.sm_80.cubin\nELF file   39: _vllm_fa2_C.abi3.39.sm_80.cubin\nELF file   40: _vllm_fa2_C.abi3.40.sm_80.cubin\nELF file   41: _vllm_fa2_C.abi3.41.sm_80.cubin\nELF file   42: _vllm_fa2_C.abi3.42.sm_80.cubin\nELF file   43: _vllm_fa2_C.abi3.43."
+    },
+    {
+      "architectures": [
+        "sm_90a"
+      ],
+      "path": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so",
+      "returncode": 0,
+      "stderr_head": "",
+      "stdout_head": "ELF file    1: _vllm_fa3_C.abi3.1.sm_90a.cubin\nELF file    2: _vllm_fa3_C.abi3.2.sm_90a.cubin\nELF file    3: _vllm_fa3_C.abi3.3.sm_90a.cubin\nELF file    4: _vllm_fa3_C.abi3.4.sm_90a.cubin\nELF file    5: _vllm_fa3_C.abi3.5.sm_90a.cubin\nELF file    6: _vllm_fa3_C.abi3.6.sm_90a.cubin\nELF file    7: _vllm_fa3_C.abi3.7.sm_90a.cubin\nELF file    8: _vllm_fa3_C.abi3.8.sm_90a.cubin\nELF file    9: _vllm_fa3_C.abi3.9.sm_90a.cubin\nELF file   10: _vllm_fa3_C.abi3.10.sm_90a.cubin\nELF file   11: _vllm_fa3_C.abi3.11.sm_90a.cubin\nELF file   12: _vllm_fa3_C.abi3.12.sm_90a.cubin\nELF file   13: _vllm_fa3_C.abi3.13.sm_90a.cubin\nELF file   14: _vllm_fa3_C.abi3.14.sm_90a.cubin\nELF file   15: _vllm_fa3_C.abi3.15.sm_90a.cubin\nELF file   16: _vllm_fa3_C.abi3.16.sm_90a.cubin\nELF file   17: _vllm_fa3_C.abi3.17.sm_90a.cubin\nELF file   18: _vllm_fa3_C.abi3.18.sm_90a.cubin\nELF file   19: _vllm_fa3_C.abi3.19.sm_90a.cubin\nELF file   20: _vllm_fa3_C.abi3.20.sm_90a.cubin\nELF file   21: _vllm_fa3_C.abi3.21.sm_90a.cubin\nELF file   22: _vllm_fa3_C.abi3.22.sm_90a.cubin\nELF file   23: _vllm_fa3_C.abi3.23.sm_90a.cubin\nELF file   24: _vllm_fa3_C.abi3.24.sm_90a.cubin\nELF file   25: _vllm_fa3_C.abi3.25.sm_90a.cubin\nELF file   26: _vllm_fa3_C.abi3.26.sm_90a.cubin\nELF file   27: _vllm_fa3_C.abi3.27.sm_90a.cubin\nELF file   28: _vllm_fa3_C.abi3.28.sm_90a.cubin\nELF file   29: _vllm_fa3_C.abi3.29.sm_90a.cubin\nELF file   30: _vllm_fa3_C.abi3.30.sm_90a.cubin\nELF file   31: _vllm_fa3_C.abi3.31.sm_90a.cubin\nELF file   32: _vllm_fa3_C.abi3.32.sm_90a.cubin\nELF file   33: _vllm_fa3_C.abi3.33.sm_90a.cubin\nELF file   34: _vllm_fa3_C.abi3.34.sm_90a.cubin\nELF file   35: _vllm_fa3_C.abi3.35.sm_90a.cubin\nELF file   36: _vllm_fa3_C.abi3.36.sm_90a.cubin\nELF file   37: _vllm_fa3_C.abi3.37.sm_90a.cubin\nELF file   38: _vllm_fa3_C.abi3.38.sm_90a.cubin\nELF file   39: _vllm_fa3_C.abi3.39.sm_90a.cubin\nELF file   40: _vllm_fa3_C.abi3.40.sm_90a.cubin\nELF file   41: _vllm_fa3_C.abi3.41.sm_90a.cubin\nELF file   42: _vllm_fa3_C.abi3.42.sm_90a"
+    }
+  ],
+  "schema": "cuda-so-audit/v1",
+  "summary": {
+    "architecture_counts": {
+      "sm_100": 5,
+      "sm_110": 3,
+      "sm_120": 3,
+      "sm_75": 1,
+      "sm_80": 4,
+      "sm_87": 3,
+      "sm_89": 3,
+      "sm_90": 3,
+      "sm_90a": 6
+    },
+    "object_count": 14,
+    "objects_with_sm_120": 3,
+    "objects_with_sm_121": 0
+  }
+}
