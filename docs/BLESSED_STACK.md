@@ -39,6 +39,7 @@ From the initial personal Gemma 4 benchmark run:
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
 - GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
 - `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
+- Qwen speed/capacity is now a required benchmark lane, but only the small SGLang BF16 Qwen smoke is locally proven. AEON's Qwen3.6 NVFP4+DFlash result is external prior art until reproduced with local artifacts.
 - `hikarioyama/vllm-nvfp4-kv-sm120` and `hikarioyama/sglang-nvfp4-kv-sm120` are audited SM120 reference implementations and should be used as prior art for our forks. They are not GB10 `sm_121` blessed stacks until fp8-vs-NVFP4 quality, capacity, and speed are reproduced on Spark-class hardware.
 - Multi-Spark recipes are not validated because we currently have only one unit.
 - The inspected vLLM/FlashInfer extension set has no explicit `sm_121` SASS. General vLLM extensions include `sm_120`, while several attention/MLA extensions are `sm_80`, `sm_90a`, or `sm_100` only. Treat this as a validation requirement, not an automatic failure.
@@ -49,15 +50,19 @@ From the initial personal Gemma 4 benchmark run:
 - FlashInfer is not the whole Spark fix. The remaining work spans packaging, vLLM/SGLang integration, Gemma 4 12B support, NVFP4 KV serving quality/capacity, llama.cpp/lm-eval accuracy, optional LiteRT GPU stability, and short before/after benchmark proof.
 - Optional LiteRT-LM GPU chat is not blessed: after fixing `/dev/dri` group access it prints `spark-ok` but exits with `returncode=-11`.
 - llama.cpp serving is blessed for the tested Gemma 4 26B Q4_0 GGUF path, but GGUF lm-eval accuracy is still blocked by API/logprobs schema compatibility. This Q4_0 row does not prove native NVFP4/MXFP4 `sm_121a` tensor-core dispatch.
+- No llama.cpp Qwen GGUF row has been captured yet.
 
 ## Candidate Next Stack
 
 To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
+- vLLM Qwen3.6 NVFP4+DFlash reproduction from AEON prior art, then a matched fork after-row with backend logs.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
+- SGLang Qwen fp8-vs-`fp4_e2m1` KV comparison before broader SGLang FP4 KV claims.
 - vLLM NVFP4 KV fork probe derived from the hikarioyama SM120 implementation, reduced to a single-Spark GB10 test before any TP=2 or long-context claims.
 - Optional LiteRT-LM GPU chat fix or documented CPU-only/complement role.
 - llama.cpp commit with an API schema that can satisfy lm-eval loglikelihood scoring, or a patched adapter.
 - llama.cpp commit/build recipe for practical serving even if lm-eval accuracy remains separate.
+- llama.cpp Qwen GGUF serving and `llama-bench` row.

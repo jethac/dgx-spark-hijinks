@@ -178,6 +178,15 @@ Impact:
 
 - The QAT-unquantized snapshot is usable for a vLLM smoke/serving check.
 - It should not be treated as proof of an end-to-end QAT, FP4, or NVFP4 serving path.
+
+### Quantized Gemma Rows Need Control-Token Sanity Checks
+
+AEON's Gemma 4 NVFP4 prior art reinforces that a Gemma row is not complete when it only loads and generates tokens. Quantized Gemma serving should also record:
+
+- the actual quantization backend selected for weights and MoE layers
+- whether router, vision, and embedding-sensitive tensors stayed in the intended non-quantized dtype
+- EOS/control-token handling, including checks for empty `message.content`, output routed only to `reasoning_content`, or visible Gemma channel/tool/thinking tokens
+- whether the run used ordinary KV, fp8 KV, or an experimental NVFP4/FP4 KV path
 - Any future quantized benchmark must prove the actual backend and quantization path from logs, dispatch probes, or profiler evidence.
 
 ### Backend Comparability Is Limited

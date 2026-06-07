@@ -107,6 +107,26 @@ Patch branch:
   - end-to-end NVFP4 KV correctness against fp8/bf16 serving reference
   - upstream FlashInfer review/CI, including Spark CI if a maintainer can trigger it
 
+## AEON Prior Art Mapping
+
+AEON's Qwen and Gemma GB10 work should be treated as NVFP4-weight and DFlash prior art, not as NVFP4-KV proof.
+
+vLLM surfaces to reproduce first:
+
+- `VLLM_NVFP4_GEMM_BACKEND=flashinfer-cutlass` maps to current vLLM backend selection flags such as `--linear-backend flashinfer_cutlass` where available.
+- `VLLM_TEST_FORCE_FP8_MARLIN=1` is an older compatibility guard for some MoE shapes. Do not hardcode it; compare `--moe-backend marlin`, `flashinfer_cutlass`, `flashinfer_b12x`, and `auto` with logs.
+- `VLLM_USE_FLASHINFER_MOE_FP4=0` means avoid an unsupported FlashInfer MoE FP4 probe on that stack; newer vLLM has explicit backend flags and should be measured directly.
+- DFlash is a vLLM speculative decode path. The AEON patch to align CUDA graph capture sizes is relevant because Qwen/DFlash can run in pure `PIECEWISE` graph mode.
+
+Nearest SGLang surfaces:
+
+- `VLLM_NVFP4_GEMM_BACKEND=flashinfer-cutlass` -> test `--fp4-gemm-backend flashinfer_cutlass`.
+- `VLLM_TEST_FORCE_FP8_MARLIN=1` -> test `--fp4-gemm-backend marlin` and, where exposed, the closest MoE runner backend flag.
+- `VLLM_USE_FLASHINFER_MOE_FP4=0` has no direct SGLang equivalent; validate SGLang MoE backend selection from logs.
+- `VLLM_USE_FLASHINFER_SAMPLER=1` has no obvious SGLang port requirement.
+
+For Gemma 4, AEON supports the priority order "NVFP4 weights with BF16/fp8 KV first, FP4 KV later." For Qwen, AEON supports using Qwen3.6 NVFP4+DFlash as the strongest external speed target, while SGLang should begin with Qwen fp8-vs-`fp4_e2m1` KV serving comparisons.
+
 ## Evidence Required Before Blessing NVFP4 KV
 
 - Spark-specific build evidence for GB10 / `sm_121`.

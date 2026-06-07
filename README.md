@@ -8,7 +8,7 @@ We currently have one Spark-class GB10 machine available. Multi-Spark work is tr
 
 Mission: this machine costs roughly 900k JPY. It needs to be as performant as the silicon is capable of, not merely "technically running."
 
-Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. Gemma 4 12B also serves now, but only through a source/precompiled vLLM probe at upstream commit `da1daf40` plus Transformers main and stale FlashInfer JIT-cache cleanup; that row is about 7.7 tok/s and forces Triton attention. The current FlashInfer SM121 `b12x` patch is dispatch enablement, not a proven speedup: model-shaped SGLang proxy microbenchmarks were mixed-to-slower.
+Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. Gemma 4 12B also serves now, but only through a source/precompiled vLLM probe at upstream commit `da1daf40` plus Transformers main and stale FlashInfer JIT-cache cleanup; that row is about 7.7 tok/s and forces Triton attention. The current FlashInfer SM121 `b12x` patch is dispatch enablement, not a proven speedup: model-shaped SGLang proxy microbenchmarks were mixed-to-slower. Qwen is now tracked as a first-class speed/capacity lane because it is the cleaner path for NVFP4 weights, fp8-vs-NVFP4 KV, and DFlash comparisons.
 
 ## Start Here
 
@@ -20,6 +20,7 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 - Issue tracker map: [docs/ISSUE_TRACKER.md](docs/ISSUE_TRACKER.md)
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
+- Qwen notes: [docs/QWEN_ON_DGX_SPARK.md](docs/QWEN_ON_DGX_SPARK.md)
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - Remediation matrix: [docs/REMEDIATION_MATRIX.md](docs/REMEDIATION_MATRIX.md)

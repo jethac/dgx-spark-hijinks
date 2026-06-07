@@ -143,6 +143,17 @@
   - outcome: sliding/local shape `H_q=16`, `H_kv=8`, `D=256`, `page=16` passed NHD/HND decode and prefill at `kv_len=1024`, `qo_len=128`.
   - blocker: global/full shape `H_q=16`, `H_kv=2`, `D=512`, `page=16` failed all NHD/HND decode/prefill operations with FlashInfer FA2 invalid configuration from `prefill.cuh:3215`.
   - conclusion: Gemma 4 26B NVFP4 KV cannot be called ready for serving until the global-attention path is fixed or routed to a proven fallback.
+- Promoted Qwen to a first-class speed/capacity benchmark lane.
+  - issue: https://github.com/jethac/dgx-spark-hijinks/issues/20
+  - new doc: `docs/QWEN_ON_DGX_SPARK.md`
+  - rationale: Qwen is the cleaner path for NVFP4 weights, fp8-vs-NVFP4 KV capacity, and DFlash measurement; Gemma remains the harder model-family compatibility target.
+  - AEON prior art: Qwen3.6 NVFP4+DFlash and Gemma 4 NVFP4-weight recipes are useful external GB10 evidence, but they do not prove our FA2 NVFP4-KV fork or SGLang `fp4_e2m1` KV.
+- Pushed vLLM Qwen/DFlash SM12x stability branch.
+  - fork commit: `jethac/vllm@0667185d5adaec32ff8cc8289a4d7716f6cdf966`
+  - branch: `spark/hijinks-020-aeon-qwen-dflash-sm121a`
+  - changes: guarded lazy fallback import for `_C_stable_libtorch`; speculative-decode CUDA graph capture-size alignment now applies to every non-`NONE` graph mode, including pure `PIECEWISE`.
+  - verification artifact: `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md`
+  - limitation: local pytest collection is blocked by missing vLLM dev dependencies; GB10 Qwen3.6 NVFP4+DFlash serving reproduction remains pending.
 
 ## First Benchmark Campaign Summary
 

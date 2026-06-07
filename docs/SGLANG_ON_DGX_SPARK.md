@@ -19,6 +19,8 @@ SGLang is a serious serving runtime and should not be hidden under the vLLM plan
 
 That repo reports Qwen2.5 and Step3.7-Flash 198B validation on SM120 RTX Blackwell systems, including a measured KV capacity improvement versus fp8 and roughly fp8-like decode speed on the large-model path. It also reports small-model incoherence under NVFP4 KV and recommends fp8 KV for that regime. This is important reference work, but it is not Spark validation. Our target is GB10 `sm_121`, and our current SGLang proof is BF16 KV only.
 
+AEON's Qwen and Gemma GB10 work is also relevant, but it is vLLM prior art. Its strongest signal is NVFP4 weight serving plus backend policy and DFlash. It does not prove SGLang `fp4_e2m1` KV, and its Gemma path reinforces that Gemma 4 can require Triton attention because of heterogeneous local/global head dimensions.
+
 ## Evidence Classes
 
 Keep these separate in reports:
@@ -26,8 +28,11 @@ Keep these separate in reports:
 - NVIDIA 26.05 BF16 Spark evidence: `nvcr.io/nvidia/sglang:26.05-py3` serves `Qwen/Qwen2.5-1.5B-Instruct` on our GB10 with BF16 KV.
 - hikarioyama SM120 NVFP4 KV evidence: `hikarioyama/sglang-nvfp4-kv-sm120` at `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` reports `fp4_e2m1` KV, FlashInfer FA2 patches, FP4 pools, hybrid-SWA support, and global-scale calibration on SM120 hardware.
 - jethac FlashInfer SM121 `mm_fp4` dispatch evidence: our FlashInfer fork changes dense/MoE GEMM auto-dispatch on GB10, but it does not validate SGLang KV attention.
+- AEON vLLM evidence: useful recipe evidence for NVFP4 weights and DFlash on GB10, not evidence that Gemma 4 works with FP4 KV in SGLang.
 
 Do not merge those into "SGLang NVFP4 works on Spark" until the GB10 `fp4_e2m1` serving row exists.
+
+For Gemma 4, first prove SGLang with NVFP4 weights and BF16/fp8 KV. Test `fp4_e2m1` KV only after that baseline works.
 
 ## Baseline First
 

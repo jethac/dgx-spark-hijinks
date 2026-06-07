@@ -114,6 +114,32 @@ A blessed SGLang result must record:
 
 Use BF16 as the proven local SGLang baseline. Do not bless SGLang NVFP4 KV on Spark until it passes a single-Spark smoke test and a quality check. fp8 is the required comparator; for small models, incoherence under fp4 is an expected negative-control result per the SM120 fork, not a Spark blessing and not necessarily a kernel failure.
 
+## Qwen Speed And KV Probe
+
+Qwen should be the first SGLang before/after target for `fp4_e2m1` KV:
+
+- before row: public Qwen model with BF16 or fp8 KV
+- after row: same model with `--kv-cache-dtype fp4_e2m1 --attention-backend flashinfer --page-size 1`
+- preferred first shape: standard-attention Qwen2.5 7B-class model before Qwen3.6 hybrid/MoE
+- required comparator: deterministic output sanity plus fp8-vs-fp4 quality check
+- required metrics: KV pool tokens, maximum concurrency, TTFT, warmed decode tok/s, memory state, and selected backend logs
+
+The existing local `Qwen/Qwen2.5-1.5B-Instruct` BF16 smoke is a runtime proof, not a meaningful NVFP4 KV quality proof. Small Qwen models may be negative controls for fp4 KV quality.
+
+## AEON-Style Gemma NVFP4 Weight Probe
+
+AEON's Gemma result is useful SGLang prior art for NVFP4 weights, but it does not prove FP4 KV. If testing Gemma 4 in SGLang, start with ordinary KV:
+
+```bash
+python3 -m sglang.launch_server \
+  --model-path AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4 \
+  --attention-backend triton \
+  --dtype bfloat16 \
+  --fp4-gemm-backend flashinfer_cutlass
+```
+
+If that fails because of backend selection, try `--fp4-gemm-backend marlin` and, if the SGLang build exposes it, the closest MoE runner backend flag. Do not test SGLang DFlash or `fp4_e2m1` KV on Gemma until non-speculative BF16/fp8 KV serving works.
+
 ## Experimental NVFP4 KV Fork Probe
 
 If testing the hikarioyama design on Spark, keep it separate from the BF16 smoke and record:

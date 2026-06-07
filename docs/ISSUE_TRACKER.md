@@ -23,6 +23,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | llama.cpp practical serving path | blessed for 26B Q4_0 serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | SM12x FP4 KV compatibility gate patch pushed; Linux/aarch64 targeted `KV4Compatibility` pytest passed; native pool/backend work and GB10 `fp4_e2m1` serving validation pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
 | before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
+| Qwen speed and capacity benchmarks | first-class lane added; vLLM AEON reproduction, SGLang fp8-vs-fp4 KV, and llama.cpp Qwen GGUF rows pending | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 
 ## Triage Rules
 

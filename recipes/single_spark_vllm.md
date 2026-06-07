@@ -60,6 +60,39 @@ The current 12B compatibility proof is not a clean blessed stack. It used:
 
 It served `google/gemma-4-12B-it`, but vLLM forced `TRITON_ATTN` and compact decode was about 7.7 tok/s. Use this as a packaging target, not a performance recommendation.
 
+## Qwen Speed And Capacity Probe
+
+Qwen is the preferred first target for measuring vLLM SM121a performance mechanics because it avoids Gemma 4's heterogeneous global/local attention complication.
+
+AEON Qwen prior art to reproduce before claiming our own speedup:
+
+- image: `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` or a documented newer successor
+- model: `AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4`
+- drafter: `z-lab/Qwen3.6-35B-A3B-DFlash`
+- key flags: `--quantization compressed-tensors`, `--attention-backend flash_attn`, DFlash `num_speculative_tokens=15`, long context, chunked prefill, prefix caching
+- key evidence: selected linear and MoE backends, CUDA graph mode, DFlash acceptance, TTFT, decode tok/s, aggregate tok/s, and server stability
+
+Fork after-row:
+
+- use `jethac/vllm` plus `jethac/flashinfer`
+- compare fp8 KV versus `--kv-cache-dtype nvfp4` on the same Qwen model, prompts, graph mode, memory fraction, and concurrency
+- require logs proving FlashInfer FA2 NVFP4 KV for the NVFP4 row
+- record KV pool tokens and maximum concurrency; decode-speed parity is useful if capacity improves
+
+Do not transfer Gemma 4 conclusions onto Qwen or Qwen conclusions onto Gemma without model-specific serving rows.
+
+## AEON Gemma 4 NVFP4 Weight Probe
+
+AEON's Gemma 4 evidence is a vLLM NVFP4-weight path, not an FA2 NVFP4-KV result. Treat it as a separate reproduction target:
+
+- image: `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`
+- model: `AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4`
+- drafter: `z-lab/gemma-4-26B-A4B-it-DFlash`
+- env surface: `VLLM_NVFP4_GEMM_BACKEND=flashinfer-cutlass`, `VLLM_USE_FLASHINFER_MOE_FP4=0`, `VLLM_TEST_FORCE_FP8_MARLIN=0`, `VLLM_USE_FLASHINFER_SAMPLER=1`
+- expected attention path: Gemma 4 may force Triton attention because local and global head dimensions differ
+
+The local FlashInfer FA2 NVFP4-KV probe passed the Gemma 4 26B sliding/local shape but failed the global `D=512` shape. Do not use `--kv-cache-dtype nvfp4` for a blessed Gemma 4 vLLM row until that global path is fixed, routed to a proven fallback, or shown irrelevant to the selected model path.
+
 ## Experimental NVFP4 KV Fork Probe
 
 Reference repo:

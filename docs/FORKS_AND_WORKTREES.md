@@ -128,7 +128,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `8916796` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2 and enables vLLM V-scale deswizzle; GB10 build/runtime proof pending |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `0667185` | submodule checkout | SM12x NVFP4 KV routing retained; AEON-inspired Qwen/DFlash stability patches added; GB10 serving proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` at `eefe8ad` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | SM12x FP4 KV compatibility gates pushed; targeted pytest passed; native pool/backend work pending |
 
 FlashInfer patch:
@@ -172,8 +172,19 @@ vLLM SM12x NVFP4 KV routing patch:
 - local verification: Python syntax compile and staged `git diff --check` passed
 - local pytest limitation: vLLM pytest collection is blocked in this Windows workspace because `tblib` is not installed
 - local lint limitation: `ruff` is not installed in this Windows workspace
-- PGX verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121 and that the deswizzle JIT flag helper enables `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
+- GB10 verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121 and that the deswizzle JIT flag helper enables `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
 - missing verification: clean vLLM plus FlashInfer build on GB10, hikari-style layout/cosine harness proof, and a serving proof selecting FA2 native NVFP4 KV
+
+vLLM Qwen/DFlash SM12x stability patch:
+
+- commit: `0667185d5adaec32ff8cc8289a4d7716f6cdf966`
+- branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-020-aeon-qwen-dflash-sm121a
+- ancestry: based on `8916796bc50926fd61e606718b194a71e2e31a24`, so it preserves the SM12x NVFP4 KV routing/deswizzle work
+- purpose: port the two AEON vLLM fixes that apply cleanly to the current fork: lazy fallback import for `_C_stable_libtorch` and speculative-decode CUDA graph capture-size alignment for non-NONE graph modes, including pure `PIECEWISE`
+- touched files: `vllm/platforms/cuda.py`, `vllm/config/compilation.py`, `tests/compile/test_config.py`
+- local verification: `python -m py_compile vllm/platforms/cuda.py vllm/config/compilation.py tests/compile/test_config.py` and `git diff --check` passed
+- local pytest limitation: targeted pytest collection is blocked in this Windows workspace because `tblib` is not installed; a direct import check then hit missing `cbor2`, confirming the local environment is not a vLLM dev/test environment
+- missing verification: Qwen3.6 NVFP4+DFlash serving reproduction, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
 
 SGLang SM12x FP4 KV gate patch:
 
