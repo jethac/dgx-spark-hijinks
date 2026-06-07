@@ -10,6 +10,17 @@
   - `scripts/gguf_logprobs_probe.py`
   - `scripts/openai_chat_smoke.py`
 - Started tracking work through GitHub Issues.
+- Ran `spark_doctor` on `thinkstationpgx-00b4` using `/home/jethac/gemma4-evals/.venv/bin/python`.
+  - GPU: `NVIDIA GB10`
+  - compute capability: `12.1` / `sm_121`
+  - host: `aarch64`
+  - driver: `580.159.03`
+  - CUDA runtime reported by `nvidia-smi`: `13.0`
+  - PyTorch: `2.11.0+cu130`
+  - vLLM: `0.22.1`
+  - FlashInfer: `0.6.11.post2`
+  - PyTorch arch list: `sm_80`, `sm_90`, `sm_100`, `sm_110`, `sm_120`; no explicit `sm_121`
+  - snapshot: `results/spark_doctor_20260607T110629Z.md`
 
 ## First Benchmark Campaign Summary
 
@@ -28,4 +39,3 @@ At the last local sync:
 - MTP rows observed: 2
 
 The campaign was still in full accuracy when monitoring stopped. It was not killed.
-

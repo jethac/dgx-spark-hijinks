@@ -169,14 +169,14 @@ Acceptance test:
 - A failed HF row records enough telemetry to say whether it was OOM/resource pressure or a real model error.
 - Reports never mix HF fallback accuracy into vLLM comparisons without labeling it.
 
-## 10. Tune For 84 SMs And Unified LPDDR5x
+## 10. Tune For 48 SMs And Unified LPDDR5x
 
 Weakness: "it runs" is not the same as "it is tuned for Spark."
 
 Plan:
 
 - Build a Spark-specific performance suite: prefill, decode, mixed prompt lengths, small-batch serving, long-context KV pressure.
-- Tune tile sizes, occupancy, batch defaults, and graph capture sizes for GB10 instead of copying RTX PRO 6000 or B200 values.
+- Tune tile sizes, occupancy, batch defaults, and graph capture sizes for GB10 instead of copying RTX PRO 6000 or B200 values. The first `spark_doctor` snapshot reported 48 CUDA multiprocessors on the available GB10 unit.
 - Track memory bandwidth limits explicitly; 128 GB unified memory is the feature, but LPDDR5x bandwidth is the constraint.
 - Add regression dashboards by model family and quantization type.
 

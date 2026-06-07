@@ -173,6 +173,19 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
     else:
         findings.append("WARN: PyTorch did not report an available CUDA device.")
 
+    arch_list = torch_cuda.get("arch_list") or []
+    if devices and devices[0].get("capability") == [12, 1]:
+        if "sm_121" in arch_list:
+            findings.append("OK: PyTorch arch list explicitly includes sm_121.")
+        elif "sm_120" in arch_list:
+            findings.append(
+                "NOTE: PyTorch arch list has sm_120 but not sm_121; verify this is an intentional compatible path for installed kernels."
+            )
+        elif arch_list:
+            findings.append(
+                f"WARN: PyTorch arch list does not include sm_121 or sm_120: {arch_list}"
+            )
+
     machine = platform.machine().lower()
     if machine not in {"aarch64", "arm64"}:
         findings.append(f"WARN: host architecture is {machine}; DGX Spark target is ARM64/aarch64.")
@@ -250,4 +263,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
