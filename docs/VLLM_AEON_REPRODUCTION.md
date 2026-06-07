@@ -119,8 +119,8 @@ Backend evidence from `results/aeon_gemma26_dflash_20260608T0436JST_key_log_line
 Caveats:
 
 - This is a real local vLLM serving win, but it is AEON's container/checkpoint, not proof that a `jethac` fork changed throughput.
-- The container reports runtime device capability `[12, 1]`, but `torch.cuda.get_arch_list()` lists `sm_120` and not explicit `sm_121`.
-- The server log does not contain explicit build-target strings accepted by `cuda_build_target_audit.py`.
+- `results/aeon_gemma26_dflash_20260608T0436JST_container_target_audit.json` classifies the container as SM120-family/PTX evidence only: runtime device capability is `[12, 1]`, image env contains `TORCH_CUDA_ARCH_LIST=... 12.0+PTX`, and `torch.cuda.get_arch_list()` lists `sm_120` but not explicit `sm_121`.
+- The server log does not contain explicit build-target strings accepted by `cuda_build_target_audit.py`, so this row is not native `sm_121` or `sm_121a` proof.
 - The server warns about differing NVFP4 global scales across fused parallel layers; accuracy still needs a separate check.
 
 ## 2026-06-08 Qwen3.6 Attempt

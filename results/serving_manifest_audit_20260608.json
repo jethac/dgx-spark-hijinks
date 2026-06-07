@@ -7,6 +7,10 @@
   "claim_ready_model_families": [
     "qwen"
   ],
+  "family_or_ptx_count": 1,
+  "family_or_ptx_model_families": [
+    "gemma"
+  ],
   "inputs": [
     "results/aeon_gemma26_dflash_20260608T0436JST_row_manifest.json",
     "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json",
@@ -36,12 +40,26 @@
       "command_checks": {
         "build_target_audit": true,
         "chat_smoke": true,
+        "container_target_audit": true,
         "openai_benchmark": true,
         "runtime_probe": true
       },
+      "container_target_audit": {
+        "claim": "family-or-ptx-only",
+        "device_is_gb10_sm121": true,
+        "exists": true,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": true,
+        "findings": [
+          "OK: runtime device evidence is NVIDIA GB10 with capability 12.1.",
+          "INFO: artifact contains SM120-family/PTX evidence, not native sm_121 or sm_121a proof.",
+          "WARN: no explicit native sm_121/sm_121a build-target evidence found."
+        ]
+      },
       "dry_run": false,
       "findings": [
-        "build-target audit lacks accepted Spark target evidence"
+        "build-target audit lacks accepted Spark target evidence",
+        "container target audit provides SM120-family/PTX evidence only; this is not native sm_121/sm_121a proof"
       ],
       "manifest_ok": true,
       "missing_metadata": [],
@@ -93,8 +111,17 @@
       "command_checks": {
         "build_target_audit": true,
         "chat_smoke": true,
+        "container_target_audit": false,
         "openai_benchmark": true,
         "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
       },
       "dry_run": false,
       "findings": [],
@@ -141,8 +168,17 @@
       "command_checks": {
         "build_target_audit": false,
         "chat_smoke": true,
+        "container_target_audit": false,
         "openai_benchmark": true,
         "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
       },
       "dry_run": true,
       "findings": [
@@ -190,8 +226,17 @@
       "command_checks": {
         "build_target_audit": false,
         "chat_smoke": true,
+        "container_target_audit": false,
         "openai_benchmark": true,
         "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
       },
       "dry_run": true,
       "findings": [
@@ -239,8 +284,17 @@
       "command_checks": {
         "build_target_audit": false,
         "chat_smoke": true,
+        "container_target_audit": false,
         "openai_benchmark": true,
         "runtime_probe": true
+      },
+      "container_target_audit": {
+        "claim": null,
+        "device_is_gb10_sm121": false,
+        "error": "artifact missing from manifest",
+        "exists": false,
+        "explicit_native_sm121": false,
+        "family_or_ptx_evidence": false
       },
       "dry_run": true,
       "findings": [

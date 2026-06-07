@@ -178,6 +178,32 @@ def build_target_ok(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
     return record
 
 
+def container_target_ok(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+    artifacts = manifest.get("artifacts") if isinstance(manifest.get("artifacts"), dict) else {}
+    data, error = read_artifact_json(root, artifacts.get("container_target_audit"))
+    record: dict[str, Any] = {
+        "exists": data is not None,
+        "device_is_gb10_sm121": False,
+        "explicit_native_sm121": False,
+        "family_or_ptx_evidence": False,
+        "claim": None,
+    }
+    if error:
+        record["error"] = error
+        return record
+    summary = data.get("summary") if isinstance(data, dict) else {}
+    record.update(
+        {
+            "device_is_gb10_sm121": bool(summary.get("device_is_gb10_sm121")),
+            "explicit_native_sm121": bool(summary.get("explicit_native_sm121")),
+            "family_or_ptx_evidence": bool(summary.get("family_or_ptx_evidence")),
+            "claim": summary.get("claim"),
+            "findings": summary.get("findings") if isinstance(summary.get("findings"), list) else [],
+        }
+    )
+    return record
+
+
 def server_log_markers(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
     artifacts = manifest.get("artifacts") if isinstance(manifest.get("artifacts"), dict) else {}
     path = artifact_path(root, artifacts.get("server_log"))
@@ -231,6 +257,7 @@ def audit_manifest(path: Path, root: Path) -> dict[str, Any]:
     benchmark = benchmark_ok(root, manifest)
     runtime = runtime_probe_ok(root, manifest)
     build_target = build_target_ok(root, manifest)
+    container_target = container_target_ok(root, manifest)
     server_log = server_log_markers(root, manifest)
 
     record.update(
@@ -249,10 +276,12 @@ def audit_manifest(path: Path, root: Path) -> dict[str, Any]:
                 "openai_benchmark": command_ok(manifest, "openai_benchmark"),
                 "runtime_probe": command_ok(manifest, "runtime_probe"),
                 "build_target_audit": command_ok(manifest, "build_target_audit"),
+                "container_target_audit": command_ok(manifest, "container_target_audit"),
             },
             "benchmark": benchmark,
             "runtime_probe": runtime,
             "build_target_audit": build_target,
+            "container_target_audit": container_target,
             "server_log": server_log,
         }
     )
@@ -269,6 +298,10 @@ def audit_manifest(path: Path, root: Path) -> dict[str, Any]:
         record["findings"].append("server log has no backend marker from the audit marker set")
     if not build_target.get("accepted"):
         record["findings"].append("build-target audit lacks accepted Spark target evidence")
+        if container_target.get("family_or_ptx_evidence"):
+            record["findings"].append(
+                "container target audit provides SM120-family/PTX evidence only; this is not native sm_121/sm_121a proof"
+            )
 
     record["claim_ready"] = (
         not record["dry_run"]
@@ -313,10 +346,23 @@ def main() -> int:
 
     live_rows = [row for row in rows if row.get("parse_ok") and not row.get("dry_run")]
     claim_ready_rows = [row for row in live_rows if row.get("claim_ready")]
+    family_or_ptx_rows = [
+        row
+        for row in live_rows
+        if isinstance(row.get("container_target_audit"), dict)
+        and row["container_target_audit"].get("family_or_ptx_evidence")
+    ]
     model_families = sorted(
         {
             row.get("model_family")
             for row in claim_ready_rows
+            if isinstance(row.get("model_family"), str) and row.get("model_family") != "unknown"
+        }
+    )
+    family_or_ptx_model_families = sorted(
+        {
+            row.get("model_family")
+            for row in family_or_ptx_rows
             if isinstance(row.get("model_family"), str) and row.get("model_family") != "unknown"
         }
     )
@@ -327,6 +373,8 @@ def main() -> int:
         "live_row_count": len(live_rows),
         "claim_ready_count": len(claim_ready_rows),
         "claim_ready_model_families": model_families,
+        "family_or_ptx_count": len(family_or_ptx_rows),
+        "family_or_ptx_model_families": family_or_ptx_model_families,
         "broad_runtime_claim_ready": {"qwen": "qwen" in model_families, "gemma": "gemma" in model_families},
         "rows": rows,
     }

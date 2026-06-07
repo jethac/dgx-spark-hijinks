@@ -265,6 +265,11 @@
   - converted the llama.cpp Qwen2.5 Q4_K_M row manifest from a manual note into strict JSON.
   - result: the llama.cpp Qwen row is now claim-ready for practical serving evidence; the AEON Gemma vLLM row remains not claim-ready in the strict audit because its build-target audit lacks accepted Spark target evidence.
   - dry-run Qwen lane manifests are explicitly classified as planning evidence only.
+- Added a container target audit to separate family/PTX evidence from native Spark target proof.
+  - script: `scripts/container_target_audit.py`
+  - AEON Gemma artifact: `results/aeon_gemma26_dflash_20260608T0436JST_container_target_audit.json`
+  - result: the AEON Gemma image/container has GB10 runtime evidence and SM120-family/PTX evidence through `TORCH_CUDA_ARCH_LIST=... 12.0+PTX` / `sm_120`, but no explicit native `sm_121` or `sm_121a` target evidence.
+  - serving-manifest audit now records this as `family_or_ptx_count: 1` for Gemma while keeping strict Gemma claim readiness false.
 
 ## First Benchmark Campaign Summary
 

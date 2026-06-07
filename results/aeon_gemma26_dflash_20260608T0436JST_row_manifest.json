@@ -2,6 +2,7 @@
   "artifacts": {
     "build_target_audit": "results/aeon_gemma26_dflash_20260608T0436JST_build_target_audit.json",
     "chat_smoke": "results/aeon_gemma26_dflash_20260608T0436JST_chat_smoke.json",
+    "container_target_audit": "results/aeon_gemma26_dflash_20260608T0436JST_container_target_audit.json",
     "openai_benchmark": "results/aeon_gemma26_dflash_20260608T0436JST_openai_benchmark.json",
     "runtime_probe": "results/aeon_gemma26_dflash_20260608T0436JST_runtime_probe.json",
     "server_log": "results/aeon_gemma26_dflash_20260608T0436JST_server.log"
@@ -37,6 +38,22 @@
       "ok": true,
       "returncode": 0,
       "started_unix": 1780861916.5231428
+    },
+    "container_target_audit": {
+      "command": [
+        "python",
+        "scripts/container_target_audit.py",
+        "--image-inspect",
+        "results/aeon_gemma26_dflash_20260608T0436JST_image_inspect.json",
+        "--container-inspect",
+        "results/aeon_gemma26_dflash_20260608T0436JST_container_inspect.json",
+        "--container-versions",
+        "results/aeon_gemma26_dflash_20260608T0436JST_container_versions.json",
+        "--output",
+        "results/aeon_gemma26_dflash_20260608T0436JST_container_target_audit.json"
+      ],
+      "ok": true,
+      "returncode": 0
     },
     "openai_benchmark": {
       "command": [

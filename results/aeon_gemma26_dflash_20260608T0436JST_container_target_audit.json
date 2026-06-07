@@ -1,0 +1,99 @@
+{
+  "inputs": {
+    "container_inspect": "results/aeon_gemma26_dflash_20260608T0436JST_container_inspect.json",
+    "container_versions": "results/aeon_gemma26_dflash_20260608T0436JST_container_versions.json",
+    "image_inspect": "results/aeon_gemma26_dflash_20260608T0436JST_image_inspect.json"
+  },
+  "inspect_records": [
+    {
+      "architecture": "arm64",
+      "evidence": [
+        {
+          "kind": "family_or_ptx_reference",
+          "text": "TORCH_CUDA_ARCH_LIST=8.0 8.7 8.9 9.0 10.0 11.0 12.0+PTX"
+        },
+        {
+          "kind": "spark_reference",
+          "text": "NVIDIA DGX Spark GB10 SM121"
+        }
+      ],
+      "exists": true,
+      "image_digests": [
+        "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash@sha256:0b93829450c7b2afcd6a81e8cb9815b1ea62ea8eb2a00bdc0badebcc9f725c88"
+      ],
+      "image_tags": [
+        "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2"
+      ],
+      "path": "results\\aeon_gemma26_dflash_20260608T0436JST_image_inspect.json"
+    },
+    {
+      "architecture": null,
+      "evidence": [
+        {
+          "kind": "family_or_ptx_reference",
+          "text": "TORCH_CUDA_ARCH_LIST=8.0 8.7 8.9 9.0 10.0 11.0 12.0+PTX"
+        },
+        {
+          "kind": "spark_reference",
+          "text": "NVIDIA DGX Spark GB10 SM121"
+        }
+      ],
+      "exists": true,
+      "image_digests": [],
+      "image_tags": [],
+      "path": "results\\aeon_gemma26_dflash_20260608T0436JST_container_inspect.json"
+    }
+  ],
+  "schema": "container-target-audit/v1",
+  "summary": {
+    "claim": "family-or-ptx-only",
+    "device_is_gb10_sm121": true,
+    "explicit_native_sm121": false,
+    "family_or_ptx_evidence": true,
+    "findings": [
+      "OK: runtime device evidence is NVIDIA GB10 with capability 12.1.",
+      "INFO: artifact contains SM120-family/PTX evidence, not native sm_121 or sm_121a proof.",
+      "WARN: no explicit native sm_121/sm_121a build-target evidence found."
+    ]
+  },
+  "versions": {
+    "arch_list": [
+      "sm_80",
+      "sm_90",
+      "sm_100",
+      "sm_110",
+      "sm_120"
+    ],
+    "device_capability": [
+      12,
+      1
+    ],
+    "device_name": "NVIDIA GB10",
+    "exists": true,
+    "multi_processor_count": 48,
+    "packages": {
+      "flashinfer": {
+        "file": "/usr/local/lib/python3.12/site-packages/flashinfer/__init__.py",
+        "version": "0.6.8.post1"
+      },
+      "torch": {
+        "file": "/usr/local/lib/python3.12/site-packages/torch/__init__.py",
+        "version": "2.11.0+cu130"
+      },
+      "transformers": {
+        "file": "/usr/local/lib/python3.12/site-packages/transformers/__init__.py",
+        "version": "5.7.0"
+      },
+      "triton": {
+        "file": "/usr/local/lib/python3.12/site-packages/triton/__init__.py",
+        "version": "3.6.0"
+      },
+      "vllm": {
+        "file": "/usr/local/lib/python3.12/site-packages/vllm/__init__.py",
+        "version": "0.20.1"
+      }
+    },
+    "path": "results\\aeon_gemma26_dflash_20260608T0436JST_container_versions.json",
+    "torch_cuda": "13.0"
+  }
+}

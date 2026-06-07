@@ -70,6 +70,7 @@ Do not generalize a Gemma-only row to Qwen, or a Qwen-only row to Gemma. A runti
    - `spark_doctor`
    - CUDA build/JIT target audit for any source-built or JIT-built backend
    - CUDA `.so` audit for the active backend when compiled objects are available
+   - container target audit for image/container artifacts when the only available evidence is environment labels, `TORCH_CUDA_ARCH_LIST`, package versions, or `torch.cuda.get_arch_list()`
 
 Example build/JIT target audit:
 
@@ -78,6 +79,8 @@ python3 scripts/cuda_build_target_audit.py \
   --log results/RUN_ID_build.log \
   --output results/RUN_ID_build_target_audit.json
 ```
+
+Family/PTX evidence such as `12.0+PTX` or a package arch list ending at `sm_120` should be recorded, but it is not native `sm_121` or `sm_121a` proof.
 
 2. Serving smoke
    - one short deterministic OpenAI-compatible chat request

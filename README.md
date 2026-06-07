@@ -80,6 +80,15 @@ python3 scripts/cuda_so_audit.py --package vllm --package flashinfer \
   --output results/cuda_so_audit_vllm_flashinfer.json
 ```
 
+To audit image/container target evidence without treating family/PTX evidence as native `sm_121a` proof:
+
+```bash
+python3 scripts/container_target_audit.py \
+  --image-inspect results/RUN_ID_image_inspect.json \
+  --container-versions results/RUN_ID_container_versions.json \
+  --output results/RUN_ID_container_target_audit.json
+```
+
 For a FlashInfer NVFP4 `mm_fp4` kernel-level dispatch check:
 
 ```bash
