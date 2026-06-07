@@ -57,11 +57,19 @@ Patch branch:
 - local verification:
   - `python -m py_compile tests\gemm\test_mm_fp4.py flashinfer\gemm\gemm_base.py flashinfer\xqa.py flashinfer\mla\_core.py`
   - targeted pytest collection currently fails in this Windows workspace because `tvm_ffi` is not installed; this is an environment dependency required by FlashInfer's test conftest.
+- Spark source/JIT verification:
+  - artifact: `results/flashinfer_sm121_source_jit_20260607T1250Z.json`
+  - installed vLLM and SGLang containers both returned `["cudnn", "cutlass"]` for real SM121 NVFP4 `mm_fp4` auto-dispatch, excluding `b12x`.
+  - patched FlashInfer source returned `["b12x", "cutlass", "cudnn"]` on real GB10 in both containers after upgrading the documented source dependency `nvidia-cutlass-dsl[cu13]>=4.5.0`.
+  - in an ephemeral SGLang container, editable FlashInfer `0.6.13` source with stale `flashinfer-jit-cache`/`flashinfer-cubin` removed built FP4 quantization under `/root/.cache/flashinfer/0.6.13/121a/cached_ops/fp4_quantization_120f`.
+  - the observed NVCC line used `arch=compute_120f,code=sm_120f`, which is the SM12x family target FlashInfer chooses for this quantization module on CUDA >= 12.9.
+  - a tiny forced-`b12x` NVFP4 GEMM on GB10 produced finite BF16 output with cosine similarity `0.9882067441940308` against BF16 `torch.mm`.
+  - overlaying patched Python on old installed FlashInfer binaries is invalid: it hit CUTLASS DSL and TVM FFI signature mismatches. A real deployment needs matching `flashinfer-python`, JIT-cache/cubin packages, CUTLASS DSL, and CUDA targets.
 - not yet proven:
-  - build success on the Spark
-  - `cuobjdump`/JIT-cache evidence showing `sm_121a`
+  - clean wheel or container build suitable for vLLM/SGLang serving
+  - `cuobjdump` evidence from a distributable artifact
   - FP4 speedup versus stock FlashInfer
-  - correctness against fp8/bf16 reference
+  - end-to-end NVFP4 KV correctness against fp8/bf16 serving reference
   - upstream FlashInfer review/CI, including Spark CI if a maintainer can trigger it
 
 ## Evidence Required Before Blessing NVFP4 KV

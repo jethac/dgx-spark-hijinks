@@ -1,0 +1,102 @@
+{
+  "status": "source_jit_smoke_passed_not_serving_blessed",
+  "host": "thinkstationpgx-00b4",
+  "hardware": {
+    "gpu": "NVIDIA GB10",
+    "compute_capability": [12, 1],
+    "target": "sm_121"
+  },
+  "flashinfer_fork": {
+    "fork": "jethac/flashinfer",
+    "branch": "spark/hijinks-004-sm121-flashinfer",
+    "commit": "a42c8f07",
+    "upstream_base": "flashinfer-ai/flashinfer@a2870343"
+  },
+  "installed_baselines": [
+    {
+      "container": "vllm/vllm-openai:cu130-nightly-aarch64",
+      "torch": "2.11.0+cu130",
+      "cuda": "13.0",
+      "flashinfer": "0.6.8.post1",
+      "nvidia_cutlass_dsl": "4.4.2",
+      "real_sm121_mm_fp4_nvfp4_heuristic": ["cudnn", "cutlass"]
+    },
+    {
+      "container": "nvcr.io/nvidia/sglang:26.05-py3",
+      "torch": "2.12.0a0+5aff3928d8.nv26.5.50603568",
+      "cuda": "13.2",
+      "flashinfer": "0.6.10+cf494fca.nv26.5.cu132.50619265",
+      "nvidia_cutlass_dsl": "4.4.2",
+      "real_sm121_mm_fp4_nvfp4_heuristic": ["cudnn", "cutlass"]
+    }
+  ],
+  "patched_source_validation": {
+    "container": "nvcr.io/nvidia/sglang:26.05-py3",
+    "source_checkout": "/home/jethac/spark-validation/flashinfer-sm121",
+    "ephemeral_container_steps": [
+      "copy source checkout to /tmp/flashinfer",
+      "git config --global --add safe.directory /tmp/flashinfer",
+      "pip uninstall -y flashinfer-jit-cache flashinfer-cubin",
+      "pip install --upgrade 'nvidia-cutlass-dsl[cu13]>=4.5.0' pytest",
+      "pip install --no-build-isolation --no-deps -e /tmp/flashinfer"
+    ],
+    "environment": {
+      "FLASHINFER_CUDA_ARCH_LIST": "12.1a",
+      "FLASHINFER_JIT_DIR": "/tmp/flashinfer-jit",
+      "FLASHINFER_JIT_VERBOSE": "1"
+    },
+    "source_file_used": "/tmp/flashinfer/flashinfer/gemm/gemm_base.py",
+    "real_sm121_mm_fp4_nvfp4_heuristic": ["b12x", "cutlass", "cudnn"],
+    "jit_cache_path_observed": "/root/.cache/flashinfer/0.6.13/121a/cached_ops/fp4_quantization_120f",
+    "nvcc_gencode_observed": "arch=compute_120f,code=sm_120f",
+    "tiny_forced_b12x_nvfp4_gemm": {
+      "m": 1,
+      "n": 128,
+      "k": 128,
+      "output_dtype": "torch.bfloat16",
+      "finite_output": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.9882067441940308
+    }
+  },
+  "patched_source_regression_tests": [
+    {
+      "container": "vllm/vllm-openai:cu130-nightly-aarch64",
+      "command": "PYTHONPATH=/src python3 -m pytest /src/tests/gemm/test_mm_fp4.py -k auto_prefers_b12x_for_sm121_nvfp4 -q",
+      "result": "1 passed, 12072 deselected"
+    },
+    {
+      "container": "nvcr.io/nvidia/sglang:26.05-py3",
+      "command": "PYTHONPATH=/src python3 -m pytest /src/tests/gemm/test_mm_fp4.py -k auto_prefers_b12x_for_sm121_nvfp4 -q",
+      "result": "1 passed, 12072 deselected"
+    }
+  ],
+  "problems_encountered": [
+    {
+      "severity": "deployment_blocker_for_overlay_only",
+      "problem": "Direct PYTHONPATH overlay of current FlashInfer source on installed serving containers failed because nvidia-cutlass-dsl 4.4.2 lacks cutlass.cute.nvgpu.OperandMajorMode.",
+      "resolution_for_validation": "Upgrade nvidia-cutlass-dsl[cu13] to >=4.5.0 inside the ephemeral container."
+    },
+    {
+      "severity": "deployment_blocker_for_mixed_python_binary",
+      "problem": "Source Python over older installed FlashInfer binary/JIT modules failed in NVFP4 quantization with TVM FFI argument mismatch: expected 9 arguments but got 10.",
+      "resolution_for_validation": "Use an editable source install and remove stale flashinfer-jit-cache/flashinfer-cubin packages in the ephemeral layer."
+    },
+    {
+      "severity": "minor_container_build_friction",
+      "problem": "Editable install from copied Git checkout initially failed with Git 'dubious ownership' for /tmp/flashinfer.",
+      "resolution_for_validation": "Add /tmp/flashinfer as a safe.directory inside the ephemeral container."
+    },
+    {
+      "severity": "packaging_mismatch",
+      "problem": "Editable FlashInfer 0.6.13 import rejected installed flashinfer-cubin 0.6.10 without FLASHINFER_DISABLE_VERSION_CHECK or package removal.",
+      "resolution_for_validation": "Remove flashinfer-cubin and flashinfer-jit-cache so source JIT is used."
+    }
+  ],
+  "interpretation": [
+    "Installed vLLM and SGLang containers currently exclude b12x from SM121 NVFP4 mm_fp4 auto-dispatch.",
+    "The patched FlashInfer source changes real GB10 auto-dispatch to prefer b12x.",
+    "A tiny forced-b12x NVFP4 GEMM can run on GB10 when the source package and generated JIT modules are kept version-consistent.",
+    "This is source/JIT proof, not an end-to-end vLLM or SGLang serving benchmark.",
+    "The next before/after step needs a clean container or wheel set with matching flashinfer-python, flashinfer-jit-cache, flashinfer-cubin, nvidia-cutlass-dsl, and CUDA targets."
+  ]
+}

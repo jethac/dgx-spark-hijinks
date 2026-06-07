@@ -111,3 +111,29 @@ Interpretation:
 
 - This is a SGLang Gemma4 model-path blocker, not a proof of a GB10 kernel failure.
 - It keeps SGLang marked as functional for some supported models but not yet a Gemma-class blessed path.
+
+## 2026-06-07: FlashInfer SM121 Source/JIT Validation
+
+Target:
+
+- fork: `jethac/flashinfer`
+- branch: `spark/hijinks-004-sm121-flashinfer`
+- commit: `a42c8f07`
+- host: `thinkstationpgx-00b4`
+
+Artifact:
+
+- `results/flashinfer_sm121_source_jit_20260607T1250Z.json`
+
+Result:
+
+- Installed vLLM container baseline: FlashInfer `0.6.8.post1`, CUDA `13.0`, real SM121 NVFP4 `mm_fp4` heuristic returned `["cudnn", "cutlass"]`.
+- Installed SGLang container baseline: FlashInfer `0.6.10+cf494fca.nv26.5.cu132.50619265`, CUDA `13.2`, real SM121 NVFP4 `mm_fp4` heuristic returned `["cudnn", "cutlass"]`.
+- Patched source: real SM121 NVFP4 `mm_fp4` heuristic returned `["b12x", "cutlass", "cudnn"]`.
+- Source/JIT path built FP4 quantization under `/root/.cache/flashinfer/0.6.13/121a/cached_ops/fp4_quantization_120f`.
+- Tiny forced-`b12x` NVFP4 GEMM produced finite BF16 output with cosine similarity `0.9882067441940308` against BF16 `torch.mm`.
+
+Interpretation:
+
+- This proves the FlashInfer fork makes the high-impact SM121 dispatch behavior better and that the `b12x` path can execute on GB10 when the source/JIT package set is consistent.
+- This does not yet prove a serving-speed improvement. The deployable before/after needs a clean vLLM or SGLang image/wheel set with matching FlashInfer Python, JIT-cache/cubin, CUTLASS DSL, and CUDA targets.

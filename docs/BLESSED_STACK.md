@@ -40,6 +40,7 @@ From the first Gemma 4 campaign:
 - The inspected vLLM/FlashInfer extension set has no explicit `sm_121` SASS. General vLLM extensions include `sm_120`, while several attention/MLA extensions are `sm_80`, `sm_90a`, or `sm_100` only. Treat this as a validation requirement, not an automatic failure.
 - SGLang NVFP4 KV is not validated on our Spark yet. Track `hikarioyama/sglang-nvfp4-kv-sm120` as a candidate design reference, but do not bless it until a Spark fp4-vs-fp8 quality check passes.
 - The tested NVIDIA SGLang container still logs `SM120 (Blackwell) detected` and audited SGLang/FlashInfer objects contain no explicit `sm_121` SASS. Treat the BF16 smoke as functional evidence, not proof of fully Spark-native kernel coverage.
+- FlashInfer source/JIT validation at `jethac/flashinfer@a42c8f07` proves one important lower-level fix: installed vLLM/SGLang containers exclude `b12x` from SM121 NVFP4 `mm_fp4` auto-dispatch, while the patched source selects `b12x` and can run a tiny forced-`b12x` NVFP4 GEMM on GB10. This is not yet a blessed serving stack because it required an ephemeral source install and removal of stale FlashInfer JIT/cubin packages.
 - LiteRT-LM is not evaluated on Spark yet. Track `google-ai-edge/LiteRT-LM` as a candidate Gemma/local-agent runtime.
 - llama.cpp serving is partially observed through throughput, but not yet blessed as a complete serving recipe.
 
