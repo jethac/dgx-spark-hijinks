@@ -246,6 +246,11 @@
   - dry-run artifact: `results/qwen_speed_lane_dryrun_20260608_summary.json`
   - purpose: record already-running vLLM, SGLang, and llama.cpp Qwen servers through the shared `record_openai_serving_row.py` manifest path.
   - interpretation: this does not replace the missing vLLM Qwen36 live result; it makes the next live Qwen campaign repeatable once the host and image acquisition are healthy.
+- Added the AEON prior-art port map.
+  - doc: `docs/AEON_PRIOR_ART_PORT_MAP.md`
+  - sources: local `CODEX_REPORT_AEON7.md`, AEON Qwen patch directory, AEON Gemma repo, AEON `vllm-dflash`, and current `jethac` forks.
+  - conclusion: literal AEON patches are vLLM internals and are already represented in `jethac/vllm@6804e1b`; SGLang and llama.cpp need counterpart experiments, not blind vLLM patch copies.
+  - SGLang nuance: current `jethac/sglang@98ad46961` already has DFlash-specific surfaces, so the next useful step is a serving proof after ordinary Qwen/Gemma rows are stable.
 
 ## First Benchmark Campaign Summary
 

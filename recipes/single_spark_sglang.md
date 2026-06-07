@@ -145,6 +145,30 @@ python3 scripts/record_openai_serving_row.py \
   --cuda-so-package flashinfer
 ```
 
+## Qwen DFlash Probe
+
+AEON's DFlash evidence is vLLM-first, but the current `jethac/sglang` fork already has DFlash-specific SGLang surfaces:
+
+- `python/sglang/srt/arg_groups/speculative_hook.py`
+- `python/sglang/srt/models/dflash.py`
+- Qwen model `set_dflash_layers_to_capture` hooks
+- speculative metrics for accepted drafts
+
+Treat this as a candidate SGLang counterpart, not a proven port. Only run this after ordinary Qwen serving is stable:
+
+```bash
+python3 -m sglang.launch_server \
+  --model-path QWEN_TARGET_MODEL \
+  --speculative-algorithm DFLASH \
+  --speculative-draft-model-path QWEN_DFLASH_DRAFTER \
+  --speculative-num-draft-tokens 15 \
+  --attention-backend flashinfer \
+  --host 0.0.0.0 \
+  --port 30000
+```
+
+Record acceptance metrics, decode tok/s, CUDA graph/overlap scheduler state, output quality, and the same non-DFlash Qwen row for comparison. Do not call this an AEON-equivalent result until it runs on GB10 with artifacts.
+
 ## AEON-Style Gemma NVFP4 Weight Probe
 
 AEON's Gemma result is useful SGLang prior art for NVFP4 weights, but it does not prove FP4 KV. If testing Gemma 4 in SGLang, start with ordinary KV:

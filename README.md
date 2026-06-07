@@ -24,6 +24,7 @@ Next vLLM proof lane: AEON Gemma is now locally reproduced; AEON Qwen3.6 NVFP4+D
 - GGUF/llama.cpp status: [docs/GGUF_LLAMA_CPP_STATUS.md](docs/GGUF_LLAMA_CPP_STATUS.md)
 - Issue tracker map: [docs/ISSUE_TRACKER.md](docs/ISSUE_TRACKER.md)
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
+- AEON prior-art port map: [docs/AEON_PRIOR_ART_PORT_MAP.md](docs/AEON_PRIOR_ART_PORT_MAP.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
 - Qwen notes: [docs/QWEN_ON_DGX_SPARK.md](docs/QWEN_ON_DGX_SPARK.md)
 - vLLM AEON reproduction: [docs/VLLM_AEON_REPRODUCTION.md](docs/VLLM_AEON_REPRODUCTION.md)

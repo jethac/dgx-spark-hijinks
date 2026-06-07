@@ -97,6 +97,8 @@ Build on hikarioyama's SM120 vLLM and SGLang NVFP4-KV work unless GB10 testing s
 - SGLang owns `fp4_e2m1` KV dtype, KV memory pools, hybrid-SWA wiring, calibration before CUDA graph capture, server args, FlashInfer backend wrapper, and model-runner integration. Do not carry FlashInfer kernels in SGLang PRs.
 - Keep the existing FlashInfer `mm_fp4` SM121 dispatch work separate from NVFP4 KV attention work; it is enablement evidence, not a serving-speed proof.
 
+AEON-derived vLLM patches and their SGLang/llama.cpp counterpart decisions are tracked in `docs/AEON_PRIOR_ART_PORT_MAP.md`. Do not create SGLang or llama.cpp source patches just because AEON patched vLLM; first reproduce the equivalent runtime failure or benchmark gap.
+
 Suggested branches:
 
 ```text
