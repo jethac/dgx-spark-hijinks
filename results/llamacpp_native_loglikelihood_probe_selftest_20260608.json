@@ -1,0 +1,12 @@
+{
+  "checks": {
+    "direct_extract": true,
+    "missing_extract": true,
+    "nested_extract": true,
+    "tokenize_ints": true,
+    "tokenize_objects": true
+  },
+  "elapsed_s": 0.0,
+  "ok": true,
+  "schema": "llamacpp-native-loglikelihood-probe-self-test/v1"
+}

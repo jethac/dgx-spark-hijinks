@@ -76,11 +76,13 @@ This is not a model-quality failure and not a CUDA failure. It is an API/schema 
 2. Patch or replace the lm-eval GGUF adapter only if a llama.cpp API path can expose arbitrary continuation-token probabilities. The observed OpenAI-compatible `logprobs.content` response is generated-token scoring, not sufficient by itself.
 3. Add a dedicated loglikelihood endpoint/path for llama.cpp that returns the exact continuation-token scores required by lm-eval.
 
-Until one of those passes `scripts/gguf_logprobs_probe.py`, GGUF remains a throughput/serving path, not a paper-comparable accuracy path.
+Until one of those passes `scripts/gguf_logprobs_probe.py` or the native endpoint probe below, GGUF remains a throughput/serving path, not a paper-comparable accuracy path.
 
 ## Next Proof
 
 The best candidate is llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.
+
+Upstream API reference: `https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md`
 
 Target proof:
 
@@ -88,6 +90,17 @@ Target proof:
 2. For each continuation token, call `/completion` with `prompt = context_tokens + previous_continuation_tokens`, `n_predict=1`, `n_probs` high enough to include the target token, and `return_tokens=true`.
 3. Pass only if the response exposes the exact target token id and its pre-sampling logprob for every continuation token.
 4. Then run one tiny lm-eval GGUF task through that adapter path.
+
+Host-ready probe:
+
+```bash
+python3 scripts/llamacpp_native_loglikelihood_probe.py \
+  --url http://127.0.0.1:8080 \
+  --n-probs 256 \
+  --output results/llamacpp_native_loglikelihood_probe.json
+```
+
+The probe deliberately tests both a likely continuation and an unlikely continuation. Recovering only the generated top token is not enough for lm-eval.
 
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 

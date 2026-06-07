@@ -33,3 +33,14 @@ Artifact:
 The server returned generated-token logprobs under `choices[0].logprobs.content`, but did not return `tokens` or `token_logprobs`. That is insufficient for the current lm-eval GGUF loglikelihood path.
 
 Next proof: test llama.cpp's native `/tokenize` plus `/completion` path with token-array prompts, `n_predict=1`, `n_probs`, and `return_tokens=true`. If that can expose arbitrary target-token logprobs, fix the adapter locally; if not, this needs a llama.cpp upstream loglikelihood path.
+
+Host-ready native probe:
+
+```bash
+python3 scripts/llamacpp_native_loglikelihood_probe.py \
+  --url http://127.0.0.1:8080 \
+  --n-probs 256 \
+  --output results/llamacpp_native_loglikelihood_probe.json
+```
+
+The probe must pass both likely and unlikely continuations before any lm-eval adapter work is considered valid.
