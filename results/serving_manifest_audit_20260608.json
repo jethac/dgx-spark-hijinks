@@ -1,0 +1,278 @@
+{
+  "broad_runtime_claim_ready": {
+    "gemma": false,
+    "qwen": true
+  },
+  "claim_ready_count": 1,
+  "claim_ready_model_families": [
+    "qwen"
+  ],
+  "inputs": [
+    "results/aeon_gemma26_dflash_20260608T0436JST_row_manifest.json",
+    "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json",
+    "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_row_manifest.json",
+    "results/qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8_row_manifest.json",
+    "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
+  ],
+  "live_row_count": 2,
+  "ok": true,
+  "row_count": 5,
+  "rows": [
+    {
+      "backend": "vllm",
+      "benchmark": {
+        "case_count": 3,
+        "exists": true,
+        "hardware_ok": false,
+        "ok": true
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "exists": true,
+        "missing_or_unaccepted_count": 1,
+        "native_fp4_log_count": 0
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": true,
+        "chat_smoke": true,
+        "openai_benchmark": true,
+        "runtime_probe": true
+      },
+      "dry_run": false,
+      "findings": [
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": true,
+      "missing_metadata": [],
+      "model": "gemma4-fast",
+      "model_family": "gemma",
+      "parse_ok": true,
+      "path": "results/aeon_gemma26_dflash_20260608T0436JST_row_manifest.json",
+      "phase": "exploratory",
+      "run_id": "aeon_gemma26_dflash_20260608T0436JST",
+      "runtime_probe": {
+        "exists": true,
+        "hardware_ok": true,
+        "process_count": 4,
+        "server_models_ok": true
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "exists": true,
+        "has_backend_marker": true,
+        "matched_markers": [
+          "FlashInfer",
+          "TRITON_ATTN",
+          "FLASH_ATTN",
+          "VLLM_CUTLASS",
+          "CUDAGraph",
+          "CUDA graph",
+          "DFlash",
+          "NvFp4",
+          "NVFP4"
+        ],
+        "path": "results/aeon_gemma26_dflash_20260608T0436JST_server.log"
+      }
+    },
+    {
+      "backend": "llamacpp",
+      "benchmark": {
+        "case_count": 3,
+        "exists": true,
+        "hardware_ok": true,
+        "ok": true
+      },
+      "build_target_audit": {
+        "accepted": true,
+        "exists": true,
+        "missing_or_unaccepted_count": 0,
+        "native_fp4_log_count": 0
+      },
+      "claim_ready": true,
+      "command_checks": {
+        "build_target_audit": true,
+        "chat_smoke": true,
+        "openai_benchmark": true,
+        "runtime_probe": true
+      },
+      "dry_run": false,
+      "findings": [],
+      "manifest_ok": true,
+      "missing_metadata": [],
+      "model": "Qwen/Qwen2.5-1.5B-Instruct-GGUF:qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json",
+      "phase": "exploratory",
+      "run_id": "llamacpp-qwen25-1-5b-q4-k-m-20260608T0420JST",
+      "runtime_probe": {
+        "exists": true,
+        "hardware_ok": true,
+        "process_count": 1,
+        "server_models_ok": true
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "exists": true,
+        "has_backend_marker": true,
+        "matched_markers": [
+          "CUDA : ARCHS",
+          "USE_GRAPHS",
+          "CUDA0",
+          "BLACKWELL_NATIVE_FP4"
+        ],
+        "path": "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log"
+      }
+    },
+    {
+      "backend": "llamacpp",
+      "benchmark": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_openai_benchmark.json",
+        "exists": false,
+        "ok": false
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "error": "artifact missing from manifest",
+        "exists": false
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": false,
+        "chat_smoke": true,
+        "openai_benchmark": true,
+        "runtime_probe": true
+      },
+      "dry_run": true,
+      "findings": [
+        "dry-run manifest is planning evidence only",
+        "OpenAI benchmark artifact is missing or not fully ok",
+        "GB10 sm_121 hardware evidence is missing from benchmark/runtime artifacts",
+        "server log has no backend marker from the audit marker set",
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": true,
+      "missing_metadata": [],
+      "model": "qwen25-1.5b-q4_k_m-gguf",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_row_manifest.json",
+      "phase": "before",
+      "run_id": "qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m",
+      "runtime_probe": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_llamacpp_llamacpp-qwen25-q4-k-m_runtime_probe.json",
+        "exists": false,
+        "hardware_ok": false,
+        "process_count": 0
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "error": "server_log artifact missing from manifest",
+        "exists": false,
+        "matched_markers": [],
+        "path": null
+      }
+    },
+    {
+      "backend": "sglang",
+      "benchmark": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8_openai_benchmark.json",
+        "exists": false,
+        "ok": false
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "error": "artifact missing from manifest",
+        "exists": false
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": false,
+        "chat_smoke": true,
+        "openai_benchmark": true,
+        "runtime_probe": true
+      },
+      "dry_run": true,
+      "findings": [
+        "dry-run manifest is planning evidence only",
+        "OpenAI benchmark artifact is missing or not fully ok",
+        "GB10 sm_121 hardware evidence is missing from benchmark/runtime artifacts",
+        "server log has no backend marker from the audit marker set",
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": true,
+      "missing_metadata": [],
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8_row_manifest.json",
+      "phase": "before",
+      "run_id": "qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8",
+      "runtime_probe": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_sglang_sglang-qwen25-fp8_runtime_probe.json",
+        "exists": false,
+        "hardware_ok": false,
+        "process_count": 0
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "error": "server_log artifact missing from manifest",
+        "exists": false,
+        "matched_markers": [],
+        "path": null
+      }
+    },
+    {
+      "backend": "vllm",
+      "benchmark": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_openai_benchmark.json",
+        "exists": false,
+        "ok": false
+      },
+      "build_target_audit": {
+        "accepted": false,
+        "error": "artifact missing from manifest",
+        "exists": false
+      },
+      "claim_ready": false,
+      "command_checks": {
+        "build_target_audit": false,
+        "chat_smoke": true,
+        "openai_benchmark": true,
+        "runtime_probe": true
+      },
+      "dry_run": true,
+      "findings": [
+        "dry-run manifest is planning evidence only",
+        "OpenAI benchmark artifact is missing or not fully ok",
+        "GB10 sm_121 hardware evidence is missing from benchmark/runtime artifacts",
+        "server log has no backend marker from the audit marker set",
+        "build-target audit lacks accepted Spark target evidence"
+      ],
+      "manifest_ok": true,
+      "missing_metadata": [],
+      "model": "AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4",
+      "model_family": "qwen",
+      "parse_ok": true,
+      "path": "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json",
+      "phase": "after",
+      "run_id": "qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash",
+      "runtime_probe": {
+        "error": "artifact does not exist: B:\\workshop\\dgx-spark-hijinks\\results\\qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_runtime_probe.json",
+        "exists": false,
+        "hardware_ok": false,
+        "process_count": 0
+      },
+      "schema": "openai-serving-row-manifest/v1",
+      "server_log": {
+        "error": "server_log artifact missing from manifest",
+        "exists": false,
+        "matched_markers": [],
+        "path": null
+      }
+    }
+  ],
+  "schema": "serving-manifest-audit/v1",
+  "strict_ok": false
+}

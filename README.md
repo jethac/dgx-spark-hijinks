@@ -122,6 +122,13 @@ python3 scripts/record_openai_serving_row.py \
   --server-log results/RUN_ID_server.log
 ```
 
+To audit serving row manifests before using them as evidence for a runtime claim:
+
+```bash
+python3 scripts/serving_manifest_audit.py \
+  --output results/serving_manifest_audit_RUN_ID.json
+```
+
 To record the required Qwen speed lane against already-running servers:
 
 ```bash

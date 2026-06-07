@@ -259,6 +259,12 @@
   - status doc change: `docs/SOLUTIONS_STATUS.md` now preserves every numbered solution-plan row through `15` instead of folding benchmark design, observability, upstream coordination, forks, and recipes into unrelated row numbers.
   - issue tracker change: `docs/ISSUE_TRACKER.md` now records solution-plan IDs separately from GitHub issue numbers.
   - Qwen rule: Qwen speed/capacity is a required cross-cutting benchmark lane alongside Gemma, not a substitute for any numbered solution area and not optional for broad runtime claims.
+- Added a serving-manifest claim-readiness audit.
+  - script: `scripts/serving_manifest_audit.py`
+  - audit artifact: `results/serving_manifest_audit_20260608.json`
+  - converted the llama.cpp Qwen2.5 Q4_K_M row manifest from a manual note into strict JSON.
+  - result: the llama.cpp Qwen row is now claim-ready for practical serving evidence; the AEON Gemma vLLM row remains not claim-ready in the strict audit because its build-target audit lacks accepted Spark target evidence.
+  - dry-run Qwen lane manifests are explicitly classified as planning evidence only.
 
 ## First Benchmark Campaign Summary
 

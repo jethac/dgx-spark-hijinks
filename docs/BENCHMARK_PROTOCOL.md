@@ -91,6 +91,7 @@ python3 scripts/cuda_build_target_audit.py \
    - long prompt / short output
    - short prompt / long output
    - for Qwen rows, prefer `scripts/qwen_speed_lane.py` with a JSONL row file so vLLM, SGLang, and llama.cpp evidence share the same manifest shape
+   - run `scripts/serving_manifest_audit.py` before treating a row as claim-ready; dry-run manifests are planning evidence only, and a live row still needs metadata, hardware evidence, backend markers, and accepted build-target evidence
 
 Example:
 
