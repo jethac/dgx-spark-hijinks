@@ -71,6 +71,34 @@ Remaining sm121-specific concern:
 - The server log says `SM120 (Blackwell) detected: auto-selecting fp4-gemm-backend=flashinfer_cudnn` on a GB10 `sm_121` device.
 - Treat this as a dispatch/packaging validation issue before calling the path fully Spark-native.
 
+## 2026-06-07 Gemma 4 E2B Result
+
+Model:
+
+- `google/gemma-4-E2B-it-qat-w4a16-ct`
+
+Default launch:
+
+- artifact prefix: `results/sglang_gemma4_e2b_w4a16_20260607T121536Z`
+- result: container exited before health
+- attention backend selection: `Use triton as default attention backend for Gemma4`
+- failure: SGLang selects the Gemma4 multimodal path, constructs the audio tower, then crashes in `Gemma4AudioConformerLightConv1d`
+- concrete exception: `AttributeError: 'MergedColumnParallelLinear' object has no attribute 'weight'`
+
+Language-only retry:
+
+- artifact prefix: `results/sglang_gemma4_e2b_w4a16_language_only_20260607T121751Z`
+- result: container exited before health
+- command added `--language-only`
+- failure: argument/config validation raises `ValueError: requires at least one encoder urls to be set via --encoder-urls`
+
+Interpretation:
+
+- The NVIDIA SGLang 26.05 container is functional on GB10 for a supported Qwen BF16 model.
+- The same container is not currently a working Gemma 4 E2B text-serving path in our test.
+- This is not an sm121 kernel failure yet; it fails before serving, during SGLang's Gemma4 model setup.
+- The failure is still a Spark campaign issue because the mission requires Gemma-class models to run through SGLang or have an explicit go/no-go.
+
 ## Preferred First Container
 
 As of 2026-06-07, the preferred first smoke path is container-based, not bare-metal pip:

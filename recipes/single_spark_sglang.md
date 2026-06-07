@@ -105,6 +105,15 @@ A blessed SGLang result must record:
 
 Do not bless SGLang NVFP4 KV on Spark until it passes a single-Spark smoke test and a quality check. For small models, prefer fp8 KV unless NVFP4 quality is proven on that model.
 
+## Gemma 4 Status
+
+`nvcr.io/nvidia/sglang:26.05-py3` passed a Qwen BF16 smoke on GB10, but failed `google/gemma-4-E2B-it-qat-w4a16-ct` before health:
+
+- default launch: Gemma4 multimodal/audio setup crashed with `MergedColumnParallelLinear` missing `.weight`
+- `--language-only` retry: failed validation because SGLang expects `--encoder-urls`
+
+Do not present SGLang as a Gemma 4 path until this is fixed or a different image/commit passes.
+
 ## Fork Rule
 
 If SGLang needs source changes, fork `sgl-project/sglang` to `jethac/sglang`, add it as `third_party/sglang`, and do the patch in a worktree named for the GitHub Issue.

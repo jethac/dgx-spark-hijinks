@@ -85,3 +85,29 @@ Interpretation:
 - This row is exploratory because it uses Qwen rather than Gemma and because sm121-specific kernel dispatch remains unresolved.
 - The CUDA object audit found no explicit `sm_121` SASS in audited SGLang/FlashInfer objects.
 - The SGLang log labeled the GB10 path as `SM120 (Blackwell)`, so this still needs upstream dispatch/packaging scrutiny.
+
+## 2026-06-07: SGLang Gemma 4 E2B Blocker
+
+Target:
+
+- image: `nvcr.io/nvidia/sglang:26.05-py3`
+- model: `google/gemma-4-E2B-it-qat-w4a16-ct`
+- dtype: `bfloat16`
+- memory fraction: `0.40`
+
+Artifacts:
+
+- default launch: `results/sglang_gemma4_e2b_w4a16_20260607T121536Z_server.log`
+- language-only retry: `results/sglang_gemma4_e2b_w4a16_language_only_20260607T121751Z_server.log`
+
+Result:
+
+- Default launch exited before health while constructing the Gemma4 audio tower.
+- The concrete exception was `AttributeError: 'MergedColumnParallelLinear' object has no attribute 'weight'`.
+- A retry with `--language-only` exited before health during server argument validation.
+- The concrete retry exception was `ValueError: requires at least one encoder urls to be set via --encoder-urls`.
+
+Interpretation:
+
+- This is a SGLang Gemma4 model-path blocker, not a proof of a GB10 kernel failure.
+- It keeps SGLang marked as functional for some supported models but not yet a Gemma-class blessed path.

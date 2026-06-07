@@ -39,7 +39,7 @@ Docker images currently present include:
 
 ## Next Runtime Actions
 
-1. SGLang: move from Qwen BF16 smoke to a Gemma smoke, then test fp8 vs NVFP4 quality/performance.
+1. SGLang: fix or escalate the Gemma 4 model-path blocker, then test fp8 vs NVFP4 quality/performance.
 2. LiteRT-LM: install `litert-lm==0.13.1` in a clean venv, prove CPU E2B generation, then test whether `--backend=gpu` uses a useful GB10 path.
 3. llama.cpp: pin the build/commit as a practical serving path; keep GGUF lm-eval accuracy blocked until logprobs compatibility is fixed.
 4. vLLM: use the current baseline as the before row for future patched/container comparisons.

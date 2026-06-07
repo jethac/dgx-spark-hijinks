@@ -32,6 +32,7 @@ From the first Gemma 4 campaign:
 ## Known Bad Or Not Yet Blessed
 
 - vLLM `0.22.1` is not blessed for Gemma 4 12B `gemma4_unified` on Spark.
+- NVIDIA SGLang `26.05-py3` is not currently a working Gemma 4 E2B path in our test: default Gemma4 multimodal setup crashes in the audio tower, and `--language-only` is not a valid standalone workaround.
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
 - GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
 - `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
@@ -48,7 +49,7 @@ To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
-- SGLang Gemma smoke and NVFP4/fp8 quality comparison on Spark.
+- SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
 - LiteRT-LM build or binary that can run a Gemma model on the Spark and expose useful generation performance.
 - llama.cpp commit with an API schema that can satisfy lm-eval loglikelihood scoring, or a patched adapter.
 - llama.cpp commit/build recipe for practical serving even if lm-eval accuracy remains separate.

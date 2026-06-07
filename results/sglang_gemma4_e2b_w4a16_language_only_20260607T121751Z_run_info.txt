@@ -1,0 +1,5 @@
+RUN_ID=sglang_gemma4_e2b_w4a16_language_only_20260607T121751Z
+IMAGE=nvcr.io/nvidia/sglang:26.05-py3
+MODEL=google/gemma-4-E2B-it-qat-w4a16-ct
+MEM_FRACTION=0.40
+LANGUAGE_ONLY=true
