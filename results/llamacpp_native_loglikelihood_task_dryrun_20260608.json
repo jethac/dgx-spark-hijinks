@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "context": "The capital of Japan is",
+      "continuation": " Tokyo",
+      "expected_greedy": true,
+      "id": "tokyo_likely"
+    },
+    {
+      "context": "The capital of Japan is",
+      "continuation": " zebra",
+      "expected_greedy": false,
+      "id": "zebra_unlikely"
+    },
+    {
+      "context": "The model family Qwen was developed by",
+      "continuation": " Alibaba",
+      "expected_greedy": null,
+      "id": "qwen_name"
+    }
+  ],
+  "completion_endpoint": "http://127.0.0.1:8080/completion",
+  "dry_run": true,
+  "elapsed_s": 0.0,
+  "input": "tasks/llamacpp_loglikelihood_smoke.jsonl",
+  "n_probs": 512,
+  "ok": true,
+  "schema": "llamacpp-native-loglikelihood-task/v1",
+  "summary": {
+    "expected_greedy_checked": 2,
+    "expected_greedy_mismatches": null,
+    "greedy_known": 0,
+    "ok": true,
+    "target_found": 0,
+    "target_missing": null,
+    "total": 3
+  },
+  "tokenize_endpoint": "http://127.0.0.1:8080/tokenize"
+}

@@ -115,6 +115,18 @@ python3 scripts/llamacpp_native_loglikelihood_probe.py \
 
 For each pair, `target_logprob_sum` is the sum over continuation-token logprobs and `all_tokens_greedy` is the greedy-match boolean needed by an lm-eval-style loglikelihood adapter. Artifact `results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json` proves the parser/classifier logic locally, but it is not live server proof.
 
+The follow-on tiny task harness is ready:
+
+```bash
+python3 scripts/llamacpp_native_loglikelihood_task.py \
+  --url http://127.0.0.1:8080 \
+  --n-probs 512 \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/llamacpp_native_loglikelihood_task.json
+```
+
+Dry-run artifact `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json` proves the JSONL task file and command shape. It does not prove llama.cpp can return the target-token logprobs.
+
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 
 ## Practical Serving Note

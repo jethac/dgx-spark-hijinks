@@ -222,6 +222,12 @@
   - changes: explicit `--pair CONTEXT|||CONTINUATION` scoring, continuation-token logprob summation, greedy-match metadata, and an `lm_eval_loglikelihood_tuple` field.
   - validation: Python compile and self-test passed.
   - interpretation: this is adapter-shape readiness only. GGUF accuracy is still blocked until the native probe passes against a live llama-server and a tiny lm-eval task.
+- Added a tiny llama.cpp native loglikelihood task harness.
+  - script: `scripts/llamacpp_native_loglikelihood_task.py`
+  - task file: `tasks/llamacpp_loglikelihood_smoke.jsonl`
+  - dry-run artifact: `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json`
+  - validation: Python compile, task dry-run, no-server failure path, and `git diff --check` passed.
+  - interpretation: this makes the next live GGUF accuracy proof one command after starting llama-server; it still does not prove paper-comparable GGUF accuracy until run against the server.
 
 ## First Benchmark Campaign Summary
 

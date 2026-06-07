@@ -17,7 +17,7 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 7. NVFP4 end to end | mixed | AEON Gemma proves NVFP4 weight serving; FlashInfer FA2 NVFP4 KV standalone probe passes small and Gemma sliding/local shapes. | End-to-end vLLM/SGLang `nvfp4` KV serving, fp8-vs-NVFP4 quality/capacity/throughput rows, and Gemma global `D=512` path. |
 | 7a. SGLang first-class Spark runtime | partial | SGLang Qwen2.5 1.5B BF16/auto and fp8 KV serve around `58-59 tok/s`; fp8 roughly doubles KV pool over BF16/auto. | Gemma serving path, clean graph-compatible FP4 KV, and output quality checks. |
 | 7b. LiteRT-LM optional side runtime | partial | Linux aarch64 install, CPU generation, and CPU/GPU benchmark evidence exist. | GPU chat exits `-11`; no blessed GPU serving path. |
-| 8. llama.cpp / lm-eval accuracy | missing | `gguf_logprobs_probe` identifies the schema mismatch; `scripts/llamacpp_native_loglikelihood_probe.py` now prototypes lm-eval-shaped scoring through native `/tokenize` plus `/completion` and has a local self-test. | Native probe must prove arbitrary continuation-token logprobs against a live llama-server, then a tiny GGUF lm-eval/loglikelihood task must pass; current OpenAI-compatible API returns `logprobs.content`, not `tokens` plus `token_logprobs`. |
+| 8. llama.cpp / lm-eval accuracy | missing | `gguf_logprobs_probe` identifies the schema mismatch; `scripts/llamacpp_native_loglikelihood_probe.py` prototypes lm-eval-shaped scoring; `scripts/llamacpp_native_loglikelihood_task.py` adds a tiny JSONL task harness with local dry-run evidence. | Native probe and task harness must prove arbitrary continuation-token logprobs against a live llama-server, then a tiny GGUF lm-eval/loglikelihood task must pass; current OpenAI-compatible API returns `logprobs.content`, not `tokens` plus `token_logprobs`. |
 | 8a. llama.cpp practical serving path | strong | Gemma 4 26B Q4_0 and Qwen2.5 1.5B Q4_K_M serve through OpenAI API; `llama-bench`, build-target audit, model details, and hardware evidence are captured. | Native NVFP4/MXFP4 GGUF and paper-comparable GGUF accuracy remain separate. |
 | 9. HF fallback containment | partial | Telemetry wrapper and failure annotator exist. | Historical `returncode=-9` rows need stronger OOM/resource evidence if HF fallback remains in comparisons. |
 | 10. GB10 SM count and memory tuning | partial | Hardware comparison keys include compute capability and SM count; scripts collect `multi_processor_count`. | Performance tuning and regression thresholds across model families remain mostly unproven. |
@@ -35,6 +35,6 @@ Live GB10 required:
 
 Offline or low-GPU work:
 
-1. Validate `scripts/llamacpp_native_loglikelihood_probe.py` against a live llama-server and, if it passes, wire the same scoring shape into a tiny GGUF lm-eval/loglikelihood task.
+1. Validate `scripts/llamacpp_native_loglikelihood_probe.py` and `scripts/llamacpp_native_loglikelihood_task.py` against a live llama-server, then wire the same scoring shape into a tiny GGUF lm-eval/loglikelihood task.
 2. Keep the acceptance table above current as each artifact lands.
 3. Continue porting AEON/hikarioyama-compatible changes only when local evidence shows the corresponding blocker.

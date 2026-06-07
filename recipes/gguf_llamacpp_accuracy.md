@@ -44,3 +44,15 @@ python3 scripts/llamacpp_native_loglikelihood_probe.py \
 ```
 
 The probe must pass both likely and unlikely continuations before any lm-eval adapter work is considered valid.
+
+Once the probe passes, run the tiny JSONL task harness:
+
+```bash
+python3 scripts/llamacpp_native_loglikelihood_task.py \
+  --url http://127.0.0.1:8080 \
+  --n-probs 512 \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/llamacpp_native_loglikelihood_task.json
+```
+
+The harness scores each `context`/`continuation` pair through the same native `/tokenize` plus `/completion` path and emits `target_logprob_sum`, `all_tokens_greedy`, and an `lm_eval_loglikelihood_tuple` per row. The smoke task intentionally includes one likely continuation and one unlikely continuation. `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json` proves the task file and command shape locally, but it is not live server proof.
