@@ -1,0 +1,42 @@
+# Blessed Stack
+
+This is the current known-good / known-bad stack record. It is intentionally conservative.
+
+## Hardware
+
+- System class: DGX Spark / ThinkStation PGX workstation
+- GPU observed in benchmark logs: `NVIDIA GB10`
+- CUDA compute capability target: `sm_121`
+- Available hardware count: one Spark-class machine
+
+## Current Benchmark Stack
+
+From the first Gemma 4 campaign:
+
+- vLLM: `0.22.1`
+- llama.cpp: `b9536`
+- llama.cpp MTP checkout: PR `23398`
+- lm-eval-harness: local Python environment
+
+## Known Good So Far
+
+- vLLM safetensors rows ran for E2B, E4B, and 26B-A4B with sustained GPU utilization.
+- stock llama.cpp CUDA throughput worked for at least the early GGUF throughput row.
+- llama.cpp MTP executed at least one speed row.
+
+## Known Bad Or Not Yet Blessed
+
+- vLLM `0.22.1` is not blessed for Gemma 4 12B `gemma4_unified` on Spark.
+- HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
+- GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
+- `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
+- Multi-Spark recipes are not validated because we currently have only one unit.
+
+## Candidate Next Stack
+
+To be tested:
+
+- NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
+- vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
+- llama.cpp commit with an API schema that can satisfy lm-eval loglikelihood scoring, or a patched adapter.
+
