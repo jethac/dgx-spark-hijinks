@@ -1,0 +1,134 @@
+{
+  "classification": {
+    "has_choices": true,
+    "has_logprobs": true,
+    "has_token_logprobs": false,
+    "has_tokens": false,
+    "looks_lm_eval_compatible": false,
+    "notes": [
+      "logprobs object exists but does not expose both tokens and token_logprobs"
+    ]
+  },
+  "elapsed_s": 0.078,
+  "endpoint": "http://127.0.0.1:18081/v1/completions",
+  "ok": false,
+  "payload": {
+    "echo": true,
+    "logprobs": 5,
+    "max_tokens": 1,
+    "model": "unused",
+    "prompt": "The capital of Japan is",
+    "temperature": 0
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "logprobs": {
+          "content": [
+            {
+              "bytes": [
+                32,
+                84,
+                111,
+                107,
+                121,
+                111
+              ],
+              "id": 21038,
+              "logprob": -0.20104478299617767,
+              "token": " Tokyo",
+              "top_logprobs": [
+                {
+                  "bytes": [
+                    32,
+                    84,
+                    111,
+                    107,
+                    121,
+                    111
+                  ],
+                  "id": 21038,
+                  "logprob": -0.20104478299617767,
+                  "token": " Tokyo"
+                },
+                {
+                  "bytes": [
+                    32,
+                    42,
+                    42
+                  ],
+                  "id": 5213,
+                  "logprob": -1.7473264932632446,
+                  "token": " **"
+                },
+                {
+                  "bytes": [
+                    32,
+                    84,
+                    111,
+                    107,
+                    105,
+                    111
+                  ],
+                  "id": 187891,
+                  "logprob": -6.993338108062744,
+                  "token": " Tokio"
+                },
+                {
+                  "bytes": [
+                    32,
+                    74,
+                    97,
+                    112,
+                    97,
+                    110
+                  ],
+                  "id": 6056,
+                  "logprob": -7.0042195320129395,
+                  "token": " Japan"
+                },
+                {
+                  "bytes": [
+                    32,
+                    91
+                  ],
+                  "id": 870,
+                  "logprob": -7.054993152618408,
+                  "token": " ["
+                }
+              ]
+            }
+          ]
+        },
+        "text": " Tokyo"
+      }
+    ],
+    "created": 1780832268,
+    "id": "chatcmpl-y5c5dlJGU5Bept4dWLDwi2EbYAPgYw39",
+    "model": "google__E2B__qat-q4_0__gemma-4-E2B_q4_0-it.gguf",
+    "object": "text_completion",
+    "system_fingerprint": "b9536-308f61c31",
+    "timings": {
+      "cache_n": 0,
+      "predicted_ms": 0.001,
+      "predicted_n": 1,
+      "predicted_per_second": 1000000.0,
+      "predicted_per_token_ms": 0.001,
+      "prompt_ms": 29.171,
+      "prompt_n": 6,
+      "prompt_per_second": 205.68372698913305,
+      "prompt_per_token_ms": 4.861833333333333
+    },
+    "usage": {
+      "completion_tokens": 1,
+      "prompt_tokens": 6,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 7
+    }
+  },
+  "schema": "gguf-logprobs-probe/v1"
+}

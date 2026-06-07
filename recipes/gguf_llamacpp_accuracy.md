@@ -22,3 +22,12 @@ The response must include token logprobs in a shape that can score an echoed pro
 
 If this probe fails, do not run full lm-eval GGUF accuracy. Fix the adapter or pin a compatible llama.cpp server first.
 
+## Current Result
+
+The probe failed against stock llama.cpp `b9536` on 2026-06-07.
+
+Artifact:
+
+- `results/gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json`
+
+The server returned generated-token logprobs under `choices[0].logprobs.content`, but did not return `tokens` or `token_logprobs`. That is insufficient for the current lm-eval GGUF loglikelihood path.
