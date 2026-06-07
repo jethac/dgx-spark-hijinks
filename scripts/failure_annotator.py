@@ -182,6 +182,40 @@ def json_annotations(path: Path) -> list[Annotation]:
                 details={"elapsed_s": data.get("elapsed_s")},
             )
         )
+    elif data.get("schema") == "spark-run-with-telemetry/v1" and data.get("failure_class") != "ok":
+        stderr_tail = data.get("stderr_tail") or ""
+        stdout_tail = data.get("stdout_tail") or ""
+        evidence = stderr_tail.strip() or stdout_tail.strip() or f"returncode={data.get('returncode')}"
+        failure_class = data.get("failure_class") or "unknown_failure"
+        confidence = "high" if failure_class in {"process_killed", "timeout"} else "medium"
+        causes: list[str] = []
+        oom_text = json.dumps(data.get("oom_evidence") or {}, sort_keys=True).lower()
+        if "out of memory" in oom_text or "oom-kill" in oom_text or "killed process" in oom_text:
+            causes.append("kernel_oom_evidence")
+            confidence = "high"
+        elif failure_class == "process_killed":
+            causes.append("signal_without_kernel_oom_evidence")
+        annotations.append(
+            Annotation(
+                source=str(path),
+                source_type="telemetry_run",
+                row=data.get("run_id"),
+                backend=data.get("backend"),
+                model=data.get("model"),
+                status="run_failed",
+                returncode=data.get("returncode"),
+                failure_class=failure_class,
+                confidence=confidence,
+                suspected_causes=causes,
+                evidence=evidence[-500:],
+                details={
+                    "elapsed_s": data.get("elapsed_s"),
+                    "timed_out": data.get("timed_out"),
+                    "peak_process_tree_rss_kib": data.get("peak_process_tree_rss_kib"),
+                    "peak_process_tree_swap_kib": data.get("peak_process_tree_swap_kib"),
+                },
+            )
+        )
     return annotations
 
 

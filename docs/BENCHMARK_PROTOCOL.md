@@ -18,6 +18,7 @@ Tracked by:
 - Capture CUDA shared-object/JIT evidence when testing kernel changes.
 - Capture runtime process evidence with `scripts/runtime_process_probe.py` for serving baselines.
 - Annotate failures with `scripts/failure_annotator.py` so killed processes, API schema mismatches, runtime exceptions, and configuration errors are not lumped together.
+- Wrap HF fallback and other fragile local commands with `scripts/run_with_telemetry.py` so return codes include RSS, swap, `free`, `nvidia-smi`, and kernel OOM evidence.
 - Separate cold start, first-token, warm decode, and long-context behavior.
 - Keep backend families separate: vLLM, SGLang, llama.cpp/Ollama, LiteRT-LM, and HF fallback.
 - Do not compare paper accuracy across backends unless the scoring path is validated.

@@ -28,6 +28,7 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
 - PyTorch sm121 support: [docs/PYTORCH_SM121_SUPPORT.md](docs/PYTORCH_SM121_SUPPORT.md)
 - Failure annotations: [docs/FAILURE_ANNOTATIONS.md](docs/FAILURE_ANNOTATIONS.md)
+- HF fallback telemetry: [docs/HF_FALLBACK_TELEMETRY.md](docs/HF_FALLBACK_TELEMETRY.md)
 
 ## First Commands
 
@@ -94,6 +95,19 @@ python3 scripts/failure_annotator.py \
   --results-dir results \
   --output-json results/failure_annotations.json \
   --output-md docs/FAILURE_ANNOTATIONS.md
+```
+
+To run a fragile fallback command with live memory/process telemetry:
+
+```bash
+python3 scripts/run_with_telemetry.py \
+  --run-id RUN_ID \
+  --backend hf \
+  --model MODEL_ID \
+  --timeout-s 2400 \
+  --interval-s 5 \
+  --output results/RUN_ID_telemetry.json \
+  -- python3 YOUR_COMMAND.py
 ```
 
 To capture the runtime availability matrix:
