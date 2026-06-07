@@ -17,7 +17,27 @@ from flashinfer import SfLayout, mm_fp4, nvfp4_quantize
 from flashinfer.gemm import gemm_base
 
 
-DEFAULT_CASES = ["1x128x128", "16x256x256", "64x512x512"]
+CASE_PRESETS = {
+    "smoke": ["1x128x128", "16x256x256", "64x512x512"],
+    # Decode-like dense projections: small token count, model-sized N/K.
+    "dense_decode": [
+        "1x4096x4096",
+        "4x4096x4096",
+        "16x4096x4096",
+        "1x8192x4096",
+        "4x8192x4096",
+        "16x8192x4096",
+    ],
+    # MoE-ish expert GEMMs: small per-expert token counts and wide FFN dimensions.
+    "moe_expert": [
+        "1x14336x4096",
+        "4x14336x4096",
+        "16x14336x4096",
+        "1x4096x14336",
+        "4x4096x14336",
+        "16x4096x14336",
+    ],
+}
 
 
 def parse_case(raw: str) -> tuple[int, int, int]:
@@ -128,6 +148,12 @@ def main() -> int:
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--container", default="unknown")
     parser.add_argument("--backend", default="auto")
+    parser.add_argument(
+        "--preset",
+        action="append",
+        choices=sorted(CASE_PRESETS),
+        help="Append a named case preset. Ignored when --case is provided.",
+    )
     parser.add_argument("--case", action="append", default=[])
     parser.add_argument("--iterations", type=int, default=30)
     parser.add_argument("--warmup", type=int, default=5)
@@ -135,12 +161,22 @@ def main() -> int:
     parser.add_argument("--output")
     args = parser.parse_args()
 
-    cases = [parse_case(raw) for raw in (args.case or DEFAULT_CASES)]
+    raw_cases = args.case
+    if not raw_cases:
+        preset_names = args.preset or ["smoke"]
+        raw_cases = [
+            raw_case
+            for preset_name in preset_names
+            for raw_case in CASE_PRESETS[preset_name]
+        ]
+    cases = [parse_case(raw) for raw in raw_cases]
     report: dict[str, Any] = {
         "schema": "flashinfer-mm-fp4-microbench/v1",
         "phase": args.phase,
         "run_id": args.run_id,
         "container": args.container,
+        "presets": args.preset or (["smoke"] if not args.case else []),
+        "raw_cases": raw_cases,
         "flashinfer_file": gemm_base.__file__,
         "flashinfer_version": __import__("flashinfer").__version__,
         "torch": torch.__version__,

@@ -56,6 +56,7 @@ Keep this short enough to run repeatedly on one unit.
    - one short deterministic OpenAI-compatible chat request
    - one medium generation request
    - use `scripts/openai_serving_benchmark.py` when the backend exposes an OpenAI-compatible API
+   - for Gemma 4 26B with `vllm/vllm-openai:latest-cu130`, include `--max-num-batched-tokens 4096` on the server; the default 2048 is below Gemma's multimodal item budget and fails before readiness
 
 3. Throughput
    - short prompt / short output
@@ -80,6 +81,7 @@ python3 scripts/openai_serving_benchmark.py \
 
 5. Kernel microbenchmarks
    - use `scripts/flashinfer_mm_fp4_microbench.py` for FlashInfer NVFP4 `mm_fp4` dispatch checks
+   - use `--preset dense_decode` and `--preset moe_expert` before making performance claims about the SM121 `b12x` path
    - treat kernel microbenchmarks as diagnostic evidence, not serving throughput
    - follow with model-shaped and serving before/after rows before claiming user-visible speedups
 

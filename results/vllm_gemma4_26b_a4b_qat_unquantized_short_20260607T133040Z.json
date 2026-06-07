@@ -1,0 +1,48 @@
+{
+  "backend": "vllm-gemma4-26b-qat-unquantized",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 66,
+      "content_chars": 362,
+      "content_preview": "A local AI workstation benefits from fast memory primarily because large-scale machine learning tasks are frequently \"memory-bandwidth bound,\" meaning the speed of the processor is often limited by how quickly data can be moved from the RAM to the compute units. During model training and high-speed inference, massive datasets and complex neural network weights",
+      "decode_s": 2.6087028000038117,
+      "decode_tok_s": 24.53326611214834,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780839510,
+        "id": "chatcmpl-819feb9c91957853",
+        "model": "gemma4-26b-a4b-it-qat-q4_0-unquantized",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 3.8571012999746017,
+      "ttft_s": 1.24839849997079,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "total_tokens": 92
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T13:38:34Z",
+  "model": "gemma4-26b-a4b-it-qat-q4_0-unquantized",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "vllm-gemma4-26b-qat-unquantized-short-20260607T133040Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T13:38:31Z",
+  "url": "http://thinkstationpgx-00b4:8000"
+}

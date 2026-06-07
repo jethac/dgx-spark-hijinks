@@ -70,6 +70,7 @@ Patch branch:
   - script: `scripts/flashinfer_mm_fp4_microbench.py`
   - on three small dense NVFP4 `mm_fp4` cases, patched SM121 `b12x` auto-dispatch was not faster than the installed `cudnn`/`cutlass` auto path.
   - this narrows the expected performance win: the patch is proven as dispatch enablement, but user-visible speedup still needs model-shaped GEMMs, MoE paths, or serving benchmarks to prove it.
+  - performance hypotheses are tracked in `docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md`.
 - not yet proven:
   - clean wheel or container build suitable for vLLM/SGLang serving
   - `cuobjdump` evidence from a distributable artifact

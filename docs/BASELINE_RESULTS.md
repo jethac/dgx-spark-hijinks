@@ -162,3 +162,70 @@ Interpretation:
 - On these three small dense NVFP4 `mm_fp4` cases, `b12x` was not faster than the installed container path.
 - This does not rule out wins for model-shaped GEMMs, MoE `b12x` kernels, underfilled decode paths, or full serving stacks.
 - Do not claim an end-to-end throughput improvement from this FlashInfer patch until a clean image/wheel set and model-level before/after rows prove it.
+
+## 2026-06-07: vLLM Gemma 4 26B A4B Compact MoE Serving Check
+
+Target:
+
+- image: `vllm/vllm-openai:latest-cu130`
+- vLLM: `0.20.0`
+- PyTorch: `2.11.0+cu130`
+- FlashInfer: `0.6.8.post1`
+- model: `google/gemma-4-26B-A4B-it`
+- served model: `gemma4-26b-a4b-it`
+- settings: `--max-model-len 8192 --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096`
+
+Artifacts:
+
+- benchmark: `results/vllm_gemma4_26b_a4b_bf16_compact_20260607T131917Z.json`
+- server log: `results/vllm_gemma4_26b_a4b_bf16_20260607T131917Z_server.log`
+- run info: `results/vllm_gemma4_26b_a4b_bf16_20260607T131917Z_run_info.txt`
+- default-setting failure: `results/vllm_gemma4_26b_a4b_bf16_default_fail_20260607T131837Z_server.log`
+
+Result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 1.228 | 3.832 | 24.58 |
+| `medium_decode` | 40 | 192 | 0.137 | 8.039 | 24.30 |
+| `long_prefill` | 2270 | 64 | 0.551 | 3.223 | 23.95 |
+
+Startup observations:
+
+- The default launch failed before readiness because Gemma 4 disabled chunked multimodal input while vLLM's default `max_num_batched_tokens=2048` was below Gemma's `max_tokens_per_mm_item=2496`.
+- Retrying with `--max-num-batched-tokens 4096` reached readiness.
+- BF16 checkpoint loading took about 6m11s for 48.07 GiB of safetensors; CUDA graph capture took another 11s.
+- The server log selected `TRITON_ATTN` for attention and `TRITON Unquantized MoE` from `['FlashInfer TRTLLM', 'FlashInfer CUTLASS', 'TRITON', 'BATCHED_TRITON']`.
+
+Interpretation:
+
+- This is a useful compact MoE serving row: Gemma 4 26B A4B serves successfully on GB10 through vLLM and sustains about 24 tok/s decode on this three-case OpenAI-compatible harness.
+- This row does not exercise the FlashInfer NVFP4 `mm_fp4` dispatch fix. The vLLM path is BF16/unquantized MoE and explicitly chose Triton.
+- The `--max-num-batched-tokens 4096` requirement should be part of future Gemma 4 vLLM recipes for this image/model combination.
+
+## 2026-06-07: vLLM Gemma 4 26B A4B QAT-Unquantized Probe
+
+Target:
+
+- image: `vllm/vllm-openai:latest-cu130`
+- model: `google/gemma-4-26B-A4B-it-qat-q4_0-unquantized`
+- served model: `gemma4-26b-a4b-it-qat-q4_0-unquantized`
+- settings: `--max-model-len 8192 --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096`
+
+Artifacts:
+
+- short benchmark: `results/vllm_gemma4_26b_a4b_qat_unquantized_short_20260607T133040Z.json`
+- server log: `results/vllm_gemma4_26b_a4b_qat_unquantized_20260607T133040Z_server.log`
+- run info: `results/vllm_gemma4_26b_a4b_qat_unquantized_20260607T133040Z_run_info.txt`
+
+Result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 1.248 | 3.857 | 24.53 |
+
+Interpretation:
+
+- The QAT-unquantized snapshot loads and serves in vLLM with the same corrected batching setting.
+- It is not a direct quantized/NVFP4 serving row in this image. The engine config reported `quantization=None`, `dtype=torch.bfloat16`, and the same `TRITON Unquantized MoE` backend.
+- If the campaign needs to prove NVFP4 end-to-end impact, this snapshot name is not enough. The run must prove the actual quantization/backend path from logs or profiler evidence.

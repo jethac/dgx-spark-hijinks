@@ -1,0 +1,12 @@
+run_id=gemma4-26b-qat-unquantized-vllm-20260607T133040Z
+container=gemma4-26b-qat-unquantized-vllm-20260607T133040Z
+image=vllm/vllm-openai:latest-cu130
+model=google/gemma-4-26B-A4B-it-qat-q4_0-unquantized
+served_model_name=gemma4-26b-a4b-it-qat-q4_0-unquantized
+max_model_len=8192
+gpu_memory_utilization=0.80
+max_num_batched_tokens=4096
+port=8000
+started_utc=20260607T133040Z
+retained_container=true
+probe=qat_unquantized_load_readiness

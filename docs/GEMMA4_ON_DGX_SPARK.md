@@ -15,6 +15,7 @@ The biggest practical problem was not model loading for the vLLM safetensors row
 - Full HellaSwag runs were extremely slow and dominated campaign runtime.
 - Initial timeouts were too short for large model load probes and MTP benchmarking.
 - The benchmark matrix was much larger than the machine could finish quickly: smoke completed, but full accuracy was still running and throughput/MTP stages were still pending when monitoring stopped.
+- A later compact vLLM serving check showed Gemma 4 26B A4B can serve on GB10 at about 24 tok/s decode, but the observed path was BF16/unquantized Triton MoE, not FlashInfer NVFP4.
 
 ## Fatal Or Blocking Problems
 
@@ -127,6 +128,41 @@ Impact:
 
 - These rows did not advance into the full vLLM accuracy path.
 - The campaign correctly classified them instead of silently falling back without labeling.
+
+### Gemma 4 26B vLLM Needs A Larger Multimodal Batch Token Budget
+
+A compact follow-up serving check on 2026-06-07 used `vllm/vllm-openai:latest-cu130` and `google/gemma-4-26B-A4B-it`.
+
+The default launch failed before readiness with:
+
+```text
+ValueError: Chunked MM input disabled but max_tokens_per_mm_item (2496) is larger than max_num_batched_tokens (2048). Please increase max_num_batched_tokens.
+```
+
+The same model reached readiness after adding `--max-num-batched-tokens 4096`.
+
+Impact:
+
+- This is a recipe/configuration issue, not a model-capacity failure.
+- Future Gemma 4 26B vLLM recipes on this image should include `--max-num-batched-tokens 4096` or another validated value above 2496.
+- This failure should be documented distinctly from CUDA architecture and FlashInfer issues.
+
+### QAT-Unquantized 26B Loads, But Not As A Quantized NVFP4 Path
+
+The cached `google/gemma-4-26B-A4B-it-qat-q4_0-unquantized` snapshot also reached readiness under vLLM with the same `--max-num-batched-tokens 4096` setting.
+
+Observed server log facts:
+
+- `quantization=None`
+- `dtype=torch.bfloat16`
+- attention backend: `TRITON_ATTN`
+- MoE backend: `TRITON Unquantized MoE`
+
+Impact:
+
+- The QAT-unquantized snapshot is usable for a vLLM smoke/serving check.
+- It should not be treated as proof of an end-to-end QAT, FP4, or NVFP4 serving path.
+- Any future quantized benchmark must prove the actual backend and quantization path from logs, dispatch probes, or profiler evidence.
 
 ### Backend Comparability Is Limited
 

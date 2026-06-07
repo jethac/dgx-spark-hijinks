@@ -1,0 +1,2 @@
+NAMES                              STATUS                     IMAGE
+gemma4-26b-vllm-20260607T131837Z   Exited (1) 3 seconds ago   vllm/vllm-openai:latest-cu130

@@ -1,0 +1,116 @@
+{
+  "backend": "vllm-gemma4-26b-bf16",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 66,
+      "content_chars": 373,
+      "content_preview": "A local AI workstation benefits from fast memory primarily because the performance of large-scale machine learning tasks is frequently bottlenecked by data movement rather than raw computational power. During both training and inference, the processor (CPU or GPU) must constantly ingest massive datasets and high-dimensional model weights; if the memory bandwidth is slow,",
+      "decode_s": 2.604030899994541,
+      "decode_tok_s": 24.577281321866867,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780838955,
+        "id": "chatcmpl-aacbc78cdbd8c827",
+        "model": "gemma4-26b-a4b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 3.831772200006526,
+      "ttft_s": 1.227741300011985,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 194,
+      "content_chars": 912,
+      "content_preview": "**Engineering Note: Validation of LLM GPU Kernel Execution**\n\n**Objective:** To verify that the LLM inference server is executing the optimized/intended kernels (e.g., FlashAttention, PagedAttention, or custom Triton kernels) rather than falling back to generic, unoptimized PyTorch/CUDA implementations.\n\n### 1. Validation Methodology\nValidation must be performed during active inference to capture the dynamic execution graph. Relying on startup logs is insufficient, as kernels are often dispatche",
+      "decode_s": 7.902252500003669,
+      "decode_tok_s": 24.29686978490131,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780838959,
+        "id": "chatcmpl-a256272968775620",
+        "model": "gemma4-26b-a4b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 8.038830600038636,
+      "ttft_s": 0.13657810003496706,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "total_tokens": 232
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 66,
+      "content_chars": 317,
+      "content_preview": "Here is the summary of the benchmark requirements:\n\n* **Configuration:** Document environment metadata and backend selection.\n* **Latency:** Measure cold-start time and warm decode speed.\n* **Resource Usage:** Monitor memory pressure.\n* **Performance Quality:** Evaluate output quality.\n* **Reliability:** Ensure full",
+      "decode_s": 2.672198100015521,
+      "decode_tok_s": 23.95032015015214,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780838967,
+        "id": "chatcmpl-a2cb26fc7ce16748",
+        "model": "gemma4-26b-a4b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2270,
+          "total_tokens": 2334
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 3.223103100026492,
+      "ttft_s": 0.550905000010971,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2270,
+        "total_tokens": 2334
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T13:29:31Z",
+  "model": "gemma4-26b-a4b-it",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "vllm-gemma4-26b-a4b-bf16-compact-20260607T131917Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T13:29:16Z",
+  "url": "http://thinkstationpgx-00b4:8000"
+}

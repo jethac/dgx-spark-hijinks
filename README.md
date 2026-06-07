@@ -8,6 +8,8 @@ We currently have one Spark-class machine available: the ThinkStation PGX workst
 
 Mission: this machine costs roughly 900k JPY. It needs to be as performant as the silicon is capable of, not merely "technically running."
 
+Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. That row proves a useful MoE serving baseline, but vLLM selected BF16/unquantized Triton MoE, so it does not yet prove the FlashInfer NVFP4 path.
+
 ## Start Here
 
 - Diagnosis: [docs/DGX_SPARK_DIAGNOSIS.md](docs/DGX_SPARK_DIAGNOSIS.md)
@@ -21,6 +23,7 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
+- FlashInfer performance hypotheses: [docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md](docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md)
 - Upstream latest release audit: [docs/UPSTREAM_LATEST_RELEASE_AUDIT.md](docs/UPSTREAM_LATEST_RELEASE_AUDIT.md)
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
 - PyTorch sm121 support: [docs/PYTORCH_SM121_SUPPORT.md](docs/PYTORCH_SM121_SUPPORT.md)

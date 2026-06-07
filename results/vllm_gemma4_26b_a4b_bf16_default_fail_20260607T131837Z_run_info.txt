@@ -1,0 +1,10 @@
+run_id=gemma4-26b-vllm-20260607T131837Z
+container=gemma4-26b-vllm-20260607T131837Z
+image=vllm/vllm-openai:latest-cu130
+model=google/gemma-4-26B-A4B-it
+served_model_name=gemma4-26b-a4b-it
+max_model_len=8192
+gpu_memory_utilization=0.80
+port=8000
+started_utc=20260607T131837Z
+retained_container=true
