@@ -17,6 +17,8 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Issue tracker map: [docs/ISSUE_TRACKER.md](docs/ISSUE_TRACKER.md)
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
+- Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
+- NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
 
 ## First Commands
 

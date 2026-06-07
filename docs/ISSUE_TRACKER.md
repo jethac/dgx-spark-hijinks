@@ -22,6 +22,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | LiteRT-LM on Spark | open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | open | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | open | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
+| before/after GB10 benchmark protocol | open | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
 
 ## Triage Rules
 

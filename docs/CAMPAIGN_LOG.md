@@ -12,6 +12,8 @@
 - Added SGLang as a first-class runtime workstream after reviewing `hikarioyama/sglang-nvfp4-kv-sm120`.
 - Added LiteRT-LM and practical llama.cpp serving as first-class runtime workstreams.
 - Added the upstream fork/submodule/worktree policy for patched libraries.
+- Added before/after GB10 benchmark protocol for measuring campaign impact.
+- Added NVFP4 dependency map from the FlashInfer/vLLM/SGLang subagent investigation.
 - Started tracking work through GitHub Issues.
 - Ran `spark_doctor` on `thinkstationpgx-00b4` using `/home/jethac/gemma4-evals/.venv/bin/python`.
   - GPU: `NVIDIA GB10`
