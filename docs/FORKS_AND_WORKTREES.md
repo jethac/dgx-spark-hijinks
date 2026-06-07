@@ -86,8 +86,18 @@ vllm-gemma4-sm121
 
 ## Current State
 
-No upstream forks are added as submodules yet. We have not made code changes to upstream libraries in this repo.
+Active submodules:
 
-The first submodule should be added when an issue has a concrete patch target and reproduction command.
+| submodule | upstream base | branch | worktree | status |
+|---|---|---|---|---|
+| `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 
-The vLLM subagent checked that `jethac/vllm` did not exist at the time of this note. Create forks only when the corresponding issue is ready to carry code.
+FlashInfer patch:
+
+- commit: `e07a6392`
+- branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-004-sm121-flashinfer
+- purpose: treat SM121 as SM12x for FP4 auto-dispatch and add `12.1a` to CUDA 12.9+/13 aarch64 JIT-cache build targets
+- local verification: Python syntax compile for touched Python files
+- missing verification: FlashInfer runtime tests on GB10 and upstream CI
+
+Other forks should still be created only when the corresponding issue is ready to carry code.

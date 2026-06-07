@@ -1,6 +1,6 @@
 # NVFP4 Dependency Map
 
-Status: draft.
+Status: active FlashInfer patch branch exists.
 
 This map records which upstreams are likely involved if we patch NVFP4 KV for Spark.
 
@@ -33,6 +33,28 @@ From the subagent read-only upstream investigation:
 - current FlashInfer has SM12x support work, but some code still distinguishes `(12, 0)` specifically.
 - SGLang pins or fetches FlashInfer-related dependencies, so native SGLang NVFP4 KV probably needs SGLang and FlashInfer work together.
 
+From FlashInfer issue #3170:
+
+- `compute_120f` covers SM120 and SM121 for family-compatible features, but native NVFP4/MXFP4 MMA requires arch-specific `120a` or `121a`.
+- FlashInfer release and nightly JIT-cache wheels used `12.0f` for CUDA 12.9+/13 builds and did not include `12.1a`.
+- `mm_fp4` auto-dispatch had a high-impact gate that preferred b12x only when `major == 12 and minor == 0`, excluding GB10 / SM121 from the b12x NVFP4 path.
+- Some SM100/CuTe DSL paths use datacenter Blackwell features and cannot be enabled for SM12x by gate relaxation alone.
+
+Patch branch:
+
+- fork: `jethac/flashinfer`
+- branch: `spark/hijinks-004-sm121-flashinfer`
+- commit: `e07a6392`
+- changes:
+  - `_heuristic_func_mm_fp4` now treats all SM12x devices as b12x candidates for CUDA 13 + NVFP4.
+  - release and nightly aarch64 JIT-cache builds for CUDA 12.9+/13 include `12.1a`.
+  - install docs show the DGX Spark `FLASHINFER_CUDA_ARCH_LIST` including `12.1a`.
+- not yet proven:
+  - build success on the Spark
+  - `cuobjdump`/JIT-cache evidence showing `sm_121a`
+  - FP4 speedup versus stock FlashInfer
+  - correctness against fp8/bf16 reference
+
 ## Evidence Required Before Blessing NVFP4 KV
 
 - Spark-specific build evidence for GB10 / `sm_121`.
@@ -44,4 +66,3 @@ From the subagent read-only upstream investigation:
 - Quality comparison on target models.
 - Performance comparison with warmed JIT/CUDA graph.
 - Explicit scope labels for untested areas: MLA/FlashMLA, Mamba/SSM, attention sinks, hybrid-SWA, MTP/spec decode, TP>1, and SGLang page-size variants.
-
