@@ -27,6 +27,7 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 - Upstream latest release audit: [docs/UPSTREAM_LATEST_RELEASE_AUDIT.md](docs/UPSTREAM_LATEST_RELEASE_AUDIT.md)
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
 - PyTorch sm121 support: [docs/PYTORCH_SM121_SUPPORT.md](docs/PYTORCH_SM121_SUPPORT.md)
+- Failure annotations: [docs/FAILURE_ANNOTATIONS.md](docs/FAILURE_ANNOTATIONS.md)
 
 ## First Commands
 
@@ -84,6 +85,15 @@ python3 scripts/runtime_process_probe.py \
   --url http://127.0.0.1:8000 \
   --match vllm \
   --output results/runtime_probe_vllm.json
+```
+
+To annotate captured benchmark and server failures:
+
+```bash
+python3 scripts/failure_annotator.py \
+  --results-dir results \
+  --output-json results/failure_annotations.json \
+  --output-md docs/FAILURE_ANNOTATIONS.md
 ```
 
 To capture the runtime availability matrix:

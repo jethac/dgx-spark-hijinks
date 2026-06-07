@@ -19,6 +19,8 @@ The biggest practical problem was not model loading for the vLLM safetensors row
 
 ## Fatal Or Blocking Problems
 
+Current machine-readable failure annotations are generated in `docs/FAILURE_ANNOTATIONS.md` and `results/failure_annotations_20260607T1400Z.json` by `scripts/failure_annotator.py`. This separates process kills, API schema mismatches, runtime exceptions, configuration errors, and invalid/empty serving responses.
+
 ### GGUF Accuracy Was Not Paper-Comparable
 
 All GGUF accuracy rows through lm-eval and stock llama.cpp failed as paper-comparable accuracy rows.
