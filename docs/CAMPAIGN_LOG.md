@@ -14,6 +14,8 @@
 - Added the upstream fork/submodule/worktree policy for patched libraries.
 - Added before/after GB10 benchmark protocol for measuring campaign impact.
 - Added NVFP4 dependency map from the FlashInfer/vLLM/SGLang subagent investigation.
+- Added a compact OpenAI-compatible serving benchmark harness and captured the first vLLM before row.
+- Added root-readable runtime process probe evidence for the live vLLM server.
 - Started tracking work through GitHub Issues.
 - Ran `spark_doctor` on `thinkstationpgx-00b4` using `/home/jethac/gemma4-evals/.venv/bin/python`.
   - GPU: `NVIDIA GB10`

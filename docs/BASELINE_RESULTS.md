@@ -19,6 +19,7 @@ Server observed on `thinkstationpgx-00b4`:
 Artifacts:
 
 - environment: `results/spark_doctor_before_vllm_gemma4_e4b_w4a16_20260607T1126Z.md`
+- runtime probe: `results/runtime_probe_vllm_gemma4_e4b_w4a16_root_20260607T1136Z.json`
 - benchmark: `results/vllm_gemma4_e4b_w4a16_before_compact_20260607T1126Z.json`
 
 Result summary:
@@ -33,6 +34,8 @@ Interpretation:
 
 - This is a valid first before row for an already-running vLLM server.
 - It is not a cold-start benchmark.
-- It is not a full blessed-stack result because backend kernel selection is still under investigation.
+- Runtime probe evidence shows the server was running as root from `/vllm-workspace` with `VLLM_USAGE_SOURCE=production-docker-image`.
+- Runtime probe evidence shows `TORCH_CUDA_ARCH_LIST=8.7 8.9 9.0 10.0+PTX 12.0 12.1`.
+- Runtime probe evidence found loaded vLLM extension paths including `_C.abi3.so`, `_C_stable_libtorch.abi3.so`, `_moe_C.abi3.so`, `_vllm_fa2_C.abi3.so`, and `_vllm_fa3_C.abi3.so`.
+- It is not a full blessed-stack result because exact per-request kernel selection is still under investigation.
 - It is useful for future before/after comparisons against the same model, prompts, settings, and server API.
-

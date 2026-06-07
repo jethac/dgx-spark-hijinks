@@ -60,6 +60,15 @@ python3 scripts/cuda_so_audit.py --package vllm --package flashinfer \
   --output results/cuda_so_audit_vllm_flashinfer.json
 ```
 
+To capture runtime process evidence for a local server:
+
+```bash
+python3 scripts/runtime_process_probe.py \
+  --url http://127.0.0.1:8000 \
+  --match vllm \
+  --output results/runtime_probe_vllm.json
+```
+
 Runtime tracks:
 
 - vLLM: [recipes/single_spark_vllm.md](recipes/single_spark_vllm.md)

@@ -16,6 +16,7 @@ Tracked by:
 - Before and after rows must use the same machine, model, prompt set, quantization, context length, batch/concurrency, and output length.
 - Capture `spark_doctor` before each run.
 - Capture CUDA shared-object/JIT evidence when testing kernel changes.
+- Capture runtime process evidence with `scripts/runtime_process_probe.py` for serving baselines.
 - Separate cold start, first-token, warm decode, and long-context behavior.
 - Keep backend families separate: vLLM, SGLang, llama.cpp/Ollama, LiteRT-LM, and HF fallback.
 - Do not compare paper accuracy across backends unless the scoring path is validated.
@@ -104,3 +105,4 @@ First compact before row:
 - `docs/BASELINE_RESULTS.md`
 - `results/vllm_gemma4_e4b_w4a16_before_compact_20260607T1126Z.json`
 - `results/spark_doctor_before_vllm_gemma4_e4b_w4a16_20260607T1126Z.md`
+- `results/runtime_probe_vllm_gemma4_e4b_w4a16_root_20260607T1136Z.json`

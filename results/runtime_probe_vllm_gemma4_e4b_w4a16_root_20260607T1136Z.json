@@ -1,0 +1,283 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 0 %"
+    }
+  },
+  "finished_utc": "2026-06-07T11:33:57Z",
+  "match": "vllm",
+  "packages": {
+    "flashinfer": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.11.post2"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/torch/__init__.py",
+      "version": "2.11.0+cu130"
+    },
+    "transformers": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/transformers/__init__.py",
+      "version": "5.10.2"
+    },
+    "triton": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/triton/__init__.py",
+      "version": "3.6.0"
+    },
+    "vllm": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/__init__.py",
+      "version": "0.22.1"
+    }
+  },
+  "pids": [
+    400411,
+    400721
+  ],
+  "platform": {
+    "executable": "/home/jethac/gemma4-evals/.venv/bin/python",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "/usr/bin/python3",
+        "/usr/local/bin/vllm",
+        "serve",
+        "google/gemma-4-E4B-it-qat-w4a16-ct",
+        "--max-model-len",
+        "8192",
+        "--limit-mm-per-prompt",
+        "{\"image\":4,\"audio\":1}",
+        "--gpu-memory-utilization",
+        "0.80",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "cwd": {
+        "path": "/vllm-workspace"
+      },
+      "environment": {
+        "values": {
+          "CUDA_VERSION": "13.0.1",
+          "TORCH_CUDA_ARCH_LIST": "8.7 8.9 9.0 10.0+PTX 12.0 12.1",
+          "VLLM_ENABLE_CUDA_COMPATIBILITY": "0",
+          "VLLM_USAGE_SOURCE": "production-docker-image"
+        }
+      },
+      "maps": {
+        "matched_count": 39,
+        "matched_paths": [
+          "/usr/lib/aarch64-linux-gnu/libcuda.so.580.159.03",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcublas.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcublasLt.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcudart.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/nccl/lib/libnccl.so.2",
+          "/usr/local/lib/python3.12/dist-packages/torch/_C.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libarm_compute.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libarm_compute_graph.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libc10.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libc10_cuda.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libgomp.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_blas_core.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_blas_lp64_gomp.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_lapack_core.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_lapack_lp64_gomp.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libshm.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cuda.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_global_deps.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_nvshmem.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_python.so",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/ld-linux-aarch64.5cbc5e90.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libcudart.faf08d9a.so.13",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libjpeg.7df6f605.so.8",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libnvjpeg.36e11081.so.13",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libpng16.25e2955a.so.16",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libsharpyuv.a91a2b15.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libwebp.4d2ef5b1.so.7",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libz.ffa36e70.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torchvision/_C.so",
+          "/usr/local/lib/python3.12/dist-packages/torchvision/image.so",
+          "/usr/local/lib/python3.12/dist-packages/triton/_C/libtriton.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_C_stable_libtorch.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_moe_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so"
+        ]
+      },
+      "pid": 400411,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "vllm",
+        "PPid": "400385",
+        "Pid": "400411",
+        "State": "S (sleeping)",
+        "Tgid": "400411",
+        "Threads": "109",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "2580416 kB",
+        "VmRSS": "2483508 kB",
+        "VmSize": "12781296 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "VLLM::EngineCore"
+      ],
+      "cwd": {
+        "path": "/vllm-workspace"
+      },
+      "environment": {
+        "values": {
+          "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor_root",
+          "TORCHINDUCTOR_COMPILE_THREADS": "1",
+          "TORCH_CUDA_ARCH_LIST": "8.7 8.9 9.0 10.0+PTX 12.0 12.1",
+          "TRITON_CACHE_AUTOTUNING": "1",
+          "VLLM_ENABLE_CUDA_COMPATIBILITY": "0",
+          "VLLM_USAGE_SOURCE": "production-docker-image",
+          "VLLM_WORKER_MULTIPROC_METHOD": "spawn"
+        }
+      },
+      "maps": {
+        "matched_count": 64,
+        "matched_paths": [
+          "/root/.triton/cache/5D34TZYHCLXXXZ75W6QO2H37AF5Q4G3NM2THK7QX6SORJLUNSMCA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/77N2OLKNL2M5JH5536YH44KQG4FXALICHTQIEM5KKYKBHHIBNINA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/IYRDUZQCBQ36FNZZ5UIHTSZIKHMS76SEK6WR22WHDGB2CRKXW7DA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/NPVYKQA3UHJGXRH76YDGOPWOSGFMBMWAUX3QACMIJULE6Z6VLNJA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/NPYD6AYN7BFCJG4CSRAP3PDXPNK6UGV54LXDSDOAMVMH2KVD7JXA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/PSDRSTMBUGFJCLU7G3VVPAAGNBOSA4Z34CALN5CTNITQVBJ7BDTQ/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/TPMJFAZ7RE4S4GPHFUPEWHMO3QS4EIKEHPYI643AZ2DKTPBLEUIQ/cuda_utils.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/VTZOTJS3SLOVG5PDQDVTD46FLSU3ZO6AWGWK6XY5HHVJKEF4TRYQ/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/root/.triton/cache/ZW2IWPDVLD5HK75XSOCHLJQ4SBEFWUE6ZNOAOML6AB2XRF2DHOOA/__triton_launcher.cpython-312-aarch64-linux-gnu.so",
+          "/usr/lib/aarch64-linux-gnu/libcuda.so.580.159.03",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/_bindings/cydriver.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/_bindings/cynvrtc.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/_bindings/cyruntime.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/_bindings/cyruntime_ptds.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/cydriver.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/cynvrtc.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/cyruntime.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/driver.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/nvrtc.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cuda/bindings/runtime.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/cudnn/_compiled_module.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcublas.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcublasLt.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libcudart.so.13",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn_engines_precompiled.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn_engines_runtime_compiled.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn_graph.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/cudnn/lib/libcudnn_heuristic.so.9",
+          "/usr/local/lib/python3.12/dist-packages/nvidia/nccl/lib/libnccl.so.2",
+          "/usr/local/lib/python3.12/dist-packages/nvidia_cutlass_dsl/python_packages/cutlass/_mlir/_mlir_libs/_cutlass_ir.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/_C.cpython-312-aarch64-linux-gnu.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libarm_compute.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libarm_compute_graph.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libc10.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libc10_cuda.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libgomp.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_blas_core.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_blas_lp64_gomp.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_lapack_core.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libnvpl_lapack_lp64_gomp.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libshm.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cuda.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_global_deps.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_nvshmem.so",
+          "/usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_python.so",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/ld-linux-aarch64.5cbc5e90.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libcudart.faf08d9a.so.13",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libjpeg.7df6f605.so.8",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libnvjpeg.36e11081.so.13",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libpng16.25e2955a.so.16",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libsharpyuv.a91a2b15.so.0",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libwebp.4d2ef5b1.so.7",
+          "/usr/local/lib/python3.12/dist-packages/torchvision.libs/libz.ffa36e70.so.1",
+          "/usr/local/lib/python3.12/dist-packages/torchvision/_C.so",
+          "/usr/local/lib/python3.12/dist-packages/torchvision/image.so",
+          "/usr/local/lib/python3.12/dist-packages/triton/_C/libtriton.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_C_stable_libtorch.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/_moe_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+          "/usr/local/lib/python3.12/dist-packages/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so"
+        ]
+      },
+      "pid": 400721,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "VLLM::EngineCor",
+        "PPid": "400411",
+        "Pid": "400721",
+        "State": "S (sleeping)",
+        "Tgid": "400721",
+        "Threads": "144",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "12123888 kB",
+        "VmRSS": "3974776 kB",
+        "VmSize": "129057320 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780832037,
+          "id": "google/gemma-4-E4B-it-qat-w4a16-ct",
+          "max_model_len": 8192,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780832037,
+              "group": null,
+              "id": "modelperm-ab6ae846d2f1f191",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "google/gemma-4-E4B-it-qat-w4a16-ct"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-07T11:33:55Z",
+  "url": "http://127.0.0.1:8000"
+}
