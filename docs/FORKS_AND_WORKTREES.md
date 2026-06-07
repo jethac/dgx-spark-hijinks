@@ -12,6 +12,7 @@ No loose long-lived patch directories.
 - Use a separate git worktree for each active branch.
 - Link every fork branch back to the hijinks Issue that requires it.
 - Record upstream base commit, local branch, test command, and upstreaming plan.
+- Follow each upstream repository's own contributing guide, style rules, tests, CI process, branch hygiene, and PR expectations. The `jethac` fork is only a staging area; patches should be shaped so upstream maintainers can review them normally.
 
 ## Naming
 
@@ -98,6 +99,14 @@ FlashInfer patch:
 - branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-004-sm121-flashinfer
 - purpose: treat SM121 as SM12x for FP4 auto-dispatch and add `12.1a` to CUDA 12.9+/13 aarch64 JIT-cache build targets
 - local verification: Python syntax compile for touched Python files
+- upstream guidance checked: `CONTRIBUTING.md`
+- relevant upstream process:
+  - use editable install with `pip install --no-build-isolation -e . -v`
+  - initialize submodules recursively
+  - add unit tests and benchmarks where the patch changes behavior
+  - run linting through `pre-commit run -a` or repo lint scripts when available
+  - public CI may require a `ci-users` approval comment or `run-ci` label for outside contributors
+  - Spark internal CI exists as `unit_test_spark` but is manual-trigger only
 - missing verification: FlashInfer runtime tests on GB10 and upstream CI
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

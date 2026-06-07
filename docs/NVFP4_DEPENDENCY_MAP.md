@@ -55,6 +55,7 @@ Patch branch:
   - `cuobjdump`/JIT-cache evidence showing `sm_121a`
   - FP4 speedup versus stock FlashInfer
   - correctness against fp8/bf16 reference
+  - upstream FlashInfer review/CI, including Spark CI if a maintainer can trigger it
 
 ## Evidence Required Before Blessing NVFP4 KV
 
