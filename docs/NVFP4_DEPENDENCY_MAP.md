@@ -82,8 +82,14 @@ Patch branch:
   - relevant launch surface: `--kv-cache-dtype nvfp4` or equivalent vLLM KV-cache flagging plus a patched FlashInfer FA2 path with explicit scale-factor stride handling.
   - reported Step3.7-Flash path: TP=2, MTP K=1, `--quantization modelopt`, `--enable-expert-parallel`, `--max-model-len 131072`, `--max-num-seqs 32`, CUDA graph capture sizes `1,2,4,8,16`.
   - reported SM120 result: fp8 KV pool around 1.66M tokens versus NVFP4 around 2.96M-3.08M tokens, with decode in the same rough range and quality deltas around `+0.01` to `+0.04` nats/token PPL.
+  - primary payoff: capacity and concurrency, not weight-GEMM FLOPs. At matched utilization, the reference result claims 1.78x fp8 KV pool and 22.59x versus 12.70x concurrency at 131k context.
+  - default-path blocker: SM120 lacks the trtllm-gen NVFP4-KV cubins used by vLLM's default NVFP4 path, so the reference routes KV through FlashInfer FA2 and standard `mma.sync`.
+  - important bug class: the FA2 NVFP4 kernel inferred scale-factor strides from data strides, but vLLM stores interleaved page data and scales. The reference patch passes explicit scale-factor strides and reads K/V scales from the interleaved cache.
+  - important telemetry lesson: an interim V scale-factor scratch cache looked cheap but silently consumed extra memory. The B2 path de-swizzles V scale factors in-kernel in registers and should be measured with memory telemetry that can catch hidden allocations.
+  - GB10 hypothesis: `_use_fa2_for_nvfp4_kv_on_sm120()` gates on compute capability 12.0/12.1 in the reference repo, so the path is nominally intended to include GB10. This still requires a real `sm_121` build and serving proof.
   - stated limits: standard attention only; head dimensions 64/128/256/512; not MLA, Mamba/SSM, or attention sinks.
-  - not covered by our current tests: fp8-vs-NVFP4 KV capacity, output quality, long-context attention decode, CUDA graph replay, and whether the same patches build cleanly for `sm_121`/`121a` on the Spark stack.
+  - next cheap proof: run the reference `harness/h_layout_b2.py` after editing `H_q/H_kv/D/page` for the target model and require roughly `cos 0.995` PASS for the relevant layouts before serving.
+  - not covered by our current tests: fp8-vs-NVFP4 KV capacity, output quality, long-context attention decode, CUDA graph replay, Gemma alternating local/global attention behavior, and whether the same patches build cleanly for `sm_121`/`121a` on the Spark stack.
 - SGLang NVFP4-KV reference status:
   - reference repo: `https://github.com/hikarioyama/sglang-nvfp4-kv-sm120`
   - audited HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`

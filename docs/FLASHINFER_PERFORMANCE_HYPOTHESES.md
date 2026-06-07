@@ -2,7 +2,7 @@
 
 Date: 2026-06-07
 
-Status: hypotheses narrowed by first GB10 microbenchmarks and model-shaped proxy cases.
+Status: hypotheses narrowed by first GB10 microbenchmarks, model-shaped proxy cases, and SM120 NVFP4-KV reference audits.
 
 This document records where the FlashInfer SM121 work might still produce real performance gains, and where current evidence says it probably will not.
 
@@ -22,6 +22,7 @@ Proven so far:
 - a tiny forced-`b12x` NVFP4 GEMM can run on GB10 with finite output and sane cosine similarity.
 - Gemma 4 26B A4B can serve through vLLM on GB10 at about 24 tok/s decode on the compact OpenAI harness, but the observed path is BF16/unquantized Triton MoE, not FlashInfer NVFP4.
 - patched source/JIT in the SGLang 26.05 container compiled SM121a-targeted FlashInfer FP4 GEMM code and produced finite outputs on dense-decode and MoE-shaped `mm_fp4` cases.
+- `hikarioyama/vllm-nvfp4-kv-sm120` reports an orthogonal SM120 NVFP4-KV path where the payoff is KV capacity and concurrency, not weight-GEMM FLOPs: fp8 KV pool around 1.66M tokens versus NVFP4 around 2.96M-3.08M tokens on Step3.7-Flash, with decode near fp8 parity.
 
 Small dense microbenchmark result:
 
@@ -39,6 +40,28 @@ Model-shaped proxy result:
 - result: patched `b12x` auto-dispatch was mixed-to-slower on dense decode proxies and slower on every MoE-shaped proxy case.
 
 ## Where Speedups Are Plausible
+
+### 0. NVFP4 KV Capacity And Long-Context Decode
+
+Why plausible:
+
+- This is not the same path as `mm_fp4` weight GEMM. It targets KV-cache storage and FA2 attention decode.
+- The SM120 reference result already shows the intended win: roughly 1.78x KV pool and much higher maximum concurrency at matched utilization, while decode stays near fp8 parity.
+- GB10 has much lower memory bandwidth than RTX PRO 6000-class boards. A smaller KV footprint could improve long-context decode by reducing bytes read per token, but this must be measured because e2m1-to-bf16 dequant and V scale-factor inverse swizzle add ALU work.
+- Capacity is the cleaner first metric on Spark: KV pool tokens and maximum concurrency should move even if decode tok/s stays flat.
+
+First proof order:
+
+1. Port the vLLM/FlashInfer FA2 NVFP4-KV patches cleanly into `jethac` forks.
+2. Run the reference layout harness for the target model shape and require the expected cosine/PASS result.
+3. Build on GB10 with `sm_121`, `sm_121a`, or documented SM12x family target evidence.
+4. Compare fp8 versus NVFP4 KV pool tokens, maximum concurrency, quality, TTFT, and warmed decode tok/s with identical prompts, memory utilization, graph settings, and concurrency.
+
+Expected outcome:
+
+- highest-probability demonstrable Spark win is capacity/concurrency.
+- decode speedup is possible on long-context/bandwidth-bound cases, but not guaranteed.
+- hidden allocations must be tracked. The SM120 B1-to-B2 history showed a V scale-factor scratch cache could silently eat a large fraction of the theoretical capacity gain.
 
 ### 1. Underfilled Decode Dense GEMMs
 

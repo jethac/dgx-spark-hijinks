@@ -34,6 +34,8 @@ Tracked by:
 | model id/revision | model control |
 | quantization | performance/quality control |
 | KV cache dtype | fp8 vs NVFP4 impact |
+| KV pool tokens | capacity/concurrency impact |
+| maximum concurrency | long-context capacity impact |
 | attention backend | kernel path |
 | CUDA graph mode | performance control |
 | prompt tokens | throughput denominator |
@@ -41,7 +43,7 @@ Tracked by:
 | TTFT | interactive feel |
 | decode tok/s | steady-state generation |
 | prefill tok/s | prompt-processing speed |
-| memory state | unified-memory pressure |
+| memory state | unified-memory pressure and hidden scratch allocation detection |
 | quality check | avoids fast garbage |
 | `spark_doctor` path | environment evidence |
 | `.so`/JIT audit path | kernel evidence |
@@ -88,7 +90,14 @@ python3 scripts/openai_serving_benchmark.py \
    - treat kernel microbenchmarks as diagnostic evidence, not serving throughput
    - follow with model-shaped and serving before/after rows before claiming user-visible speedups
 
-6. Optional long checks
+6. NVFP4 KV capacity checks
+   - compare fp8 versus NVFP4 KV at the same model, prompts, memory utilization, graph settings, and concurrency
+   - record vLLM/SGLang startup KV pool tokens and maximum concurrency directly from server logs
+   - capture memory telemetry before, during, and after serving so hidden scale-factor scratch allocations do not masquerade as capacity wins
+   - treat decode speed as secondary to capacity for the first proof; a flat tok/s result can still be a win if KV pool and concurrency improve without quality loss
+   - for vLLM, run the reference layout harness for the target `H_q/H_kv/D/page` before serving
+
+7. Optional long checks
    - HellaSwag and other long lm-eval tasks run as separate campaigns
    - RULER/needle-style checks for long-context KV changes
 

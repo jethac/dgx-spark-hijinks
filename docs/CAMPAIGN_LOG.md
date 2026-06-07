@@ -55,6 +55,7 @@
   - vLLM reference HEAD: `f6156ee3b22b24885a52c02bdafb34a9c201fe86`.
   - SGLang reference HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`.
   - conclusion: build on them as prior art through `jethac` forks, but do not vendor overlays or call them Spark validation until GB10 `sm_121` fp8-vs-NVFP4 proof exists.
+  - priority shift: vLLM NVFP4 KV is a capacity/concurrency lane first. Measure KV pool tokens, maximum concurrency, quality, and hidden allocations before chasing decode tok/s.
 - Tightened the smoke suite:
   - `run_with_telemetry.py` now captures `pre_memory` before launching the child command.
   - `spark_smoke_suite.py` wraps MTP/spec-decode commands with telemetry and supports `--mtp-model`.

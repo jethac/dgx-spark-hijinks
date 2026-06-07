@@ -70,13 +70,17 @@ Reference claims from SM120 RTX PRO 6000-class hardware:
 - vLLM `--kv-cache-dtype nvfp4` routed through patched FlashInfer FA2.
 - Step3.7-Flash 198B used TP=2, expert parallel, ModelOpt quantization, MTP K=1, `--max-model-len 131072`, and CUDA graph capture sizes `1,2,4,8,16`.
 - Reported KV pool grew from about 1.66M fp8 tokens to about 2.96M-3.08M NVFP4 tokens, with decode in the same rough range.
+- The expected primary win is KV capacity and concurrency, not a weight-GEMM speedup. Decode speed parity is enough if the KV pool expands.
+- The reference B2 path matters because it avoids the hidden V scale-factor scratch allocation from the interim B1 design. Our telemetry must watch for unreported scratch or JIT-cache allocations that reduce usable KV pool.
 - Scope limits: standard attention only; head dim 64/128/256/512; not MLA, Mamba/SSM, or attention sinks.
 
 Spark proof requirements before blessing:
 
+- first run the reference `harness/h_layout_b2.py` with the target model's `H_q/H_kv/D/page` and require the expected cosine/PASS result for the relevant layout
 - one GB10 `sm_121` server starts with `--kv-cache-dtype nvfp4`
 - logs or profiler evidence prove FlashInfer FA2 NVFP4 KV, not fp8/bf16 fallback
 - build or JIT cache records `sm_121`, `sm_121a`, or a documented valid SM12x family target
 - paired fp8 and NVFP4 runs use the same model, prompts, graph settings, and memory utilization
-- quality, KV capacity, long-context behavior, and warmed decode speed are recorded
+- KV pool tokens, maximum concurrency, quality, long-context behavior, and warmed decode speed are recorded
+- Gemma 4's alternating local/global attention is checked against the reference repo's unsupported attention-sink caveat before treating any Gemma result as general
 - if source changes are needed, port them through `jethac/vllm` and `jethac/flashinfer` worktrees instead of treating the SM120 overlay as a vendored production dependency

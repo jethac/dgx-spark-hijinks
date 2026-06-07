@@ -178,6 +178,8 @@ Two hikarioyama reference repos are now tracked as prior art:
 
 They are relevant because they implement NVFP4 KV paths through vLLM/SGLang plus FlashInfer FA2 changes on SM120 RTX Blackwell systems. They are not GB10 `sm_121` validation. The repo policy is to build on them through clean `jethac` forks and worktrees, not vendor overlay trees into production images.
 
+The vLLM reference changes the measurement priority. Its headline is not weight-GEMM speed: it reports roughly 1.78x fp8 KV pool and much higher maximum concurrency at matched utilization, while decode stays near fp8 parity. For Spark, the first useful proof should therefore measure KV pool tokens, maximum concurrency, hidden scratch allocations, quality, and long-context behavior. Decode tok/s is still recorded, but a flat decode result can be acceptable if capacity and quality improve.
+
 ## Open State
 
 At the point monitoring stopped:
