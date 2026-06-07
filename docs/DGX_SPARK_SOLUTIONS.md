@@ -6,7 +6,7 @@ Goal: make DGX Spark boring for local AI.
 
 Not heroic. Not "follow this Discord thread and install three nightlies." Boring.
 
-That means a developer should be able to install a supported stack, run Gemma-class models through vLLM or llama.cpp, know which kernels are being used, and get results that are both fast and explainable.
+That means a developer should be able to install a supported stack, run Gemma-class models through vLLM, SGLang, llama.cpp, or LiteRT-LM, know which kernels are being used, and get results that are both fast and explainable.
 
 ## 1. Name The Target Correctly
 
@@ -49,7 +49,7 @@ Weakness: libraries may have kernels for nearby architectures but fail to route 
 
 Plan:
 
-- Audit dispatch tables for `sm_121` handling across vLLM, FlashInfer, CUTLASS consumers, Triton custom kernels, TensorRT-LLM plugins, llama.cpp CUDA, and quantization libraries.
+- Audit dispatch tables for `sm_121` handling across vLLM, SGLang, LiteRT-LM, FlashInfer, CUTLASS consumers, Triton custom kernels, TensorRT-LLM plugins, llama.cpp CUDA, and quantization libraries.
 - Add explicit `sm_121` cases where code currently checks only `sm_80`, `sm_90`, `sm_100`, or `sm_120`.
 - Ship PTX where appropriate so forward-compatible JIT can save users from missing SASS.
 - Refuse silent fallback to old kernels when performance would be misleading; log the selected backend and architecture.
@@ -126,6 +126,7 @@ Plan:
 - Audit NVFP4 from checkpoint format through quantization metadata, loader, GEMM kernels, KV cache, serving flags, and output validation.
 - Validate `--kv-cache-dtype nvfp4` on `sm_121` specifically before recommending it.
 - Upstream or replace patched FlashInfer paths that route NVFP4 KV through working FA2 kernels.
+- Track both vLLM and SGLang NVFP4 KV implementations. The SGLang SM120 implementation adds `fp4_e2m1` KV cache, FlashInfer FA2 patches, native FP4 memory pools, hybrid-SWA wiring, and per-layer global-scale auto-calibration before CUDA graph capture.
 - Add correctness tests, not just speed tests: short deterministic prompts, logits sanity, and regression comparisons.
 - Keep fp8 KV as the default until NVFP4 KV is proven on Spark for the target model family.
 
@@ -134,6 +135,44 @@ Acceptance test:
 - NVFP4 model load, prefill, decode, and KV cache all use documented Spark-compatible paths.
 - Output is numerically sane against a reference backend.
 - Throughput improvement is measured against fp8/bf16 baselines, not assumed.
+
+## 7a. Add SGLang As A First-Class Spark Runtime
+
+Weakness: the first plan focused on vLLM and llama.cpp, but SGLang is another serious local serving runtime and already has community NVFP4 KV work for RTX Blackwell.
+
+Plan:
+
+- Add SGLang to the blessed-stack matrix alongside vLLM, LiteRT-LM, llama.cpp, and HF fallback.
+- Track SGLang OpenAI-compatible serving smoke tests through `scripts/openai_chat_smoke.py`.
+- Validate SGLang on the available single Spark before making any TP>1 claims.
+- For NVFP4, study the `hikarioyama/sglang-nvfp4-kv-sm120` implementation: FlashInfer FA2 patches, `fp4_e2m1` KV, native FP4 pool, hybrid-SWA support, and global-scale auto-calibration.
+- Treat the repo's small-model warning seriously: use fp8 KV for small models until NVFP4 quality is proven.
+- Keep SGLang and vLLM results separate in reports unless backend, quantization, KV cache, and serving flags are identical enough to compare.
+
+Acceptance test:
+
+- SGLang imports or container startup is documented on Spark.
+- A single-Spark SGLang server answers an OpenAI-compatible smoke request.
+- The report records SGLang version/container, attention backend, KV cache dtype, quantization, CUDA graph mode, and memory use.
+- NVFP4 SGLang is not blessed until output quality and speed are measured against fp8 KV on the same model.
+
+## 7b. Evaluate LiteRT-LM For Gemma And Local Agents
+
+Weakness: LiteRT-LM was not part of the first benchmark, but it may be relevant for Gemma, MTP, and local-agent prototyping.
+
+Plan:
+
+- Evaluate `google-ai-edge/LiteRT-LM` on Linux `aarch64` / DGX OS.
+- Determine whether the Spark path uses CPU, CUDA GPU, LiteRT GPU, or another backend.
+- Identify model format and conversion requirements.
+- Smoke a Gemma model if supported.
+- Compare generation throughput and ergonomics against llama.cpp, vLLM, and SGLang.
+
+Acceptance test:
+
+- LiteRT-LM has a documented build/install path on the Spark.
+- One generation smoke completes or a concrete blocker is filed.
+- The report records backend evidence, model format, throughput, and a go/no-go recommendation.
 
 ## 8. Fix llama.cpp / lm-eval Accuracy
 
@@ -151,6 +190,24 @@ Acceptance test:
 - A tiny GGUF lm-eval task produces valid loglikelihood scores.
 - The adapter test fails fast if logprobs are missing or shaped differently.
 - GGUF accuracy rows are no longer classified as loader failures for API-schema reasons.
+
+## 8a. Bless llama.cpp As A Practical Serving Path
+
+Weakness: llama.cpp may be the most reliable serving path today, but the first report only captured early throughput and the broken lm-eval accuracy adapter.
+
+Plan:
+
+- Pin a llama.cpp commit for Spark.
+- Record CUDA build flags and architecture target.
+- Run `llama-bench` and an OpenAI-compatible smoke test.
+- Keep serving/throughput separate from paper-comparable accuracy.
+- Decide where Ollama fits if its bundled llama.cpp path is more ergonomic.
+
+Acceptance test:
+
+- A single-Spark llama.cpp recipe serves a model from a clean checkout.
+- The recipe records exact commit, build flags, `spark_doctor` evidence, throughput, and model details.
+- The recipe clearly says whether lm-eval accuracy is supported for that server/API version.
 
 ## 9. Tame HF Fallback
 
@@ -252,7 +309,7 @@ Weakness: no single team owns "local AI works on Blackwell workstation/Spark sys
 
 Plan:
 
-- Create a public Spark compatibility board across NVIDIA, vLLM, PyTorch, FlashInfer, llama.cpp, SGLang, and key quantization projects.
+- Create a public Spark compatibility board across NVIDIA, vLLM, SGLang, LiteRT-LM, PyTorch, FlashInfer, llama.cpp, and key quantization projects.
 - Track issues by layer: packaging, kernel dispatch, model architecture, runtime flags, performance, docs.
 - Publish a monthly blessed stack: driver, CUDA, container, PyTorch, vLLM, FlashInfer, llama.cpp.
 - Require each blessed stack to include a small public benchmark bundle.
@@ -262,6 +319,23 @@ Acceptance test:
 
 - Users can answer "what should I install today?" without reading five issue threads.
 - Maintainers can reproduce Spark bugs without owning the hardware personally.
+
+## 14a. Use Forks, Submodules, Worktrees, And Subagents
+
+Weakness: patching upstream libraries through loose files or one dirty checkout will not scale.
+
+Plan:
+
+- Fork patched upstream libraries under `jethac`.
+- Add each fork as a submodule under `third_party/`.
+- Use one issue-named branch per patch stream.
+- Use `git worktree` for parallel patch streams.
+- Use subagents for independent runtime investigations and disjoint implementation areas.
+- Keep each subagent's write scope separate to avoid merge conflicts.
+
+Acceptance test:
+
+- Any upstream code change is represented by a `jethac` fork submodule, issue branch, worktree path, commit SHA, reproduction command, and upstreaming plan.
 
 ## 15. Publish Honest Recipes
 

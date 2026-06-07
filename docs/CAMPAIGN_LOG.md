@@ -9,6 +9,9 @@
   - `scripts/spark_doctor.py`
   - `scripts/gguf_logprobs_probe.py`
   - `scripts/openai_chat_smoke.py`
+- Added SGLang as a first-class runtime workstream after reviewing `hikarioyama/sglang-nvfp4-kv-sm120`.
+- Added LiteRT-LM and practical llama.cpp serving as first-class runtime workstreams.
+- Added the upstream fork/submodule/worktree policy for patched libraries.
 - Started tracking work through GitHub Issues.
 - Ran `spark_doctor` on `thinkstationpgx-00b4` using `/home/jethac/gemma4-evals/.venv/bin/python`.
   - GPU: `NVIDIA GB10`
@@ -23,6 +26,14 @@
   - FlashInfer: `0.6.11.post2`
   - PyTorch arch list: `sm_80`, `sm_90`, `sm_100`, `sm_110`, `sm_120`; no explicit `sm_121`
   - snapshot: `results/spark_doctor_20260607T110833Z.md`
+- Ran `cuda_so_audit` against vLLM and FlashInfer package roots in the benchmark venv.
+  - inspected objects: 14
+  - objects with explicit `sm_121`: 0
+  - objects with `sm_120`: 3
+  - vLLM FA2 extension: `sm_80`
+  - vLLM FA3 extension: `sm_90a`
+  - vLLM FlashMLA extensions: `sm_100`, `sm_90a`
+  - snapshot: `results/cuda_so_audit_vllm_flashinfer_20260607T111023Z.json`
 
 ## First Benchmark Campaign Summary
 
