@@ -4,7 +4,7 @@ This is the current known-good / known-bad stack record. It is intentionally con
 
 ## Hardware
 
-- System class: DGX Spark / ThinkStation PGX workstation
+- System class: DGX Spark-class GB10 workstation
 - GPU observed in benchmark logs: `NVIDIA GB10`
 - CUDA compute capability target: `sm_121`
 - Available hardware count: one Spark-class machine
@@ -39,15 +39,16 @@ From the initial personal Gemma 4 benchmark run:
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
 - GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
 - `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
-- `hikarioyama/vllm-nvfp4-kv-sm120` and `hikarioyama/sglang-nvfp4-kv-sm120` are audited SM120 reference implementations and should be used as prior art for our forks. They are not GB10 `sm_121` blessed stacks until fp8-vs-NVFP4 quality, capacity, and speed are reproduced on the Spark.
+- `hikarioyama/vllm-nvfp4-kv-sm120` and `hikarioyama/sglang-nvfp4-kv-sm120` are audited SM120 reference implementations and should be used as prior art for our forks. They are not GB10 `sm_121` blessed stacks until fp8-vs-NVFP4 quality, capacity, and speed are reproduced on Spark-class hardware.
 - Multi-Spark recipes are not validated because we currently have only one unit.
 - The inspected vLLM/FlashInfer extension set has no explicit `sm_121` SASS. General vLLM extensions include `sm_120`, while several attention/MLA extensions are `sm_80`, `sm_90a`, or `sm_100` only. Treat this as a validation requirement, not an automatic failure.
 - SGLang NVFP4 KV is not validated on our Spark yet. Track `hikarioyama/sglang-nvfp4-kv-sm120` as a candidate design reference, but do not bless it until a Spark fp4-vs-fp8 quality check passes.
 - The tested NVIDIA SGLang container still logs `SM120 (Blackwell) detected` and audited SGLang/FlashInfer objects contain no explicit `sm_121` SASS. Treat the BF16 smoke as functional evidence, not proof of fully Spark-native kernel coverage.
 - FlashInfer source/JIT validation at `jethac/flashinfer@a42c8f07` proves one important lower-level fix: installed vLLM/SGLang containers exclude `b12x` from SM121 NVFP4 `mm_fp4` auto-dispatch, while the patched source selects `b12x` and can run tiny and model-shaped NVFP4 GEMMs on GB10. Current microbenchmarks do not show a speedup. This is not yet a blessed serving stack because it required an ephemeral source install and removal of stale FlashInfer JIT/cubin packages.
-- FlashInfer is not the whole Spark fix. The remaining work spans packaging, vLLM/SGLang integration, Gemma 4 12B support, NVFP4 KV correctness, llama.cpp/lm-eval accuracy, optional LiteRT GPU stability, and short before/after benchmark proof.
+- FlashInfer FA2 NVFP4 paged-KV standalone correctness now passes on GB10 with `jethac/flashinfer@e152cf4d` and vLLM-style V-scale-factor de-swizzle enabled. This is kernel-level evidence, not a blessed vLLM/SGLang serving stack.
+- FlashInfer is not the whole Spark fix. The remaining work spans packaging, vLLM/SGLang integration, Gemma 4 12B support, NVFP4 KV serving quality/capacity, llama.cpp/lm-eval accuracy, optional LiteRT GPU stability, and short before/after benchmark proof.
 - Optional LiteRT-LM GPU chat is not blessed: after fixing `/dev/dri` group access it prints `spark-ok` but exits with `returncode=-11`.
-- llama.cpp serving is blessed for the tested Gemma 4 26B Q4_0 GGUF path, but GGUF lm-eval accuracy is still blocked by API/logprobs schema compatibility.
+- llama.cpp serving is blessed for the tested Gemma 4 26B Q4_0 GGUF path, but GGUF lm-eval accuracy is still blocked by API/logprobs schema compatibility. This Q4_0 row does not prove native NVFP4/MXFP4 `sm_121a` tensor-core dispatch.
 
 ## Candidate Next Stack
 

@@ -113,6 +113,22 @@
   - current GB10 comparison key: `NVIDIA_GB10:sm_121:sms_48`
   - audit doc: `docs/SM_COUNT_AWARENESS.md`
   - conclusion: current fork patches do not hardcode a 48-SM performance heuristic; future performance rows must still match `multi_processor_count`.
+- Added and ran a standalone FlashInfer FA2 NVFP4 paged-KV correctness probe.
+  - new script: `scripts/flashinfer_nvfp4_kv_probe.py`
+  - result: `results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json`
+  - source: `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
+  - env: `FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
+  - hardware key: `NVIDIA_GB10:sm_121:sms_48`
+  - outcome: NHD decode, NHD prefill, HND decode, and HND prefill all passed with cosine >= `0.99999946`.
+  - limitation: this proves the patched FlashInfer FA2 kernel path and vLLM-style V-scale-factor de-swizzle, not clean vLLM/SGLang serving, KV capacity, quality, or throughput.
+- Tightened llama.cpp wording.
+  - Gemma 4 26B Q4_0 remains the blessed practical GGUF serving path.
+  - The Q4_0 result does not prove native NVFP4/MXFP4 `sm_121a` tensor-core MMA dispatch; that needs a separate native-FP4 GGUF experiment.
+- Tried a CPU-only Linux `aarch64` Docker verification route for the SGLang FP4 KV branch to avoid spending GPU time on Python-level gate tests.
+  - result: `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`
+  - target: `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`
+  - outcome: build failed before pytest while compiling `sglang-kernel-cpu`; the ARM64 `vaddq_f16` path hit a target-specific option mismatch.
+  - conclusion: this does not disprove the SGLang FP4 KV gate patch, but the cheap CPU Docker verification route needs either a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix.
 
 ## First Benchmark Campaign Summary
 

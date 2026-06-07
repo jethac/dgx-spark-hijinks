@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; SGLang integration and GB10 runtime proof pending.
+Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness proof passes; clean vLLM/SGLang serving and capacity proof pending.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -59,8 +59,20 @@ Local verification:
 Missing verification:
 
 - no clean FlashInfer wheel/container build has been run yet for GB10
-- no GB10 FA2 NVFP4 KV harness run has passed yet
+- no clean installed-package FlashInfer build has passed the KV harness yet
 - no vLLM/SGLang serving proof has selected this path yet
+
+GB10 runtime verification:
+
+- artifact: `results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json`
+- source: `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
+- import path: `/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/__init__.py`
+- source root supplied to JIT: `/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121`
+- env: `FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
+- hardware key: `NVIDIA_GB10:sm_121:sms_48`
+- shape: `batch_size=2`, `kv_len=64`, `qo_len=16`, `page_size=16`, `num_kv_heads=2`, `num_qo_heads=4`, `head_dim=128`, `dtype=bfloat16`
+- result: NHD decode, NHD prefill, HND decode, and HND prefill all passed with cosine >= `0.99999946` and max absolute error <= `0.0078125`.
+- limitations: this is a standalone FlashInfer FA2 paged-KV correctness probe with vLLM-style swizzled V scale factors and in-kernel de-swizzle enabled. It does not prove clean wheel packaging, vLLM metadata integration, KV capacity gain, output quality, CUDA graph replay, or serving throughput.
 
 ## vLLM Reference Map
 
@@ -83,7 +95,7 @@ Local verification:
 - `git diff --cached --check` passed before commit.
 - `python -m ruff check ...` is blocked in this Windows workspace because `ruff` is not installed.
 - `python -m pytest tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py -q` is blocked in this Windows workspace because vLLM's `tests/conftest.py` imports missing `tblib`.
-- PGX source-file routing probe passed on real GB10/SM121:
+- GB10 source-file routing probe passed on real SM121 hardware:
   - result: `results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json`
   - source revision: `8916796bc50926fd61e606718b194a71e2e31a24`
   - GPU: `NVIDIA GB10`
@@ -98,7 +110,7 @@ Local verification:
 Missing verification:
 
 - no vLLM wheel/container build has been run yet with `jethac/flashinfer@e152cf4d`
-- no hikari-style NHD/HND layout correctness harness has passed yet with this vLLM/FlashInfer pair
+- standalone FlashInfer NHD/HND FA2 NVFP4 KV correctness has passed with the same deswizzle flag; vLLM's full installed integration still needs a harness/server run
 - no GB10 server log has selected the FA2 NVFP4 KV path yet
 - no fp8-vs-NVFP4 KV correctness, capacity, quality, or throughput row exists yet
 
@@ -132,7 +144,8 @@ Likely `jethac/flashinfer` work:
 - Ported in `e152cf4d`: explicit scale-factor stride plumbing for `maybe_k_cache_sf` and `maybe_v_cache_sf`.
 - Ported in `e152cf4d`: FA2 page layout support for independent K/V page strides and offsets.
 - Ported in `e152cf4d`: compile-time gated B2-style V scale-factor de-swizzle; the vLLM branch must enable this path when using the interleaved vLLM cache layout.
-- Still pending: GB10 harness coverage for target `H_q/H_kv/D/page` shapes before serving.
+- Passed: GB10 standalone harness coverage for NHD/HND paged KV at `H_q=4`, `H_kv=2`, `D=128`, `page=16`, with swizzled V scale factors and de-swizzle enabled.
+- Still pending: larger model-shaped KV harness coverage before serving.
 - Still pending: clean wheel/container build proof and runtime logs proving native FA2 NVFP4 KV selection.
 
 Patch ownership from the SM120 vLLM reference:
@@ -166,16 +179,22 @@ Local verification:
 - `git diff --check` passed.
 - `python -m ruff check ...` is blocked in this Windows workspace because `ruff` is not installed.
 - `PYTHONPATH=python python -m pytest test/registered/unit/server_args/test_server_args.py -k KV4Compatibility -q` is blocked in this Windows workspace because SGLang imports the POSIX-only `resource` module.
-- PGX/Linux verification:
+- GB10/Linux verification:
   - result: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md`
   - branch fetch confirmed `origin/spark/hijinks-018-fp4-e2m1-kv-sm121 == 67c7967a1913960055e64c49c26c5f622c1f1ff1`
-  - detached PGX worktree checkout succeeded on Linux `aarch64`
+  - detached worktree checkout succeeded on Linux `aarch64`
   - `python3 -m py_compile python/sglang/srt/layers/quantization/kvfp4_tensor.py python/sglang/srt/server_args.py test/registered/unit/server_args/test_server_args.py` passed
-  - targeted pytest was not run because PGX has no `python` shim and `python3 -m pytest` reports `No module named pytest`
+  - targeted pytest was not run because the host has no `python` shim and `python3 -m pytest` reports `No module named pytest`
+- CPU Docker verification:
+  - result: `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`
+  - target: `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`
+  - intent: run the `KV4Compatibility` pytest path in a Linux `aarch64` CPU-only build before spending GPU time
+  - outcome: Docker build failed before pytest while compiling `sglang-kernel-cpu`; `vaddq_f16` in `sgl-kernel/csrc/cpu/aarch64/shm.h` hit a target-specific option mismatch
 
 Missing verification:
 
-- no Linux/PGX SGLang targeted pytest has passed yet for this branch
+- no Linux SGLang targeted pytest has passed yet for this branch
+- no cheap CPU-only SGLang Docker verification route is working yet; it needs a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix
 - no SGLang native FP4 KV memory-pool or FlashInfer backend wrapper patch has landed yet
 - no GB10 `fp4_e2m1` serving proof exists yet
 
@@ -222,7 +241,7 @@ Current upstream SGLang risk:
 
 1. Keep existing NVIDIA SGLang 26.05 Qwen BF16 and vLLM 26B/12B rows as baselines; do not merge them into NVFP4-KV claims.
 2. Port FlashInfer FA2 stride/page work into a clean `jethac/flashinfer` branch.
-3. Run the reference layout harness for the target model shape on GB10 with a fresh JIT cache.
+3. Extend the standalone GB10 layout harness from the small passed shape to target model shapes with a fresh JIT cache.
 4. Start vLLM with `--kv-cache-dtype nvfp4`; logs must prove FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback or trtllm-gen.
 5. Compare fp8 and NVFP4 on the same model, prompts, memory utilization, CUDA graph mode, and concurrency.
 6. Record KV pool tokens, maximum concurrency, memory telemetry, deterministic output, quality/PPL or retrieval sanity, TTFT, and warmed decode tok/s.

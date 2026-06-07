@@ -1,10 +1,10 @@
 # DGX Spark Hijinks
 
-Public record for making DGX Spark / ThinkStation PGX useful and boring for local AI.
+Public record for making DGX Spark-class GB10 systems useful and boring for local AI.
 
 The short version: GB10 is `sm_121`. A lot of the AI stack still assumes x86_64, CUDA 12, datacenter Blackwell, RTX Blackwell, or older CUDA architectures. This repository tracks the work to turn those rough edges into reproducible fixes.
 
-We currently have one Spark-class machine available: the ThinkStation PGX workstation observed as `NVIDIA GB10`. Multi-Spark work is tracked, but not executable yet.
+We currently have one Spark-class GB10 machine available. Multi-Spark work is tracked, but not executable yet.
 
 Mission: this machine costs roughly 900k JPY. It needs to be as performant as the silicon is capable of, not merely "technically running."
 
@@ -34,7 +34,7 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 
 ## First Commands
 
-Run these on the Spark / PGX host:
+Run these on the Spark-class GB10 host:
 
 ```bash
 python3 scripts/spark_doctor.py --json > results/spark_doctor.json
@@ -79,6 +79,15 @@ python3 scripts/flashinfer_mm_fp4_microbench.py \
   --run-id flashinfer-mm-fp4-before \
   --container CONTAINER_TAG \
   --output results/flashinfer_mm_fp4_before.json
+```
+
+For a FlashInfer FA2 NVFP4 paged-KV correctness check against a source checkout:
+
+```bash
+PYTHONPATH=/path/to/flashinfer-src:./scripts \
+python3 scripts/flashinfer_nvfp4_kv_probe.py \
+  --flashinfer-source-root /path/to/flashinfer-src \
+  --output results/flashinfer_nvfp4_kv_probe.json
 ```
 
 To capture runtime process evidence for a local server:

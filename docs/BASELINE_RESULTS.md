@@ -243,6 +243,49 @@ Interpretation:
 - This does not prove the full vLLM fork installs cleanly, that FlashInfer FA2 NVFP4 KV kernels build/run, or that serving correctness/capacity/performance improves.
 - Remaining proof must use the layout/correctness harness, including NHD and HND cosine checks, plus an end-to-end serve.
 
+## 2026-06-08: FlashInfer FA2 NVFP4 KV Runtime Correctness Probe
+
+Artifact:
+
+- `results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json`
+
+Environment:
+
+- source: `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
+- import path: `/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121/flashinfer/__init__.py`
+- source root supplied to JIT: `/root/spark-validation/flashinfer-fa2-nvfp4-kv-sm121`
+- env: `FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
+- hardware key: `NVIDIA_GB10:sm_121:sms_48`
+- Torch: `2.11.0+cu130`
+- CUDA: `13.0`
+
+Shape:
+
+- `batch_size=2`
+- `kv_len=64`
+- `qo_len=16`
+- `page_size=16`
+- `num_kv_heads=2`
+- `num_qo_heads=4`
+- `head_dim=128`
+- `dtype=bfloat16`
+- backend: FlashInfer FA2 paged KV
+
+Result:
+
+| operation | layout | cosine | max abs error | passed |
+|---|---:|---:|---:|---|
+| decode | NHD | 0.9999995232 | 0.0078125 | true |
+| prefill | NHD | 0.9999998808 | 0.0 | true |
+| decode | HND | 0.9999994636 | 0.0078125 | true |
+| prefill | HND | 0.9999998808 | 0.0 | true |
+
+Interpretation:
+
+- This is the first GB10 runtime proof that the patched FlashInfer FA2 NVFP4 paged-KV path builds, runs, and reads vLLM-style swizzled V scale factors correctly when the in-kernel de-swizzle macro is enabled.
+- It is stronger than the vLLM routing probe because it executes FlashInfer kernels and compares against dequantized reference attention for both NHD and HND layouts.
+- It is still not an end-to-end vLLM serving proof. It does not prove clean wheel packaging, vLLM metadata integration, fp8-vs-NVFP4 KV capacity, output quality, CUDA graph replay, or serving throughput.
+
 ## 2026-06-07: vLLM Gemma 4 26B A4B Compact MoE Serving Check
 
 Target:
@@ -393,6 +436,7 @@ Interpretation:
 - llama.cpp is now blessed as a practical single-Spark serving path for this GGUF model.
 - `--reasoning off` is required for normal OpenAI chat `message.content` output on this Gemma 4 server path.
 - Server logs confirm CUDA on `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, and `BLACKWELL_NATIVE_FP4 = 1`.
+- This row is Q4_0 GGUF, not NVFP4/MXFP4 GGUF. The measured win is practical 4-bit bandwidth reduction plus mature CUDA graph/quantized-serving kernels on `sm_121`; it does not prove native `sm_121a` FP4 tensor-core MMA dispatch.
 - GGUF lm-eval accuracy remains blocked. The same server still exposes logprobs under `choices[0].logprobs.content`, not the `tokens` and `token_logprobs` shape expected by the existing lm-eval adapter.
 
 ## 2026-06-07: LiteRT-LM Gemma 4 E2B CPU/GPU Smoke

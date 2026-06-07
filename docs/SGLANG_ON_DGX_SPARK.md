@@ -2,7 +2,7 @@
 
 Status: BF16 NVIDIA 26.05 container smoke passed; hikarioyama SM120 NVFP4 KV fork audited; no SGLang NVFP4 KV run has passed on GB10/SM121.
 
-Target: DGX Spark / ThinkStation PGX / GB10 = compute capability 12.1 = `sm_121`.
+Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
 Scope: one Spark-class unit only. No TP>1 or multi-Spark claims yet.
 
@@ -147,6 +147,12 @@ Known risk: on `aarch64`, SGLang may JIT some kernels at first launch instead of
 ## NVFP4 Rule
 
 Use BF16 as the proven SGLang baseline on our Spark today. fp8 is the desired comparator and likely default for small models, but it should not be called proven until a GB10 SGLang fp8 smoke passes. Keep NVFP4 KV unblessed until it passes on Spark.
+
+Current fork verification:
+
+- `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1` has passed Linux `aarch64` syntax compilation for the touched FP4 KV gate files.
+- A CPU-only Docker route was attempted to avoid spending GPU time on Python-level `KV4Compatibility` tests, but `docker/arm64.Dockerfile` failed before pytest while building `sglang-kernel-cpu`; see `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`.
+- This is a build-route failure, not a failing SGLang FP4 KV test. No SGLang `fp4_e2m1` server row exists yet.
 
 For NVFP4 validation, record:
 

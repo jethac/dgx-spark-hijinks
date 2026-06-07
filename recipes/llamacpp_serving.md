@@ -45,6 +45,17 @@ Current serving/throughput evidence:
 - OpenAI compact serving: about `76 tok/s` decode for 64- and 192-token generations
 - `llama-bench`: `pp512` 3021.76 +/- 34.41 tok/s, `tg128` 77.35 +/- 0.13 tok/s
 
+## Native FP4 Claim Boundary
+
+This blessed row is Gemma 4 26B Q4_0 GGUF serving. `BLACKWELL_NATIVE_FP4 = 1` proves that the llama.cpp CUDA backend was built with Blackwell FP4 capability visible, but it does not prove this model used NVFP4/MXFP4 tensor types or native `sm_121a` FP4 MMA.
+
+Native FP4 GGUF requires a separate experiment:
+
+- NVFP4 or MXFP4 GGUF model, not Q4_0/Q4_K/Q8
+- build-target evidence for `sm_121a` or a documented valid native-FP4 target
+- runtime dispatch evidence from llama.cpp backend tests or logs
+- comparison against the existing Q4_0 row
+
 Artifacts:
 
 - `results/llamacpp_gemma4_26b_q4_0_chat_smoke_20260607T135911Z.json`

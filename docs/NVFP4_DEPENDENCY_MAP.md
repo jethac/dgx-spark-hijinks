@@ -88,8 +88,9 @@ Patch branch:
   - important telemetry lesson: an interim V scale-factor scratch cache looked cheap but silently consumed extra memory. The B2 path de-swizzles V scale factors in-kernel in registers and should be measured with memory telemetry that can catch hidden allocations.
   - GB10 hypothesis: `_use_fa2_for_nvfp4_kv_on_sm120()` gates on compute capability 12.0/12.1 in the reference repo, so the path is nominally intended to include GB10. This still requires a real `sm_121` build and serving proof.
   - stated limits: standard attention only; head dimensions 64/128/256/512; not MLA, Mamba/SSM, or attention sinks.
-  - next cheap proof: run the reference `harness/h_layout_b2.py` after editing `H_q/H_kv/D/page` for the target model and require roughly `cos 0.995` PASS for the relevant layouts before serving.
-  - not covered by our current tests: fp8-vs-NVFP4 KV capacity, output quality, long-context attention decode, CUDA graph replay, Gemma alternating local/global attention behavior, and whether the same patches build cleanly for `sm_121`/`121a` on the Spark stack.
+  - current GB10 proof: `results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json` runs `jethac/flashinfer@e152cf4d` through FlashInfer FA2 paged decode/prefill with vLLM-style swizzled V scale factors and in-kernel de-swizzle enabled. NHD and HND both pass with cosine >= `0.99999946`.
+  - next proof: extend the standalone harness to model-shaped `H_q/H_kv/D/page` values, then run a clean vLLM server with `--kv-cache-dtype nvfp4` and compare fp8-vs-NVFP4 capacity, quality, and throughput.
+  - not covered by our current tests: fp8-vs-NVFP4 KV capacity, output quality, long-context attention decode, CUDA graph replay, Gemma alternating local/global attention behavior, and whether the same patches build cleanly as distributable wheels/containers for `sm_121`/`121a` on the Spark stack.
 - SGLang NVFP4-KV reference status:
   - reference repo: `https://github.com/hikarioyama/sglang-nvfp4-kv-sm120`
   - audited HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`
