@@ -86,6 +86,41 @@ Interpretation:
 - The CUDA object audit found no explicit `sm_121` SASS in audited SGLang/FlashInfer objects.
 - The SGLang log labeled the GB10 path as `SM120 (Blackwell)`, so this still needs upstream dispatch/packaging scrutiny.
 
+## 2026-06-08: SGLang Qwen2.5 1.5B fp8-vs-fp4 KV Probe
+
+Target:
+
+- image: `nvcr.io/nvidia/sglang:26.05-py3`
+- model: `Qwen/Qwen2.5-1.5B-Instruct`
+- dtype: `bfloat16`
+- memory fraction: `0.40`
+- hardware key: `NVIDIA_GB10:sm_121:sms_48`
+
+Artifacts:
+
+- summary: `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- fp8 smoke: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_chat_smoke.json`
+- fp8 benchmark: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_openai_benchmark.json`
+- fp8 server log: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_server.log`
+- fp4 FlashInfer startup failure: `results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log`
+- fp4 Triton startup failure: `results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log`
+
+fp8 result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | decode tok/s |
+|---|---:|---:|---:|---:|
+| `short_decode` | 44 | 64 | 0.043 | 59.09 |
+| `medium_decode` | 56 | 192 | 0.035 | 58.43 |
+| `long_prefill` | 2369 | 64 | 0.036 | 58.22 |
+
+Interpretation:
+
+- fp8 KV is now the concrete SGLang Qwen comparator row for issue #20.
+- fp8 KV selected FlashInfer attention, enabled CUDA graphs, and allocated a `3,113,713` token KV pool.
+- stock `fp4_e2m1` with FlashInfer attention failed at SGLang's `KV4Compatibility` gate.
+- stock `fp4_e2m1` with Triton attention allocated a larger `5,534,509` token KV pool, about `1.78x` the fp8 row, then failed on missing `KVFP4QuantizeUtil`.
+- This is a useful before-state for the `jethac/sglang` fork, not a blessed FP4 KV serving result.
+
 ## 2026-06-07: SGLang Gemma 4 E2B Blocker
 
 Target:

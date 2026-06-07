@@ -126,6 +126,25 @@ Qwen should be the first SGLang before/after target for `fp4_e2m1` KV:
 
 The existing local `Qwen/Qwen2.5-1.5B-Instruct` BF16 smoke is a runtime proof, not a meaningful NVFP4 KV quality proof. Small Qwen models may be negative controls for fp4 KV quality.
 
+Capture each Qwen row with the shared manifest wrapper:
+
+```bash
+python3 scripts/record_openai_serving_row.py \
+  --backend sglang \
+  --phase before \
+  --run-id "$RUN_ID" \
+  --url http://127.0.0.1:30000 \
+  --model "$MODEL" \
+  --container-image "$IMAGE" \
+  --kv-cache-dtype "$KV_CACHE_DTYPE" \
+  --attention-backend "$ATTENTION_BACKEND" \
+  --server-log "results/${RUN_ID}_server.log" \
+  --process-match sglang \
+  --cuda-so-package sglang \
+  --cuda-so-package sgl_kernel \
+  --cuda-so-package flashinfer
+```
+
 ## AEON-Style Gemma NVFP4 Weight Probe
 
 AEON's Gemma result is useful SGLang prior art for NVFP4 weights, but it does not prove FP4 KV. If testing Gemma 4 in SGLang, start with ordinary KV:

@@ -71,6 +71,42 @@ Older observed throughput evidence:
 - prompt throughput: `3923.63 tok/s`
 - generation throughput: `122.11 tok/s`
 
+## Qwen GGUF Template
+
+No Qwen GGUF row has been captured yet. Use env vars rather than host-specific paths:
+
+```bash
+LLAMA_SERVER=${LLAMA_SERVER:?}
+LLAMA_BENCH=${LLAMA_BENCH:?}
+GGUF_MODEL=${GGUF_MODEL:?}
+MODEL_ALIAS=${MODEL_ALIAS:-qwen-gguf}
+RUN_ID=${RUN_ID:-llamacpp_qwen_gguf_$(date -u +%Y%m%dT%H%M%SZ)}
+
+"$LLAMA_SERVER" \
+  --model "$GGUF_MODEL" \
+  --alias "$MODEL_ALIAS" \
+  --host 0.0.0.0 \
+  --port 18082 \
+  --ctx-size 8192 \
+  --gpu-layers all
+```
+
+After the server is healthy:
+
+```bash
+python3 scripts/record_openai_serving_row.py \
+  --backend llamacpp \
+  --phase before \
+  --run-id "$RUN_ID" \
+  --url http://127.0.0.1:18082 \
+  --model "$MODEL_ALIAS" \
+  --runtime-ref "$LLAMA_CPP_COMMIT" \
+  --quantization gguf \
+  --server-log "results/${RUN_ID}_server.log" \
+  --llama-bench-command "$LLAMA_BENCH --model $GGUF_MODEL --gpu-layers all" \
+  --run-gguf-logprobs-probe
+```
+
 ## Accuracy Track
 
 Do not claim paper-comparable GGUF accuracy until:

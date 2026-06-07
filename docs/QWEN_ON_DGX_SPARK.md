@@ -9,7 +9,7 @@ Qwen is a first-class Spark target alongside Gemma. Gemma exercises the hardest 
 | runtime | row | status |
 |---|---|---|
 | vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | external GB10 prior art reports strong speed and soak stability; local reproduction pending |
-| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16 | local GB10 smoke passed at about 59-60 tok/s decode |
+| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8 | local GB10 BF16 and fp8 rows pass at about 58-60 tok/s decode; stock fp4 KV fails before serving |
 | llama.cpp | Qwen GGUF | not yet run locally; Gemma 4 Q4_0 is only a proxy for practical GGUF serving |
 
 ## vLLM Target
@@ -40,6 +40,14 @@ Use Qwen for the first real SGLang NVFP4 KV validation:
 4. KV pool tokens, maximum concurrency, TTFT, warmed decode, and selected backend logs.
 
 Start with a standard-attention Qwen model before Qwen3.6 hybrid/MoE. Small models may be quality-negative controls for fp4 KV; a small-model incoherence result is not by itself a Spark kernel failure.
+
+Current SGLang Qwen evidence:
+
+- `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- fp8 KV before row: `Qwen/Qwen2.5-1.5B-Instruct`, FlashInfer attention, CUDA graphs enabled, `3,113,713` token KV pool, about `58-59 tok/s` decode.
+- stock `fp4_e2m1` with FlashInfer attention fails at the compatibility gate.
+- stock `fp4_e2m1` with Triton attention reaches FP4 KV allocation, `5,534,509` tokens or about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
+- next after-row: run the same model and prompts through the `jethac/sglang` fork and prove whether FP4 KV can serve with acceptable output quality.
 
 ## llama.cpp Target
 

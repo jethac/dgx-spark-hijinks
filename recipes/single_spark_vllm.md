@@ -81,6 +81,26 @@ Fork after-row:
 
 Do not transfer Gemma 4 conclusions onto Qwen or Qwen conclusions onto Gemma without model-specific serving rows.
 
+Capture the row after the server is healthy:
+
+```bash
+python3 scripts/record_openai_serving_row.py \
+  --backend vllm \
+  --phase before \
+  --run-id "$RUN_ID" \
+  --url http://127.0.0.1:8000 \
+  --model "$MODEL" \
+  --container-image "$IMAGE" \
+  --model-revision "$MODEL_REVISION" \
+  --quantization compressed-tensors \
+  --kv-cache-dtype "$KV_CACHE_DTYPE" \
+  --attention-backend flash_attn \
+  --server-log "results/${RUN_ID}_server.log" \
+  --process-match vllm \
+  --cuda-so-package vllm \
+  --cuda-so-package flashinfer
+```
+
 ## AEON Gemma 4 NVFP4 Weight Probe
 
 AEON's Gemma 4 evidence is a vLLM NVFP4-weight path, not an FA2 NVFP4-KV result. Treat it as a separate reproduction target:

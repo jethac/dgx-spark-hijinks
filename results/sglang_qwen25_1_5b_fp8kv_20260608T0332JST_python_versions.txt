@@ -1,0 +1,9 @@
+machine aarch64
+torch 2.12.0a0+5aff3928d8.nv26.05 13.2
+cuda NVIDIA GB10 (12, 1)
+arch_list ['sm_80', 'sm_86', 'sm_90', 'sm_100', 'sm_110', 'sm_120', 'compute_120']
+sglang 0.5.11+nv26.5.51621272
+sglang-kernel 0.4.2+nv26.5.51621272
+flashinfer-python 0.6.10+cf494fca.nv26.5.cu132.50619265
+torch 2.12.0a0+5aff3928d8.nv26.5.50603568
+triton 3.5.1+gitbfeb0668.nv25.12

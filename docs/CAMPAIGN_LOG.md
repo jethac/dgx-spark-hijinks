@@ -154,6 +154,15 @@
   - changes: guarded lazy fallback import for `_C_stable_libtorch`; speculative-decode CUDA graph capture-size alignment now applies to every non-`NONE` graph mode, including pure `PIECEWISE`.
   - verification artifact: `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md`
   - limitation: local pytest collection is blocked by missing vLLM dev dependencies; GB10 Qwen3.6 NVFP4+DFlash serving reproduction remains pending.
+- Captured SGLang Qwen2.5 1.5B fp8-vs-fp4 KV evidence.
+  - summary: `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+  - fp8 row: NVIDIA SGLang 26.05 serves `Qwen/Qwen2.5-1.5B-Instruct` with FlashInfer attention, CUDA graphs enabled, hardware key `NVIDIA_GB10:sm_121:sms_48`, `3,113,713` KV tokens, and about `58-59 tok/s` decode.
+  - stock fp4 FlashInfer row: fails at `KV4Compatibility`, rejecting FlashInfer for MHA FP4 KV.
+  - stock fp4 Triton row: allocates `5,534,509` KV tokens, about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
+  - conclusion: fp8 is now a real SGLang Qwen comparator; stock fp4 KV is not a serving path yet, and the next after-row should use the `jethac/sglang` fork.
+- Added `scripts/record_openai_serving_row.py`.
+  - purpose: capture smoke, benchmark, optional runtime/CUDA audits, and a manifest for one already-running OpenAI-compatible server.
+  - verification: `python -m py_compile` passed and `--dry-run` emits relative artifact paths and portable command records.
 
 ## First Benchmark Campaign Summary
 

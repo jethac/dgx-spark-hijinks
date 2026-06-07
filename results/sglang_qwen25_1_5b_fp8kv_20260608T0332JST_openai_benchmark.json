@@ -1,0 +1,150 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 385,
+      "content_preview": "A local AI workstation benefits from fast memory because it allows for efficient and quick access to the vast amounts of data, models, and algorithms required for training and running machine learning tasks. Fast memory enables faster processing times, reduced latency in model inference, and improved overall system performance. This is crucial for real-time applications or scenarios",
+      "decode_s": 1.0831686930032447,
+      "decode_tok_s": 59.08590269771422,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780857218,
+        "id": "a641ea08fe9e4d2591763f377bfacd21",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 108
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.1263264190056361,
+      "ttft_s": 0.04315772600239143,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "content_chars": 834,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is using the correct and intended GPU kernels for.\n\n### Methodology:\n\n1 that the LLM server uses the appropriate GPU kernels by verifying the kernel usage through specific checks.\n\n#### Tools Required:\n- **NVIDIA Command Line Interface (nvidia-smi)**\n- **Python Scripting**\n- **Monitoring Tools (e.g., Prometheus, Grafana)**\n\n#### Steps to Validate GPU Kernel Usag",
+      "decode_s": 3.2858273640158586,
+      "decode_tok_s": 58.43277163695607,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780857221,
+        "id": "c9ae2e2555034dd3ab29a511b0143f86",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 56,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 248
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.3208632369933184,
+      "ttft_s": 0.0350358729774598,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 67,
+      "content_chars": 354,
+      "content_preview": " capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility. The pressure must capture environment metadata, backend,",
+      "decode_s": 1.0993216740025673,
+      "decode_tok_s": 58.21771872010825,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780857222,
+        "id": "3f159025850041c3aa24543913d26ce8",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2433
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.1350384420074988,
+      "ttft_s": 0.03571676800493151,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2433
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T18:33:42Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "before",
+  "run_id": "sglang_qwen25_1_5b_fp8kv_20260608T0332JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T18:33:36Z",
+  "url": "http://127.0.0.1:30001"
+}

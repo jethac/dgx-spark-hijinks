@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16 NVIDIA 26.05 container smoke passed; hikarioyama SM120 NVFP4 KV fork audited; SGLang SM12x FP4 KV gate pytest passed; no SGLang NVFP4 KV serving run has passed on GB10/SM121.
+Status: BF16 and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; hikarioyama SM120 NVFP4 KV fork audited; SGLang SM12x FP4 KV gate pytest passed; no SGLang NVFP4 KV serving run has passed on GB10/SM121.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -45,6 +45,28 @@ Before NVFP4:
 - establish BF16 or fp8 KV quality and speed: BF16 baseline captured for Qwen; fp8 is still unproven on our GB10 SGLang path
 
 Only then test `fp4_e2m1`.
+
+## 2026-06-08 Qwen fp8-vs-fp4 KV Probe
+
+Artifacts:
+
+- `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_openai_benchmark.json`
+- `results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log`
+
+Result:
+
+- fp8 KV with FlashInfer attention serves `Qwen/Qwen2.5-1.5B-Instruct` on GB10 and records `NVIDIA_GB10:sm_121:sms_48`.
+- fp8 KV allocated `3,113,713` KV tokens and decoded around `58-59 tok/s`.
+- stock `fp4_e2m1` with FlashInfer attention fails before health because `KV4Compatibility` rejects FlashInfer for MHA FP4 KV.
+- stock `fp4_e2m1` with Triton attention allocates `5,534,509` KV tokens, about `1.78x` fp8 capacity, then fails before health because `KVFP4QuantizeUtil` cannot be imported from `kvfp4_tensor.py`.
+
+Interpretation:
+
+- This confirms fp8 is a valid SGLang Qwen comparator on our GB10.
+- This also confirms stock NVIDIA 26.05 SGLang does not yet provide a working `fp4_e2m1` serving row for this Qwen model.
+- The FlashInfer failure is directly relevant to the `jethac/sglang` SM12x FP4 KV gate patch. The Triton failure shows there is a second integration gap after allocation.
 
 ## 2026-06-07 Smoke Result
 
@@ -151,7 +173,7 @@ Known risk: on `aarch64`, SGLang may JIT some kernels at first launch instead of
 
 ## NVFP4 Rule
 
-Use BF16 as the proven SGLang baseline on our Spark today. fp8 is the desired comparator and likely default for small models, but it should not be called proven until a GB10 SGLang fp8 smoke passes. Keep NVFP4 KV unblessed until it passes on Spark.
+Use BF16 and fp8 as the proven SGLang Qwen baselines on our Spark today. Keep NVFP4/FP4 KV unblessed until it passes on Spark with a quality check.
 
 Current fork verification:
 

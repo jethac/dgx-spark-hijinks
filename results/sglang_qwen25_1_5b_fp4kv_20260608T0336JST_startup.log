@@ -1,0 +1,49 @@
+sglang-qwen-fp4-20260608T0336JST Exited (1) 2 seconds ago
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.2 driver version 595.58.03 with kernel driver version 580.159.03.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+
+/usr/local/lib/python3.12/dist-packages/torchao/quantization/quant_api.py:1674: SyntaxWarning: invalid escape sequence '\.'
+  """Configuration class for applying different quantization configs to modules or parameters based on their fully qualified names (FQNs).
+W0607 18:35:35.143000 1 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0607 18:35:35.190000 1 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+/usr/local/lib/python3.12/dist-packages/sglang/launch_server.py:54: UserWarning: 'python -m sglang.launch_server' is still supported, but 'sglang serve' is the recommended entrypoint.
+  Example: sglang serve --model-path <model> [options]
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-06-07 18:35:38] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[2026-06-07 18:35:39] Failed to get GPU memory capacity from nvidia-smi. Falling back to torch.cuda.mem_get_info(). Reported total GPU memory per device (MiB): [122501], using min: 122501 MiB.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.12/dist-packages/sglang/launch_server.py", line 66, in <module>
+    server_args = prepare_server_args(sys.argv[1:])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sglang/srt/server_args.py", line 7329, in prepare_server_args
+    return ServerArgs.from_cli_args(raw_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sglang/srt/server_args.py", line 6715, in from_cli_args
+    return cls(**{attr: getattr(args, attr) for attr in attrs})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 371, in __init__
+  File "/usr/local/lib/python3.12/dist-packages/sglang/srt/server_args.py", line 852, in __post_init__
+    self._handle_kv4_compatibility()
+  File "/usr/local/lib/python3.12/dist-packages/sglang/srt/server_args.py", line 2837, in _handle_kv4_compatibility
+    self.attention_backend in KV4_ATTENTION_MHA_BACKEND_CHOICES
+AssertionError: KV4 MHA expects attention_backend to be one of ['triton', 'torch_native', 'flex_attention', 'trtllm_mha'], but got flashinfer

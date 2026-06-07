@@ -100,6 +100,20 @@ python3 scripts/runtime_process_probe.py \
   --output results/runtime_probe_vllm.json
 ```
 
+To record a complete OpenAI-compatible serving row manifest:
+
+```bash
+python3 scripts/record_openai_serving_row.py \
+  --backend sglang \
+  --phase before \
+  --run-id RUN_ID \
+  --url http://127.0.0.1:30000 \
+  --model MODEL_NAME \
+  --kv-cache-dtype fp8_e4m3 \
+  --attention-backend flashinfer \
+  --server-log results/RUN_ID_server.log
+```
+
 To annotate captured benchmark and server failures:
 
 ```bash
