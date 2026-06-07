@@ -24,6 +24,7 @@ Next vLLM proof lane: AEON Gemma is now locally reproduced; AEON Qwen3.6 NVFP4+D
 - GGUF/llama.cpp status: [docs/GGUF_LLAMA_CPP_STATUS.md](docs/GGUF_LLAMA_CPP_STATUS.md)
 - Issue tracker map: [docs/ISSUE_TRACKER.md](docs/ISSUE_TRACKER.md)
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
+- Solution coverage audit: `scripts/solution_coverage_audit.py`
 - AEON prior-art port map: [docs/AEON_PRIOR_ART_PORT_MAP.md](docs/AEON_PRIOR_ART_PORT_MAP.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
 - Qwen notes: [docs/QWEN_ON_DGX_SPARK.md](docs/QWEN_ON_DGX_SPARK.md)
@@ -128,6 +129,13 @@ python3 scripts/qwen_speed_lane.py \
   --input tasks/qwen_speed_lane_sample.jsonl \
   --campaign-id qwen_speed_lane_RUN_ID \
   --continue-on-error
+```
+
+To verify that the solution status, issue tracker, and required Qwen lane still cover the solution plan:
+
+```bash
+python3 scripts/solution_coverage_audit.py \
+  --output results/solution_coverage_audit_RUN_ID.json
 ```
 
 To reproduce AEON-7's vLLM NVFP4+DFlash rows:

@@ -1,0 +1,401 @@
+{
+  "extra_status_ids": [],
+  "issue_rows": [
+    {
+      "area": "sm_121 target naming and build flags",
+      "issue": "[#1](https://github.com/jethac/dgx-spark-hijinks/issues/1)",
+      "plan_ids": [
+        "1"
+      ],
+      "status": "build/JIT target log audit added"
+    },
+    {
+      "area": "ARM64 + CUDA 13 wheel/container matrix",
+      "issue": "[#2](https://github.com/jethac/dgx-spark-hijinks/issues/2)",
+      "plan_ids": [
+        "2"
+      ],
+      "status": "first matrix added; clean blessed stack still missing"
+    },
+    {
+      "area": "Gemma 4 12B vLLM support",
+      "issue": "[#3](https://github.com/jethac/dgx-spark-hijinks/issues/3)",
+      "plan_ids": [
+        "6"
+      ],
+      "status": "source/precompiled probe serves; clean release container pending"
+    },
+    {
+      "area": "kernel dispatch and backend observability",
+      "issue": "[#4](https://github.com/jethac/dgx-spark-hijinks/issues/4)",
+      "plan_ids": [
+        "3",
+        "13"
+      ],
+      "status": "build/JIT target audit plus existing runtime probes; backend-specific serving logs still pending"
+    },
+    {
+      "area": "spark-doctor environment evidence",
+      "issue": "[#5](https://github.com/jethac/dgx-spark-hijinks/issues/5)",
+      "plan_ids": [
+        "13"
+      ],
+      "status": "in progress"
+    },
+    {
+      "area": "vLLM Spark runtime path",
+      "issue": "[#6](https://github.com/jethac/dgx-spark-hijinks/issues/6)",
+      "plan_ids": [
+        "5"
+      ],
+      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; `jethac/vllm@6804e1b` carries AEON Qwen source fixes; clean fork parity and Qwen reproduction pending"
+    },
+    {
+      "area": "NVFP4 on Spark",
+      "issue": "[#7](https://github.com/jethac/dgx-spark-hijinks/issues/7)",
+      "plan_ids": [
+        "3",
+        "7"
+      ],
+      "status": "SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing/deswizzle branches pushed; standalone GB10 FA2 NVFP4 KV passes small and Gemma 4 26B sliding shapes; Gemma 4 26B global `D=512` fails; SGLang integration and serving proof pending"
+    },
+    {
+      "area": "llama.cpp / lm-eval GGUF accuracy",
+      "issue": "[#8](https://github.com/jethac/dgx-spark-hijinks/issues/8)",
+      "plan_ids": [
+        "8"
+      ],
+      "status": "native loglikelihood adapter prototype and tiny JSONL task harness added; live llama-server proof pending"
+    },
+    {
+      "area": "HF fallback telemetry and containment",
+      "issue": "[#9](https://github.com/jethac/dgx-spark-hijinks/issues/9)",
+      "plan_ids": [
+        "9"
+      ],
+      "status": "telemetry wrapper added"
+    },
+    {
+      "area": "single-machine benchmark redesign",
+      "issue": "[#10](https://github.com/jethac/dgx-spark-hijinks/issues/10)",
+      "plan_ids": [
+        "12"
+      ],
+      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, and MTP/spec-decode wrapping exist"
+    },
+    {
+      "area": "public recipes and blessed stack docs",
+      "issue": "[#11](https://github.com/jethac/dgx-spark-hijinks/issues/11)",
+      "plan_ids": [
+        "4",
+        "14",
+        "15"
+      ],
+      "status": "vLLM/SGLang recipes require build/JIT target audit paths; compatibility board added"
+    },
+    {
+      "area": "multi-Spark future work",
+      "issue": "[#12](https://github.com/jethac/dgx-spark-hijinks/issues/12)",
+      "plan_ids": [
+        "11"
+      ],
+      "status": "blocked on hardware"
+    },
+    {
+      "area": "Spark-specific performance tuning",
+      "issue": "[#13](https://github.com/jethac/dgx-spark-hijinks/issues/13)",
+      "plan_ids": [
+        "10"
+      ],
+      "status": "FlashInfer proxy null result recorded; SM-count-aware run keys added; serving-path tuning pending"
+    },
+    {
+      "area": "SGLang Spark runtime path",
+      "issue": "[#14](https://github.com/jethac/dgx-spark-hijinks/issues/14)",
+      "plan_ids": [
+        "7a"
+      ],
+      "status": "BF16 Qwen passed; Gemma E2B failed; NVFP4 tracked in #18"
+    },
+    {
+      "area": "upstream forks, submodules, and worktrees",
+      "issue": "[#15](https://github.com/jethac/dgx-spark-hijinks/issues/15)",
+      "plan_ids": [
+        "14",
+        "14a"
+      ],
+      "status": "FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed; vLLM Qwen branch advanced to AEON source patch coverage; AEON port map added for SGLang/llama.cpp counterpart decisions"
+    },
+    {
+      "area": "LiteRT-LM on Spark",
+      "issue": "[#16](https://github.com/jethac/dgx-spark-hijinks/issues/16)",
+      "plan_ids": [
+        "7b"
+      ],
+      "status": "optional side runtime; CPU path proven; GPU chat crash open"
+    },
+    {
+      "area": "llama.cpp practical serving path",
+      "issue": "[#17](https://github.com/jethac/dgx-spark-hijinks/issues/17)",
+      "plan_ids": [
+        "8a"
+      ],
+      "status": "blessed for Gemma 4 26B Q4_0 and Qwen2.5 1.5B Q4_K_M serving"
+    },
+    {
+      "area": "SGLang NVFP4 KV on Spark",
+      "issue": "[#18](https://github.com/jethac/dgx-spark-hijinks/issues/18)",
+      "plan_ids": [
+        "7",
+        "7a"
+      ],
+      "status": "`jethac/sglang@98ad46961` clears SM12x FP4 KV gate and alias blockers; patched overlay shows 1.78x fp8 pool potential and can serve only with graph paths disabled at 0.276 tok/s; clean graph-compatible serving still pending"
+    },
+    {
+      "area": "before/after GB10 benchmark protocol",
+      "issue": "[#19](https://github.com/jethac/dgx-spark-hijinks/issues/19)",
+      "plan_ids": [
+        "10",
+        "12",
+        "13"
+      ],
+      "status": "SM-count-aware hardware comparison keys and Qwen speed-lane runner added"
+    },
+    {
+      "area": "Qwen speed and capacity benchmarks",
+      "issue": "[#20](https://github.com/jethac/dgx-spark-hijinks/issues/20)",
+      "plan_ids": [
+        "qwen-speed"
+      ],
+      "status": "SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 weights downloaded and `jethac/vllm@6804e1b` now carries AEON source fixes; `scripts/qwen_speed_lane.py` now records already-running Qwen servers, but image pull/registration and host reachability still block vLLM serving"
+    }
+  ],
+  "missing_issue_plan_ids": [],
+  "missing_status_ids": [],
+  "ok": true,
+  "qwen_speed_lane": {
+    "checks": [
+      {
+        "name": "readme_fixed_criteria_mentions_qwen_speed_capacity",
+        "ok": true,
+        "path": "README.md"
+      },
+      {
+        "name": "benchmark_protocol_requires_qwen_and_gemma",
+        "ok": true,
+        "path": "docs/BENCHMARK_PROTOCOL.md"
+      },
+      {
+        "name": "qwen_notes_doc_exists",
+        "ok": true,
+        "path": "docs/QWEN_ON_DGX_SPARK.md"
+      },
+      {
+        "name": "qwen_speed_lane_runner_exists",
+        "ok": true,
+        "path": "scripts/qwen_speed_lane.py"
+      },
+      {
+        "name": "qwen_speed_lane_sample_exists",
+        "ok": true,
+        "path": "tasks/qwen_speed_lane_sample.jsonl"
+      }
+    ],
+    "issue_row_ok": true
+  },
+  "schema": "solution-coverage-audit/v1",
+  "solution_headings": [
+    {
+      "acceptance_items": 2,
+      "id": "1",
+      "title": "Name The Target Correctly"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "2",
+      "title": "Fix The Wheel And Container Matrix"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "3",
+      "title": "Make Kernel Dispatch Architecture-Aware"
+    },
+    {
+      "acceptance_items": 2,
+      "id": "4",
+      "title": "Separate Datacenter Blackwell From Spark Blackwell"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "5",
+      "title": "Fix vLLM For Spark As A First-Class Runtime"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "6",
+      "title": "Fix Gemma 4 12B Support"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "7",
+      "title": "Make NVFP4 Real"
+    },
+    {
+      "acceptance_items": 4,
+      "id": "7a",
+      "title": "Add SGLang As A First-Class Spark Runtime"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "7b",
+      "title": "Evaluate LiteRT-LM As An Optional Side Runtime"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "8",
+      "title": "Fix llama.cpp / lm-eval Accuracy"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "8a",
+      "title": "Bless llama.cpp As A Practical Serving Path"
+    },
+    {
+      "acceptance_items": 2,
+      "id": "9",
+      "title": "Tame HF Fallback"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "10",
+      "title": "Tune For GB10 SM Count And Unified LPDDR5x"
+    },
+    {
+      "acceptance_items": 2,
+      "id": "11",
+      "title": "Handle Multi-Spark Correctly"
+    },
+    {
+      "acceptance_items": 3,
+      "id": "12",
+      "title": "Improve Benchmark Design"
+    },
+    {
+      "acceptance_items": 2,
+      "id": "13",
+      "title": "Add Observability For \"Am I Using The Hardware?\""
+    },
+    {
+      "acceptance_items": 2,
+      "id": "14",
+      "title": "Coordinate Upstream Ownership"
+    },
+    {
+      "acceptance_items": 1,
+      "id": "14a",
+      "title": "Use Forks, Submodules, Worktrees, And Subagents"
+    },
+    {
+      "acceptance_items": 2,
+      "id": "15",
+      "title": "Publish Honest Recipes"
+    }
+  ],
+  "status_rows": [
+    {
+      "id": "1",
+      "status": "partial",
+      "title": "sm_121 target naming and build flags"
+    },
+    {
+      "id": "2",
+      "status": "partial",
+      "title": "Wheel and container matrix"
+    },
+    {
+      "id": "3",
+      "status": "partial",
+      "title": "Kernel dispatch architecture awareness"
+    },
+    {
+      "id": "4",
+      "status": "partial",
+      "title": "Separate datacenter Blackwell from Spark Blackwell"
+    },
+    {
+      "id": "5",
+      "status": "partial",
+      "title": "vLLM first-class Spark runtime"
+    },
+    {
+      "id": "6",
+      "status": "partial",
+      "title": "Gemma 4 12B support"
+    },
+    {
+      "id": "7",
+      "status": "mixed",
+      "title": "NVFP4 end to end"
+    },
+    {
+      "id": "7a",
+      "status": "partial",
+      "title": "SGLang first-class Spark runtime"
+    },
+    {
+      "id": "7b",
+      "status": "partial",
+      "title": "LiteRT-LM optional side runtime"
+    },
+    {
+      "id": "8",
+      "status": "missing",
+      "title": "llama.cpp / lm-eval accuracy"
+    },
+    {
+      "id": "8a",
+      "status": "strong",
+      "title": "llama.cpp practical serving path"
+    },
+    {
+      "id": "9",
+      "status": "partial",
+      "title": "HF fallback containment"
+    },
+    {
+      "id": "10",
+      "status": "partial",
+      "title": "GB10 SM count and memory tuning"
+    },
+    {
+      "id": "11",
+      "status": "missing",
+      "title": "Multi-Spark"
+    },
+    {
+      "id": "12",
+      "status": "partial",
+      "title": "Improve benchmark design"
+    },
+    {
+      "id": "13",
+      "status": "partial",
+      "title": "Observability"
+    },
+    {
+      "id": "14",
+      "status": "partial",
+      "title": "Coordinate upstream ownership"
+    },
+    {
+      "id": "14a",
+      "status": "partial",
+      "title": "Forks, submodules, worktrees, and subagents"
+    },
+    {
+      "id": "15",
+      "status": "partial",
+      "title": "Publish honest recipes"
+    }
+  ]
+}

@@ -253,6 +253,12 @@
   - sources: local `CODEX_REPORT_AEON7.md`, AEON Qwen patch directory, AEON Gemma repo, AEON `vllm-dflash`, and current `jethac` forks.
   - conclusion: literal AEON patches are vLLM internals and are already represented in `jethac/vllm@6804e1b`; SGLang and llama.cpp need counterpart experiments, not blind vLLM patch copies.
   - SGLang nuance: current `jethac/sglang@98ad46961` already has DFlash-specific surfaces, so the next useful step is a serving proof after ordinary Qwen/Gemma rows are stable.
+- Added a mechanical solution coverage audit.
+  - script: `scripts/solution_coverage_audit.py`
+  - audit artifact: `results/solution_coverage_audit_20260608.json`
+  - status doc change: `docs/SOLUTIONS_STATUS.md` now preserves every numbered solution-plan row through `15` instead of folding benchmark design, observability, upstream coordination, forks, and recipes into unrelated row numbers.
+  - issue tracker change: `docs/ISSUE_TRACKER.md` now records solution-plan IDs separately from GitHub issue numbers.
+  - Qwen rule: Qwen speed/capacity is a required cross-cutting benchmark lane alongside Gemma, not a substitute for any numbered solution area and not optional for broad runtime claims.
 
 ## First Benchmark Campaign Summary
 

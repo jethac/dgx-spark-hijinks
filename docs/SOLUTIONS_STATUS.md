@@ -22,9 +22,27 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 9. HF fallback containment | partial | Telemetry wrapper and failure annotator exist. | Historical `returncode=-9` rows need stronger OOM/resource evidence if HF fallback remains in comparisons. |
 | 10. GB10 SM count and memory tuning | partial | Hardware comparison keys include compute capability and SM count; scripts collect `multi_processor_count`. | Performance tuning and regression thresholds across model families remain mostly unproven. |
 | 11. Multi-Spark | missing | Single-unit assumption is documented. | No multi-Spark hardware or TP>1 validation. |
-| 12. Upstream forks/worktrees | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work. | No upstream PRs until matched before/after GB10 story is proven. |
-| 13. Public issue tracking | partial | GitHub issues track vLLM, SGLang, NVFP4, llama.cpp, Qwen, and benchmark protocol progress; `docs/COMPATIBILITY_BOARD.md` now provides the recurring runtime/status board and live-proof queue. | Keep the board current as new rows land; a release-style cadence still needs ongoing maintenance, not just the first board. |
-| 14. Qwen speed lane runner | partial | `scripts/qwen_speed_lane.py` and `tasks/qwen_speed_lane_sample.jsonl` can record already-running vLLM, SGLang, and llama.cpp Qwen servers through the shared row manifest wrapper. | Live GB10 run against all target servers, including vLLM Qwen36 NVFP4+DFlash once image acquisition is fixed. |
+| 12. Improve benchmark design | partial | `scripts/spark_smoke_suite.py`, `scripts/openai_serving_benchmark.py`, telemetry wrapping, failure annotation, and `scripts/qwen_speed_lane.py` split smoke, serving, Qwen speed/capacity, and fragile fallback evidence into narrower phases. | Live rows still need consistent phase completion, size-aware timeout policy, row-level failure explanations, and matched before/after manifests for every claimed runtime path. |
+| 13. Observability | partial | `spark_doctor`, `cuda_so_audit`, `cuda_build_target_audit`, runtime process probes, SM-count-aware hardware keys, and server-log artifact capture exist. | Each blessed runtime still needs a no-silent-fallback artifact proving selected attention, quantization, KV, CUDA graph, and build/JIT targets before and after benchmarks. |
+| 14. Coordinate upstream ownership | partial | GitHub issues track the layer split; `docs/COMPATIBILITY_BOARD.md`, `docs/WHEEL_CONTAINER_MATRIX.md`, and `docs/AEON_PRIOR_ART_PORT_MAP.md` give maintainers a public status board, install matrix, and prior-art map. | Need recurring blessed-stack updates, public reproduction bundles, and upstream issue/PR taxonomy once matched GB10 before/after evidence exists. |
+| 14a. Forks, submodules, worktrees, and subagents | partial | `jethac` FlashInfer, vLLM, and SGLang forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work. | No upstream PRs until matched before/after GB10 story is proven; every future fork change still needs issue branch, worktree path, commit SHA, and reproduction command. |
+| 15. Publish honest recipes | partial | Runtime recipes, compatibility board, wheel/container matrix, blessed-stack notes, and Qwen/Gemma docs now record what works, what is slow, what is broken, and what remains untested. | A clean-unit reproduction for the blessed vLLM/SGLang/llama.cpp stack is still missing, and the recipes must stay tied to exact commands, versions, artifacts, and go/no-go decisions. |
+
+## Cross-Cutting Required Lanes
+
+| lane | status | current evidence | missing proof |
+|---|---|---|---|
+| Qwen speed and capacity | partial | `docs/QWEN_ON_DGX_SPARK.md`, `docs/BENCHMARK_PROTOCOL.md`, `scripts/qwen_speed_lane.py`, and `tasks/qwen_speed_lane_sample.jsonl` make Qwen a mandatory runtime lane. SGLang Qwen2.5 BF16/auto and fp8 rows exist; llama.cpp Qwen2.5 Q4_K_M rows exist; vLLM Qwen3.6 source compatibility prep exists. | Live GB10 run against all target Qwen servers, especially vLLM Qwen3.6 NVFP4+DFlash once image acquisition is fixed. Broad runtime claims require both Qwen and Gemma rows, not one family generalized to the other. |
+| Gemma compatibility and performance | partial | AEON Gemma 26B NVFP4+DFlash, vLLM Gemma 26B BF16, vLLM Gemma 12B source/precompiled, llama.cpp Gemma 26B Q4_0, and LiteRT-LM Gemma E2B side-runtime rows exist. | Clean official vLLM/SGLang paths, Gemma 12B release-container support, SGLang Gemma serving, and paper-comparable GGUF accuracy remain open. |
+
+## Mechanical Coverage Audit
+
+Run this after changing the solution plan, status table, issue tracker, or Qwen benchmark lane:
+
+```bash
+python3 scripts/solution_coverage_audit.py \
+  --output results/solution_coverage_audit_20260608.json
+```
 
 ## Highest-Leverage Next Proofs
 
