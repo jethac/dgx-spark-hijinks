@@ -2,7 +2,7 @@
 
 Status: blocked pending logprobs compatibility.
 
-The first campaign showed that llama.cpp throughput can work while lm-eval accuracy fails. Do not treat llama-bench throughput as proof that paper-comparable accuracy is available.
+The initial personal benchmark run showed that llama.cpp throughput can work while lm-eval accuracy fails. Do not treat llama-bench throughput as proof that paper-comparable accuracy is available.
 
 ## Preflight
 

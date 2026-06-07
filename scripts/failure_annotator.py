@@ -259,6 +259,51 @@ def json_annotations(path: Path) -> list[Annotation]:
                 details=classification,
             )
         )
+    elif data.get("schema") == "spark-smoke-suite/v1" and not data.get("ok"):
+        for step in data.get("steps") or []:
+            if step.get("ok") is True:
+                continue
+            if step.get("ok") is None and not step.get("required"):
+                continue
+            evidence = (
+                step.get("skip_reason")
+                or step.get("error")
+                or step.get("stderr_tail")
+                or step.get("stdout_tail")
+                or f"returncode={step.get('returncode')}"
+            )
+            failure_class, confidence, causes = classify_text(evidence, step.get("name"))
+            if not step.get("configured") and step.get("required"):
+                failure_class = "missing_required_smoke"
+                confidence = "high"
+                causes = ["required_smoke_not_configured"]
+            elif step.get("timed_out"):
+                failure_class = "timeout"
+                confidence = "high"
+            elif failure_class == "unknown_failure":
+                failure_class = "smoke_step_failed"
+                confidence = "medium"
+            annotations.append(
+                Annotation(
+                    source=str(path),
+                    source_type="spark_smoke_suite",
+                    row=data.get("run_id"),
+                    task=step.get("name"),
+                    backend=step.get("name"),
+                    status="smoke_failed",
+                    returncode=step.get("returncode"),
+                    failure_class=failure_class,
+                    confidence=confidence,
+                    suspected_causes=causes,
+                    evidence=str(evidence)[-500:],
+                    details={
+                        "required": step.get("required"),
+                        "configured": step.get("configured"),
+                        "timed_out": step.get("timed_out"),
+                        "artifact": step.get("artifact"),
+                    },
+                )
+            )
     return annotations
 
 

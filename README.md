@@ -22,6 +22,8 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
+- Remediation matrix: [docs/REMEDIATION_MATRIX.md](docs/REMEDIATION_MATRIX.md)
+- Spark smoke suite: [docs/SPARK_SMOKE_SUITE.md](docs/SPARK_SMOKE_SUITE.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
 - FlashInfer performance hypotheses: [docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md](docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md)
 - Upstream latest release audit: [docs/UPSTREAM_LATEST_RELEASE_AUDIT.md](docs/UPSTREAM_LATEST_RELEASE_AUDIT.md)
@@ -118,6 +120,19 @@ python3 scripts/runtime_availability_matrix.py \
   --output results/runtime_availability.json
 ```
 
+To run the compact Spark smoke suite:
+
+```bash
+python3 scripts/spark_smoke_suite.py \
+  --run-id spark-smoke-before \
+  --vllm-url http://127.0.0.1:8000 \
+  --vllm-model MODEL \
+  --llamacpp-url http://127.0.0.1:18082 \
+  --llamacpp-model MODEL \
+  --hf-command "python3 path/to/tiny_hf_probe.py" \
+  --mtp-command "python3 path/to/tiny_mtp_probe.py"
+```
+
 Runtime tracks:
 
 - vLLM: [recipes/single_spark_vllm.md](recipes/single_spark_vllm.md)
@@ -144,6 +159,6 @@ It is complete when the repo contains a tested, reproducible stack where:
 
 ## Current State
 
-This repo starts from the first Gemma 4 benchmark campaign. That run showed useful vLLM safetensors results for several model rows, but also exposed ecosystem problems around `sm_121` packaging, vLLM model support, HF fallback reliability, GGUF lm-eval logprobs, long benchmark design, and missing observability. A first NVIDIA SGLang 26.05 container smoke now passes on GB10, but it still needs Gemma and NVFP4 validation.
+This repo starts from an initial personal Gemma 4 benchmark run on the machine. That run showed useful vLLM safetensors results for several model rows, but also exposed ecosystem problems around `sm_121` packaging, vLLM model support, HF fallback reliability, GGUF lm-eval logprobs, long benchmark design, and missing observability. A first NVIDIA SGLang 26.05 container smoke now passes on GB10, but it still needs Gemma and NVFP4 validation. LiteRT-LM now has a proven E2B CPU path and benchmarkable GPU path, but GPU chat exits with `returncode=-11` after producing output.
 
 The GitHub Issues are the source of truth for active work. If we need source changes to upstream libraries, the change goes through a `jethac` fork, a submodule under `third_party/`, and an issue-named worktree.

@@ -6,13 +6,13 @@ This report summarizes the PGX Workstation benchmarking work performed so far an
 
 ## Scope
 
-The work executed the Gemma 4 benchmark campaign described by `BENCHMARK_PLAN.md` on `thinkstationpgx-00b4`, with results synchronized into:
+The work monitored and summarized the initial personal Gemma 4 benchmark run described by `BENCHMARK_PLAN.md` on `thinkstationpgx-00b4`, with results synchronized into:
 
 - Remote generated report: `/home/jethac/gemma4-evals/20260606_BENCHMARKING.md`
 - Local generated report: `B:\workshop\20260606_BENCHMARKING.md`
 - This narrative report: `B:\workshop\BENCHMARKING_REPORT.md`
 
-The campaign was not terminated. Monitoring was stopped per request; the last observed remote campaign was still running.
+The personal benchmark run was not terminated. Monitoring was stopped per request; the last observed remote process was still running.
 
 ## Campaign Setup
 
@@ -28,7 +28,7 @@ The manifest contained:
 - 152 accuracy rows
 - 248 MTP rows
 
-The campaign stages were:
+The personal benchmark run stages were:
 
 1. smoke safetensors
 2. full accuracy
@@ -66,7 +66,7 @@ At that snapshot:
 | throughput JSONL rows observed | 2 |
 | MTP JSONL rows observed | 2 |
 
-The generated report showed the throughput and MTP sections as partial/early data only. The full throughput and MTP stages had not yet run in the active campaign by the last synced snapshot.
+The generated report showed the throughput and MTP sections as partial/early data only. The full throughput and MTP stages had not yet run in the active personal benchmark process by the last synced snapshot.
 
 ## Last Live Observation
 
@@ -147,7 +147,7 @@ Only early throughput/MTP rows were present in the synced snapshot:
 | GGUF throughput | `google-e2b-qat-q4_0...gguf`, llama.cpp, prompt `3923.63 tok/s`, generation `122.11 tok/s` |
 | MTP speed | `mtp-12b-ud-iq2_m-q8_0...`, prompt `1042.40 tok/s`, generation `36.40 tok/s` |
 
-The active campaign had not reached the full throughput or MTP stages by the last synced report.
+The active personal benchmark run had not reached the full throughput or MTP stages by the last synced report.
 
 ## Open State
 
@@ -156,9 +156,9 @@ At the point monitoring stopped:
 - Smoke was complete.
 - Full accuracy was still running.
 - The active row was `unsloth-26b-a4b-baseline-bf16` HellaSwag.
-- Throughput stages were still pending in the active campaign.
-- MTP stage was still pending in the active campaign.
-- The final generated report was a current snapshot, not final campaign completion.
+- Throughput stages were still pending in the active personal run.
+- MTP stage was still pending in the active personal run.
+- The final generated report was a current snapshot, not completion of that personal run.
 
 ## Files
 

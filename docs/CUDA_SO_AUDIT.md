@@ -49,7 +49,7 @@ Important objects:
 
 ## Interpretation
 
-This does not prove the current vLLM stack is broken on Spark. The first benchmark campaign did run several vLLM safetensors rows successfully on GB10.
+This does not prove the current vLLM stack is broken on Spark. The initial personal benchmark run did run several vLLM safetensors rows successfully on GB10.
 
 It does prove that the current installed extension set does not carry explicit `sm_121` SASS in the inspected objects. The general vLLM extensions carry `sm_120`, while some attention/MLA objects are clearly older or datacenter-specific targets.
 

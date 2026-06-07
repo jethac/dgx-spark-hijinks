@@ -58,6 +58,7 @@ Keep this short enough to run repeatedly on one unit.
    - one short deterministic OpenAI-compatible chat request
    - one medium generation request
    - use `scripts/openai_serving_benchmark.py` when the backend exposes an OpenAI-compatible API
+   - use `scripts/spark_smoke_suite.py` before and after larger stack changes so vLLM, SGLang, llama.cpp, HF fallback, MTP/spec decode, and NVFP4 evidence are tracked together
    - for Gemma 4 26B with `vllm/vllm-openai:latest-cu130`, include `--max-num-batched-tokens 4096` on the server; the default 2048 is below Gemma's multimodal item budget and fails before readiness
 
 3. Throughput
@@ -93,7 +94,7 @@ python3 scripts/openai_serving_benchmark.py \
 
 ## Initial Before State
 
-The first imported benchmark campaign is a partial before-state artifact, not a complete protocol run.
+The first imported personal benchmark run is a partial before-state artifact, not a complete protocol run.
 
 Known before-state evidence:
 

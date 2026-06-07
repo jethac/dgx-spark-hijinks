@@ -14,8 +14,10 @@
 - Added the upstream fork/submodule/worktree policy for patched libraries.
 - Added before/after GB10 benchmark protocol for measuring campaign impact.
 - Added NVFP4 dependency map from the FlashInfer/vLLM/SGLang subagent investigation.
+- Added a remediation matrix clarifying that the FlashInfer SM121 `mm_fp4` patch is only one workstream; remaining work includes packaging, vLLM/SGLang integration, Gemma 4 12B, NVFP4 KV, llama.cpp/lm-eval, LiteRT-LM, HF fallback, observability, benchmark proof, and upstream coordination.
 - Added a compact OpenAI-compatible serving benchmark harness and captured the first vLLM before row.
 - Added root-readable runtime process probe evidence for the live vLLM server.
+- Added `scripts/spark_smoke_suite.py` as the compact before/after orchestrator. Core tracks are vLLM, SGLang, llama.cpp, HF fallback telemetry, MTP/spec decode, and NVFP4; LiteRT-LM is opt-in.
 - Reproduced the llama.cpp GGUF logprobs incompatibility with a temporary `llama-server` on port `18081`; server was stopped after the probe.
 - Captured runtime availability matrix showing vLLM/FlashInfer/PyTorch present, SGLang and LiteRT-LM absent, Docker available, and llama.cpp built but not on `PATH`.
 - Started tracking work through GitHub Issues.
@@ -40,10 +42,12 @@
   - vLLM FA3 extension: `sm_90a`
   - vLLM FlashMLA extensions: `sm_100`, `sm_90a`
   - snapshot: `results/cuda_so_audit_vllm_flashinfer_20260607T111023Z.json`
+- Proved llama.cpp `b9536` as a practical Gemma 4 26B Q4_0 serving path with `--reasoning off`.
+- Evaluated LiteRT-LM `0.13.1` on Linux `aarch64`: CPU chat works for Gemma 4 E2B, CPU/GPU benchmark commands work, GPU chat still exits `returncode=-11` after producing `spark-ok`.
 
 ## First Benchmark Campaign Summary
 
-The first campaign was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
+The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
 
 At the last local sync:
 
@@ -57,4 +61,4 @@ At the last local sync:
 - throughput rows observed: 2
 - MTP rows observed: 2
 
-The campaign was still in full accuracy when monitoring stopped. It was not killed.
+That personal benchmark run was still in full accuracy when monitoring stopped. It was not killed.

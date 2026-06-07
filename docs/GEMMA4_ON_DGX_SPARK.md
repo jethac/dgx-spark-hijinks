@@ -2,17 +2,17 @@
 
 Date: 2026-06-07
 
-This report lists the problems encountered while running the Gemma 4 benchmark campaign on the DGX Spark / PGX workstation-class system observed as `NVIDIA GB10`. It covers fatal failures, nonfatal benchmark failures, compatibility issues, runtime and performance issues, and operational problems from setup and monitoring.
+This report lists the problems encountered while running an initial personal Gemma 4 benchmark run on the DGX Spark / PGX workstation-class system observed as `NVIDIA GB10`. It covers fatal failures, nonfatal benchmark failures, compatibility issues, runtime and performance issues, and operational problems from setup and monitoring.
 
-The campaign was still running when monitoring was stopped. The latest local generated benchmark snapshot used for this report was `B:\workshop\20260606_BENCHMARKING.md`, last synced at 2026-06-07 18:40.
+That personal benchmark run was still running when monitoring was stopped. The latest local generated benchmark snapshot used for this report was `B:\workshop\20260606_BENCHMARKING.md`, last synced at 2026-06-07 18:40.
 
 ## Executive Summary
 
-The biggest practical problem was not model loading for the vLLM safetensors rows. Those ran reliably once the campaign settled. The biggest problems were:
+The biggest practical problem was not model loading for the vLLM safetensors rows. Those ran reliably once the personal run settled. The biggest problems were:
 
 - GGUF accuracy through lm-eval was blocked by a llama.cpp API/logprobs compatibility mismatch.
 - HF fallback rows were fragile and repeatedly exited with `returncode=-9`, especially on QAT/unquantized and larger models.
-- Full HellaSwag runs were extremely slow and dominated campaign runtime.
+- Full HellaSwag runs were extremely slow and dominated runtime.
 - Initial timeouts were too short for large model load probes and MTP benchmarking.
 - The benchmark matrix was much larger than the machine could finish quickly: smoke completed, but full accuracy was still running and throughput/MTP stages were still pending when monitoring stopped.
 - A later compact vLLM serving check showed Gemma 4 26B A4B can serve on GB10 at about 24 tok/s decode, but the observed path was BF16/unquantized Triton MoE, not FlashInfer NVFP4.
@@ -68,7 +68,7 @@ After reviewing external SM120/SM121-focused repos, the better conclusion is mor
 
 - The local logs did not show an explicit "unsupported sm120/sm121" or missing cubin error.
 - But several failures line up with known Blackwell/vLLM ecosystem maturity issues.
-- The campaign used conservative TP=1 vLLM execution, so it avoided some known no-P2P multi-GPU hangs.
+- The personal run used conservative TP=1 vLLM execution, so it avoided some known no-P2P multi-GPU hangs.
 
 External SM120 notes from `lna-lab/gemma4-12b-vllm-sm120` identify these relevant issues:
 
@@ -85,7 +85,7 @@ External SM120 notes from `hikarioyama/vllm-nvfp4-kv-sm120` identify a separate 
 - their workaround routes NVFP4 KV through a patched FlashInfer FA2 path with explicit scale-factor strides.
 - this is specifically about `--kv-cache-dtype nvfp4`, not ordinary fp8/bf16 KV paths.
 
-That NVFP4 KV issue was not directly encountered in our benchmark because the campaign did not use the patched NVFP4 KV cache path. It is still relevant for future DGX Spark optimization work, but DGX Spark validation should specifically check `sm_121`, not only `sm_120`.
+That NVFP4 KV issue was not directly encountered in the personal benchmark run because it did not use the patched NVFP4 KV cache path. It is still relevant for future DGX Spark optimization work, but DGX Spark validation should specifically check `sm_121`, not only `sm_120`.
 
 User-provided X/Twitter context from June 5-6, 2026 also points in the same direction: community users are explicitly asking NVIDIA for more attention on `sm120`/`sm121` support for RTX PRO 6000-class systems and DGX Spark, while an NVIDIA representative acknowledged the gap and said the team is trying to put more focus on it. This is not a benchmark artifact, but it supports the interpretation that the failures should be read against an immature RTX/SM120/SM121 inference software ecosystem rather than as isolated local setup mistakes.
 
@@ -129,7 +129,7 @@ Examples from smoke:
 Impact:
 
 - These rows did not advance into the full vLLM accuracy path.
-- The campaign correctly classified them instead of silently falling back without labeling.
+- The personal run correctly classified them instead of silently falling back without labeling.
 
 ### Gemma 4 26B vLLM Needs A Larger Multimodal Batch Token Budget
 
@@ -201,7 +201,7 @@ Impact:
 
 - Full accuracy could not finish quickly even though the system stayed healthy.
 - Each new HellaSwag row required long passive monitoring.
-- The campaign remained in `full_accuracy` for many hours.
+- The personal run remained in `full_accuracy` for many hours.
 
 ### Larger Models Were Slow But Mostly Healthy Under vLLM
 
@@ -246,13 +246,13 @@ Impact:
 
 ### Campaign Was Interrupted Earlier By Exit 137
 
-The campaign log included an earlier smoke stage ending with `rc=137`, followed by resumed smoke and full-accuracy stages.
+The personal benchmark log included an earlier smoke stage ending with `rc=137`, followed by resumed smoke and full-accuracy stages.
 
 Impact:
 
 - This indicates an earlier kill or resource pressure event.
 - The later resumed smoke stage completed with `rc=0`.
-- The active campaign recovered and continued.
+- The active personal run recovered and continued.
 
 ### Monitoring Was Manual And Long-Running
 
@@ -262,12 +262,12 @@ Operational issue:
 
 - After the user interrupted the turn, an old local delayed monitor session no longer accepted stdin.
 - No new long-running monitor was started after the stop request.
-- The remote campaign itself was not killed.
+- The remote personal benchmark process itself was not killed.
 
 Impact:
 
 - Reporting is based on the latest synced generated report and the last observed live state.
-- There may be newer remote results after the stop point if the campaign continued.
+- There may be newer remote results after the stop point if the personal run continued.
 
 ## Result-State Problems
 
@@ -281,11 +281,11 @@ At the last synced snapshot:
 | full accuracy | still running |
 | throughput | only early rows present |
 | MTP | only early rows present |
-| final report stage | not reached by active campaign |
+| final report stage | not reached by active personal run |
 
 Impact:
 
-- `20260606_BENCHMARKING.md` is useful, but not a final end-of-campaign report.
+- `20260606_BENCHMARKING.md` is useful, but not a final end-of-run report.
 - Full throughput and MTP conclusions cannot be drawn from the current snapshot.
 
 ### Pending Work Was Still Large
@@ -338,12 +338,12 @@ Impact:
 2. Keep HF fallback rows labeled and separate; do not merge them into vLLM comparisons.
 3. Consider splitting HellaSwag into a separate long-running campaign, because it dominates wall time.
 4. Keep the larger timeout settings for future smoke and MTP runs.
-5. Before drawing final throughput or MTP conclusions, let the campaign reach those stages or run targeted throughput/MTP subsets directly.
+5. Before drawing final throughput or MTP conclusions, let the personal run reach those stages or run targeted throughput/MTP subsets directly.
 6. For future monitoring, prefer point-in-time remote status checks over local long sleeps if the user may interrupt the session.
 
 ## Last Known Active Problem
 
-When monitoring stopped, the active campaign was still in full accuracy:
+When monitoring stopped, the active personal run was still in full accuracy:
 
 - Active row: `unsloth-26b-a4b-baseline-bf16`
 - Active task: HellaSwag 10-shot

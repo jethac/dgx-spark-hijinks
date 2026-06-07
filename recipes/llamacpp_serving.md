@@ -2,7 +2,7 @@
 
 Status: blessed for practical single-Spark serving; not blessed for lm-eval GGUF accuracy.
 
-The first benchmark campaign showed llama.cpp throughput working for at least one GGUF row. It also showed that GGUF lm-eval accuracy was blocked by a logprobs/API mismatch.
+The initial personal benchmark run showed llama.cpp throughput working for at least one GGUF row. It also showed that GGUF lm-eval accuracy was blocked by a logprobs/API mismatch.
 
 Those are separate problems.
 

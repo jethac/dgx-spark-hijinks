@@ -260,7 +260,7 @@ Acceptance test:
 
 ## 12. Improve Benchmark Design
 
-Weakness: our campaign was too broad to finish quickly, and long HellaSwag rows dominated runtime.
+Weakness: the initial personal benchmark matrix was too broad to finish quickly, and long HellaSwag rows dominated runtime.
 
 Plan:
 
@@ -366,7 +366,7 @@ If I were driving this this week:
 2. Pin one blessed vLLM container and one blessed llama.cpp build.
 3. Retest Gemma 4 12B on a vLLM build with native `gemma4_unified`.
 4. Add a tiny GGUF logprobs compatibility test before any lm-eval GGUF run.
-5. Create a 30-minute Spark smoke suite that covers vLLM, HF fallback, llama.cpp, NVFP4/fp8 KV, and one MTP row.
+5. Create a 30-minute Spark smoke suite that covers vLLM, SGLang, HF fallback, llama.cpp, NVFP4/fp8 KV, and one MTP row. LiteRT-LM is useful but opt-in because it is a side runtime, not the usual Spark performance path.
 6. Publish the known-good stack and the known-bad flags.
 7. File upstream issues with minimal repros, not benchmark dumps.
 
