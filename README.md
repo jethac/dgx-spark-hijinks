@@ -21,6 +21,7 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
+- Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)
 
 ## First Commands
 
@@ -68,6 +69,14 @@ python3 scripts/runtime_process_probe.py \
   --url http://127.0.0.1:8000 \
   --match vllm \
   --output results/runtime_probe_vllm.json
+```
+
+To capture the runtime availability matrix:
+
+```bash
+python3 scripts/runtime_availability_matrix.py \
+  --include-docker-images \
+  --output results/runtime_availability.json
 ```
 
 Runtime tracks:

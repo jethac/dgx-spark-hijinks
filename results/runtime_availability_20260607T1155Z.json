@@ -1,0 +1,132 @@
+{
+  "commands": {
+    "docker": {
+      "available": true,
+      "path": "/usr/bin/docker",
+      "version": {
+        "cmd": [
+          "/usr/bin/docker",
+          "--version"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "Docker version 29.2.1, build a5c7197"
+      }
+    },
+    "litert_lm": {
+      "available": false
+    },
+    "litertlm": {
+      "available": false
+    },
+    "llama-bench": {
+      "available": false
+    },
+    "llama-server": {
+      "available": false
+    },
+    "ollama": {
+      "available": false
+    },
+    "pip": {
+      "available": true,
+      "path": "/usr/bin/pip"
+    },
+    "podman": {
+      "available": false
+    },
+    "python3": {
+      "available": true,
+      "path": "/usr/bin/python3"
+    },
+    "sglang": {
+      "available": false
+    },
+    "uv": {
+      "available": false
+    },
+    "vllm": {
+      "available": false
+    }
+  },
+  "docker_images": {
+    "cmd": [
+      "docker",
+      "images",
+      "--format",
+      "{{.Repository}}:{{.Tag}} {{.ID}}"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "gemma4-vllm:v0.22.1-pip 092bf5799a77\ngemma4-vllm:tf-main 8f838b81510e\nvllm/vllm-openai:latest-cu130 bf05c8a0d56f\nvllm/vllm-openai:cu130-nightly-aarch64 ffa30d66ff5c\nnvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 d1f3dc428c53"
+  },
+  "finished_utc": "2026-06-07T11:44:01Z",
+  "modules": {
+    "flashinfer": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.11.post2"
+    },
+    "litert": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'litert'\")"
+    },
+    "litert_lm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'litert_lm'\")"
+    },
+    "llama_cpp": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'llama_cpp'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "tensorflow": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'tensorflow'\")"
+    },
+    "torch": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/torch/__init__.py",
+      "version": "2.11.0+cu130"
+    },
+    "transformers": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/transformers/__init__.py",
+      "version": "5.10.2"
+    },
+    "triton": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/triton/__init__.py",
+      "version": "3.6.0"
+    },
+    "vllm": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/__init__.py",
+      "version": "0.22.1"
+    }
+  },
+  "ports": {
+    "cmd": [
+      "ss",
+      "-ltnp"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "State  Recv-Q Send-Q               Local Address:Port  Peer Address:PortProcess                             \nLISTEN 0      4096                     127.0.0.1:34757      0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:34783      0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:38987      0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:37909      0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:46433      0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:45803      0.0.0.0:*                                       \nLISTEN 0      4096                 127.0.0.53%lo:53         0.0.0.0:*                                       \nLISTEN 0      4096                    127.0.0.54:53         0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:631        0.0.0.0:*                                       \nLISTEN 0      4096                     127.0.0.1:11000      0.0.0.0:*                                       \nLISTEN 0      5                          0.0.0.0:18080      0.0.0.0:*    users:((\"python3\",pid=398882,fd=3))\nLISTEN 0      2048                       0.0.0.0:8000       0.0.0.0:*                                       \nLISTEN 0      4096                 100.113.98.11:35800      0.0.0.0:*                                       \nLISTEN 0      4096                       0.0.0.0:22         0.0.0.0:*                                       \nLISTEN 0      4096                             *:60387            *:*                                       \nLISTEN 0      4096                         [::1]:631           [::]:*                                       \nLISTEN 0      4096   [fd7a:115c:a1e0::1638:620c]:43060         [::]:*                                       \nLISTEN 0      4096                          [::]:22            [::]:*"
+  },
+  "processes": {
+    "matches": [
+      " 400411  400385 root           46:00 /usr/bin/python3 /usr/local/bin/vllm serve google/gemma-4-E4B-it-qat-w4a16-ct --max-model-len 8192 --limit-mm-per-prompt {\"image\":4,\"audio\":1} --gpu-memory-utilization 0.80 --host 0.0.0.0 --port 8000",
+      " 400721  400411 root           45:13 VLLM::EngineCore"
+    ]
+  },
+  "python": {
+    "executable": "/home/jethac/gemma4-evals/.venv/bin/python",
+    "version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]"
+  },
+  "schema": "runtime-availability-matrix/v1",
+  "started_utc": "2026-06-07T11:43:59Z"
+}
