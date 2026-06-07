@@ -8,7 +8,7 @@ Qwen is a first-class Spark target alongside Gemma. Gemma exercises the hardest 
 
 | runtime | row | status |
 |---|---|---|
-| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | external GB10 prior art reports strong speed and soak stability; local reproduction pending |
+| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | target/drafter weights downloaded locally; GHCR image pull did not register after bounded retries, so serving reproduction is blocked before model load |
 | SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
@@ -32,7 +32,8 @@ Current local setup:
 
 - `scripts/run_aeon_vllm_reproduction.sh qwen36-dflash RUN_ID` records the AEON Qwen reproduction row when `RECORD=1`.
 - preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
-- remaining proof: download weights, start the image, and capture the first local vLLM Qwen36 NVFP4+DFlash row.
+- current blocker: the target and drafter weights are downloaded, but `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not finish/register after two pulls, including a `timeout 900` retry. See `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`.
+- remaining proof: acquire or rebuild the image, start the server, and capture the first local vLLM Qwen36 NVFP4+DFlash row.
 
 Do not claim a fork speedup until server logs prove the selected kernel path and the before/after rows are matched.
 

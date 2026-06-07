@@ -198,6 +198,13 @@
   - warmed compact row: `47.91`, `53.60`, and `98.38 tok/s` across short, medium, and long-prefill cases.
   - backend evidence: `FlashInferCutlassNvFp4LinearKernel`, `VLLM_CUTLASS` NvFp4 MoE, target `TRITON_ATTN`, drafter `FLASH_ATTN`, CUDA graphs, DFlash.
   - caveats: not a `jethac` fork speedup claim; PyTorch arch list reports `sm_120` but not explicit `sm_121`; server log warns about differing NVFP4 global scales across fused parallel layers; accuracy remains separate.
+- Attempted the AEON Qwen3.6 NVFP4+DFlash vLLM reproduction.
+  - run ID: `aeon_qwen36_dflash_20260608T0501JST`
+  - model downloaded: `/home/jethac/models/aeon/qwen36-nvfp4`, about `22G`
+  - drafter downloaded: `/home/jethac/models/aeon/qwen36-dflash`, about `905M`
+  - blocker: `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not finish/register after the initial pull or a bounded `timeout 900` retry.
+  - artifact: `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`
+  - interpretation: this is a container acquisition blocker, not yet a Qwen model-load, runtime, or kernel failure.
 
 ## First Benchmark Campaign Summary
 

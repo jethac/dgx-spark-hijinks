@@ -23,7 +23,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | llama.cpp practical serving path | blessed for Gemma 4 26B Q4_0 and Qwen2.5 1.5B Q4_K_M serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | `jethac/sglang@98ad46961` clears SM12x FP4 KV gate and alias blockers; patched overlay shows 1.78x fp8 pool potential and can serve only with graph paths disabled at 0.276 tok/s; clean graph-compatible serving still pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
 | before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
-| Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; vLLM AEON Qwen36 reproduction runner/preflight ready, serving row pending | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
+| Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 weights downloaded, but GHCR image pull/registration blocked serving | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 
 ## Triage Rules
 

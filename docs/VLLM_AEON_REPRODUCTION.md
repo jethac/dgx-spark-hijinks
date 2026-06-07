@@ -1,6 +1,6 @@
 # vLLM AEON Reproduction
 
-Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash remains pending.
+Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash is blocked before serving by image-pull/registration failure.
 
 AEON-7's public Gemma and Qwen recipes are currently the highest-leverage vLLM prior art for this campaign because they target GB10 / `sm_121a`, NVFP4 weights, and DFlash speculative decoding. Treat them as external evidence until our local artifacts exist.
 
@@ -39,6 +39,8 @@ Preflight artifact: `results/aeon_vllm_reproduction_preflight_20260608T0430JST.m
 
 Gemma reproduction artifact: `results/aeon_gemma26_dflash_20260608T0436JST_summary.md`.
 
+Qwen reproduction attempt artifact: `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`.
+
 ## Preflight Result
 
 Both GHCR images resolve:
@@ -76,7 +78,7 @@ This lane is different from the FlashInfer `b12x` and FA2 NVFP4-KV work:
 
 - Gemma 4's immediate vLLM win comes from NVFP4 weights, correct compressed-tensors loading, FlashInfer CUTLASS NVFP4 linear kernels, vLLM CUTLASS NvFp4 MoE, Triton target attention, CUDA graphs, and DFlash.
 - FA2 NVFP4 KV remains a Qwen/standard-attention capacity lane first; it is not the current Gemma 4 DFlash recipe.
-- The next useful proof is the Qwen3.6 reproduction row, then a matched fork/container after-row if we need local vLLM source changes.
+- The next useful proof is unblocking the Qwen3.6 image/container path, then recording a matched serving row.
 
 ## 2026-06-08 Gemma 26B Result
 
@@ -110,3 +112,27 @@ Caveats:
 - The container reports runtime device capability `[12, 1]`, but `torch.cuda.get_arch_list()` lists `sm_120` and not explicit `sm_121`.
 - The server log does not contain explicit build-target strings accepted by `cuda_build_target_audit.py`.
 - The server warns about differing NVFP4 global scales across fused parallel layers; accuracy still needs a separate check.
+
+## 2026-06-08 Qwen3.6 Attempt
+
+Target:
+
+- image: `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2`
+- model: `AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4`
+- drafter: `z-lab/Qwen3.6-35B-A3B-DFlash`
+
+Result:
+
+- target model downloaded to `/home/jethac/models/aeon/qwen36-nvfp4`, size about `22G`
+- drafter downloaded to `/home/jethac/models/aeon/qwen36-dflash`, size about `905M`
+- first Docker pull reached late layer extraction but never registered the image
+- second bounded pull retry used `timeout 900`; it again reached late `Pull complete` lines but timed out without registering the image
+- no vLLM server or model load started, so this is not a Qwen model/runtime/kernel failure yet
+
+Artifacts:
+
+- summary: `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`
+- pull retry log: `results/aeon_qwen36_dflash_20260608T0501JST_docker_pull_retry.log`
+- post-attempt GPU/process state: `results/aeon_qwen36_dflash_20260608T0501JST_nvidia_smi_after.txt`
+
+Next step: use a more reliable image acquisition path before spending GPU time, for example a longer pull with Docker daemon debug evidence, `skopeo`/`crane` copy into the local daemon, or a source/container build path from the AEON/vLLM recipe.
