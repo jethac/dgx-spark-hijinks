@@ -16,11 +16,13 @@
   - host: `aarch64`
   - driver: `580.159.03`
   - CUDA runtime reported by `nvidia-smi`: `13.0`
+  - `nvcc`: CUDA `13.0`, found through `/usr/local/cuda`
+  - `cuobjdump`: CUDA `13.0`, found through `/usr/local/cuda`
   - PyTorch: `2.11.0+cu130`
   - vLLM: `0.22.1`
   - FlashInfer: `0.6.11.post2`
   - PyTorch arch list: `sm_80`, `sm_90`, `sm_100`, `sm_110`, `sm_120`; no explicit `sm_121`
-  - snapshot: `results/spark_doctor_20260607T110629Z.md`
+  - snapshot: `results/spark_doctor_20260607T110833Z.md`
 
 ## First Benchmark Campaign Summary
 

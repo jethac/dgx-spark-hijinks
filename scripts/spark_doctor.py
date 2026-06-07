@@ -38,6 +38,17 @@ def run(cmd: list[str], timeout: int = 20) -> dict[str, Any]:
         return {"cmd": cmd, "error": repr(exc)}
 
 
+def find_executable(name: str, extra_paths: list[str] | None = None) -> str | None:
+    found = shutil.which(name)
+    if found:
+        return found
+    for raw in extra_paths or []:
+        path = Path(raw)
+        if path.exists() and os.access(path, os.X_OK):
+            return str(path)
+    return None
+
+
 def module_version(name: str) -> dict[str, Any]:
     try:
         mod = importlib.import_module(name)
@@ -85,7 +96,10 @@ def torch_info() -> dict[str, Any]:
 
 def inspect_so(paths: list[str]) -> list[dict[str, Any]]:
     out = []
-    cuobjdump = shutil.which("cuobjdump")
+    cuobjdump = find_executable(
+        "cuobjdump",
+        ["/usr/local/cuda/bin/cuobjdump", "/usr/local/cuda-13.0/bin/cuobjdump"],
+    )
     for raw in paths:
         path = Path(raw)
         item: dict[str, Any] = {"path": str(path), "exists": path.exists()}
@@ -107,18 +121,34 @@ def inspect_so(paths: list[str]) -> list[dict[str, Any]]:
 
 def collect(args: argparse.Namespace) -> dict[str, Any]:
     commands: dict[str, Any] = {}
-    for name, cmd in {
-        "nvidia_smi": ["nvidia-smi"],
-        "nvidia_smi_query": [
+    command_specs = {
+        "nvidia_smi": ("nvidia-smi", ["nvidia-smi"], []),
+        "nvidia_smi_query": (
             "nvidia-smi",
-            "--query-gpu=name,compute_cap,driver_version,memory.total",
-            "--format=csv,noheader",
-        ],
-        "nvcc": ["nvcc", "--version"],
-        "uname": ["uname", "-a"],
-    }.items():
-        if shutil.which(cmd[0]):
-            commands[name] = run(cmd)
+            [
+                "nvidia-smi",
+                "--query-gpu=name,compute_cap,driver_version,memory.total",
+                "--format=csv,noheader",
+            ],
+            [],
+        ),
+        "nvcc": (
+            "nvcc",
+            ["nvcc", "--version"],
+            ["/usr/local/cuda/bin/nvcc", "/usr/local/cuda-13.0/bin/nvcc"],
+        ),
+        "cuobjdump": (
+            "cuobjdump",
+            ["cuobjdump", "--version"],
+            ["/usr/local/cuda/bin/cuobjdump", "/usr/local/cuda-13.0/bin/cuobjdump"],
+        ),
+        "uname": ("uname", ["uname", "-a"], []),
+    }
+    for name, (exe_name, cmd, extra_paths) in command_specs.items():
+        exe = find_executable(exe_name, extra_paths)
+        if exe:
+            resolved_cmd = [exe] + cmd[1:]
+            commands[name] = run(resolved_cmd)
         else:
             commands[name] = {"available": False, "cmd": cmd}
 
