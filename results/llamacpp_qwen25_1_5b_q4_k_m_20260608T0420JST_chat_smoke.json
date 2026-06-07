@@ -1,0 +1,44 @@
+{
+  "content": "spark-ok",
+  "elapsed_s": 0.076,
+  "endpoint": "http://127.0.0.1:18083/v1/chat/completions",
+  "model": "qwen25-1.5b-q4_k_m-gguf",
+  "ok": true,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "spark-ok",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1780859851,
+    "id": "chatcmpl-vrDjZ51rTH8oDiM32ykYjUKUxwhtrbdD",
+    "model": "qwen25-1.5b-q4_k_m-gguf",
+    "object": "chat.completion",
+    "system_fingerprint": "b9536-308f61c31",
+    "timings": {
+      "cache_n": 0,
+      "predicted_ms": 15.939,
+      "predicted_n": 3,
+      "predicted_per_second": 188.21757952192735,
+      "predicted_per_token_ms": 5.313,
+      "prompt_ms": 36.061,
+      "prompt_n": 37,
+      "prompt_per_second": 1026.0392113363469,
+      "prompt_per_token_ms": 0.9746216216216216
+    },
+    "usage": {
+      "completion_tokens": 3,
+      "prompt_tokens": 37,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 40
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

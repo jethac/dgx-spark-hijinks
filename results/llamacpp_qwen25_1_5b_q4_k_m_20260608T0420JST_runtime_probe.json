@@ -1,0 +1,162 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 0 %"
+    }
+  },
+  "finished_utc": "2026-06-07T19:18:31Z",
+  "match": "llama-server",
+  "packages": {
+    "flashinfer": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.11.post2"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/torch/__init__.py",
+      "version": "2.11.0+cu130"
+    },
+    "transformers": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/transformers/__init__.py",
+      "version": "5.10.2"
+    },
+    "triton": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/triton/__init__.py",
+      "version": "3.6.0"
+    },
+    "vllm": {
+      "available": true,
+      "file": "/home/jethac/gemma4-evals/.venv/lib/python3.12/site-packages/vllm/__init__.py",
+      "version": "0.22.1"
+    }
+  },
+  "pids": [
+    571393
+  ],
+  "platform": {
+    "executable": "/home/jethac/gemma4-evals/.venv/bin/python",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "/home/jethac/src/llama.cpp-b9536/build/bin/llama-server",
+        "-m",
+        "/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+        "-a",
+        "qwen25-1.5b-q4_k_m-gguf",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "18083",
+        "--ctx-size",
+        "8192",
+        "-ngl",
+        "999"
+      ],
+      "cwd": {
+        "path": "/home/jethac"
+      },
+      "environment": {
+        "values": {}
+      },
+      "maps": {
+        "matched_count": 5,
+        "matched_paths": [
+          "/home/jethac/src/llama.cpp-b9536/build/bin/libggml-cuda.so.0.13.1",
+          "/usr/lib/aarch64-linux-gnu/libcuda.so.580.159.03",
+          "/usr/local/cuda-13.0/targets/sbsa-linux/lib/libcublas.so.13.1.1.3",
+          "/usr/local/cuda-13.0/targets/sbsa-linux/lib/libcublasLt.so.13.1.1.3",
+          "/usr/local/cuda-13.0/targets/sbsa-linux/lib/libcudart.so.13.0.96"
+        ]
+      },
+      "pid": 571393,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "llama-server",
+        "PPid": "1",
+        "Pid": "571393",
+        "State": "S (sleeping)",
+        "Tgid": "571393",
+        "Threads": "24",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "1414184 kB",
+        "VmRSS": "626416 kB",
+        "VmSize": "50481744 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "aliases": [
+            "qwen25-1.5b-q4_k_m-gguf"
+          ],
+          "created": 1780859911,
+          "id": "qwen25-1.5b-q4_k_m-gguf",
+          "meta": {
+            "n_ctx": 8192,
+            "n_ctx_train": 32768,
+            "n_embd": 1536,
+            "n_params": 1777088000,
+            "n_vocab": 151936,
+            "size": 1111370240,
+            "vocab_type": 2
+          },
+          "object": "model",
+          "owned_by": "llamacpp",
+          "tags": []
+        }
+      ],
+      "models": [
+        {
+          "capabilities": [
+            "completion"
+          ],
+          "description": "",
+          "details": {
+            "families": [
+              ""
+            ],
+            "family": "",
+            "format": "gguf",
+            "parameter_size": "",
+            "parent_model": "",
+            "quantization_level": ""
+          },
+          "digest": "",
+          "model": "qwen25-1.5b-q4_k_m-gguf",
+          "modified_at": "",
+          "name": "qwen25-1.5b-q4_k_m-gguf",
+          "parameters": "",
+          "size": "",
+          "tags": [
+            ""
+          ],
+          "type": "model"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-07T19:18:30Z",
+  "url": "http://127.0.0.1:18083"
+}

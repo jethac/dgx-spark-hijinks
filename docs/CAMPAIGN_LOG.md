@@ -174,6 +174,15 @@
 - Added `scripts/record_openai_serving_row.py`.
   - purpose: capture smoke, benchmark, optional runtime/CUDA audits, and a manifest for one already-running OpenAI-compatible server.
   - verification: `python -m py_compile` passed and `--dry-run` emits relative artifact paths and portable command records.
+- Captured llama.cpp Qwen2.5 1.5B Q4_K_M serving evidence.
+  - model: `Qwen/Qwen2.5-1.5B-Instruct-GGUF`, file `qwen2.5-1.5b-instruct-q4_k_m.gguf`.
+  - binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`, build `308f61c31 (9536)`.
+  - artifact prefix: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST`.
+  - server log: `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, `BLACKWELL_NATIVE_FP4 = 1`.
+  - compact OpenAI serving decode: `175.19`, `174.86`, and `166.66 tok/s` on short, medium, and long-prefill cases.
+  - `llama-bench`: `pp512 12505.79 +/- 615.87 tok/s`, `tg128 178.10 +/- 0.95 tok/s`.
+  - logprobs probe: still not lm-eval compatible; response exposes `logprobs.content` but not `tokens` and `token_logprobs`.
+  - conclusion: practical Qwen GGUF serving is proven for llama.cpp on GB10; GGUF accuracy and native FP4/MXFP4 dispatch remain separate workstreams.
 
 ## First Benchmark Campaign Summary
 

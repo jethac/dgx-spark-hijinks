@@ -1,0 +1,14 @@
+run_id=llamacpp-qwen25-1-5b-q4-k-m-20260608T0420JST
+binary=/home/jethac/src/llama.cpp-b9536/build/bin/llama-server
+bench_binary=/home/jethac/src/llama.cpp-b9536/build/bin/llama-bench
+build=308f61c31 (9536)
+model_repo=Qwen/Qwen2.5-1.5B-Instruct-GGUF
+model_file=qwen2.5-1.5b-instruct-q4_k_m.gguf
+model=/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf
+alias=qwen25-1.5b-q4_k_m-gguf
+port=18083
+host=0.0.0.0
+ctx_size=8192
+gpu_layers=999
+started_utc=2026-06-07T19:16:00Z
+notes=llama.cpp build cannot use -hf HTTPS download; model was downloaded with huggingface_hub from the benchmark venv.

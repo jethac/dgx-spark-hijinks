@@ -28,6 +28,7 @@ From the initial personal Gemma 4 benchmark run:
 - NVIDIA SGLang `26.05-py3` served `Qwen/Qwen2.5-1.5B-Instruct` on GB10 through the OpenAI-compatible API.
 - stock llama.cpp CUDA throughput worked for at least the early GGUF throughput row.
 - llama.cpp `b9536` serves Gemma 4 26B Q4_0 through the OpenAI-compatible API with `--reasoning off`; compact decode was about 76 tok/s.
+- llama.cpp `b9536` serves Qwen2.5 1.5B Q4_K_M GGUF through the OpenAI-compatible API; compact decode was about 167-175 tok/s.
 - Optional LiteRT-LM `0.13.1` CPU chat serves Gemma 4 E2B and returns `spark-ok`.
 - Optional LiteRT-LM `0.13.1` GPU benchmark runs for Gemma 4 E2B and shows high prefill throughput on the tiny benchmark row.
 - llama.cpp MTP executed at least one speed row.
@@ -49,8 +50,7 @@ From the initial personal Gemma 4 benchmark run:
 - FlashInfer FA2 NVFP4 paged-KV standalone correctness now passes on GB10 with `jethac/flashinfer@e152cf4d` and vLLM-style V-scale-factor de-swizzle enabled. This is kernel-level evidence, not a blessed vLLM/SGLang serving stack.
 - FlashInfer is not the whole Spark fix. The remaining work spans packaging, vLLM/SGLang integration, Gemma 4 12B support, NVFP4 KV serving quality/capacity, llama.cpp/lm-eval accuracy, optional LiteRT GPU stability, and short before/after benchmark proof.
 - Optional LiteRT-LM GPU chat is not blessed: after fixing `/dev/dri` group access it prints `spark-ok` but exits with `returncode=-11`.
-- llama.cpp serving is blessed for the tested Gemma 4 26B Q4_0 GGUF path, but GGUF lm-eval accuracy is still blocked by API/logprobs schema compatibility. This Q4_0 row does not prove native NVFP4/MXFP4 `sm_121a` tensor-core dispatch.
-- No llama.cpp Qwen GGUF row has been captured yet.
+- llama.cpp serving is blessed for the tested Gemma 4 26B Q4_0 and Qwen2.5 1.5B Q4_K_M GGUF paths, but GGUF lm-eval accuracy is still blocked by API/logprobs schema compatibility. These rows do not prove native NVFP4/MXFP4 `sm_121a` tensor-core dispatch.
 
 ## Candidate Next Stack
 
@@ -65,4 +65,4 @@ To be tested:
 - Optional LiteRT-LM GPU chat fix or documented CPU-only/complement role.
 - llama.cpp commit with an API schema that can satisfy lm-eval loglikelihood scoring, or a patched adapter.
 - llama.cpp commit/build recipe for practical serving even if lm-eval accuracy remains separate.
-- llama.cpp Qwen GGUF serving and `llama-bench` row.
+- larger llama.cpp Qwen3/Qwen3.6 GGUF serving and native FP4/MXFP4 experiments.

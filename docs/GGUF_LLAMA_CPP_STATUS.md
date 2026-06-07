@@ -104,6 +104,60 @@ This llama.cpp build is validated as a practical serving path on Spark:
 
 That should be tracked separately from lm-eval accuracy.
 
+## 2026-06-08 Qwen Serving Validation
+
+Target:
+
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`
+- version: `9536 (308f61c31)`
+- model repo: `Qwen/Qwen2.5-1.5B-Instruct-GGUF`
+- model file: `qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- local model path: `/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- alias: `qwen25-1.5b-q4_k_m-gguf`
+- command flags: `--ctx-size 8192 -ngl 999`
+
+Artifacts:
+
+- run info: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_run_info.txt`
+- server log: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log`
+- OpenAI chat smoke: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_chat_smoke.json`
+- compact serving benchmark: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_openai_benchmark.json`
+- `llama-bench`: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_llama_bench.txt`
+- build-target audit: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json`
+- runtime probe: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_runtime_probe.json`
+- `spark_doctor`: `results/spark_doctor_llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST.md`
+- logprobs probe: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_gguf_logprobs_probe.json`
+
+Server log evidence:
+
+- device: `CUDA0 : NVIDIA GB10`
+- `CUDA : ARCHS = 1210`
+- `USE_GRAPHS = 1`
+- `BLACKWELL_NATIVE_FP4 = 1`
+- chat template: Qwen instruct template detected
+
+OpenAI-compatible serving result:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 44 | 64 | 0.032 | 0.397 | 175.19 |
+| `medium_decode` | 56 | 192 | 0.015 | 1.113 | 174.86 |
+| `long_prefill` | 2369 | 64 | 0.214 | 0.598 | 166.66 |
+
+`llama-bench` result:
+
+| model | backend | test | throughput |
+|---|---|---|---:|
+| `qwen2 1.5B Q4_K - Medium` | CUDA | `pp512` | 12505.79 +/- 615.87 tok/s |
+| `qwen2 1.5B Q4_K - Medium` | CUDA | `tg128` | 178.10 +/- 0.95 tok/s |
+
+Accuracy status under the same server:
+
+- `scripts/gguf_logprobs_probe.py` still fails the lm-eval compatibility check.
+- The response has `choices[0].logprobs.content`.
+- The response still lacks `choices[0].logprobs.tokens` and `choices[0].logprobs.token_logprobs`.
+- Therefore, Qwen GGUF serving is blessed for practical use, but GGUF paper-comparable lm-eval accuracy remains blocked.
+
 ## 2026-06-07 Serving Validation
 
 Target:

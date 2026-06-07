@@ -1,0 +1,20 @@
+{
+   schema: manual-serving-row-manifest/v1,
+  run_id: llamacpp-qwen25-1-5b-q4-k-m-20260608T0420JST,
+  runtime: llama.cpp,
+  model: Qwen/Qwen2.5-1.5B-Instruct-GGUF:qwen2.5-1.5b-instruct-q4_k_m.gguf,
+  served_model: qwen25-1.5b-q4_k_m-gguf,
+  hardware_key: NVIDIA_GB10:sm_121:sms_48,
+  artifacts: [
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_run_info.txt,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_chat_smoke.json,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_openai_benchmark.json,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_llama_bench.txt,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_gguf_logprobs_probe.json,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json,
+    llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_runtime_probe.json,
+    spark_doctor_llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST.md,
+    spark_doctor_llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST.json
+  ]
+}

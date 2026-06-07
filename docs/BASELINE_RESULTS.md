@@ -525,6 +525,52 @@ Interpretation:
 - This row is Q4_0 GGUF, not NVFP4/MXFP4 GGUF. The measured win is practical 4-bit bandwidth reduction plus mature CUDA graph/quantized-serving kernels on `sm_121`; it does not prove native `sm_121a` FP4 tensor-core MMA dispatch.
 - GGUF lm-eval accuracy remains blocked. The same server still exposes logprobs under `choices[0].logprobs.content`, not the `tokens` and `token_logprobs` shape expected by the existing lm-eval adapter.
 
+## 2026-06-08: llama.cpp Qwen2.5 1.5B Q4_K_M Practical Serving Row
+
+Target:
+
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`
+- build: `308f61c31 (9536)`
+- model repo: `Qwen/Qwen2.5-1.5B-Instruct-GGUF`
+- model file: `qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- local model: `/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- alias: `qwen25-1.5b-q4_k_m-gguf`
+- settings: `--ctx-size 8192 -ngl 999`
+
+Artifacts:
+
+- run info: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_run_info.txt`
+- smoke: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_chat_smoke.json`
+- serving benchmark: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_openai_benchmark.json`
+- `llama-bench`: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_llama_bench.txt`
+- server log: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log`
+- build-target audit: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json`
+- runtime probe: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_runtime_probe.json`
+- `spark_doctor`: `results/spark_doctor_llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST.md`
+- logprobs probe: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_gguf_logprobs_probe.json`
+
+Result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 44 | 64 | 0.032 | 0.397 | 175.19 |
+| `medium_decode` | 56 | 192 | 0.015 | 1.113 | 174.86 |
+| `long_prefill` | 2369 | 64 | 0.214 | 0.598 | 166.66 |
+
+`llama-bench`:
+
+| test | throughput |
+|---|---:|
+| `pp512` | 12505.79 +/- 615.87 tok/s |
+| `tg128` | 178.10 +/- 0.95 tok/s |
+
+Interpretation:
+
+- llama.cpp is now also proven as a practical Qwen GGUF serving path on GB10.
+- Server logs confirm CUDA on `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, and `BLACKWELL_NATIVE_FP4 = 1`.
+- This row is Q4_K_M GGUF, not NVFP4/MXFP4 GGUF. It does not prove native `sm_121a` FP4 tensor-core MMA dispatch.
+- The logprobs probe still fails the lm-eval compatibility check for the same schema reason as the Gemma llama.cpp row.
+
 ## 2026-06-07: LiteRT-LM Gemma 4 E2B CPU/GPU Smoke
 
 Target:

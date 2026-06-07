@@ -1,0 +1,192 @@
+{
+  "backend": "llamacpp",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 381,
+      "content_preview": "A local AI workstation benefits from fast memory because it allows for quicker access to the necessary data and resources required for training and running AI models. Fast memory enables faster computation and processing, which is crucial for real-time applications and high-performance AI tasks. Additionally, fast memory can help reduce latency, making it easier to implement and",
+      "decode_s": 0.365324115002295,
+      "decode_tok_s": 175.1869021830052,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859852,
+        "id": "chatcmpl-MpwxqBkPJeK4jVINtbmHtpTjzsFI2qnZ",
+        "model": "qwen25-1.5b-q4_k_m-gguf",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "b9536-308f61c31",
+        "timings": {
+          "cache_n": 24,
+          "predicted_ms": 365.076,
+          "predicted_n": 64,
+          "predicted_per_second": 175.30596368975225,
+          "predicted_per_token_ms": 5.7043125,
+          "prompt_ms": 10.849,
+          "prompt_n": 20,
+          "prompt_per_second": 1843.487879067195,
+          "prompt_per_token_ms": 0.54245
+        },
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": {
+            "cached_tokens": 24
+          },
+          "total_tokens": 108
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 0.3971255480137188,
+      "ttft_s": 0.031801433011423796,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": {
+          "cached_tokens": 24
+        },
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "content_chars": 790,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n**Objective:**\nTo ensure that an LLM (Large Language Model) server is using the intended GPU kernels, we need to validate the GPU configuration and kernel usage. This involves checking the GPU drivers, identifying the specific GPU models, and verifying the kernel versions that are being used.\n\n**Methodology:**\n\n1. **Identify the GPU Model:**\n   - Use the `nvidia-smi` command to list all GPUs on the system.\n   - Identify the spec",
+      "decode_s": 1.098030244000256,
+      "decode_tok_s": 174.85857156404083,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859853,
+        "id": "chatcmpl-pupwvxaXmmDphmRzLwxc1NyglxOom2JI",
+        "model": "qwen25-1.5b-q4_k_m-gguf",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "b9536-308f61c31",
+        "timings": {
+          "cache_n": 24,
+          "predicted_ms": 1097.254,
+          "predicted_n": 192,
+          "predicted_per_second": 174.98227393110437,
+          "predicted_per_token_ms": 5.714864583333333,
+          "prompt_ms": 10.514,
+          "prompt_n": 32,
+          "prompt_per_second": 3043.560966330607,
+          "prompt_per_token_ms": 0.3285625
+        },
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 56,
+          "prompt_tokens_details": {
+            "cached_tokens": 24
+          },
+          "total_tokens": 248
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 1.112826361990301,
+      "ttft_s": 0.014796117990044877,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": {
+          "cached_tokens": 24
+        },
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 67,
+      "content_chars": 352,
+      "content_preview": "1. Capture environment metadata: Gather information about the hardware, software, and system configuration of the environment where the inference server is running.\n2. Backend selection: Determine the specific backend or model that will be used for inference.\n3. Cold-start time: Measure the time it takes for the inference server to start processing a",
+      "decode_s": 0.3840067849960178,
+      "decode_tok_s": 166.6637218419557,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859854,
+        "id": "chatcmpl-iLWqmQHumTo9d33PyoG88jbe5F5bE0ER",
+        "model": "qwen25-1.5b-q4_k_m-gguf",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "b9536-308f61c31",
+        "timings": {
+          "cache_n": 0,
+          "predicted_ms": 384.787,
+          "predicted_n": 64,
+          "predicted_per_second": 166.3257854345391,
+          "predicted_per_token_ms": 6.012296875,
+          "prompt_ms": 203.817,
+          "prompt_n": 2369,
+          "prompt_per_second": 11623.171766830048,
+          "prompt_per_token_ms": 0.0860350358801182
+        },
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_tokens": 2433
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 0.5977906039915979,
+      "ttft_s": 0.21378381899558008,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 2433
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T19:17:34Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "model": "qwen25-1.5b-q4_k_m-gguf",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "llamacpp-qwen25-1-5b-q4-k-m-20260608T0420JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T19:17:31Z",
+  "url": "http://127.0.0.1:18083"
+}

@@ -168,6 +168,7 @@ After the initial personal campaign snapshot, targeted compact probes were added
 | LiteRT-LM Gemma 4 E2B | CPU chat works; GPU benchmark works; GPU chat prints output then exits `-11` | optional side-runtime evidence, not a main Spark performance path |
 | SGLang Qwen2.5 1.5B BF16/auto vs fp8 | matched `mem_fraction_static=0.40` rows run at about 58-59 tok/s; fp8 KV pool is 3.11M tokens vs 1.56M BF16/auto | fp8 is a capacity win with decode-speed parity on this small Qwen row |
 | SGLang Qwen2.5 1.5B patched FP4 KV | patched overlay serves only with both CUDA graph modes disabled; FP4 KV pool is 5.54M tokens but short decode is 0.276 tok/s with repetitive output | FP4 KV capacity path is real, but SGLang FP4 KV is not a usable speed path yet |
+| llama.cpp Qwen2.5 1.5B Q4_K_M | OpenAI-compatible serving around 167-175 tok/s decode; `llama-bench` tg128 around 178 tok/s | practical Qwen GGUF serving is proven; lm-eval GGUF accuracy remains blocked by logprobs schema |
 
 The current headline remains conservative: the scaffolding and evidence are much better, but no end-to-end NVFP4 serving speedup has been banked yet.
 
