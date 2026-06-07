@@ -2,7 +2,7 @@
 
 Date: 2026-06-07
 
-Status: hypotheses narrowed by first GB10 microbenchmarks.
+Status: hypotheses narrowed by first GB10 microbenchmarks and model-shaped proxy cases.
 
 This document records where the FlashInfer SM121 work might still produce real performance gains, and where current evidence says it probably will not.
 
@@ -21,13 +21,22 @@ Proven so far:
 - patched FlashInfer source changes real GB10 dispatch to `["b12x", "cutlass", "cudnn"]`.
 - a tiny forced-`b12x` NVFP4 GEMM can run on GB10 with finite output and sane cosine similarity.
 - Gemma 4 26B A4B can serve through vLLM on GB10 at about 24 tok/s decode on the compact OpenAI harness, but the observed path is BF16/unquantized Triton MoE, not FlashInfer NVFP4.
+- patched source/JIT in the SGLang 26.05 container compiled SM121a-targeted FlashInfer FP4 GEMM code and produced finite outputs on dense-decode and MoE-shaped `mm_fp4` cases.
 
-Microbenchmark result:
+Small dense microbenchmark result:
 
 - artifact: `results/flashinfer_mm_fp4_auto_microbench_20260607T1300Z.json`
 - script: `scripts/flashinfer_mm_fp4_microbench.py`
 - cases: `1x128x128`, `16x256x256`, `64x512x512`
 - result: patched `b12x` auto-dispatch was not faster than the installed `cudnn`/`cutlass` auto path on those small dense cases.
+
+Model-shaped proxy result:
+
+- installed artifact, dense: `results/flashinfer_mm_fp4_sglang_installed_dense_decode_20260607T161500Z.json`
+- installed artifact, MoE: `results/flashinfer_mm_fp4_sglang_installed_moe_expert_20260607T161500Z.json`
+- patched artifact, dense: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_dense_decode.json`
+- patched artifact, MoE: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_moe_expert.json`
+- result: patched `b12x` auto-dispatch was mixed-to-slower on dense decode proxies and slower on every MoE-shaped proxy case.
 
 ## Where Speedups Are Plausible
 
@@ -50,8 +59,8 @@ Shapes to test first:
 
 Expected outcome:
 
-- possible small to moderate kernel-level gains if cuDNN/CUTLASS are poorly matched for low-`M` decode.
-- no claim until measured.
+- measured SGLang container result was mixed: faster for `4x4096x4096` and `16x4096x4096`, slower for the other four dense-decode shapes.
+- no serving claim from this path without a real model trace showing this kernel is on the critical path.
 
 ### 2. MoE Expert GEMMs
 
@@ -72,8 +81,8 @@ Shapes to test first:
 
 Expected outcome:
 
-- more plausible than generic dense smoke shapes.
-- still only a proxy for real fused MoE kernels; serving benchmarks on an MoE model remain required.
+- first proxy result was negative: patched `b12x` auto-dispatch was slower on all six tested MoE-shaped cases.
+- still only a proxy for real fused MoE kernels; serving benchmarks on an actually quantized MoE model remain required before closing the NVFP4 question.
 
 ### 3. Packaging And JIT-Cache Correctness
 
@@ -134,6 +143,36 @@ Interpretation:
 - this patch is not a blanket "b12x is faster" result.
 - it is currently a dispatch correctness and enablement result.
 - performance work must now target model-shaped or MoE-shaped cases.
+
+Do not claim speedup for the first model-shaped proxy cases either.
+
+Dense decode proxy, SGLang 26.05 container:
+
+| case | installed mean ms | patched mean ms | patched latency change |
+|---|---:|---:|---:|
+| `1x4096x4096` | 0.0738 | 0.0893 | +21.1% |
+| `4x4096x4096` | 0.0704 | 0.0677 | -3.9% |
+| `16x4096x4096` | 0.0692 | 0.0620 | -10.4% |
+| `1x8192x4096` | 0.0707 | 0.0857 | +21.3% |
+| `4x8192x4096` | 0.0700 | 0.0786 | +12.4% |
+| `16x8192x4096` | 0.0709 | 0.0741 | +4.5% |
+
+MoE-shaped proxy, SGLang 26.05 container:
+
+| case | installed mean ms | patched mean ms | patched latency change |
+|---|---:|---:|---:|
+| `1x14336x4096` | 0.1443 | 0.1543 | +6.9% |
+| `4x14336x4096` | 0.1382 | 0.1510 | +9.3% |
+| `16x14336x4096` | 0.1413 | 0.1535 | +8.6% |
+| `1x4096x14336` | 0.1401 | 0.1688 | +20.5% |
+| `4x4096x14336` | 0.1397 | 0.1551 | +11.0% |
+| `16x4096x14336` | 0.1390 | 0.1546 | +11.2% |
+
+Interpretation:
+
+- the one-line FlashInfer SM121 `b12x` gate fix is necessary enablement, not a banked speedup.
+- the most likely remaining wins are in fused serving paths, NVFP4 KV, model-specific quantization plumbing, CUDA graph compatibility, or packaging that avoids stale cubin/JIT-cache artifacts.
+- an end-to-end NVFP4 MoE row with logs or profiler evidence is still the decision point for whether this patch matters to user-visible throughput.
 
 ## Measurement Plan
 

@@ -8,7 +8,7 @@ We currently have one Spark-class machine available: the ThinkStation PGX workst
 
 Mission: this machine costs roughly 900k JPY. It needs to be as performant as the silicon is capable of, not merely "technically running."
 
-Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. That row proves a useful MoE serving baseline, but vLLM selected BF16/unquantized Triton MoE, so it does not yet prove the FlashInfer NVFP4 path.
+Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. That row proves a useful MoE serving baseline, but vLLM selected BF16/unquantized Triton MoE, so it does not yet prove the FlashInfer NVFP4 path. The current FlashInfer SM121 `b12x` patch is dispatch enablement, not a proven speedup: model-shaped SGLang proxy microbenchmarks were mixed-to-slower.
 
 ## Start Here
 

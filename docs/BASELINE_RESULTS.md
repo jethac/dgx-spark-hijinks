@@ -163,6 +163,52 @@ Interpretation:
 - This does not rule out wins for model-shaped GEMMs, MoE `b12x` kernels, underfilled decode paths, or full serving stacks.
 - Do not claim an end-to-end throughput improvement from this FlashInfer patch until a clean image/wheel set and model-level before/after rows prove it.
 
+## 2026-06-07: FlashInfer NVFP4 `mm_fp4` Model-Shaped Proxy Microbenchmarks
+
+Artifacts:
+
+- installed dense-decode proxy: `results/flashinfer_mm_fp4_sglang_installed_dense_decode_20260607T161500Z.json`
+- installed MoE proxy: `results/flashinfer_mm_fp4_sglang_installed_moe_expert_20260607T161500Z.json`
+- patched dense-decode proxy: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_dense_decode.json`
+- patched MoE proxy: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_moe_expert.json`
+
+Target:
+
+- image: `nvcr.io/nvidia/sglang:26.05-py3`
+- installed FlashInfer: `0.6.10+cf494fca.nv26.05.cu132.50619265`
+- patched source: `jethac/flashinfer@a42c8f07`
+- patched source/JIT FlashInfer version: `0.6.13`
+- GPU: `NVIDIA GB10`, compute capability `12.1`
+
+Result summary, dense-decode proxy:
+
+| case | installed heuristic | installed mean ms | patched heuristic | patched mean ms | patched latency change |
+|---|---|---:|---|---:|---:|
+| `1x4096x4096` | `cudnn`, `cutlass` | 0.0738 | `b12x`, `cutlass`, `cudnn` | 0.0893 | +21.1% |
+| `4x4096x4096` | `cudnn`, `cutlass` | 0.0704 | `b12x`, `cutlass`, `cudnn` | 0.0677 | -3.9% |
+| `16x4096x4096` | `cudnn`, `cutlass` | 0.0692 | `b12x`, `cutlass`, `cudnn` | 0.0620 | -10.4% |
+| `1x8192x4096` | `cudnn`, `cutlass` | 0.0707 | `b12x`, `cutlass`, `cudnn` | 0.0857 | +21.3% |
+| `4x8192x4096` | `cudnn`, `cutlass` | 0.0700 | `b12x`, `cutlass`, `cudnn` | 0.0786 | +12.4% |
+| `16x8192x4096` | `cudnn`, `cutlass` | 0.0709 | `b12x`, `cutlass`, `cudnn` | 0.0741 | +4.5% |
+
+Result summary, MoE-shaped proxy:
+
+| case | installed heuristic | installed mean ms | patched heuristic | patched mean ms | patched latency change |
+|---|---|---:|---|---:|---:|
+| `1x14336x4096` | `cudnn`, `cutlass` | 0.1443 | `b12x`, `cutlass`, `cudnn` | 0.1543 | +6.9% |
+| `4x14336x4096` | `cudnn`, `cutlass` | 0.1382 | `b12x`, `cutlass`, `cudnn` | 0.1510 | +9.3% |
+| `16x14336x4096` | `cudnn`, `cutlass` | 0.1413 | `b12x`, `cutlass`, `cudnn` | 0.1535 | +8.6% |
+| `1x4096x14336` | `cudnn`, `cutlass` | 0.1401 | `b12x`, `cutlass`, `cudnn` | 0.1688 | +20.5% |
+| `4x4096x14336` | `cudnn`, `cutlass` | 0.1397 | `b12x`, `cutlass`, `cudnn` | 0.1551 | +11.0% |
+| `16x4096x14336` | `cudnn`, `cutlass` | 0.1390 | `b12x`, `cutlass`, `cudnn` | 0.1546 | +11.2% |
+
+Interpretation:
+
+- The patched source/JIT path selected `b12x` on real GB10 and produced finite outputs with cosine similarity around `0.991` against BF16 `torch.mm`.
+- The patched source/JIT container compiled FlashInfer FP4 GEMM under an SM121a-targeted path during this run.
+- The model-shaped proxy result is not a speedup. Dense-decode proxies were mixed, and all MoE-shaped proxy cases were slower than the installed SGLang container path.
+- This makes the FlashInfer predicate patch a correctness/enablement fix. The remaining performance question must be answered in fused serving paths, NVFP4 KV, model-specific quantization plumbing, CUDA graph behavior, or clean package builds.
+
 ## 2026-06-07: vLLM Gemma 4 26B A4B Compact MoE Serving Check
 
 Target:

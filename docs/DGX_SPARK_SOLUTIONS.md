@@ -6,7 +6,7 @@ Goal: make DGX Spark boring for local AI.
 
 Not heroic. Not "follow this Discord thread and install three nightlies." Boring.
 
-That means a developer should be able to install a supported stack, run Gemma-class models through vLLM, SGLang, llama.cpp, or LiteRT-LM, know which kernels are being used, and get results that are both fast and explainable.
+That means a developer should be able to install a supported stack, run Gemma-class models through vLLM, SGLang, or llama.cpp, know which kernels are being used, and get results that are both fast and explainable. LiteRT-LM is tracked as a side runtime for small Gemma/local-agent tasks, not as the main Spark performance lane.
 
 ## 1. Name The Target Correctly
 
@@ -142,7 +142,7 @@ Weakness: the first plan focused on vLLM and llama.cpp, but SGLang is another se
 
 Plan:
 
-- Add SGLang to the blessed-stack matrix alongside vLLM, LiteRT-LM, llama.cpp, and HF fallback.
+- Add SGLang to the blessed-stack matrix alongside vLLM, llama.cpp, HF fallback, and optional LiteRT-LM side-runtime evidence.
 - Track SGLang OpenAI-compatible serving smoke tests through `scripts/openai_chat_smoke.py`.
 - Validate SGLang on the available single Spark before making any TP>1 claims.
 - For NVFP4, study the `hikarioyama/sglang-nvfp4-kv-sm120` implementation: FlashInfer FA2 patches, `fp4_e2m1` KV, native FP4 pool, hybrid-SWA support, and global-scale auto-calibration.
@@ -156,9 +156,9 @@ Acceptance test:
 - The report records SGLang version/container, attention backend, KV cache dtype, quantization, CUDA graph mode, and memory use.
 - NVFP4 SGLang is not blessed until output quality and speed are measured against fp8 KV on the same model.
 
-## 7b. Evaluate LiteRT-LM For Gemma And Local Agents
+## 7b. Evaluate LiteRT-LM As An Optional Side Runtime
 
-Weakness: LiteRT-LM was not part of the first benchmark, but it may be relevant for Gemma, MTP, and local-agent prototyping.
+Weakness: LiteRT-LM was not part of the first benchmark and is not the usual Spark performance path, but it may be useful for small Gemma and local-agent side tasks.
 
 Plan:
 
@@ -166,13 +166,13 @@ Plan:
 - Determine whether the Spark path uses CPU, CUDA GPU, LiteRT GPU, or another backend.
 - Identify model format and conversion requirements.
 - Smoke a Gemma model if supported.
-- Compare generation throughput and ergonomics against llama.cpp, vLLM, and SGLang.
+- Compare generation throughput and ergonomics against llama.cpp, vLLM, and SGLang, while keeping LiteRT-LM labeled as an optional complement.
 
 Acceptance test:
 
 - LiteRT-LM has a documented build/install path on the Spark.
 - One generation smoke completes or a concrete blocker is filed.
-- The report records backend evidence, model format, throughput, and a go/no-go recommendation.
+- The report records backend evidence, model format, throughput, and a go/no-go recommendation as an optional side runtime.
 
 ## 8. Fix llama.cpp / lm-eval Accuracy
 

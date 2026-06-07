@@ -63,13 +63,16 @@ Patch branch:
   - patched FlashInfer source returned `["b12x", "cutlass", "cudnn"]` on real GB10 in both containers after upgrading the documented source dependency `nvidia-cutlass-dsl[cu13]>=4.5.0`.
   - in an ephemeral SGLang container, editable FlashInfer `0.6.13` source with stale `flashinfer-jit-cache`/`flashinfer-cubin` removed built FP4 quantization under `/root/.cache/flashinfer/0.6.13/121a/cached_ops/fp4_quantization_120f`.
   - the observed NVCC line used `arch=compute_120f,code=sm_120f`, which is the SM12x family target FlashInfer chooses for this quantization module on CUDA >= 12.9.
+  - the later model-shaped SGLang patched run built FP4 GEMM code under `/root/.cache/flashinfer/0.6.13/121a/cached_ops/fp4_gemm_cutlass_sm120` with observed NVCC `arch=compute_121a,code=sm_121a`.
   - a tiny forced-`b12x` NVFP4 GEMM on GB10 produced finite BF16 output with cosine similarity `0.9882067441940308` against BF16 `torch.mm`.
   - overlaying patched Python on old installed FlashInfer binaries is invalid: it hit CUTLASS DSL and TVM FFI signature mismatches. A real deployment needs matching `flashinfer-python`, JIT-cache/cubin packages, CUTLASS DSL, and CUDA targets.
 - Microbenchmark evidence:
   - artifact: `results/flashinfer_mm_fp4_auto_microbench_20260607T1300Z.json`
   - script: `scripts/flashinfer_mm_fp4_microbench.py`
   - on three small dense NVFP4 `mm_fp4` cases, patched SM121 `b12x` auto-dispatch was not faster than the installed `cudnn`/`cutlass` auto path.
-  - this narrows the expected performance win: the patch is proven as dispatch enablement, but user-visible speedup still needs model-shaped GEMMs, MoE paths, or serving benchmarks to prove it.
+  - model-shaped proxy artifacts: `results/flashinfer_mm_fp4_sglang_installed_dense_decode_20260607T161500Z.json`, `results/flashinfer_mm_fp4_sglang_installed_moe_expert_20260607T161500Z.json`, `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_dense_decode.json`, and `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_moe_expert.json`.
+  - on SGLang 26.05, patched dense-decode proxies were mixed and patched MoE-shaped proxies were slower on all tested shapes.
+  - this narrows the expected performance win: the patch is proven as dispatch enablement, but user-visible speedup still needs fused serving paths, NVFP4 KV, model-specific quantization plumbing, CUDA graph behavior, or clean package builds to prove it.
   - performance hypotheses are tracked in `docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md`.
 - not yet proven:
   - clean wheel or container build suitable for vLLM/SGLang serving

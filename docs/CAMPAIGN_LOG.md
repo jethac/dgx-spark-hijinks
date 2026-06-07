@@ -10,11 +10,11 @@
   - `scripts/gguf_logprobs_probe.py`
   - `scripts/openai_chat_smoke.py`
 - Added SGLang as a first-class runtime workstream after reviewing `hikarioyama/sglang-nvfp4-kv-sm120`.
-- Added LiteRT-LM and practical llama.cpp serving as first-class runtime workstreams.
+- Added practical llama.cpp serving as a first-class runtime workstream and LiteRT-LM as optional side-runtime coverage.
 - Added the upstream fork/submodule/worktree policy for patched libraries.
 - Added before/after GB10 benchmark protocol for measuring campaign impact.
 - Added NVFP4 dependency map from the FlashInfer/vLLM/SGLang subagent investigation.
-- Added a remediation matrix clarifying that the FlashInfer SM121 `mm_fp4` patch is only one workstream; remaining work includes packaging, vLLM/SGLang integration, Gemma 4 12B, NVFP4 KV, llama.cpp/lm-eval, LiteRT-LM, HF fallback, observability, benchmark proof, and upstream coordination.
+- Added a remediation matrix clarifying that the FlashInfer SM121 `mm_fp4` patch is only one workstream; remaining work includes packaging, vLLM/SGLang integration, Gemma 4 12B, NVFP4 KV, llama.cpp/lm-eval, optional LiteRT-LM, HF fallback, observability, benchmark proof, and upstream coordination.
 - Added a compact OpenAI-compatible serving benchmark harness and captured the first vLLM before row.
 - Added root-readable runtime process probe evidence for the live vLLM server.
 - Added `scripts/spark_smoke_suite.py` as the compact before/after orchestrator. Core tracks are vLLM, SGLang, llama.cpp, HF fallback telemetry, MTP/spec decode, and NVFP4; LiteRT-LM is opt-in.
@@ -44,6 +44,10 @@
   - snapshot: `results/cuda_so_audit_vllm_flashinfer_20260607T111023Z.json`
 - Proved llama.cpp `b9536` as a practical Gemma 4 26B Q4_0 serving path with `--reasoning off`.
 - Evaluated LiteRT-LM `0.13.1` on Linux `aarch64`: CPU chat works for Gemma 4 E2B, CPU/GPU benchmark commands work, GPU chat still exits `returncode=-11` after producing `spark-ok`.
+- Ran SGLang 26.05 model-shaped FlashInfer `mm_fp4` proxy microbenchmarks against installed and patched source/JIT FlashInfer.
+  - patched source selected `b12x`, `cutlass`, `cudnn` and built an SM121a-targeted FP4 GEMM path.
+  - patched dense-decode proxies were mixed; patched MoE-shaped proxies were slower on all tested shapes.
+  - conclusion: the FlashInfer SM121 predicate patch remains dispatch enablement, not a proven speedup.
 
 ## First Benchmark Campaign Summary
 

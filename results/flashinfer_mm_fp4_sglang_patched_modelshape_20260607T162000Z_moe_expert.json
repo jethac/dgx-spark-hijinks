@@ -1,0 +1,105 @@
+{
+  "schema": "flashinfer-mm-fp4-microbench/v1",
+  "phase": "after",
+  "run_id": "flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z-moe-expert",
+  "container": "nvcr.io/nvidia/sglang:26.05-py3-patched-flashinfer-source",
+  "presets": [
+    "moe_expert"
+  ],
+  "raw_cases": [
+    "1x14336x4096",
+    "4x14336x4096",
+    "16x14336x4096",
+    "1x4096x14336",
+    "4x4096x14336",
+    "16x4096x14336"
+  ],
+  "flashinfer_file": "/tmp/flashinfer-python-path/flashinfer/gemm/gemm_base.py",
+  "flashinfer_version": "0.6.13",
+  "torch": "2.12.0a0+5aff3928d8.nv26.05",
+  "cuda": "13.2",
+  "gpu": "NVIDIA GB10",
+  "compute_capability": [
+    12,
+    1
+  ],
+  "heuristic": [
+    "b12x",
+    "cutlass",
+    "cudnn"
+  ],
+  "cases": [
+    {
+      "m": 1,
+      "n": 14336,
+      "k": 4096,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.0046297959925141186,
+      "mean_ms": 0.15432653308380395,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.9909099340438843
+    },
+    {
+      "m": 4,
+      "n": 14336,
+      "k": 4096,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.004528771009063348,
+      "mean_ms": 0.15095903363544494,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.9911949038505554
+    },
+    {
+      "m": 16,
+      "n": 14336,
+      "k": 4096,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.004604946996551007,
+      "mean_ms": 0.1534982332183669,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.990942120552063
+    },
+    {
+      "m": 1,
+      "n": 4096,
+      "k": 14336,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.005065312987426296,
+      "mean_ms": 0.1688437662475432,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.9909789562225342
+    },
+    {
+      "m": 4,
+      "n": 4096,
+      "k": 14336,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.0046537469897884876,
+      "mean_ms": 0.15512489965961626,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.9910666942596436
+    },
+    {
+      "m": 16,
+      "n": 4096,
+      "k": 14336,
+      "backend": "auto",
+      "iterations": 30,
+      "warmup": 5,
+      "elapsed_s": 0.004636611003661528,
+      "mean_ms": 0.15455370012205094,
+      "finite": true,
+      "cosine_similarity_vs_bf16_torch_mm": 0.991060733795166
+    }
+  ]
+}
