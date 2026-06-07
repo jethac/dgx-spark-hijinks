@@ -39,8 +39,7 @@ Docker images currently present include:
 
 ## Next Runtime Actions
 
-1. SGLang: identify a clean ARM64/CUDA 13 install or container path, then run a BF16/fp8 KV smoke before any NVFP4 work.
-2. LiteRT-LM: determine whether Linux aarch64 + GB10 can use a relevant GPU backend and which model format is required.
+1. SGLang: run the container smoke with `nvcr.io/nvidia/sglang:26.05-py3`; fall back to `lmsysorg/sglang:latest-cu130-runtime` if CUDA 13.2 / driver compatibility blocks it.
+2. LiteRT-LM: install `litert-lm==0.13.1` in a clean venv, prove CPU E2B generation, then test whether `--backend=gpu` uses a useful GB10 path.
 3. llama.cpp: pin the build/commit as a practical serving path; keep GGUF lm-eval accuracy blocked until logprobs compatibility is fixed.
 4. vLLM: use the current baseline as the before row for future patched/container comparisons.
-
