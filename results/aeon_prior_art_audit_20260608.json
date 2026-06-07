@@ -1,0 +1,139 @@
+{
+  "failed": [],
+  "ok": true,
+  "repo_root": ".",
+  "schema": "aeon-prior-art-audit/v1",
+  "sglang_counterpart_surfaces": [
+    {
+      "exists": true,
+      "markers": [
+        "speculative_algorithm == \"DFLASH\"",
+        "def _handle_dflash"
+      ],
+      "missing_markers": [],
+      "name": "sglang_dflash_algorithm_hook",
+      "ok": true,
+      "path": "third_party/sglang/python/sglang/srt/arg_groups/speculative_hook.py",
+      "reason": "SGLang counterpart surface for AEON's DFlash speed lane."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "class DFlashDraftModel",
+        "DFlashAttention"
+      ],
+      "missing_markers": [],
+      "name": "sglang_dflash_model",
+      "ok": true,
+      "path": "third_party/sglang/python/sglang/srt/models/dflash.py",
+      "reason": "SGLang native DFlash draft-model surface exists; serving proof remains separate."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "set_dflash_layers_to_capture"
+      ],
+      "missing_markers": [],
+      "name": "sglang_qwen_dflash_capture_hooks",
+      "ok": true,
+      "path": "third_party/sglang/python/sglang/srt/models/qwen3_moe.py",
+      "reason": "Qwen MoE model exposes DFlash capture hooks for counterpart testing."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "spec_accept_length",
+        "spec_accept_rate"
+      ],
+      "missing_markers": [],
+      "name": "sglang_speculative_acceptance_metrics",
+      "ok": true,
+      "path": "third_party/sglang/python/sglang/srt/managers/scheduler_components/metrics_reporter.py",
+      "reason": "Accepted-draft metrics are needed to judge DFlash/EAGLE counterpart quality."
+    }
+  ],
+  "submodules": {
+    "flashinfer": {
+      "branch": "HEAD",
+      "commit": "e152cf4da4ab2a9d093b7d9d4b499198b0211c61",
+      "dirty": false,
+      "exists": true
+    },
+    "sglang": {
+      "branch": "spark/hijinks-018-fp4-e2m1-kv-sm121-serving",
+      "commit": "98ad469618db3a91517f018ed295e052c1cfcc48",
+      "dirty": false,
+      "exists": true
+    },
+    "vllm": {
+      "branch": "spark/hijinks-020-aeon-qwen-dflash-sm121a",
+      "commit": "6804e1b81fcc0abcfb4e876425495fa8f7650bcb",
+      "dirty": false,
+      "exists": true
+    }
+  },
+  "vllm_ports": [
+    {
+      "exists": true,
+      "markers": [
+        "RTLD_LAZY",
+        "_C_stable_libtorch",
+        "import_module"
+      ],
+      "missing_markers": [],
+      "name": "vllm_lazy_stable_libtorch_import",
+      "ok": true,
+      "path": "third_party/vllm/vllm/platforms/cuda.py",
+      "reason": "AEON Qwen patch: lazy import around unused SM100-only symbols on SM12x."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "Qwen3_5ForCausalLM",
+        "Qwen3_5MoeForCausalLM"
+      ],
+      "missing_markers": [],
+      "name": "vllm_qwen3_5_text_registry",
+      "ok": true,
+      "path": "third_party/vllm/vllm/model_executor/models/registry.py",
+      "reason": "AEON Qwen patch: register text-only Qwen3.5/Qwen3.6 model classes."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "cudagraph_mode != CUDAGraphMode.NONE",
+        "uniform_decode_query_len > 1",
+        "adjust_cudagraph_sizes_for_spec_decode"
+      ],
+      "missing_markers": [],
+      "name": "vllm_spec_decode_cudagraph_alignment",
+      "ok": true,
+      "path": "third_party/vllm/vllm/config/compilation.py",
+      "reason": "AEON Qwen patch: align capture sizes for speculative decode beyond FULL mode."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "mamba_block_size is None",
+        "vllm_config.cache_config.block_size or 16"
+      ],
+      "missing_markers": [],
+      "name": "vllm_mamba_block_size_fallback",
+      "ok": true,
+      "path": "third_party/vllm/vllm/model_executor/layers/mamba/abstract.py",
+      "reason": "AEON Qwen patch: keep hybrid/Mamba cache arithmetic from seeing block_size=None."
+    },
+    {
+      "exists": true,
+      "markers": [
+        "if block_size is None",
+        "else cdiv(max_model_len"
+      ],
+      "missing_markers": [],
+      "name": "vllm_hybrid_kv_block_size_none_safe",
+      "ok": true,
+      "path": "third_party/vllm/vllm/v1/worker/gpu_model_runner.py",
+      "reason": "AEON Qwen patch: guard hybrid linear-attention groups that do not use KV blocks."
+    }
+  ]
+}

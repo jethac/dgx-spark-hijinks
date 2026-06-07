@@ -99,6 +99,8 @@ Build on hikarioyama's SM120 vLLM and SGLang NVFP4-KV work unless GB10 testing s
 
 AEON-derived vLLM patches and their SGLang/llama.cpp counterpart decisions are tracked in `docs/AEON_PRIOR_ART_PORT_MAP.md`. Do not create SGLang or llama.cpp source patches just because AEON patched vLLM; first reproduce the equivalent runtime failure or benchmark gap.
 
+Run `scripts/aeon_prior_art_audit.py` after advancing vLLM or SGLang submodules so the public map does not drift from the actual fork contents.
+
 Suggested branches:
 
 ```text

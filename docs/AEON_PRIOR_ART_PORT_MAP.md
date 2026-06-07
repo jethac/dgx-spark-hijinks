@@ -21,6 +21,17 @@ Primary sources checked:
 - AEON Gemma proves NVFP4 weights plus ordinary KV plus Triton target attention plus DFlash, not FA2 NVFP4 KV.
 - A runtime is not broadly blessed from a Gemma-only or Qwen-only row.
 
+## Audit Command
+
+Use the local audit to verify that the submodules still match this map:
+
+```bash
+python3 scripts/aeon_prior_art_audit.py \
+  --output results/aeon_prior_art_audit_YYYYMMDD.json
+```
+
+Current validation artifact: `results/aeon_prior_art_audit_20260608.json`.
+
 ## Literal AEON Qwen Patch Inventory
 
 | AEON patch | purpose | current vLLM status | SGLang counterpart | llama.cpp counterpart |
