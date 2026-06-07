@@ -74,6 +74,14 @@
   - added compile-time gated vLLM B2 V scale-factor de-swizzle while preserving symmetric-linear V scale-factor behavior by default for SGLang/reference compatibility.
   - verification: Python syntax compile and `git diff --check` passed.
   - limitation: targeted pytest collection is blocked in this Windows workspace by missing `tvm_ffi`; no clean GB10 build, harness proof, or serving proof yet.
+- Pushed vLLM SM12x NVFP4 KV routing patch branch `spark/hijinks-007-nvfp4-kv-sm121` at `2c1405dd129d873d268b8baea78c5739cd384951`.
+  - routes SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 instead of `trtllm-gen`.
+  - keeps SM100 NVFP4 on the existing TRTLLM path.
+  - uses model dtype query/output on the SM12x FA2 path instead of the TRTLLM FP8-query/FP8-output workaround.
+  - adds a one-time runtime log for FA2 NVFP4 KV selection.
+  - adds wrapper-routing regression coverage and updates vLLM's attention backend design doc.
+  - verification: Python syntax compile and staged `git diff --check` passed.
+  - limitations: local `ruff` is unavailable and pytest collection is blocked by missing `tblib`; no clean GB10 vLLM plus FlashInfer build or serving proof yet.
 
 ## First Benchmark Campaign Summary
 

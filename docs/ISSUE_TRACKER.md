@@ -9,8 +9,8 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
 | kernel dispatch and backend observability | open | [#4](https://github.com/jethac/dgx-spark-hijinks/issues/4) |
 | `spark-doctor` environment evidence | in progress | [#5](https://github.com/jethac/dgx-spark-hijinks/issues/5) |
-| vLLM Spark runtime path | open | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
-| NVFP4 on Spark | SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page branch pushed; vLLM/SGLang integration and GB10 KV proof pending | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
+| vLLM Spark runtime path | SM12x NVFP4 KV routing patch pushed; clean GB10 serving proof pending | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
+| NVFP4 on Spark | SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing branches pushed; SGLang integration and GB10 KV proof pending | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
 | llama.cpp / lm-eval GGUF accuracy | open | [#8](https://github.com/jethac/dgx-spark-hijinks/issues/8) |
 | HF fallback telemetry and containment | telemetry wrapper added | [#9](https://github.com/jethac/dgx-spark-hijinks/issues/9) |
 | single-machine benchmark redesign | smoke-suite orchestrator added; HF and MTP telemetry wrapped | [#10](https://github.com/jethac/dgx-spark-hijinks/issues/10) |
@@ -18,7 +18,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | multi-Spark future work | blocked on hardware | [#12](https://github.com/jethac/dgx-spark-hijinks/issues/12) |
 | Spark-specific performance tuning | FlashInfer proxy null result recorded; serving-path tuning pending | [#13](https://github.com/jethac/dgx-spark-hijinks/issues/13) |
 | SGLang Spark runtime path | BF16 Qwen passed; Gemma E2B failed; NVFP4 tracked in #18 | [#14](https://github.com/jethac/dgx-spark-hijinks/issues/14) |
-| upstream forks, submodules, and worktrees | FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer KV patch branch pushed and submodule advanced | [#15](https://github.com/jethac/dgx-spark-hijinks/issues/15) |
+| upstream forks, submodules, and worktrees | FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer and vLLM KV patch branches pushed and submodules advanced | [#15](https://github.com/jethac/dgx-spark-hijinks/issues/15) |
 | LiteRT-LM on Spark | optional side runtime; CPU path proven; GPU chat crash open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | blessed for 26B Q4_0 serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | SM120 fork audited; `jethac/sglang` branch created; FlashInfer prerequisite patch pushed; GB10 `fp4_e2m1` KV validation pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |

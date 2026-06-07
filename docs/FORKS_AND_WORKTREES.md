@@ -128,7 +128,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `2c1405d` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2; GB10 build/runtime proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
 
 FlashInfer patch:
@@ -160,5 +160,17 @@ FlashInfer FA2 NVFP4 KV patch:
 - local verification: `python -m py_compile flashinfer/jit/attention/utils.py flashinfer/jit/attention/modules.py tests/jit/test_attention_utils.py` and `git diff --check` passed
 - local pytest limitation: `python -m pytest tests/jit/test_attention_utils.py` fails to collect in this Windows workspace because `tvm_ffi` is not installed
 - missing verification: clean FlashInfer GB10 build, harness proof, and vLLM/SGLang serving proof
+
+vLLM SM12x NVFP4 KV routing patch:
+
+- commit: `2c1405dd129d873d268b8baea78c5739cd384951`
+- branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-007-nvfp4-kv-sm121
+- purpose: route SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 while preserving the existing SM100 TRTLLM NVFP4 path
+- touched files: `vllm/v1/attention/backends/flashinfer.py`, `tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py`, `docs/design/attention_backends.md`
+- upstream guidance checked: `CONTRIBUTING.md`, `docs/contributing/README.md`, and `AGENTS.md`; commit was made with DCO sign-off
+- local verification: Python syntax compile and staged `git diff --check` passed
+- local pytest limitation: vLLM pytest collection is blocked in this Windows workspace because `tblib` is not installed
+- local lint limitation: `ruff` is not installed in this Windows workspace
+- missing verification: clean vLLM plus FlashInfer build on GB10 and a serving proof selecting FA2 native NVFP4 KV
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

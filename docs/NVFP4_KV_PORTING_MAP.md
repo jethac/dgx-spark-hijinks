@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: FlashInfer FA2 KV stride/page patch branch created and pushed; vLLM/SGLang integration and GB10 runtime proof pending.
+Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing patch are pushed; SGLang integration and GB10 runtime proof pending.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -14,7 +14,7 @@ The KV lane is higher priority because it targets Spark's bottleneck directly: u
 | lane | fork branch | worktree | base/current commit | reference |
 |---|---|---|---|---|
 | FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | current `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`; based on `a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
-| vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
+| vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | current `jethac/vllm@2c1405dd129d873d268b8baea78c5739cd384951`; based on `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
 | SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
 
 Reference clones are local scratch only:
@@ -64,6 +64,31 @@ Missing verification:
 
 ## vLLM Reference Map
 
+Current `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` patch:
+
+- commit: `2c1405dd129d873d268b8baea78c5739cd384951`
+- branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-007-nvfp4-kv-sm121
+- routes SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 instead of `trtllm-gen`
+- keeps SM100 NVFP4 on the existing TRTLLM path
+- uses model dtype query/output on the SM12x FA2 path instead of the TRTLLM FP8-query/FP8-output workaround
+- adds a one-time runtime log: `Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x.`
+- explicitly rejects DCP for this first SM12x NVFP4 FA2 path
+- adds a wrapper-routing regression test for FA2/TRTLLM/auto backend selection
+- updates vLLM's attention backend design doc to mention the SM12x FA2 NVFP4 KV route
+
+Local verification:
+
+- `python -m py_compile vllm/v1/attention/backends/flashinfer.py tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py` passed.
+- `git diff --cached --check` passed before commit.
+- `python -m ruff check ...` is blocked in this Windows workspace because `ruff` is not installed.
+- `python -m pytest tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py -q` is blocked in this Windows workspace because vLLM's `tests/conftest.py` imports missing `tblib`.
+
+Missing verification:
+
+- no vLLM wheel/container build has been run yet with `jethac/flashinfer@e152cf4d`
+- no GB10 server log has selected the FA2 NVFP4 KV path yet
+- no fp8-vs-NVFP4 KV correctness, capacity, quality, or throughput row exists yet
+
 Reference files:
 
 - `src/vllm/v1/attention/backends/flashinfer.py`
@@ -77,10 +102,10 @@ Reference files:
 
 Likely `jethac/vllm` work:
 
-- Route `--kv-cache-dtype nvfp4` to FlashInfer FA2 on SM12x instead of forcing `trtllm-gen`.
-- Preserve or replace the reference `_use_fa2_for_nvfp4_kv_on_sm120()` gate with an explicit GB10-safe SM12x gate.
-- Pass split NVFP4 data and scale views into FlashInfer without hidden V scale-factor scratch.
-- Add runtime logging that proves FA2 native NVFP4 KV is selected.
+- Ported in `2c1405d`: route `--kv-cache-dtype nvfp4` to FlashInfer FA2 on SM12x instead of forcing `trtllm-gen`.
+- Ported in `2c1405d`: preserve SM100 TRTLLM NVFP4 while adding an explicit SM12x FA2 gate.
+- Already present upstream and retained: split NVFP4 data and scale views are passed through `nvfp4_kv_cache_split_views()` and `kv_cache_sf`.
+- Ported in `2c1405d`: runtime logging that proves FA2 native NVFP4 KV routing was selected.
 - Add serving proof scripts/docs for fp8-vs-NVFP4 KV pool tokens, maximum concurrency, quality, TTFT, and warmed decode.
 
 Likely `jethac/flashinfer` work:
