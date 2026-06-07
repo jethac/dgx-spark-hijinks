@@ -137,3 +137,28 @@ Interpretation:
 
 - This proves the FlashInfer fork makes the high-impact SM121 dispatch behavior better and that the `b12x` path can execute on GB10 when the source/JIT package set is consistent.
 - This does not yet prove a serving-speed improvement. The deployable before/after needs a clean vLLM or SGLang image/wheel set with matching FlashInfer Python, JIT-cache/cubin, CUTLASS DSL, and CUDA targets.
+
+## 2026-06-07: FlashInfer NVFP4 `mm_fp4` Auto Microbenchmark
+
+Artifact:
+
+- `results/flashinfer_mm_fp4_auto_microbench_20260607T1300Z.json`
+
+Script:
+
+- `scripts/flashinfer_mm_fp4_microbench.py`
+
+Result summary:
+
+| case | installed auto heuristic | installed mean ms | patched auto heuristic | patched mean ms | patched latency change |
+|---|---|---:|---|---:|---:|
+| `1x128x128` | `cudnn`, `cutlass` | 0.0727 | `b12x`, `cutlass`, `cudnn` | 0.0769 | +5.9% |
+| `16x256x256` | `cudnn`, `cutlass` | 0.0654 | `b12x`, `cutlass`, `cudnn` | 0.0661 | +1.0% |
+| `64x512x512` | `cudnn`, `cutlass` | 0.0651 | `b12x`, `cutlass`, `cudnn` | 0.0757 | +16.3% |
+
+Interpretation:
+
+- The patch did what it was supposed to do at dispatch level: SM121 auto-dispatch now includes `b12x`.
+- On these three small dense NVFP4 `mm_fp4` cases, `b12x` was not faster than the installed container path.
+- This does not rule out wins for model-shaped GEMMs, MoE `b12x` kernels, underfilled decode paths, or full serving stacks.
+- Do not claim an end-to-end throughput improvement from this FlashInfer patch until a clean image/wheel set and model-level before/after rows prove it.

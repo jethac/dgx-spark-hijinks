@@ -78,7 +78,12 @@ python3 scripts/openai_serving_benchmark.py \
    - fp8/bf16 reference for any NVFP4 test
    - no NaN/inf/empty/zero-output path
 
-5. Optional long checks
+5. Kernel microbenchmarks
+   - use `scripts/flashinfer_mm_fp4_microbench.py` for FlashInfer NVFP4 `mm_fp4` dispatch checks
+   - treat kernel microbenchmarks as diagnostic evidence, not serving throughput
+   - follow with model-shaped and serving before/after rows before claiming user-visible speedups
+
+6. Optional long checks
    - HellaSwag and other long lm-eval tasks run as separate campaigns
    - RULER/needle-style checks for long-context KV changes
 

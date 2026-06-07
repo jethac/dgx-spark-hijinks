@@ -64,6 +64,16 @@ python3 scripts/cuda_so_audit.py --package vllm --package flashinfer \
   --output results/cuda_so_audit_vllm_flashinfer.json
 ```
 
+For a FlashInfer NVFP4 `mm_fp4` kernel-level dispatch check:
+
+```bash
+python3 scripts/flashinfer_mm_fp4_microbench.py \
+  --phase before \
+  --run-id flashinfer-mm-fp4-before \
+  --container CONTAINER_TAG \
+  --output results/flashinfer_mm_fp4_before.json
+```
+
 To capture runtime process evidence for a local server:
 
 ```bash

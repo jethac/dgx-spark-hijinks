@@ -1,0 +1,128 @@
+{
+  "schema": "flashinfer-mm-fp4-before-after/v1",
+  "status": "microbenchmark_complete_not_serving_blessed",
+  "host": "thinkstationpgx-00b4",
+  "hardware": {
+    "gpu": "NVIDIA GB10",
+    "compute_capability": [12, 1],
+    "target": "sm_121"
+  },
+  "benchmark": {
+    "script_added": "scripts/flashinfer_mm_fp4_microbench.py",
+    "backend": "auto",
+    "iterations": 30,
+    "warmup": 5,
+    "cases": ["1x128x128", "16x256x256", "64x512x512"],
+    "scope": "FlashInfer NVFP4 dense mm_fp4 microbenchmark only; not a serving benchmark"
+  },
+  "before": {
+    "phase": "before",
+    "container": "nvcr.io/nvidia/sglang:26.05-py3",
+    "flashinfer_file": "/usr/local/lib/python3.12/dist-packages/flashinfer/gemm/gemm_base.py",
+    "flashinfer_version": "0.6.10+cf494fca.nv26.05.cu132.50619265",
+    "torch": "2.12.0a0+5aff3928d8.nv26.05",
+    "cuda": "13.2",
+    "heuristic": ["cudnn", "cutlass"],
+    "cases": [
+      {
+        "m": 1,
+        "n": 128,
+        "k": 128,
+        "mean_ms": 0.07265953269476692,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.9920552968978882
+      },
+      {
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "mean_ms": 0.06538383313454688,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.991342306137085
+      },
+      {
+        "m": 64,
+        "n": 512,
+        "k": 512,
+        "mean_ms": 0.06507556730260451,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.9909263849258423
+      }
+    ]
+  },
+  "after": {
+    "phase": "after_patched_source",
+    "container": "nvcr.io/nvidia/sglang:26.05-py3",
+    "flashinfer_file": "/tmp/flashinfer/flashinfer/gemm/gemm_base.py",
+    "flashinfer_version": "0.6.13",
+    "torch": "2.12.0a0+5aff3928d8.nv26.05",
+    "cuda": "13.2",
+    "source": {
+      "fork": "jethac/flashinfer",
+      "branch": "spark/hijinks-004-sm121-flashinfer",
+      "commit": "a42c8f07",
+      "notes": [
+        "ephemeral editable source install",
+        "nvidia-cutlass-dsl[cu13]>=4.5.0 installed",
+        "flashinfer-jit-cache and flashinfer-cubin removed to avoid stale binary/JIT mismatch",
+        "FLASHINFER_CUDA_ARCH_LIST=12.1a"
+      ]
+    },
+    "heuristic": ["b12x", "cutlass", "cudnn"],
+    "cases": [
+      {
+        "m": 1,
+        "n": 128,
+        "k": 128,
+        "mean_ms": 0.07693370086296152,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.9920552968978882
+      },
+      {
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "mean_ms": 0.066059566840219,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.991342306137085
+      },
+      {
+        "m": 64,
+        "n": 512,
+        "k": 512,
+        "mean_ms": 0.07567930054695655,
+        "finite": true,
+        "cosine_similarity_vs_bf16_torch_mm": 0.9909263849258423
+      }
+    ]
+  },
+  "comparison": [
+    {
+      "case": "1x128x128",
+      "before_mean_ms": 0.07265953269476692,
+      "after_mean_ms": 0.07693370086296152,
+      "speedup_before_over_after": 0.9444415296791461,
+      "after_latency_change_percent": 5.882448620596648
+    },
+    {
+      "case": "16x256x256",
+      "before_mean_ms": 0.06538383313454688,
+      "after_mean_ms": 0.066059566840219,
+      "speedup_before_over_after": 0.9897708377588854,
+      "after_latency_change_percent": 1.0334851908053573
+    },
+    {
+      "case": "64x512x512",
+      "before_mean_ms": 0.06507556730260451,
+      "after_mean_ms": 0.07567930054695655,
+      "speedup_before_over_after": 0.8598859642942231,
+      "after_latency_change_percent": 16.29449954949607
+    }
+  ],
+  "interpretation": [
+    "The patch changes SM121 auto-dispatch from cudnn/cutlass to b12x/cutlass/cudnn.",
+    "For these three small dense mm_fp4 cases, patched b12x auto-dispatch was not faster than the installed container path.",
+    "The result does not rule out benefits for other shapes, MoE b12x kernels, underfilled decode GEMMs, or end-to-end NVFP4 serving paths.",
+    "The immediate value of the patch remains correctness/dispatch enablement plus source/JIT proof; throughput benefit still needs model-shaped microbenchmarks and a clean image or wheel set."
+  ]
+}

@@ -65,6 +65,11 @@ Patch branch:
   - the observed NVCC line used `arch=compute_120f,code=sm_120f`, which is the SM12x family target FlashInfer chooses for this quantization module on CUDA >= 12.9.
   - a tiny forced-`b12x` NVFP4 GEMM on GB10 produced finite BF16 output with cosine similarity `0.9882067441940308` against BF16 `torch.mm`.
   - overlaying patched Python on old installed FlashInfer binaries is invalid: it hit CUTLASS DSL and TVM FFI signature mismatches. A real deployment needs matching `flashinfer-python`, JIT-cache/cubin packages, CUTLASS DSL, and CUDA targets.
+- Microbenchmark evidence:
+  - artifact: `results/flashinfer_mm_fp4_auto_microbench_20260607T1300Z.json`
+  - script: `scripts/flashinfer_mm_fp4_microbench.py`
+  - on three small dense NVFP4 `mm_fp4` cases, patched SM121 `b12x` auto-dispatch was not faster than the installed `cudnn`/`cutlass` auto path.
+  - this narrows the expected performance win: the patch is proven as dispatch enablement, but user-visible speedup still needs model-shaped GEMMs, MoE paths, or serving benchmarks to prove it.
 - not yet proven:
   - clean wheel or container build suitable for vLLM/SGLang serving
   - `cuobjdump` evidence from a distributable artifact
