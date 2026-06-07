@@ -1,3 +1,9 @@
 [submodule "third_party/flashinfer"]
 	path = third_party/flashinfer
 	url = git@github.com:jethac/flashinfer.git
+[submodule "third_party/vllm"]
+	path = third_party/vllm
+	url = git@github.com:jethac/vllm.git
+[submodule "third_party/sglang"]
+	path = third_party/sglang
+	url = git@github.com:jethac/sglang.git

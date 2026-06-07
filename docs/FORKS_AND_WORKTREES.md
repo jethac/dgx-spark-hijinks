@@ -127,6 +127,9 @@ Active submodules:
 | submodule | upstream base | branch | worktree | status |
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
+| `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | branch pushed; inherits SM121 `mm_fp4` patch; FA2 KV code not ported yet |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
+| `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
 
 FlashInfer patch:
 
@@ -144,5 +147,7 @@ FlashInfer patch:
   - Spark internal CI exists as `unit_test_spark` but is manual-trigger only
 - local pytest limitation: targeted pytest collection fails in this Windows workspace because FlashInfer imports `tvm_ffi` through `tests/conftest.py`, and that dependency is not installed here.
 - missing verification: FlashInfer runtime tests on GB10 and upstream CI
+
+The new FlashInfer FA2 NVFP4 KV branch is deliberately based on the existing SM121 FlashInfer patch branch, not plain upstream. That preserves the earlier `mm_fp4` dispatch enablement while keeping KV cache changes separate for review and benchmarking.
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

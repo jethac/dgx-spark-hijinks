@@ -59,6 +59,14 @@
 - Tightened the smoke suite:
   - `run_with_telemetry.py` now captures `pre_memory` before launching the child command.
   - `spark_smoke_suite.py` wraps MTP/spec-decode commands with telemetry and supports `--mtp-model`.
+- Created `jethac/vllm` and `jethac/sglang` forks, added them as submodules, and pushed issue-named worktree branches for NVFP4 KV work.
+  - vLLM branch: `spark/hijinks-007-nvfp4-kv-sm121` at `4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa`.
+  - SGLang branch: `spark/hijinks-018-fp4-e2m1-kv-sm121` at `02be2e71899491b7aaf2849dce6431f61fc190b6`.
+- Created the FlashInfer FA2 NVFP4 KV branch `spark/hijinks-007-fa2-nvfp4-kv-sm121` from `a42c8f0751c70a2f69596f063170e284710c94ac`, so the KV lane inherits the earlier SM121 `mm_fp4` dispatch and `121a` JIT-cache work.
+- Recorded the NVFP4 KV porting map from the vLLM and SGLang subagent audits:
+  - build on hikarioyama's SM120 work as prior art, but re-derive minimal upstream-shaped patches in `jethac` forks.
+  - keep FlashInfer kernel/page/stride changes in FlashInfer, vLLM routing/tensor plumbing in vLLM, and SGLang memory-pool/calibration/backend-wrapper changes in SGLang.
+  - first port scope is symmetric NVFP4 B2 only; no hidden V scale-factor scratch cache and no mixed K/V experiments until GB10 proof exists.
 
 ## First Benchmark Campaign Summary
 
