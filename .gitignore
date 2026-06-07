@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+results/*.json
+results/*.jsonl
+results/spark_doctor*.md
+results/spark_doctor*.json
+!results/20260606_BENCHMARKING.md
