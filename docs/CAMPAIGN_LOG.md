@@ -160,6 +160,17 @@
   - stock fp4 FlashInfer row: fails at `KV4Compatibility`, rejecting FlashInfer for MHA FP4 KV.
   - stock fp4 Triton row: allocates `5,534,509` KV tokens, about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
   - conclusion: fp8 is now a real SGLang Qwen comparator; stock fp4 KV is not a serving path yet, and the next after-row should use the `jethac/sglang` fork.
+- Captured the matched SGLang Qwen BF16/auto comparator at `mem_fraction_static=0.40`.
+  - artifacts: `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_openai_benchmark.json` and server log.
+  - result: BF16/auto KV allocated `1,557,709` tokens and decoded `58.89`, `58.59`, and `57.73 tok/s` across the standard short, medium, and long-prefill cases.
+  - conclusion: fp8 roughly doubles KV pool tokens over BF16/auto at matched memory fraction without materially changing decode speed on this small Qwen row.
+- Pushed the SGLang FP4 KV alias fix and ran patched overlay serving attempts.
+  - fork commit: `jethac/sglang@98ad46961`.
+  - change: `KVFP4QuantizeUtil` is now an alias of `BlockFP4KVQuantizeUtil`, matching the historical import used by the MHA KV memory-pool path.
+  - FlashInfer attention overlay: clears the stock compatibility/import failures, allocates `5,539,718` FP4 KV tokens, targets `compute_121a,code=sm_121a`, then fails compiling FlashInfer FP4 decode at `vec_dtypes.cuh(117)`.
+  - Triton attention overlay: normal graph capture stalls; disabling only standard CUDA graphs still enters piecewise graph capture and stalls; disabling both graph modes serves.
+  - no-graphs Triton FP4 KV result: `5,541,103` KV tokens, smoke passes, but `short_decode` is only `0.276 tok/s` with repetitive output.
+  - conclusion: the FP4 KV capacity path is real, but SGLang FP4 KV remains unblessed until the clean fork/dependency stack serves with graphs and acceptable quality.
 - Added `scripts/record_openai_serving_row.py`.
   - purpose: capture smoke, benchmark, optional runtime/CUDA audits, and a manifest for one already-running OpenAI-compatible server.
   - verification: `python -m py_compile` passed and `--dry-run` emits relative artifact paths and portable command records.

@@ -99,11 +99,23 @@ Target:
 Artifacts:
 
 - summary: `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- BF16/auto benchmark: `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_openai_benchmark.json`
+- BF16/auto server log: `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_server.log`
 - fp8 smoke: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_chat_smoke.json`
 - fp8 benchmark: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_openai_benchmark.json`
 - fp8 server log: `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_server.log`
 - fp4 FlashInfer startup failure: `results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log`
 - fp4 Triton startup failure: `results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log`
+- patched fp4 FlashInfer startup failure: `results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log`
+- patched fp4 Triton no-graphs benchmark: `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json`
+
+BF16/auto result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | decode tok/s |
+|---|---:|---:|---:|---:|
+| `short_decode` | 44 | 64 | 0.042 | 58.89 |
+| `medium_decode` | 56 | 192 | 0.035 | 58.59 |
+| `long_prefill` | 2369 | 64 | 0.136 | 57.73 |
 
 fp8 result summary:
 
@@ -116,10 +128,12 @@ fp8 result summary:
 Interpretation:
 
 - fp8 KV is now the concrete SGLang Qwen comparator row for issue #20.
+- BF16/auto KV is the matched memory-fraction comparator row: it allocated `1,557,709` KV tokens and ran at roughly the same decode speed as fp8.
 - fp8 KV selected FlashInfer attention, enabled CUDA graphs, and allocated a `3,113,713` token KV pool.
 - stock `fp4_e2m1` with FlashInfer attention failed at SGLang's `KV4Compatibility` gate.
 - stock `fp4_e2m1` with Triton attention allocated a larger `5,534,509` token KV pool, about `1.78x` the fp8 row, then failed on missing `KVFP4QuantizeUtil`.
-- This is a useful before-state for the `jethac/sglang` fork, not a blessed FP4 KV serving result.
+- patched `jethac/sglang@98ad46961` overlay cleared those SGLang blockers. FlashInfer attention then failed inside FlashInfer FP4 E2M1 decode JIT, while Triton attention served only with both CUDA graph modes disabled.
+- The patched no-graphs Triton FP4 KV row allocated `5,541,103` KV tokens but decoded at only `0.276 tok/s` on `short_decode` with visibly repetitive output. This is a capacity/debug proof, not a blessed FP4 KV serving result.
 
 ## 2026-06-07: SGLang Gemma 4 E2B Blocker
 

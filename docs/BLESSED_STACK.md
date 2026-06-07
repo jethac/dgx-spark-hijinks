@@ -39,11 +39,11 @@ From the initial personal Gemma 4 benchmark run:
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
 - GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
 - `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
-- Qwen speed/capacity is now a required benchmark lane, but only the small SGLang BF16 Qwen smoke is locally proven. AEON's Qwen3.6 NVFP4+DFlash result is external prior art until reproduced with local artifacts.
+- Qwen speed/capacity is now a required benchmark lane. Small SGLang Qwen BF16/auto and fp8 rows are locally proven at about 58-59 tok/s; AEON's Qwen3.6 NVFP4+DFlash result is external prior art until reproduced with local artifacts.
 - `hikarioyama/vllm-nvfp4-kv-sm120` and `hikarioyama/sglang-nvfp4-kv-sm120` are audited SM120 reference implementations and should be used as prior art for our forks. They are not GB10 `sm_121` blessed stacks until fp8-vs-NVFP4 quality, capacity, and speed are reproduced on Spark-class hardware.
 - Multi-Spark recipes are not validated because we currently have only one unit.
 - The inspected vLLM/FlashInfer extension set has no explicit `sm_121` SASS. General vLLM extensions include `sm_120`, while several attention/MLA extensions are `sm_80`, `sm_90a`, or `sm_100` only. Treat this as a validation requirement, not an automatic failure.
-- SGLang NVFP4 KV is not validated on our Spark yet. Track `hikarioyama/sglang-nvfp4-kv-sm120` as a candidate design reference, but do not bless it until a Spark fp4-vs-fp8 quality check passes.
+- SGLang NVFP4 KV is not blessed on our Spark yet. The patched overlay can serve Qwen FP4 KV only with standard and piecewise CUDA graphs disabled, at about `0.276 tok/s` with poor output; track `hikarioyama/sglang-nvfp4-kv-sm120` as a candidate design reference, but do not bless it until a clean Spark fp4-vs-fp8 quality and performance check passes.
 - The tested NVIDIA SGLang container still logs `SM120 (Blackwell) detected` and audited SGLang/FlashInfer objects contain no explicit `sm_121` SASS. Treat the BF16 smoke as functional evidence, not proof of fully Spark-native kernel coverage.
 - FlashInfer source/JIT validation at `jethac/flashinfer@a42c8f07` proves one important lower-level fix: installed vLLM/SGLang containers exclude `b12x` from SM121 NVFP4 `mm_fp4` auto-dispatch, while the patched source selects `b12x` and can run tiny and model-shaped NVFP4 GEMMs on GB10. Current microbenchmarks do not show a speedup. This is not yet a blessed serving stack because it required an ephemeral source install and removal of stale FlashInfer JIT/cubin packages.
 - FlashInfer FA2 NVFP4 paged-KV standalone correctness now passes on GB10 with `jethac/flashinfer@e152cf4d` and vLLM-style V-scale-factor de-swizzle enabled. This is kernel-level evidence, not a blessed vLLM/SGLang serving stack.
@@ -60,7 +60,7 @@ To be tested:
 - vLLM Qwen3.6 NVFP4+DFlash reproduction from AEON prior art, then a matched fork after-row with backend logs.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
-- SGLang Qwen fp8-vs-`fp4_e2m1` KV comparison before broader SGLang FP4 KV claims.
+- SGLang Qwen fp8-vs-`fp4_e2m1` KV clean after-row with graph-compatible serving and quality checks before broader SGLang FP4 KV claims.
 - vLLM NVFP4 KV fork probe derived from the hikarioyama SM120 implementation, reduced to a single-Spark GB10 test before any TP=2 or long-context claims.
 - Optional LiteRT-LM GPU chat fix or documented CPU-only/complement role.
 - llama.cpp commit with an API schema that can satisfy lm-eval loglikelihood scoring, or a patched adapter.

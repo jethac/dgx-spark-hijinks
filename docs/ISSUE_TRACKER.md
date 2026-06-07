@@ -21,9 +21,9 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | upstream forks, submodules, and worktrees | FlashInfer, vLLM, and SGLang forks/submodules/worktrees created; FlashInfer, vLLM, and SGLang KV patch branches pushed and submodules advanced | [#15](https://github.com/jethac/dgx-spark-hijinks/issues/15) |
 | LiteRT-LM on Spark | optional side runtime; CPU path proven; GPU chat crash open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | blessed for 26B Q4_0 serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
-| SGLang NVFP4 KV on Spark | SM12x FP4 KV compatibility gate patch pushed; Linux/aarch64 targeted `KV4Compatibility` pytest passed; stock NVIDIA 26.05 Qwen fp4 KV fails before serving after showing 1.78x pool potential; fork serving validation pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
+| SGLang NVFP4 KV on Spark | `jethac/sglang@98ad46961` clears SM12x FP4 KV gate and alias blockers; patched overlay shows 1.78x fp8 pool potential and can serve only with graph paths disabled at 0.276 tok/s; clean graph-compatible serving still pending | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
 | before/after GB10 benchmark protocol | SM-count-aware hardware comparison keys added | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |
-| Qwen speed and capacity benchmarks | SGLang Qwen fp8 before row captured; stock fp4 KV failure/capacity evidence captured; vLLM AEON reproduction and llama.cpp Qwen GGUF rows pending | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
+| Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured at matched memory fraction; patched fp4 KV capacity/debug row captured but not usable for speed; vLLM AEON reproduction and llama.cpp Qwen GGUF rows pending | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 
 ## Triage Rules
 

@@ -46,6 +46,38 @@ Result:
 - build-target audit: server log did not expose explicit CUDA architecture build targets
 - CUDA shared-object audit: no explicit `sm_121` SASS claim should be inferred from this row
 
+## BF16/Auto KV Comparator
+
+Command shape:
+
+```bash
+python3 -m sglang.launch_server \
+  --model-path Qwen/Qwen2.5-1.5B-Instruct \
+  --dtype bfloat16 \
+  --attention-backend flashinfer \
+  --page-size 1 \
+  --mem-fraction-static 0.40
+```
+
+Artifacts:
+
+- `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_chat_smoke.json`
+- `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_openai_benchmark.json`
+- `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_server.log`
+- `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_container_inspect.json`
+
+Result:
+
+- chat smoke: passed, returned `spark-ok`
+- attention backend: `flashinfer`
+- KV cache dtype: `torch.bfloat16`
+- KV pool: `1,557,709` tokens, K `20.80 GB`, V `20.80 GB`
+- CUDA graphs: enabled; full and piecewise graph capture completed
+- decode:
+  - short: `58.89 tok/s`, TTFT `0.042 s`
+  - medium: `58.59 tok/s`, TTFT `0.035 s`
+  - long-prefill: `57.73 tok/s`, TTFT `0.136 s`, prompt tokens `2369`
+
 ## Stock fp4_e2m1 KV Failures
 
 FlashInfer attention attempt:
@@ -93,10 +125,55 @@ Result: allocated a larger FP4 KV pool, then failed before server health:
 - capacity ratio versus fp8 row: about `1.78x`
 - failure: `ImportError: cannot import name 'KVFP4QuantizeUtil' from 'sglang.srt.layers.quantization.kvfp4_tensor'`
 
+## Patched Overlay fp4_e2m1 KV Attempts
+
+Overlay source:
+
+- SGLang fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
+- fork commit: `98ad46961`
+- overlay helper: `scripts/patch_sglang_fp4_kv_site.py`
+
+The overlay applied three Python-level fixes inside the NVIDIA 26.05 image:
+
+- `server_args_fa4_gate=True`
+- `server_args_mha_gate=True`
+- `kvfp4_alias=True`
+
+FlashInfer attention artifact:
+
+- `results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_container_inspect.json`
+
+FlashInfer attention result:
+
+- moved past stock `KV4Compatibility` and missing-alias failures
+- allocated `5,539,718` FP4 KV tokens
+- FlashInfer JIT targeted `compute_121a,code=sm_121a`
+- failed compiling the FlashInfer FP4 decode kernel: `vec_dtypes.cuh(117): no suitable conversion function from const Params::DTypeKV to float`
+
+Triton attention artifacts:
+
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_20260608T0352JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nograph_20260608T0400JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_chat_smoke.json`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_server.log`
+
+Triton attention result:
+
+- normal CUDA graph capture reached FP4 KV allocation, then stalled at the first graph-capture batch
+- `--disable-cuda-graph` alone still entered piecewise CUDA graph capture and stalled after two dynamic-shape compiles
+- disabling both standard and piecewise CUDA graphs reached serving and returned `spark-ok`
+- no-graphs FP4 KV pool: `5,541,103` tokens, about `3.56x` BF16/auto capacity and `1.78x` fp8 capacity
+- no-graphs short decode: `0.276 tok/s`, TTFT `5.812 s`, total `238.044 s` for 64 completion tokens
+- output quality was visibly poor and repetitive on the short benchmark
+
 ## Interpretation
 
 This is a useful SGLang before-state for issue #20 and #18.
 
-The stock NVIDIA SGLang 26.05 image can serve the cached Qwen2.5 1.5B model with fp8 KV on GB10 at about `58-59 tok/s` decode and a `3.11M` token KV pool. Stock `fp4_e2m1` does not currently produce a serving row on the same image. The FlashInfer route is blocked by an attention-backend compatibility gate; the Triton route reaches FP4 KV allocation and shows the expected `~1.78x` capacity increase, but then fails on missing `KVFP4QuantizeUtil`.
+The stock NVIDIA SGLang 26.05 image can serve the cached Qwen2.5 1.5B model with BF16/auto and fp8 KV on GB10 at about `58-59 tok/s` decode. fp8 provides about `2.0x` the BF16/auto KV pool at matched memory fraction with similar decode speed.
 
-Do not call SGLang FP4 KV blessed from this evidence. The next meaningful after-row is the `jethac/sglang` fork with the same model and prompts, proving whether the compatibility gate and missing quantization utility path are fixed and whether output quality is acceptable.
+The patched overlay proves the first SGLang-side FP4 KV blockers are fixable and that the expected larger FP4 KV pool is real. It does not prove a usable FP4 KV serving stack. FlashInfer attention now fails inside FlashInfer FP4 E2M1 decode compilation, while Triton attention serves only with CUDA graphs disabled and is about two orders of magnitude slower than BF16/fp8.
+
+Do not call SGLang FP4 KV blessed from this evidence. The next meaningful after-row is a clean `jethac/sglang` plus dependency build with graph-compatible FP4 KV, quality comparison against BF16/fp8, and no site-package overlay.

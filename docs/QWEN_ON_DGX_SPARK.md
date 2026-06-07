@@ -9,7 +9,7 @@ Qwen is a first-class Spark target alongside Gemma. Gemma exercises the hardest 
 | runtime | row | status |
 |---|---|---|
 | vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | external GB10 prior art reports strong speed and soak stability; local reproduction pending |
-| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8 | local GB10 BF16 and fp8 rows pass at about 58-60 tok/s decode; stock fp4 KV fails before serving |
+| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
 | llama.cpp | Qwen GGUF | not yet run locally; Gemma 4 Q4_0 is only a proxy for practical GGUF serving |
 
 ## vLLM Target
@@ -44,10 +44,13 @@ Start with a standard-attention Qwen model before Qwen3.6 hybrid/MoE. Small mode
 Current SGLang Qwen evidence:
 
 - `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- BF16/auto KV comparator: `Qwen/Qwen2.5-1.5B-Instruct`, FlashInfer attention, CUDA graphs enabled, `1,557,709` token KV pool, `57.7-58.9 tok/s` decode at `mem_fraction_static=0.40`.
 - fp8 KV before row: `Qwen/Qwen2.5-1.5B-Instruct`, FlashInfer attention, CUDA graphs enabled, `3,113,713` token KV pool, about `58-59 tok/s` decode.
 - stock `fp4_e2m1` with FlashInfer attention fails at the compatibility gate.
 - stock `fp4_e2m1` with Triton attention reaches FP4 KV allocation, `5,534,509` tokens or about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
-- next after-row: run the same model and prompts through the `jethac/sglang` fork and prove whether FP4 KV can serve with acceptable output quality.
+- patched overlay using `jethac/sglang@98ad46961` gate/alias changes clears the stock SGLang blockers. FlashInfer attention reaches an `sm_121a` JIT compile and fails in FlashInfer FP4 decode. Triton attention serves only after disabling both standard and piecewise CUDA graphs, with `5,541,103` FP4 KV tokens, but the short decode row is only `0.276 tok/s` and output is repetitive.
+
+Interpretation: FP4 KV capacity is real on this Qwen row, but the serving path is not performance-usable yet. The next after-row must be a clean fork/container with graph-compatible FP4 KV and a quality check, not a site-package overlay.
 
 ## llama.cpp Target
 

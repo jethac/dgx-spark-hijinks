@@ -1,0 +1,74 @@
+{
+  "backend": "sglang-fp4kv-triton-nographs",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 318,
+      "content_preview": "A local AI helper benefits from fast memory memory in. the fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast fast",
+      "decode_s": 232.23225155699765,
+      "decode_tok_s": 0.2755861839641693,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859104,
+        "id": "aa0e0aadeeb04dbaa021b320823f0e7a",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 108
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 238.04391284499434,
+      "ttft_s": 5.811661287996685,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T19:05:04Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "sglang-qwen25-1-5b-fp4kv-patched-triton-nographs-20260608T0404JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T19:01:04Z",
+  "url": "http://127.0.0.1:30007"
+}

@@ -1,0 +1,38 @@
+{
+  "content": "spark-ok",
+  "elapsed_s": 11.084,
+  "endpoint": "http://127.0.0.1:30007/v1/chat/completions",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "ok": true,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "matched_stop": 151645,
+        "message": {
+          "content": "spark-ok",
+          "reasoning_content": null,
+          "role": "assistant",
+          "tool_calls": null
+        }
+      }
+    ],
+    "created": 1780858864,
+    "id": "6305e1bac172435cb825e393a425ceb1",
+    "metadata": {
+      "weight_version": "default"
+    },
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 3,
+      "prompt_tokens": 37,
+      "prompt_tokens_details": null,
+      "reasoning_tokens": 0,
+      "total_tokens": 40
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

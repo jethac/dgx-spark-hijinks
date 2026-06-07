@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16 and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; hikarioyama SM120 NVFP4 KV fork audited; SGLang SM12x FP4 KV gate pytest passed; no SGLang NVFP4 KV serving run has passed on GB10/SM121.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; `jethac/sglang@98ad46961` clears the first gate/alias blockers; patched Triton FP4 KV can serve only with graph paths disabled and is too slow to bless.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -42,7 +42,7 @@ Before NVFP4:
 - capture `spark_doctor`: done for `sglang_20260607T115213Z`
 - start an OpenAI-compatible server: done on port `30000`
 - run `scripts/openai_chat_smoke.py`: passed
-- establish BF16 or fp8 KV quality and speed: BF16 baseline captured for Qwen; fp8 is still unproven on our GB10 SGLang path
+- establish BF16 or fp8 KV quality and speed: BF16/auto and fp8 baselines are captured for Qwen on the GB10 SGLang path
 
 Only then test `fp4_e2m1`.
 
@@ -51,22 +51,29 @@ Only then test `fp4_e2m1`.
 Artifacts:
 
 - `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md`
+- `results/sglang_qwen25_1_5b_bf16auto_040mem_20260608T0409JST_openai_benchmark.json`
 - `results/sglang_qwen25_1_5b_fp8kv_20260608T0332JST_openai_benchmark.json`
 - `results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log`
 - `results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log`
+- `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json`
 
 Result:
 
+- BF16/auto KV with FlashInfer attention serves at the same `mem_fraction_static=0.40` and records `1,557,709` KV tokens.
+- BF16/auto decode is `58.89`, `58.59`, and `57.73 tok/s` across the standard short, medium, and long-prefill cases.
 - fp8 KV with FlashInfer attention serves `Qwen/Qwen2.5-1.5B-Instruct` on GB10 and records `NVIDIA_GB10:sm_121:sms_48`.
 - fp8 KV allocated `3,113,713` KV tokens and decoded around `58-59 tok/s`.
 - stock `fp4_e2m1` with FlashInfer attention fails before health because `KV4Compatibility` rejects FlashInfer for MHA FP4 KV.
 - stock `fp4_e2m1` with Triton attention allocates `5,534,509` KV tokens, about `1.78x` fp8 capacity, then fails before health because `KVFP4QuantizeUtil` cannot be imported from `kvfp4_tensor.py`.
+- patched FlashInfer attention clears the SGLang gate and alias blockers, allocates `5,539,718` FP4 KV tokens, targets `compute_121a,code=sm_121a`, then fails compiling FlashInfer FP4 decode at `vec_dtypes.cuh(117)`.
+- patched Triton attention with normal graph capture hangs at the first CUDA graph batch. With only `--disable-cuda-graph`, it still enters piecewise graph capture and stalls. With both `--disable-cuda-graph` and `--disable-piecewise-cuda-graph`, it serves and allocates `5,541,103` FP4 KV tokens, but short decode is only `0.276 tok/s` and output quality is visibly poor.
 
 Interpretation:
 
 - This confirms fp8 is a valid SGLang Qwen comparator on our GB10.
 - This also confirms stock NVIDIA 26.05 SGLang does not yet provide a working `fp4_e2m1` serving row for this Qwen model.
-- The FlashInfer failure is directly relevant to the `jethac/sglang` SM12x FP4 KV gate patch. The Triton failure shows there is a second integration gap after allocation.
+- The SGLang fork fixes are necessary but not sufficient. The remaining blockers are FlashInfer FP4 E2M1 decode support for the FlashInfer-attention path and graph-compatible Triton FP4 KV serving with sane output.
 
 ## 2026-06-07 Smoke Result
 
@@ -173,14 +180,14 @@ Known risk: on `aarch64`, SGLang may JIT some kernels at first launch instead of
 
 ## NVFP4 Rule
 
-Use BF16 and fp8 as the proven SGLang Qwen baselines on our Spark today. Keep NVFP4/FP4 KV unblessed until it passes on Spark with a quality check.
+Use BF16/auto and fp8 as the proven SGLang Qwen baselines on our Spark today. Keep NVFP4/FP4 KV unblessed until it passes on Spark with graph-compatible serving and a quality check.
 
 Current fork verification:
 
-- `jethac/sglang@eefe8aded` has passed Linux `aarch64` syntax compilation and targeted `KV4Compatibility` pytest for the touched FP4 KV gate files.
+- `jethac/sglang@98ad46961` has passed Linux `aarch64` syntax compilation, targeted `KV4Compatibility` pytest for the touched FP4 KV gate files, and a targeted import-alias test for the historical `KVFP4QuantizeUtil` name.
 - A CPU-only Docker route was attempted to avoid spending GPU time on Python-level `KV4Compatibility` tests, but `docker/arm64.Dockerfile` failed before pytest while building `sglang-kernel-cpu`; see `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`.
 - A no-kernel scratch-venv pytest route passed; see `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md`.
-- No SGLang `fp4_e2m1` server row exists yet.
+- The site-package overlay after-row proves `fp4_e2m1` can serve only when both CUDA graph modes are disabled; that row is not blessed because it is overlay-based, very slow, and low quality.
 
 For NVFP4 validation, record:
 

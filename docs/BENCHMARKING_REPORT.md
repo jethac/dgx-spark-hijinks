@@ -166,6 +166,8 @@ After the initial personal campaign snapshot, targeted compact probes were added
 | vLLM Gemma 4 12B | source/precompiled vLLM commit `da1daf40` plus Transformers main serves at about 7.7 tok/s | proves `gemma4_unified` can run on GB10, but not a clean release container or performance win |
 | llama.cpp Gemma 4 26B Q4_0 | OpenAI-compatible serving around 76 tok/s decode with `--reasoning off`; `llama-bench` tg128 around 77 tok/s | practical GGUF serving path is blessed; lm-eval GGUF accuracy remains blocked |
 | LiteRT-LM Gemma 4 E2B | CPU chat works; GPU benchmark works; GPU chat prints output then exits `-11` | optional side-runtime evidence, not a main Spark performance path |
+| SGLang Qwen2.5 1.5B BF16/auto vs fp8 | matched `mem_fraction_static=0.40` rows run at about 58-59 tok/s; fp8 KV pool is 3.11M tokens vs 1.56M BF16/auto | fp8 is a capacity win with decode-speed parity on this small Qwen row |
+| SGLang Qwen2.5 1.5B patched FP4 KV | patched overlay serves only with both CUDA graph modes disabled; FP4 KV pool is 5.54M tokens but short decode is 0.276 tok/s with repetitive output | FP4 KV capacity path is real, but SGLang FP4 KV is not a usable speed path yet |
 
 The current headline remains conservative: the scaffolding and evidence are much better, but no end-to-end NVFP4 serving speedup has been banked yet.
 

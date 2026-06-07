@@ -1,0 +1,150 @@
+{
+  "backend": "sglang-bf16auto",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "content_chars": 398,
+      "content_preview": "A local AI workstation benefits from fast memory because it allows for efficient storage and processing of large amounts of data, which is crucial in the field of artificial intelligence. Fast memory enables faster access to information, allowing for quicker decision-making and more accurate predictions. This can be particularly important when working with complex models or datasets that require",
+      "decode_s": 1.086727162997704,
+      "decode_tok_s": 58.89242689347889,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859248,
+        "id": "023dea51d694468f9b2e3691816bc663",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 108
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.1291105300188065,
+      "ttft_s": 0.04238336702110246,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "content_chars": 909,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is utilizing the correct and intended GPU kernels for optimal performance.\n\n### Methodology:\n\n1. **Identify Relevant Kernels:**\n   - Determine which specific GPU kernels are required by your LLM model.\n   - List these kernels in a clear, organized manner.\n\n2. **Monitor System Logs:**\n   - Use system logs to track kernel usage patterns over time.\n   - Look for an",
+      "decode_s": 3.277284702984616,
+      "decode_tok_s": 58.58508411708815,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859251,
+        "id": "7d9d103a9a874c6ba2a3d2431cf19f84",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 56,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 248
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.312746838986641,
+      "ttft_s": 0.035462136002024636,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 67,
+      "content_chars": 331,
+      "content_preview": "1. Capture environment metadata: Gather information about the hardware, software configuration, and system settings of the local inference server.\n2. Backend selection: Determine which backend (e.g., TensorFlow Serving, ONNX Runtime) will be used for inference.\n3. Cold-start time: Measure the time it takes to initialize and start",
+      "decode_s": 1.108686273015337,
+      "decode_tok_s": 57.72597853668443,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780859252,
+        "id": "3e853121994c4399b649bac72efa5e15",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2433
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.244921522011282,
+      "ttft_s": 0.13623524899594486,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2433
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T19:07:32Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "before",
+  "run_id": "sglang-qwen25-1-5b-bf16auto-040mem-20260608T0409JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T19:07:26Z",
+  "url": "http://127.0.0.1:30008"
+}
