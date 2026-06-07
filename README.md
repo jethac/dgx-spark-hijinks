@@ -18,6 +18,7 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
+- Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
 
 ## First Commands
@@ -39,6 +40,17 @@ For a compact OpenAI-compatible smoke test against vLLM, SGLang, llama.cpp, or a
 
 ```bash
 python3 scripts/openai_chat_smoke.py --url http://127.0.0.1:8000 --model MODEL_NAME
+```
+
+For before/after measurement against an OpenAI-compatible server:
+
+```bash
+python3 scripts/openai_serving_benchmark.py \
+  --url http://127.0.0.1:8000 \
+  --backend vllm \
+  --phase before \
+  --run-id RUN_ID \
+  --output results/RUN_ID.json
 ```
 
 To inspect installed CUDA extension binaries:

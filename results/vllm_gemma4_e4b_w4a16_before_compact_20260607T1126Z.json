@@ -1,0 +1,103 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 66,
+      "content_chars": 349,
+      "content_preview": "A local AI workstation benefits immensely from fast memory because the entire process of training, fine-tuning, and running large language models (LLMs) or complex deep learning algorithms is inherently data-intensive. These models require massive datasets to be constantly accessed, processed, and held in active memory (RAM) while the GPU performs",
+      "decode_s": 1.2390290820039809,
+      "decode_tok_s": 51.653347713588516,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.2708742120012175,
+      "ttft_s": 0.031845129997236654,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "total_tokens": 88
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 194,
+      "content_chars": 932,
+      "content_preview": "## Engineering Note: Validating LLM Server GPU Kernel Usage\n\n**Objective:** To verify that the deployed LLM server is executing the intended, optimized GPU kernels (e.g., specific CUDA kernels, Triton kernels, or framework-specific implementations) rather than generic or fallback kernels.\n\n**Methodology:** Kernel validation requires observing the execution flow and resource utilization at the GPU level during inference.\n\n**Procedure:**\n\n1. **Instrumentation/Profiling:** Utilize GPU profiling too",
+      "decode_s": 3.746445386990672,
+      "decode_tok_s": 51.24857836356285,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.7785551569832023,
+      "ttft_s": 0.032109769992530346,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 36,
+        "total_tokens": 228
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 66,
+      "content_chars": 359,
+      "content_preview": "Here are five concise bullet points summarizing the requirements for benchmarking your local inference server:\n\n* **System & Configuration Tracking:** Record all relevant **environment metadata** and the specific **backend selection** used for each test run.\n* **Performance Metrics:** Measure key latency indicators, specifically **cold-start time** (initial",
+      "decode_s": 1.2828966710076202,
+      "decode_tok_s": 49.88710427452645,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.7527651689888444,
+      "ttft_s": 0.4698684979812242,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2266,
+        "total_tokens": 2330
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T11:26:32Z",
+  "model": "google/gemma-4-E4B-it-qat-w4a16-ct",
+  "models_response": {
+    "data": [
+      {
+        "created": 1780831585,
+        "id": "google/gemma-4-E4B-it-qat-w4a16-ct",
+        "max_model_len": 8192,
+        "object": "model",
+        "owned_by": "vllm",
+        "parent": null,
+        "permission": [
+          {
+            "allow_create_engine": false,
+            "allow_fine_tuning": false,
+            "allow_logprobs": true,
+            "allow_sampling": true,
+            "allow_search_indices": false,
+            "allow_view": true,
+            "created": 1780831585,
+            "group": null,
+            "id": "modelperm-b51d257b6b3acec0",
+            "is_blocking": false,
+            "object": "model_permission",
+            "organization": "*"
+          }
+        ],
+        "root": "google/gemma-4-E4B-it-qat-w4a16-ct"
+      }
+    ],
+    "object": "list"
+  },
+  "ok": true,
+  "phase": "before",
+  "run_id": "vllm-gemma4-e4b-w4a16-before-compact-20260607T1126Z",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T11:26:25Z",
+  "url": "http://127.0.0.1:8000"
+}

@@ -54,11 +54,23 @@ Keep this short enough to run repeatedly on one unit.
 2. Serving smoke
    - one short deterministic OpenAI-compatible chat request
    - one medium generation request
+   - use `scripts/openai_serving_benchmark.py` when the backend exposes an OpenAI-compatible API
 
 3. Throughput
    - short prompt / short output
    - long prompt / short output
    - short prompt / long output
+
+Example:
+
+```bash
+python3 scripts/openai_serving_benchmark.py \
+  --url http://127.0.0.1:8000 \
+  --backend vllm \
+  --phase before \
+  --run-id vllm-gemma4-e4b-w4a16-before-001 \
+  --output results/vllm_gemma4_e4b_w4a16_before_001.json
+```
 
 4. Quality sanity
    - deterministic prompt expected to produce stable text
@@ -87,3 +99,8 @@ Known before-state evidence:
 
 The next step is to turn this into a compact repeatable before/after suite.
 
+First compact before row:
+
+- `docs/BASELINE_RESULTS.md`
+- `results/vllm_gemma4_e4b_w4a16_before_compact_20260607T1126Z.json`
+- `results/spark_doctor_before_vllm_gemma4_e4b_w4a16_20260607T1126Z.md`
