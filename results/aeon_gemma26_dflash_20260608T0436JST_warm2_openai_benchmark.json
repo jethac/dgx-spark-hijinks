@@ -1,0 +1,138 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 32,
+      "content_chars": 373,
+      "content_preview": "A local AI workstation benefits from fast memory because the performance of modern machine learning workloads is frequently bottlenecked by the speed at which data can be moved between the processor and the system RAM. During the training and inference of large-scale models, the system must constantly shuttle massive multidimensional arrays, known as tensors, through the",
+      "decode_s": 1.3357349580037408,
+      "decode_tok_s": 47.91369696249334,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780862055,
+        "id": "chatcmpl-a6d05cd0716d3a55",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.4339328380010556,
+      "ttft_s": 0.09819787999731489,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 79,
+      "content_chars": 850,
+      "content_preview": "**Engineering Note: Validation of LLM Kernel Execution**\n\n**Objective:** To verify that the LLM inference server is executing the intended optimized kernels (e.g., FlashAttention, PagedAttention, or custom Triton kernels) rather than falling back to generic, unoptimized implementations.\n\n### 1. Validation Methodology\nValidation must move from high-level profiling to low-level instruction inspection to ensure the \"intended\" code is actually running on the hardware.\n\n#### Phase A: Profiling (Macro",
+      "decode_s": 3.5821846109756734,
+      "decode_tok_s": 53.59857764217944,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780862056,
+        "id": "chatcmpl-8053dd873c99a77f",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.669477041985374,
+      "ttft_s": 0.08729243100970052,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "total_tokens": 232
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 16,
+      "content_chars": 325,
+      "content_preview": "Here is the summary of the benchmark requirements:\n\n* **Configuration:** Capture environment metadata and backend selection.\n* **Latency:** Measure cold-start time and warm decode speed.\n* **Resource Utilization:** Monitor memory pressure.\n* **Performance Quality:** Evaluate output quality.\n* **Reliability:** Ensure results",
+      "decode_s": 0.6505683890136424,
+      "decode_tok_s": 98.37551452051557,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780862060,
+        "id": "chatcmpl-aef267e36d12a592",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2270,
+          "total_tokens": 2334
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 0.7680853450146969,
+      "ttft_s": 0.1175169560010545,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2270,
+        "total_tokens": 2334
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T19:54:21Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "dgx_spark_baseline_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "model": "gemma4-fast",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "aeon_gemma26_dflash_20260608T0436JST_warm2",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T19:54:14Z",
+  "url": "http://127.0.0.1:8000"
+}

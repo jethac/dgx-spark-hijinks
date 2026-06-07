@@ -1,0 +1,126 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 32,
+      "content_chars": 373,
+      "content_preview": "A local AI workstation benefits from fast memory because the performance of modern machine learning workloads is frequently bottlenecked by the speed at which data can be moved between the processor and the system RAM. During the training and inference of large-scale models, the system must constantly shuttle massive multidimensional arrays, known as tensors, through the",
+      "decode_s": 1.3336046389886178,
+      "decode_tok_s": 47.99023498338793,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780861964,
+        "id": "chatcmpl-b942b3301f356ce6",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 1.4422517139755655,
+      "ttft_s": 0.1086470749869477,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 83,
+      "content_chars": 841,
+      "content_preview": "**Engineering Note: Validation of LLM Kernel Execution**\n\n**Objective:** To verify that the LLM inference server is executing the intended optimized GPU kernels (e.g., FlashAttention, PagedAttention, or custom Triton kernels) rather than falling back to generic, unoptimized implementations.\n\n### 1. Validation Methodology\nValidation must move from high-level profiling to low-level instruction inspection to ensure the execution path matches the architectural intent.\n\n#### Phase A: Profiling (Macro",
+      "decode_s": 3.7642802410118748,
+      "decode_tok_s": 51.005766762038036,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780861965,
+        "id": "chatcmpl-860d644586044592",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 3.8471641080104746,
+      "ttft_s": 0.08288386699859984,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "total_tokens": 232
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 17,
+      "content_chars": 332,
+      "content_preview": "Here is the summary of the benchmark requirements:\n\n* **Configuration & Environment:** Capture environment metadata and backend selection.\n* **Latency Metrics:** Measure cold-start time and warm decode speed.\n* **Resource Utilization:** Monitor memory pressure.\n* **Performance Quality:** Evaluate output quality.\n* **Consistency:**",
+      "decode_s": 0.7003596700087655,
+      "decode_tok_s": 91.38161824652038,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780861969,
+        "id": "chatcmpl-901b6043f1efe6df",
+        "model": "gemma4-aeon-uncensored",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2270,
+          "total_tokens": 2334
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 1.194375310005853,
+      "ttft_s": 0.4940156399970874,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2270,
+        "total_tokens": 2334
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T19:52:50Z",
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "gemma4-fast",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "aeon_gemma26_dflash_20260608T0436JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T19:52:44Z",
+  "url": "http://127.0.0.1:8000"
+}

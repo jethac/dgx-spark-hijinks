@@ -35,6 +35,7 @@ From the initial personal Gemma 4 benchmark run:
 
 ## Known Bad Or Not Yet Blessed
 
+- AEON's vLLM `0.20.1` Gemma 4 26B NVFP4+DFlash image is now locally proven for practical serving on GB10; keep it as the fastest measured vLLM Gemma 26B path while accuracy and fork parity remain pending.
 - vLLM `0.22.1` is not blessed for Gemma 4 12B `gemma4_unified` on Spark.
 - NVIDIA SGLang `26.05-py3` is not currently a working Gemma 4 E2B path in our test: default Gemma4 multimodal setup crashes in the audio tower, and `--language-only` is not a valid standalone workaround.
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
@@ -58,7 +59,7 @@ To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
 - vLLM Qwen3.6 NVFP4+DFlash reproduction from AEON prior art, then a matched fork after-row with backend logs.
-- AEON Gemma/Qwen NVFP4+DFlash reproduction can now be launched with `scripts/run_aeon_vllm_reproduction.sh`; preflight passed, serving proof pending.
+- AEON Gemma NVFP4+DFlash reproduction is now measured locally; AEON Qwen3.6 NVFP4+DFlash remains the next reproduction target.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
 - SGLang Qwen fp8-vs-`fp4_e2m1` KV clean after-row with graph-compatible serving and quality checks before broader SGLang FP4 KV claims.

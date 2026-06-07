@@ -19,6 +19,7 @@ Environment:
   DOCKER_PULL=0                        set to 1 to docker pull before launch
   PROCESS_MATCH=vllm                   runtime process probe match string
   HF_CLI=hf                            Hugging Face CLI command override
+  RECORD_PYTHON=python3                Python used for RECORD=1 artifact capture
 EOF
 }
 
@@ -37,6 +38,7 @@ RECORD=${RECORD:-0}
 WAIT_TIMEOUT=${WAIT_TIMEOUT:-900}
 DOCKER_PULL=${DOCKER_PULL:-0}
 PROCESS_MATCH=${PROCESS_MATCH:-vllm}
+RECORD_PYTHON=${RECORD_PYTHON:-python3}
 
 REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 mkdir -p "${RESULTS_DIR}"
@@ -185,7 +187,7 @@ done
 docker logs "${RUN_ID}" > "${RESULTS_DIR}/${RUN_ID}_server.log" 2>&1 || true
 
 if [[ "${RECORD}" == "1" ]]; then
-  python3 "${REPO_ROOT}/scripts/record_openai_serving_row.py" \
+  "${RECORD_PYTHON}" "${REPO_ROOT}/scripts/record_openai_serving_row.py" \
     --backend vllm \
     --phase exploratory \
     --run-id "${RUN_ID}" \

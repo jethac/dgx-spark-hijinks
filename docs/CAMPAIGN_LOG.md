@@ -189,6 +189,15 @@
   - preflight artifact: `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md`
   - outcome: both AEON GHCR images resolve; Gemma/Qwen target and drafter HF repos are public and non-gated from the GB10 host.
   - limitation: no large model download or vLLM serving row has been started yet; this is readiness evidence for the next benchmark, not a performance result.
+- Reproduced the AEON Gemma 4 26B NVFP4+DFlash vLLM row locally.
+  - run ID: `aeon_gemma26_dflash_20260608T0436JST`
+  - image: `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`
+  - model: `AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4`
+  - drafter: `z-lab/gemma-4-26B-A4B-it-DFlash`
+  - artifact summary: `results/aeon_gemma26_dflash_20260608T0436JST_summary.md`
+  - warmed compact row: `47.91`, `53.60`, and `98.38 tok/s` across short, medium, and long-prefill cases.
+  - backend evidence: `FlashInferCutlassNvFp4LinearKernel`, `VLLM_CUTLASS` NvFp4 MoE, target `TRITON_ATTN`, drafter `FLASH_ATTN`, CUDA graphs, DFlash.
+  - caveats: not a `jethac` fork speedup claim; PyTorch arch list reports `sm_120` but not explicit `sm_121`; server log warns about differing NVFP4 global scales across fused parallel layers; accuracy remains separate.
 
 ## First Benchmark Campaign Summary
 

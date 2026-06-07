@@ -1,0 +1,44 @@
+{
+  "content": "spark-ok",
+  "elapsed_s": 47.731,
+  "endpoint": "http://127.0.0.1:8000/v1/chat/completions",
+  "model": "gemma4-fast",
+  "ok": true,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": null,
+          "audio": null,
+          "content": "spark-ok",
+          "function_call": null,
+          "reasoning": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "stop_reason": 106,
+        "token_ids": null
+      }
+    ],
+    "created": 1780861916,
+    "id": "chatcmpl-bbdc3aaf33afb9d5",
+    "kv_transfer_params": null,
+    "model": "gemma4-aeon-uncensored",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 4,
+      "prompt_tokens": 22,
+      "prompt_tokens_details": null,
+      "total_tokens": 26
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

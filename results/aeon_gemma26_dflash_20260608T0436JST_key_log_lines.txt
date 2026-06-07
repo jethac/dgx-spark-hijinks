@@ -1,0 +1,15 @@
+3:(APIServer pid=1) INFO 06-07 19:47:16 [utils.py:299]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.20.1
+12:(APIServer pid=1) INFO 06-07 19:47:25 [model.py:555] Resolved architecture: DFlashDraftModel
+15:(APIServer pid=1) INFO 06-07 19:47:25 [config.py:101] Gemma4 model has heterogeneous head dimensions (head_dim=256, global_head_dim=512). Forcing TRITON_ATTN backend to prevent mixed-backend numerical divergence.
+30:(EngineCore pid=137) INFO 06-07 19:48:02 [__init__.py:648] Using FlashInferCutlassNvFp4LinearKernel for NVFP4 GEMM
+31:(EngineCore pid=137) INFO 06-07 19:48:02 [cuda.py:308] Using AttentionBackendEnum.TRITON_ATTN backend.
+32:(EngineCore pid=137) INFO 06-07 19:48:02 [nvfp4.py:280] Using 'VLLM_CUTLASS' NvFp4 MoE backend out of potential backends: ['VLLM_CUTLASS', 'MARLIN', 'EMULATION'].
+33:(EngineCore pid=137) INFO 06-07 19:48:02 [cuda.py:308] Using AttentionBackendEnum.TRITON_ATTN backend.
+42:(EngineCore pid=137) WARNING 06-07 19:50:03 [compressed_tensors_w4a4_nvfp4.py:97] In NVFP4 linear, the global scale for input or weight are different for parallel layers (e.g. q_proj, k_proj, v_proj). This  will likely result in reduced accuracy. Please verify the model accuracy. Consider using a checkpoint with a shared global NVFP4 scale for fused layers.
+45:(EngineCore pid=137) INFO 06-07 19:50:03 [cuda.py:308] Using AttentionBackendEnum.FLASH_ATTN backend.
+55:(EngineCore pid=137) INFO 06-07 19:50:10 [gpu_model_runner.py:4879] Model loading took 17.17 GiB memory and 127.259276 seconds
+61:(EngineCore pid=137) [rank0]:W0607 19:50:39.629000 137 site-packages/torch/_inductor/utils.py:1731] Not enough SMs to use max_autotune_gemm mode
+75:(EngineCore pid=137) INFO 06-07 19:51:22 [gpu_worker.py:455] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.8000 is equivalent to --gpu-memory-utilization=0.7881 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.8119. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+76:(EngineCore pid=137) INFO 06-07 19:51:22 [kv_cache_utils.py:1766] GPU KV cache size: 519,920 tokens
+77:(EngineCore pid=137) INFO 06-07 19:51:22 [kv_cache_utils.py:1767] Maximum concurrency for 262,144 tokens per request: 1.98x
+88:(EngineCore pid=137) INFO 06-07 19:51:53 [gpu_model_runner.py:6134] Graph capturing finished in 7 secs, took 1.64 GiB

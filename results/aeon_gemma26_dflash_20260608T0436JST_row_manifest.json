@@ -1,0 +1,106 @@
+{
+  "artifacts": {
+    "build_target_audit": "results/aeon_gemma26_dflash_20260608T0436JST_build_target_audit.json",
+    "chat_smoke": "results/aeon_gemma26_dflash_20260608T0436JST_chat_smoke.json",
+    "openai_benchmark": "results/aeon_gemma26_dflash_20260608T0436JST_openai_benchmark.json",
+    "runtime_probe": "results/aeon_gemma26_dflash_20260608T0436JST_runtime_probe.json",
+    "server_log": "results/aeon_gemma26_dflash_20260608T0436JST_server.log"
+  },
+  "backend": "vllm",
+  "commands": {
+    "build_target_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_build_target_audit.py",
+        "--log",
+        "results/aeon_gemma26_dflash_20260608T0436JST_server.log",
+        "--output",
+        "results/aeon_gemma26_dflash_20260608T0436JST_build_target_audit.json"
+      ],
+      "finished_unix": 1780861970.9235742,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780861970.9015615
+    },
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma4-fast",
+        "--output",
+        "results/aeon_gemma26_dflash_20260608T0436JST_chat_smoke.json"
+      ],
+      "finished_unix": 1780861964.2973013,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780861916.5231428
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma4-fast",
+        "--backend",
+        "vllm",
+        "--phase",
+        "exploratory",
+        "--run-id",
+        "aeon_gemma26_dflash_20260608T0436JST",
+        "--output",
+        "results/aeon_gemma26_dflash_20260608T0436JST_openai_benchmark.json"
+      ],
+      "finished_unix": 1780861970.8187118,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780861964.2974129
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--match",
+        "vllm",
+        "--output",
+        "results/aeon_gemma26_dflash_20260608T0436JST_runtime_probe.json"
+      ],
+      "finished_unix": 1780861970.9012744,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780861970.8190393
+    }
+  },
+  "dry_run": false,
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "metadata": {
+    "attention_backend": "triton-target-flashattn-drafter",
+    "container_digest": null,
+    "container_image": "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2",
+    "cuda_graph_mode": "enabled",
+    "kv_cache_dtype": "auto",
+    "model_revision": null,
+    "quantization": "compressed-tensors-nvfp4",
+    "runtime_ref": "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2"
+  },
+  "model": "gemma4-fast",
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "aeon_gemma26_dflash_20260608T0436JST",
+  "schema": "openai-serving-row-manifest/v1"
+}

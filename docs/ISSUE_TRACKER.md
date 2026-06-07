@@ -9,7 +9,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
 | kernel dispatch and backend observability | build/JIT target audit plus existing runtime probes; backend-specific serving logs still pending | [#4](https://github.com/jethac/dgx-spark-hijinks/issues/4) |
 | `spark-doctor` environment evidence | in progress | [#5](https://github.com/jethac/dgx-spark-hijinks/issues/5) |
-| vLLM Spark runtime path | SM12x NVFP4 KV routing/deswizzle probe passed on GB10; standalone FlashInfer FA2 KV correctness passed; AEON Gemma/Qwen NVFP4+DFlash reproduction runner and access preflight added; clean vLLM serving proof pending | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
+| vLLM Spark runtime path | AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; clean `jethac` fork parity and Qwen reproduction pending | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6) |
 | NVFP4 on Spark | SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing/deswizzle branches pushed; standalone GB10 FA2 NVFP4 KV passes small and Gemma 4 26B sliding shapes; Gemma 4 26B global `D=512` fails; SGLang integration and serving proof pending | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
 | llama.cpp / lm-eval GGUF accuracy | open | [#8](https://github.com/jethac/dgx-spark-hijinks/issues/8) |
 | HF fallback telemetry and containment | telemetry wrapper added | [#9](https://github.com/jethac/dgx-spark-hijinks/issues/9) |

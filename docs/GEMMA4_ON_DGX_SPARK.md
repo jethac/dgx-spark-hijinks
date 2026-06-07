@@ -1,6 +1,6 @@
 # Gemma 4 On DGX Spark: Problems Encountered
 
-Latest vLLM reproduction lane: AEON-7's Gemma 4 26B A4B NVFP4+DFlash recipe is now scripted locally through `scripts/run_aeon_vllm_reproduction.sh gemma26-dflash RUN_ID`. Preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the image and HF repos are reachable and non-gated; the local serving benchmark row is still pending.
+Latest vLLM reproduction lane: AEON-7's Gemma 4 26B A4B NVFP4+DFlash recipe now serves locally through `scripts/run_aeon_vllm_reproduction.sh gemma26-dflash RUN_ID`. Artifact `results/aeon_gemma26_dflash_20260608T0436JST_summary.md` records a warmed compact row of `47.91`, `53.60`, and `98.38 tok/s` across short, medium, and long-prefill cases. This is a real local vLLM performance win over the earlier BF16/unquantized 26B row, but it is AEON's container/checkpoint rather than a `jethac` fork speedup claim.
 
 Date: 2026-06-07
 

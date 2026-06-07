@@ -1,0 +1,39 @@
+{
+  "arch_list": [
+    "sm_80",
+    "sm_90",
+    "sm_100",
+    "sm_110",
+    "sm_120"
+  ],
+  "device_capability": [
+    12,
+    1
+  ],
+  "device_name": "NVIDIA GB10",
+  "multi_processor_count": 48,
+  "packages": {
+    "flashinfer": {
+      "file": "/usr/local/lib/python3.12/site-packages/flashinfer/__init__.py",
+      "version": "0.6.8.post1"
+    },
+    "torch": {
+      "file": "/usr/local/lib/python3.12/site-packages/torch/__init__.py",
+      "version": "2.11.0+cu130"
+    },
+    "transformers": {
+      "file": "/usr/local/lib/python3.12/site-packages/transformers/__init__.py",
+      "version": "5.7.0"
+    },
+    "triton": {
+      "file": "/usr/local/lib/python3.12/site-packages/triton/__init__.py",
+      "version": "3.6.0"
+    },
+    "vllm": {
+      "file": "/usr/local/lib/python3.12/site-packages/vllm/__init__.py",
+      "version": "0.20.1"
+    }
+  },
+  "torch_cuda": "13.0",
+  "total_memory": 128452014080
+}

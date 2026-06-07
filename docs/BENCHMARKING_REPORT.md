@@ -163,6 +163,7 @@ After the initial personal campaign snapshot, targeted compact probes were added
 | FlashInfer SM121 `mm_fp4` source/JIT | patched auto-dispatch includes `b12x`; finite outputs on GB10 | dispatch enablement, not a speedup claim |
 | FlashInfer model-shaped proxies | dense-decode proxies mixed; MoE-shaped proxies slower after the patch | the one-line `b12x` gate is not enough to make Spark faster |
 | vLLM Gemma 4 26B A4B | serves in `vllm/vllm-openai:latest-cu130` at about 24 tok/s after `--max-num-batched-tokens 4096` | useful BF16/unquantized MoE serving baseline, not NVFP4 |
+| vLLM AEON Gemma 4 26B A4B NVFP4+DFlash | serves in `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`; warmed compact row is 47.91, 53.60, and 98.38 tok/s across short/medium/long-prefill cases | first local vLLM Gemma 26B row materially above the BF16 baseline; gain comes from AEON NVFP4 checkpoint/container plus DFlash, not from our fork |
 | vLLM Gemma 4 12B | source/precompiled vLLM commit `da1daf40` plus Transformers main serves at about 7.7 tok/s | proves `gemma4_unified` can run on GB10, but not a clean release container or performance win |
 | llama.cpp Gemma 4 26B Q4_0 | OpenAI-compatible serving around 76 tok/s decode with `--reasoning off`; `llama-bench` tg128 around 77 tok/s | practical GGUF serving path is blessed; lm-eval GGUF accuracy remains blocked |
 | LiteRT-LM Gemma 4 E2B | CPU chat works; GPU benchmark works; GPU chat prints output then exits `-11` | optional side-runtime evidence, not a main Spark performance path |
@@ -170,7 +171,7 @@ After the initial personal campaign snapshot, targeted compact probes were added
 | SGLang Qwen2.5 1.5B patched FP4 KV | patched overlay serves only with both CUDA graph modes disabled; FP4 KV pool is 5.54M tokens but short decode is 0.276 tok/s with repetitive output | FP4 KV capacity path is real, but SGLang FP4 KV is not a usable speed path yet |
 | llama.cpp Qwen2.5 1.5B Q4_K_M | OpenAI-compatible serving around 167-175 tok/s decode; `llama-bench` tg128 around 178 tok/s | practical Qwen GGUF serving is proven; lm-eval GGUF accuracy remains blocked by logprobs schema |
 
-The current headline remains conservative: the scaffolding and evidence are much better, but no end-to-end NVFP4 serving speedup has been banked yet.
+The current headline has changed: a local end-to-end vLLM Gemma 26B NVFP4 serving win is now banked through AEON's container and checkpoint. The open question is no longer whether a Spark-class GB10 can run a fast NVFP4 Gemma 26B vLLM path; it is how much of that path belongs upstream, how to reproduce it for Qwen, and which parts should be carried in `jethac` forks.
 
 ## SM120 Reference Work
 

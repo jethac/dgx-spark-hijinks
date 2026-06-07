@@ -1,6 +1,6 @@
 # vLLM AEON Reproduction
 
-Status: ready for the first local reproduction run; not yet a banked local performance result.
+Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash remains pending.
 
 AEON-7's public Gemma and Qwen recipes are currently the highest-leverage vLLM prior art for this campaign because they target GB10 / `sm_121a`, NVFP4 weights, and DFlash speculative decoding. Treat them as external evidence until our local artifacts exist.
 
@@ -33,8 +33,11 @@ Defaults:
 - downloads and docker pulls are opt-in
 - `RECORD=1` runs OpenAI smoke, compact benchmark, runtime probe, build-target audit, and row manifest capture
 - `HF_CLI=/path/to/hf` can be set if `hf` is available only inside a venv
+- `RECORD_PYTHON=/path/to/python` should point at a Python with `torch` installed if host hardware metadata is required
 
 Preflight artifact: `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md`.
+
+Gemma reproduction artifact: `results/aeon_gemma26_dflash_20260608T0436JST_summary.md`.
 
 ## Preflight Result
 
@@ -71,6 +74,39 @@ For Gemma, the GitHub repo has no patch directory. Its referenced `gemma4_patche
 
 This lane is different from the FlashInfer `b12x` and FA2 NVFP4-KV work:
 
-- Gemma 4's immediate vLLM win is expected from NVFP4 weights, correct compressed-tensors loading, CUTLASS/Marlin backend choice, Triton target attention, and DFlash.
+- Gemma 4's immediate vLLM win comes from NVFP4 weights, correct compressed-tensors loading, FlashInfer CUTLASS NVFP4 linear kernels, vLLM CUTLASS NvFp4 MoE, Triton target attention, CUDA graphs, and DFlash.
 - FA2 NVFP4 KV remains a Qwen/standard-attention capacity lane first; it is not the current Gemma 4 DFlash recipe.
-- The next useful proof is a local serving row with model download, image digest, server log, build-target audit, runtime probe, OpenAI smoke, and compact benchmark.
+- The next useful proof is the Qwen3.6 reproduction row, then a matched fork/container after-row if we need local vLLM source changes.
+
+## 2026-06-08 Gemma 26B Result
+
+Target:
+
+- image: `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`
+- model: `AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4`
+- drafter: `z-lab/gemma-4-26B-A4B-it-DFlash`
+- hardware key: `NVIDIA_GB10:sm_121:sms_48`
+
+Measured warmed compact row:
+
+| case | prompt tokens | generated tokens | TTFT seconds | decode tok/s |
+|---|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 0.098 | 47.91 |
+| `medium_decode` | 40 | 192 | 0.087 | 53.60 |
+| `long_prefill` | 2270 | 64 | 0.118 | 98.38 |
+
+Backend evidence from `results/aeon_gemma26_dflash_20260608T0436JST_key_log_lines.txt`:
+
+- `FlashInferCutlassNvFp4LinearKernel` for NVFP4 GEMM
+- `VLLM_CUTLASS` NvFp4 MoE backend
+- target attention forced to `TRITON_ATTN`
+- drafter attention uses `FLASH_ATTN`
+- KV cache size `519,920` tokens at `--max-model-len 262144`
+- maximum concurrency `1.98x`
+
+Caveats:
+
+- This is a real local vLLM serving win, but it is AEON's container/checkpoint, not proof that a `jethac` fork changed throughput.
+- The container reports runtime device capability `[12, 1]`, but `torch.cuda.get_arch_list()` lists `sm_120` and not explicit `sm_121`.
+- The server log does not contain explicit build-target strings accepted by `cuda_build_target_audit.py`.
+- The server warns about differing NVFP4 global scales across fused parallel layers; accuracy still needs a separate check.

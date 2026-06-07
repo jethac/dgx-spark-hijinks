@@ -1,0 +1,318 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 96 %"
+    }
+  },
+  "finished_utc": "2026-06-07T19:52:50Z",
+  "match": "vllm",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    576309,
+    577541,
+    577729,
+    579302
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "bash",
+        "scripts/run_aeon_vllm_reproduction.sh",
+        "gemma26-dflash",
+        "aeon_gemma26_dflash_20260608T0436JST"
+      ],
+      "cwd": {
+        "path": "/home/jethac/dgx-spark-hijinks-aeon-run"
+      },
+      "environment": {
+        "values": {}
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 576309,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "bash",
+        "PPid": "576308",
+        "Pid": "576309",
+        "State": "S (sleeping)",
+        "Tgid": "576309",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "3064 kB",
+        "VmRSS": "3064 kB",
+        "VmSize": "20716 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "/usr/local/bin/python3",
+        "/usr/local/bin/vllm",
+        "serve",
+        "/models/target",
+        "--served-model-name",
+        "gemma4-aeon-uncensored",
+        "gemma4-fast",
+        "gemma4-deep",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--tensor-parallel-size",
+        "1",
+        "--dtype",
+        "auto",
+        "--max-model-len",
+        "262144",
+        "--max-num-seqs",
+        "64",
+        "--max-num-batched-tokens",
+        "32768",
+        "--gpu-memory-utilization",
+        "0.80",
+        "--enable-chunked-prefill",
+        "--enable-prefix-caching",
+        "--trust-remote-code",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "gemma4",
+        "--speculative-config",
+        "{\"method\":\"dflash\",\"model\":\"/models/drafter\",\"num_speculative_tokens\":15,\"attention_backend\":\"flash_attn\"}"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 577541,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "vllm",
+        "PPid": "577518",
+        "Pid": "577541",
+        "State": "S (sleeping)",
+        "Tgid": "577541",
+        "Threads": "84",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "2618788 kB",
+        "VmRSS": "2524892 kB",
+        "VmSize": "11518408 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "VLLM::EngineCore"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 577729,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "VLLM::EngineCor",
+        "PPid": "577541",
+        "Pid": "577729",
+        "State": "S (sleeping)",
+        "Tgid": "577729",
+        "Threads": "129",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "18533420 kB",
+        "VmRSS": "5154776 kB",
+        "VmSize": "1021734376 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "python3",
+        "/home/jethac/dgx-spark-hijinks-aeon-run/scripts/record_openai_serving_row.py",
+        "--backend",
+        "vllm",
+        "--phase",
+        "exploratory",
+        "--run-id",
+        "aeon_gemma26_dflash_20260608T0436JST",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma4-fast",
+        "--results-dir",
+        "results",
+        "--runtime-ref",
+        "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2",
+        "--container-image",
+        "ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2",
+        "--quantization",
+        "compressed-tensors-nvfp4",
+        "--kv-cache-dtype",
+        "auto",
+        "--attention-backend",
+        "triton-target-flashattn-drafter",
+        "--cuda-graph-mode",
+        "enabled",
+        "--server-log",
+        "results/aeon_gemma26_dflash_20260608T0436JST_server.log",
+        "--process-match",
+        "vllm"
+      ],
+      "cwd": {
+        "path": "/home/jethac/dgx-spark-hijinks-aeon-run"
+      },
+      "environment": {
+        "values": {}
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 579302,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "python3",
+        "PPid": "576309",
+        "Pid": "579302",
+        "State": "S (sleeping)",
+        "Tgid": "579302",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "13648 kB",
+        "VmRSS": "13648 kB",
+        "VmSize": "35340 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780861970,
+          "id": "gemma4-aeon-uncensored",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780861970,
+              "group": null,
+              "id": "modelperm-a3b8124cbaf7d815",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        },
+        {
+          "created": 1780861970,
+          "id": "gemma4-fast",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780861970,
+              "group": null,
+              "id": "modelperm-8654cb2f7840d248",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        },
+        {
+          "created": 1780861970,
+          "id": "gemma4-deep",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780861970,
+              "group": null,
+              "id": "modelperm-ad087a8ef320b507",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-07T19:52:50Z",
+  "url": "http://127.0.0.1:8000"
+}

@@ -4,6 +4,45 @@ Status: first compact before row.
 
 This file indexes before/after benchmark artifacts. Raw JSON remains the source of truth.
 
+## 2026-06-08: AEON vLLM Gemma 4 26B NVFP4+DFlash Row
+
+Target:
+
+- image: `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`
+- model: `AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4`
+- drafter: `z-lab/gemma-4-26B-A4B-it-DFlash`
+- hardware key: `NVIDIA_GB10:sm_121:sms_48`
+- vLLM: `0.20.1`
+- PyTorch: `2.11.0+cu130`
+- FlashInfer: `0.6.8.post1`
+
+Artifacts:
+
+- summary: `results/aeon_gemma26_dflash_20260608T0436JST_summary.md`
+- chat smoke: `results/aeon_gemma26_dflash_20260608T0436JST_chat_smoke.json`
+- first compact benchmark: `results/aeon_gemma26_dflash_20260608T0436JST_openai_benchmark.json`
+- warmed compact benchmark: `results/aeon_gemma26_dflash_20260608T0436JST_warm2_openai_benchmark.json`
+- server log: `results/aeon_gemma26_dflash_20260608T0436JST_server.log`
+- key log lines: `results/aeon_gemma26_dflash_20260608T0436JST_key_log_lines.txt`
+- container versions: `results/aeon_gemma26_dflash_20260608T0436JST_container_versions.json`
+- `spark_doctor`: `results/spark_doctor_aeon_gemma26_dflash_20260608T0436JST.md`
+
+Warmed result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 0.098 | 1.434 | 47.91 |
+| `medium_decode` | 40 | 192 | 0.087 | 3.669 | 53.60 |
+| `long_prefill` | 2270 | 64 | 0.118 | 0.768 | 98.38 |
+
+Interpretation:
+
+- This is the first local vLLM Gemma 4 26B row that materially beats the earlier BF16/unquantized vLLM row at about 24 tok/s.
+- The server log proves `FlashInferCutlassNvFp4LinearKernel`, `VLLM_CUTLASS` NvFp4 MoE, target `TRITON_ATTN`, drafter `FLASH_ATTN`, CUDA graph capture, and DFlash model load.
+- This is not proof that the local `jethac/vllm` or `jethac/flashinfer` forks improved throughput; the run used AEON's container and checkpoint.
+- The container reports device capability `[12, 1]`, but its PyTorch arch list contains `sm_120` and not explicit `sm_121`; keep this as packaging evidence to inspect.
+- The server log warns about differing NVFP4 global scales across fused parallel layers, so accuracy still needs a separate check.
+
 ## 2026-06-07: vLLM Gemma 4 E4B W4A16 Before Row
 
 Server observed on `thinkstationpgx-00b4`:
