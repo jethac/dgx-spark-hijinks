@@ -31,6 +31,7 @@ Then test our forked stack:
 Current local setup:
 
 - `scripts/run_aeon_vllm_reproduction.sh qwen36-dflash RUN_ID` records the AEON Qwen reproduction row when `RECORD=1`.
+- `scripts/pull_container_with_evidence.sh ghcr.io/aeon-7/vllm-spark-omni-q36:v2 RUN_ID` is the preferred image acquisition path when Docker pulls stall or fail to register.
 - preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
 - current blocker: the target and drafter weights are downloaded, but `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not finish/register after multiple pulls and the follow-up `v2` pull could not be inspected because the GB10 host became unreachable. See `results/aeon_qwen36_dflash_20260608T0501JST_summary.md` and `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`.
 - remaining proof: acquire or rebuild the image, start the server, and capture the first local vLLM Qwen36 NVFP4+DFlash row.

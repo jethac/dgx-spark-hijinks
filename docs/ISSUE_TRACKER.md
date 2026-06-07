@@ -28,6 +28,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 ## Triage Rules
 
 - Issues should contain a reproduction command or the exact missing evidence.
+- `docs/SOLUTIONS_STATUS.md` is the current acceptance-evidence index for `docs/DGX_SPARK_SOLUTIONS.md`.
 - Results must say which backend was tested: vLLM, SGLang, LiteRT-LM, HF fallback, llama.cpp, Ollama, or another path.
 - DGX Spark means GB10 / compute capability 12.1 / `sm_121`.
 - RTX PRO 6000 and RTX 50-series are `sm_120`; they are related but not the same validation target.

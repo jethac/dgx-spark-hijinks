@@ -17,6 +17,7 @@ Environment:
   RECORD=0                             set to 1 to run smoke/benchmark manifest
   WAIT_TIMEOUT=900                     seconds to wait for /health
   DOCKER_PULL=0                        set to 1 to docker pull before launch
+  DOCKER_PLATFORM=linux/arm64          platform passed to docker pull
   PROCESS_MATCH=vllm                   runtime process probe match string
   HF_CLI=hf                            Hugging Face CLI command override
   RECORD_PYTHON=python3                Python used for RECORD=1 artifact capture
@@ -37,6 +38,7 @@ DOWNLOAD=${DOWNLOAD:-0}
 RECORD=${RECORD:-0}
 WAIT_TIMEOUT=${WAIT_TIMEOUT:-900}
 DOCKER_PULL=${DOCKER_PULL:-0}
+DOCKER_PLATFORM=${DOCKER_PLATFORM:-linux/arm64}
 PROCESS_MATCH=${PROCESS_MATCH:-vllm}
 RECORD_PYTHON=${RECORD_PYTHON:-python3}
 
@@ -156,7 +158,7 @@ if [[ ! -d "${MODEL_DIR}" || ! -d "${DRAFTER_DIR}" ]]; then
 fi
 
 if [[ "${DOCKER_PULL}" == "1" ]]; then
-  docker pull "${IMAGE}"
+  docker pull --platform "${DOCKER_PLATFORM}" "${IMAGE}"
 fi
 
 docker rm -f "${RUN_ID}" >/dev/null 2>&1 || true

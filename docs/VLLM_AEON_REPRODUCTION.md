@@ -31,6 +31,7 @@ Defaults:
 - results directory: `results`
 - port: `8000`
 - downloads and docker pulls are opt-in
+- Docker pulls use `DOCKER_PLATFORM=linux/arm64` by default
 - `RECORD=1` runs OpenAI smoke, compact benchmark, runtime probe, build-target audit, and row manifest capture
 - `HF_CLI=/path/to/hf` can be set if `hf` is available only inside a venv
 - `RECORD_PYTHON=/path/to/python` should point at a Python with `torch` installed if host hardware metadata is required
@@ -139,7 +140,19 @@ Artifacts:
 - pull retry log: `results/aeon_qwen36_dflash_20260608T0501JST_docker_pull_retry.log`
 - post-attempt GPU/process state: `results/aeon_qwen36_dflash_20260608T0501JST_nvidia_smi_after.txt`
 
-Next step: use a more reliable image acquisition path before spending GPU time, for example a longer pull with Docker daemon debug evidence, `skopeo`/`crane` copy into the local daemon, or a source/container build path from the AEON/vLLM recipe.
+Next step: use a more reliable image acquisition path before spending GPU time. The scripted path is:
+
+```bash
+RESULTS_DIR=results \
+PLATFORM=linux/arm64 \
+PULL_TIMEOUT=0 \
+USE_SKOPEO=1 \
+scripts/pull_container_with_evidence.sh \
+  ghcr.io/aeon-7/vllm-spark-omni-q36:v2 \
+  aeon_qwen36_dflash_v2_image_pull_YYYYMMDDTHHMMJST
+```
+
+This records Docker manifest evidence, disk state, Docker daemon logs, `docker pull --platform linux/arm64`, final `docker image inspect`, and an optional `skopeo` OCI copy/import fallback. If that still fails, the remaining options are a Docker daemon/storage investigation or a source/container build path from the AEON/vLLM recipe.
 
 ## 2026-06-08 Qwen3.6 v2 Stop Point
 
@@ -152,3 +165,5 @@ ssh: connect to host 192.168.68.112 port 22: Connection timed out
 ```
 
 This remains an acquisition/reachability blocker. It is not a Qwen model-load, DFlash, vLLM, FlashInfer, or `sm_121` runtime result.
+
+If the image did not register, use `scripts/pull_container_with_evidence.sh` before trying another hand-run pull.
