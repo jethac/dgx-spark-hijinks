@@ -27,6 +27,7 @@ Then test our forked stack:
 - `jethac/vllm` with the SM12x NVFP4 KV FA2 routing and AEON-inspired DFlash stability patches
 - `jethac/flashinfer` with SM121 `mm_fp4` dispatch and FA2 NVFP4-KV stride/page/deswizzle changes
 - paired fp8-vs-NVFP4 KV runs on the same model, prompts, context length, memory fraction, graph mode, and concurrency
+- `scripts/nvfp4_checkpoint_audit.py` output for any NVFP4-weight checkpoint used in the row, so format and sensitive-tensor handling are explicit
 
 Current vLLM fork stop point:
 
@@ -90,6 +91,7 @@ Every Qwen row should include:
 
 - `spark_doctor` JSON and markdown
 - runtime process probe
+- NVFP4 checkpoint audit for NVFP4-weight rows
 - CUDA build-target audit
 - CUDA shared-object audit where applicable
 - server log with backend selection

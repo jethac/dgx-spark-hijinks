@@ -8,7 +8,7 @@ DGX Spark advertises strong FP4 capability, but NVFP4 work has to be split into 
 
 | track | purpose | current status |
 |---|---|---|
-| NVFP4 weights | reduce model-weight bandwidth and enable native FP4 linear/MoE kernels where supported | AEON external Qwen/Gemma evidence is strong; local reproduction pending |
+| NVFP4 weights | reduce model-weight bandwidth and enable native FP4 linear/MoE kernels where supported | AEON Gemma is locally reproduced; AEON Qwen remains blocked before serving; checkpoint metadata audit now exists |
 | FP8/BF16 KV baseline | safe serving comparator for quality, speed, and capacity | required before any FP4 KV claim |
 | NVFP4/FP4 KV | reduce KV-cache footprint and increase long-context/concurrency capacity | vLLM/FlashInfer standalone FA2 probe passes some shapes; SGLang `fp4_e2m1` serving not proven locally |
 
@@ -23,10 +23,12 @@ DGX Spark advertises strong FP4 capability, but NVFP4 work has to be split into 
 - Track SGLang separately from vLLM. `hikarioyama/sglang-nvfp4-kv-sm120` reports SGLang `fp4_e2m1` KV cache with FlashInfer FA2 patches, native FP4 pool, hybrid-SWA support, and per-layer global-scale auto-calibration.
 - Treat small models as likely fp8-KV defaults until NVFP4 quality is proven; the SGLang repo reports small-model incoherence under NVFP4 KV even when larger models are near-lossless.
 - Unless a measured GB10 result says otherwise, build on hikarioyama's vLLM and SGLang NVFP4-KV work as prior art, but port changes through `jethac` forks and issue-named worktrees with upstream contributing guidelines followed.
+- Before using an NVFP4 checkpoint for Qwen/Gemma speed evidence or GGUF conversion, run `scripts/nvfp4_checkpoint_audit.py --model-dir MODEL_DIR --output results/RUN_ID_nvfp4_checkpoint_audit.json --strict`. The audit must not show quantized router, vision, visual, or vision-embedding tensors.
 
 ## Minimal Acceptance Test
 
 - model loads
+- NVFP4 checkpoint audit passes for weight-quantized checkpoints
 - deterministic short prompt produces sane text
 - logits or token choices are consistent against a reference path
 - prefill and decode speeds are measured against fp8/bf16

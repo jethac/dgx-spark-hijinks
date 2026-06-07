@@ -1,0 +1,73 @@
+{
+  "config": {
+    "architectures": [
+      "Gemma4ForConditionalGeneration"
+    ],
+    "error": null,
+    "exists": true,
+    "model_type": "gemma4"
+  },
+  "eos_check": {
+    "expected_gemma_eos_ids": [
+      1,
+      50,
+      98,
+      100,
+      101,
+      106
+    ],
+    "generation_config_error": null,
+    "generation_config_exists": true,
+    "looks_gemma": true,
+    "missing_gemma_eos_ids": [],
+    "observed_eos_ids": [
+      1,
+      50,
+      98,
+      100,
+      101,
+      106
+    ],
+    "ok": true
+  },
+  "format_guess": {
+    "compressed_tensors_marker_count": 4,
+    "config_markers": {
+      "mentions_compressed_tensors": true,
+      "mentions_modelopt": false,
+      "mentions_nvfp4": true
+    },
+    "guess": "compressed_tensors_nvfp4",
+    "modelopt_marker_count": 0,
+    "sample_compressed_tensors_keys": [
+      "model.layers.0.mlp.experts.0.down_proj.input_global_scale",
+      "model.layers.0.mlp.experts.0.down_proj.weight_global_scale",
+      "model.layers.0.mlp.experts.0.down_proj.weight_packed",
+      "model.layers.0.mlp.experts.0.down_proj.weight_scale"
+    ],
+    "sample_modelopt_keys": []
+  },
+  "index_error_count": 0,
+  "index_errors": [],
+  "key_count": 7,
+  "key_source": "index",
+  "model_dir": "tasks/nvfp4_checkpoint_audit_sample",
+  "ok": true,
+  "safe_for_gemma_nvfp4_serving": true,
+  "safetensors_error_count": 0,
+  "safetensors_errors": [],
+  "safetensors_loaded": false,
+  "schema": "nvfp4-checkpoint-audit/v1",
+  "sensitive_quantization": {
+    "ok": true,
+    "quantized_sensitive_bases": [],
+    "quantized_sensitive_key_count": 0,
+    "sample_quantized_sensitive_keys": [],
+    "sample_sensitive_keys": [
+      "model.layers.0.router.proj.weight",
+      "model.vision_tower.encoder.layers.0.self_attn.q_proj.weight"
+    ],
+    "sensitive_key_count": 2
+  },
+  "warnings": []
+}

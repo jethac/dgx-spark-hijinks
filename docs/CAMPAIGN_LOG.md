@@ -270,6 +270,12 @@
   - AEON Gemma artifact: `results/aeon_gemma26_dflash_20260608T0436JST_container_target_audit.json`
   - result: the AEON Gemma image/container has GB10 runtime evidence and SM120-family/PTX evidence through `TORCH_CUDA_ARCH_LIST=... 12.0+PTX` / `sm_120`, but no explicit native `sm_121` or `sm_121a` target evidence.
   - serving-manifest audit now records this as `family_or_ptx_count: 1` for Gemma while keeping strict Gemma claim readiness false.
+- Added an NVFP4 checkpoint metadata audit before larger Qwen/Gemma speed work.
+  - script: `scripts/nvfp4_checkpoint_audit.py`
+  - sample fixture: `tasks/nvfp4_checkpoint_audit_sample`
+  - sample artifact: `results/nvfp4_checkpoint_audit_sample_20260608.json`
+  - purpose: classify compressed-tensors versus ModelOpt NVFP4 markers, flag quantized router/vision/visual tensors, and check Gemma EOS/control-token metadata without loading tensor data or using GPU time.
+  - interpretation: this does not prove a live Qwen or Gemma speed row; it prevents future NVFP4-weight serving or GGUF conversion rows from silently using a bad checkpoint format.
 
 ## First Benchmark Campaign Summary
 

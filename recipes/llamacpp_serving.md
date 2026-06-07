@@ -52,6 +52,8 @@ This blessed row is Gemma 4 26B Q4_0 GGUF serving. `BLACKWELL_NATIVE_FP4 = 1` pr
 Native FP4 GGUF requires a separate experiment:
 
 - NVFP4 or MXFP4 GGUF model, not Q4_0/Q4_K/Q8
+- source-checkpoint audit before conversion when the GGUF is made from a HF NVFP4 checkpoint:
+  `python3 scripts/nvfp4_checkpoint_audit.py --model-dir MODEL_DIR --output results/RUN_ID_nvfp4_checkpoint_audit.json --strict`
 - build-target evidence for `sm_121a` or a documented valid native-FP4 target
 - runtime dispatch evidence from llama.cpp backend tests or logs
 - comparison against the existing Q4_0 row

@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "total_size": 4096
+  },
+  "weight_map": {
+    "model.embed_tokens.weight": "model-00001-of-00001.safetensors",
+    "model.layers.0.mlp.experts.0.down_proj.input_global_scale": "model-00001-of-00001.safetensors",
+    "model.layers.0.mlp.experts.0.down_proj.weight_global_scale": "model-00001-of-00001.safetensors",
+    "model.layers.0.mlp.experts.0.down_proj.weight_packed": "model-00001-of-00001.safetensors",
+    "model.layers.0.mlp.experts.0.down_proj.weight_scale": "model-00001-of-00001.safetensors",
+    "model.layers.0.router.proj.weight": "model-00001-of-00001.safetensors",
+    "model.vision_tower.encoder.layers.0.self_attn.q_proj.weight": "model-00001-of-00001.safetensors"
+  }
+}

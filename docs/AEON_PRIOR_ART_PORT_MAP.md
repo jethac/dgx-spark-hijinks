@@ -49,7 +49,7 @@ Current validation artifact: `results/aeon_prior_art_audit_20260608.json`.
 |---|---|---|---|
 | NVFP4 weights are the proven Gemma speed lever | locally reproduced through AEON image; about `48-54 tok/s` short/medium decode and `98 tok/s` long-prefill | test Gemma 4 NVFP4 weights with ordinary KV before FP4 KV; current SGLang Gemma path is not blessed | current GGUF Q4_0 path is practical; native NVFP4/MXFP4 GGUF remains a separate experiment |
 | Gemma 4 target attention is Triton because local/global head dimensions differ | documented in vLLM recipe and local logs | do not make Gemma FP4 KV the first SGLang goal; prove ordinary KV serving first | no FA2 KV implication |
-| Routers, vision tower, and vision embeddings must not be blindly NVFP4-quantized | use AEON weights unless re-quantizing | if building SGLang-loadable Gemma NVFP4 checkpoints, preserve BF16 routers and vision tensors | if making GGUFs from AEON or our own quantization, record whether routers/vision stayed high precision |
+| Routers, vision tower, and vision embeddings must not be blindly NVFP4-quantized | use AEON weights unless re-quantizing; run `scripts/nvfp4_checkpoint_audit.py` before treating a checkpoint as safe | if building SGLang-loadable Gemma NVFP4 checkpoints, preserve BF16 routers and vision tensors and attach the checkpoint audit artifact | if making GGUFs from AEON or our own quantization, record whether routers/vision stayed high precision before conversion |
 | EOS/control-token cleanup matters | AEON weights/config sidestep this for the reproduced row | include deterministic output sanity in Gemma SGLang row | include chat smoke and template checks for Gemma GGUF |
 
 ## DFlash And Speculative Decode
@@ -86,7 +86,8 @@ Do not spend time porting these directly:
 ## Next Proof Order
 
 1. Reconnect to the GB10 host and finish AEON Qwen36 image acquisition or rebuild.
-2. Run the Qwen speed lane for vLLM/SGLang/llama.cpp with `scripts/qwen_speed_lane.py`.
-3. Attempt SGLang Gemma NVFP4-weight serving with ordinary KV.
-4. Only then decide whether a SGLang DFlash or FP4-KV code change is justified.
-5. Create `third_party/llama.cpp` only when a real llama.cpp source change is required.
+2. Run `scripts/nvfp4_checkpoint_audit.py` on any NVFP4 Qwen/Gemma checkpoint before using it as speed evidence or conversion input.
+3. Run the Qwen speed lane for vLLM/SGLang/llama.cpp with `scripts/qwen_speed_lane.py`.
+4. Attempt SGLang Gemma NVFP4-weight serving with ordinary KV.
+5. Only then decide whether a SGLang DFlash or FP4-KV code change is justified.
+6. Create `third_party/llama.cpp` only when a real llama.cpp source change is required.

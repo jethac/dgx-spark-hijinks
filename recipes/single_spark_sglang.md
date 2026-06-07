@@ -120,6 +120,7 @@ Qwen should be the first SGLang before/after target for `fp4_e2m1` KV:
 
 - before row: public Qwen model with BF16 or fp8 KV
 - after row: same model with `--kv-cache-dtype fp4_e2m1 --attention-backend flashinfer --page-size 1`
+- for NVFP4-weight Qwen checkpoints, attach `scripts/nvfp4_checkpoint_audit.py` output before treating speed as meaningful
 - preferred first shape: standard-attention Qwen2.5 7B-class model before Qwen3.6 hybrid/MoE
 - required comparator: deterministic output sanity plus fp8-vs-fp4 quality check
 - required metrics: KV pool tokens, maximum concurrency, TTFT, warmed decode tok/s, memory state, and selected backend logs
@@ -172,6 +173,13 @@ Record acceptance metrics, decode tok/s, CUDA graph/overlap scheduler state, out
 ## AEON-Style Gemma NVFP4 Weight Probe
 
 AEON's Gemma result is useful SGLang prior art for NVFP4 weights, but it does not prove FP4 KV. If testing Gemma 4 in SGLang, start with ordinary KV:
+
+```bash
+python3 scripts/nvfp4_checkpoint_audit.py \
+  --model-dir /path/to/Gemma-4-26B-A4B-it-Uncensored-NVFP4 \
+  --output results/${RUN_ID}_nvfp4_checkpoint_audit.json \
+  --strict
+```
 
 ```bash
 python3 -m sglang.launch_server \

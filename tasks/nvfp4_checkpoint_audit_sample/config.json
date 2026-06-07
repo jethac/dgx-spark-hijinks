@@ -1,0 +1,10 @@
+{
+  "architectures": [
+    "Gemma4ForConditionalGeneration"
+  ],
+  "model_type": "gemma4",
+  "quantization_config": {
+    "format": "nvfp4",
+    "quant_method": "compressed-tensors"
+  }
+}

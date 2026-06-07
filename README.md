@@ -89,6 +89,15 @@ python3 scripts/container_target_audit.py \
   --output results/RUN_ID_container_target_audit.json
 ```
 
+To audit an NVFP4 checkpoint before Qwen/Gemma serving or GGUF conversion:
+
+```bash
+python3 scripts/nvfp4_checkpoint_audit.py \
+  --model-dir /path/to/model \
+  --output results/RUN_ID_nvfp4_checkpoint_audit.json \
+  --strict
+```
+
 For a FlashInfer NVFP4 `mm_fp4` kernel-level dispatch check:
 
 ```bash
