@@ -170,7 +170,7 @@ After the initial personal campaign snapshot, targeted compact probes were added
 | SGLang Qwen2.5 1.5B BF16/auto vs fp8 | matched `mem_fraction_static=0.40` rows run at about 58-59 tok/s; fp8 KV pool is 3.11M tokens vs 1.56M BF16/auto | fp8 is a capacity win with decode-speed parity on this small Qwen row |
 | SGLang Qwen2.5 1.5B patched FP4 KV | patched overlay serves only with both CUDA graph modes disabled; FP4 KV pool is 5.54M tokens but short decode is 0.276 tok/s with repetitive output | FP4 KV capacity path is real, but SGLang FP4 KV is not a usable speed path yet |
 | llama.cpp Qwen2.5 1.5B Q4_K_M | OpenAI-compatible serving around 167-175 tok/s decode; `llama-bench` tg128 around 178 tok/s | practical Qwen GGUF serving is proven; lm-eval GGUF accuracy remains blocked by logprobs schema |
-| vLLM AEON Qwen3.6 35B-A3B NVFP4+DFlash | target and drafter weights downloaded; image `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not register after initial pull plus `timeout 900` retry | blocked before serving; not a model-load or kernel result yet |
+| vLLM AEON Qwen3.6 35B-A3B NVFP4+DFlash | target and drafter weights downloaded; `v1.2` image pulls did not register; `v2` pull started but the host became unreachable before final status inspection | blocked before serving; Qwen speed row remains required and this is not a model-load or kernel result yet |
 
 The current headline has changed: a local end-to-end vLLM Gemma 26B NVFP4 serving win is now banked through AEON's container and checkpoint. The open question is no longer whether a Spark-class GB10 can run a fast NVFP4 Gemma 26B vLLM path; it is how much of that path belongs upstream, how to reproduce it for Qwen, and which parts should be carried in `jethac` forks.
 

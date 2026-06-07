@@ -59,7 +59,7 @@ To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
 - vLLM Qwen3.6 NVFP4+DFlash reproduction from AEON prior art, then a matched fork after-row with backend logs.
-- AEON Gemma NVFP4+DFlash reproduction is now measured locally; AEON Qwen3.6 NVFP4+DFlash is blocked before serving by GHCR image pull/registration failure, though weights are downloaded.
+- AEON Gemma NVFP4+DFlash reproduction is now measured locally; AEON Qwen3.6 NVFP4+DFlash is blocked before serving by GHCR image pull/registration and host reachability failure, though weights are downloaded.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
 - SGLang Qwen fp8-vs-`fp4_e2m1` KV clean after-row with graph-compatible serving and quality checks before broader SGLang FP4 KV claims.

@@ -205,6 +205,11 @@
   - blocker: `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2` did not finish/register after the initial pull or a bounded `timeout 900` retry.
   - artifact: `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`
   - interpretation: this is a container acquisition blocker, not yet a Qwen model-load, runtime, or kernel failure.
+- Promoted the AEON Qwen vLLM runner default to the current `v2` image and recorded a stop point.
+  - runner default: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
+  - artifact: `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`
+  - blocker: the `v2` pull had been started and partially observed, but the GB10 host later stopped answering SSH and ping before final pull status could be inspected.
+  - interpretation: Qwen speed remains a required benchmark lane alongside Gemma; this stop point is an acquisition/reachability failure, not a Qwen model/runtime/kernel result.
 
 ## First Benchmark Campaign Summary
 

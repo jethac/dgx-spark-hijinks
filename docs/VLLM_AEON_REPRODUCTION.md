@@ -1,6 +1,6 @@
 # vLLM AEON Reproduction
 
-Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash is blocked before serving by image-pull/registration failure.
+Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash is blocked before serving by image-pull/registration and host-reachability failure.
 
 AEON-7's public Gemma and Qwen recipes are currently the highest-leverage vLLM prior art for this campaign because they target GB10 / `sm_121a`, NVFP4 weights, and DFlash speculative decoding. Treat them as external evidence until our local artifacts exist.
 
@@ -39,7 +39,10 @@ Preflight artifact: `results/aeon_vllm_reproduction_preflight_20260608T0430JST.m
 
 Gemma reproduction artifact: `results/aeon_gemma26_dflash_20260608T0436JST_summary.md`.
 
-Qwen reproduction attempt artifact: `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`.
+Qwen reproduction attempt artifacts:
+
+- `results/aeon_qwen36_dflash_20260608T0501JST_summary.md`
+- `results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md`
 
 ## Preflight Result
 
@@ -47,6 +50,7 @@ Both GHCR images resolve:
 
 - `ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2`
 - `ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2`
+- `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
 
 All four required HF repos are public and non-gated from the GB10 host:
 
@@ -136,3 +140,15 @@ Artifacts:
 - post-attempt GPU/process state: `results/aeon_qwen36_dflash_20260608T0501JST_nvidia_smi_after.txt`
 
 Next step: use a more reliable image acquisition path before spending GPU time, for example a longer pull with Docker daemon debug evidence, `skopeo`/`crane` copy into the local daemon, or a source/container build path from the AEON/vLLM recipe.
+
+## 2026-06-08 Qwen3.6 v2 Stop Point
+
+AEON's current documented Qwen image is tracked as `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`, and the local runner now defaults to that tag for `qwen36-dflash`.
+
+After the `v1.2` registration failures, a longer `v1.2` pull and then a `v2` pull were attempted. The `v2` pull had progressed through multiple completed layers, but follow-up inspection failed because the GB10 host stopped answering SSH and ping:
+
+```text
+ssh: connect to host 192.168.68.112 port 22: Connection timed out
+```
+
+This remains an acquisition/reachability blocker. It is not a Qwen model-load, DFlash, vLLM, FlashInfer, or `sm_121` runtime result.

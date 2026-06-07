@@ -88,7 +88,7 @@ case "${TARGET}" in
     ATTENTION_BACKEND=triton-target-flashattn-drafter
     ;;
   qwen36-dflash)
-    IMAGE=${IMAGE:-ghcr.io/aeon-7/vllm-spark-omni-q36:v1.2}
+    IMAGE=${IMAGE:-ghcr.io/aeon-7/vllm-spark-omni-q36:v2}
     MODEL_REPO=${MODEL_REPO:-AEON-7/Qwen3.6-35B-A3B-heretic-NVFP4}
     DRAFTER_REPO=${DRAFTER_REPO:-z-lab/Qwen3.6-35B-A3B-DFlash}
     MODEL_DIR=${MODEL_DIR:-${MODELS_ROOT}/qwen36-nvfp4}
