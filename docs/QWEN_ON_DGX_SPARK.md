@@ -8,7 +8,7 @@ Qwen is a first-class Spark target alongside Gemma, not a secondary check. Gemma
 
 | runtime | row | status |
 |---|---|---|
-| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | `v2` image and weights are local; server starts, loads target/drafter, records NVFP4/DFlash/backend evidence, and generates completion tokens, but smoke/benchmark output validation fails because responses expose no normal content |
+| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on short/medium cases and `54 tok/s` after long prefill |
 | SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
@@ -42,15 +42,16 @@ Current local setup:
 - `scripts/pull_container_with_evidence.sh ghcr.io/aeon-7/vllm-spark-omni-q36:v2 RUN_ID` is the preferred image acquisition path when Docker pulls stall or fail to register.
 - `scripts/qwen_speed_lane.py --input tasks/qwen_speed_lane_sample.jsonl --campaign-id RUN_ID` records already-running vLLM, SGLang, and llama.cpp Qwen servers with the shared row manifest wrapper.
 - preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
-- current blocker: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2` now starts, but `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json` is `ok=false`; chat smoke produced `message.reasoning` only and benchmark streams exposed no normal content.
-- remaining proof: fix the Qwen response/content path, rerun smoke and benchmark with the updated harness, and capture the first passing local vLLM Qwen36 NVFP4+DFlash row.
+- current status: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json` is `ok=true`; chat smoke returns normal `message.content` after disabling Qwen thinking with `chat_template_kwargs={"enable_thinking": false}`.
+- remaining proof: run a matched `jethac/vllm` fork row, add a clean container/install path, and collect native `sm_121`/`sm_121a` build-target proof or explicitly classify the path as family/PTX-only.
 
 Current local AEON Qwen evidence:
 
+- `results/qwen_content_probe_20260608T0900JST_direct_chat_probes.json`: baseline and `/no_think` prompt rows stayed in `message.reasoning`; API-level `chat_template_kwargs={"enable_thinking": false}` produced `spark-ok` content for both `qwen36-fast` and `qwen36-deep`.
+- `results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json`: compact serving passes with `50.37`, `55.84`, and `53.75 tok/s` decode for short, medium, and long-prefill cases.
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`: `ok=true`, compressed-tensors NVFP4, `124306` safetensors keys, `0` quantized sensitive keys.
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`: target `Qwen3_5MoeForConditionalGeneration`, drafter `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, `585168` KV tokens, `4.73x` max concurrency at 262k context.
-- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_build_target_audit.json`: no accepted native `sm_121` or `sm_121a` target evidence in the server log.
-- `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json`: completion token counts exist, but output validation fails; do not use it as a speed row.
+- `results/aeon_qwen36_dflash_nothink_20260608T0834JST_build_target_audit.json`: no accepted native `sm_121` or `sm_121a` target evidence in the server log.
 
 Do not claim a fork speedup until server logs prove the selected kernel path and the before/after rows are matched.
 

@@ -1,0 +1,132 @@
+{
+  "cases": [
+    {
+      "case": "fast_baseline_64",
+      "content": null,
+      "content_chars": 0,
+      "elapsed_s": 34.692,
+      "finish_reason": "length",
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "Reply exactly: spark-ok",
+            "role": "user"
+          }
+        ],
+        "model": "qwen36-fast",
+        "temperature": 0
+      },
+      "raw_model": "qwen36-35b-heretic",
+      "reasoning": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   User says: \"Reply exactly: spark-ok\"\n    *   Constraint: \"Reply exactly\" means I should output only the specified text, or at least the specified text without extra conversational filler unless necessary.\n    *  ",
+      "reasoning_chars": 268,
+      "reasoning_content": null,
+      "reasoning_content_chars": 0,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 15,
+        "prompt_tokens_details": null,
+        "total_tokens": 79
+      }
+    },
+    {
+      "case": "fast_template_no_think",
+      "content": "spark-ok",
+      "content_chars": 8,
+      "elapsed_s": 0.22,
+      "finish_reason": "stop",
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "Reply exactly: spark-ok",
+            "role": "user"
+          }
+        ],
+        "model": "qwen36-fast",
+        "temperature": 0
+      },
+      "raw_model": "qwen36-35b-heretic",
+      "reasoning": null,
+      "reasoning_chars": 0,
+      "reasoning_content": null,
+      "reasoning_content_chars": 0,
+      "usage": {
+        "completion_tokens": 3,
+        "prompt_tokens": 17,
+        "prompt_tokens_details": null,
+        "total_tokens": 20
+      }
+    },
+    {
+      "case": "fast_prompt_no_think",
+      "content": null,
+      "content_chars": 0,
+      "elapsed_s": 0.663,
+      "finish_reason": "length",
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "Reply exactly: spark-ok\n/no_think",
+            "role": "user"
+          }
+        ],
+        "model": "qwen36-fast",
+        "temperature": 0
+      },
+      "raw_model": "qwen36-35b-heretic",
+      "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User says: \"Reply exactly: spark-ok\"\n   - Followed by: \"/no_think\"\n   - Key instruction: \"Reply exactly: spark-ok\"\n   - The \"/no_think\" likely",
+      "reasoning_chars": 203,
+      "reasoning_content": null,
+      "reasoning_content_chars": 0,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": null,
+        "total_tokens": 83
+      }
+    },
+    {
+      "case": "deep_template_no_think",
+      "content": "spark-ok",
+      "content_chars": 8,
+      "elapsed_s": 0.158,
+      "finish_reason": "stop",
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "Reply exactly: spark-ok",
+            "role": "user"
+          }
+        ],
+        "model": "qwen36-deep",
+        "temperature": 0
+      },
+      "raw_model": "qwen36-35b-heretic",
+      "reasoning": null,
+      "reasoning_chars": 0,
+      "reasoning_content": null,
+      "reasoning_content_chars": 0,
+      "usage": {
+        "completion_tokens": 3,
+        "prompt_tokens": 17,
+        "prompt_tokens_details": null,
+        "total_tokens": 20
+      }
+    }
+  ],
+  "run_id": "qwen_content_probe_20260608T0900JST",
+  "schema": "qwen-content-probe/v1"
+}

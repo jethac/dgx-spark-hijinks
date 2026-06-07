@@ -1,6 +1,6 @@
 # vLLM AEON Reproduction
 
-Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash now starts from the AEON `v2` image and generates completion tokens, but the row is not claim-ready because smoke/benchmark output validation failed.
+Status: Gemma 4 26B NVFP4+DFlash is locally reproduced; Qwen3.6 NVFP4+DFlash is locally reproduced through AEON's `v2` image when Qwen thinking is disabled with OpenAI `chat_template_kwargs`.
 
 AEON-7's public Gemma and Qwen recipes are currently the highest-leverage vLLM prior art for this campaign because they target GB10 / `sm_121a`, NVFP4 weights, and DFlash speculative decoding. Treat them as external evidence until our local artifacts exist.
 
@@ -47,6 +47,8 @@ Qwen reproduction attempt artifacts:
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json`
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`
+- `results/qwen_content_probe_20260608T0900JST_direct_chat_probes.json`
+- `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json`
 
 ## Preflight Result
 
@@ -91,7 +93,7 @@ This lane is different from the FlashInfer `b12x` and FA2 NVFP4-KV work:
 
 - Gemma 4's immediate vLLM win comes from NVFP4 weights, correct compressed-tensors loading, FlashInfer CUTLASS NVFP4 linear kernels, vLLM CUTLASS NvFp4 MoE, Triton target attention, CUDA graphs, and DFlash.
 - FA2 NVFP4 KV remains a Qwen/standard-attention capacity lane first; it is not the current Gemma 4 DFlash recipe.
-- The next useful proof is fixing the Qwen3.6 output path and recording a matched serving row with normal content, backend logs, and quality checks.
+- The next useful proof is a matched `jethac/vllm` fork row with the same Qwen thinking control, backend logs, and quality checks.
 
 ## 2026-06-08 Gemma 26B Result
 
@@ -216,3 +218,28 @@ Failure:
 - server warning: the GPU was reported as lacking native FP4 computation for this path, so weight-only FP4 compression used Marlin and may degrade compute-heavy workloads
 
 Interpretation: image acquisition and model startup are no longer the blocker for AEON Qwen3.6. The blocker moved to output validation and native-target/kernel proof. This is a useful partial vLLM Qwen row, but it must not be counted as a passing serving benchmark or a fork speedup.
+
+## 2026-06-08 Qwen3.6 No-Think Row
+
+The prior failed row was a Qwen thinking-mode artifact. With `--reasoning-parser qwen3`, normal responses are routed through `message.reasoning` until the model emits `</think>`. The 8-token smoke and compact benchmark never reached normal `message.content`.
+
+Direct probe artifact: `results/qwen_content_probe_20260608T0900JST_direct_chat_probes.json`.
+
+- baseline `qwen36-fast`, `max_tokens=64`: `content=null`, `finish_reason=length`, text in `message.reasoning`
+- prompt-level `/no_think`: still `content=null`, text in `message.reasoning`
+- API-level `chat_template_kwargs={"enable_thinking": false}`: `content="spark-ok"` for both `qwen36-fast` and `qwen36-deep`
+
+Passing serving row:
+
+- row manifest: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json`, `ok=true`
+- chat smoke: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_chat_smoke.json`, `content="spark-ok"`
+- compact benchmark: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json`
+- short decode: `50.37 tok/s`
+- medium decode: `55.84 tok/s`
+- long-prefill decode: `53.75 tok/s`
+
+Caveats:
+
+- This is AEON's container/checkpoint, not a `jethac/vllm` fork speedup.
+- The build-target audit still finds no explicit native `sm_121` or `sm_121a` target evidence in the server log.
+- The server still warns that the selected FP4 path uses Marlin weight-only FP4 because the GPU is not treated as native FP4 for that path.

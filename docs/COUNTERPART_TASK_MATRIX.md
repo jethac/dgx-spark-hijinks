@@ -30,7 +30,7 @@ Current validation artifact: `results/counterpart_task_matrix_20260608.json`.
 | `sglang_gemma_nvfp4_ordinary_kv` | SGLang | Gemma NVFP4-weight serving with ordinary BF16/fp8 KV and checkpoint audit |
 | `sglang_clean_fp4_kv_after_row` | SGLang | clean fp8-vs-fp4 KV Qwen row with quality and graph policy |
 | `sglang_dflash_or_eagle_qwen` | SGLang | Qwen speculative row with accepted-draft metrics and non-speculative comparator |
-| `vllm_qwen36_nvfp4_dflash` | vLLM | AEON or matched fork Qwen3.6 NVFP4+DFlash row after image/host blocker clears |
+| `vllm_qwen36_nvfp4_dflash` | vLLM | matched fork Qwen3.6 NVFP4+DFlash row; AEON row now passes with thinking disabled |
 | `llamacpp_larger_qwen_gguf` | llama.cpp | Qwen3/Qwen3.6 GGUF practical serving row |
 | `llamacpp_native_fp4_gguf` | llama.cpp | NVFP4/MXFP4 GGUF row with native FP4 dispatch evidence |
 | `llamacpp_live_loglikelihood` | llama.cpp | live native `/tokenize` plus `/completion` loglikelihood task proof |

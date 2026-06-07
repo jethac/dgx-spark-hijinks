@@ -79,6 +79,10 @@ def main() -> int:
     parser.add_argument("--cuda-so-package", action="append", default=[])
     parser.add_argument("--llama-bench-command")
     parser.add_argument("--run-gguf-logprobs-probe", action="store_true")
+    parser.add_argument("--chat-smoke-prompt", default="Reply with exactly this text: spark-ok")
+    parser.add_argument("--chat-smoke-max-tokens", type=int, default=8)
+    parser.add_argument("--benchmark-prompt-suffix", default="")
+    parser.add_argument("--chat-template-kwargs-json")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -102,6 +106,15 @@ def main() -> int:
             args.url,
             "--model",
             args.model,
+            "--prompt",
+            args.chat_smoke_prompt,
+            "--max-tokens",
+            str(args.chat_smoke_max_tokens),
+            *(
+                ["--chat-template-kwargs-json", args.chat_template_kwargs_json]
+                if args.chat_template_kwargs_json
+                else []
+            ),
             "--output",
             str(chat_out),
         ],
@@ -122,6 +135,13 @@ def main() -> int:
             args.phase,
             "--run-id",
             args.run_id,
+            "--prompt-suffix",
+            args.benchmark_prompt_suffix,
+            *(
+                ["--chat-template-kwargs-json", args.chat_template_kwargs_json]
+                if args.chat_template_kwargs_json
+                else []
+            ),
             "--output",
             str(bench_out),
         ],

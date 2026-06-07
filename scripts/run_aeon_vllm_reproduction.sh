@@ -21,6 +21,10 @@ Environment:
   PROCESS_MATCH=vllm                   runtime process probe match string
   HF_CLI=hf                            Hugging Face CLI command override
   RECORD_PYTHON=python3                Python used for RECORD=1 artifact capture
+  CHAT_SMOKE_PROMPT=...                override OpenAI smoke prompt
+  CHAT_SMOKE_MAX_TOKENS=8              max tokens for OpenAI smoke
+  BENCHMARK_PROMPT_SUFFIX=...          appended to compact benchmark prompts
+  CHAT_TEMPLATE_KWARGS_JSON=...        OpenAI chat_template_kwargs JSON
 EOF
 }
 
@@ -189,6 +193,10 @@ done
 docker logs "${RUN_ID}" > "${RESULTS_DIR}/${RUN_ID}_server.log" 2>&1 || true
 
 if [[ "${RECORD}" == "1" ]]; then
+  RECORD_EXTRA_ARGS=()
+  if [[ -n "${CHAT_TEMPLATE_KWARGS_JSON:-}" ]]; then
+    RECORD_EXTRA_ARGS+=(--chat-template-kwargs-json "${CHAT_TEMPLATE_KWARGS_JSON}")
+  fi
   "${RECORD_PYTHON}" "${REPO_ROOT}/scripts/record_openai_serving_row.py" \
     --backend vllm \
     --phase exploratory \
@@ -202,6 +210,10 @@ if [[ "${RECORD}" == "1" ]]; then
     --kv-cache-dtype auto \
     --attention-backend "${ATTENTION_BACKEND}" \
     --cuda-graph-mode enabled \
+    --chat-smoke-prompt "${CHAT_SMOKE_PROMPT:-Reply with exactly this text: spark-ok}" \
+    --chat-smoke-max-tokens "${CHAT_SMOKE_MAX_TOKENS:-8}" \
+    --benchmark-prompt-suffix "${BENCHMARK_PROMPT_SUFFIX:-}" \
+    "${RECORD_EXTRA_ARGS[@]}" \
     --server-log "${RESULTS_DIR}/${RUN_ID}_server.log" \
     --process-match "${PROCESS_MATCH}"
   docker logs "${RUN_ID}" > "${RESULTS_DIR}/${RUN_ID}_server.log" 2>&1 || true

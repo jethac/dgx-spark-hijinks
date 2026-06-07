@@ -28,6 +28,9 @@ def main() -> int:
     parser.add_argument("--url", default="http://127.0.0.1:8000")
     parser.add_argument("--model", required=True)
     parser.add_argument("--timeout", type=int, default=120)
+    parser.add_argument("--prompt", default="Reply with exactly this text: spark-ok")
+    parser.add_argument("--max-tokens", type=int, default=8)
+    parser.add_argument("--chat-template-kwargs-json")
     parser.add_argument("--output")
     args = parser.parse_args()
 
@@ -37,12 +40,14 @@ def main() -> int:
         "messages": [
             {
                 "role": "user",
-                "content": "Reply with exactly this text: spark-ok",
+                "content": args.prompt,
             }
         ],
         "temperature": 0,
-        "max_tokens": 8,
+        "max_tokens": args.max_tokens,
     }
+    if args.chat_template_kwargs_json:
+        payload["chat_template_kwargs"] = json.loads(args.chat_template_kwargs_json)
 
     started = time.time()
     report: dict[str, Any] = {

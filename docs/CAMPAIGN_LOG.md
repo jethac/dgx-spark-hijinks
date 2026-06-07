@@ -279,7 +279,7 @@
 - Added a counterpart evidence audit for AEON-derived non-vLLM work.
   - script: `scripts/counterpart_evidence_audit.py`
   - artifact: `results/counterpart_evidence_audit_20260608.json`
-  - result: all seven counterpart proof rows are still missing, partial, or blocked: SGLang Gemma NVFP4 ordinary-KV serving, SGLang clean FP4-KV after-row, SGLang DFlash/EAGLE Qwen, vLLM Qwen3.6 NVFP4+DFlash serving, larger Qwen llama.cpp GGUF, llama.cpp native FP4 GGUF, and live llama.cpp loglikelihood.
+  - result at creation time: all seven counterpart proof rows were still missing, partial, or blocked: SGLang Gemma NVFP4 ordinary-KV serving, SGLang clean FP4-KV after-row, SGLang DFlash/EAGLE Qwen, vLLM Qwen3.6 NVFP4+DFlash serving, larger Qwen llama.cpp GGUF, llama.cpp native FP4 GGUF, and live llama.cpp loglikelihood.
   - interpretation: AEON source-port coverage is useful but does not satisfy the SGLang/llama.cpp counterpart acceptance tests.
 - Added live task contracts for the missing counterpart rows.
   - task file: `tasks/counterpart_evidence_tasks.jsonl`
@@ -301,6 +301,12 @@
   - backend evidence: server log resolved `Qwen3_5MoeForConditionalGeneration` and `DFlashDraftModel`, selected `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, and `585168` KV tokens.
   - failure: row manifest is `ok=false`; chat smoke produced `message.reasoning` but no normal content and no `spark-ok`; benchmark recorded completion-token counts but no valid output text, so this is not a speed row.
   - interpretation: image acquisition and model startup are no longer the vLLM Qwen blocker; the next blocker is response/content validation plus native-target proof.
+- Fixed the AEON Qwen3.6 vLLM response/content row by disabling Qwen thinking through OpenAI `chat_template_kwargs`.
+  - direct probe: `results/qwen_content_probe_20260608T0900JST_direct_chat_probes.json`
+  - finding: baseline and prompt-level `/no_think` stayed in `message.reasoning`, while API-level `{"enable_thinking": false}` returned normal `message.content` for both `qwen36-fast` and `qwen36-deep`.
+  - passing row: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json`, `ok=true`
+  - compact decode: `50.37 tok/s` short, `55.84 tok/s` medium, `53.75 tok/s` long-prefill.
+  - caveat: this is AEON's container/checkpoint, not a `jethac` fork speedup; build-target audit still lacks explicit native `sm_121`/`sm_121a` evidence and the server still warns about Marlin weight-only FP4.
 
 ## First Benchmark Campaign Summary
 

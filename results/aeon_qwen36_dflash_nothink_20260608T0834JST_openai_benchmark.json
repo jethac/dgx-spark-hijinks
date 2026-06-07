@@ -1,0 +1,156 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 30,
+      "completion_tok_s_total": 44.61693565487211,
+      "content_chars": 351,
+      "content_preview": "A local AI workstation benefits significantly from fast memory because the performance of modern machine learning models is often bottlenecked by data transfer speeds rather than raw computational power. High-bandwidth memory (HBM) or fast DDR5 RAM allows the GPU or CPU to rapidly access large datasets and model weights, minimizing the \"memory wall\"",
+      "decode_s": 1.2704999760026112,
+      "decode_tok_s": 50.37386950715571,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780874858,
+        "id": "chatcmpl-8291c5b05501d097",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 27,
+          "total_tokens": 91
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 351,
+      "payload": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 1.4344328910228796,
+      "ttft_s": 0.1639329150202684,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 27,
+        "total_tokens": 91
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 78,
+      "completion_tok_s_total": 53.72669579926734,
+      "content_chars": 747,
+      "content_preview": "**Engineering Note: Validating LLM Server GPU Kernel Usage**\n\n**Objective:** Verify that the LLM inference server is executing computations on the intended GPU architecture using optimized kernels (e.g., cuBLAS, cuDNN, FlashAttention) rather than falling back to CPU or generic CUDA kernels.\n\n### 1. Collect Concrete Evidence\n\n| Evidence Type | Collection Method | Expected Indicator |\n| :--- | :--- | :--- |\n| **GPU Utilization & Memory** | `nvidia-smi` or `nvtop` | High GPU utilization (>80% durin",
+      "decode_s": 3.4382151079771575,
+      "decode_tok_s": 55.84292837133202,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780874859,
+        "id": "chatcmpl-b91b84c7baf5627d",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 39,
+          "total_tokens": 231
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 747,
+      "payload": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 3.5736424349888694,
+      "ttft_s": 0.1354273270117119,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 39,
+        "total_tokens": 231
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 26,
+      "completion_tok_s_total": 37.92711700574586,
+      "content_chars": 360,
+      "content_preview": "Here are the five benchmark requirements summarized from the provided text:\n\n*   **Environment and Configuration**: Capture environment metadata and backend selection to establish the context for the inference server.\n*   **Latency Metrics**: Measure cold-start time and warm decode speed to evaluate performance under different load conditions.\n*   **Resource",
+      "decode_s": 1.1907932809845079,
+      "decode_tok_s": 53.74568451300544,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780874863,
+        "id": "chatcmpl-a282d546c03f2d53",
+        "model": "qwen36-35b-heretic",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2271,
+          "total_tokens": 2335
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 360,
+      "payload": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 1.6874470050097443,
+      "ttft_s": 0.49665372402523644,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2271,
+        "total_tokens": 2335
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T23:27:44Z",
+  "hardware": {
+    "devices": [],
+    "dgx_spark_baseline_sm_count": 48,
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "qwen36-fast",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "aeon_qwen36_dflash_nothink_20260608T0834JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T23:27:38Z",
+  "url": "http://127.0.0.1:8000"
+}

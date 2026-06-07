@@ -149,20 +149,33 @@ def choose_model(base_url: str, requested: str | None, timeout: int) -> tuple[st
 
 def run_case(args: argparse.Namespace, model: str, case_name: str, case: dict[str, Any]) -> dict[str, Any]:
     endpoint = args.url.rstrip("/") + "/v1/chat/completions"
+    messages = [
+        {
+            **message,
+            "content": message["content"] + args.prompt_suffix,
+        }
+        for message in case["messages"]
+    ]
     payload = {
         "model": model,
-        "messages": case["messages"],
+        "messages": messages,
         "temperature": 0,
         "max_tokens": case["max_tokens"],
         "stream": True,
         "stream_options": {"include_usage": True},
     }
+    chat_template_kwargs = None
+    if args.chat_template_kwargs_json:
+        chat_template_kwargs = json.loads(args.chat_template_kwargs_json)
+        payload["chat_template_kwargs"] = chat_template_kwargs
     report = {
         "case": case_name,
         "ok": False,
         "payload": {
             "max_tokens": payload["max_tokens"],
             "message_chars": sum(len(m["content"]) for m in payload["messages"]),
+            "prompt_suffix": args.prompt_suffix,
+            "chat_template_kwargs": chat_template_kwargs,
         },
     }
     try:
@@ -219,6 +232,8 @@ def main() -> int:
     parser.add_argument("--phase", choices=["before", "after", "exploratory"], default="exploratory")
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--case", action="append", choices=sorted(PROMPTS), default=[])
+    parser.add_argument("--prompt-suffix", default="")
+    parser.add_argument("--chat-template-kwargs-json")
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--output")
     args = parser.parse_args()
