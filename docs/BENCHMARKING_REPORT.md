@@ -14,6 +14,8 @@ The work monitored and summarized the initial personal Gemma 4 benchmark run des
 
 The personal benchmark run was not terminated. Monitoring was stopped per request; the last observed remote process was still running.
 
+Later targeted Spark probes were run outside the original personal campaign to make the compatibility story more actionable. Those results are indexed in `docs/BASELINE_RESULTS.md` and summarized below.
+
 ## Campaign Setup
 
 The benchmark plan was revised to run host-native on the PGX workstation rather than through Docker. The active toolchain and sources recorded in the generated report were:
@@ -148,6 +150,33 @@ Only early throughput/MTP rows were present in the synced snapshot:
 | MTP speed | `mtp-12b-ud-iq2_m-q8_0...`, prompt `1042.40 tok/s`, generation `36.40 tok/s` |
 
 The active personal benchmark run had not reached the full throughput or MTP stages by the last synced report.
+
+## Targeted Follow-Up Benchmarks
+
+After the initial personal campaign snapshot, targeted compact probes were added to answer specific Spark/GB10 questions.
+
+| target | result | interpretation |
+|---|---|---|
+| vLLM Gemma 4 E4B W4A16 | compact OpenAI harness around 50-52 tok/s decode | first before row for an already-running vLLM server |
+| SGLang 26.05 Qwen BF16 | Qwen smoke passed; short/medium/long-prefill decode around 59-60 tok/s | SGLang works on GB10 for at least one supported BF16 model, but this is not Gemma or NVFP4 |
+| SGLang Gemma 4 E2B | failed before health; default path crashed in Gemma4 audio tower, `--language-only` required encoder URLs | SGLang Gemma4 model glue blocker, not a proven `sm_121` kernel failure |
+| FlashInfer SM121 `mm_fp4` source/JIT | patched auto-dispatch includes `b12x`; finite outputs on GB10 | dispatch enablement, not a speedup claim |
+| FlashInfer model-shaped proxies | dense-decode proxies mixed; MoE-shaped proxies slower after the patch | the one-line `b12x` gate is not enough to make Spark faster |
+| vLLM Gemma 4 26B A4B | serves in `vllm/vllm-openai:latest-cu130` at about 24 tok/s after `--max-num-batched-tokens 4096` | useful BF16/unquantized MoE serving baseline, not NVFP4 |
+| vLLM Gemma 4 12B | source/precompiled vLLM commit `da1daf40` plus Transformers main serves at about 7.7 tok/s | proves `gemma4_unified` can run on GB10, but not a clean release container or performance win |
+| llama.cpp Gemma 4 26B Q4_0 | OpenAI-compatible serving around 76 tok/s decode with `--reasoning off`; `llama-bench` tg128 around 77 tok/s | practical GGUF serving path is blessed; lm-eval GGUF accuracy remains blocked |
+| LiteRT-LM Gemma 4 E2B | CPU chat works; GPU benchmark works; GPU chat prints output then exits `-11` | optional side-runtime evidence, not a main Spark performance path |
+
+The current headline remains conservative: the scaffolding and evidence are much better, but no end-to-end NVFP4 serving speedup has been banked yet.
+
+## SM120 Reference Work
+
+Two hikarioyama reference repos are now tracked as prior art:
+
+- `hikarioyama/vllm-nvfp4-kv-sm120` at `f6156ee3b22b24885a52c02bdafb34a9c201fe86`
+- `hikarioyama/sglang-nvfp4-kv-sm120` at `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`
+
+They are relevant because they implement NVFP4 KV paths through vLLM/SGLang plus FlashInfer FA2 changes on SM120 RTX Blackwell systems. They are not GB10 `sm_121` validation. The repo policy is to build on them through clean `jethac` forks and worktrees, not vendor overlay trees into production images.
 
 ## Open State
 

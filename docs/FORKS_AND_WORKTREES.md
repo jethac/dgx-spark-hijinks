@@ -4,6 +4,8 @@ Policy: if this campaign needs changes to an upstream open-source library, the c
 
 No loose long-lived patch directories.
 
+Do not vendor hikarioyama's overlay trees into this repository or into production images. Treat them as SM120 prior art and attribution sources. Productionable changes must be re-derived as minimal patches on `jethac` forks of the true upstream projects, with upstream base commits, issue-named branches, local GB10 proof artifacts, and each upstream's contributing process preserved.
+
 ## Rules
 
 - Fork upstream under `jethac`.
@@ -13,6 +15,7 @@ No loose long-lived patch directories.
 - Link every fork branch back to the hijinks Issue that requires it.
 - Record upstream base commit, local branch, test command, and upstreaming plan.
 - Follow each upstream repository's own contributing guide, style rules, tests, CI process, branch hygiene, and PR expectations. The `jethac` fork is only a staging area; patches should be shaped so upstream maintainers can review them normally.
+- Add submodules only when carrying code. Reference clones can live outside the production flow or under `references/*-sm120-reference`.
 
 ## Naming
 
@@ -84,6 +87,38 @@ sglang-nvfp4-kv-sm121
 flashinfer-nvfp4-kv-sm121
 vllm-gemma4-sm121
 ```
+
+## NVFP4 KV Ownership Split
+
+Build on hikarioyama's SM120 vLLM and SGLang NVFP4-KV work unless GB10 testing shows it is the wrong path, but keep ownership boundaries clean:
+
+- FlashInfer owns FA2 kernel/page layout, explicit scale-factor strides, V scale-factor in-kernel deswizzle, JIT/codegen, SM12x/`121a` packaging, and kernel/unit harnesses.
+- vLLM owns `--kv-cache-dtype nvfp4` routing, FlashInfer backend feature gates, scale-factor tensor and stride plumbing, serving tests, and docs. Do not carry FlashInfer kernels in vLLM PRs.
+- SGLang owns `fp4_e2m1` KV dtype, KV memory pools, hybrid-SWA wiring, calibration before CUDA graph capture, server args, FlashInfer backend wrapper, and model-runner integration. Do not carry FlashInfer kernels in SGLang PRs.
+- Keep the existing FlashInfer `mm_fp4` SM121 dispatch work separate from NVFP4 KV attention work; it is enablement evidence, not a serving-speed proof.
+
+Suggested branches:
+
+```text
+jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121
+jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121
+jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121
+```
+
+## Spark NVFP4 KV PR Gate
+
+A Spark NVFP4 KV PR is not ready until a clean GB10 `sm_121` wheel/container proves native NVFP4 KV selection, correctness against fp8/bf16, warmed performance/capacity deltas, and binary/JIT evidence for the selected kernels. Overlay-based success is useful debugging evidence only.
+
+Required proof packet:
+
+- clean build: wheel/container, no site-package overlays, no stale `flashinfer-jit-cache` or cubin mismatch
+- build evidence: logs showing `sm_121`, `sm_121a`, or a documented valid SM12x family target such as `120f`
+- binary/JIT evidence: `cuobjdump` or JIT-cache audit proving the claimed kernels are selected
+- runtime evidence: real GB10 reports compute capability `(12, 1)` and logs show FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback
+- correctness: compare against fp8 or bf16 for prefill, decode, long context, GQA, page-size variants, CUDA graph replay, and peaked qK cases
+- quality: deterministic prompt output plus PPL/retrieval-style checks on a model large enough for NVFP4 KV to be meaningful
+- performance/capacity: warmed fp8-vs-NVFP4 runs with same model, prompts, memory fraction, CUDA graph mode, concurrency, TTFT, decode tok/s, and KV pool tokens
+- scope labels: explicitly say if MLA/FlashMLA, Mamba/SSM, attention sinks, hybrid-SWA, MTP/spec decode, TP>1, or multi-Spark are untested
 
 ## Current State
 

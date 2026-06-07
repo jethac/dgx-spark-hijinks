@@ -35,6 +35,7 @@ python3 scripts/spark_smoke_suite.py \
   --sglang-model Qwen/Qwen2.5-1.5B-Instruct \
   --hf-command "python3 path/to/tiny_hf_fallback_probe.py" \
   --mtp-command "python3 path/to/tiny_mtp_probe.py" \
+  --mtp-model gemma4-12b-mtp \
   --nvfp4-preset smoke \
   --output results/spark_smoke_before.json
 ```
@@ -83,8 +84,32 @@ The suite writes a `spark-smoke-suite/v1` JSON report with:
 - skipped rows only when explicitly skipped or for opt-in LiteRT-LM
 - a `spark_doctor` artifact for environment evidence
 - telemetry JSON for HF fallback when `--hf-command` is supplied
+- telemetry JSON for MTP/spec-decode when `--mtp-command` is supplied
 
 The suite is considered green only when every configured step succeeds and no required core track is missing.
+
+## Tiny HF And MTP Commands
+
+Use a tiny HF fallback smoke when validating the suite itself:
+
+```bash
+python3 scripts/spark_smoke_suite.py \
+  --run-id spark-smoke-hf-tiny-$(date -u +%Y%m%dT%H%M%SZ) \
+  --timeout-s 120 \
+  --skip-vllm --skip-sglang --skip-llamacpp --skip-mtp --skip-nvfp4 \
+  --hf-command "env CUDA_VISIBLE_DEVICES= lm_eval --model hf --model_args pretrained=sshleifer/tiny-gpt2,device=cpu,dtype=float32 --tasks boolq --limit 1 --batch_size 1 --num_fewshot 0"
+```
+
+Use a capped MTP smoke against the known llama.cpp MTP eval checkout:
+
+```bash
+python3 scripts/spark_smoke_suite.py \
+  --run-id spark-smoke-mtp-tiny-$(date -u +%Y%m%dT%H%M%SZ) \
+  --timeout-s 180 \
+  --skip-vllm --skip-sglang --skip-llamacpp --skip-hf --skip-nvfp4 \
+  --mtp-model gemma4-12b-ud-iq2_m \
+  --mtp-command "env GEMMA4_EVAL_ROOT=/home/jethac/gemma4-evals /home/jethac/gemma4-evals/.venv/bin/python /home/jethac/gemma4-evals/run_mtp_speed.py --only-row-id mtp-12b-ud-iq2_m-q8_0-gemma-4-12b-it-ud-iq2_m.gguf --max-tokens 8 --timeout 180 --large-timeout 180"
+```
 
 ## Current Evidence
 

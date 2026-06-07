@@ -16,6 +16,7 @@ The biggest practical problem was not model loading for the vLLM safetensors row
 - Initial timeouts were too short for large model load probes and MTP benchmarking.
 - The benchmark matrix was much larger than the machine could finish quickly: smoke completed, but full accuracy was still running and throughput/MTP stages were still pending when monitoring stopped.
 - A later compact vLLM serving check showed Gemma 4 26B A4B can serve on GB10 at about 24 tok/s decode, but the observed path was BF16/unquantized Triton MoE, not FlashInfer NVFP4.
+- A later vLLM source/precompiled probe showed Gemma 4 12B `gemma4_unified` can serve on GB10, but only after moving past released-image support, installing Transformers main, and removing a stale FlashInfer JIT-cache package.
 
 ## Fatal Or Blocking Problems
 
@@ -130,6 +131,19 @@ Impact:
 
 - These rows did not advance into the full vLLM accuracy path.
 - The personal run correctly classified them instead of silently falling back without labeling.
+
+Follow-up result:
+
+- On 2026-06-07, a separate source/precompiled vLLM probe at upstream commit `da1daf40bf18e5eaae04f26a80a537c8168a8bc2` served `google/gemma-4-12B-it` on GB10.
+- The run required `VLLM_USE_PRECOMPILED=1`, matching CUDA 13 precompiled wheel metadata, Transformers main, and removal of stale `flashinfer-jit-cache` files from the base image.
+- The import probe recorded `has_gemma4_unified: true`, `compute_capability: [12, 1]`, PyTorch `2.11.0+cu130`, vLLM `0.1.dev1+gda1daf40b`, and Transformers `5.10.0.dev0`.
+- The compact OpenAI-compatible serving row passed, but only at about 7.7 tok/s decode. vLLM forced `TRITON_ATTN` for Gemma 4's heterogeneous head dimensions and logged Triton JIT compilation during inference.
+
+Interpretation:
+
+- The old "12B vLLM load failed" finding should now be read as a released-stack/model-architecture packaging problem, not as proof that 12B cannot run on GB10.
+- The source/precompiled row is still not a blessed stack because it required source overlay and manual dependency cleanup.
+- Performance remains unsolved. This row is a compatibility proof, not evidence that Spark is extracting the silicon's FP4 capability.
 
 ### Gemma 4 26B vLLM Needs A Larger Multimodal Batch Token Budget
 

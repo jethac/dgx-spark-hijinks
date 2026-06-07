@@ -18,7 +18,7 @@ python3 scripts/gguf_logprobs_probe.py \
 
 ## Pass Criteria
 
-The response must include token logprobs in a shape that can score an echoed prompt/continuation pair.
+The response must include arbitrary continuation-token logprobs in a shape that can score an echoed prompt/continuation pair. Generated-token top-k logprobs are not enough unless they can recover every requested continuation token's pre-sampling probability.
 
 If this probe fails, do not run full lm-eval GGUF accuracy. Fix the adapter or pin a compatible llama.cpp server first.
 
@@ -31,3 +31,5 @@ Artifact:
 - `results/gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json`
 
 The server returned generated-token logprobs under `choices[0].logprobs.content`, but did not return `tokens` or `token_logprobs`. That is insufficient for the current lm-eval GGUF loglikelihood path.
+
+Next proof: test llama.cpp's native `/tokenize` plus `/completion` path with token-array prompts, `n_predict=1`, `n_probs`, and `return_tokens=true`. If that can expose arbitrary target-token logprobs, fix the adapter locally; if not, this needs a llama.cpp upstream loglikelihood path.

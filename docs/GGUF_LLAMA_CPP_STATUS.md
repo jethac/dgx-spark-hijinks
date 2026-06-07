@@ -73,10 +73,23 @@ This is not a model-quality failure and not a CUDA failure. It is an API/schema 
 ## Fix Options
 
 1. Pin a llama.cpp server/API version that returns echoed prompt/continuation token logprobs in the shape lm-eval expects.
-2. Patch or replace the lm-eval GGUF adapter to score against the current `logprobs.content` schema if it can be made mathematically equivalent.
+2. Patch or replace the lm-eval GGUF adapter only if a llama.cpp API path can expose arbitrary continuation-token probabilities. The observed OpenAI-compatible `logprobs.content` response is generated-token scoring, not sufficient by itself.
 3. Add a dedicated loglikelihood endpoint/path for llama.cpp that returns the exact continuation-token scores required by lm-eval.
 
 Until one of those passes `scripts/gguf_logprobs_probe.py`, GGUF remains a throughput/serving path, not a paper-comparable accuracy path.
+
+## Next Proof
+
+The best candidate is llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.
+
+Target proof:
+
+1. Tokenize a context and two continuations, including one continuation token unlikely to be in top-5 alternatives.
+2. For each continuation token, call `/completion` with `prompt = context_tokens + previous_continuation_tokens`, `n_predict=1`, `n_probs` high enough to include the target token, and `return_tokens=true`.
+3. Pass only if the response exposes the exact target token id and its pre-sampling logprob for every continuation token.
+4. Then run one tiny lm-eval GGUF task through that adapter path.
+
+If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 
 ## Practical Serving Note
 

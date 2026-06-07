@@ -48,6 +48,16 @@
   - patched source selected `b12x`, `cutlass`, `cudnn` and built an SM121a-targeted FP4 GEMM path.
   - patched dense-decode proxies were mixed; patched MoE-shaped proxies were slower on all tested shapes.
   - conclusion: the FlashInfer SM121 predicate patch remains dispatch enablement, not a proven speedup.
+- Served Gemma 4 12B through a vLLM source/precompiled probe at upstream commit `da1daf40` plus Transformers main after removing stale FlashInfer JIT-cache files.
+  - the run proved `Gemma4UnifiedForConditionalGeneration` can start on GB10, but compact decode was only about 7.7 tok/s and vLLM forced `TRITON_ATTN`.
+  - conclusion: this is a compatibility and packaging proof, not a clean blessed container or performance win.
+- Audited hikarioyama's vLLM and SGLang NVFP4-KV SM120 reference repos.
+  - vLLM reference HEAD: `f6156ee3b22b24885a52c02bdafb34a9c201fe86`.
+  - SGLang reference HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`.
+  - conclusion: build on them as prior art through `jethac` forks, but do not vendor overlays or call them Spark validation until GB10 `sm_121` fp8-vs-NVFP4 proof exists.
+- Tightened the smoke suite:
+  - `run_with_telemetry.py` now captures `pre_memory` before launching the child command.
+  - `spark_smoke_suite.py` wraps MTP/spec-decode commands with telemetry and supports `--mtp-model`.
 
 ## First Benchmark Campaign Summary
 

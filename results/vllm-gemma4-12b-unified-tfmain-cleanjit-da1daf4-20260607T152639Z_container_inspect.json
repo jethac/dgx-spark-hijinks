@@ -1,0 +1,272 @@
+[
+    {
+        "Id": "bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435",
+        "Created": "2026-06-07T15:26:39.778448125Z",
+        "Path": "bash",
+        "Args": [
+            "-lc",
+            "\nset -euo pipefail\napt-get update -qq >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_apt_update.log 2>&1\napt-get install -y -qq git >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_apt_git.log 2>&1\ngit config --global --add safe.directory /vllm-src\npython3 -m pip install -q setuptools-rust >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_pip_bootstrap.log 2>&1\ncd /vllm-src\nVLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT=da1daf40bf18e5eaae04f26a80a537c8168a8bc2   python3 -m pip install --no-build-isolation -e . >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_editable_install.log 2>&1\nif [[ \"1\" == \"1\" ]]; then\n  python3 -m pip uninstall -y flashinfer-jit-cache >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_flashinfer_jit_cache_uninstall.log 2>&1 || true\n  find /usr/local/lib/python3.12/dist-packages -maxdepth 1     \\( -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info' \\)     -print -exec rm -rf {} + >>/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_flashinfer_jit_cache_uninstall.log 2>&1 || true\nfi\nif [[ -n \"git+https://github.com/huggingface/transformers.git@effde20942e3f82a1b97449f60b3a48c5ff96145\" ]]; then\n  python3 -m pip install \"git+https://github.com/huggingface/transformers.git@effde20942e3f82a1b97449f60b3a48c5ff96145\" >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_transformers_install.log 2>&1\nfi\npython3 - <<'PY' >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_import_probe.txt 2>&1\nimport json\nimport torch\nimport transformers\nimport vllm\nimport vllm.model_executor.models.registry as registry\n\nprint(json.dumps({\n    \"vllm_file\": vllm.__file__,\n    \"vllm_version\": vllm.__version__,\n    \"torch\": torch.__version__,\n    \"cuda\": torch.version.cuda,\n    \"compute_capability\": torch.cuda.get_device_capability(0),\n    \"gpu\": torch.cuda.get_device_name(0),\n    \"transformers\": transformers.__version__,\n    \"has_gemma4_unified\": \"Gemma4UnifiedForConditionalGeneration\" in str(registry.__dict__),\n}, sort_keys=True))\nPY\nexec vllm serve google/gemma-4-12B-it   --served-model-name gemma4-12b-it   --max-model-len 8192   --gpu-memory-utilization 0.80   --max-num-batched-tokens 4096   --host 0.0.0.0   --port 8000\n"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 504160,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-06-07T15:26:39.803789318Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:bf05c8a0d56f7ed2fe279e0c0c876dd2bb813dd34702d975fa6ab640860ce825",
+        "ResolvConfPath": "/var/lib/docker/containers/bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435/hostname",
+        "HostsPath": "/var/lib/docker/containers/bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435/hosts",
+        "LogPath": "/var/lib/docker/containers/bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435/bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435-json.log",
+        "Name": "/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/jethac/spark-validation/vllm-gemma4-unified-da1daf4-clone:/vllm-src",
+                "/home/jethac/gemma4-evals/hf-cache:/root/.cache/huggingface",
+                "/home/jethac/dgx-spark-hijinks/results:/results"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+                "8000/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "8000"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "host",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": [
+                "label=disable"
+            ],
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": [
+                {
+                    "Driver": "",
+                    "Count": -1,
+                    "DeviceIDs": null,
+                    "Capabilities": [
+                        [
+                            "gpu"
+                        ]
+                    ],
+                    "Options": {}
+                }
+            ],
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "ID": "bb687b51f46d7321d15735c688f218c4f7d21f97adb0866312eb9a71bd628435",
+                "LowerDir": "/var/lib/docker/overlay2/44c81e51013f66ba81d3a7c41825f6804b2772f08a251f105455d87c82645cb9-init/diff:/var/lib/docker/overlay2/32311487332b9775588588d450b07d52ee283845f7778b7c89be166171d5ca85/diff:/var/lib/docker/overlay2/9f56601a858190c0e2728dc99a540d4cd07733c0186d3bfe2b0a5102ddff6112/diff:/var/lib/docker/overlay2/71a55a877d9905f40747af8e7088f001fae0394a42ba17538b1b129a31de6650/diff:/var/lib/docker/overlay2/c490d96836d7b68eab813039571b9853d07b2c921eb5b44c0e98ce504ec7ef8e/diff:/var/lib/docker/overlay2/c5579d894fa0b880a489b2c59c793d24cbb76e3c4e556112e3d210751528869f/diff:/var/lib/docker/overlay2/fcb5a3e49cf36bf22ab3c0ac0195c60d3435a0ada43c472c7f06f8aac3c99619/diff:/var/lib/docker/overlay2/756c8bbcd855fb2d06f16b038df529ac49517dc4c4f716ec23d1f1794908711f/diff:/var/lib/docker/overlay2/c8fffa4ad1130993dfa31220a8dd743086b37bf263a31a66af32854eeb0a9e84/diff:/var/lib/docker/overlay2/91af2528fcc419d06b9e373020eb853bdb7f2cad8e41d8296dbb5a03cc801492/diff:/var/lib/docker/overlay2/e5054c5a78d4aa901c276fcd8cab082e1d9327076448c25415d7930d6cfa426f/diff:/var/lib/docker/overlay2/b017b90cf7100779bccefa2edc2c392c72797eb353f7bfd7ba53bbe1ba70989c/diff:/var/lib/docker/overlay2/3a4ceceeed04753e37235918de69c486b3a98f76be84df22e31c883a353950cb/diff:/var/lib/docker/overlay2/22164d10f4d67b15174bf839b5c3391a891bb594436f6b7c3fd3a3da0ec3bfb4/diff:/var/lib/docker/overlay2/fba7e580ea6e4089d24a831cd5e0a698c016b263339b27418b791590551d03c7/diff:/var/lib/docker/overlay2/5d2c86fbf48d6529d9f0d6a3a3478b1070d47ac28bbffd63dcddb9198f950565/diff:/var/lib/docker/overlay2/dda158c99969338f5e0906cc166b181deb4f1fbfce818eb2f49d44542834c9aa/diff:/var/lib/docker/overlay2/fa942a5e2d0b72f0c6215efe72336b2c25bf28b52a20895b05537dd94384f6a2/diff:/var/lib/docker/overlay2/c9aa85875548e486991d31dc67be56fc8191beb7f6d908da71d1ab197f630d57/diff:/var/lib/docker/overlay2/515a6958dc015d29d9dc1fb720c375817031e6e5c5389df78022876beede8894/diff:/var/lib/docker/overlay2/12206b18f58827c10a4db30152e786a41f2a08dbdf3b49f714149809d21c6d83/diff:/var/lib/docker/overlay2/46ae7cceb934058c0ea6e5a5fffd2d44288a1694e8501636a94e079a62dc7ebc/diff:/var/lib/docker/overlay2/56060c68be5e791b059468263375e7b1df9f09b3337abc462f6836633022ea83/diff:/var/lib/docker/overlay2/abd3984a003c181dd2c733d76ce90d077c8053e25fb6a5ab542505c263fb71f0/diff:/var/lib/docker/overlay2/ae7f9bea994babd164bc70836720595728e34a3d16be89dd6229434eb326bebb/diff:/var/lib/docker/overlay2/ef3a11f2aa3e9487390eaf5f4b20040b0c357a8fb8d3571678bcc0fcdfc71ba9/diff",
+                "MergedDir": "/var/lib/docker/overlay2/44c81e51013f66ba81d3a7c41825f6804b2772f08a251f105455d87c82645cb9/merged",
+                "UpperDir": "/var/lib/docker/overlay2/44c81e51013f66ba81d3a7c41825f6804b2772f08a251f105455d87c82645cb9/diff",
+                "WorkDir": "/var/lib/docker/overlay2/44c81e51013f66ba81d3a7c41825f6804b2772f08a251f105455d87c82645cb9/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/jethac/spark-validation/vllm-gemma4-unified-da1daf4-clone",
+                "Destination": "/vllm-src",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/jethac/gemma4-evals/hf-cache",
+                "Destination": "/root/.cache/huggingface",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/jethac/dgx-spark-hijinks/results",
+                "Destination": "/results",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "bb687b51f46d",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "8000/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NVARCH=sbsa",
+                "NVIDIA_REQUIRE_CUDA=cuda>=13.0 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=vapps,driver>=535,driver<536 brand=vpc,driver>=535,driver<536 brand=vcs,driver>=535,driver<536 brand=vws,driver>=535,driver<536 brand=cloudgaming,driver>=535,driver<536 brand=unknown,driver>=550,driver<551 brand=grid,driver>=550,driver<551 brand=tesla,driver>=550,driver<551 brand=nvidia,driver>=550,driver<551 brand=quadro,driver>=550,driver<551 brand=quadrortx,driver>=550,driver<551 brand=nvidiartx,driver>=550,driver<551 brand=vapps,driver>=550,driver<551 brand=vpc,driver>=550,driver<551 brand=vcs,driver>=550,driver<551 brand=vws,driver>=550,driver<551 brand=cloudgaming,driver>=550,driver<551 brand=unknown,driver>=565,driver<566 brand=grid,driver>=565,driver<566 brand=tesla,driver>=565,driver<566 brand=nvidia,driver>=565,driver<566 brand=quadro,driver>=565,driver<566 brand=quadrortx,driver>=565,driver<566 brand=nvidiartx,driver>=565,driver<566 brand=vapps,driver>=565,driver<566 brand=vpc,driver>=565,driver<566 brand=vcs,driver>=565,driver<566 brand=vws,driver>=565,driver<566 brand=cloudgaming,driver>=565,driver<566 brand=unknown,driver>=570,driver<571 brand=grid,driver>=570,driver<571 brand=tesla,driver>=570,driver<571 brand=nvidia,driver>=570,driver<571 brand=quadro,driver>=570,driver<571 brand=quadrortx,driver>=570,driver<571 brand=nvidiartx,driver>=570,driver<571 brand=vapps,driver>=570,driver<571 brand=vpc,driver>=570,driver<571 brand=vcs,driver>=570,driver<571 brand=vws,driver>=570,driver<571 brand=cloudgaming,driver>=570,driver<571 brand=unknown,driver>=575,driver<576 brand=grid,driver>=575,driver<576 brand=tesla,driver>=575,driver<576 brand=nvidia,driver>=575,driver<576 brand=quadro,driver>=575,driver<576 brand=quadrortx,driver>=575,driver<576 brand=nvidiartx,driver>=575,driver<576 brand=vapps,driver>=575,driver<576 brand=vpc,driver>=575,driver<576 brand=vcs,driver>=575,driver<576 brand=vws,driver>=575,driver<576 brand=cloudgaming,driver>=575,driver<576",
+                "NV_CUDA_CUDART_VERSION=13.0.96-1",
+                "CUDA_VERSION=13.0.2",
+                "LD_LIBRARY_PATH=/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "DEBIAN_FRONTEND=noninteractive",
+                "UV_HTTP_TIMEOUT=500",
+                "UV_INDEX_STRATEGY=unsafe-best-match",
+                "UV_LINK_MODE=copy",
+                "VLLM_ENABLE_CUDA_COMPATIBILITY=0",
+                "TORCH_CUDA_ARCH_LIST=8.0 8.7 8.9 9.0 10.0 11.0 12.0+PTX",
+                "VLLM_USAGE_SOURCE=production-docker-image"
+            ],
+            "Cmd": [
+                "-lc",
+                "\nset -euo pipefail\napt-get update -qq >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_apt_update.log 2>&1\napt-get install -y -qq git >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_apt_git.log 2>&1\ngit config --global --add safe.directory /vllm-src\npython3 -m pip install -q setuptools-rust >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_pip_bootstrap.log 2>&1\ncd /vllm-src\nVLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT=da1daf40bf18e5eaae04f26a80a537c8168a8bc2   python3 -m pip install --no-build-isolation -e . >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_editable_install.log 2>&1\nif [[ \"1\" == \"1\" ]]; then\n  python3 -m pip uninstall -y flashinfer-jit-cache >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_flashinfer_jit_cache_uninstall.log 2>&1 || true\n  find /usr/local/lib/python3.12/dist-packages -maxdepth 1     \\( -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info' \\)     -print -exec rm -rf {} + >>/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_flashinfer_jit_cache_uninstall.log 2>&1 || true\nfi\nif [[ -n \"git+https://github.com/huggingface/transformers.git@effde20942e3f82a1b97449f60b3a48c5ff96145\" ]]; then\n  python3 -m pip install \"git+https://github.com/huggingface/transformers.git@effde20942e3f82a1b97449f60b3a48c5ff96145\" >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_transformers_install.log 2>&1\nfi\npython3 - <<'PY' >/results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_import_probe.txt 2>&1\nimport json\nimport torch\nimport transformers\nimport vllm\nimport vllm.model_executor.models.registry as registry\n\nprint(json.dumps({\n    \"vllm_file\": vllm.__file__,\n    \"vllm_version\": vllm.__version__,\n    \"torch\": torch.__version__,\n    \"cuda\": torch.version.cuda,\n    \"compute_capability\": torch.cuda.get_device_capability(0),\n    \"gpu\": torch.cuda.get_device_name(0),\n    \"transformers\": transformers.__version__,\n    \"has_gemma4_unified\": \"Gemma4UnifiedForConditionalGeneration\" in str(registry.__dict__),\n}, sort_keys=True))\nPY\nexec vllm serve google/gemma-4-12B-it   --served-model-name gemma4-12b-it   --max-model-len 8192   --gpu-memory-utilization 0.80   --max-num-batched-tokens 4096   --host 0.0.0.0   --port 8000\n"
+            ],
+            "Image": "vllm/vllm-openai:latest-cu130",
+            "Volumes": null,
+            "WorkingDir": "/vllm-workspace",
+            "Entrypoint": [
+                "bash"
+            ],
+            "Labels": {
+                "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "22.04"
+            }
+        },
+        "NetworkSettings": {
+            "SandboxID": "b41768f0d208678efd753cb352bf84226c74ffd3743096d373f3b5527dc6ed2f",
+            "SandboxKey": "/var/run/docker/netns/b41768f0d208",
+            "Ports": {
+                "8000/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "8000"
+                    },
+                    {
+                        "HostIp": "::",
+                        "HostPort": "8000"
+                    }
+                ]
+            },
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "a60ea3ff8fed0129e1285185ec7ac9aee0ee845041baab614a1151565d305b3e",
+                    "EndpointID": "3a6289d090b0f8b3dceafebfd2d2babc99d70038c4d867cf78fba74e8ba9a113",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "MacAddress": "e6:5b:47:22:36:d0",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

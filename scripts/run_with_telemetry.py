@@ -183,6 +183,7 @@ def classify_returncode(returncode: int | None) -> str:
 def run_with_telemetry(args: argparse.Namespace) -> dict[str, Any]:
     started = time.time()
     started_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started))
+    pre_memory = memory_snapshot()
     proc = subprocess.Popen(
         args.command,
         stdin=subprocess.DEVNULL,
@@ -236,7 +237,7 @@ def run_with_telemetry(args: argparse.Namespace) -> dict[str, Any]:
         "samples": samples,
         "peak_process_tree_rss_kib": max((s.get("rss_kib", 0) for s in samples), default=0),
         "peak_process_tree_swap_kib": max((s.get("swap_kib", 0) for s in samples), default=0),
-        "pre_memory": memory_snapshot(),
+        "pre_memory": pre_memory,
         "post_memory": memory_snapshot(),
         "oom_evidence": oom_snapshot(since=started_utc),
     }

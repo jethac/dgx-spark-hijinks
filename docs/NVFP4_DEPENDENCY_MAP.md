@@ -29,9 +29,10 @@ From `results/cuda_so_audit_vllm_flashinfer_20260607T111023Z.json`:
 From the subagent read-only upstream investigation:
 
 - current vLLM source has NVFP4 KV support surfaces, but FlashInfer backend behavior still needs Spark-specific validation.
-- community vLLM NVFP4 work modifies both vLLM glue and FlashInfer FA2/CUDA/JIT surfaces.
+- `hikarioyama/vllm-nvfp4-kv-sm120` reports a vLLM NVFP4 KV cache path for SM120 RTX PRO 6000 using a FlashInfer FA2 explicit-scale-factor-stride patch; the repo summary claims roughly 1.5x fp8 KV pool capacity and 95-104% fp8 speed on that hardware class.
+- community vLLM NVFP4-KV work modifies both vLLM glue and FlashInfer FA2/CUDA/JIT surfaces. This is a different problem from the current FlashInfer `mm_fp4` auto-dispatch patch, which targets dense/MoE GEMM backend selection rather than KV-cache storage or attention decode.
 - current FlashInfer has SM12x support work, but some code still distinguishes `(12, 0)` specifically.
-- SGLang pins or fetches FlashInfer-related dependencies, so native SGLang NVFP4 KV probably needs SGLang and FlashInfer work together.
+- `hikarioyama/sglang-nvfp4-kv-sm120` ports the same NVFP4-KV idea into SGLang and adds SGLang memory-pool, hybrid-SWA, and calibration plumbing. SGLang pins or fetches FlashInfer-related dependencies, so native SGLang NVFP4 KV probably needs SGLang and FlashInfer work together.
 
 From FlashInfer issue #3170:
 
@@ -74,6 +75,22 @@ Patch branch:
   - on SGLang 26.05, patched dense-decode proxies were mixed and patched MoE-shaped proxies were slower on all tested shapes.
   - this narrows the expected performance win: the patch is proven as dispatch enablement, but user-visible speedup still needs fused serving paths, NVFP4 KV, model-specific quantization plumbing, CUDA graph behavior, or clean package builds to prove it.
   - performance hypotheses are tracked in `docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md`.
+- vLLM NVFP4-KV reference status:
+  - reference repo: `https://github.com/hikarioyama/vllm-nvfp4-kv-sm120`
+  - audited HEAD: `f6156ee3b22b24885a52c02bdafb34a9c201fe86`
+  - current classification: SM120 reference evidence, not a GB10 `sm_121` result.
+  - relevant launch surface: `--kv-cache-dtype nvfp4` or equivalent vLLM KV-cache flagging plus a patched FlashInfer FA2 path with explicit scale-factor stride handling.
+  - reported Step3.7-Flash path: TP=2, MTP K=1, `--quantization modelopt`, `--enable-expert-parallel`, `--max-model-len 131072`, `--max-num-seqs 32`, CUDA graph capture sizes `1,2,4,8,16`.
+  - reported SM120 result: fp8 KV pool around 1.66M tokens versus NVFP4 around 2.96M-3.08M tokens, with decode in the same rough range and quality deltas around `+0.01` to `+0.04` nats/token PPL.
+  - stated limits: standard attention only; head dimensions 64/128/256/512; not MLA, Mamba/SSM, or attention sinks.
+  - not covered by our current tests: fp8-vs-NVFP4 KV capacity, output quality, long-context attention decode, CUDA graph replay, and whether the same patches build cleanly for `sm_121`/`121a` on the Spark stack.
+- SGLang NVFP4-KV reference status:
+  - reference repo: `https://github.com/hikarioyama/sglang-nvfp4-kv-sm120`
+  - audited HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`
+  - current classification: SM120 reference evidence, not a GB10 `sm_121` result.
+  - relevant launch surface: `--kv-cache-dtype fp4_e2m1 --attention-backend flashinfer --page-size 1`.
+  - reported SM120 result: Qwen2.5 and Step3.7-Flash validation, 1.778x KV capacity versus fp8 in the documented Step3.7 case, roughly fp8-like decode on larger models, and small-model quality failures even after calibration.
+  - not covered by our current tests: SGLang fp8 baseline on GB10, SGLang NVFP4-KV quality/perf on GB10, and Gemma-family serving under SGLang.
 - not yet proven:
   - clean wheel or container build suitable for vLLM/SGLang serving
   - `cuobjdump` evidence from a distributable artifact

@@ -2,7 +2,7 @@
 
 Status: draft, not blessed.
 
-SGLang is tracked as a first-class Spark runtime alongside vLLM, llama.cpp, and LiteRT-LM.
+SGLang is tracked as a first-class Spark runtime alongside vLLM and llama.cpp. LiteRT-LM is optional side-runtime coverage.
 
 ## Why It Matters
 
@@ -13,8 +13,10 @@ The `hikarioyama/sglang-nvfp4-kv-sm120` repo shows an SGLang NVFP4 KV path for R
 - native FP4 KV memory pool
 - hybrid-SWA wiring
 - per-layer global-scale auto-calibration before CUDA graph capture
+- reported 1.778x KV capacity versus fp8 on Step3.7-Flash
+- reported fp4 decode near fp8 on large-model tests, with small-model quality warnings
 
-That is relevant to Spark because it attacks the same missing NVFP4 plumbing problem we saw on the vLLM side. It still needs `sm_121` validation on our GB10 unit.
+That is relevant to Spark because it attacks the same missing NVFP4 plumbing problem we saw on the vLLM side. It still needs `sm_121` validation on our GB10 unit. Treat the fork as prior art to build from, not as a Spark-blessed result.
 
 ## Preflight
 
@@ -52,7 +54,7 @@ docker run -d --rm --name sglang-smoke \
     --port 30000 \
     --tp 1 \
     --dtype bfloat16 \
-    --mem-fraction-static 0.75
+    --mem-fraction-static 0.40
 
 until curl -fsS http://127.0.0.1:30000/health; do sleep 5; done
 curl -s http://127.0.0.1:30000/v1/models > results/${RUN_ID}_models.json
@@ -103,7 +105,21 @@ A blessed SGLang result must record:
 
 ## Current Rule
 
-Do not bless SGLang NVFP4 KV on Spark until it passes a single-Spark smoke test and a quality check. For small models, prefer fp8 KV unless NVFP4 quality is proven on that model.
+Use BF16 as the proven local SGLang baseline. Do not bless SGLang NVFP4 KV on Spark until it passes a single-Spark smoke test and a quality check. fp8 is the required comparator; for small models, incoherence under fp4 is an expected negative-control result per the SM120 fork, not a Spark blessing and not necessarily a kernel failure.
+
+## Experimental NVFP4 KV Fork Probe
+
+If testing the hikarioyama design on Spark, keep it separate from the BF16 smoke and record:
+
+- `hikarioyama/sglang-nvfp4-kv-sm120` source commit, currently audited at `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`
+- SGLang upstream base commit
+- FlashInfer patch source and upstream base commit
+- `--kv-cache-dtype fp4_e2m1 --attention-backend flashinfer --page-size 1`
+- `SGLANG_FP4_KV_AUTOCALIB` value
+- checkpoint `k_scale`/`v_scale` presence
+- fresh FlashInfer JIT cache path
+- paired fp8 and fp4 runs on the same model and prompts
+- deterministic prompt output and a quality comparison, not just throughput
 
 ## Gemma 4 Status
 
@@ -116,4 +132,4 @@ Do not present SGLang as a Gemma 4 path until this is fixed or a different image
 
 ## Fork Rule
 
-If SGLang needs source changes, fork `sgl-project/sglang` to `jethac/sglang`, add it as `third_party/sglang`, and do the patch in a worktree named for the GitHub Issue.
+If SGLang needs source changes, fork `sgl-project/sglang` to `jethac/sglang`, add it as `third_party/sglang`, and do the patch in a worktree named for the GitHub Issue. Build on the hikarioyama implementation unless a GB10-specific test shows it is the wrong path.

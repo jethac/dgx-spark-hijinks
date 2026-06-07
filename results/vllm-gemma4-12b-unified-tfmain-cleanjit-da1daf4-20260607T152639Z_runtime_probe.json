@@ -1,0 +1,160 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 96 %"
+    }
+  },
+  "finished_utc": "2026-06-07T15:35:31Z",
+  "match": "vllm",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    504160,
+    505250
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "/usr/bin/python3",
+        "/usr/local/bin/vllm",
+        "serve",
+        "google/gemma-4-12B-it",
+        "--served-model-name",
+        "gemma4-12b-it",
+        "--max-model-len",
+        "8192",
+        "--gpu-memory-utilization",
+        "0.80",
+        "--max-num-batched-tokens",
+        "4096",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 504160,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "vllm",
+        "PPid": "504135",
+        "Pid": "504160",
+        "State": "S (sleeping)",
+        "Tgid": "504160",
+        "Threads": "65",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "2598288 kB",
+        "VmRSS": "2349096 kB",
+        "VmSize": "10040652 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "VLLM::EngineCore"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 505250,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "VLLM::EngineCor",
+        "PPid": "504160",
+        "Pid": "505250",
+        "State": "S (sleeping)",
+        "Tgid": "505250",
+        "Threads": "124",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "25544484 kB",
+        "VmRSS": "3421116 kB",
+        "VmSize": "132166508 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780846531,
+          "id": "gemma4-12b-it",
+          "max_model_len": 8192,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780846531,
+              "group": null,
+              "id": "modelperm-a068837551209565",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "google/gemma-4-12B-it"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-07T15:35:31Z",
+  "url": "http://127.0.0.1:8000"
+}

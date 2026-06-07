@@ -1,8 +1,8 @@
 # LiteRT-LM On Spark
 
-Status: usable CPU path, benchmark-only GPU path, not blessed for GPU chat.
+Status: optional side-runtime coverage; usable CPU path, benchmark-only GPU path, not blessed for GPU chat.
 
-LiteRT-LM is tracked because it may be relevant for Gemma and local-agent prototyping, especially if its Gemma/MTP path is strong on desktop Linux.
+LiteRT-LM is tracked as optional side-runtime coverage for Gemma and local-agent prototyping, not as a core Spark performance lane.
 
 Source:
 
@@ -27,7 +27,7 @@ Current assessment, 2026-06-07:
 - Which model formats are required?
 - Does it support the Gemma 4 models we care about?
 - Does it expose a CLI/server path suitable for local-agent workflows?
-- Does it outperform llama.cpp or vLLM for small Gemma text generation or MTP?
+- Does it have a narrow small-Gemma text-generation or MTP niche not covered by llama.cpp or vLLM?
 
 ## Preflight
 

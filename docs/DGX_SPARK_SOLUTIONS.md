@@ -126,7 +126,9 @@ Plan:
 - Audit NVFP4 from checkpoint format through quantization metadata, loader, GEMM kernels, KV cache, serving flags, and output validation.
 - Validate `--kv-cache-dtype nvfp4` on `sm_121` specifically before recommending it.
 - Upstream or replace patched FlashInfer paths that route NVFP4 KV through working FA2 kernels.
-- Track both vLLM and SGLang NVFP4 KV implementations. The SGLang SM120 implementation adds `fp4_e2m1` KV cache, FlashInfer FA2 patches, native FP4 memory pools, hybrid-SWA wiring, and per-layer global-scale auto-calibration before CUDA graph capture.
+- Track both vLLM and SGLang NVFP4 KV implementations. Unless GB10 testing shows a better route, build on hikarioyama's SM120 reference work through clean `jethac` forks and upstream-shaped patches.
+- The vLLM SM120 implementation routes `--kv-cache-dtype nvfp4` through patched FlashInfer FA2 with explicit scale-factor stride handling and reports large Step3.7-Flash KV-capacity gains on TP=2 RTX PRO 6000-class hardware.
+- The SGLang SM120 implementation adds `fp4_e2m1` KV cache, FlashInfer FA2 patches, native FP4 memory pools, hybrid-SWA wiring, and per-layer global-scale auto-calibration before CUDA graph capture.
 - Add correctness tests, not just speed tests: short deterministic prompts, logits sanity, and regression comparisons.
 - Keep fp8 KV as the default until NVFP4 KV is proven on Spark for the target model family.
 

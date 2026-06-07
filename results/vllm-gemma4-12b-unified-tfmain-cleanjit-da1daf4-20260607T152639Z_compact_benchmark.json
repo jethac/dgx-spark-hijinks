@@ -1,0 +1,148 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 65,
+      "content_chars": 343,
+      "content_preview": "A local AI workstation benefits from fast memory\u2014specifically high-bandwidth memory (HBM) or high-speed DDR5\u2014because the primary bottleneck in modern deep learning is often the speed at which data can be moved between storage and the processor. During the training and inference phases, large models must constantly shuttle massive tensors and",
+      "decode_s": 8.179712520999601,
+      "decode_tok_s": 7.824235856173939,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780846488,
+        "id": "chatcmpl-879955b72e7012e6",
+        "model": "gemma4-12b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+gda1daf40b-c9e7d3e7",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 79
+      },
+      "total_s": 8.447613287018612,
+      "ttft_s": 0.2679007660190109,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 193,
+      "content_chars": 813,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Execution in LLM Inference Servers**\n\n**Objective:** To verify that the inference engine (e.g., vLLM, TGI, TensorRT-LLM) is executing the optimized kernels intended for the specific hardware architecture (e.g., FlashAttention-2, PagedAttention, or custom Triton kernels) rather than falling back to generic, unoptimized implementations.\n\n### 1. Validation Methodologies\n\n#### A. Profiling & Trace Analysis (Primary Method)\nUse hardware-level profiling tools ",
+      "decode_s": 25.056784726999467,
+      "decode_tok_s": 7.662595264791257,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780846496,
+        "id": "chatcmpl-8114674b208b533a",
+        "model": "gemma4-12b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+gda1daf40b-c9e7d3e7",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "message_chars": 151
+      },
+      "total_s": 25.318019863014342,
+      "ttft_s": 0.261235136014875,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "total_tokens": 232
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 65,
+      "content_chars": 356,
+      "content_preview": "Here are the benchmark requirements summarized into five bullets:\n\n*   **System & Configuration:** Capture comprehensive environment metadata and specific backend selections.\n*   **Latency Metrics:** Measure both initial cold-start times and sustained warm decode speeds.\n*   **Resource Utilization:** Monitor and record memory pressure during inference.\n*",
+      "decode_s": 8.275557860994013,
+      "decode_tok_s": 7.733617609231806,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780846522,
+        "id": "chatcmpl-81f38220cb53a703",
+        "model": "gemma4-12b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+gda1daf40b-c9e7d3e7",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2270,
+          "total_tokens": 2334
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "message_chars": 12743
+      },
+      "total_s": 9.25184318801621,
+      "ttft_s": 0.9762853270221967,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2270,
+        "total_tokens": 2334
+      }
+    }
+  ],
+  "finished_utc": "2026-06-07T15:35:31Z",
+  "model": "gemma4-12b-it",
+  "models_response": {
+    "data": [
+      {
+        "created": 1780846488,
+        "id": "gemma4-12b-it",
+        "max_model_len": 8192,
+        "object": "model",
+        "owned_by": "vllm",
+        "parent": null,
+        "permission": [
+          {
+            "allow_create_engine": false,
+            "allow_fine_tuning": false,
+            "allow_logprobs": true,
+            "allow_sampling": true,
+            "allow_search_indices": false,
+            "allow_view": true,
+            "created": 1780846488,
+            "group": null,
+            "id": "modelperm-9410bd580581e7ed",
+            "is_blocking": false,
+            "object": "model_permission",
+            "organization": "*"
+          }
+        ],
+        "root": "google/gemma-4-12B-it"
+      }
+    ],
+    "object": "list"
+  },
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z-compact",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-07T15:34:48Z",
+  "url": "http://127.0.0.1:8000"
+}

@@ -249,6 +249,51 @@ Interpretation:
 - This row does not exercise the FlashInfer NVFP4 `mm_fp4` dispatch fix. The vLLM path is BF16/unquantized MoE and explicitly chose Triton.
 - The `--max-num-batched-tokens 4096` requirement should be part of future Gemma 4 vLLM recipes for this image/model combination.
 
+## 2026-06-07: vLLM Gemma 4 12B Unified Source/Precompiled Probe
+
+Target:
+
+- base image: `vllm/vllm-openai:latest-cu130`
+- vLLM source commit: `da1daf40bf18e5eaae04f26a80a537c8168a8bc2`
+- install mode: editable source install using `VLLM_USE_PRECOMPILED=1`, `VLLM_MAIN_CUDA_VERSION=13.0`, and matching precompiled wheel metadata
+- Transformers: main snapshot installed from `git+https://github.com/huggingface/transformers.git@effde20942e3f82a1b97449f60b3a48c5ff96145`
+- model: `google/gemma-4-12B-it`
+- served model: `gemma4-12b-it`
+- settings: `--max-model-len 8192 --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096`
+
+Artifacts:
+
+- launcher: `scripts/run_vllm_gemma4_12b_unified_probe.sh`
+- import probe: `results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_import_probe.txt`
+- chat smoke: `results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_openai_chat_smoke.json`
+- compact benchmark: `results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_compact_benchmark.json`
+- runtime probe: `results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_runtime_probe.json`
+- server log: `results/vllm-gemma4-12b-unified-tfmain-cleanjit-da1daf4-20260607T152639Z_server.log`
+
+Result summary:
+
+| case | prompt tokens | generated tokens | TTFT seconds | total seconds | decode tok/s |
+|---|---:|---:|---:|---:|---:|
+| `short_decode` | 28 | 64 | 0.268 | 8.448 | 7.82 |
+| `medium_decode` | 40 | 192 | 0.261 | 25.318 | 7.66 |
+| `long_prefill` | 2270 | 64 | 0.976 | 9.252 | 7.73 |
+
+Startup observations:
+
+- The import probe recorded GB10 compute capability `[12, 1]`, PyTorch `2.11.0+cu130`, vLLM `0.1.dev1+gda1daf40b`, Transformers `5.10.0.dev0`, and `has_gemma4_unified: true`.
+- Released/current local images checked before this run did not expose `Gemma4UnifiedForConditionalGeneration` through the registry: `vllm/vllm-openai:latest-cu130`, `vllm/vllm-openai:cu130-nightly-aarch64`, and the earlier `gemma4-vllm:v0.22.1-pip` image.
+- Upstream vLLM main contains the architecture, and wheel metadata existed for `da1daf40`; the current main commit tested during this audit did not have matching precompiled wheel metadata yet.
+- Stale `flashinfer-jit-cache` from the base image had to be removed. Without cleanup, FlashInfer reported a JIT-cache package version mismatch; after `pip uninstall` plus deleting the remaining package directory and dist-info, the server reached health.
+- The server resolved `Gemma4UnifiedForConditionalGeneration`, loaded 22.28 GiB of checkpoints, and created a 336,566-token GPU KV cache for 8,192-token requests.
+- vLLM forced `TRITON_ATTN` because Gemma 4 has heterogeneous head dimensions. The log also reported Triton JIT compilation during inference for `_compute_slot_mapping_kernel` and `kernel_unified_attention`.
+
+Interpretation:
+
+- This overturns the older local result that 12B was simply not usable in vLLM on Spark: the architecture path can run on GB10 when vLLM and Transformers are new enough and the FlashInfer JIT-cache package set is consistent.
+- This is not a blessed clean stack. It required source overlay, a specific precompiled-wheel commit, Transformers main, and manual stale-package cleanup inside the container.
+- The measured decode speed is much slower than the 26B A4B vLLM row and the llama.cpp 26B Q4_0 row. Treat it as a compatibility proof and a packaging target, not a performance win.
+- The next proof is a clean release/nightly container that starts the same model without source surgery, then a quantized/MTP row that explains whether the SM120 reference results transfer to GB10 `sm_121`.
+
 ## 2026-06-07: vLLM Gemma 4 26B A4B QAT-Unquantized Probe
 
 Target:

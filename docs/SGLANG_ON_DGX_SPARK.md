@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16 container smoke passed, not NVFP4-blessed.
+Status: BF16 NVIDIA 26.05 container smoke passed; hikarioyama SM120 NVFP4 KV fork audited; no SGLang NVFP4 KV run has passed on GB10/SM121.
 
 Target: DGX Spark / ThinkStation PGX / GB10 = compute capability 12.1 = `sm_121`.
 
@@ -17,7 +17,17 @@ SGLang is a serious serving runtime and should not be hidden under the vLLM plan
 - per-layer global-scale auto-calibration before CUDA graph capture
 - fp4-vs-fp8 comparison discipline
 
-That is SM120 RTX Blackwell evidence. It is not Spark validation. Our target is `sm_121`.
+That repo reports Qwen2.5 and Step3.7-Flash 198B validation on SM120 RTX Blackwell systems, including a measured KV capacity improvement versus fp8 and roughly fp8-like decode speed on the large-model path. It also reports small-model incoherence under NVFP4 KV and recommends fp8 KV for that regime. This is important reference work, but it is not Spark validation. Our target is GB10 `sm_121`, and our current SGLang proof is BF16 KV only.
+
+## Evidence Classes
+
+Keep these separate in reports:
+
+- NVIDIA 26.05 BF16 Spark evidence: `nvcr.io/nvidia/sglang:26.05-py3` serves `Qwen/Qwen2.5-1.5B-Instruct` on our GB10 with BF16 KV.
+- hikarioyama SM120 NVFP4 KV evidence: `hikarioyama/sglang-nvfp4-kv-sm120` at `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` reports `fp4_e2m1` KV, FlashInfer FA2 patches, FP4 pools, hybrid-SWA support, and global-scale calibration on SM120 hardware.
+- jethac FlashInfer SM121 `mm_fp4` dispatch evidence: our FlashInfer fork changes dense/MoE GEMM auto-dispatch on GB10, but it does not validate SGLang KV attention.
+
+Do not merge those into "SGLang NVFP4 works on Spark" until the GB10 `fp4_e2m1` serving row exists.
 
 ## Baseline First
 
@@ -27,7 +37,7 @@ Before NVFP4:
 - capture `spark_doctor`: done for `sglang_20260607T115213Z`
 - start an OpenAI-compatible server: done on port `30000`
 - run `scripts/openai_chat_smoke.py`: passed
-- establish BF16 or fp8 KV quality and speed: partial BF16 baseline captured
+- establish BF16 or fp8 KV quality and speed: BF16 baseline captured for Qwen; fp8 is still unproven on our GB10 SGLang path
 
 Only then test `fp4_e2m1`.
 
@@ -136,23 +146,28 @@ Known risk: on `aarch64`, SGLang may JIT some kernels at first launch instead of
 
 ## NVFP4 Rule
 
-Keep fp8 KV as the default recommendation until SGLang NVFP4 KV passes on Spark.
+Use BF16 as the proven SGLang baseline on our Spark today. fp8 is the desired comparator and likely default for small models, but it should not be called proven until a GB10 SGLang fp8 smoke passes. Keep NVFP4 KV unblessed until it passes on Spark.
 
 For NVFP4 validation, record:
 
 - SGLang version/image/commit
+- SGLang upstream base commit if using a fork or overlay
 - FlashInfer version or patch source
+- FlashInfer upstream base commit if using a fork or overlay
 - model id/revision
 - attention backend
 - `--kv-cache-dtype fp4_e2m1`
 - page size
 - CUDA graph mode
 - fresh JIT cache path
+- `SGLANG_FP4_KV_AUTOCALIB` value
+- whether checkpoint `k_scale`/`v_scale` values are present or calibration is generated at startup
 - deterministic prompt output
 - fp4-vs-fp8 quality comparison
 - prefill/decode speed
 - memory/KV capacity difference
 - whether patches are SM120-derived or SM121-specific
+- whether the model is large enough for NVFP4 KV quality to be meaningful; the SM120 reference repo warns that small models can fail quality even when the kernel is numerically correct
 
 ## Fork Rule
 
@@ -160,4 +175,4 @@ If SGLang needs source changes, fork `sgl-project/sglang` to `jethac/sglang`, ad
 
 If FlashInfer needs source changes for the SGLang path, fork `flashinfer-ai/flashinfer` to `jethac/flashinfer`, add it as `third_party/flashinfer`, and use a separate worktree.
 
-Use the supplied SM120 repo as reference context, not as a Spark-blessed submodule.
+Use the supplied SM120 repo as reference context and prior art. Unless a better reason appears, build on its design and tests, but port productionable changes into `jethac/sglang` and `jethac/flashinfer` branches with upstream-base commits recorded, contributing guidelines followed, and GB10 proof artifacts attached.

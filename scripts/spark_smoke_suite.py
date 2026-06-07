@@ -260,6 +260,53 @@ def add_hf_step(
     )
 
 
+def add_mtp_step(
+    steps: list[dict[str, Any]],
+    *,
+    repo_root: Path,
+    results_dir: Path,
+    run_id: str,
+    raw_command: str | None,
+    timeout_s: int,
+    skip: bool,
+    model: str | None,
+) -> None:
+    if skip:
+        steps.append(skipped("mtp", "--skip-mtp provided", required=False))
+        return
+    if not raw_command:
+        steps.append(skipped("mtp", "--mtp-command not provided", required=True))
+        return
+    artifact = results_dir / f"{run_id}_mtp_telemetry.json"
+    command = [
+        sys.executable,
+        str(repo_root / "scripts" / "run_with_telemetry.py"),
+        "--run-id",
+        f"{run_id}-mtp",
+        "--backend",
+        "mtp",
+        "--timeout-s",
+        str(timeout_s),
+        "--interval-s",
+        "5",
+        "--output",
+        str(artifact),
+    ]
+    if model:
+        command.extend(["--model", model])
+    command.extend(["--", *shlex.split(raw_command)])
+    steps.append(
+        run_command(
+            name="mtp",
+            command=command,
+            timeout_s=timeout_s + 30,
+            artifact=artifact,
+            required=True,
+            cwd=repo_root,
+        )
+    )
+
+
 def add_nvfp4_step(
     steps: list[dict[str, Any]],
     *,
@@ -328,6 +375,7 @@ def main() -> int:
     parser.add_argument("--litert-model-file", default="gemma-4-E2B-it.litertlm")
     parser.add_argument("--hf-command", help="HF fallback command to run under telemetry.")
     parser.add_argument("--mtp-command", help="MTP/spec decode command to run under this suite.")
+    parser.add_argument("--mtp-model", help="Model label to store in the MTP telemetry artifact.")
     parser.add_argument("--nvfp4-command", help="NVFP4/fp8 probe command to run under this suite.")
     parser.add_argument("--nvfp4-preset", default="smoke", choices=["smoke", "dense_decode", "moe_expert"])
     parser.add_argument("--nvfp4-iterations", type=int, default=10)
@@ -423,7 +471,16 @@ def main() -> int:
         timeout_s=args.timeout_s,
         skip=args.skip_hf,
     )
-    add_optional_shell_step(steps, name="mtp", raw_command=args.mtp_command, timeout_s=args.timeout_s, required=True, skip=args.skip_mtp)
+    add_mtp_step(
+        steps,
+        repo_root=repo_root,
+        results_dir=results_dir,
+        run_id=args.run_id,
+        raw_command=args.mtp_command,
+        timeout_s=args.timeout_s,
+        skip=args.skip_mtp,
+        model=args.mtp_model,
+    )
     add_nvfp4_step(
         steps,
         repo_root=repo_root,
