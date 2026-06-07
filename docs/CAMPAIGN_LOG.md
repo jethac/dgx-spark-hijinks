@@ -232,6 +232,14 @@
   - doc: `docs/COMPATIBILITY_BOARD.md`
   - purpose: recurring runtime/status view covering vLLM, SGLang, llama.cpp, FlashInfer, LiteRT-LM, HF fallback, model lanes, live proof queue, and update cadence.
   - interpretation: this closes the documentation gap where issues existed but there was no single compatibility board; maintaining it remains part of every future row update.
+- Added the wheel/container matrix.
+  - doc: `docs/WHEEL_CONTAINER_MATRIX.md`
+  - purpose: map proven, partial, blocked, debug-only, and side-runtime install/container paths to exact artifact evidence.
+  - interpretation: the matrix moves solution area 2 from scattered notes to an explicit acceptance-evidence index, while still marking the clean Spark-blessed vLLM/SGLang/FlashInfer package set as missing.
+- Tightened the benchmark protocol so Qwen speed/capacity is mandatory alongside Gemma for broad runtime claims.
+  - Qwen is the clean first lane for SM121a throughput, speculative decode, NVFP4 weights, and fp8-vs-NVFP4 KV capacity.
+  - Gemma remains required for the original workload and harder model-family compatibility path.
+  - llama.cpp Qwen2.5 GGUF evidence is now recorded in the llama.cpp serving recipe instead of being left as a stale template-only section.
 
 ## First Benchmark Campaign Summary
 

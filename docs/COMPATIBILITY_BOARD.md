@@ -105,3 +105,5 @@ Each update must include:
 - GitHub issue comment link when pushed publicly
 
 Detailed acceptance evidence remains in `docs/SOLUTIONS_STATUS.md`, runtime-specific docs, and the `results/` artifacts.
+
+The install/package-level companion is `docs/WHEEL_CONTAINER_MATRIX.md`.

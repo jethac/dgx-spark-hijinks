@@ -5,7 +5,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | area | status | issue |
 |---|---|---|
 | `sm_121` target naming and build flags | build/JIT target log audit added | [#1](https://github.com/jethac/dgx-spark-hijinks/issues/1) |
-| ARM64 + CUDA 13 wheel/container matrix | open | [#2](https://github.com/jethac/dgx-spark-hijinks/issues/2) |
+| ARM64 + CUDA 13 wheel/container matrix | first matrix added; clean blessed stack still missing | [#2](https://github.com/jethac/dgx-spark-hijinks/issues/2) |
 | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
 | kernel dispatch and backend observability | build/JIT target audit plus existing runtime probes; backend-specific serving logs still pending | [#4](https://github.com/jethac/dgx-spark-hijinks/issues/4) |
 | `spark-doctor` environment evidence | in progress | [#5](https://github.com/jethac/dgx-spark-hijinks/issues/5) |

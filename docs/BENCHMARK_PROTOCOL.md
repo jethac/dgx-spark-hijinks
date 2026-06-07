@@ -57,6 +57,15 @@ Tracked by:
 
 Keep this short enough to run repeatedly on one unit.
 
+## Required Model Lanes
+
+Runtime claims must cover both model families unless the claim is explicitly model-specific:
+
+- Qwen speed/capacity: required for throughput, speculative decode, NVFP4-weight, and fp8-vs-NVFP4 KV claims. Qwen is the cleaner first lane for SM121a runtime mechanics because it avoids Gemma 4's heterogeneous attention-shape complications.
+- Gemma compatibility/performance: required for the campaign's original workload and for proving the stack handles the harder Gemma 4 model-family path.
+
+Do not generalize a Gemma-only row to Qwen, or a Qwen-only row to Gemma. A runtime can be marked `partial` with one family, but it should not be called broadly blessed until both lanes have at least one artifact-backed speed row and a basic quality sanity check.
+
 1. Environment
    - `spark_doctor`
    - CUDA build/JIT target audit for any source-built or JIT-built backend

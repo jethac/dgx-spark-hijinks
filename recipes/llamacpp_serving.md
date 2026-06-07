@@ -71,9 +71,18 @@ Older observed throughput evidence:
 - prompt throughput: `3923.63 tok/s`
 - generation throughput: `122.11 tok/s`
 
-## Qwen GGUF Template
+## Qwen GGUF Row
 
-No Qwen GGUF row has been captured yet. Use env vars rather than host-specific paths:
+The first Qwen GGUF row is captured and should stay in the benchmark set so llama.cpp is not evaluated on Gemma only:
+
+- model: `Qwen/Qwen2.5-1.5B-Instruct-GGUF`, file `qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`, build `308f61c31 (9536)`
+- server log: `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, `BLACKWELL_NATIVE_FP4 = 1`
+- compact OpenAI serving decode: `175.19`, `174.86`, and `166.66 tok/s`
+- `llama-bench`: `pp512 12505.79 +/- 615.87 tok/s`, `tg128 178.10 +/- 0.95 tok/s`
+- artifacts: `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_*`
+
+Use env vars for the next Qwen GGUF row rather than host-specific paths:
 
 ```bash
 LLAMA_SERVER=${LLAMA_SERVER:?}
