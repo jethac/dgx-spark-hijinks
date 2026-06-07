@@ -127,7 +127,7 @@ Active submodules:
 | submodule | upstream base | branch | worktree | status |
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
-| `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | branch pushed; inherits SM121 `mm_fp4` patch; FA2 KV code not ported yet |
+| `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
 | `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
 
@@ -149,5 +149,16 @@ FlashInfer patch:
 - missing verification: FlashInfer runtime tests on GB10 and upstream CI
 
 The new FlashInfer FA2 NVFP4 KV branch is deliberately based on the existing SM121 FlashInfer patch branch, not plain upstream. That preserves the earlier `mm_fp4` dispatch enablement while keeping KV cache changes separate for review and benchmarking.
+
+FlashInfer FA2 NVFP4 KV patch:
+
+- commit: `e152cf4d`
+- branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-007-fa2-nvfp4-kv-sm121
+- ancestry: based on `a42c8f07`, so it includes the earlier SM121 `mm_fp4` auto-dispatch and `12.1a` JIT-cache build-target work
+- purpose: port the FlashInfer side of the FA2 NVFP4 KV cache path by adding explicit scale-factor stride plumbing, independent K/V page strides, and optional vLLM B2 V scale-factor de-swizzle
+- touched files: `csrc/batch_decode.cu`, `csrc/batch_prefill.cu`, `flashinfer/jit/attention/modules.py`, `flashinfer/jit/attention/utils.py`, `include/flashinfer/attention/persistent.cuh`, `include/flashinfer/attention/prefill.cuh`, `include/flashinfer/page.cuh`, `tests/jit/test_attention_utils.py`
+- local verification: `python -m py_compile flashinfer/jit/attention/utils.py flashinfer/jit/attention/modules.py tests/jit/test_attention_utils.py` and `git diff --check` passed
+- local pytest limitation: `python -m pytest tests/jit/test_attention_utils.py` fails to collect in this Windows workspace because `tvm_ffi` is not installed
+- missing verification: clean FlashInfer GB10 build, harness proof, and vLLM/SGLang serving proof
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: fork/submodule/worktree lanes created; no GB10 NVFP4-KV code proof yet.
+Status: FlashInfer FA2 KV stride/page patch branch created and pushed; vLLM/SGLang integration and GB10 runtime proof pending.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -11,9 +11,9 @@ The KV lane is higher priority because it targets Spark's bottleneck directly: u
 
 ## Active Fork Lanes
 
-| lane | fork branch | worktree | base commit | reference |
+| lane | fork branch | worktree | base/current commit | reference |
 |---|---|---|---|---|
-| FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | `jethac/flashinfer@a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
+| FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | current `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`; based on `a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
 | vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
 | SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
 
@@ -25,6 +25,42 @@ Reference clones are local scratch only:
 Do not vendor those overlay trees into production images.
 
 The FlashInfer KV branch intentionally starts from `a42c8f07`, the earlier `spark/hijinks-004-sm121-flashinfer` branch tip. That keeps the SM121 `mm_fp4` dispatch and `121a` JIT-cache work in the ancestry while leaving FA2 NVFP4 KV as a separate, issue-scoped change.
+
+## Current FlashInfer Patch State
+
+Branch `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` is pushed at `e152cf4da4ab2a9d093b7d9d4b499198b0211c61`.
+
+It adds the first FA2 NVFP4 KV port layer:
+
+- explicit JIT/codegen scale-factor stride fields for `maybe_k_cache_sf` and `maybe_v_cache_sf`
+- FA2 prefill and persistent attention reads using those explicit scale-factor strides instead of deriving them from packed data strides
+- independent K/V page strides and V offset helpers in `paged_kv_t`
+- separate K and V local offset arrays where K and V storage widths differ
+- optional compile-time `FLASHINFER_PAGED_V_SF_DESWIZZLE` support for vLLM-style B2 in-kernel V scale-factor de-swizzle
+- default symmetric-linear V scale-factor behavior for SGLang/reference compatibility when the de-swizzle macro is not enabled
+
+Touched files:
+
+- `csrc/batch_decode.cu`
+- `csrc/batch_prefill.cu`
+- `flashinfer/jit/attention/modules.py`
+- `flashinfer/jit/attention/utils.py`
+- `include/flashinfer/attention/persistent.cuh`
+- `include/flashinfer/attention/prefill.cuh`
+- `include/flashinfer/page.cuh`
+- `tests/jit/test_attention_utils.py`
+
+Local verification:
+
+- `python -m py_compile flashinfer/jit/attention/utils.py flashinfer/jit/attention/modules.py tests/jit/test_attention_utils.py` passed.
+- `git diff --check` passed.
+- `python -m pytest tests/jit/test_attention_utils.py` is blocked in this Windows workspace because FlashInfer's test conftest imports `tvm_ffi`, which is not installed.
+
+Missing verification:
+
+- no clean FlashInfer wheel/container build has been run yet for GB10
+- no GB10 FA2 NVFP4 KV harness run has passed yet
+- no vLLM/SGLang serving proof has selected this path yet
 
 ## vLLM Reference Map
 
@@ -49,11 +85,11 @@ Likely `jethac/vllm` work:
 
 Likely `jethac/flashinfer` work:
 
-- Add explicit scale-factor stride plumbing for `maybe_k_cache_sf` and `maybe_v_cache_sf`.
-- Fix FA2 page layout addressing for interleaved vLLM `[K_data|K_scale|V_data|V_scale]` pages.
-- Keep the B2 design: de-swizzle V scale factors inside the kernel in registers, with no parallel scratch cache.
-- Split K/V page offsets where K and V storage widths differ.
-- Maintain harness coverage for target `H_q/H_kv/D/page` shapes before serving.
+- Ported in `e152cf4d`: explicit scale-factor stride plumbing for `maybe_k_cache_sf` and `maybe_v_cache_sf`.
+- Ported in `e152cf4d`: FA2 page layout support for independent K/V page strides and offsets.
+- Ported in `e152cf4d`: compile-time gated B2-style V scale-factor de-swizzle; the vLLM branch must enable this path when using the interleaved vLLM cache layout.
+- Still pending: GB10 harness coverage for target `H_q/H_kv/D/page` shapes before serving.
+- Still pending: clean wheel/container build proof and runtime logs proving native FA2 NVFP4 KV selection.
 
 Patch ownership from the SM120 vLLM reference:
 

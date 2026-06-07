@@ -67,6 +67,13 @@
   - build on hikarioyama's SM120 work as prior art, but re-derive minimal upstream-shaped patches in `jethac` forks.
   - keep FlashInfer kernel/page/stride changes in FlashInfer, vLLM routing/tensor plumbing in vLLM, and SGLang memory-pool/calibration/backend-wrapper changes in SGLang.
   - first port scope is symmetric NVFP4 B2 only; no hidden V scale-factor scratch cache and no mixed K/V experiments until GB10 proof exists.
+- Pushed FlashInfer FA2 NVFP4 KV patch branch `spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4da4ab2a9d093b7d9d4b499198b0211c61`.
+  - added explicit scale-factor stride plumbing for `maybe_k_cache_sf` and `maybe_v_cache_sf`.
+  - added independent K/V page strides and V offset helpers in `paged_kv_t`.
+  - updated FA2 prefill and persistent attention to consume explicit scale-factor strides.
+  - added compile-time gated vLLM B2 V scale-factor de-swizzle while preserving symmetric-linear V scale-factor behavior by default for SGLang/reference compatibility.
+  - verification: Python syntax compile and `git diff --check` passed.
+  - limitation: targeted pytest collection is blocked in this Windows workspace by missing `tvm_ffi`; no clean GB10 build, harness proof, or serving proof yet.
 
 ## First Benchmark Campaign Summary
 
