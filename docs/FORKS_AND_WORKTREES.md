@@ -129,7 +129,7 @@ Active submodules:
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
 | `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `2c1405d` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2; GB10 build/runtime proof pending |
-| `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | fork, submodule, and branch pushed; code not ported yet |
+| `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` at `67c7967` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | SM12x FP4 KV compatibility gates pushed; native pool/backend work pending |
 
 FlashInfer patch:
 
@@ -173,5 +173,16 @@ vLLM SM12x NVFP4 KV routing patch:
 - local lint limitation: `ruff` is not installed in this Windows workspace
 - PGX verification: `results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json` proves the forked routing predicate selects FlashInfer `fa2` for SM12x NVFP4 KV on real GB10/SM121
 - missing verification: clean vLLM plus FlashInfer build on GB10 and a serving proof selecting FA2 native NVFP4 KV
+
+SGLang SM12x FP4 KV gate patch:
+
+- commit: `67c7967a1c1b6145a8c9d26a7b941258735ebd8d`
+- branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121
+- purpose: remove first compatibility blockers for SM12x `fp4_e2m1` KV with FlashInfer MHA without claiming the native pool/backend path is complete
+- touched files: `python/sglang/srt/server_args.py`, `python/sglang/srt/layers/quantization/kvfp4_tensor.py`, `test/registered/unit/server_args/test_server_args.py`
+- local verification: Python syntax compile and `git diff --check` passed
+- local pytest limitation: Windows collection fails because SGLang imports the POSIX-only `resource` module
+- local lint limitation: `ruff` is not installed in this Windows workspace
+- missing verification: Linux/PGX unit test run, native FP4 KV pool/backend wrapper patch, and GB10 `fp4_e2m1` serving proof
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

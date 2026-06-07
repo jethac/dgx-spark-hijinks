@@ -88,6 +88,12 @@
   - installed dependency context: vLLM `0.22.1`, Torch `2.11.0+cu130`, CUDA `13.0`
   - outcome: SM12x NVFP4 KV wrapper routing selects FlashInfer `fa2`; SM100-style NVFP4 still selects `trtllm-gen`; non-NVFP4 still selects `auto`
   - limitation: this loads the forked `flashinfer.py` source file against installed compiled dependencies. It does not install the full fork, build FlashInfer kernels, start a server, or prove correctness/capacity/performance.
+- Pushed SGLang SM12x FP4 KV gate patch branch `spark/hijinks-018-fp4-e2m1-kv-sm121` at `67c7967a1c1b6145a8c9d26a7b941258735ebd8d`.
+  - allows FlashInfer MHA in `fp4_e2m1` KV compatibility gates only when SGLang's `is_sm120_supported()` helper is true.
+  - allows `NVFP4KVQuantizeUtil.quantize()` on SM120-family devices and routes SM100/SM120 through `flashinfer.nvfp4_kv_quantize`.
+  - adds server-args unit coverage for SM12x FlashInfer MHA KV4 gates.
+  - verification: Python syntax compile and `git diff --check` passed.
+  - limitations: local `ruff` is unavailable and pytest collection is blocked on Windows by missing POSIX `resource`; native FP4 KV memory-pool/backend wrapper work and GB10 serving proof are still pending.
 
 ## First Benchmark Campaign Summary
 
