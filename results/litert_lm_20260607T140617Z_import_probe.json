@@ -1,0 +1,31 @@
+{
+  "commands": {
+    "litert-lm": "/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv/bin/litert-lm",
+    "litert_lm": null,
+    "litertlm": null
+  },
+  "machine": "aarch64",
+  "modules": {
+    "ai_edge_litert": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'ai_edge_litert'\")"
+    },
+    "litert": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'litert'\")"
+    },
+    "litert_lm": {
+      "available": true,
+      "file": "/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv/lib/python3.12/site-packages/litert_lm/__init__.py",
+      "version": null
+    }
+  },
+  "packages": {
+    "litert": {
+      "error": "PackageNotFoundError('litert')"
+    },
+    "litert-lm": "0.13.1",
+    "litert-lm-api": "0.13.1"
+  },
+  "platform": "Linux-6.17.0-1021-nvidia-aarch64-with-glibc2.39"
+}

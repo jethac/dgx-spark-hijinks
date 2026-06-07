@@ -19,7 +19,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | Spark-specific performance tuning | open | [#13](https://github.com/jethac/dgx-spark-hijinks/issues/13) |
 | SGLang Spark runtime path | open | [#14](https://github.com/jethac/dgx-spark-hijinks/issues/14) |
 | upstream forks, submodules, and worktrees | open | [#15](https://github.com/jethac/dgx-spark-hijinks/issues/15) |
-| LiteRT-LM on Spark | open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
+| LiteRT-LM on Spark | CPU path proven; GPU chat crash open | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | llama.cpp practical serving path | blessed for 26B Q4_0 serving | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17) |
 | SGLang NVFP4 KV on Spark | open | [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
 | before/after GB10 benchmark protocol | open | [#19](https://github.com/jethac/dgx-spark-hijinks/issues/19) |

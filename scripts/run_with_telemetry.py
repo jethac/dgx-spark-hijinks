@@ -173,6 +173,8 @@ def classify_returncode(returncode: int | None) -> str:
         return "ok"
     if returncode == -9 or returncode == 137:
         return "process_killed"
+    if returncode == -11 or returncode == 139:
+        return "process_crash"
     if returncode == -15 or returncode == 143:
         return "terminated"
     return "process_error"
@@ -183,6 +185,7 @@ def run_with_telemetry(args: argparse.Namespace) -> dict[str, Any]:
     started_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started))
     proc = subprocess.Popen(
         args.command,
+        stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,

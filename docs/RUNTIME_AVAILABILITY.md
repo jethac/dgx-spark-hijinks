@@ -23,7 +23,7 @@ Summary:
 | FlashInfer | installed in benchmark venv |
 | PyTorch | installed in benchmark venv as `2.11.0+cu130` |
 | SGLang | not installed in benchmark venv; NVIDIA `nvcr.io/nvidia/sglang:26.05-py3` container smoke passed |
-| LiteRT-LM | not installed in benchmark venv; no command found |
+| LiteRT-LM | clean venv install works with `litert-lm==0.13.1`; CPU E2B generation works; GPU benchmark works; GPU chat exits `-11` after output |
 | TensorFlow/LiteRT Python modules | not installed in benchmark venv |
 | llama.cpp | built under `/home/jethac/src`, but not on shell `PATH` |
 | Ollama | no command found |
@@ -40,6 +40,6 @@ Docker images currently present include:
 ## Next Runtime Actions
 
 1. SGLang: fix or escalate the Gemma 4 model-path blocker, then test fp8 vs NVFP4 quality/performance.
-2. LiteRT-LM: install `litert-lm==0.13.1` in a clean venv, prove CPU E2B generation, then test whether `--backend=gpu` uses a useful GB10 path.
+2. LiteRT-LM: keep CPU as a complement path, investigate GPU chat `SIGSEGV`, and decide whether the GPU benchmark path is useful enough for local-agent microtasks.
 3. llama.cpp: pin the build/commit as a practical serving path; keep GGUF lm-eval accuracy blocked until logprobs compatibility is fixed.
 4. vLLM: use the current baseline as the before row for future patched/container comparisons.

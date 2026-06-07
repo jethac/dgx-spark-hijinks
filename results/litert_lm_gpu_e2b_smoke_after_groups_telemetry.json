@@ -1,0 +1,144 @@
+{
+  "backend": "litert-lm-gpu",
+  "command": [
+    "litert-lm",
+    "run",
+    "--from-huggingface-repo",
+    "litert-community/gemma-4-E2B-it-litert-lm",
+    "--backend",
+    "gpu",
+    "--temperature",
+    "0",
+    "--prompt",
+    "Reply with exactly this text: spark-ok",
+    "gemma-4-E2B-it.litertlm"
+  ],
+  "elapsed_s": 3.3320083618164062,
+  "failure_class": "process_error",
+  "finished_utc": "2026-06-07T14:19:26Z",
+  "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+  "oom_evidence": {
+    "dmesg_oom_tail": {
+      "cmd": [
+        "sh",
+        "-lc",
+        "dmesg -T | grep -Ei 'out of memory|killed process|oom-kill' | tail -80"
+      ],
+      "returncode": 0,
+      "stderr": "dmesg: read kernel buffer failed: Operation not permitted",
+      "stdout": ""
+    },
+    "journal_oom": {
+      "cmd": [
+        "journalctl",
+        "-k",
+        "--no-pager",
+        "--since",
+        "2026-06-07T14:19:23Z",
+        "-g",
+        "Out of memory|Killed process|oom-kill"
+      ],
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "-- No entries --"
+    }
+  },
+  "peak_process_tree_rss_kib": 16240,
+  "peak_process_tree_swap_kib": 0,
+  "post_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4372463616 90938286080     8867840 34737623040 124079550464\nSwap:    17179865088   340017152 16839847936"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "pre_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4364734464 90946015232     8867840 34737623040 124087279616\nSwap:    17179865088   340017152 16839847936"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "returncode": -11,
+  "run_id": "litert-lm-gpu-e2b-smoke-after-groups-20260607T150000Z",
+  "samples": [
+    {
+      "hwm_kib": 16240,
+      "memory": {
+        "free": {
+          "cmd": [
+            "free",
+            "-b"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4344541184 90967695360     8863744 34736132096 124107472896\nSwap:    17179865088   340017152 16839847936"
+        },
+        "nvidia_smi": {
+          "cmd": [
+            "nvidia-smi",
+            "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+        }
+      },
+      "pids": [
+        468765
+      ],
+      "processes": [
+        {
+          "name": "litert-lm",
+          "pid": 468765,
+          "ppid": "468764",
+          "rssanon": 9720,
+          "rssfile": 6520,
+          "state": "R (running)",
+          "vmhwm": 16240,
+          "vmrss": 16240,
+          "vmsize": 38160,
+          "vmswap": 0
+        }
+      ],
+      "rss_kib": 16240,
+      "swap_kib": 0,
+      "timestamp": 1780841963.333844
+    }
+  ],
+  "schema": "spark-run-with-telemetry/v1",
+  "started_utc": "2026-06-07T14:19:23Z",
+  "stderr_tail": "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\nWarning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.\nWarning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.\n",
+  "stdout_tail": "Downloading gemma-4-E2B-it.litertlm from litert-community/gemma-4-E2B-it-litert-lm...\nINFO: Failed to load OpenCL library with dlopen: libOpenCL.so: cannot open shared object file: No such file or directory. Trying ICD loader.\nspark-ok\n",
+  "timed_out": false,
+  "timeout_s": 1200
+}

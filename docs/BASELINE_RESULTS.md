@@ -269,3 +269,47 @@ Interpretation:
 - `--reasoning off` is required for normal OpenAI chat `message.content` output on this Gemma 4 server path.
 - Server logs confirm CUDA on `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`, and `BLACKWELL_NATIVE_FP4 = 1`.
 - GGUF lm-eval accuracy remains blocked. The same server still exposes logprobs under `choices[0].logprobs.content`, not the `tokens` and `token_logprobs` shape expected by the existing lm-eval adapter.
+
+## 2026-06-07: LiteRT-LM Gemma 4 E2B CPU/GPU Smoke
+
+Target:
+
+- venv: `/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv`
+- package: `litert-lm==0.13.1`
+- API package: `litert-lm-api==0.13.1`
+- model: `litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm`
+- host: Linux `aarch64`, Python 3.12.3
+
+Artifacts:
+
+- import probe: `results/litert_lm_20260607T140617Z_import_probe.json`
+- run info: `results/litert_lm_20260607T140617Z_run_info.txt`
+- CPU chat smoke: `results/litert_lm_cpu_e2b_smoke_no_max_telemetry.json`
+- CPU bad-KV smoke: `results/litert_lm_cpu_e2b_smoke4_telemetry.json`
+- GPU chat smoke after group fix: `results/litert_lm_gpu_e2b_smoke_after_groups_telemetry.json`
+- CPU benchmark: `results/litert_lm_cpu_e2b_bench_256p64d_telemetry.json`
+- GPU benchmark: `results/litert_lm_gpu_e2b_bench_256p64d_telemetry.json`
+
+Result summary:
+
+| path | prefill tokens | decode tokens | result |
+|---|---:|---:|---|
+| CPU `run` chat | n/a | n/a | returned `spark-ok`, exit 0 |
+| CPU `benchmark` | 256 | 64 | prefill `125.77` tok/s, decode `43.57` tok/s, init `0.3235` s, TTFT `2.0584` s |
+| GPU `benchmark` | 256 | 64 | prefill `1773.07` tok/s, decode `43.70` tok/s, init `2.5860` s, TTFT `0.1673` s |
+| GPU `run` chat | n/a | n/a | printed `spark-ok`, then exited `returncode=-11` |
+| CPU `run --max-num-tokens 512` | n/a | n/a | failed with `DYNAMIC_UPDATE_SLICE` / `Failed to allocate tensors`; CLI still returned 0 |
+
+Operational observations:
+
+- `litert-lm run` reads all non-TTY stdin before loading the model. The telemetry wrapper originally left stdin open, which made LiteRT-LM appear to hang in `anon_pipe_read`.
+- The telemetry wrapper now passes `stdin=subprocess.DEVNULL` for benchmark commands.
+- Hugging Face cache subdirectories under `/home/jethac/.cache/huggingface` were root-owned from earlier work and caused permission-denied download errors. Ownership was restored to `jethac`.
+- `jethac` was added to `render` and `video` so LiteRT GPU can open `/dev/dri` nodes. This removed the device permission errors but did not fix the GPU chat `SIGSEGV`.
+- GPU logs still show `Failed to load OpenCL library with dlopen: libOpenCL.so`; LiteRT falls back to the ICD loader.
+
+Interpretation:
+
+- LiteRT-LM is viable on Spark as a lightweight Gemma E2B CPU path and as a benchmarkable GPU path.
+- It is not yet blessed for GPU chat/serving because the `run` command can generate text and still crash at process exit.
+- The GPU benchmark has a clear prefill advantage over CPU on this small row, but decode is effectively tied. This should be treated as a complement to llama.cpp/vLLM, not as the main path for extracting GB10 tensor throughput.

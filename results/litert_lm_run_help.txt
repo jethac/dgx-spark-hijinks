@@ -1,0 +1,67 @@
+Runs a LiteRT-LM model interactively or with a single prompt.
+  
+  Examples:
+    # Run interactively using a model ID from 'litert-lm list'
+    litert-lm run my-model
+
+    # Run with a single prompt using a local path
+    litert-lm run ./model.litertlm --prompt "Hi there!"
+
+    # Run directly from a HuggingFace repository
+    litert-lm run --from-huggingface-repo org/repo model.litertlm
+
+Usage: litert-lm run [OPTIONS] MODEL_REFERENCE
+
+Options:
+  --prompt TEXT                   A single prompt to run once and exit.
+  --preset FILE                   Path to a Python file containing tool
+                                  functions and system instructions.
+  --no-template                   Interact with the model directly without
+                                  applying prompt templates. That means the
+                                  input should include all control tokens for
+                                  the model expected.
+  --max-num-tokens INTEGER        Maximum number of tokens for the KV cache.
+                                  If not set, use the default from the native
+                                  engine.
+  --filter-channel-content-from-kv-cache
+                                  Whether to filter channel content from the
+                                  KV cache.
+  --vision-backend [cpu|gpu|]     The backend to use for vision encoding.
+  --audio-backend [cpu|gpu|]      The backend to use for audio encoding.
+  --attachment FILE               Path to an attachment (image or audio only).
+                                  Can be specified multiple times.
+                                  Attachements are placed before the first
+                                  user text prompt.
+  --top-k INTEGER RANGE           The number of top logits used during
+                                  sampling. If not set, use the default from
+                                  the model or engine.  [x>=1]
+  --top-p FLOAT RANGE             The cumulative probability threshold for
+                                  nucleus sampling. If not set, use the
+                                  default from the model or engine.
+                                  [0.0<=x<=1.0]
+  --temperature FLOAT RANGE       The temperature to use for sampling. If not
+                                  set, use the default from the model or
+                                  engine.  [x>=0.0]
+  --seed INTEGER                  The seed to use for randomization. If not
+                                  set, use the default from the model or
+                                  engine.
+  --backend [cpu|gpu|npu]         The backend to use.  [default: cpu]
+  --enable-speculative-decoding [auto|true|false]
+                                  Speculative decoding mode ("auto", "true", "false").
+                                    - auto: Automatically determine the speculative decoding behavior from the model metadata.
+                                    - true: Force enable speculative decoding. It will throw an error if the model does not support it.
+                                    - false: Force disable speculative decoding.  [default: auto]
+  --cache [disk|memory|no]        Caching mode for compiled model artifacts to speed up startup.
+                                    - disk: Persists compiled artifacts to a file next to the model.
+                                    - memory: Caches compiled artifacts in RAM (CPU backend only, not available on Windows).
+                                    - no: Disables caching (recompiles on every run).  [default: disk]
+  --verbose                       Whether to enable verbose logging.
+  --from-huggingface-repo TEXT    The HuggingFace repository ID to download
+                                  the model from, if set.
+  --huggingface-token TEXT        The HuggingFace API token to use when
+                                  downloading from a access gated HuggingFace
+                                  repository. This can also be set via the
+                                  HUGGING_FACE_HUB_TOKEN or HF_TOKEN
+                                  environment variables, or by running `hf
+                                  auth login`.
+  -h, --help                      Show this message and exit.

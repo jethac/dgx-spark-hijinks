@@ -975,6 +975,97 @@
       "task": null
     },
     {
+      "backend": "litert-lm-cpu",
+      "confidence": "high",
+      "details": {
+        "elapsed_s": 0.39357614517211914,
+        "peak_process_tree_rss_kib": 9368,
+        "peak_process_tree_swap_kib": 0,
+        "timed_out": false
+      },
+      "evidence": "Downloading gemma-4-E2B-it.litertlm from litert-community/gemma-4-E2B-it-litert-lm...\nError downloading from HuggingFace: [Errno 13] Permission denied: '/home/jethac/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm'\nHuggingFace token not found. If this is a private or gated repository, you can provide the token via the --huggingface-token option, setting the HUGGING_FACE_HUB_TOKEN environment variable, or by running 'hf auth login'.",
+      "failure_class": "artifact_download_failed",
+      "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+      "returncode": 0,
+      "row": "litert-lm-cpu-e2b-smoke3-20260607T143500Z",
+      "source": "results\\litert_lm_cpu_e2b_smoke3_telemetry.json",
+      "source_type": "telemetry_run",
+      "status": "run_failed",
+      "suspected_causes": [
+        "huggingface_download_failed",
+        "cache_permission_denied",
+        "kernel_oom_evidence"
+      ],
+      "task": null
+    },
+    {
+      "backend": "litert-lm-cpu",
+      "confidence": "high",
+      "details": {
+        "elapsed_s": 14.52405333518982,
+        "peak_process_tree_rss_kib": 1001684,
+        "peak_process_tree_swap_kib": 0,
+        "timed_out": false
+      },
+      "evidence": "RuntimeError: INTERNAL: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:755]",
+      "failure_class": "runtime_exception",
+      "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+      "returncode": 0,
+      "row": "litert-lm-cpu-e2b-smoke4-20260607T144000Z",
+      "source": "results\\litert_lm_cpu_e2b_smoke4_telemetry.json",
+      "source_type": "telemetry_run",
+      "status": "run_failed",
+      "suspected_causes": [
+        "kernel_oom_evidence"
+      ],
+      "task": null
+    },
+    {
+      "backend": "litert-lm-gpu",
+      "confidence": "high",
+      "details": {
+        "elapsed_s": 3.3320083618164062,
+        "peak_process_tree_rss_kib": 16240,
+        "peak_process_tree_swap_kib": 0,
+        "timed_out": false
+      },
+      "evidence": "returncode=-11; last stdout=spark-ok",
+      "failure_class": "process_crash",
+      "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+      "returncode": -11,
+      "row": "litert-lm-gpu-e2b-smoke-after-groups-20260607T150000Z",
+      "source": "results\\litert_lm_gpu_e2b_smoke_after_groups_telemetry.json",
+      "source_type": "telemetry_run",
+      "status": "run_failed",
+      "suspected_causes": [
+        "segmentation_fault",
+        "kernel_oom_evidence"
+      ],
+      "task": null
+    },
+    {
+      "backend": "litert-lm-gpu",
+      "confidence": "high",
+      "details": {
+        "elapsed_s": 6.8116536140441895,
+        "peak_process_tree_rss_kib": 2612472,
+        "peak_process_tree_swap_kib": 0,
+        "timed_out": false
+      },
+      "evidence": "TU: error: ../src/freedreno/vulkan/tu_knl.cc:387: failed to open device /dev/dri/renderD128 (VK_ERROR_INCOMPATIBLE_DRIVER)\nWarning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.\nWarning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.",
+      "failure_class": "permission_error",
+      "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+      "returncode": -11,
+      "row": "litert-lm-gpu-e2b-smoke-20260607T145500Z",
+      "source": "results\\litert_lm_gpu_e2b_smoke_telemetry.json",
+      "source_type": "telemetry_run",
+      "status": "run_failed",
+      "suspected_causes": [
+        "kernel_oom_evidence"
+      ],
+      "task": null
+    },
+    {
       "backend": "sglang",
       "confidence": "medium",
       "details": {
@@ -1068,12 +1159,14 @@
       "task": null
     }
   ],
-  "count": 49,
+  "count": 53,
   "results_dir": "results",
   "schema": "spark-failure-annotations/v1",
   "summary": {
     "by_backend": {
       "hf": 4,
+      "litert-lm-cpu": 2,
+      "litert-lm-gpu": 2,
       "llama.cpp": 31,
       "sglang": 1,
       "unknown": 4,
@@ -1081,11 +1174,14 @@
     },
     "by_failure_class": {
       "api_schema_mismatch": 31,
+      "artifact_download_failed": 1,
       "configuration_error": 3,
       "invalid_or_empty_response": 1,
+      "permission_error": 1,
+      "process_crash": 1,
       "process_error": 9,
       "process_killed": 2,
-      "runtime_exception": 1,
+      "runtime_exception": 2,
       "unknown_failure": 2
     }
   }

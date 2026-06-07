@@ -63,6 +63,13 @@ def classify_text(text: str, backend: str | None = None) -> tuple[str, str, list
         return "timeout", "medium", []
     if "connection reset" in lower or "failed to connect" in lower:
         return "server_unavailable", "medium", []
+    if "error downloading from huggingface" in lower:
+        causes.append("huggingface_download_failed")
+        if "permission denied" in lower:
+            causes.append("cache_permission_denied")
+        return "artifact_download_failed", "high", causes
+    if "permission denied" in lower:
+        return "permission_error", "medium", []
     return "unknown_failure", "low", []
 
 
@@ -182,13 +189,26 @@ def json_annotations(path: Path) -> list[Annotation]:
                 details={"elapsed_s": data.get("elapsed_s")},
             )
         )
-    elif data.get("schema") == "spark-run-with-telemetry/v1" and data.get("failure_class") != "ok":
+    elif data.get("schema") == "spark-run-with-telemetry/v1":
         stderr_tail = data.get("stderr_tail") or ""
         stdout_tail = data.get("stdout_tail") or ""
         evidence = stderr_tail.strip() or stdout_tail.strip() or f"returncode={data.get('returncode')}"
+        output_class, output_confidence, output_causes = classify_text(evidence, data.get("backend"))
         failure_class = data.get("failure_class") or "unknown_failure"
-        confidence = "high" if failure_class in {"process_killed", "timeout"} else "medium"
-        causes: list[str] = []
+        if failure_class == "ok" and output_class == "unknown_failure":
+            return annotations
+        causes = list(output_causes)
+        if output_class != "unknown_failure":
+            failure_class = output_class
+            confidence = output_confidence
+        else:
+            if data.get("returncode") in {-11, 139}:
+                failure_class = "process_crash"
+                causes.append("segmentation_fault")
+                stdout_lines = [line.strip() for line in stdout_tail.splitlines() if line.strip()]
+                last_stdout = stdout_lines[-1] if stdout_lines else ""
+                evidence = f"returncode={data.get('returncode')}; last stdout={last_stdout}"
+            confidence = "high" if failure_class in {"process_crash", "process_killed", "timeout"} else "medium"
         oom_text = json.dumps(data.get("oom_evidence") or {}, sort_keys=True).lower()
         if "out of memory" in oom_text or "oom-kill" in oom_text or "killed process" in oom_text:
             causes.append("kernel_oom_evidence")
@@ -207,7 +227,7 @@ def json_annotations(path: Path) -> list[Annotation]:
                 failure_class=failure_class,
                 confidence=confidence,
                 suspected_causes=causes,
-                evidence=evidence[-500:],
+                evidence=first_matching_line(evidence) if output_class != "unknown_failure" else evidence[-500:],
                 details={
                     "elapsed_s": data.get("elapsed_s"),
                     "timed_out": data.get("timed_out"),

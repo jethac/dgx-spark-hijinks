@@ -1,6 +1,6 @@
 # LiteRT-LM On Spark
 
-Status: research track, not blessed.
+Status: usable CPU path, benchmark-only GPU path, not blessed for GPU chat.
 
 LiteRT-LM is tracked because it may be relevant for Gemma and local-agent prototyping, especially if its Gemma/MTP path is strong on desktop Linux.
 
@@ -10,12 +10,15 @@ Source:
 
 Current assessment, 2026-06-07:
 
-- `litert-lm` and `litert-lm-api` 0.13.1 are the first package targets.
-- `litert-lm-api` publishes a Linux `aarch64` wheel, which makes install viability plausible on DGX Spark.
-- CPU is the first backend to prove.
-- GPU is unproven for GB10 and appears more likely to be LiteRT GPU via WebGPU/Vulkan than CUDA-native tensor-core code.
+- `litert-lm==0.13.1` and `litert-lm-api==0.13.1` install cleanly in a Python 3.12 Linux `aarch64` venv on Spark.
+- CPU generation is proven with `litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm`; the prompt smoke returned `spark-ok`.
+- The built-in CPU and GPU benchmark commands run for the same E2B model.
+- GPU chat is not clean yet. It prints `spark-ok` and then exits with `returncode=-11`.
+- GPU appears to use LiteRT GPU/Vulkan/OpenCL plumbing, not a CUDA-native tensor-core serving path. The logs include `Failed to load OpenCL library with dlopen: libOpenCL.so` followed by ICD-loader fallback.
 - `.litertlm` is the required model container format; raw safetensors and GGUF are not first-class inputs.
 - Treat E2B/E4B preconverted Gemma repos as first smoke targets. Do not start with 12B.
+- Do not set `--max-num-tokens 512` for this E2B chat smoke. That setting failed with `DYNAMIC_UPDATE_SLICE`, `Failed to allocate tensors`, and `Failed to invoke the compiled model`, while the CLI still returned exit code 0.
+- Noninteractive wrappers must close stdin or provide piped input. `litert-lm run` reads all non-TTY stdin before loading the model; leaving an open pipe causes an apparent hang.
 
 ## Questions
 
@@ -59,26 +62,47 @@ PY
 ```bash
 litert-lm run \
   --from-huggingface-repo=litert-community/gemma-4-E2B-it-litert-lm \
-  gemma-4-E2B-it.litertlm \
   --backend=cpu \
-  --prompt="What is the capital of France?"
+  --temperature=0 \
+  --prompt="Reply with exactly this text: spark-ok" \
+  gemma-4-E2B-it.litertlm
 ```
+
+Observed 2026-06-07 on `thinkstationpgx-00b4`: `spark-ok`.
+
+Do not add `--max-num-tokens 512` to this smoke. LiteRT-LM selected `Max number of tokens: 4096` in the successful benchmark path.
 
 ## GPU Smoke
 
 Run this only after CPU works:
 
 ```bash
-vulkaninfo --summary || true
 nvidia-smi
 
 litert-lm run \
   --from-huggingface-repo=litert-community/gemma-4-E2B-it-litert-lm \
-  gemma-4-E2B-it.litertlm \
   --backend=gpu \
-  --enable-speculative-decoding=true \
-  --prompt="Write one sentence about DGX Spark."
+  --temperature=0 \
+  --prompt="Reply with exactly this text: spark-ok" \
+  gemma-4-E2B-it.litertlm
 ```
+
+Observed 2026-06-07 after adding `jethac` to `render` and `video`: the command printed `spark-ok` but exited with `returncode=-11`.
+
+The GPU benchmark command is healthier:
+
+```bash
+litert-lm benchmark \
+  --from-huggingface-repo=litert-community/gemma-4-E2B-it-litert-lm \
+  --backend=gpu \
+  --prefill-tokens=256 \
+  --decode-tokens=64 \
+  gemma-4-E2B-it.litertlm
+```
+
+Observed GPU benchmark: `1773.07` prefill tok/s, `43.70` decode tok/s, init `2.5860` s, TTFT `0.1673` s.
+
+Observed CPU benchmark with the same token counts: `125.77` prefill tok/s, `43.57` decode tok/s, init `0.3235` s, TTFT `2.0584` s.
 
 ## Server Smoke
 
@@ -105,7 +129,7 @@ curl http://localhost:9379/v1/chat/completions \
 - comparison against at least one existing path, usually llama.cpp or vLLM
 - logs or library evidence showing whether the GPU path is Vulkan/WebGPU, CUDA, or another backend
 
-Do not treat a successful Python import as sufficient. A go decision requires CPU generation, GPU generation, backend evidence, and CPU-vs-GPU timing.
+Do not treat a successful Python import as sufficient. A go decision requires CPU generation, GPU generation, backend evidence, CPU-vs-GPU timing, and a clean exit from the serving/chat path.
 
 ## Fork Rule
 

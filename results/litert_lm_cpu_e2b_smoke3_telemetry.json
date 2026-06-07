@@ -1,0 +1,146 @@
+{
+  "backend": "litert-lm-cpu",
+  "command": [
+    "litert-lm",
+    "run",
+    "--from-huggingface-repo",
+    "litert-community/gemma-4-E2B-it-litert-lm",
+    "--backend",
+    "cpu",
+    "--max-num-tokens",
+    "512",
+    "--temperature",
+    "0",
+    "--prompt",
+    "Reply with exactly this text: spark-ok",
+    "gemma-4-E2B-it.litertlm"
+  ],
+  "elapsed_s": 0.39357614517211914,
+  "failure_class": "ok",
+  "finished_utc": "2026-06-07T14:15:43Z",
+  "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+  "oom_evidence": {
+    "dmesg_oom_tail": {
+      "cmd": [
+        "sh",
+        "-lc",
+        "dmesg -T | grep -Ei 'out of memory|killed process|oom-kill' | tail -80"
+      ],
+      "returncode": 0,
+      "stderr": "dmesg: read kernel buffer failed: Operation not permitted",
+      "stdout": ""
+    },
+    "journal_oom": {
+      "cmd": [
+        "journalctl",
+        "-k",
+        "--no-pager",
+        "--since",
+        "2026-06-07T14:15:42Z",
+        "-g",
+        "Out of memory|Killed process|oom-kill"
+      ],
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "-- No entries --"
+    }
+  },
+  "peak_process_tree_rss_kib": 9368,
+  "peak_process_tree_swap_kib": 0,
+  "post_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4292100096 95427178496     8867840 30285926400 124159913984\nSwap:    17179865088   340221952 16839643136"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "pre_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4289626112 95429652480     8867840 30285926400 124162387968\nSwap:    17179865088   340221952 16839643136"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "returncode": 0,
+  "run_id": "litert-lm-cpu-e2b-smoke3-20260607T143500Z",
+  "samples": [
+    {
+      "hwm_kib": 9368,
+      "memory": {
+        "free": {
+          "cmd": [
+            "free",
+            "-b"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4295798784 95423553536     8859648 30285852672 124156215296\nSwap:    17179865088   340221952 16839643136"
+        },
+        "nvidia_smi": {
+          "cmd": [
+            "nvidia-smi",
+            "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+        }
+      },
+      "pids": [
+        464725
+      ],
+      "processes": [
+        {
+          "name": "litert-lm",
+          "pid": 464725,
+          "ppid": "464724",
+          "rssanon": 3744,
+          "rssfile": 5624,
+          "state": "R (running)",
+          "vmhwm": 9368,
+          "vmrss": 9368,
+          "vmsize": 31100,
+          "vmswap": 0
+        }
+      ],
+      "rss_kib": 9368,
+      "swap_kib": 0,
+      "timestamp": 1780841742.6901345
+    }
+  ],
+  "schema": "spark-run-with-telemetry/v1",
+  "started_utc": "2026-06-07T14:15:42Z",
+  "stderr_tail": "",
+  "stdout_tail": "Downloading gemma-4-E2B-it.litertlm from litert-community/gemma-4-E2B-it-litert-lm...\nError downloading from HuggingFace: [Errno 13] Permission denied: '/home/jethac/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm'\nHuggingFace token not found. If this is a private or gated repository, you can provide the token via the --huggingface-token option, setting the HUGGING_FACE_HUB_TOKEN environment variable, or by running 'hf auth login'.\n",
+  "timed_out": false,
+  "timeout_s": 1200
+}

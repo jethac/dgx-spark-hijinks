@@ -1,0 +1,23 @@
+Imports a model from a local path or HuggingFace hub.
+
+Examples:
+  # Import from a local path
+  litert-lm import ./model.litertlm my-model
+
+  # Import from a HuggingFace repository
+  litert-lm import --from-huggingface-repo org/repo model.litertlm my-model
+
+  # Import and use the default model ID
+  litert-lm import ./model.litertlm
+
+Usage: litert-lm import [OPTIONS] MODEL_FILE [MODEL_REF]
+
+Options:
+  --from-huggingface-repo TEXT  The HuggingFace repository ID to download the
+                                model from, if set.
+  --huggingface-token TEXT      The HuggingFace API token to use when
+                                downloading from a access gated HuggingFace
+                                repository. This can also be set via the
+                                HUGGING_FACE_HUB_TOKEN or HF_TOKEN environment
+                                variables, or by running `hf auth login`.
+  -h, --help                    Show this message and exit.

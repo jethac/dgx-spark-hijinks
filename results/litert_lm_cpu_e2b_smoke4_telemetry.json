@@ -1,0 +1,234 @@
+{
+  "backend": "litert-lm-cpu",
+  "command": [
+    "litert-lm",
+    "run",
+    "--from-huggingface-repo",
+    "litert-community/gemma-4-E2B-it-litert-lm",
+    "--backend",
+    "cpu",
+    "--max-num-tokens",
+    "512",
+    "--temperature",
+    "0",
+    "--prompt",
+    "Reply with exactly this text: spark-ok",
+    "gemma-4-E2B-it.litertlm"
+  ],
+  "elapsed_s": 14.52405333518982,
+  "failure_class": "ok",
+  "finished_utc": "2026-06-07T14:17:07Z",
+  "model": "litert-community/gemma-4-E2B-it-litert-lm/gemma-4-E2B-it.litertlm",
+  "oom_evidence": {
+    "dmesg_oom_tail": {
+      "cmd": [
+        "sh",
+        "-lc",
+        "dmesg -T | grep -Ei 'out of memory|killed process|oom-kill' | tail -80"
+      ],
+      "returncode": 0,
+      "stderr": "dmesg: read kernel buffer failed: Operation not permitted",
+      "stdout": ""
+    },
+    "journal_oom": {
+      "cmd": [
+        "journalctl",
+        "-k",
+        "--no-pager",
+        "--since",
+        "2026-06-07T14:16:53Z",
+        "-g",
+        "Out of memory|Killed process|oom-kill"
+      ],
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "-- No entries --"
+    }
+  },
+  "peak_process_tree_rss_kib": 1001684,
+  "peak_process_tree_swap_kib": 0,
+  "post_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4892721152 92024008704     8867840 33121390592 123559292928\nSwap:    17179865088   340148224 16839716864"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "pre_memory": {
+    "free": {
+      "cmd": [
+        "free",
+        "-b"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4908179456 92008550400     8867840 33121390592 123543834624\nSwap:    17179865088   340148224 16839716864"
+    },
+    "nvidia_smi": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+        "--format=csv,noheader,nounits"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+    }
+  },
+  "returncode": 0,
+  "run_id": "litert-lm-cpu-e2b-smoke4-20260607T144000Z",
+  "samples": [
+    {
+      "hwm_kib": 15308,
+      "memory": {
+        "free": {
+          "cmd": [
+            "free",
+            "-b"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  4309794816 95409348608     8859648 30286057472 124142219264\nSwap:    17179865088   340152320 16839712768"
+        },
+        "nvidia_smi": {
+          "cmd": [
+            "nvidia-smi",
+            "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+        }
+      },
+      "pids": [
+        465667
+      ],
+      "processes": [
+        {
+          "name": "litert-lm",
+          "pid": 465667,
+          "ppid": "465666",
+          "rssanon": 8824,
+          "rssfile": 6484,
+          "state": "R (running)",
+          "vmhwm": 15308,
+          "vmrss": 15308,
+          "vmsize": 37752,
+          "vmswap": 0
+        }
+      ],
+      "rss_kib": 15308,
+      "swap_kib": 0,
+      "timestamp": 1780841813.450862
+    },
+    {
+      "hwm_kib": 1001684,
+      "memory": {
+        "free": {
+          "cmd": [
+            "free",
+            "-b"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  5417598976 93892390912     8867840 30700150784 123034415104\nSwap:    17179865088   340152320 16839712768"
+        },
+        "nvidia_smi": {
+          "cmd": [
+            "nvidia-smi",
+            "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+        }
+      },
+      "pids": [
+        465667
+      ],
+      "processes": [
+        {
+          "name": "litert-lm",
+          "pid": 465667,
+          "ppid": "465666",
+          "rssanon": 937708,
+          "rssfile": 63976,
+          "state": "S (sleeping)",
+          "vmhwm": 1001684,
+          "vmrss": 1001684,
+          "vmsize": 3219340,
+          "vmswap": 0
+        }
+      ],
+      "rss_kib": 1001684,
+      "swap_kib": 0,
+      "timestamp": 1780841818.5370333
+    },
+    {
+      "hwm_kib": 1245244,
+      "memory": {
+        "free": {
+          "cmd": [
+            "free",
+            "-b"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "total        used        free      shared  buff/cache   available\nMem:     128452014080  5492092928 92386779136     8867840 32149331968 122959921152\nSwap:    17179865088   340148224 16839716864"
+        },
+        "nvidia_smi": {
+          "cmd": [
+            "nvidia-smi",
+            "--query-gpu=name,memory.used,memory.total,utilization.gpu",
+            "--format=csv,noheader,nounits"
+          ],
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "NVIDIA GB10, [N/A], [N/A], 0"
+        }
+      },
+      "pids": [
+        465667
+      ],
+      "processes": [
+        {
+          "name": "litert-lm",
+          "pid": 465667,
+          "ppid": "465666",
+          "rssanon": 904692,
+          "rssfile": 64040,
+          "state": "S (sleeping)",
+          "vmhwm": 1245244,
+          "vmrss": 968732,
+          "vmsize": 3100640,
+          "vmswap": 0
+        }
+      ],
+      "rss_kib": 968732,
+      "swap_kib": 0,
+      "timestamp": 1780841823.5754573
+    }
+  ],
+  "schema": "spark-run-with-telemetry/v1",
+  "started_utc": "2026-06-07T14:16:53Z",
+  "stderr_tail": "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\nERROR: third_party/tensorflow/lite/kernels/dynamic_update_slice.cc:70 SizeOfDimension(update, i) <= SizeOfDimension(operand, i) was not true.\nERROR: Node number 1164 (DYNAMIC_UPDATE_SLICE) failed to prepare.\nERROR: [litert_compiled_model.cc:162] Failed to allocate tensors\nTraceback (most recent call last):\n  File \"/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv/lib/python3.12/site-packages/litert_lm_cli/commands/run.py\", line 280, in run_interactive\n    _execute_prompt(state, runner, prompt, attachments=attachments)\n  File \"/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv/lib/python3.12/site-packages/litert_lm_cli/commands/run.py\", line 102, in _execute_prompt\n    for chunk in stream:\n  File \"/home/jethac/spark-validation/litert-lm-20260607T140617Z/venv/lib/python3.12/site-packages/litert_lm/conversation.py\", line 198, in send_message_async\n    raise item\nRuntimeError: INTERNAL: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:755]\n\u2514 Failed to invoke the compiled model\n",
+  "stdout_tail": "Downloading gemma-4-E2B-it.litertlm from litert-community/gemma-4-E2B-it-litert-lm...\nAn error occurred\n",
+  "timed_out": false,
+  "timeout_s": 1200
+}
