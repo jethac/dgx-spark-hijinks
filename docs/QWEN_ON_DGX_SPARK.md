@@ -28,6 +28,12 @@ Then test our forked stack:
 - `jethac/flashinfer` with SM121 `mm_fp4` dispatch and FA2 NVFP4-KV stride/page/deswizzle changes
 - paired fp8-vs-NVFP4 KV runs on the same model, prompts, context length, memory fraction, graph mode, and concurrency
 
+Current local setup:
+
+- `scripts/run_aeon_vllm_reproduction.sh qwen36-dflash RUN_ID` records the AEON Qwen reproduction row when `RECORD=1`.
+- preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
+- remaining proof: download weights, start the image, and capture the first local vLLM Qwen36 NVFP4+DFlash row.
+
 Do not claim a fork speedup until server logs prove the selected kernel path and the before/after rows are matched.
 
 ## SGLang Target

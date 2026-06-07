@@ -1,5 +1,7 @@
 # Gemma 4 On DGX Spark: Problems Encountered
 
+Latest vLLM reproduction lane: AEON-7's Gemma 4 26B A4B NVFP4+DFlash recipe is now scripted locally through `scripts/run_aeon_vllm_reproduction.sh gemma26-dflash RUN_ID`. Preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the image and HF repos are reachable and non-gated; the local serving benchmark row is still pending.
+
 Date: 2026-06-07
 
 This report lists the problems encountered while running an initial personal Gemma 4 benchmark run on the DGX Spark / PGX workstation-class system observed as `NVIDIA GB10`. It covers fatal failures, nonfatal benchmark failures, compatibility issues, runtime and performance issues, and operational problems from setup and monitoring.

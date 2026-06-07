@@ -10,6 +10,8 @@ Mission: this machine costs roughly 900k JPY. It needs to be as performant as th
 
 Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-cu130` on GB10 at about 24 tok/s decode, after setting `--max-num-batched-tokens 4096`. Gemma 4 12B also serves now, but only through a source/precompiled vLLM probe at upstream commit `da1daf40` plus Transformers main and stale FlashInfer JIT-cache cleanup; that row is about 7.7 tok/s and forces Triton attention. Qwen is now tracked as a first-class speed/capacity lane: SGLang Qwen2.5 1.5B BF16/auto and fp8 both serve at about 58-59 tok/s, fp8 roughly doubles KV pool tokens, patched FP4 KV exposes the expected larger pool but is not usable yet, and llama.cpp Qwen2.5 1.5B Q4_K_M serves at about 167-175 tok/s. The current FlashInfer SM121 `b12x` patch is dispatch enablement, not a proven speedup: model-shaped SGLang proxy microbenchmarks were mixed-to-slower.
 
+Next vLLM proof lane: AEON-7's public Gemma/Qwen NVFP4+DFlash recipes now have a local reproduction runner and access preflight, but no local serving row yet.
+
 ## Start Here
 
 - Diagnosis: [docs/DGX_SPARK_DIAGNOSIS.md](docs/DGX_SPARK_DIAGNOSIS.md)
@@ -21,6 +23,7 @@ Latest compact signal: Gemma 4 26B A4B serves through `vllm/vllm-openai:latest-c
 - Fork/worktree policy: [docs/FORKS_AND_WORKTREES.md](docs/FORKS_AND_WORKTREES.md)
 - SGLang notes: [docs/SGLANG_ON_DGX_SPARK.md](docs/SGLANG_ON_DGX_SPARK.md)
 - Qwen notes: [docs/QWEN_ON_DGX_SPARK.md](docs/QWEN_ON_DGX_SPARK.md)
+- vLLM AEON reproduction: [docs/VLLM_AEON_REPRODUCTION.md](docs/VLLM_AEON_REPRODUCTION.md)
 - Before/after benchmark protocol: [docs/BENCHMARK_PROTOCOL.md](docs/BENCHMARK_PROTOCOL.md)
 - Baseline results: [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md)
 - Remediation matrix: [docs/REMEDIATION_MATRIX.md](docs/REMEDIATION_MATRIX.md)
@@ -112,6 +115,13 @@ python3 scripts/record_openai_serving_row.py \
   --kv-cache-dtype fp8_e4m3 \
   --attention-backend flashinfer \
   --server-log results/RUN_ID_server.log
+```
+
+To reproduce AEON-7's vLLM NVFP4+DFlash rows:
+
+```bash
+DOWNLOAD=1 DOCKER_PULL=1 RECORD=1 \
+scripts/run_aeon_vllm_reproduction.sh gemma26-dflash aeon_gemma26_dflash_RUN_ID
 ```
 
 To annotate captured benchmark and server failures:

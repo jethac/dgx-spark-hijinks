@@ -183,6 +183,12 @@
   - `llama-bench`: `pp512 12505.79 +/- 615.87 tok/s`, `tg128 178.10 +/- 0.95 tok/s`.
   - logprobs probe: still not lm-eval compatible; response exposes `logprobs.content` but not `tokens` and `token_logprobs`.
   - conclusion: practical Qwen GGUF serving is proven for llama.cpp on GB10; GGUF accuracy and native FP4/MXFP4 dispatch remain separate workstreams.
+- Added the AEON vLLM reproduction runner and preflight.
+  - new script: `scripts/run_aeon_vllm_reproduction.sh`
+  - targets: `gemma26-dflash` and `qwen36-dflash`
+  - preflight artifact: `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md`
+  - outcome: both AEON GHCR images resolve; Gemma/Qwen target and drafter HF repos are public and non-gated from the GB10 host.
+  - limitation: no large model download or vLLM serving row has been started yet; this is readiness evidence for the next benchmark, not a performance result.
 
 ## First Benchmark Campaign Summary
 
