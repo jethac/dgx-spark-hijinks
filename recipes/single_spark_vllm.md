@@ -2,7 +2,7 @@
 
 Status: draft, not blessed.
 
-Use this recipe for one DGX Spark / ThinkStation PGX unit. Do not use this for multi-Spark runs.
+Use this recipe for one DGX Spark-class GB10 unit. Do not use this for multi-Spark runs.
 
 ## Rules
 
@@ -41,6 +41,8 @@ A blessed result must record:
 - PyTorch version
 - vLLM version
 - selected attention backend if visible
+- build/JIT target audit path
+- CUDA shared-object audit path
 - CUDA graphs enabled/disabled
 - prompt and generated token counts
 - wall time and tokens/sec
@@ -80,6 +82,7 @@ Spark proof requirements before blessing:
 - one GB10 `sm_121` server starts with `--kv-cache-dtype nvfp4`
 - logs or profiler evidence prove FlashInfer FA2 NVFP4 KV, not fp8/bf16 fallback
 - build or JIT cache records `sm_121`, `sm_121a`, or a documented valid SM12x family target
+- `scripts/cuda_build_target_audit.py` records the build/JIT target evidence before any `.so` inspection claim
 - paired fp8 and NVFP4 runs use the same model, prompts, graph settings, and memory utilization
 - KV pool tokens, maximum concurrency, quality, long-context behavior, and warmed decode speed are recorded
 - Gemma 4's alternating local/global attention is checked against the reference repo's unsupported attention-sink caveat before treating any Gemma result as general

@@ -95,9 +95,11 @@ Patch branch:
   - reference repo: `https://github.com/hikarioyama/sglang-nvfp4-kv-sm120`
   - audited HEAD: `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2`
   - current classification: SM120 reference evidence, not a GB10 `sm_121` result.
+  - current `jethac/sglang` branch: `spark/hijinks-018-fp4-e2m1-kv-sm121` at `eefe8aded`.
+  - current GB10/Linux Python-gate evidence: `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md` shows `KV4Compatibility` passed with `3 passed, 56 deselected`.
   - relevant launch surface: `--kv-cache-dtype fp4_e2m1 --attention-backend flashinfer --page-size 1`.
   - reported SM120 result: Qwen2.5 and Step3.7-Flash validation, 1.778x KV capacity versus fp8 in the documented Step3.7 case, roughly fp8-like decode on larger models, and small-model quality failures even after calibration.
-  - not covered by our current tests: SGLang fp8 baseline on GB10, SGLang NVFP4-KV quality/perf on GB10, and Gemma-family serving under SGLang.
+  - not covered by our current tests: native FP4 KV pool/backend wrapper plumbing, SGLang fp8 baseline on GB10, SGLang NVFP4-KV quality/perf on GB10, and Gemma-family serving under SGLang.
 - not yet proven:
   - clean wheel or container build suitable for vLLM/SGLang serving
   - `cuobjdump` evidence from a distributable artifact

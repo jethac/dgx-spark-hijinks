@@ -1,8 +1,34 @@
-# CUDA Shared Object Audit
+# CUDA Target And Shared Object Audit
 
 Date: 2026-06-07
 
-Audit command on `thinkstationpgx-00b4`:
+## Two-Stage CUDA Target Evidence
+
+Spark-native claims need two kinds of evidence:
+
+1. Build or JIT logs should show the intended target, such as `sm_121`, `compute_121`, `121-real`, or a documented SM12x family target.
+2. Resulting CUDA extension objects should be inspected with `cuobjdump` where a `.so` exists.
+
+Use the build/JIT log checker first:
+
+```bash
+python3 scripts/cuda_build_target_audit.py \
+  --log results/RUN_ID_build.log \
+  --output results/RUN_ID_build_target_audit.json
+```
+
+If a project intentionally uses a family-compatible target such as `120f`, make that explicit:
+
+```bash
+python3 scripts/cuda_build_target_audit.py \
+  --log results/RUN_ID_jit.log \
+  --allow-family-target 120f \
+  --output results/RUN_ID_build_target_audit.json
+```
+
+Then inspect compiled shared objects:
+
+Historical audit command:
 
 ```bash
 /home/jethac/gemma4-evals/.venv/bin/python /home/jethac/cuda_so_audit.py \

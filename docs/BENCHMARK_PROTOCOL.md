@@ -17,7 +17,7 @@ Tracked by:
 - Before and after performance rows must also match CUDA compute capability and `multi_processor_count`; GB10 `sm_121` can appear in different SM-count bins, and correctness compatibility does not make throughput comparable.
 - See `docs/SM_COUNT_AWARENESS.md` for the current 48-SM baseline evidence and fork audit.
 - Capture `spark_doctor` before each run.
-- Capture CUDA shared-object/JIT evidence when testing kernel changes.
+- Capture CUDA build/JIT target evidence and shared-object evidence when testing kernel changes.
 - Capture runtime process evidence with `scripts/runtime_process_probe.py` for serving baselines.
 - Annotate failures with `scripts/failure_annotator.py` so killed processes, API schema mismatches, runtime exceptions, and configuration errors are not lumped together.
 - Wrap HF fallback and other fragile local commands with `scripts/run_with_telemetry.py` so return codes include RSS, swap, `free`, `nvidia-smi`, and kernel OOM evidence.
@@ -50,7 +50,8 @@ Tracked by:
 | memory state | unified-memory pressure and hidden scratch allocation detection |
 | quality check | avoids fast garbage |
 | `spark_doctor` path | environment evidence |
-| `.so`/JIT audit path | kernel evidence |
+| build target audit path | intended CUDA target evidence from build/JIT logs |
+| `.so`/JIT audit path | compiled kernel evidence |
 
 ## Baseline Suite
 
@@ -58,7 +59,16 @@ Keep this short enough to run repeatedly on one unit.
 
 1. Environment
    - `spark_doctor`
-   - CUDA `.so` audit for the active backend
+   - CUDA build/JIT target audit for any source-built or JIT-built backend
+   - CUDA `.so` audit for the active backend when compiled objects are available
+
+Example build/JIT target audit:
+
+```bash
+python3 scripts/cuda_build_target_audit.py \
+  --log results/RUN_ID_build.log \
+  --output results/RUN_ID_build_target_audit.json
+```
 
 2. Serving smoke
    - one short deterministic OpenAI-compatible chat request

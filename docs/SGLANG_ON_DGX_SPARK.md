@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16 NVIDIA 26.05 container smoke passed; hikarioyama SM120 NVFP4 KV fork audited; no SGLang NVFP4 KV run has passed on GB10/SM121.
+Status: BF16 NVIDIA 26.05 container smoke passed; hikarioyama SM120 NVFP4 KV fork audited; SGLang SM12x FP4 KV gate pytest passed; no SGLang NVFP4 KV serving run has passed on GB10/SM121.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -150,9 +150,10 @@ Use BF16 as the proven SGLang baseline on our Spark today. fp8 is the desired co
 
 Current fork verification:
 
-- `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1` has passed Linux `aarch64` syntax compilation for the touched FP4 KV gate files.
+- `jethac/sglang@eefe8aded` has passed Linux `aarch64` syntax compilation and targeted `KV4Compatibility` pytest for the touched FP4 KV gate files.
 - A CPU-only Docker route was attempted to avoid spending GPU time on Python-level `KV4Compatibility` tests, but `docker/arm64.Dockerfile` failed before pytest while building `sglang-kernel-cpu`; see `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`.
-- This is a build-route failure, not a failing SGLang FP4 KV test. No SGLang `fp4_e2m1` server row exists yet.
+- A no-kernel scratch-venv pytest route passed; see `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md`.
+- No SGLang `fp4_e2m1` server row exists yet.
 
 For NVFP4 validation, record:
 

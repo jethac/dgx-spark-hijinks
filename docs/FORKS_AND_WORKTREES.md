@@ -129,7 +129,7 @@ Active submodules:
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
 | `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-007-nvfp4-kv-sm121` at `8916796` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | SM12x NVFP4 KV routes to FlashInfer FA2 and enables vLLM V-scale deswizzle; GB10 build/runtime proof pending |
-| `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` at `67c7967` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | SM12x FP4 KV compatibility gates pushed; native pool/backend work pending |
+| `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121` at `eefe8ad` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | SM12x FP4 KV compatibility gates pushed; targeted pytest passed; native pool/backend work pending |
 
 FlashInfer patch:
 
@@ -177,14 +177,15 @@ vLLM SM12x NVFP4 KV routing patch:
 
 SGLang SM12x FP4 KV gate patch:
 
-- commit: `67c7967a1c1b6145a8c9d26a7b941258735ebd8d`
+- commit: `eefe8aded`
 - branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121
 - purpose: remove first compatibility blockers for SM12x `fp4_e2m1` KV with FlashInfer MHA without claiming the native pool/backend path is complete
 - touched files: `python/sglang/srt/server_args.py`, `python/sglang/srt/layers/quantization/kvfp4_tensor.py`, `test/registered/unit/server_args/test_server_args.py`
 - local verification: Python syntax compile and `git diff --check` passed
 - local pytest limitation: Windows collection fails because SGLang imports the POSIX-only `resource` module
 - local lint limitation: `ruff` is not installed in this Windows workspace
-- PGX verification: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md` confirms Linux/aarch64 branch checkout and `python3 -m py_compile` for touched files
-- missing verification: Linux/PGX targeted pytest with SGLang test dependencies, native FP4 KV pool/backend wrapper patch, and GB10 `fp4_e2m1` serving proof
+- Linux verification: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md` confirms branch checkout and `python3 -m py_compile` for touched files
+- targeted pytest: `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md` confirms `KV4Compatibility` passes on Linux `aarch64`
+- missing verification: native FP4 KV pool/backend wrapper patch and GB10 `fp4_e2m1` serving proof
 
 Other forks should still be created only when the corresponding issue is ready to carry code.

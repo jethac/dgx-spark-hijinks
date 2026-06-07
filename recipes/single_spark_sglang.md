@@ -80,6 +80,11 @@ docker exec -w /workspace/dgx-spark-hijinks sglang-smoke \
     --output results/${RUN_ID}_cuda_so_audit_sglang.json
 
 docker logs sglang-smoke > results/${RUN_ID}_server.log 2>&1
+
+python3 scripts/cuda_build_target_audit.py \
+  --log results/${RUN_ID}_server.log \
+  --output results/${RUN_ID}_build_target_audit_sglang.json
+
 docker rm -f sglang-smoke
 ```
 
@@ -100,6 +105,8 @@ A blessed SGLang result must record:
 - attention backend
 - CUDA graph enabled/disabled
 - Spark doctor snapshot
+- build/JIT target audit path
+- CUDA shared-object audit path
 - output quality check against fp8 KV or another reference path
 - prompt/generation throughput and memory state
 
@@ -118,6 +125,7 @@ If testing the hikarioyama design on Spark, keep it separate from the BF16 smoke
 - `SGLANG_FP4_KV_AUTOCALIB` value
 - checkpoint `k_scale`/`v_scale` presence
 - fresh FlashInfer JIT cache path
+- build/JIT target audit showing `sm_121`, `sm_121a`, or an explicitly documented compatible SM12x family target
 - paired fp8 and fp4 runs on the same model and prompts
 - deterministic prompt output and a quality comparison, not just throughput
 

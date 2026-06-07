@@ -129,6 +129,14 @@
   - target: `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`
   - outcome: build failed before pytest while compiling `sglang-kernel-cpu`; the ARM64 `vaddq_f16` path hit a target-specific option mismatch.
   - conclusion: this does not disprove the SGLang FP4 KV gate patch, but the cheap CPU Docker verification route needs either a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix.
+- Fixed and validated the SGLang FP4 KV gate test setup.
+  - fork commit: `jethac/sglang@eefe8aded`
+  - result: `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md`
+  - outcome: targeted Linux `aarch64` `KV4Compatibility` pytest passed: `3 passed, 56 deselected`.
+  - limitation: this is Python-level argument compatibility only; native FP4 KV pools, backend wrapper plumbing, quality, capacity, and serving remain pending.
+- Added `scripts/cuda_build_target_audit.py` for build/JIT log target evidence before `.so` inspection.
+  - first smoke artifact: `results/llamacpp_gemma4_26b_q4_0_build_target_audit_20260608T0325JST.json`
+  - result: the existing llama.cpp server log contains accepted Spark target evidence through `CUDA : ARCHS = 1210`.
 
 ## First Benchmark Campaign Summary
 

@@ -15,7 +15,7 @@ The KV lane is higher priority because it targets Spark's bottleneck directly: u
 |---|---|---|---|---|
 | FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | current `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`; based on `a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
 | vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | current `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`; based on `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
-| SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | current `jethac/sglang@67c7967a1c1b6145a8c9d26a7b941258735ebd8d`; based on `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
+| SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | current `jethac/sglang@eefe8aded`; based on `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
 
 Reference clones are local scratch only:
 
@@ -167,11 +167,12 @@ Current upstream vLLM risk:
 
 Current `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` patch:
 
-- commit: `67c7967a1c1b6145a8c9d26a7b941258735ebd8d`
+- commit: `eefe8aded`
 - branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121
 - allows `flashinfer` in MHA `fp4_e2m1` KV compatibility gates only when `is_sm120_supported()` is true, which covers SM120 and GB10/SM121 in SGLang's helper naming
 - lets `NVFP4KVQuantizeUtil.quantize()` run on SM120-family devices and route SM100/SM120 through `flashinfer.nvfp4_kv_quantize`; SM90 keeps the existing `fp4_quantize` fallback
 - adds server-args unit coverage for SM12x FlashInfer MHA KV4 acceptance, non-SM12x rejection, and FA4-prefill plus FlashInfer-decode acceptance
+- fixes the unit-test helper to populate public prefill/decode backend fields before `_handle_kv4_compatibility()` recomputes the effective backend strings
 
 Local verification:
 
@@ -190,10 +191,14 @@ Local verification:
   - target: `jethac/sglang@67c7967a1913960055e64c49c26c5f622c1f1ff1`
   - intent: run the `KV4Compatibility` pytest path in a Linux `aarch64` CPU-only build before spending GPU time
   - outcome: Docker build failed before pytest while compiling `sglang-kernel-cpu`; `vaddq_f16` in `sgl-kernel/csrc/cpu/aarch64/shm.h` hit a target-specific option mismatch
+- Targeted no-kernel pytest:
+  - result: `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md`
+  - target: `jethac/sglang@eefe8aded`
+  - command: `python -m pytest test/registered/unit/server_args/test_server_args.py -k KV4Compatibility -q`
+  - outcome: `3 passed, 56 deselected, 3 warnings`
 
 Missing verification:
 
-- no Linux SGLang targeted pytest has passed yet for this branch
 - no cheap CPU-only SGLang Docker verification route is working yet; it needs a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix
 - no SGLang native FP4 KV memory-pool or FlashInfer backend wrapper patch has landed yet
 - no GB10 `fp4_e2m1` serving proof exists yet
@@ -215,6 +220,7 @@ Reference files:
 Likely `jethac/sglang` work:
 
 - Ported in `67c7967`: allow `--kv-cache-dtype fp4_e2m1` with FlashInfer MHA only on SM12x where the reference path is relevant.
+- Fixed in `eefe8ad`: make the new KV4 unit tests use public prefill/decode backend fields.
 - Still pending: wire native FP4 KV pools, separate data and scale buffers, global scales, and scale getters.
 - Add or preserve pre-CUDA-graph calibration for NVFP4 KV global scales.
 - Delegate FP4 subpools through hybrid-SWA.

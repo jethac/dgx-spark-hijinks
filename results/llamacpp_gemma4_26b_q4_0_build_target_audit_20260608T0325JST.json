@@ -1,0 +1,38 @@
+{
+  "created_unix": 1780855024.504582,
+  "inputs": {
+    "allow_family_targets": [],
+    "logs": [
+      "results\\llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log"
+    ]
+  },
+  "logs": [
+    {
+      "accepted_spark_target_evidence": true,
+      "allowed_family_targets": [],
+      "evidence": [
+        {
+          "kind": "spark_target",
+          "line": "0.00.302.528 I system_info: n_threads = 20 (n_threads_batch = 20) / 20 | CUDA : ARCHS = 1210 | USE_GRAPHS = 1 | PEER_MAX_BATCH_SIZE = 128 | BLACKWELL_NATIVE_FP4 = 1 | CPU : NEON = 1 | ARM_FMA = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |",
+          "line_no": 5,
+          "token": "CUDA : ARCHS = 1210"
+        }
+      ],
+      "exists": true,
+      "findings": [
+        "OK: log contains Spark sm_121 target evidence."
+      ],
+      "has_native_fp4_target": false,
+      "has_spark_target": true,
+      "path": "results\\llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log",
+      "unallowed_family_targets": []
+    }
+  ],
+  "schema": "cuda-build-target-audit/v1",
+  "summary": {
+    "accepted_log_count": 1,
+    "log_count": 1,
+    "missing_or_unaccepted_count": 0,
+    "native_fp4_log_count": 0
+  }
+}
