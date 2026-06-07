@@ -49,9 +49,10 @@
     }
   ],
   "schema": "counterpart-task-matrix/v1",
-  "task_count": 7,
-  "task_without_audit_requirement": [
+  "task_already_claim_ready": [
     "vllm_qwen36_nvfp4_dflash"
   ],
+  "task_count": 7,
+  "task_without_audit_requirement": [],
   "tasks": "tasks/counterpart_evidence_tasks.jsonl"
 }

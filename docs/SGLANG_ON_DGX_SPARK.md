@@ -75,6 +75,19 @@ Interpretation:
 - This also confirms stock NVIDIA 26.05 SGLang does not yet provide a working `fp4_e2m1` serving row for this Qwen model.
 - The SGLang fork fixes are necessary but not sufficient. The remaining blockers are FlashInfer FP4 E2M1 decode support for the FlashInfer-attention path and graph-compatible Triton FP4 KV serving with sane output.
 
+Smallest next proof:
+
+- Do not spend another full Qwen serving launch first.
+- Run a FlashInfer-only JIT compile probe for the failing signature: BF16 Q, FP4 E2M1 KV, BF16 output, int32 indices, head dim 128, batch decode, `sm_121a`, and a fresh JIT cache.
+- If that still fails at `include/flashinfer/vec_dtypes.cuh:117`, fix FlashInfer before returning to SGLang serving.
+- If it compiles, run a tiny synthetic decode with `kv_cache_sf` scale buffers before trying the clean SGLang after-row.
+
+Likely code locations:
+
+- `third_party/flashinfer/include/flashinfer/vec_dtypes.cuh`: generic `vec_cast` lacks the needed FP4 E2M1 to float conversion path.
+- `third_party/flashinfer/include/flashinfer/attention/decode.cuh`: K/V loads go through `vec_t<float>::cast_load`.
+- `third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py`: after FlashInfer compiles, verify SGLang passes the FP4 per-block scale buffers the kernel expects, not only scalar `k_scale`/`v_scale`.
+
 ## 2026-06-07 Smoke Result
 
 Image:

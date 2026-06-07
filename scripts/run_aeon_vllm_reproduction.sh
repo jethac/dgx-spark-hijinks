@@ -19,6 +19,8 @@ Environment:
   DOCKER_PULL=0                        set to 1 to docker pull before launch
   DOCKER_PLATFORM=linux/arm64          platform passed to docker pull
   PROCESS_MATCH=vllm                   runtime process probe match string
+  RUNTIME_REF=$IMAGE                    runtime ref recorded in manifest
+  CUDA_SO_PACKAGE=...                   repeatable comma-separated packages for CUDA .so audit
   HF_CLI=hf                            Hugging Face CLI command override
   RECORD_PYTHON=python3                Python used for RECORD=1 artifact capture
   CHAT_SMOKE_PROMPT=...                override OpenAI smoke prompt
@@ -45,6 +47,8 @@ DOCKER_PULL=${DOCKER_PULL:-0}
 DOCKER_PLATFORM=${DOCKER_PLATFORM:-linux/arm64}
 PROCESS_MATCH=${PROCESS_MATCH:-vllm}
 RECORD_PYTHON=${RECORD_PYTHON:-python3}
+RUNTIME_REF=${RUNTIME_REF:-}
+CUDA_SO_PACKAGE=${CUDA_SO_PACKAGE:-}
 
 REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 mkdir -p "${RESULTS_DIR}"
@@ -197,6 +201,14 @@ if [[ "${RECORD}" == "1" ]]; then
   if [[ -n "${CHAT_TEMPLATE_KWARGS_JSON:-}" ]]; then
     RECORD_EXTRA_ARGS+=(--chat-template-kwargs-json "${CHAT_TEMPLATE_KWARGS_JSON}")
   fi
+  if [[ -n "${CUDA_SO_PACKAGE}" ]]; then
+    IFS=',' read -r -a CUDA_SO_PACKAGES <<< "${CUDA_SO_PACKAGE}"
+    for package in "${CUDA_SO_PACKAGES[@]}"; do
+      if [[ -n "${package}" ]]; then
+        RECORD_EXTRA_ARGS+=(--cuda-so-package "${package}")
+      fi
+    done
+  fi
   "${RECORD_PYTHON}" "${REPO_ROOT}/scripts/record_openai_serving_row.py" \
     --backend vllm \
     --phase exploratory \
@@ -204,7 +216,7 @@ if [[ "${RECORD}" == "1" ]]; then
     --url "http://127.0.0.1:${PORT}" \
     --model "${SERVED_MODEL}" \
     --results-dir "${RESULTS_DIR}" \
-    --runtime-ref "${IMAGE}" \
+    --runtime-ref "${RUNTIME_REF:-${IMAGE}}" \
     --container-image "${IMAGE}" \
     --quantization "${QUANTIZATION}" \
     --kv-cache-dtype auto \

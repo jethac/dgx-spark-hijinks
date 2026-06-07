@@ -188,7 +188,7 @@ vLLM Qwen/DFlash SM12x stability patch:
 - touched files: `vllm/platforms/cuda.py`, `vllm/config/compilation.py`, `tests/compile/test_config.py`, `vllm/model_executor/models/registry.py`, `tests/models/registry.py`, `vllm/v1/engine/core.py`, `vllm/v1/worker/gpu_model_runner.py`, `vllm/model_executor/layers/mamba/abstract.py`, `tests/model_executor/test_qwen3_5_registry.py`
 - local verification: Python syntax compile and `git diff --check` passed; see `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md` and `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - local pytest limitation: targeted pytest collection is blocked in this Windows workspace because `tblib` is not installed; a direct import check then hit missing `cbor2`, confirming the local environment is not a vLLM dev/test environment
-- missing verification: Qwen3.6 NVFP4+DFlash serving reproduction, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
+- missing verification: dependency-aligned Qwen3.6 NVFP4+DFlash serving through the derived fork image, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
 
 SGLang SM12x FP4 KV gate and alias patch:
 

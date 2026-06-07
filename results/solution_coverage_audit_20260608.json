@@ -48,7 +48,7 @@
       "plan_ids": [
         "5"
       ],
-      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; `jethac/vllm@6804e1b` carries AEON Qwen source fixes; AEON Qwen36 now passes with API-level thinking disabled; clean fork parity pending"
+      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived image builds and imports, but fork parity serving is blocked on `compressed_tensors` API drift"
     },
     {
       "area": "NVFP4 on Spark",
@@ -167,7 +167,7 @@
       "plan_ids": [
         "qwen-speed"
       ],
-      "status": "SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` carries AEON source fixes; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
+      "status": "SGLang Qwen BF16/auto and fp8 rows captured; patched fp4 KV capacity/debug row captured but not usable for speed; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` derived image builds but needs `compressed-tensors` dependency alignment before fork serving; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
     }
   ],
   "missing_issue_plan_ids": [],

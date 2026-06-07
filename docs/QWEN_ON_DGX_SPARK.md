@@ -93,6 +93,12 @@ Artifacts use the prefix `results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_*
 
 Interpretation: llama.cpp practical Qwen GGUF serving is now proven on this GB10, and it is much faster than the small SGLang Qwen rows for single-stream decode. This row still does not prove native NVFP4/MXFP4 GGUF, Qwen3/Qwen3.6 behavior, or lm-eval accuracy.
 
+Next llama.cpp Qwen proof:
+
+- Run a Qwen3/Qwen3.6-class instruct GGUF row with the same `b9536` llama.cpp build, not another Qwen2.5 1.5B row.
+- Start with a normal practical-serving quant such as Q4_K_M or Q4_0 to fill the larger-Qwen GGUF gap.
+- Keep native FP4 separate: `BLACKWELL_NATIVE_FP4=1` in the build log is not proof unless the model artifact is NVFP4/MXFP4 GGUF and runtime/build audits show the native FP4 path.
+
 ## Required Artifacts
 
 Every Qwen row should include:

@@ -127,6 +127,11 @@ def main() -> int:
         for req in audit.get("requirements", [])
         if isinstance(req, dict) and req.get("claim_ready") is False
     }
+    claim_ready_requirements = {
+        str(req.get("name"))
+        for req in audit.get("requirements", [])
+        if isinstance(req, dict) and req.get("claim_ready") is True
+    }
     task_requirements = {str(row.get("requirement")) for row in rows}
     duplicate_requirements = sorted(
         requirement
@@ -135,7 +140,10 @@ def main() -> int:
     )
     row_checks = [validate_task(row) for row in rows]
     missing_tasks_for_audit = sorted(audit_requirements - task_requirements)
-    task_without_audit_requirement = sorted(task_requirements - audit_requirements) if audit_requirements else []
+    task_already_claim_ready = sorted(task_requirements & claim_ready_requirements)
+    task_without_audit_requirement = sorted(
+        task_requirements - audit_requirements - claim_ready_requirements
+    ) if audit_requirements or claim_ready_requirements else []
     summary = {
         "schema": "counterpart-task-matrix/v1",
         "tasks": rel(tasks_path, root),
@@ -143,6 +151,7 @@ def main() -> int:
         "task_count": len(rows),
         "audit_missing_or_partial_count": len(audit_requirements),
         "missing_tasks_for_audit": missing_tasks_for_audit,
+        "task_already_claim_ready": task_already_claim_ready,
         "task_without_audit_requirement": task_without_audit_requirement,
         "duplicate_requirements": duplicate_requirements,
         "row_checks": row_checks,

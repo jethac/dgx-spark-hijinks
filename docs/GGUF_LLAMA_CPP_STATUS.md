@@ -129,6 +129,8 @@ Dry-run artifact `results/llamacpp_native_loglikelihood_task_dryrun_20260608.jso
 
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 
+For Qwen speed, the next serving proof is separate from the accuracy adapter: run a Qwen3/Qwen3.6-class instruct GGUF with the same `b9536` CUDA build and row recorder. The existing Qwen2.5 1.5B Q4_K_M row proves practical small-Qwen serving, but the counterpart matrix still requires a larger Qwen3/Qwen3.6 GGUF row. Native FP4 GGUF remains blocked until an actual NVFP4/MXFP4 GGUF artifact is available and the runtime dispatch evidence proves that path, not just a Q4_K/Q4_0 model on a build compiled with Blackwell FP4 support.
+
 ## Practical Serving Note
 
 This llama.cpp build is validated as a practical serving path on Spark:

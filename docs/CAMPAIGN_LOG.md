@@ -307,6 +307,14 @@
   - passing row: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json`, `ok=true`
   - compact decode: `50.37 tok/s` short, `55.84 tok/s` medium, `53.75 tok/s` long-prefill.
   - caveat: this is AEON's container/checkpoint, not a `jethac` fork speedup; build-target audit still lacks explicit native `sm_121`/`sm_121a` evidence and the server still warns about Marlin weight-only FP4.
+- Built and smoke-started the matched `jethac/vllm` derived image for Qwen3.6.
+  - derived image: `jethac-vllm-aeon-q36:6804e1b81`
+  - base image: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
+  - fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+  - build artifact: `results/jethac_vllm_aeon_q36_6804e1b81_image_build_20260608T0845JST.log`
+  - stop-point artifact: `results/jethac_qwen36_dflash_depstop_20260608T0850JST_summary.md`
+  - result: image imports `vllm 0.1.dev1+g6804e1b81`, but serving exits before health because the AEON base environment lacks `compressed_tensors.compressors.pack_quantized`.
+  - interpretation: fork parity is now blocked on dependency/API drift, not image build, Qwen weights, or `sm_121` kernels.
 
 ## First Benchmark Campaign Summary
 

@@ -81,7 +81,7 @@ Current fork evidence:
 - first patch artifact: `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md`
 - full AEON Qwen source-port artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
-- limitation: this is source verification only; the local AEON Qwen3.6 container starts, but the `jethac` fork still needs a clean install/container parity row
+- limitation: the derived `jethac` fork image now builds and imports, but Qwen serving exits before health until the `compressed-tensors` dependency is aligned with the newer fork
 
 The old Qwen `language_model.` prefix stripping is a model-conversion helper, not a vLLM source patch for the current AEON v2 multimodal weights.
 
@@ -94,6 +94,70 @@ This lane is different from the FlashInfer `b12x` and FA2 NVFP4-KV work:
 - Gemma 4's immediate vLLM win comes from NVFP4 weights, correct compressed-tensors loading, FlashInfer CUTLASS NVFP4 linear kernels, vLLM CUTLASS NvFp4 MoE, Triton target attention, CUDA graphs, and DFlash.
 - FA2 NVFP4 KV remains a Qwen/standard-attention capacity lane first; it is not the current Gemma 4 DFlash recipe.
 - The next useful proof is a matched `jethac/vllm` fork row with the same Qwen thinking control, backend logs, and quality checks.
+
+## Matched Fork Plan
+
+For the first `jethac/vllm` Qwen parity row, derive from AEON's working Qwen image instead of starting with a full source build. The branch changes in `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3` are Python-side compatibility and stability fixes, while AEON's image already has the known-good CUDA, PyTorch, FlashInfer, model, and DFlash runtime shape.
+
+Recommended build shape:
+
+```bash
+docker build --platform linux/arm64 \
+  -t jethac-vllm-aeon-q36:6804e1b81 \
+  -f - third_party/vllm <<'EOF'
+FROM ghcr.io/aeon-7/vllm-spark-omni-q36:v2
+ARG VLLM_REF=6804e1b81fcc0abcfb4e876425495fa8f7650bcb
+LABEL org.opencontainers.image.source="https://github.com/jethac/vllm" \
+      org.opencontainers.image.revision="${VLLM_REF}" \
+      aeon.base="ghcr.io/aeon-7/vllm-spark-omni-q36:v2"
+RUN python3 -m pip install --no-cache-dir \
+      'cmake>=3.26.1' ninja 'packaging>=24.2' \
+      'setuptools>=77.0.3,<81.0.0' 'setuptools-scm>=8.0' \
+      'setuptools-rust>=1.9.0' wheel jinja2
+COPY . /opt/jethac-vllm
+WORKDIR /opt/jethac-vllm
+ENV VLLM_USE_PRECOMPILED=1 \
+    VLLM_MAIN_CUDA_VERSION=13.0 \
+    VLLM_PRECOMPILED_WHEEL_COMMIT=4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa \
+    VLLM_SKIP_PRECOMPILED_VERSION_SUFFIX=1
+RUN python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+EOF
+```
+
+Run shape:
+
+```bash
+CHAT_TEMPLATE_KWARGS_JSON='{"enable_thinking": false}' \
+CHAT_SMOKE_MAX_TOKENS=64 \
+CUDA_SO_PACKAGE=vllm,flashinfer \
+RUNTIME_REF='ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3' \
+IMAGE=jethac-vllm-aeon-q36:6804e1b81 \
+MODELS_ROOT=/home/jethac/models/aeon \
+RECORD=1 DOWNLOAD=0 DOCKER_PULL=0 WAIT_TIMEOUT=1200 \
+scripts/run_aeon_vllm_reproduction.sh qwen36-dflash jethac_qwen36_dflash_nothink_YYYYMMDDTHHMMJST
+```
+
+Risks: the AEON image uses vLLM `0.20.1.dev0+g101584af0.d20260424`, while the fork branch is newer; installing with `--no-deps` preserves the AEON environment but may expose API drift. This is a fork parity experiment, not a native `sm_121a` proof unless the build/runtime audits find accepted target evidence.
+
+## 2026-06-08 Matched Fork Stop Point
+
+Artifact: `results/jethac_qwen36_dflash_depstop_20260608T0850JST_summary.md`.
+
+The derived image path builds:
+
+- image: `jethac-vllm-aeon-q36:6804e1b81`
+- base: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
+- fork: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- precompiled wheel source: vLLM aarch64 cu130 wheel at `4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa`
+- imported `vllm 0.1.dev1+g6804e1b81` from `/opt/jethac-vllm`
+
+The server then exited before health:
+
+```text
+ModuleNotFoundError: No module named 'compressed_tensors.compressors.pack_quantized'
+```
+
+Interpretation: the matched fork row is blocked on dependency/API drift between the newer `jethac/vllm` branch and AEON's older base environment. This is not an `sm_121` kernel failure and not a Qwen model-load failure. The next attempt should update only the required `compressed-tensors` dependency in the derived image, then rerun the same no-think Qwen row.
 
 ## 2026-06-08 Gemma 26B Result
 

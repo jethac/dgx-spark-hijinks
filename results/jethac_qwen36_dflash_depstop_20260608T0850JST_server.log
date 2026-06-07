@@ -1,0 +1,88 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.1.dev1+g6804e1b81
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]   █▄█▀ █     █     █     █  model   /models/target
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:339]
+(APIServer pid=1) INFO 06-07 23:50:23 [api_utils.py:273] non-default args: {'model_tag': '/models/target', 'enable_auto_tool_choice': True, 'tool_call_parser': 'qwen3_coder', 'host': '0.0.0.0', 'model': '/models/target', 'trust_remote_code': True, 'max_model_len': 262144, 'quantization': 'compressed-tensors', 'served_model_name': ['qwen36-35b-heretic', 'qwen36-fast', 'qwen36-deep'], 'load_format': 'safetensors', 'attention_backend': 'flash_attn', 'reasoning_parser': 'qwen3', 'gpu_memory_utilization': 0.85, 'enable_prefix_caching': True, 'max_num_batched_tokens': 65536, 'max_num_seqs': 128, 'enable_chunked_prefill': True, 'speculative_config': {'method': 'dflash', 'model': '/models/drafter', 'num_speculative_tokens': 15}}
+(APIServer pid=1) WARNING 06-07 23:50:23 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_PRECOMPILED_WHEEL_COMMIT
+(APIServer pid=1) WARNING 06-07 23:50:23 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_BASE_DIR
+(APIServer pid=1) INFO 06-07 23:50:28 [model.py:611] Resolved architecture: Qwen3_5MoeForConditionalGeneration
+(APIServer pid=1) INFO 06-07 23:50:28 [model.py:1745] Using max model len 262144
+(APIServer pid=1) Traceback (most recent call last):
+(APIServer pid=1)   File "/usr/local/bin/vllm", line 8, in <module>
+(APIServer pid=1)     sys.exit(main())
+(APIServer pid=1)              ^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/cli/main.py", line 95, in main
+(APIServer pid=1)     args.dispatch_function(args)
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/cli/serve.py", line 148, in cmd
+(APIServer pid=1)     uvloop.run(run_server(args))
+(APIServer pid=1)   File "/usr/local/lib/python3.12/dist-packages/uvloop/__init__.py", line 96, in run
+(APIServer pid=1)     return __asyncio.run(
+(APIServer pid=1)            ^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+(APIServer pid=1)     return runner.run(main)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=1)     return self._loop.run_until_complete(task)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=1)   File "/usr/local/lib/python3.12/dist-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=1)     return await main
+(APIServer pid=1)            ^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/openai/api_server.py", line 665, in run_server
+(APIServer pid=1)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/openai/api_server.py", line 679, in run_server_worker
+(APIServer pid=1)     async with build_async_engine_client(
+(APIServer pid=1)   File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/openai/api_server.py", line 99, in build_async_engine_client
+(APIServer pid=1)     async with build_async_engine_client_from_engine_args(
+(APIServer pid=1)   File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/entrypoints/openai/api_server.py", line 123, in build_async_engine_client_from_engine_args
+(APIServer pid=1)     vllm_config = engine_args.create_engine_config(usage_context=usage_context)
+(APIServer pid=1)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/engine/arg_utils.py", line 1735, in create_engine_config
+(APIServer pid=1)     model_config = self.create_model_config()
+(APIServer pid=1)                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/engine/arg_utils.py", line 1565, in create_model_config
+(APIServer pid=1)     return ModelConfig(
+(APIServer pid=1)            ^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/dist-packages/pydantic/_internal/_dataclasses.py", line 121, in __init__
+(APIServer pid=1)     s.__pydantic_validator__.validate_python(ArgsKwargs(args, kwargs), self_instance=s)
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/config/model.py", line 747, in __post_init__
+(APIServer pid=1)     self._verify_quantization()
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/config/model.py", line 1041, in _verify_quantization
+(APIServer pid=1)     method = me_quant.get_quantization_config(name)
+(APIServer pid=1)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/__init__.py", line 120, in get_quantization_config
+(APIServer pid=1)     from .compressed_tensors.compressed_tensors import (
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py", line 36, in <module>
+(APIServer pid=1)     from vllm.model_executor.layers.quantization.compressed_tensors.compressed_tensors_moe import (  # noqa: E501
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py", line 4, in <module>
+(APIServer pid=1)     from vllm.model_executor.layers.quantization.compressed_tensors.compressed_tensors_moe.compressed_tensors_moe import (  # noqa: E501
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py", line 17, in <module>
+(APIServer pid=1)     from vllm.model_executor.layers.quantization.compressed_tensors.schemes.compressed_tensors_wNa16 import (  # noqa
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/compressed_tensors/schemes/__init__.py", line 13, in <module>
+(APIServer pid=1)     from .compressed_tensors_wNa8o8 import CompressedTensorsWNA8O8Int
+(APIServer pid=1)   File "/opt/jethac-vllm/vllm/model_executor/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa8o8.py", line 14, in <module>
+(APIServer pid=1)     from compressed_tensors.compressors.pack_quantized.helpers import pack_to_int32
+(APIServer pid=1) ModuleNotFoundError: No module named 'compressed_tensors.compressors.pack_quantized'
