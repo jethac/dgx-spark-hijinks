@@ -34,12 +34,20 @@ Changes:
 Expected effect: the failing Gemma 3 paged-prefill module should build under a fresh
 `dtype_kv_fp4x2_e2m1` namespace rather than reusing any stale `dtype_kv_u8` module.
 
+Top-level source-overlay correction:
+
+- `scripts/flashinfer_source_sitecustomize.py` now prepends `SPARK_FLASHINFER_SOURCE_ROOT`
+  to `sys.path` before importing FlashInfer. This is required for the live container to use
+  the patched Python JIT URI helpers from `/flashinfer-src`, not only the patched C++/JIT
+  template directories.
+
 ## Local Verification
 
 Passed on the Windows checkout:
 
 ```text
 py -3 -m py_compile third_party\flashinfer\flashinfer\jit\utils.py third_party\flashinfer\flashinfer\jit\attention\modules.py
+py -3 -m py_compile scripts\flashinfer_source_sitecustomize.py
 git -C third_party\flashinfer diff --check
 ```
 

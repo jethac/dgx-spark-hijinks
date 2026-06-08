@@ -26,7 +26,11 @@ Inside the existing GB10 vLLM source-overlay container:
    FlashAttention versions.
 2. Clear FlashInfer generated/JIT cache directories used by the container before server
    start. Do not rely on timestamp rebuild alone.
-3. Set:
+3. Use `scripts/flashinfer_source_sitecustomize.py` from commit `188efae` or newer. It must
+   prepend `/flashinfer-src` to `sys.path` before importing FlashInfer; otherwise the
+   container may still use the installed old `flashinfer/jit/attention/modules.py` and the
+   URI patch will not be exercised.
+4. Set:
 
 ```bash
 export FLASHINFER_JIT_VERBOSE=1

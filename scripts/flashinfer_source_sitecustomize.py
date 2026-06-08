@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 from pathlib import Path
 
 
@@ -29,6 +30,9 @@ def _load_local_attention_utils(source_root: Path):
 
 
 def _patch_flashinfer(source_root: Path) -> None:
+    if str(source_root) not in sys.path:
+        sys.path.insert(0, str(source_root))
+
     from flashinfer.jit import env as jit_env  # type: ignore
 
     jit_env.FLASHINFER_DATA = source_root
