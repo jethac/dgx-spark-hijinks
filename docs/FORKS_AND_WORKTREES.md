@@ -132,7 +132,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `6804e1b` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes; clean fork packaging and native-target proof pending |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `db4b210c1` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; `db4b210c1` adds a precompiled FA2/FA3 skip knob for clean packaging; native-target proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` | submodule checkout | SM12x FP4 KV compatibility gates, historical alias fix, pre-capture calibration, and SM120-family writer fallback are under test; clean source overlay reaches graph-enabled startup, but FP4 KV output quality is still corrupted |
 
 FlashInfer patch:
@@ -181,7 +181,8 @@ vLLM SM12x NVFP4 KV routing patch:
 
 vLLM Qwen/DFlash SM12x stability patch:
 
-- commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- serving commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- current fork head: `db4b210c1`
 - branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-020-aeon-qwen-dflash-sm121a
 - ancestry: based on `8916796bc50926fd61e606718b194a71e2e31a24`, so it preserves the SM12x NVFP4 KV routing/deswizzle work
 - purpose: port the AEON vLLM fixes that apply cleanly to the current fork: lazy fallback import for `_C_stable_libtorch`, speculative-decode CUDA graph capture-size alignment for non-NONE graph modes, Qwen3.5/3.6 text registry entries, hybrid KV `block_size=None` safety, Mamba block-size fallback, and text-only M-RoPE fallback
@@ -189,7 +190,7 @@ vLLM Qwen/DFlash SM12x stability patch:
 - local verification: Python syntax compile and `git diff --check` passed; see `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md` and `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - local pytest limitation: targeted pytest collection is blocked in this Windows workspace because `tblib` is not installed; a direct import check then hit missing `cbor2`, confirming the local environment is not a vLLM dev/test environment
 - GB10 serving verification: `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md` proves the fork-derived AEON image serves Qwen3.6 NVFP4+DFlash with CUDA graphs and DFlash after dependency alignment.
-- remaining verification: clean fork wheel/container without AEON FA2 binary, in-container native target audit, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
+- remaining verification: clean fork wheel/container using `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` plus an ABI-matched FA2 build, in-container native target/JIT audit, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
 
 SGLang SM12x FP4 KV gate and alias patch:
 

@@ -323,6 +323,11 @@
   - backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, and `1,251,446` KV tokens.
   - compact decode: `47.22 tok/s` short, `58.88 tok/s` medium, `61.62 tok/s` long-prefill.
   - interpretation: this is a passing fork-derived vLLM Qwen serving row, but not clean fork packaging and not native `sm_121a` target proof because it still depends on AEON's FA2 binary and only host-side audits were captured.
+- Added vLLM clean-packaging hook and in-container target/JIT audit tooling.
+  - fork commit: `jethac/vllm@db4b210c1`
+  - new vLLM env knob: `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1`, which skips extracting bundled FA2/FA3 extensions from a precompiled wheel while preserving the rest of the precompiled extension set
+  - campaign scripts: `scripts/run_vllm_incontainer_target_audit.sh` and `scripts/cuda_artifact_arch_audit.py`
+  - prior in-container audit interpretation: the passing `jethac/vllm@6804e1b` Qwen image has GB10 runtime evidence but no inspected `sm_121`/`sm_121a` CUDA object evidence, so the next vLLM image must replace AEON FA2 with an ABI-matched clean build and rerun the no-think Qwen row.
 - Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
   - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.

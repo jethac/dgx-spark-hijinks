@@ -58,7 +58,7 @@ From the initial personal Gemma 4 benchmark run:
 To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
-- In-container native-target audit for the passing `jethac/vllm` Qwen3.6 NVFP4+DFlash row.
+- Clean fork CUDA/FA2 build for the passing `jethac/vllm` Qwen3.6 NVFP4+DFlash row. The in-container audit is done and found GB10 runtime evidence, but no inspected `sm_121`/`sm_121a` CUDA object evidence in that AEON-derived image.
 - AEON Gemma and Qwen3.6 NVFP4+DFlash are now measured locally, and the derived `jethac/vllm` Qwen row passes; the rows still use AEON containers/checkpoints and do not prove clean fork packaging.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.

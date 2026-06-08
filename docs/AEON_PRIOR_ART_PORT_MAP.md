@@ -12,7 +12,7 @@ Primary sources checked:
 - `https://github.com/AEON-7/Qwen3.6-NVFP4-DFlash/tree/main/patches`
 - `https://github.com/AEON-7/Gemma-4-26B-A4B-it-Uncensored-NVFP4`
 - `https://github.com/AEON-7/vllm-dflash`
-- current forks: `jethac/vllm@6804e1b`, `jethac/sglang@98ad46961`, `jethac/flashinfer@e152cf4d`
+- current forks: `jethac/vllm@db4b210c1`, `jethac/sglang@98ad46961`, `jethac/flashinfer@e152cf4d`
 
 ## Rules
 
@@ -87,7 +87,7 @@ AEON's DFlash result is the main single-stream multiplier, but the port story is
 1. SGLang Gemma NVFP4-weight serving with ordinary KV.
 2. SGLang graph-compatible FP4 KV after-row with quality checks; current overlay row proves capacity but not usable speed.
 3. SGLang DFlash or EAGLE row on a Qwen-class model if ordinary serving is stable.
-4. Clean `jethac/vllm` packaging and in-container native-target audit for Qwen3.6 NVFP4+DFlash.
+4. Clean `jethac/vllm` packaging for Qwen3.6 NVFP4+DFlash using the precompiled FA2/FA3 skip knob, followed by in-container native-target/JIT audit.
 5. llama.cpp larger Qwen3/Qwen3.6 GGUF rows.
 6. llama.cpp native NVFP4/MXFP4 GGUF tensor-core proof, separate from Q4_0/Q4_K serving.
 7. llama.cpp live native loglikelihood task proof before paper-comparable GGUF accuracy claims.
@@ -107,7 +107,7 @@ Do not spend time porting these directly:
 
 ## Next Proof Order
 
-1. Run an in-container binary/JIT target audit for the passing `jethac/vllm` Qwen36 image, then remove the AEON FA2 binary dependency if possible.
+1. Build a clean `jethac/vllm` Qwen36 image with `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1`, replace the AEON FA2 binary dependency with an ABI-matched FA2 build, then rerun the no-think serving row and in-container binary/JIT target audit.
 2. Run `scripts/nvfp4_checkpoint_audit.py` on any NVFP4 Qwen/Gemma checkpoint before using it as speed evidence or conversion input.
 3. Run the Qwen speed lane for vLLM/SGLang/llama.cpp with `scripts/qwen_speed_lane.py`.
 4. Attempt SGLang Gemma NVFP4-weight serving with ordinary KV.

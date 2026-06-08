@@ -48,7 +48,7 @@
       "plan_ids": [
         "5"
       ],
-      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration, but clean fork packaging and native-target proof remain missing"
+      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration; in-container audit found GB10 runtime evidence but no `sm_121`/`sm_121a` CUDA object evidence; `jethac/vllm@db4b210c1` adds a precompiled-install knob to skip bundled FA2/FA3 so the next image can supply a clean ABI-matched FA2 build"
     },
     {
       "area": "NVFP4 on Spark",
@@ -167,7 +167,7 @@
       "plan_ids": [
         "qwen-speed"
       ],
-      "status": "SGLang Qwen BF16/auto and fp8 rows captured; SGLang FP4 KV now passes quality only with graph capture disabled by default but still needs matched capacity/throughput benchmarking; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` derived AEON Qwen row passes at 47.22/58.88/61.62 tok/s but still lacks clean fork packaging and native-target proof; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
+      "status": "SGLang Qwen BF16/auto and fp8 rows captured; SGLang FP4 KV now passes quality only with graph capture disabled by default but still needs matched capacity/throughput benchmarking; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` derived AEON Qwen row passes at 47.22/58.88/61.62 tok/s but still lacks clean fork packaging and native-target proof; `jethac/vllm@db4b210c1` prepares the clean FA2 packaging experiment; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
     }
   ],
   "missing_issue_plan_ids": [],

@@ -201,7 +201,54 @@ Caveats:
 - This proves a `jethac/vllm` fork can serve the AEON Qwen3.6 NVFP4+DFlash row on GB10, but it is still an AEON-derived container recipe.
 - The passing image depends on AEON's FA2 binary, so it is not a clean fork wheel/container proof.
 - The server still warns that the selected FP4 path uses Marlin weight-only FP4 rather than native FP4 compute.
-- The host-side `.so` audit could not import container-local packages, and the build-target audit found no accepted native `sm_121` or `sm_121a` target strings. The next proof needs an in-container binary/JIT audit.
+- The host-side `.so` audit could not import container-local packages, and the build-target audit found no accepted native `sm_121` or `sm_121a` target strings. The follow-up in-container binary audit below closes this as functional compatibility evidence, not native Spark target proof.
+
+## 2026-06-08 In-Container Target Audit
+
+Artifact: `results/jethac_qwen36_dflash_aeonfa2_incontainer_target_audit_20260608.md`.
+
+The passing derived Qwen image was inspected from inside the container rather than from host Python:
+
+- image: `jethac-vllm-aeon-q36:6804e1b81-ct017-humming-aeonfa2`
+- runtime device: `NVIDIA GB10`, capability `[12, 1]`, `48` SMs
+- PyTorch arch list: `sm_80`, `sm_90`, `sm_100`, `sm_110`, `sm_120`, `compute_120`
+- vLLM: `0.1.dev1+g6804e1b81` from `/opt/jethac-vllm`
+- FlashInfer: `0.6.9rc1`
+- `cuobjdump` inspected `14` vLLM/FlashInfer package objects
+- objects with `sm_120`: `3`
+- objects with `sm_121`: `0`
+- no inspected object reports `sm_121a`
+- restored AEON FA2 binary reports only `sm_80`
+
+Conclusion: the passing fork-derived Qwen row remains a real serving compatibility result, but it is not native `sm_121` or `sm_121a` proof. The next vLLM proof is a clean fork CUDA/FA2 image without AEON FA2 binary restoration, followed by the same no-think Qwen row and in-container target audit.
+
+Reusable audit command:
+
+```bash
+scripts/run_vllm_incontainer_target_audit.sh \
+  jethac-vllm-aeon-q36:6804e1b81-ct017-humming-aeonfa2 \
+  jethac_qwen36_dflash_aeonfa2_YYYYMMDDTHHMMJST
+```
+
+## 2026-06-08 Clean FA2 Packaging Hook
+
+Fork commit: `jethac/vllm@db4b210c1`.
+
+The vLLM fork now adds `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` for editable installs that use `VLLM_USE_PRECOMPILED=1`. When set, setup still extracts the normal precompiled vLLM extension set but skips bundled `_vllm_fa2_C.abi3.so` and `_vllm_fa3_C.abi3.so`.
+
+Purpose: build the next derived Qwen image without restoring AEON's FA2 binary or accidentally extracting a precompiled FA2 extension with the wrong PyTorch/CUDA ABI. The image still needs an ABI-matched FA2 build or supplied extension before it can be a clean serving proof.
+
+Next image shape:
+
+```bash
+VLLM_USE_PRECOMPILED=1 \
+VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1 \
+VLLM_MAIN_CUDA_VERSION=13.0 \
+VLLM_PRECOMPILED_WHEEL_COMMIT=4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa \
+python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+```
+
+Then install or build the FA2 extension against the container's actual Torch/CUDA ABI, rerun the no-think Qwen row, and run `scripts/run_vllm_incontainer_target_audit.sh` against the resulting image after a warmed request.
 
 ## 2026-06-08 Gemma 26B Result
 

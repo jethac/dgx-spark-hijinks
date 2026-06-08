@@ -8,7 +8,7 @@ Qwen is a first-class Spark target alongside Gemma, not a secondary check. Gemma
 
 | runtime | row | status |
 |---|---|---|
-| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on the AEON image. A derived `jethac/vllm@6804e1b` row also passes at `47.22`, `58.88`, and `61.62 tok/s`, but still depends on AEON's FA2 binary and lacks native-target proof |
+| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on the AEON image. A derived `jethac/vllm@6804e1b` row also passes at `47.22`, `58.88`, and `61.62 tok/s`, but still depends on AEON's FA2 binary and lacks native-target proof. Fork head `db4b210c1` adds the precompiled FA2/FA3 skip knob for the next clean-image attempt |
 | SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
@@ -32,11 +32,12 @@ Then test our forked stack:
 Current vLLM fork state:
 
 - branch: `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a`
-- commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- passing row commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- current fork head: `db4b210c1`
 - source coverage: AEON lazy import fallback, CUDA graph alignment, Qwen3.5/3.6 text registry, hybrid KV `block_size=None` handling, Mamba block-size fallback, and text-only M-RoPE fallback
 - source artifact: `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - passing fork-derived serving artifact: `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md`
-- image caveat: the passing container aligns `compressed-tensors==0.17.0`, adds `humming-kernels==0.1.4`, and restores AEON's FA2 binary after a PyTorch ABI mismatch. It is fork runtime parity, not clean fork packaging.
+- image caveat: the passing container aligns `compressed-tensors==0.17.0`, adds `humming-kernels==0.1.4`, and restores AEON's FA2 binary after a PyTorch ABI mismatch. It is fork runtime parity, not clean fork packaging. The next image should use `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` and supply an ABI-matched FA2 build instead.
 
 Current local setup:
 
