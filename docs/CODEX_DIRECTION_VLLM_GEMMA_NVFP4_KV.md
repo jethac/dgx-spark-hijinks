@@ -235,14 +235,21 @@ explain byte-like BF16 output. The next smallest experiment is to force a fresh 
 paged-prefill JIT namespace, clear the FlashInfer JIT cache, and rerun the exact Gemma 3
 wrapper-boundary probe before touching kernel math.
 
-Patch staged (2026-06-09): `jethac/flashinfer@3db181f4`
+JIT URI patch result (2026-06-09): `jethac/flashinfer@3db181f4`
 (`spark/hijinks-020-nvfp4-jit-uri`) adds that namespace split by naming generated KV cache
 modules from the logical KV C++ type (`fp4x2_e2m1` for `__nv_fp4x2_e2m1`) rather than the
 carrier dtype (`u8`). It also emits a batch-prefill static assertion that FP4 KV modules
 build with `DTypeKV=__nv_fp4x2_e2m1`. Evidence packet:
-`results/vllm_gemma3_27b_flashinfer_nvfp4_jit_uri_patch_20260609.md`; live rerun packet:
-`tasks/vllm_gemma3_flashinfer_nvfp4_jit_uri_rerun_packet_20260609.md`. This is not blessed
-until the Gemma 3 wrapper-boundary probe is rerun on GB10 with FlashInfer JIT cache cleared.
+`results/vllm_gemma3_27b_flashinfer_nvfp4_jit_uri_patch_20260609.md`; live rerun:
+`results/vllm_gemma3_27b_jituri_20260609T0319JST_summary.md`. The rerun proves the URI
+patch is active (`prefill_uri_has_fp4x2=true`, `prefill_uri_has_u8=false`) and that the
+server JIT-builds `121a` batch-prefill modules under a `dtype_kv_fp4x2_e2m1` namespace.
+Quality still fails, and traced `flashinfer_wrapper_prefill_post` / `flashinfer_attn_output`
+values remain byte-like BF16 (`max=255.0`, means around `124..130`). Therefore stale
+`dtype_kv_u8` module naming is falsified as the root cause. Next vLLM/FlashInfer action is
+inside FlashInfer's paged-prefill FP4-KV read/convert path: audit the conversion from
+packed `__nv_fp4x2_e2m1` plus FP8 scales into BF16 attention values, using the active-page
+replay as the signed reference.
 
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale

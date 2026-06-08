@@ -71,30 +71,41 @@ has_fp4_name=true
 has_u8_name=false
 ```
 
-## Required Live Rerun
+## Live Rerun Result
 
-Rerun the existing Gemma 3 wrapper-boundary packet with:
+Live rerun:
 
-- vLLM fork at the current `third_party/vllm` pointer;
-- FlashInfer fork at `jethac/flashinfer@3db181f4`;
-- FlashInfer JIT cache cleared before server start;
-- `FLASHINFER_JIT_VERBOSE=1` enabled if practical;
-- the same wrapper-boundary / active-page trace env used in
-  `results/vllm_gemma3_27b_wrapper_trace_20260609T0148JST_summary.md`.
+```text
+results/vllm_gemma3_27b_jituri_20260609T0319JST_summary.md
+```
 
-Green outcomes:
+Outcome: red, and specifically red outcome 2 from the original plan.
 
-1. server log or JIT path proves the batch-prefill module name contains
-   `dtype_kv_fp4x2_e2m1`;
-2. generated config contains the FP4 static assertion;
-3. Gemma 3 first-token output becomes quality-correct against the fp8 comparator, or at
-   least the wrapper output becomes signed/small instead of byte-like.
+The accepted rerun reached readiness after disabling FlashInfer sampling with
+`VLLM_USE_FLASHINFER_SAMPLER=0` to avoid a source-overlay side-path sampling failure.
+FlashInfer attention and NVFP4-KV stayed selected. The import probe and server log prove
+the paged-prefill module used the explicit FP4 namespace:
 
-Red outcomes:
+```text
+prefill_uri_has_fp4x2=true
+prefill_uri_has_u8=false
+cached_ops/.../batch_prefill_with_kv_cache_dtype_q_bf16_dtype_kv_fp4x2_e2m1_...
+```
 
-1. the module name is still `dtype_kv_u8` or an AOT path bypasses the new JIT namespace;
-2. the wrapper output remains byte-like even with a fresh `fp4x2_e2m1` module;
-3. the static assertion fails, proving the module is still being generated with raw `uint8_t`.
+Quality did not recover. The first-token probe still produced unrelated tokens
+(`Stephanie`, `ilacion`, `Kiara`) for the three simple prompts, and the tensor trace still
+shows byte-like BF16 attention output:
 
-If red outcome 2 happens, the next fix moves into `compute_sfm_v()` /
-`vec_cast<nv_bfloat16, __nv_fp4x2_e2m1>` rather than vLLM page pairing.
+```text
+flashinfer_wrapper_prefill_post layer 0: max=255.00 mean=130.06
+flashinfer_wrapper_prefill_post layer 5: max=255.00 mean=127.73
+flashinfer_wrapper_prefill_post layer 0: max=255.00 mean=126.61
+flashinfer_wrapper_prefill_post layer 5: max=255.00 mean=128.94
+flashinfer_wrapper_prefill_post layer 0: max=255.00 mean=123.72
+flashinfer_wrapper_prefill_post layer 5: max=255.00 mean=129.28
+```
+
+Conclusion: stale `dtype_kv_u8` JIT naming is falsified as the root cause for the Gemma 3
+NVFP4-KV failure. The next fix moves into FlashInfer's paged-prefill FP4-KV read/convert
+path, especially the conversion from packed `__nv_fp4x2_e2m1` plus FP8 scale factors to
+BF16 attention values.

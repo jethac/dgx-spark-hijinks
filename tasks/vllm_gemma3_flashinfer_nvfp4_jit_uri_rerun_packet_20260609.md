@@ -1,5 +1,8 @@
 # vLLM Gemma 3 FlashInfer NVFP4 JIT URI Rerun Packet, 2026-06-09
 
+Status: completed red. Result summary:
+`results/vllm_gemma3_27b_jituri_20260609T0319JST_summary.md`.
+
 Purpose: rerun the Gemma 3 27B wrapper-boundary failure with
 `jethac/flashinfer@3db181f4`, which gives packed NVFP4 KV modules a distinct
 `fp4x2_e2m1` JIT namespace.
@@ -82,3 +85,7 @@ The summary must answer:
 - If module naming does not change: fix the source overlay/JIT-cache path first.
 - If naming changes but `out_after` stays byte-like: move next to FlashInfer
   `compute_sfm_v()` / BF16 FP4 conversion instrumentation.
+
+Live decision: module naming changed and the kernel JIT-built under
+`dtype_kv_fp4x2_e2m1`, but `out_after` stayed byte-like and quality stayed red. Proceed to
+FlashInfer paged-prefill FP4-KV conversion instrumentation.
