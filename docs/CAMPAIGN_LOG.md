@@ -323,6 +323,16 @@
   - backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, and `1,251,446` KV tokens.
   - compact decode: `47.22 tok/s` short, `58.88 tok/s` medium, `61.62 tok/s` long-prefill.
   - interpretation: this is a passing fork-derived vLLM Qwen serving row, but not clean fork packaging and not native `sm_121a` target proof because it still depends on AEON's FA2 binary and only host-side audits were captured.
+- Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
+  - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
+  - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.
+  - graph-enabled negative artifacts: `results/sglang_qwen_fp4kv_decode_dtype_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_decode_dtype_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_decode_dtype_bad_output_20260608_server.log`.
+  - layout probe: `results/sglang_nvfp4_kv_layout_probe_20260608.json`; both 4D and 3D scale-factor forms matched a faithful dequant reference at cosine `0.9999957`, so scale-rank was not the serving corruption root cause.
+  - eager/no-graph positive artifacts: `results/sglang_qwen_fp4kv_eager_only_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_eager_only_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_eager_only_server_20260608.log`.
+  - auto-safe default artifacts: `results/sglang_qwen_fp4kv_autosafe_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_autosafe_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_autosafe_server_20260608.log`.
+  - result: the fork now disables CUDA graph and piecewise graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. Default launch logs the disable warning, returns `spark-ok`, and raw generation gives a sane `2+2 is 4` answer.
+  - interpretation: SGLang FP4 KV is correctness-safe enough for a matched fp8-vs-fp4 capacity row, but graph-enabled FP4 KV remains a separate corruption bug and no speed claim has been banked.
+  - related upstream note: TensorRT-LLM #11368 documents a separate GB10 FP4 GEMM problem where SM120 tile configs exceed GB10's 99 KiB shared-memory limit, explaining why SM12x dispatch/JIT targeting alone may not improve MoE-shaped FP4 GEMM performance.
 
 ## First Benchmark Campaign Summary
 

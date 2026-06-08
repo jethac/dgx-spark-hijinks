@@ -1,0 +1,55 @@
+{
+  "schema": "sglang-nvfp4-kv-layout-probe/v1",
+  "flashinfer_version": "0.6.10+cf494fca.nv26.05.cu132.50619265",
+  "torch_version": "2.12.0a0+5aff3928d8.nv26.05",
+  "device": "NVIDIA GB10",
+  "capability": [
+    12,
+    1
+  ],
+  "shape": {
+    "tokens": 40,
+    "query_heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "page_size": 1
+  },
+  "packed_kv_shape": [
+    40,
+    4,
+    64
+  ],
+  "flat_scale_shape": [
+    40,
+    4,
+    8
+  ],
+  "results": [
+    {
+      "sf_rank": 4,
+      "sf_shape": [
+        40,
+        1,
+        4,
+        8
+      ],
+      "cosine_vs_dequant": 0.9999957084655762,
+      "relative_error_vs_dequant": 0.012937873344908217,
+      "finite": true,
+      "passed": true
+    },
+    {
+      "sf_rank": 3,
+      "sf_shape": [
+        40,
+        4,
+        8
+      ],
+      "cosine_vs_dequant": 0.9999957084655762,
+      "relative_error_vs_dequant": 0.012937873344908217,
+      "finite": true,
+      "passed": true
+    }
+  ],
+  "all_ok": false
+}
