@@ -387,6 +387,22 @@
   - FP4 KV: `5,519,481` KV tokens, auto-safe no-graph policy, `1.779x` fp8 capacity, and `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`.
   - negative result: standardized FP4 raw `2+2` and compact benchmark content fail quality, so this is a capacity proof rather than a blessed serving or speed row.
 
+- Set standing vLLM-lane direction toward Gemma 4 (and earlier Gemmas) on Spark with NVFP4 KV.
+  - doc: `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`
+  - framing: Gemma's serving blocker and the NVFP4-KV blocker are the same blocker — heterogeneous/dual head dims (local `D=256`, global `D=512`) plus alternating SWA force `TRITON_ATTN`, so the native FA2 `sm_121a` path never engages and the FA2 NVFP4-KV path fails Gemma global `D=512` at `prefill.cuh:3215` while passing local `D=256`.
+  - sequencing: no vLLM image builds in the dev loop; iterate via standalone FlashInfer kernel harness (the keystone `D=512` head-dim-guard-vs-SMEM-overflow diagnosis) and source overlay on the proven `cleanfa2-patchedfa2-cutlass` image. Image bake is the final gated deliverable (Objective E), not a dev step.
+  - SM120 ride-along: build on hikarioyama's SM120 prior art and keep patches SM12x-family-shaped so the eventual PR serves the larger RTX PRO 6000 audience (vllm #31085). Emit both `sm_120a` and `sm_121a` (arch-specific; `120f` cannot emit native FP4 MMA per #3170). `a` cubins are not cross-capability portable, so `sm_120a` cannot run on GB10 — SM120 stays compiled-but-unclaimed, validated by hikari, not us.
+  - verified (NVIDIA Blackwell Tuning Guide, 2026-06): RTX PRO 6000 = `sm_120`/CC 12.0, GB10 = `sm_121`/CC 12.1; both CC 12.x have 128 KB SMEM/SM and a 99 KB/thread-block limit, vs B200 CC 10.0 at 228 KB/SM. So TRT-LLM #11368's >99 KiB FP4 GEMM tile overflow is a 12.x-family constraint, not a GB10 quirk — a 99 KB-fitting tile fix is correct for both sm_120 and sm_121.
+  - tracker: added an "Upstream Issues Referenced" section to `docs/ISSUE_TRACKER.md` (vllm #31085, vllm #31128, TRT-LLM #11368) and a native-FP4 target note; linked the direction doc from `README.md`.
+
+- Set standing SGLang-lane direction: convert the proven NVFP4-KV capacity row into a blessed quality row.
+  - doc: `docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md`
+  - framing: SGLang already proves ~1.78× fp8 KV capacity on GB10, but output corrupts even in eager/no-graph mode. The FlashInfer FA2 NVFP4-KV kernel is correct standalone (`e152cf4d`, cosine ≥ 0.99999946) and the layout probe cleared scale-rank (dequant cosine 0.9999957), so the bug is in SGLang's integration of a correct kernel, not the kernel math.
+  - prime suspect: the turn-1 convention mismatch — the SGLang patch routes SM12x through `nvfp4_kv_quantize` (encode/multiply convention), but the GB10-runnable FlashInfer FA2 consumer may expect the `fp4_quantize` decode/divide convention; mismatch = off-by-`s_enc²` garbage, which matches the symptom. First decisive test: swap SM12x to `fp4_quantize` + inverted global scale and check whether raw `2+2` returns `4` in eager mode.
+  - objectives: (A) root-cause eager corruption via a SGLang-vs-standalone-FlashInfer numerical bridge, testing convention → V-scale layout (SGLang symmetric-linear, not vLLM B2 swizzle) → calibration → decode kernel; (B) confirm the force-compiled FP4 decode kernel is numerically correct, not just building; (C) fix CUDA-graph-capture corruption so capacity isn't stuck on the slow no-graph path; (D) land a blessed matched fp8-vs-FP4 row with quality passing; (E) SWA/Gemma later (Qwen/non-SWA first).
+  - methodology: no image builds in the dev loop — iterate via editable source overlay on stock `nvcr.io/nvidia/sglang:26.05-py3` and use the standalone FlashInfer reference as ground truth.
+  - tracker: linked the direction doc from `README.md`; SGLang NVFP4 KV remains issue #18.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

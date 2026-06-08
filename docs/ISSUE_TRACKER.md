@@ -26,6 +26,23 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 | `qwen-speed` | Qwen speed and capacity benchmarks | SGLang Qwen BF16/auto and fp8 rows captured; SGLang FP4 KV capacity row captures `1.779x` fp8 capacity but fails quality; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={"enable_thinking": false}` is set; `jethac/vllm@6804e1b` derived AEON Qwen row passes at 47.22/58.88/61.62 tok/s but still lacks native FP4 weight/MoE proof; `jethac/vllm@a919d635d` clean FA2 row passes at 61.07/56.97/60.10 tok/s with separate `sm_121a` FA2 cubin proof; `scripts/qwen_speed_lane.py` records already-running Qwen servers | [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 | `vllm-fa2-sm121a` | vLLM FlashAttention FA2 native-target proof | `jethac/flash-attention@spark/hijinks-021-fa2-sm121a` adds SM121/SM121a to the vLLM-pinned FA2 CMake path and is wired as `third_party/vllm-flash-attention`; clean image build/import/cuobjdump proof still pending | [#21](https://github.com/jethac/dgx-spark-hijinks/issues/21) |
 
+## Upstream Issues Referenced
+
+External issues we track because they gate or motivate Spark/SM12x work. These are not
+our issues; they record where the upstream fix or demand lives.
+
+| upstream issue | relevance |
+|---|---|
+| [vllm-project/vllm #31085](https://github.com/vllm-project/vllm/issues/31085) | Add SM120 (RTX 6000/5000 Blackwell) native NVFP4 MoE kernels — concrete upstream demand for the SM12x-family-shaped NVFP4 work; the RTX PRO 6000 audience that makes our hikari-derived patches mergeable beyond Spark |
+| [vllm-project/vllm #31128](https://github.com/vllm-project/vllm/issues/31128) | vLLM SM121 support tracking |
+| [TensorRT-LLM #11368](https://github.com/NVIDIA/TensorRT-LLM/issues/11368) | SM120 CUTLASS FP4 GEMM tiles exceed the CC-12.x 99 KB/block shared-memory limit; confirmed family-wide (RTX PRO 6000 sm_120 and GB10 sm_121 share it), so a 99 KB-fitting tile fix serves both |
+
+Native-FP4 target note: RTX PRO 6000 = `sm_120` (CC 12.0); GB10 = `sm_121` (CC 12.1).
+Both need arch-specific (`a`) cubins for native block-scaled FP4 MMA — `120f`/`121f`
+family targets cannot emit it. `a` cubins are not portable across compute capabilities,
+so `sm_120a` cannot run on GB10; SM120 is a compiled-but-unclaimed target validated by
+hikarioyama, not by us. See `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`.
+
 ## Triage Rules
 
 - Issues should contain a reproduction command or the exact missing evidence.
