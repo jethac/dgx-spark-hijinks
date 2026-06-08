@@ -106,6 +106,20 @@ hook is request-order/cache-state only: run the
 `tasks/sglang_qwen_fp4kv_request_order_probe_20260608.md` packet to prove whether the
 failure follows the second request / cached prefix, independent of endpoint.
 
+Request-order trace result
+(`results/sglang_qwen_fp4kv_request_order_20260608T2340JST_summary.md`):
+`scripts/sglang_fp4_request_order_probe.py` proves the failure is endpoint-independent.
+OpenAI-first/native-second fails on the native call (`cached_tokens=55`, `ark`/`838`);
+native-first/OpenAI-second fails on the OpenAI call (`cached_tokens=55`, `ark`).
+Flush-between and namespace isolation both keep `cached_tokens=0` and both endpoints emit
+`**`. OpenAI `cache_salt + extra_key` and native `extra_key` are real radix namespaces; the
+trace shows distinct namespace strings and no prefix hit. The remaining blocker is now
+FP4 cached-prefix quality/reuse itself. Prior traces proved the bytes, scale bytes,
+paged-prefix read, LSE convention, and merge are internally consistent for the sampled
+failure, so the next fix/probe should compare full dense prefill versus FP4 cached-prefix
+attention quality and test whether better global scales or a selective no-reuse policy is
+needed.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

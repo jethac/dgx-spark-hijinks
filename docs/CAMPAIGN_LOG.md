@@ -935,6 +935,18 @@
     are not the distinguishing factor; next run
     `tasks/sglang_qwen_fp4kv_request_order_probe_20260608.md`.
 
+- Added and ran SGLang FP4-KV request-order probe.
+  - script: `scripts/sglang_fp4_request_order_probe.py`
+  - artifact: `results/sglang_qwen_fp4kv_request_order_20260608T2340JST_summary.md`
+  - parsed artifact: `results/sglang_qwen_fp4kv_request_order_20260608T2340JST_analysis.json`
+  - result: OpenAI-first/native-second fails on native with `cached_tokens=55` and `ark`;
+    native-first/OpenAI-second fails on OpenAI with `cached_tokens=55` and `ark`.
+  - controls: flush-between and distinct `extra_key`/`cache_salt` namespaces both force
+    `cached_tokens=0` and both endpoints emit `**`.
+  - interpretation: the remaining SGLang blocker is endpoint-independent FP4 cached-prefix
+    reuse. The next fix/probe is dense full-prefill versus FP4 cached-prefix quality,
+    better calibration, or a selective no-reuse policy.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

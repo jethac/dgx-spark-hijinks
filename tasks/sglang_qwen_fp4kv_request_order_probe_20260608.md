@@ -2,6 +2,9 @@
 
 Run this on the GB10 host after the quant-error trace.
 
+Status: completed in
+`results/sglang_qwen_fp4kv_request_order_20260608T2340JST_summary.md`.
+
 Purpose: prove whether the FP4-KV OpenAI/native split is actually request-order and radix
 reuse state. The prior rows show:
 

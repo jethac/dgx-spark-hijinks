@@ -1,0 +1,155 @@
+{
+  "run_id": "sglang_qwen_fp4kv_request_order_20260608T2340JST",
+  "sglang_commit": "d4fe78078633e70fde968c58032a675c72f13bc1",
+  "token_summary": [
+    {
+      "name": "baseline_openai_then_native",
+      "openai_chat": {
+        "rid": "openai-first",
+        "token": "**",
+        "token_id": null,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": null,
+        "cache_salt": null
+      },
+      "native_generate": {
+        "rid": "native-second",
+        "token": "ark",
+        "token_id": 838,
+        "logprob": -0.5874708890914917,
+        "cached_tokens": 55,
+        "extra_key": null,
+        "cache_salt": null
+      }
+    },
+    {
+      "name": "reverse_native_then_openai",
+      "openai_chat": {
+        "rid": "openai-second",
+        "token": "ark",
+        "token_id": null,
+        "logprob": -0.5874708890914917,
+        "cached_tokens": 55,
+        "extra_key": null,
+        "cache_salt": null
+      },
+      "native_generate": {
+        "rid": "native-first",
+        "token": "**",
+        "token_id": 334,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": null,
+        "cache_salt": null
+      }
+    },
+    {
+      "name": "flush_between_openai_native",
+      "openai_chat": {
+        "rid": "openai-flush-first",
+        "token": "**",
+        "token_id": null,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": null,
+        "cache_salt": null
+      },
+      "native_generate": {
+        "rid": "native-after-flush",
+        "token": "**",
+        "token_id": 334,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": null,
+        "cache_salt": null
+      }
+    },
+    {
+      "name": "namespace_isolation_extra_key",
+      "openai_chat": {
+        "rid": "openai-namespace-a",
+        "token": "**",
+        "token_id": null,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": "fp4-order-openai",
+        "cache_salt": "fp4-order-openai"
+      },
+      "native_generate": {
+        "rid": "native-namespace-b",
+        "token": "**",
+        "token_id": 334,
+        "logprob": -0.7235294580459595,
+        "cached_tokens": 0,
+        "extra_key": "fp4-order-native",
+        "cache_salt": null
+      }
+    }
+  ],
+  "prompt": {
+    "mode": "hf_apply_chat_template",
+    "model_path": "Qwen/Qwen2.5-1.5B-Instruct",
+    "token_count": 56,
+    "token_ids": [
+      151644,
+      8948,
+      198,
+      2610,
+      525,
+      1207,
+      16948,
+      11,
+      3465,
+      553,
+      54364,
+      14817,
+      13,
+      1446,
+      525,
+      264,
+      10950,
+      17847,
+      13,
+      151645,
+      198,
+      151644,
+      872,
+      198,
+      7985,
+      264,
+      63594,
+      14667,
+      5185,
+      25021,
+      1246,
+      311,
+      9593,
+      429,
+      458,
+      444,
+      10994,
+      3538,
+      374,
+      1667,
+      279,
+      10602,
+      22670,
+      63515,
+      13,
+      29734,
+      14175,
+      5904,
+      311,
+      6530,
+      13,
+      151645,
+      198,
+      151644,
+      77091,
+      198
+    ],
+    "token_ids_sha256": "5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517"
+  },
+  "namespace_error": null
+}
