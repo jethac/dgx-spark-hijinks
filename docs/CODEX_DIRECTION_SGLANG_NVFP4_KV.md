@@ -23,9 +23,10 @@ machinery** (prefix reuse / SWA windows), not in plain linear KV. The shared roo
 class remains "packed FP4 KV plus FP8 scales under reuse/windowing," but the
 `f76f80484` write/read trace clears the simplest stale/wrong-page scale-buffer version for
 sampled SGLang pages. **SGLang's job:** prove whether the reused cached-prefix contribution
-is numerically identical to a recomputed FP4 prefix contribution; meanwhile a
-`--disable-radix-cache` row can land a blessed-with-caveat result. Compare with vLLM's SWA
-finding.
+is numerically identical to a recomputed FP4 prefix contribution. A `--disable-radix-cache`
+row is diagnostic/emergency workaround evidence only; it must not be blessed as an FP4-KV
+serving result because prefix reuse is part of the serving behavior the capacity win must
+survive. Compare with vLLM's SWA finding.
 
 Instrumentation head: `jethac/sglang@ce1b6d15e` adds inactive-by-default
 `SGLANG_FP4_KV_TRACE_RADIX=1` logs through `Req.init_next_round_input`,
@@ -119,6 +120,15 @@ paged-prefix read, LSE convention, and merge are internally consistent for the s
 failure, so the next fix/probe should compare full dense prefill versus FP4 cached-prefix
 attention quality and test whether better global scales or a selective no-reuse policy is
 needed.
+
+Cached-prefix top-logprob post-analysis
+(`results/sglang_qwen_fp4kv_cached_prefix_toplogprob_postanalysis_20260608T2346JST.md`):
+the cached-prefix rows are not a small candidate-rank wobble. Baseline and reverse-order
+failures both have `0 / 20` first-token top-logprob token overlap between the no-cache
+first request and the 55-token cached-prefix second request; flush-between and namespace
+isolation rows have `20 / 20` overlap. This keeps selective no-reuse in the diagnostic or
+emergency-workaround bucket only. The accepted fix must preserve FP4 prefix reuse and
+recover the top-logprob distribution.
 
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
