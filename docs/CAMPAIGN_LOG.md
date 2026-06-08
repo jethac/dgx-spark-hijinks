@@ -725,6 +725,23 @@
   - next gate: rerun the endpoint probe inside the SGLang container or another environment
     with `transformers`, with explicit endpoint labels or split request runs.
 
+- Captured the paired SGLang Qwen FP4-KV OpenAI/native first-token dump.
+  - artifact: `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_summary.md`
+  - endpoint probe: `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST.json`
+  - dump summary:
+    `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_dump_summary.md`
+  - result: running the probe inside the SGLang container fixed the missing-`transformers`
+    host failure and completed both `/v1/chat/completions` and `/generate`.
+  - finding: prompt reconciliation still passes with the same 56-token prompt hash, but
+    OpenAI returns `**` while native returns `ark` / token id `838`.
+  - localization: candidate prefill dump groups already diverge before logits
+    preprocessing: OpenAI argmax `334`, native argmax `838`; native argmax `838` matches
+    the endpoint-visible native first token. `_preprocess_logits()` is not the primary
+    cause.
+  - next gate: compare fp8 vs FP4 under the same OpenAI/native sequencing and add explicit
+    endpoint request tags or split runs to isolate endpoint metadata, scheduler/cache state,
+    or FP4-KV endpoint-specific request handling.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

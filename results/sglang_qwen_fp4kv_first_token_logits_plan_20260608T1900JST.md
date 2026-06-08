@@ -213,3 +213,21 @@ Live partial result:
 - next correction: run the probe in the SGLang container or another environment with
   `transformers`, and add endpoint labels or separate request runs so OpenAI and native
   dumps can be paired explicitly.
+
+Live paired result:
+
+- artifact: `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_summary.md`
+- endpoint probe:
+  `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST.json`
+- compact dump summary:
+  `results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_dump_summary.md`
+- result: running the endpoint probe inside `nvcr.io/nvidia/sglang:26.05-py3` fixed the
+  missing-`transformers` host failure and completed both `/v1/chat/completions` and
+  `/generate`.
+- finding: prompt reconciliation still passes with a shared 56-token prompt hash, but
+  first-token output differs (`**` for OpenAI Chat, `ark` / token id `838` for native
+  `/generate`). The corresponding prefill dump candidates already differ before logits
+  preprocessing: OpenAI candidate argmax `334`, native candidate argmax `838`.
+- interpretation: the first-token split is earlier than `_preprocess_logits()`; keep SGLang
+  FP4 KV red and focus the next probe on endpoint metadata / scheduler state / FP4-KV
+  endpoint-specific request handling.
