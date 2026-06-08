@@ -633,6 +633,32 @@
     `cu130` metadata paths. The next vLLM step is to rebase the geometry overlay onto a
     source/precompiled-wheel pair with published CUDA 13 metadata before running fp8.
 
+- Rebased the vLLM Gemma 3 geometry hook onto the CUDA-13-proven Qwen lane.
+  - vLLM fork commit: `jethac/vllm@25ab073ef87f4443616fbaf00a2f6f09a9087c1f`
+  - branch: `jethac/vllm:spark/hijinks-020-aeon-qwen-dflash-sm121a`
+  - precompiled wheel base: `4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa`
+  - result: the env-gated `SPARK_GEMMA_KV_GEOMETRY`/`SPARK_GEMMA_KV_SPEC` hook now sits on
+    the same line as the clean `a919d635d` Qwen packaging that already built with CUDA 13.
+  - superseded next gate: the setup-only check and fp8 comparator have since run; the live
+    gate is now the matching Gemma 3 NVFP4 row.
+
+- Cleared the vLLM Gemma 3 Rung 1 setup-only packaging gate.
+  - artifact: `results/vllm_gemma3_27b_rung1_setup_only_20260608T1855JST.md`
+  - result: the repaired source/wheel pair clears the prior metadata 404, but the first
+    setup probe allowed dependency resolution and downgraded Torch/FlashInfer.
+  - caveat: that downgraded dependency state is rejected; live rows now use `--no-deps` and
+    copy the ABI-matched FA2 extension from `/opt/jethac-vllm`.
+  - superseded next gate: the fp8 comparator has since run; the live gate is now the
+    matching Gemma 3 NVFP4 row.
+
+- Captured the next SGLang Qwen FP4-KV quality localization step from the sidecar lane.
+  - artifact: `results/sglang_qwen_fp4kv_first_token_logits_plan_20260608T1900JST.md`
+  - result: the next proof is a one-token FP4-only endpoint split with
+    `scripts/sglang_fp4_first_token_dump_patch.yaml`, dumping `next_token_logits` before and
+    after `ModelRunner._preprocess_logits()` plus request metadata.
+  - next gate: run the dump against the existing no-graph FP4 Qwen source-overlay server and
+    compare whether divergence is present before logits preprocessing.
+
 - Added the llama.cpp NVFP4 correctness/speed run packet.
   - packet: `tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md`
   - doc update: `docs/GGUF_LLAMA_CPP_STATUS.md`
@@ -640,6 +666,39 @@
     while correctness versus BF16/Q8 and matched PP/TG speed remain explicitly unproven.
   - next gate: run the packet on the Linux GB10 host with a same-lineage BF16 or Q8_0
     Qwen3.6 reference GGUF.
+
+- Tightened the vLLM Gemma 3 Rung 1 install path after rejecting a dependency downgrade.
+  - artifact updated: `results/vllm_gemma3_27b_rung1_setup_only_20260608T1855JST.md`
+  - result: the repaired source/wheel pair still clears the prior CUDA 13 metadata 404, but
+    the dependency-resolving setup probe downgraded Torch/FlashInfer and is no longer an
+    accepted runtime environment.
+  - fix: the command packet now uses `pip install --no-build-isolation --no-deps -e .`,
+    preserves the clean image dependency stack, copies the ABI-matched FA2 extension from
+    `/opt/jethac-vllm`, and adds `RUN_FP8` so fp8 and NVFP4 rows can be run separately.
+
+- Captured the vLLM Gemma 3 27B Rung 1 fp8 comparator row.
+  - artifact: `results/vllm_gemma3_27b_rung1_fp8_20260608T1924JST.md`
+  - result: Gemma 3 27B text-only serves with fp8 KV and FlashInfer decoder attention.
+  - measured geometry: `62` decoder layers, `52` local SWA layers, `10` full/global layers,
+    uniform `heads=32`, `kv_heads=16`, `head_dim=128`, `head_dim_v=128`, and the expected
+    `0-4 local / 5 full` repeating pattern.
+  - capacity baseline: `882,851` fp8 KV tokens and `6.74x` maximum concurrency at
+    `131,072` tokens/request.
+  - benchmark: all three OpenAI cases completed with unflagged output, around
+    `4.16-4.24 tok/s` decode.
+  - next gate: run the matching NVFP4 row against this baseline.
+
+- Captured the vLLM Gemma 3 27B Rung 1 NVFP4 candidate row.
+  - command: `RUN_FP8=0 RUN_NVFP4=1 bash docs/results/vllm_gemma3_27b_rung1_20260608TCHECKOUTJST_command_packet.sh`
+  - artifact: `results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md`
+  - capacity result: FlashInfer FA2 NVFP4 KV routes on SM12x and reports `1,568,861` KV
+    tokens / `11.97x` concurrency versus fp8 `882,851` / `6.74x`, a `1.777x` pool gain.
+  - speed result: decode is essentially parity with fp8 across the three benchmark cases.
+  - quality result: red. Strict `spark-ok` smoke returns nonsensical mixed-script text, and
+    the benchmark generations are also corrupted. The simple heuristic quality probe is too
+    weak because it did not flag the garbage text.
+  - next gate: add a stronger fp8-vs-NVFP4 correctness/localization probe for vLLM Gemma 3
+    before climbing to the Gemma 4 31B rung.
 
 ## First Benchmark Campaign Summary
 

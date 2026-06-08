@@ -133,7 +133,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `a919d635d` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; clean packaging skips bundled FA2/FA3 and preserves explicit `12.1a` targets; native FA2 proof now depends on patched vLLM FlashAttention |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `25ab073ef` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; clean packaging skips bundled FA2/FA3 and preserves explicit `12.1a` targets; native FA2 proof now depends on patched vLLM FlashAttention; Gemma geometry logging was cherry-picked onto the CUDA-13-proven lane; Gemma 3 27B fp8 comparator serves with measured SWA geometry and `882,851` KV tokens; Gemma 3 NVFP4 routes through FA2 and gives `1.777x` KV capacity but corrupts output |
 | `third_party/vllm-flash-attention` | `vllm-project/flash-attention@dd62dac` | `jethac/flash-attention@spark/hijinks-021-fa2-sm121a` at `7d53245` | submodule checkout | vLLM-pinned FA2 CMake now admits SM121/SM121a for CUDA 13 and FA2 arch selection; build/import/cuobjdump proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` | submodule checkout | SM12x FP4 KV compatibility gates, historical alias fix, pre-capture calibration, and SM120-family writer fallback are under test; clean source overlay reaches graph-enabled startup, but FP4 KV output quality is still corrupted |
 
@@ -185,7 +185,7 @@ vLLM SM12x NVFP4 KV routing patch:
 vLLM Qwen/DFlash SM12x stability patch:
 
 - serving commit: `6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
-- current fork head: `db4b210c1`
+- current fork head: `25ab073ef87f4443616fbaf00a2f6f09a9087c1f`
 - branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-020-aeon-qwen-dflash-sm121a
 - ancestry: based on `8916796bc50926fd61e606718b194a71e2e31a24`, so it preserves the SM12x NVFP4 KV routing/deswizzle work
 - purpose: port the AEON vLLM fixes that apply cleanly to the current fork: lazy fallback import for `_C_stable_libtorch`, speculative-decode CUDA graph capture-size alignment for non-NONE graph modes, Qwen3.5/3.6 text registry entries, hybrid KV `block_size=None` safety, Mamba block-size fallback, and text-only M-RoPE fallback
@@ -193,7 +193,8 @@ vLLM Qwen/DFlash SM12x stability patch:
 - local verification: Python syntax compile and `git diff --check` passed; see `results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md` and `results/vllm_aeon_qwen_patch_port_20260608T0619JST.md`
 - local pytest limitation: targeted pytest collection is blocked in this Windows workspace because `tblib` is not installed; a direct import check then hit missing `cbor2`, confirming the local environment is not a vLLM dev/test environment
 - GB10 serving verification: `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md` proves the fork-derived AEON image serves Qwen3.6 NVFP4+DFlash with CUDA graphs and DFlash after dependency alignment.
-- remaining verification: clean fork wheel/container using `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` plus an ABI-matched FA2 build, in-container native target/JIT audit, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
+- Gemma verification: `results/vllm_gemma3_27b_rung1_fp8_20260608T1924JST.md` proves the `25ab073ef` geometry-hook overlay serves Gemma 3 27B text-only with fp8 KV, FlashInfer attention, measured `62`-layer SWA geometry, `882,851` KV tokens, and unflagged benchmark output. `results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md` proves the matching NVFP4 row routes through FlashInfer FA2 and reaches `1.777x` KV capacity at decode parity, but output is corrupted. The accepted packet uses `--no-deps` and copies the ABI-matched FA2 extension; dependency downgrades are rejected.
+- remaining verification: localize/fix Gemma 3 NVFP4 KV quality, clean fork wheel/container using `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` plus an ABI-matched FA2 build, in-container native target/JIT audit, CUDA graph replay under load, and matched stock-vs-fork throughput/capacity rows
 
 SGLang SM12x FP4 KV gate and alias patch:
 

@@ -15,8 +15,11 @@ Environment:
   GPU_MEMORY_UTILIZATION=0.85
   MAX_MODEL_LEN=131072
   MAX_NUM_BATCHED_TOKENS=4096
-  VLLM_SOURCE_COMMIT=3658ba7123c3eb2211f18a882af1b993112fadb1
-  VLLM_PRECOMPILED_WHEEL_COMMIT=8916796bc50926fd61e606718b194a71e2e31a24
+  VLLM_SOURCE_COMMIT=25ab073ef87f4443616fbaf00a2f6f09a9087c1f
+  VLLM_PRECOMPILED_WHEEL_COMMIT=4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa
+  VLLM_VERSION_OVERRIDE=0.1.dev1+g25ab073ef
+  RUN_FP8=1
+  RUN_NVFP4=1
 EOF
 }
 
@@ -35,8 +38,11 @@ STAMP=${STAMP:-$(date +%Y%m%dT%H%MJST)}
 GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.85}
 MAX_MODEL_LEN=${MAX_MODEL_LEN:-131072}
 MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS:-4096}
-VLLM_SOURCE_COMMIT=${VLLM_SOURCE_COMMIT:-3658ba7123c3eb2211f18a882af1b993112fadb1}
-VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-8916796bc50926fd61e606718b194a71e2e31a24}
+VLLM_SOURCE_COMMIT=${VLLM_SOURCE_COMMIT:-25ab073ef87f4443616fbaf00a2f6f09a9087c1f}
+VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa}
+VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE:-0.1.dev1+g${VLLM_SOURCE_COMMIT:0:9}}
+RUN_FP8=${RUN_FP8:-1}
+RUN_NVFP4=${RUN_NVFP4:-1}
 
 MODEL=google/gemma-3-27b-it
 SERVED_MODEL=gemma3-27b-it
@@ -61,6 +67,9 @@ export MAX_MODEL_LEN=${MAX_MODEL_LEN}
 export MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS}
 export VLLM_SOURCE_COMMIT=${VLLM_SOURCE_COMMIT}
 export VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT}
+export VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE}
+export RUN_FP8=\${RUN_FP8:-${RUN_FP8}}
+export RUN_NVFP4=\${RUN_NVFP4:-${RUN_NVFP4}}
 
 mkdir -p "\${RESULTS_DIR}"
 
@@ -91,6 +100,7 @@ stop_vllm_container() {
 trap 'stop_vllm_container ${FP8_RUN}; stop_vllm_container ${NVFP4_RUN}' EXIT
 
 # Start the fp8 comparator row. Stop this container before starting the NVFP4 row.
+if [[ "\${RUN_FP8}" == "1" ]]; then
 docker rm -f ${FP8_RUN} >/dev/null 2>&1 || true
 docker run -d --gpus all --ipc=host --network=host \\
   --name ${FP8_RUN} \\
@@ -116,13 +126,16 @@ cp ${REPO_IN_CONTAINER}/scripts/flashinfer_source_sitecustomize.py /tmp/spark-si
 export PYTHONPATH="/tmp/spark-sitecustomize:\${PYTHONPATH:-}"
 python3 -m pip install -q setuptools-rust > /results/${FP8_RUN}_pip_bootstrap.log 2>&1
 cd /vllm-src
-VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT='"${VLLM_PRECOMPILED_WHEEL_COMMIT}"' \\
-  python3 -m pip install --no-build-isolation -e . > /results/${FP8_RUN}_editable_install.log 2>&1
+VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT='"${VLLM_PRECOMPILED_WHEEL_COMMIT}"' VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1 VLLM_VERSION_OVERRIDE='"${VLLM_VERSION_OVERRIDE}"' \\
+  python3 -m pip install --no-build-isolation --no-deps -e . > /results/${FP8_RUN}_editable_install.log 2>&1
+cp /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so /vllm-src/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so
 python3 - <<'"'"'PY'"'"' > /results/${FP8_RUN}_import_probe.txt 2>&1
 import json, torch, transformers, vllm, flashinfer
+import vllm.vllm_flash_attn._vllm_fa2_C as fa2_ext
 print(json.dumps({
   "vllm": getattr(vllm, "__version__", None),
   "vllm_file": getattr(vllm, "__file__", None),
+  "vllm_fa2": getattr(fa2_ext, "__file__", None),
   "flashinfer": getattr(flashinfer, "__version__", None),
   "flashinfer_file": getattr(flashinfer, "__file__", None),
   "transformers": getattr(transformers, "__version__", None),
@@ -140,7 +153,6 @@ exec vllm serve ${MODEL} \\
   --max-model-len '"${MAX_MODEL_LEN}"' \\
   --gpu-memory-utilization '"${GPU_MEMORY_UTILIZATION}"' \\
   --max-num-batched-tokens '"${MAX_NUM_BATCHED_TOKENS}"' \\
-  --disable-log-requests \\
   --host 0.0.0.0 \\
   --port 8000
 '
@@ -149,7 +161,7 @@ docker logs -f ${FP8_RUN} > "\${RESULTS_DIR}/${FP8_RUN}_server.log" 2>&1 &
 echo "\$!" > "\${RESULTS_DIR}/${FP8_RUN}_docker_logs_pid.txt"
 wait_for_vllm ${FP8_RUN} "\${RESULTS_DIR}/${FP8_RUN}_server.log"
 
-python scripts/record_openai_serving_row.py \\
+python3 scripts/record_openai_serving_row.py \\
   --backend vllm --phase before --run-id ${FP8_RUN} \\
   --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
   --results-dir "\${RESULTS_DIR}" \\
@@ -160,12 +172,20 @@ python scripts/record_openai_serving_row.py \\
   --server-log "\${RESULTS_DIR}/${FP8_RUN}_server.log" \\
   --process-match "vllm serve ${MODEL}"
 
-python scripts/openai_quality_probe.py \\
+python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${FP8_RUN}_openai_benchmark.json" \\
   --run-id ${FP8_RUN}_quality_from_benchmark \\
   --output "\${RESULTS_DIR}/${FP8_RUN}_quality.json"
 
 stop_vllm_container ${FP8_RUN}
+else
+  echo "RUN_FP8=\${RUN_FP8}; reusing any existing fp8 comparator artifacts for ${FP8_RUN}."
+fi
+
+if [[ "\${RUN_NVFP4}" != "1" ]]; then
+  echo "RUN_NVFP4=\${RUN_NVFP4}; stopping after fp8 comparator row."
+  exit 0
+fi
 
 # Start the NVFP4-KV candidate row with the same geometry and serving settings.
 docker rm -f ${NVFP4_RUN} >/dev/null 2>&1 || true
@@ -193,13 +213,16 @@ cp ${REPO_IN_CONTAINER}/scripts/flashinfer_source_sitecustomize.py /tmp/spark-si
 export PYTHONPATH="/tmp/spark-sitecustomize:\${PYTHONPATH:-}"
 python3 -m pip install -q setuptools-rust > /results/${NVFP4_RUN}_pip_bootstrap.log 2>&1
 cd /vllm-src
-VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT='"${VLLM_PRECOMPILED_WHEEL_COMMIT}"' \\
-  python3 -m pip install --no-build-isolation -e . > /results/${NVFP4_RUN}_editable_install.log 2>&1
+VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT='"${VLLM_PRECOMPILED_WHEEL_COMMIT}"' VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1 VLLM_VERSION_OVERRIDE='"${VLLM_VERSION_OVERRIDE}"' \\
+  python3 -m pip install --no-build-isolation --no-deps -e . > /results/${NVFP4_RUN}_editable_install.log 2>&1
+cp /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so /vllm-src/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so
 python3 - <<'"'"'PY'"'"' > /results/${NVFP4_RUN}_import_probe.txt 2>&1
 import json, torch, transformers, vllm, flashinfer
+import vllm.vllm_flash_attn._vllm_fa2_C as fa2_ext
 print(json.dumps({
   "vllm": getattr(vllm, "__version__", None),
   "vllm_file": getattr(vllm, "__file__", None),
+  "vllm_fa2": getattr(fa2_ext, "__file__", None),
   "flashinfer": getattr(flashinfer, "__version__", None),
   "flashinfer_file": getattr(flashinfer, "__file__", None),
   "transformers": getattr(transformers, "__version__", None),
@@ -217,7 +240,6 @@ exec vllm serve ${MODEL} \\
   --max-model-len '"${MAX_MODEL_LEN}"' \\
   --gpu-memory-utilization '"${GPU_MEMORY_UTILIZATION}"' \\
   --max-num-batched-tokens '"${MAX_NUM_BATCHED_TOKENS}"' \\
-  --disable-log-requests \\
   --host 0.0.0.0 \\
   --port 8000
 '
@@ -226,7 +248,7 @@ docker logs -f ${NVFP4_RUN} > "\${RESULTS_DIR}/${NVFP4_RUN}_server.log" 2>&1 &
 echo "\$!" > "\${RESULTS_DIR}/${NVFP4_RUN}_docker_logs_pid.txt"
 wait_for_vllm ${NVFP4_RUN} "\${RESULTS_DIR}/${NVFP4_RUN}_server.log"
 
-python scripts/record_openai_serving_row.py \\
+python3 scripts/record_openai_serving_row.py \\
   --backend vllm --phase after --run-id ${NVFP4_RUN} \\
   --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
   --results-dir "\${RESULTS_DIR}" \\
@@ -237,12 +259,12 @@ python scripts/record_openai_serving_row.py \\
   --server-log "\${RESULTS_DIR}/${NVFP4_RUN}_server.log" \\
   --process-match "vllm serve ${MODEL}"
 
-python scripts/openai_quality_probe.py \\
+python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${NVFP4_RUN}_openai_benchmark.json" \\
   --run-id ${NVFP4_RUN}_quality_from_benchmark \\
   --output "\${RESULTS_DIR}/${NVFP4_RUN}_quality.json"
 
-python scripts/openai_quality_probe.py \\
+python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${NVFP4_RUN}_openai_benchmark.json" \\
   --compare-to "\${RESULTS_DIR}/${FP8_RUN}_openai_benchmark.json" \\
   --run-id ${PREFIX}_quality_compare \\

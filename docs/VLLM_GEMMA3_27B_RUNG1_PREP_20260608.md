@@ -10,9 +10,9 @@ container was started and no GPU work was consumed.
 - model: `google/gemma-3-27b-it`
 - served model name: `gemma3-27b-it`
 - runtime image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
-- vLLM overlay: `jethac/vllm@3658ba7123c3eb2211f18a882af1b993112fadb1`
+- vLLM overlay: `jethac/vllm@25ab073ef87f4443616fbaf00a2f6f09a9087c1f`
 - FlashInfer overlay: `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
-- precompiled wheel base: `8916796bc50926fd61e606718b194a71e2e31a24`
+- precompiled wheel base: `4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa`
 - max model length: `131072`
 - GPU memory utilization: `0.85`
 - attention backend: `flashinfer`
@@ -140,6 +140,36 @@ attempt did not fail on Hugging Face access; it failed during editable vLLM inst
 Repair the vLLM source/precompiled-wheel pair first, likely by moving the geometry hook
 onto the proven `a919d635d` lane or another commit with published CUDA 13 metadata.
 
+Source/wheel repair prepared:
+`jethac/vllm@25ab073ef87f4443616fbaf00a2f6f09a9087c1f` cherry-picks the Gemma geometry hook
+onto the proven `a919d635d` lane. The regenerated packet now uses precompiled wheel base
+`4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa`, matching the prior clean Qwen CUDA 13 build.
+The accepted live packet installs with `python3 -m pip install --no-build-isolation --no-deps
+-e .` and copies the ABI-matched FA2 extension from `/opt/jethac-vllm` into the source
+overlay. Do not allow pip dependency resolution to downgrade Torch/FlashInfer in this lane.
+
+Setup-only check passed:
+`results/vllm_gemma3_27b_rung1_setup_only_20260608T1855JST.md`. This artifact is retained
+only for the metadata-404 fix; its dependency-resolving install downgraded packages and is
+not accepted as the live runtime environment.
+
+fp8 comparator row passed:
+`results/vllm_gemma3_27b_rung1_fp8_20260608T1924JST.md`. Gemma 3 27B text-only serves with
+`--kv-cache-dtype fp8`, FlashInfer decoder attention, and the measured running-model
+geometry required for Rung 1: `62` decoder layers, `52` local SWA layers, `10` full/global
+layers, uniform `heads=32`, `kv_heads=16`, `head_dim=128`, `head_dim_v=128`, and the
+expected `0-4 local / 5 full` repeating SWA pattern. vLLM reports `882,851` fp8 KV tokens
+and `6.74x` maximum concurrency at `131,072` tokens/request. All three OpenAI benchmark
+cases completed with unflagged output.
+
+NVFP4 candidate row is red:
+`results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md`. The row routes through
+FlashInfer FA2 with vLLM V-scale-factor deswizzle, records the same 62-layer Gemma geometry,
+and reports `1,568,861` KV tokens / `11.97x` concurrency, a `1.777x` capacity gain over
+fp8 at decode-speed parity. It is not correct: strict `spark-ok` smoke returns nonsensical
+mixed-script text, and the benchmark generations are also corrupted. Treat Gemma 3 NVFP4-KV
+as a routing/capacity proof plus quality failure, not a green Rung 1.
+
 ## Expected Log Lines
 
 Both rows:
@@ -257,13 +287,16 @@ diff --git a/vllm/model_executor/layers/attention/attention.py b/vllm/model_exec
 - Runtime geometry log proves all Gemma 3 27B decoder layers are `head_dim=128`, with
   `num_attention_heads=32`, `num_kv_heads=16`, and the expected local/full SWA map.
 - NVFP4 server log proves FlashInfer FA2 NVFP4 KV on SM12x, not fp8 fallback and not
-  `trtllm-gen`.
+  `trtllm-gen`. This gate is passed for routing, but quality is still red.
 - Capacity report records `GPU KV cache size` and `Maximum concurrency` for both rows and
   computes NVFP4/fp8 ratio. Expect near `1.78x`, but record the actual number.
-- `chat_smoke.json` returns exactly `spark-ok`.
+- `chat_smoke.json` returns exactly `spark-ok`. This gate failed for the NVFP4 row.
 - `openai_benchmark.json` has all benchmark cases `ok=true`, nonempty normal content,
   TTFT, and decode tokens/sec.
 - `quality.json` has no flags for either row, and `quality_compare.json` is `ok=true`.
+  The current heuristic is too weak: the NVFP4 row produced garbage while the simple
+  heuristic remained unflagged. Add a stronger correctness comparator before treating this
+  rung as green.
 
 Untested at this checkpoint: TP>1, DCP, non-default page/block sizes, fp8-vs-NVFP4
 logprob parity, and Gemma 4 `D=512`.
