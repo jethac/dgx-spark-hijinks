@@ -1,0 +1,37 @@
+{
+  "baseline_run_id": "sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp8",
+  "baseline_source": null,
+  "candidate_run_id": "sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_compare",
+  "candidate_source": null,
+  "comparisons": [
+    {
+      "baseline_chars": 884,
+      "baseline_flags": [],
+      "baseline_starts_with": "**Engineering Note: Validating GPU Kerne",
+      "candidate_chars": 1262,
+      "candidate_flags": [
+        "low_unique_word_ratio",
+        "dominant_repeated_word",
+        "repeated_bigrams",
+        "repeated_trigrams"
+      ],
+      "candidate_starts_with": "the following code:\n\n a sample of of.  (",
+      "case": "medium_decode",
+      "ok": false,
+      "text_similarity": 0.008387698042870456
+    },
+    {
+      "baseline_chars": 393,
+      "baseline_flags": [],
+      "baseline_starts_with": "A local AI workstation benefits from fas",
+      "candidate_chars": 128,
+      "candidate_flags": [],
+      "candidate_starts_with": "A local AI workstation\u5de5\u4f5c\u7ad9\u7684\u5feb\u901f\u5185\u5b58\u662f\u5176\u6027\u80fd\u548c\u6548\u7387\u7684\u5173\u952e",
+      "case": "short_decode",
+      "ok": true,
+      "text_similarity": 0.08829174664107485
+    }
+  ],
+  "ok": false,
+  "schema": "openai-quality-compare/v1"
+}

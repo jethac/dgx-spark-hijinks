@@ -474,6 +474,13 @@
   - benchmark: fp8 produced normal compact benchmark text at about `57 tok/s`; FP4 short/medium/long benchmark content remained degraded even though raw/chat smoke passed.
   - interpretation: this retires the missing matched-comparator/request-trace task, but does not bless SGLang FP4 KV quality or speed. The next SGLang task is quality localization on the degraded benchmark prompts.
 
+- Ran the SGLang FP4-KV logprob quality probe on the same `d7d931f` source-overlay path.
+  - script: `scripts/openai_quality_probe.py`
+  - artifacts: `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md`, `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp8_quality_probe.json`, `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp4_quality_probe.json`, and `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_compare.json`.
+  - command shape: same NVIDIA SGLang 26.05 source overlay, same Qwen2.5 1.5B model, FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled; probe requested generated-token logprobs for `short_decode` and `medium_decode`.
+  - result: fp8 passed both probes. FP4 `short_decode` began with the same high-confidence prefix (`A local AI workstation`) then drifted into mixed Chinese/repetition; FP4 `medium_decode` diverged at token one (`the following code:` vs fp8 `**Engineering Note:`) and collapsed into repeated `import` text.
+  - interpretation: the quality bug is now localized beyond "bad benchmark text": one standardized prompt is wrong from the first token, while another starts plausibly and corrupts later. Next useful SGLang work is a divergence-window trace around the failing `medium_decode` prompt, not another capacity row.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

@@ -109,6 +109,15 @@ passing — not a dev step.
   plus FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text. This
   is still not a blessed row because the FP4 standardized benchmark content remains
   degraded.
+- **Logprob quality localization is DONE**
+  (`results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md`):
+  `scripts/openai_quality_probe.py` compared the degraded FP4 prompts against the fp8
+  comparator with generated-token logprobs. FP4 `short_decode` starts with the same
+  high-confidence prefix as fp8 (`A local AI workstation`) then drifts into mixed
+  Chinese/repetition; FP4 `medium_decode` diverges at token one (`the following code:`
+  instead of `**Engineering Note:`) and collapses into repeated `import` text. This
+  proves the quality bug is prompt/path-sensitive generation corruption, not just a
+  missing backend trace or a capacity-only artifact gap.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -141,9 +150,13 @@ end-to-end path diverges from a valid pairing, suspects in order:
       kernel built **without** `FLASHINFER_PAGED_V_SF_DESWIZZLE` (vLLM's clean row builds
       it **with** the macro — so do not copy vLLM's flag, copy its *matched-ness*). A
       layout/macro mismatch corrupts V exactly like a convention mismatch.
-   3. **Per-layer calibration application** — the 28-layer / 4096-token calibration must
+   3. **Per-layer calibration application / prompt-path state** — the 28-layer /
+      4096-token calibration must
       apply the same global scales at quantize and at in-kernel dequant. This is the most
-      likely remaining culprit now that raw convention is understood.
+      likely remaining culprit now that raw convention is understood. The logprob quality
+      probe shows one prompt diverges from token one and another drifts after an initially
+      plausible prefix, so collect a prefill/decode boundary trace before changing the
+      quantizer again.
    4. Only then the decode kernel itself (Objective B/C overlap).
 
 **B. Confirm the FlashInfer FP4 decode kernel is numerically correct.**
@@ -165,11 +178,26 @@ must pass: raw `2+2` = `4`, coherent benchmark content, plus a real quality comp
 telemetry, TTFT, warmed decode tok/s. Server log must prove native FlashInfer FP4 KV
 selection — not fp8/bf16 fallback. Use Qwen2.5 1.5B (the established comparator) first.
 
-**E. SWA / Gemma is explicitly later.** SGLang FP4 KV with hybrid-SWA subpool delegation
-(Gemma's alternating local/global) is a separate, harder workstream — and SGLang Gemma
-already has open blockers (issue #14). Prove FP4 KV on Qwen/Step-like non-SWA models
-first; keep Gemma SGLang blockers out of the NVFP4-KV quality fix. Coordinate Gemma
-attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`).
+**E. Gemma via SWA-aware mixed KV (Strategy B) — gated behind the Qwen quality fix.**
+The shared Gemma blocker is a FlashInfer register/fragment-shape guard on `D=512` (see the
+vLLM doc Objective B — `8*NUM_MMA_D_VO = 256 ≥ 256` before the KV term), so a true
+full-FP4-KV global-attention kernel is a hard, separate FlashInfer track, not a quick fix.
+The near-term Gemma path on **both** lanes is therefore **mixed KV**: NVFP4 on local
+(`D=256`) layers, fp8/bf16 on global (`D=512`) layers — capturing most of Gemma's ~5:1
+local:global capacity win while dodging the broken kernel.
+
+SGLang's *mechanism* is its **hybrid-SWA subpool delegation** (`swa_memory_pool.py`,
+`mem_cache/`): route local-attention layers to the FP4 subpool, global to fp8/bf16. This is
+the SGLang counterpart to vLLM's per-layer `kv_cache_dtype_skip_layers` plumbing — the two
+lanes implement the *same strategy through non-overlapping code* and cross-validate it.
+
+**Prerequisite — do NOT start this until SGLang's Qwen FP4-KV quality is blessed
+(Objectives A–D).** Gemma's SWA complexity will *mask* whether the long-sequence Qwen
+degradation is actually fixed; building Gemma on an unblessed Qwen path is building on sand.
+SGLang Gemma also has its own open blockers (issue #14). The shared surface is only the
+FlashInfer guard — don't edit `prefill.cuh` trait math here; that lands once, in FlashInfer.
+Coordinate attention geometry with the vLLM lane
+(`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`).
 
 ## Evidence gates (a row isn't a claim without these)
 - Source-overlay/build evidence with a valid `sm_121a`/`compute_121a` FlashInfer target.
@@ -213,9 +241,9 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The matched `d7d931f` row is done and captured both decode and request-path
-`extend_merge_paged`. Do not repeat it as-is. The next step is a quality-localization
-probe that compares fp8 and FP4 logits/text under the same prompts that degrade in the
-standard benchmark, while preserving the backend trace. Add `extend_ragged_no_prefix`
-trace only if a failing request does not hit the already-traced `extend_merge_paged`
-path. No serving image required until quality passes.
+The matched `d7d931f` row and logprob quality probe are done. Do not repeat them as-is.
+The next step is a divergence-window probe for the failing `medium_decode` prompt:
+capture the prefill/extend path, the first decode-step metadata, selected global scales,
+and the first-token distribution against fp8. Add `extend_ragged_no_prefix` trace only if
+the failing request does not hit the already-traced `extend_merge_paged` path. No serving
+image required until quality passes.

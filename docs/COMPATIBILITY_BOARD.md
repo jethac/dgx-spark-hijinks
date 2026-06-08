@@ -35,7 +35,7 @@ Latest reachability evidence: `results/spark_doctor_tailnet_reconnect_20260608T0
 |---|---|---|---|
 | Gemma 4 26B | `partial` | fast local vLLM NVFP4+DFlash row exists through AEON image; llama.cpp Q4_0 is practical and fast | accuracy checks, fork parity, and native/forked vLLM path |
 | Gemma 4 12B | `partial` | source/precompiled vLLM probe serves at about `7.7 tok/s` | clean release/nightly container plus one zero-shot task |
-| Qwen speed | `partial` | SGLang small Qwen rows, SGLang FP4 KV capacity-only row, llama.cpp Qwen2.5 row, passing AEON vLLM Qwen36 NVFP4+DFlash row, passing derived `jethac/vllm` Qwen36 row, passing clean-FA2 `jethac/vllm` Qwen36 row, and matched vLLM Qwen fp8-vs-NVFP4 KV capacity row exist | larger llama.cpp Qwen3/Qwen3.6 GGUF, SGLang FP4-KV quality, SGLang DFlash/EAGLE, native FP4 weight/MoE proof |
+| Qwen speed | `partial` | SGLang small Qwen rows, SGLang FP4 KV capacity-only row plus logprob quality-localization row, llama.cpp Qwen2.5 row, passing AEON vLLM Qwen36 NVFP4+DFlash row, passing derived `jethac/vllm` Qwen36 row, passing clean-FA2 `jethac/vllm` Qwen36 row, and matched vLLM Qwen fp8-vs-NVFP4 KV capacity row exist | larger llama.cpp Qwen3/Qwen3.6 GGUF, SGLang FP4-KV quality, SGLang DFlash/EAGLE, native FP4 weight/MoE proof |
 | NVFP4 weights | `partial` | AEON Gemma, AEON Qwen36, derived `jethac/vllm` Qwen36, and clean-FA2 `jethac/vllm` Qwen36 prove compressed-tensors NVFP4 weight serving on GB10 | native FP4 weight/MoE compute proof; current clean Qwen row still selects Marlin weight-only FP4 |
 | NVFP4 / FP4 KV | `partial` | standalone probes prove the FA2 tuple-KV signature; vLLM Qwen NVFP4-KV records `1.751x` fp8 KV pool/concurrency with normal content and decode parity; SGLang FP4 KV records a matched `1.779x` fp8 capacity gain under auto-safe no-graph policy but fails quality | Gemma NVFP4-KV, SGLang quality-passing FP4 KV serving, graph-safe serving, and claimable throughput |
 | GGUF accuracy | `blocked` | OpenAI-compatible llama.cpp logprobs schema is insufficient; live native task at `n_probs=512` scored likely continuations but missed the unlikely continuation | direct supplied-token logprobs, practical full-vocabulary probabilities, or another native scoring path |
@@ -102,7 +102,7 @@ Use the clean `jethac/sglang` fork/container, not a site-package overlay, and re
 - deterministic output sanity
 - quality comparator before any speed/capacity claim
 
-Current safe policy: the fork disables CUDA graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. The autosafe row proves capacity but still corrupts standardized Qwen output, so FP4 KV is not a blessed SGLang serving path yet.
+Current safe policy: the fork disables CUDA graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. The matched `d7d931f` row proves capacity/backend routing but still corrupts standardized Qwen output; the logprob quality probe shows both first-token and late-drift failures. FP4 KV is not a blessed SGLang serving path yet.
 
 ## Update Cadence
 

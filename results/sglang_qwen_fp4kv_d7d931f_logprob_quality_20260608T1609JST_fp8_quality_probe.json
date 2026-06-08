@@ -1,0 +1,517 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "elapsed_s": 2.1204760760010686,
+      "finish_reason": "length",
+      "logprobs": {
+        "available": true,
+        "first_tokens": [
+          {
+            "logprob": -0.023486744612455368,
+            "token": "A",
+            "top_logprobs": [
+              {
+                "logprob": -0.023486744612455368,
+                "token": "A"
+              },
+              {
+                "logprob": -4.398486614227295,
+                "token": "Local"
+              },
+              {
+                "logprob": -5.273486614227295,
+                "token": "In"
+              },
+              {
+                "logprob": -6.148486614227295,
+                "token": "Fast"
+              },
+              {
+                "logprob": -7.148486614227295,
+                "token": "Having"
+              }
+            ]
+          },
+          {
+            "logprob": -0.00850826594978571,
+            "token": " local",
+            "top_logprobs": [
+              {
+                "logprob": -0.00850826594978571,
+                "token": " local"
+              },
+              {
+                "logprob": -4.883508205413818,
+                "token": " fast"
+              },
+              {
+                "logprob": -8.508508682250977,
+                "token": " faster"
+              },
+              {
+                "logprob": -8.508508682250977,
+                "token": " high"
+              },
+              {
+                "logprob": -9.758508682250977,
+                "token": " key"
+              }
+            ]
+          },
+          {
+            "logprob": -6.3774932641536e-05,
+            "token": " AI",
+            "top_logprobs": [
+              {
+                "logprob": -6.3774932641536e-05,
+                "token": " AI"
+              },
+              {
+                "logprob": -9.7500638961792,
+                "token": " artificial"
+              },
+              {
+                "logprob": -13.3750638961792,
+                "token": "AI"
+              },
+              {
+                "logprob": -13.5000638961792,
+                "token": " Artificial"
+              },
+              {
+                "logprob": -14.0000638961792,
+                "token": " A"
+              }
+            ]
+          },
+          {
+            "logprob": -0.00023862851958256215,
+            "token": " workstation",
+            "top_logprobs": [
+              {
+                "logprob": -0.00023862851958256215,
+                "token": " workstation"
+              },
+              {
+                "logprob": -8.375238418579102,
+                "token": "\u5de5\u4f5c\u7ad9"
+              },
+              {
+                "logprob": -12.250238418579102,
+                "token": " ("
+              },
+              {
+                "logprob": -13.125238418579102,
+                "token": " work"
+              },
+              {
+                "logprob": -14.750238418579102,
+                "token": " workspace"
+              }
+            ]
+          },
+          {
+            "logprob": -0.08862617611885071,
+            "token": " benefits",
+            "top_logprobs": [
+              {
+                "logprob": -0.08862617611885071,
+                "token": " benefits"
+              },
+              {
+                "logprob": -2.9636261463165283,
+                "token": " can"
+              },
+              {
+                "logprob": -4.713626384735107,
+                "token": " that"
+              },
+              {
+                "logprob": -5.338626384735107,
+                "token": " gains"
+              },
+              {
+                "logprob": -5.463626384735107,
+                "token": "'s"
+              }
+            ]
+          },
+          {
+            "logprob": -0.3468714952468872,
+            "token": " from",
+            "top_logprobs": [
+              {
+                "logprob": -0.3468714952468872,
+                "token": " from"
+              },
+              {
+                "logprob": -1.9718714952468872,
+                "token": " greatly"
+              },
+              {
+                "logprob": -1.9718714952468872,
+                "token": " significantly"
+              },
+              {
+                "logprob": -4.471871376037598,
+                "token": " immensely"
+              },
+              {
+                "logprob": -6.221871376037598,
+                "token": " tremendously"
+              }
+            ]
+          },
+          {
+            "logprob": -0.008341236039996147,
+            "token": " fast",
+            "top_logprobs": [
+              {
+                "logprob": -0.008341236039996147,
+                "token": " fast"
+              },
+              {
+                "logprob": -5.258341312408447,
+                "token": " having"
+              },
+              {
+                "logprob": -6.883341312408447,
+                "token": " faster"
+              },
+              {
+                "logprob": -7.008341312408447,
+                "token": " high"
+              },
+              {
+                "logprob": -8.008340835571289,
+                "token": " rapid"
+              }
+            ]
+          },
+          {
+            "logprob": -1.823885577323381e-05,
+            "token": " memory",
+            "top_logprobs": [
+              {
+                "logprob": -1.823885577323381e-05,
+                "token": " memory"
+              },
+              {
+                "logprob": -11.375018119812012,
+                "token": " RAM"
+              },
+              {
+                "logprob": -13.250018119812012,
+                "token": " memories"
+              },
+              {
+                "logprob": -13.250018119812012,
+                "token": "memory"
+              },
+              {
+                "logprob": -14.125018119812012,
+                "token": ","
+              }
+            ]
+          }
+        ],
+        "token_count_observed": 64
+      },
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "request_logprobs": true,
+        "top_logprobs": 5
+      },
+      "quality": {
+        "chars": 393,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "A local AI workstation benefits from fas",
+        "top_word": "and",
+        "top_word_fraction": 0.05084745762711865,
+        "unique_word_ratio": 0.9491525423728814,
+        "word_count": 59
+      },
+      "response": null,
+      "source": "live",
+      "text": "A local AI workstation benefits from fast memory because it allows for efficient storage and processing of large datasets, enabling faster model training times and improved accuracy. With high-speed RAM, the workstation can handle more complex computations and data analysis tasks without slowing down or crashing, ensuring smooth operation even under heavy load. This capability is crucial in",
+      "text_preview": "A local AI workstation benefits from fast memory because it allows for efficient storage and processing of large datasets, enabling faster model training times and improved accuracy. With high-speed RAM, the workstation can handle more complex computations and data analysis tasks without slowing down or crashing, ensuring smooth operation even under heavy load. This capability is crucial in",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "elapsed_s": 3.4329850930080283,
+      "finish_reason": "length",
+      "logprobs": {
+        "available": true,
+        "first_tokens": [
+          {
+            "logprob": -0.92763751745224,
+            "token": "**",
+            "top_logprobs": [
+              {
+                "logprob": -0.92763751745224,
+                "token": "**"
+              },
+              {
+                "logprob": -1.3026375770568848,
+                "token": "###"
+              },
+              {
+                "logprob": -2.1776375770568848,
+                "token": "#"
+              },
+              {
+                "logprob": -2.9276375770568848,
+                "token": "Title"
+              },
+              {
+                "logprob": -3.6776375770568848,
+                "token": "Engineering"
+              }
+            ]
+          },
+          {
+            "logprob": -0.1699751913547516,
+            "token": "Engineering",
+            "top_logprobs": [
+              {
+                "logprob": -0.1699751913547516,
+                "token": "Engineering"
+              },
+              {
+                "logprob": -3.6699752807617188,
+                "token": "Title"
+              },
+              {
+                "logprob": -3.7949752807617188,
+                "token": "Engine"
+              },
+              {
+                "logprob": -4.044975280761719,
+                "token": "Note"
+              },
+              {
+                "logprob": -4.044975280761719,
+                "token": "Con"
+              }
+            ]
+          },
+          {
+            "logprob": -0.0007848043460398912,
+            "token": " Note",
+            "top_logprobs": [
+              {
+                "logprob": -0.0007848043460398912,
+                "token": " Note"
+              },
+              {
+                "logprob": -8.125784873962402,
+                "token": " Notes"
+              },
+              {
+                "logprob": -9.250784873962402,
+                "token": " Notice"
+              },
+              {
+                "logprob": -9.375784873962402,
+                "token": " note"
+              },
+              {
+                "logprob": -9.875784873962402,
+                "token": " Not"
+              }
+            ]
+          },
+          {
+            "logprob": -0.11459161341190338,
+            "token": ":",
+            "top_logprobs": [
+              {
+                "logprob": -0.11459161341190338,
+                "token": ":"
+              },
+              {
+                "logprob": -3.114591598510742,
+                "token": ":**"
+              },
+              {
+                "logprob": -3.364591598510742,
+                "token": "**\n\n"
+              },
+              {
+                "logprob": -4.614591598510742,
+                "token": "**:"
+              },
+              {
+                "logprob": -4.989591598510742,
+                "token": " on"
+              }
+            ]
+          },
+          {
+            "logprob": -0.689142644405365,
+            "token": " Valid",
+            "top_logprobs": [
+              {
+                "logprob": -0.689142644405365,
+                "token": " Valid"
+              },
+              {
+                "logprob": -2.1891427040100098,
+                "token": " Ver"
+              },
+              {
+                "logprob": -2.3141427040100098,
+                "token": " Validation"
+              },
+              {
+                "logprob": -2.4391427040100098,
+                "token": " Validate"
+              },
+              {
+                "logprob": -2.5641427040100098,
+                "token": " Ens"
+              }
+            ]
+          },
+          {
+            "logprob": -0.0002004899288294837,
+            "token": "ating",
+            "top_logprobs": [
+              {
+                "logprob": -0.0002004899288294837,
+                "token": "ating"
+              },
+              {
+                "logprob": -9.875200271606445,
+                "token": "ated"
+              },
+              {
+                "logprob": -9.875200271606445,
+                "token": "ity"
+              },
+              {
+                "logprob": -10.625200271606445,
+                "token": "iation"
+              },
+              {
+                "logprob": -11.125200271606445,
+                "token": "at"
+              }
+            ]
+          },
+          {
+            "logprob": -0.7309814095497131,
+            "token": " GPU",
+            "top_logprobs": [
+              {
+                "logprob": -0.7309814095497131,
+                "token": " GPU"
+              },
+              {
+                "logprob": -1.9809813499450684,
+                "token": " that"
+              },
+              {
+                "logprob": -2.2309813499450684,
+                "token": " Int"
+              },
+              {
+                "logprob": -2.2309813499450684,
+                "token": " the"
+              },
+              {
+                "logprob": -3.1059813499450684,
+                "token": " Intent"
+              }
+            ]
+          },
+          {
+            "logprob": -0.40531331300735474,
+            "token": " Kernel",
+            "top_logprobs": [
+              {
+                "logprob": -0.40531331300735474,
+                "token": " Kernel"
+              },
+              {
+                "logprob": -2.03031325340271,
+                "token": " K"
+              },
+              {
+                "logprob": -2.53031325340271,
+                "token": " Usage"
+              },
+              {
+                "logprob": -3.53031325340271,
+                "token": "-K"
+              },
+              {
+                "logprob": -3.90531325340271,
+                "token": "-"
+              }
+            ]
+          }
+        ],
+        "token_count_observed": 192
+      },
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "request_logprobs": true,
+        "top_logprobs": 5
+      },
+      "quality": {
+        "chars": 884,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.07692307692307693,
+        "repeated_trigram_fraction": 0.007751937984496124,
+        "starts_with": "**Engineering Note: Validating GPU Kerne",
+        "top_word": "the",
+        "top_word_fraction": 0.0916030534351145,
+        "unique_word_ratio": 0.6412213740458015,
+        "word_count": 131
+      },
+      "response": null,
+      "source": "live",
+      "text": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is utilizing the correct and intended GPU kernels for optimal performance.\n\n### Methodology:\n\n1 that the LLM server is configured to use specific GPU kernels designed for its model. This involves verifying the following steps:\n\n#### 1. Identify the Correct GPU Kernels\n\n- **Step 1:** Review the documentation or specifications provided by the LLM provider.\n- **Step 2:** Check if the LLM's runtime environment configuration file, typically found in `/etc/default/llm` or similar paths, which specifies the GPU devices and their corresponding kernel configurations.\n\n#### Step 3: Verify the Kernel Configuration\n\n- **Step :** Use a tool like `n -v` or `nvidia-smi` to list the current GPU state and identify the active kernels.\n- **Step 4:** Compare",
+      "text_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is utilizing the correct and intended GPU kernels for optimal performance.\n\n### Methodology:\n\n1 that the LLM server is configured to use specific GPU kernels designed for its model. This involves verifying the following steps:\n\n#### 1. Identify the Correct GPU Kernels\n\n- **Step 1:** Review the documentation or specifications provided by the LLM provider.\n- **Step 2:** Check if the LLM's runtime environment configuration file, typically found in `/etc/default/llm` or similar paths, which specifies the GPU devices and their corresponding kernel configurations.\n\n#### Step 3: Verify the Kernel Configuration\n\n- **Step :** Use a tool like `n -v` or `nvidia-smi` ",
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T07:11:14Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "run_id": "sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp8",
+  "schema": "openai-quality-probe/v1",
+  "started_utc": "2026-06-08T07:11:08Z",
+  "url": "http://127.0.0.1:30012"
+}

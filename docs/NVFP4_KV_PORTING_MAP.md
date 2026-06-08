@@ -234,11 +234,12 @@ Updated verification:
 - `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md` records a GB10 matched source-overlay run on `jethac/sglang@d7d931f53` using NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1` and `SGLANG_FP4_KV_TRACE_BACKEND=1`.
 - The run allocated `5,517,572` FP4 KV tokens versus `3,105,240` fp8 tokens (`1.7769x`), calibrated 28 layers, traced all 28 decode layers and all 28 `extend_merge_paged` layers through packed `uint8` K/V and FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text.
 - This is not yet a blessed row because the FP4 standardized benchmark content remains degraded versus the matched fp8 comparator.
+- `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md` localizes the degradation: FP4 `medium_decode` diverges from fp8 at token one, while FP4 `short_decode` begins with the same high-confidence English prefix and then drifts into mixed Chinese/repetition.
 
 Missing verification:
 
 - no cheap CPU-only SGLang Docker verification route is working yet; it needs a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix
-- no matched quality-positive fp8-vs-FP4 row has been produced on `d7d931f53`
+- no matched quality-positive fp8-vs-FP4 row has been produced on `d7d931f53`; the next required probe is a divergence-window trace around the failing `medium_decode` prompt
 - graph-safe FP4 KV is still unproven
 
 Reference files:
@@ -260,7 +261,7 @@ Likely `jethac/sglang` work:
 - Ported in `67c7967`: allow `--kv-cache-dtype fp4_e2m1` with FlashInfer MHA only on SM12x where the reference path is relevant.
 - Fixed in `eefe8ad`: make the new KV4 unit tests use public prefill/decode backend fields.
 - Ported through `d7d931f`: native FP4 KV pools, separate data and scale buffers, global scales, scale getters, pre-CUDA-graph calibration, FlashInfer backend `kv_cache_sf` routing, and decode trace logging.
-- Still pending: quality localization for the degraded benchmark prompts and a matched fp8-vs-FP4 quality row.
+- Still pending: divergence-window localization for the degraded benchmark prompts and a matched fp8-vs-FP4 quality row.
 - Still pending: delegate FP4 subpools through hybrid-SWA.
 - Keep SGLang Gemma blockers separate from NVFP4 KV work; Qwen/Step-like models are better first probes.
 

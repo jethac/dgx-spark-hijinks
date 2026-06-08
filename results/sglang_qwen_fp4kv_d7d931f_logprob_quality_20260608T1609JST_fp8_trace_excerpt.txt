@@ -1,0 +1,12 @@
+W0608 07:10:01.969000 1 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0608 07:10:02.021000 1 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0608 07:10:10.052000 185 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0608 07:10:10.062000 185 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0608 07:10:10.140000 184 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0608 07:10:10.150000 184 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+[2026-06-08 07:10:14] Ignore import error when loading sglang.srt.models.deepseek_v4: No module named 'tilelang'
+[2026-06-08 07:10:14] Ignore import error when loading sglang.srt.models.deepseek_v4_nextn: No module named 'tilelang'
+[2026-06-08 07:10:15] Ignore import error when loading sglang.srt.models.midashenglm: No module named 'torchaudio'
+[2026-06-08 07:10:50] KV Cache is allocated. dtype: torch.float8_e4m3fn, #tokens: 3053425, K size: 20.38 GB, V size: 20.38 GB
+2026-06-08 07:10:54,716 - CUTE_DSL - WARNING - [handle_import_error] - Unexpected error during package walk: cutlass.cute.experimental
+[2026-06-08 07:10:54] Unexpected error during package walk: cutlass.cute.experimental

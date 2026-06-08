@@ -1,0 +1,522 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "elapsed_s": 2.096997169981478,
+      "finish_reason": "length",
+      "logprobs": {
+        "available": true,
+        "first_tokens": [
+          {
+            "logprob": -0.023486744612455368,
+            "token": "A",
+            "top_logprobs": [
+              {
+                "logprob": -0.023486744612455368,
+                "token": "A"
+              },
+              {
+                "logprob": -4.398486614227295,
+                "token": "Local"
+              },
+              {
+                "logprob": -5.273486614227295,
+                "token": "In"
+              },
+              {
+                "logprob": -6.148486614227295,
+                "token": "Fast"
+              },
+              {
+                "logprob": -7.148486614227295,
+                "token": "Having"
+              }
+            ]
+          },
+          {
+            "logprob": -0.028705427423119545,
+            "token": " local",
+            "top_logprobs": [
+              {
+                "logprob": -0.028705427423119545,
+                "token": " local"
+              },
+              {
+                "logprob": -3.778705358505249,
+                "token": " fast"
+              },
+              {
+                "logprob": -6.653705596923828,
+                "token": " faster"
+              },
+              {
+                "logprob": -6.778705596923828,
+                "token": " high"
+              },
+              {
+                "logprob": -7.778705596923828,
+                "token": " quick"
+              }
+            ]
+          },
+          {
+            "logprob": -0.03363470733165741,
+            "token": " AI",
+            "top_logprobs": [
+              {
+                "logprob": -0.03363470733165741,
+                "token": " AI"
+              },
+              {
+                "logprob": -5.408634662628174,
+                "token": " artificial"
+              },
+              {
+                "logprob": -5.408634662628174,
+                "token": " local"
+              },
+              {
+                "logprob": -6.033634662628174,
+                "token": " workstation"
+              },
+              {
+                "logprob": -6.658634662628174,
+                "token": ","
+              }
+            ]
+          },
+          {
+            "logprob": -0.0012436520773917437,
+            "token": " workstation",
+            "top_logprobs": [
+              {
+                "logprob": -0.0012436520773917437,
+                "token": " workstation"
+              },
+              {
+                "logprob": -7.376243591308594,
+                "token": "\u5de5\u4f5c\u7ad9"
+              },
+              {
+                "logprob": -7.876243591308594,
+                "token": " ("
+              },
+              {
+                "logprob": -10.001243591308594,
+                "token": " workspace"
+              },
+              {
+                "logprob": -10.251243591308594,
+                "token": " work"
+              }
+            ]
+          },
+          {
+            "logprob": -1.1837190389633179,
+            "token": "\u5de5\u4f5c\u7ad9",
+            "top_logprobs": [
+              {
+                "logprob": -1.1837190389633179,
+                "token": "\u5de5\u4f5c\u7ad9"
+              },
+              {
+                "logprob": -1.4337190389633179,
+                "token": " workstation"
+              },
+              {
+                "logprob": -2.1212191581726074,
+                "token": "\u5de5\u4f5c"
+              },
+              {
+                "logprob": -3.4962191581726074,
+                "token": "\u5de5"
+              },
+              {
+                "logprob": -3.9337191581726074,
+                "token": "\u673a"
+              }
+            ]
+          },
+          {
+            "logprob": -2.0623693466186523,
+            "token": "\u7684",
+            "top_logprobs": [
+              {
+                "logprob": -2.0623693466186523,
+                "token": "\u7684"
+              },
+              {
+                "logprob": -2.4998693466186523,
+                "token": "\u901a\u8fc7"
+              },
+              {
+                "logprob": -2.9998693466186523,
+                "token": "\u9700\u8981"
+              },
+              {
+                "logprob": -3.0623693466186523,
+                "token": "\u91c7\u7528"
+              },
+              {
+                "logprob": -3.0623693466186523,
+                "token": "\u80fd\u591f"
+              }
+            ]
+          },
+          {
+            "logprob": -1.509163498878479,
+            "token": "\u5feb\u901f",
+            "top_logprobs": [
+              {
+                "logprob": -1.509163498878479,
+                "token": "\u5feb\u901f"
+              },
+              {
+                "logprob": -1.759163498878479,
+                "token": "\u6027\u80fd"
+              },
+              {
+                "logprob": -2.1341633796691895,
+                "token": "\u672c\u5730"
+              },
+              {
+                "logprob": -2.3841633796691895,
+                "token": "\u8fd0\u884c"
+              },
+              {
+                "logprob": -2.7591633796691895,
+                "token": "\u5feb\u901f\u53d1\u5c55"
+              }
+            ]
+          },
+          {
+            "logprob": -0.8433963656425476,
+            "token": "\u5185\u5b58",
+            "top_logprobs": [
+              {
+                "logprob": -0.8433963656425476,
+                "token": "\u5185\u5b58"
+              },
+              {
+                "logprob": -2.1558964252471924,
+                "token": "\u8bb0\u5fc6"
+              },
+              {
+                "logprob": -2.3433964252471924,
+                "token": "\u7f13"
+              },
+              {
+                "logprob": -2.4058964252471924,
+                "token": "\u901f"
+              },
+              {
+                "logprob": -3.2808964252471924,
+                "token": "\u5b58\u50a8"
+              }
+            ]
+          }
+        ],
+        "token_count_observed": 64
+      },
+      "ok": true,
+      "payload": {
+        "max_tokens": 64,
+        "request_logprobs": true,
+        "top_logprobs": 5
+      },
+      "quality": {
+        "chars": 128,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "A local AI workstation\u5de5\u4f5c\u7ad9\u7684\u5feb\u901f\u5185\u5b58\u662f\u5176\u6027\u80fd\u548c\u6548\u7387\u7684\u5173\u952e",
+        "top_word": "ai",
+        "top_word_fraction": 0.4,
+        "unique_word_ratio": 0.8,
+        "word_count": 5
+      },
+      "response": null,
+      "source": "live",
+      "text": "A local AI workstation\u5de5\u4f5c\u7ad9\u7684\u5feb\u901f\u5185\u5b58\u662f\u5176\u6027\u80fd\u548c\u6548\u7387\u7684\u5173\u952e\u56e0\u7d20\u3002\u5728\u5904\u7406\u590d\u6742\u7684\u673a\u5668\u5b66\u4e60\u4efb\u52a1\u4efb\u52a1\u65f6\uff0c\uff0c\u5de5\u4f5c\u7ad9\u9700\u8981\u5927\u91cf\u7684\u8ba1\u7b97\u8d44\u6e90\u6765\u6765\u652f\u6301\u6a21\u578b\u8bad\u7ec3\u7684\u5b66\u4e60\u548c\u63a8\u7406\u8fc7\u7a0b\u3002\u56e0\u6b64\uff0cAI\u5de5\u4f5c\u7ad9\u9700\u8981\u62e5\u6709\u9ad8\u901f\u7684\u5185\u5b58\u4ee5\u786e\u4fdd\u80fd\u591f\u9ad8\u6548\u5730\u5b58\u50a8\u548c\u8bbf\u95ee\u5927\u91cf\u6570\u636e\u3002\u6b64\u5916\uff0c\uff0c",
+      "text_preview": "A local AI workstation\u5de5\u4f5c\u7ad9\u7684\u5feb\u901f\u5185\u5b58\u662f\u5176\u6027\u80fd\u548c\u6548\u7387\u7684\u5173\u952e\u56e0\u7d20\u3002\u5728\u5904\u7406\u590d\u6742\u7684\u673a\u5668\u5b66\u4e60\u4efb\u52a1\u4efb\u52a1\u65f6\uff0c\uff0c\u5de5\u4f5c\u7ad9\u9700\u8981\u5927\u91cf\u7684\u8ba1\u7b97\u8d44\u6e90\u6765\u6765\u652f\u6301\u6a21\u578b\u8bad\u7ec3\u7684\u5b66\u4e60\u548c\u63a8\u7406\u8fc7\u7a0b\u3002\u56e0\u6b64\uff0cAI\u5de5\u4f5c\u7ad9\u9700\u8981\u62e5\u6709\u9ad8\u901f\u7684\u5185\u5b58\u4ee5\u786e\u4fdd\u80fd\u591f\u9ad8\u6548\u5730\u5b58\u50a8\u548c\u8bbf\u95ee\u5927\u91cf\u6570\u636e\u3002\u6b64\u5916\uff0c\uff0c",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "elapsed_s": 3.497973033983726,
+      "finish_reason": "length",
+      "logprobs": {
+        "available": true,
+        "first_tokens": [
+          {
+            "logprob": -2.7443013191223145,
+            "token": " the",
+            "top_logprobs": [
+              {
+                "logprob": -2.7443013191223145,
+                "token": " the"
+              },
+              {
+                "logprob": -3.2443013191223145,
+                "token": "\n"
+              },
+              {
+                "logprob": -3.3068013191223145,
+                "token": "s"
+              },
+              {
+                "logprob": -3.6193013191223145,
+                "token": " "
+              },
+              {
+                "logprob": -3.6818013191223145,
+                "token": " you"
+              }
+            ]
+          },
+          {
+            "logprob": -2.8166372776031494,
+            "token": " following",
+            "top_logprobs": [
+              {
+                "logprob": -2.8166372776031494,
+                "token": " following"
+              },
+              {
+                "logprob": -3.8166372776031494,
+                "token": " model"
+              },
+              {
+                "logprob": -4.44163703918457,
+                "token": " code"
+              },
+              {
+                "logprob": -4.44163703918457,
+                "token": " use"
+              },
+              {
+                "logprob": -4.94163703918457,
+                "token": " first"
+              }
+            ]
+          },
+          {
+            "logprob": -2.7471280097961426,
+            "token": " code",
+            "top_logprobs": [
+              {
+                "logprob": -2.7471280097961426,
+                "token": " code"
+              },
+              {
+                "logprob": -3.1221280097961426,
+                "token": " is"
+              },
+              {
+                "logprob": -3.7471280097961426,
+                "token": " a"
+              },
+              {
+                "logprob": -3.8721280097961426,
+                "token": " are"
+              },
+              {
+                "logprob": -3.9346280097961426,
+                "token": " question"
+              }
+            ]
+          },
+          {
+            "logprob": -2.1463403701782227,
+            "token": ":\n\n",
+            "top_logprobs": [
+              {
+                "logprob": -2.1463403701782227,
+                "token": ":\n\n"
+              },
+              {
+                "logprob": -2.3963403701782227,
+                "token": ":\n"
+              },
+              {
+                "logprob": -2.6463403701782227,
+                "token": " snippet"
+              },
+              {
+                "logprob": -3.0213403701782227,
+                "token": ":"
+              },
+              {
+                "logprob": -3.1463403701782227,
+                "token": "."
+              }
+            ]
+          },
+          {
+            "logprob": -3.2899303436279297,
+            "token": " a",
+            "top_logprobs": [
+              {
+                "logprob": -3.2899303436279297,
+                "token": " a"
+              },
+              {
+                "logprob": -3.6649303436279297,
+                "token": " use"
+              },
+              {
+                "logprob": -3.6649303436279297,
+                "token": " are"
+              },
+              {
+                "logprob": -3.7274303436279297,
+                "token": " to"
+              },
+              {
+                "logprob": -3.7899303436279297,
+                "token": " write"
+              }
+            ]
+          },
+          {
+            "logprob": -4.16602087020874,
+            "token": " sample",
+            "top_logprobs": [
+              {
+                "logprob": -4.16602087020874,
+                "token": " sample"
+              },
+              {
+                "logprob": -4.41602087020874,
+                "token": " simple"
+              },
+              {
+                "logprob": -4.41602087020874,
+                "token": " model"
+              },
+              {
+                "logprob": -4.47852087020874,
+                "token": " python"
+              },
+              {
+                "logprob": -4.47852087020874,
+                "token": " "
+              }
+            ]
+          },
+          {
+            "logprob": -1.6355527639389038,
+            "token": " of",
+            "top_logprobs": [
+              {
+                "logprob": -1.6355527639389038,
+                "token": " of"
+              },
+              {
+                "logprob": -3.3400988578796387,
+                "token": " code"
+              },
+              {
+                "logprob": -3.5105528831481934,
+                "token": " to"
+              },
+              {
+                "logprob": -3.6355528831481934,
+                "token": " output"
+              },
+              {
+                "logprob": -3.6355528831481934,
+                "token": " input"
+              }
+            ]
+          },
+          {
+            "logprob": -1.7105084657669067,
+            "token": " of",
+            "top_logprobs": [
+              {
+                "logprob": -1.7105084657669067,
+                "token": " of"
+              },
+              {
+                "logprob": -3.335508346557617,
+                "token": " to"
+              },
+              {
+                "logprob": -3.369600296020508,
+                "token": " code"
+              },
+              {
+                "logprob": -3.585508346557617,
+                "token": " for"
+              },
+              {
+                "logprob": -4.023008346557617,
+                "token": "."
+              }
+            ]
+          }
+        ],
+        "token_count_observed": 192
+      },
+      "ok": true,
+      "payload": {
+        "max_tokens": 192,
+        "request_logprobs": true,
+        "top_logprobs": 5
+      },
+      "quality": {
+        "chars": 1262,
+        "flagged": true,
+        "flags": [
+          "low_unique_word_ratio",
+          "dominant_repeated_word",
+          "repeated_bigrams",
+          "repeated_trigrams"
+        ],
+        "repeated_bigram_fraction": 0.8478260869565217,
+        "repeated_trigram_fraction": 0.825136612021858,
+        "starts_with": "the following code:\n\n a sample of of.  (",
+        "top_word": "import",
+        "top_word_fraction": 0.8810810810810811,
+        "unique_word_ratio": 0.10270270270270271,
+        "word_count": 185
+      },
+      "response": null,
+      "source": "live",
+      "text": " the following code:\n\n a sample of of.  (code is not in in python)) use to import import numpy,import import torch import import torchvision import from from class import import tensor import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import",
+      "text_preview": " the following code:\n\n a sample of of.  (code is not in in python)) use to import import numpy,import import torch import import torchvision import from from class import import tensor import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import",
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T07:12:46Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "run_id": "sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp4",
+  "schema": "openai-quality-probe/v1",
+  "started_utc": "2026-06-08T07:12:41Z",
+  "url": "http://127.0.0.1:30012"
+}

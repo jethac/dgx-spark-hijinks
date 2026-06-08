@@ -195,6 +195,27 @@ Interpretation:
 - It proves capacity, backend routing, and smoke-level sanity on `jethac/sglang@d7d931f`.
 - It is still not a blessed serving-quality or speed row. The next SGLang work is quality localization on the degraded benchmark prompts, not another capacity rerun.
 
+## 2026-06-08 d7d931f Logprob Quality Probe
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md`
+- `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp8_quality_probe.json`
+- `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp4_quality_probe.json`
+- `results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_compare.json`
+
+Result:
+
+- fp8 passed `short_decode` and `medium_decode` quality probes with generated-token logprobs.
+- FP4 `short_decode` began with the same high-confidence English prefix as fp8, then drifted into mixed Chinese text and repetition; similarity to fp8 was only `0.0883`.
+- FP4 `medium_decode` diverged immediately: first generated tokens were `the following code:` instead of fp8's `**Engineering Note:`, then the output collapsed into repeated `import` text. Similarity to fp8 was `0.0084`.
+- The comparison artifact has `ok=false`.
+
+Interpretation:
+
+- This localizes the FP4 quality failure more tightly than the earlier benchmark row. The corruption can be present at token one for a normal prompt, but another prompt can start plausibly and degrade later.
+- This is still not a serving win. It points the next SGLang work at prefill/decode state, per-layer calibration application, wrapper metadata, and scale/layout coupling around the failing prompt.
+
 Likely code locations:
 
 - `third_party/flashinfer/include/flashinfer/vec_dtypes.cuh`: generic `vec_cast` lacks the needed FP4 E2M1 to float conversion path.

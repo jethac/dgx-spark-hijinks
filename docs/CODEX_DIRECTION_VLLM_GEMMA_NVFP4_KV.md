@@ -127,6 +127,17 @@ Likely insertion points and risks:
   heterogeneous `head_dim/global_head_dim`; relax this only after per-layer routing is
   explicit, or global `D=512` can accidentally hit the known FlashInfer NVFP4 guard.
 
+**Parallel-lane split (read this).** The D=512 diagnosis (register/fragment-shape guard,
+not a tile/SMEM tweak) means a *true* full-FP4-KV D=512 kernel is a hard, separate
+FlashInfer track — back-burner, benefiting both lanes only if/when it lands. **Mixed KV
+(this objective) is the primary near-term Gemma path.** SGLang pursues the *same* mixed-KV
+strategy through a *different mechanism* — its hybrid-SWA subpool delegation (see SGLang doc
+Objective E) — so the two lanes implement one proven-viable approach through non-overlapping
+code and cross-validate it. vLLM's mechanism is per-layer `kv_cache_dtype_skip_layers` +
+per-`AttentionSpec` dtype. The only shared surface is the FlashInfer guard itself:
+coordinate so neither lane edits `prefill.cuh`'s trait math blindly — any real D=512 kernel
+work lands once, in FlashInfer, not twice.
+
 **C. Decouple SWA handling from the dual-head-dim fix using an earlier Gemma.**
 Earlier Gemmas (2/3) use SWA but uniform head dims, so they exercise the
 hybrid-local/global KV plumbing *without* the `D=512` blocker. Use one as the first
