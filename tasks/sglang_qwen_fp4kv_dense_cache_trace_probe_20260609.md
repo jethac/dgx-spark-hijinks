@@ -24,6 +24,18 @@ Run the cheap no-code matrix before adding new instrumentation:
   feature path.
 - Both env vars: full recompute through full paged attention.
 
+2026-06-09 execution stop point:
+
+- Runner: `scripts/run_sglang_fp4_request_order_matrix.sh`
+- Artifact: `results/sglang_qwen_fp4kv_matrix_20260609tmatrix6jst.md`
+- Outcome: source overlay builds and installs cleanly from `jethac/sglang@d4fe78078`
+  when the throwaway image provides rustup stable and `protoc`, but SGLang exits before
+  health because NGC 26.05 ships `flashinfer_python 0.6.10...` and the source overlay
+  requires `>=0.6.12`.
+- Interpretation: no row evidence yet. Do not downgrade SGLang or bless the older
+  FlashInfer package. Re-run the same matrix only after pairing the overlay with a
+  FlashInfer `>=0.6.12` build that keeps the GB10 FP4-KV patches/evidence.
+
 Decision rule for this matrix:
 
 - Full-paged cached-prefix passes while default fails -> bug is split ragged/paged merge

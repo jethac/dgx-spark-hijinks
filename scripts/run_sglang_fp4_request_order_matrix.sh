@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+IMAGE=${IMAGE:-nvcr.io/nvidia/sglang:26.05-py3}
+RUNTIME_IMAGE=${RUNTIME_IMAGE:-}
+PREPARE_RUST_IMAGE=${PREPARE_RUST_IMAGE:-1}
+MODEL=${MODEL:-Qwen/Qwen2.5-1.5B-Instruct}
+PORT=${PORT:-30000}
+RUN_ID=${RUN_ID:-sglang_qwen_fp4kv_matrix_$(date -u +%Y%m%dT%H%M%SZ)}
+REPO_ROOT=${REPO_ROOT:-$(pwd)}
+RESULTS_DIR=${RESULTS_DIR:-${REPO_ROOT}/results}
+HF_CACHE=${HF_CACHE:-${HOME}/.cache/huggingface}
+
+mkdir -p "${RESULTS_DIR}"
+
+if [[ -z "${RUNTIME_IMAGE}" ]]; then
+  RUNTIME_IMAGE="${IMAGE}"
+fi
+
+if [[ "${PREPARE_RUST_IMAGE}" == "1" ]]; then
+  image_tag=$(
+    printf '%s' "${RUN_ID}" |
+      tr '[:upper:]' '[:lower:]' |
+      tr -c 'a-z0-9_.-' '-'
+  )
+  RUNTIME_IMAGE="sglang-matrix-${image_tag}-rust"
+  if ! docker build -t "${RUNTIME_IMAGE}" - <<EOF
+FROM ${IMAGE}
+RUN apt-get update && apt-get install -y --no-install-recommends protobuf-compiler && rm -rf /var/lib/apt/lists/*
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable
+ENV PATH="/root/.cargo/bin:\${PATH}"
+EOF
+  then
+    exit 1
+  fi
+fi
+
+COMMON_ENVS=(
+  -e SGLANG_FP4_KV_TRACE_RADIX=1
+  -e SGLANG_FP4_KV_TRACE_BACKEND=1
+  -e SGLANG_FP4_KV_TRACE_LAYERS=0
+  -e SGLANG_FP4_KV_TRACE_VALUES=16
+  -e SGLANG_FP4_KV_TRACE_LOC_LIMIT=128
+)
+
+run_case() {
+  local name="$1"
+  shift
+  local container="${RUN_ID}_${name}"
+  local out="results/${RUN_ID}_${name}.json"
+  local server_log="results/${RUN_ID}_${name}_server.log"
+  local inspect="results/${RUN_ID}_${name}_container_inspect.json"
+  local install_log="results/${RUN_ID}_${name}_editable_install.log"
+  local cid_file="results/${RUN_ID}_${name}_container_id.txt"
+
+  echo "==== CASE ${name} ===="
+  docker rm -f "${container}" >/dev/null 2>&1 || true
+
+  local extra_envs=()
+  for envpair in "$@"; do
+    extra_envs+=(-e "${envpair}")
+  done
+
+  local cid
+  cid=$(
+    docker run -d --name "${container}" --gpus all --ipc=host --network=host \
+      -v "${REPO_ROOT}:/work" \
+      -v "${HF_CACHE}:/root/.cache/huggingface" \
+      -w /work \
+      "${COMMON_ENVS[@]}" "${extra_envs[@]}" \
+      "${RUNTIME_IMAGE}" \
+      bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/sglang; python3 -m pip install --no-deps -e /work/third_party/sglang/python > /work/${install_log} 2>&1; exec python3 -m sglang.launch_server --model-path ${MODEL} --attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port ${PORT}"
+  )
+  echo "${cid}" >"${REPO_ROOT}/${cid_file}"
+
+  local ready=0
+  for _ in $(seq 1 180); do
+    if curl -fsS "http://127.0.0.1:${PORT}/health" >/dev/null 2>&1; then
+      ready=1
+      break
+    fi
+    if ! docker ps --format '{{.Names}}' | grep -qx "${container}"; then
+      break
+    fi
+    sleep 2
+  done
+
+  if [[ "${ready}" != "1" ]]; then
+    echo "server not ready for ${name}" >&2
+    docker logs "${container}" >"${REPO_ROOT}/${server_log}" 2>&1 || true
+    docker inspect "${container}" >"${REPO_ROOT}/${inspect}" 2>/dev/null || true
+    docker rm -f "${container}" >/dev/null 2>&1 || true
+    return 1
+  fi
+
+  docker exec "${container}" python3 /work/scripts/sglang_fp4_request_order_probe.py \
+    --url "http://127.0.0.1:${PORT}" \
+    --model "${MODEL}" \
+    --model-path "${MODEL}" \
+    --case medium_decode \
+    --run-id "${RUN_ID}_${name}" \
+    --output "/work/${out}" \
+    --max-new-tokens 1 \
+    --top-logprobs-num 20 \
+    --timeout 180
+  local rc=$?
+
+  docker logs "${container}" >"${REPO_ROOT}/${server_log}" 2>&1 || true
+  docker inspect "${container}" >"${REPO_ROOT}/${inspect}" 2>/dev/null || true
+  docker rm -f "${container}" >/dev/null 2>&1 || true
+  return "${rc}"
+}
+
+status=0
+run_case default || status=1
+run_case full_paged SGLANG_FLASHINFER_USE_PAGED=1 || status=1
+run_case force_miss SGLANG_RADIX_FORCE_MISS=1 || status=1
+run_case force_miss_full_paged \
+  SGLANG_RADIX_FORCE_MISS=1 \
+  SGLANG_FLASHINFER_USE_PAGED=1 || status=1
+
+python3 - <<PY
+import json
+from pathlib import Path
+
+run = "${RUN_ID}"
+base = Path("${RESULTS_DIR}")
+summary = {"schema": "sglang-fp4-kv-matrix-summary/v1", "run_id": run, "cases": {}}
+for name in ("default", "full_paged", "force_miss", "force_miss_full_paged"):
+    path = base / f"{run}_{name}.json"
+    if not path.exists():
+        summary["cases"][name] = {"ok": False, "missing": str(path)}
+        continue
+    obj = json.loads(path.read_text())
+    rows = []
+    for row in obj.get("rows", []):
+        row_summary = {"name": row.get("name"), "requests": []}
+        for req in row.get("requests") or []:
+            req_summary = req.get("summary") or {}
+            first = req_summary.get("first_token") or {}
+            if req.get("endpoint") == "native_generate":
+                cached = req_summary.get("cached_tokens")
+            else:
+                cached = (req_summary.get("meta_info") or {}).get("cached_tokens")
+            row_summary["requests"].append(
+                {
+                    "endpoint": req.get("endpoint"),
+                    "rid": req.get("rid"),
+                    "cached_tokens": cached,
+                    "token": first.get("token"),
+                    "token_id": first.get("token_id"),
+                    "logprob": first.get("logprob"),
+                }
+            )
+        rows.append(row_summary)
+    summary["cases"][name] = {
+        "ok": True,
+        "token_summary": obj.get("token_summary"),
+        "rows": rows,
+    }
+out = base / f"{run}_summary.json"
+out.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+print(json.dumps(summary, indent=2, sort_keys=True))
+PY
+
+exit "${status}"
