@@ -32,6 +32,15 @@ Instrumentation head: `jethac/sglang@ce1b6d15e` adds inactive-by-default
 the default FP4 native request against the radix-off request and prove whether the cached
 prefix's packed KV bytes and FP8 scale buffers stay aligned.
 
+Trace result (`results/sglang_qwen_fp4kv_radix_trace_20260608T213052JST_summary.md`):
+the default FP4 native request fails (`**` vs `ark`/`838`) while reusing a 55-token prefix
+(`prefix_indices_len=55`, `extend_prefix_lens_cpu=[55]`) and running
+`forward_extend_merge_paged`; the radix-off row passes (`**` vs `**`) with
+`prefix_indices_len=0`, `extend_prefix_lens_cpu=[0]`, and
+`forward_extend_ragged_no_prefix`. This narrows the next fix to FP4 cached-prefix merge
+page handling, not raw quantizer math, pool layout, prompt serialization, or graph capture.
+The next hook must compare reused page IDs with K-data/K-scale/V-data/V-scale page IDs.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

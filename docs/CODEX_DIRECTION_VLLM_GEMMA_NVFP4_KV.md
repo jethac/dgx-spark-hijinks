@@ -77,6 +77,12 @@ and proves NVFP4 corruption is present on the first generated token. The fp8 row
 top-logprob overlap for every probe case. So this is not late decode compounding or
 sampling noise; attention/KV state or logits are already wrong before sampling.
 
+Audit caveat: those first-token prompts are only `18`, `23`, and `24` tokens, far below
+Gemma 3's `sliding_window=1024`. They therefore do not require SWA eviction or window
+rotation to fail. SWA/hybrid metadata is still the only new model-family variable versus
+Qwen, but the next trace must first prove the base Gemma NVFP4 write/read/page-pairing
+path before attributing the defect to eviction.
+
 vLLM code-map audit: Gemma 3 SWA uses common `SlidingWindowSpec` and common block-table
 machinery. NVFP4 data and scales are not separate pools; they are slices of the same
 physical KV page (`[K_data | K_scale | V_data | V_scale]`). Therefore the next audit is:

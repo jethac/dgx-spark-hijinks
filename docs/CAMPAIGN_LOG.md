@@ -792,6 +792,31 @@
     generated token, so the next vLLM diagnostic should trace SWA block lifecycle, slot
     mapping, NVFP4 split/view offsets, and FlashInfer read-side page IDs.
 
+- Captured the SGLang Qwen FP4-KV radix metadata trace.
+  - artifact: `results/sglang_qwen_fp4kv_radix_trace_20260608T213052JST_summary.md`
+  - fork commit: `jethac/sglang@ce1b6d15e76985240e91592a0f44c0f282fc65af`
+  - rows:
+    `results/sglang_qwen_fp4kv_radix_trace_20260608T213052JST_default.json`,
+    `results/sglang_qwen_fp4kv_radix_trace_20260608T213052JST_radixoff.json`
+  - result: default FP4 still fails (`OpenAI **` vs native `ark` / `838`), while
+    `--disable-radix-cache` still passes (`**` vs `**` / `334`).
+  - localization: the failing native request has `prefix_indices_len=55`,
+    `extend_prefix_lens_cpu=[55]`, `extend_seq_lens_cpu=[1]`, and routes through
+    `forward_extend_merge_paged`; the passing radix-off request has no prefix reuse,
+    `extend_prefix_lens_cpu=[0]`, `extend_seq_lens_cpu=[56]`, and routes through
+    `forward_extend_ragged_no_prefix`.
+  - next gate: instrument cached-prefix page IDs and verify K-data/K-scale/V-data/V-scale
+    page pairing for reused FP4 prefix pages.
+
+- Updated the vLLM Gemma NVFP4-KV diagnosis from the read-only audit.
+  - finding: the three Gemma 3 first-token prompts are `18`, `23`, and `24` tokens, below
+    the `1024` sliding window, so the observed first-token corruption cannot require SWA
+    eviction or window rotation.
+  - implication: the next vLLM trace should still include SWA block lifecycle, but it must
+    first prove base Gemma NVFP4 write/read/page pairing in `BlockTable`,
+    `do_kv_cache_update`, `reshape_and_cache_nvfp4_dispatch`, and
+    `nvfp4_kv_cache_split_views`.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
