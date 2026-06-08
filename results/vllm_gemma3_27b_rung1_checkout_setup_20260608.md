@@ -52,3 +52,15 @@ previous preflight. Before running the fp8 comparator row, confirm `HF_TOKEN`/ga
 and disk headroom for the model download. Start the fp8 comparator first and only proceed
 to the NVFP4 candidate after fp8 produces server log, import probe, runtime geometry, chat
 smoke, benchmark, build-target audit, and quality artifacts.
+
+Follow-up access probe:
+`results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json`.
+
+- model info is visible: `gated="manual"`, revision
+  `005ad3404e59d6023443cb575daa05336842228a`
+- small metadata/tokenizer snapshot is blocked with `GatedRepoError`
+- `HF_TOKEN` was not present in the container environment
+- cache filesystem free space was `2498420961280` bytes
+
+So the immediate blocker is authentication/access for the gated model, not disk headroom or
+missing container tooling.

@@ -65,8 +65,11 @@ The packet generator now captures real Docker logs, waits for `/v1/models`, and 
 containers on exit. Clean checkout artifact:
 `results/vllm_gemma3_27b_rung1_checkout_setup_20260608.md`. Generated packet:
 `docs/results/vllm_gemma3_27b_rung1_20260608TCHECKOUTJST_command_packet.sh`.
-`google/gemma-3-27b-it` was not found in the existing HF cache, so confirm gated
-access/cache before starting the fp8 comparator.
+HF access probe `results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json`
+confirms the model is manually gated: model metadata is visible, but even the small
+config/tokenizer snapshot fails with `GatedRepoError` because no `HF_TOKEN` is present in
+the container environment. Disk headroom is sufficient. Provide/verify HF auth before
+starting the fp8 comparator.
 
 ### Qwen Speed Lane
 

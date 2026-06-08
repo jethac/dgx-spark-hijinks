@@ -104,6 +104,13 @@ The generated packet is committed at
 intentionally checked out at the Gemma 3 overlay commits named above, so `git submodule
 status` shows leading `+` markers for those two submodules.
 
+HF access probe:
+`results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json`. The model metadata is
+visible and reports manual gating, but a config/tokenizer-only snapshot fails with
+`GatedRepoError` because no `HF_TOKEN` is present in the container environment. Disk
+headroom is sufficient. The fp8 comparator row should not be started until HF auth/access
+is available.
+
 ## Expected Log Lines
 
 Both rows:

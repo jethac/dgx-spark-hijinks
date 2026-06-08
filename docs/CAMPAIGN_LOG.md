@@ -552,6 +552,20 @@
   - remaining gate: `google/gemma-3-27b-it` still needs gated access/cache confirmation
     before the fp8 comparator row starts.
 
+- Ran the bounded Hugging Face access probe for vLLM Gemma 3 27B.
+  - script: `scripts/hf_model_access_probe.py`
+  - artifact: `results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json`
+  - target: `google/gemma-3-27b-it`
+  - container: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+  - result: `model_info` succeeds and reports `gated="manual"` at revision
+    `005ad3404e59d6023443cb575daa05336842228a`, but a config/tokenizer-only
+    `snapshot_download` fails with `GatedRepoError`.
+  - environment: no `HF_TOKEN` was present inside the container; cache filesystem free
+    space was about `2.50e12` bytes.
+  - interpretation: the immediate blocker for the Gemma 3 fp8 comparator row is gated
+    Hugging Face authentication/access, not disk headroom, target image availability, or
+    source-checkout setup.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

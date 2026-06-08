@@ -1,0 +1,43 @@
+{
+  "allow_patterns": [
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer.model",
+    "tokenizer_config.json",
+    "special_tokens_map.json"
+  ],
+  "checks": {
+    "model_info": {
+      "gated": "manual",
+      "ok": true,
+      "private": false,
+      "sha": "005ad3404e59d6023443cb575daa05336842228a",
+      "siblings": 25
+    },
+    "small_snapshot": {
+      "exception_type": "GatedRepoError",
+      "message": "401 Client Error. (Request ID: Root=1-6a267de6-45d2776d36a301d571f112cd;c858bd7d-6167-4a29-8732-0202db8dbf32)\n\nCannot access gated repo for url https://huggingface.co/google/gemma-3-27b-it/resolve/005ad3404e59d6023443cb575daa05336842228a/config.json.\nAccess to model google/gemma-3-27b-it is restricted. You must have access to it and be authenticated to access it. Please log in.",
+      "ok": false
+    }
+  },
+  "disk": {
+    "free_bytes": 2498420961280,
+    "path": "/hf-cache",
+    "total_bytes": 3936289308672,
+    "used_bytes": 1237839212544
+  },
+  "environment": {
+    "cache_dir": "/hf-cache",
+    "hf_home": "/hf-cache",
+    "hf_hub_cache": null,
+    "hf_token_env_present": false
+  },
+  "finished_unix": 1780907494.5143142,
+  "huggingface_hub_version": "1.9.2",
+  "local_files_only": false,
+  "model": "google/gemma-3-27b-it",
+  "ok": false,
+  "schema": "hf-model-access-probe/v1",
+  "started_unix": 1780907493.7805882
+}
