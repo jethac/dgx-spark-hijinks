@@ -1,0 +1,185 @@
+{
+  "active_pages": [
+    13,
+    14
+  ],
+  "active_v_bytes_repeated": {
+    "all_finite": true,
+    "byte_like": true,
+    "dtype": "torch.float32",
+    "finite": 36864,
+    "head": [
+      240.0,
+      1.0,
+      226.0,
+      137.0,
+      145.0,
+      20.0,
+      186.0,
+      185.0,
+      33.0,
+      65.0,
+      47.0,
+      233.0,
+      91.0,
+      34.0,
+      145.0,
+      25.0
+    ],
+    "max": 255.0,
+    "mean": 128.48577880859375,
+    "min": 0.0,
+    "numel": 36864,
+    "rms": 147.62606811523438,
+    "shape": [
+      18,
+      32,
+      64
+    ]
+  },
+  "actual": {
+    "all_finite": true,
+    "byte_like": false,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      0.0,
+      -4.875,
+      0.40625,
+      0.0,
+      0.8125,
+      -3.25,
+      -0.40625,
+      0.0,
+      0.40625,
+      -0.40625,
+      1.625,
+      0.40625,
+      -0.8125,
+      -1.21875,
+      -0.40625,
+      -1.21875
+    ],
+    "max": 15.0,
+    "mean": -0.015198326669633389,
+    "min": -13.5,
+    "numel": 73728,
+    "rms": 1.9469819068908691,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "actual_vs_active_v_bytes_repeated": {
+    "cosine": -0.011256215162575245,
+    "max_abs": 257.84375,
+    "mean_abs": 128.52818298339844,
+    "rms_abs": 147.6586151123047,
+    "same_shape": true
+  },
+  "actual_vs_original_out_after": {
+    "cosine": -0.005058457143604755,
+    "max_abs": 259.09375,
+    "mean_abs": 128.56124877929688,
+    "rms_abs": 147.465576171875,
+    "same_shape": true
+  },
+  "actual_vs_reference": {
+    "cosine": 0.6811760663986206,
+    "max_abs": 13.85010051727295,
+    "mean_abs": 0.7769775390625,
+    "rms_abs": 1.5392377376556396,
+    "same_shape": true
+  },
+  "dump": "results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump/spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0002.pt",
+  "elapsed_sec": 0.0992261289502494,
+  "flashinfer_extra_cudaflags": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+  "last_page_len": [
+    2
+  ],
+  "layer_name": "language_model.model.layers.5.self_attn.attn",
+  "logits_soft_cap": 50.0,
+  "original_out_after": {
+    "all_finite": true,
+    "byte_like": true,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      240.0,
+      1.0,
+      226.0,
+      137.0,
+      145.0,
+      20.0,
+      186.0,
+      185.0,
+      33.0,
+      65.0,
+      47.0,
+      233.0,
+      91.0,
+      34.0,
+      145.0,
+      25.0
+    ],
+    "max": 255.0,
+    "mean": 128.52850341796875,
+    "min": 0.0,
+    "numel": 73728,
+    "rms": 147.44287109375,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "paged_kv_indices": [
+    13,
+    14
+  ],
+  "reference": {
+    "all_finite": true,
+    "byte_like": false,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      0.0,
+      -4.875,
+      0.40625,
+      0.0,
+      0.8125,
+      -3.25,
+      -0.40625,
+      0.0,
+      0.40625,
+      -0.40625,
+      1.625,
+      0.40625,
+      -0.8125,
+      -1.21875,
+      -0.40625,
+      -1.21875
+    ],
+    "max": 14.998600959777832,
+    "mean": -0.028590790927410126,
+    "min": -13.498526573181152,
+    "numel": 73728,
+    "rms": 1.9071201086044312,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "remapped_kv_indices": [
+    0,
+    1
+  ],
+  "schema": "vllm-active-page-flashinfer-replay/v1",
+  "sm_scale": 0.08838834764831845,
+  "source_paths": {
+    "source_root": "/flashinfer-src"
+  },
+  "window_left": -1
+}

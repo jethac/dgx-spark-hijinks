@@ -251,6 +251,40 @@ inside FlashInfer's paged-prefill FP4-KV read/convert path: audit the conversion
 packed `__nv_fp4x2_e2m1` plus FP8 scales into BF16 attention values, using the active-page
 replay as the signed reference.
 
+Output/view and physical-page update (2026-06-09):
+`results/vllm_gemma3_27b_contigout_and_sparse_replay_20260609.md` adds two more falsifiers.
+The missing-FP4-macro hypothesis is also closed: the failed Gemma 3 JIT run already built
+paged-prefill modules with `-DFLASHINFER_ENABLE_FP4_E2M1` and
+`-gencode=arch=compute_121a,code=sm_121a`. The causal standalone path is closed too:
+`scripts/flashinfer_nvfp4_kv_probe.py --causal` passes NHD/HND tuple KV at Gemma-compatible
+shape, with signed non-byte-like prefill output and cosine around `1.0`.
+
+`jethac/vllm@spark/hijinks-021-gemma3-tensor-trace` now has an inactive-by-default
+`VLLM_SPARK_NVFP4_PREFILL_CONTIG_OUT=1` diagnostic switch that routes SM12x NVFP4 FA2
+prefill through a fresh contiguous BF16 scratch output and copies the result back. The
+Gemma 3 row still returns the same bad first tokens (` Reigns`, Gujarati token, `ioane`),
+and layer-5 full-attention `flashinfer_wrapper_prefill_post` remains byte-like
+(`head=[240.0, 1.0, 226.0, 137.0, ...]`, `max=255.0`, mean around `129`) even though
+`uses_contig_out=true` and the `out_arg_view` is dense with stride `[4096, 128, 1]`.
+Therefore vLLM output-view aliasing/stride is not the cause.
+
+Second, `scripts/vllm_active_page_flashinfer_replay.py` now supports
+`--page-placement compact|sparse`. The sparse mode places dumped active pages back at their
+original physical page IDs and passes original indices, for example `[13, 14]`, instead of
+remapping to `[0, 1]`. Both compact and sparse direct FlashInfer replay on the useful
+layer-5 dump produce the same sane signed output (`head=[0.0, -4.875, 0.40625, 0.0, ...]`,
+RMS `1.9469819068908691`) and near-zero cosine against the live byte-like wrapper output.
+Therefore nonzero physical page IDs / page offset alone do not reproduce the failure.
+
+Current target: compare the live vLLM long-lived
+`BatchPrefillWithPagedKVCacheWrapper` state against the direct replay wrapper. The remaining
+difference is not data pages, scale pages, output contiguity, or physical page IDs in
+isolation; it is likely plan reuse, wrapper metadata, split-kv/JIT module selection, or a
+run/plan argument that differs between the direct replay and vLLM's wrapper path. The next
+trace should dump wrapper plan fields immediately before `run(...)` and a direct in-process
+fresh-wrapper replay from the same live tensors before returning from the vLLM attention
+call.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate

@@ -137,6 +137,7 @@ def _pack_metadata(args: argparse.Namespace) -> dict[str, Any]:
         "flashinfer_source_root": str(args.flashinfer_source_root)
         if args.flashinfer_source_root
         else None,
+        "causal": args.causal,
         "k_global_scale": args.k_global_scale,
         "v_global_scale": args.v_global_scale,
         "cosine_threshold": args.cosine_threshold,
@@ -386,7 +387,7 @@ def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: 
         args.num_kv_heads,
         args.head_dim,
         args.page_size,
-        causal=False,
+        causal=args.causal,
         pos_encoding_mode="NONE",
         logits_soft_cap=0.0,
         kv_data_type=torch.uint8,
@@ -412,7 +413,12 @@ def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: 
         vi = _gather_sequence(torch, case["v_dq"], layout, start, stop, last_len)
         refs.append(
             flashinfer.prefill.single_prefill_with_kv_cache(
-                qi, ki, vi, causal=False, pos_encoding_mode="NONE", logits_soft_cap=0.0
+                qi,
+                ki,
+                vi,
+                causal=args.causal,
+                pos_encoding_mode="NONE",
+                logits_soft_cap=0.0,
             )
         )
     expected = torch.cat(refs, dim=0)
@@ -537,6 +543,11 @@ def parse_args() -> argparse.Namespace:
         help="Global dequantization scale passed as v_scale.",
     )
     parser.add_argument("--cosine-threshold", type=float, default=0.995)
+    parser.add_argument(
+        "--causal",
+        action="store_true",
+        help="Run paged prefill with a causal mask instead of full attention.",
+    )
     parser.add_argument("--max-abs-threshold", type=float, default=0.25)
     parser.add_argument("--no-deswizzle-flag", action="store_true")
     return parser.parse_args()
