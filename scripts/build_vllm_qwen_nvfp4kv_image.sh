@@ -74,11 +74,15 @@ from pathlib import Path
 import flashinfer
 import vllm
 
-root = Path(flashinfer.__file__).resolve().parent
+source_root = Path("/opt/jethac-flashinfer")
 source_hits = []
-for path in root.rglob("*.py"):
+for path in list(source_root.rglob("*.py")) + list(source_root.rglob("*.cu")) + list(source_root.rglob("*.cuh")):
     text = path.read_text(errors="ignore")
-    if "maybe_k_cache_sf_stride_page" in text or "FLASHINFER_PAGED_V_SF_DESWIZZLE" in text:
+    if (
+        "maybe_k_cache_sf_stride_page" in text
+        or "sf_stride_page" in text
+        or "FLASHINFER_PAGED_V_SF_DESWIZZLE" in text
+    ):
         source_hits.append(str(path))
 
 backend = Path(vllm.__file__).resolve().parent / "v1/attention/backends/flashinfer.py"
