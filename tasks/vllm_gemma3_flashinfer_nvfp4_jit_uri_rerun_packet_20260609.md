@@ -26,10 +26,12 @@ Inside the existing GB10 vLLM source-overlay container:
    FlashAttention versions.
 2. Clear FlashInfer generated/JIT cache directories used by the container before server
    start. Do not rely on timestamp rebuild alone.
-3. Use `scripts/flashinfer_source_sitecustomize.py` from commit `188efae` or newer. It must
-   prepend `/flashinfer-src` to `sys.path` before importing FlashInfer; otherwise the
-   container may still use the installed old `flashinfer/jit/attention/modules.py` and the
-   URI patch will not be exercised.
+3. Use `scripts/flashinfer_source_sitecustomize.py` from commit `258d4bf` or newer. It must
+   monkeypatch the installed `flashinfer.prefill.get_batch_prefill_uri` binding to emit
+   `dtype_kv_fp4x2_e2m1` for packed NVFP4 KV; otherwise the container may still use the
+   installed old `dtype_kv_u8` URI helper and the patch will not be exercised. Do not
+   prepend the whole `/flashinfer-src` package to `PYTHONPATH` in this image: that path
+   currently trips a CuteDSL/CUTLASS Python dependency mismatch.
 4. Set:
 
 ```bash

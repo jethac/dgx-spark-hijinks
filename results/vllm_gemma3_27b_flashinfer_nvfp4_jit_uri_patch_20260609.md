@@ -36,10 +36,15 @@ Expected effect: the failing Gemma 3 paged-prefill module should build under a f
 
 Top-level source-overlay correction:
 
-- `scripts/flashinfer_source_sitecustomize.py` now prepends `SPARK_FLASHINFER_SOURCE_ROOT`
-  to `sys.path` before importing FlashInfer. This is required for the live container to use
-  the patched Python JIT URI helpers from `/flashinfer-src`, not only the patched C++/JIT
-  template directories.
+- `scripts/flashinfer_source_sitecustomize.py` now monkeypatches the installed
+  FlashInfer `get_batch_prefill_uri` binding used by `flashinfer.prefill`, so the live
+  container uses a `dtype_kv_fp4x2_e2m1` batch-prefill namespace without importing the
+  whole `/flashinfer-src` Python package.
+- Whole-source Python import was tested and is not viable in this container because the
+  source package's CuteDSL/CUTLASS Python dependency path raises
+  `AttributeError: module 'cutlass.cute.nvgpu' has no attribute 'OperandMajorMode'`.
+  Therefore the live overlay stays narrow: installed FlashInfer Python ABI plus patched
+  JIT env paths, patched attention utilities, and patched batch-prefill URI binding.
 
 ## Local Verification
 
