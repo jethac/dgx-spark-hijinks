@@ -3,12 +3,12 @@
 Run this on the GB10 host only when the GPU is free.
 
 Purpose: rerun the known SGLang Qwen default-vs-radix-off FP4 first-token probe with
-`jethac/sglang@a8e8de26d` and the cached-prefix reference comparator enabled. This is a
+`jethac/sglang@2a228949a` and the cached-prefix reference comparator enabled. This is a
 diagnostic packet, not a benchmark row.
 
 Expected source pin:
 
-- `third_party/sglang`: `a8e8de26db`
+- `third_party/sglang`: `2a228949a31c5f36776cdb4d7b286dc03e6f1e89`
 
 Required FP4 trace envs for the default row:
 
@@ -43,6 +43,8 @@ Pass/fail:
 - Default server log must contain `FP4 KV prefix-reference trace`.
 - If `o2_compare` or `s2_compare` is bad, the defect is in native FP4 paged-prefix
   read/layout/scale semantics.
+- `s2_compare` uses FlashInfer's log2 LSE convention; natural-log LSE mismatch alone is
+  expected.
 - If `o2/s2` compare but `merge_compare` is bad, the defect is in LSE merge integration.
 - If all comparator values match and quality still fails, move to quantization-error and
   calibration-impact probes at `MHATokenToKVPoolFP4.set_kv_buffer()`.

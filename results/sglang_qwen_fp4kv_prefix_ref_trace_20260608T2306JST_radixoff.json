@@ -1,0 +1,561 @@
+{
+  "case": "medium_decode",
+  "created_utc": "2026-06-08T14:06:49Z",
+  "endpoint_request_metadata": {
+    "native_generate": {
+      "endpoint": "/generate",
+      "prompt_carrier": "input_ids",
+      "prompt_token_count": 56,
+      "sampling_fields": {
+        "logprob_start_len": -1,
+        "return_logprob": true,
+        "return_text_in_logprobs": true,
+        "sampling_params": {
+          "max_new_tokens": 1,
+          "temperature": 0
+        },
+        "stream": false,
+        "top_logprobs_num": 20
+      }
+    },
+    "openai_chat": {
+      "endpoint": "/v1/chat/completions",
+      "prompt_carrier": "messages",
+      "sampling_fields": {
+        "logprobs": true,
+        "max_tokens": 1,
+        "return_meta_info": true,
+        "return_prompt_token_ids": true,
+        "stream": false,
+        "temperature": 0,
+        "top_logprobs": 20
+      }
+    }
+  },
+  "first_generated_token": {
+    "native_generate": {
+      "logprob": -0.7235294580459595,
+      "raw": [
+        -0.7235294580459595,
+        334,
+        "**"
+      ],
+      "token": "**",
+      "token_id": 334
+    },
+    "openai_chat": {
+      "logprob": -0.7235294580459595,
+      "raw": {
+        "bytes": [
+          42,
+          42
+        ],
+        "logprob": -0.7235294580459595,
+        "token": "**",
+        "top_logprobs": [
+          {
+            "bytes": [
+              42,
+              42
+            ],
+            "logprob": -0.7235294580459595,
+            "token": "**"
+          },
+          {
+            "bytes": [
+              35,
+              35,
+              35
+            ],
+            "logprob": -1.4735294580459595,
+            "token": "###"
+          },
+          {
+            "bytes": [
+              35
+            ],
+            "logprob": -2.09852933883667,
+            "token": "#"
+          },
+          {
+            "bytes": [
+              69,
+              110,
+              103,
+              105,
+              110,
+              101,
+              101,
+              114,
+              105,
+              110,
+              103
+            ],
+            "logprob": -3.09852933883667,
+            "token": "Engineering"
+          },
+          {
+            "bytes": [
+              84,
+              105,
+              116,
+              108,
+              101
+            ],
+            "logprob": -3.34852933883667,
+            "token": "Title"
+          },
+          {
+            "bytes": [
+              35,
+              35
+            ],
+            "logprob": -3.97352933883667,
+            "token": "##"
+          },
+          {
+            "bytes": [
+              84,
+              111
+            ],
+            "logprob": -4.84852933883667,
+            "token": "To"
+          },
+          {
+            "bytes": [
+              67,
+              101,
+              114,
+              116,
+              97,
+              105,
+              110,
+              108,
+              121
+            ],
+            "logprob": -4.84852933883667,
+            "token": "Certainly"
+          },
+          {
+            "bytes": [
+              72,
+              101,
+              114,
+              101
+            ],
+            "logprob": -4.97352933883667,
+            "token": "Here"
+          },
+          {
+            "bytes": [
+              45,
+              45,
+              45,
+              10,
+              10
+            ],
+            "logprob": -5.09852933883667,
+            "token": "---\n\n"
+          },
+          {
+            "bytes": [
+              86,
+              97,
+              108,
+              105,
+              100
+            ],
+            "logprob": -5.59852933883667,
+            "token": "Valid"
+          },
+          {
+            "bytes": [
+              86,
+              97,
+              108,
+              105,
+              100,
+              97,
+              116,
+              105,
+              111,
+              110
+            ],
+            "logprob": -5.72352933883667,
+            "token": "Validation"
+          },
+          {
+            "bytes": [
+              83,
+              117,
+              114,
+              101
+            ],
+            "logprob": -5.72352933883667,
+            "token": "Sure"
+          },
+          {
+            "bytes": [
+              87,
+              104,
+              101,
+              110
+            ],
+            "logprob": -5.84852933883667,
+            "token": "When"
+          },
+          {
+            "bytes": [
+              78,
+              111,
+              116,
+              101
+            ],
+            "logprob": -6.09852933883667,
+            "token": "Note"
+          },
+          {
+            "bytes": [
+              91
+            ],
+            "logprob": -6.22352933883667,
+            "token": "["
+          },
+          {
+            "bytes": [
+              67,
+              114,
+              101,
+              97,
+              116,
+              105,
+              110,
+              103
+            ],
+            "logprob": -6.72352933883667,
+            "token": "Creating"
+          },
+          {
+            "bytes": [
+              83,
+              117,
+              98,
+              106,
+              101,
+              99,
+              116
+            ],
+            "logprob": -6.84852933883667,
+            "token": "Subject"
+          },
+          {
+            "bytes": [
+              69,
+              110,
+              103,
+              105,
+              110,
+              101
+            ],
+            "logprob": -6.84852933883667,
+            "token": "Engine"
+          },
+          {
+            "bytes": [
+              42
+            ],
+            "logprob": -6.97352933883667,
+            "token": "*"
+          }
+        ]
+      },
+      "token": "**",
+      "token_id": null
+    },
+    "same_text": true,
+    "same_token_id": false
+  },
+  "fp4_backend_trace": {
+    "first_trace_by_label": {
+      "decode": {
+        "k_scale": 0.1197916716337204,
+        "layer": 0,
+        "metadata": "{'type': 'DecodeMetadata', 'use_ragged': None, 'extend_no_prefix': None}",
+        "q": "{'shape': (1, 12, 128), 'dtype': 'torch.bfloat16', 'stride': (1536, 128, 1), 'device': 'cuda:0'}",
+        "v_scale": 0.0016276042442768812
+      }
+    },
+    "http_routes_seen": [
+      "/v1/chat/completions",
+      "/generate"
+    ],
+    "label_counts": {
+      "decode": 28
+    },
+    "layers_by_label": {
+      "decode": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ]
+    },
+    "limitation": "Existing NVFP4 backend trace lines are not tagged with rid or endpoint, so they prove which forward labels occurred but cannot bind a given trace group to OpenAI chat versus native /generate.",
+    "path": "/home/jethac/spark_tmp/sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST/dgx-spark-hijinks/results/sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST_radixoff_fp4_server.log",
+    "request_tagged": false
+  },
+  "local_prompt": {
+    "mode": "hf_apply_chat_template",
+    "model_path": "Qwen/Qwen2.5-1.5B-Instruct",
+    "token_count": 56,
+    "token_ids": [
+      151644,
+      8948,
+      198,
+      2610,
+      525,
+      1207,
+      16948,
+      11,
+      3465,
+      553,
+      54364,
+      14817,
+      13,
+      1446,
+      525,
+      264,
+      10950,
+      17847,
+      13,
+      151645,
+      198,
+      151644,
+      872,
+      198,
+      7985,
+      264,
+      63594,
+      14667,
+      5185,
+      25021,
+      1246,
+      311,
+      9593,
+      429,
+      458,
+      444,
+      10994,
+      3538,
+      374,
+      1667,
+      279,
+      10602,
+      22670,
+      63515,
+      13,
+      29734,
+      14175,
+      5904,
+      311,
+      6530,
+      13,
+      151645,
+      198,
+      151644,
+      77091,
+      198
+    ],
+    "token_ids_sha256": "5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517"
+  },
+  "localized_issue": "FP4 OpenAI chat and native /generate can consume the same prompt IDs but produce different first-token distributions. The smallest missing signal is request-tagged pre-sampling logits at ModelRunner.sample(), plus ForwardBatch mode/input_ids/positions/seq_lens/rids for the same first generated token.",
+  "max_new_tokens": 1,
+  "prompt_id_reconciliation": {
+    "local_prompt_token_ids_sha256": "5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517",
+    "openai_matches_local": true,
+    "openai_prompt_token_ids_sha256": "5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517"
+  },
+  "response_metadata": {
+    "native_generate": {
+      "cached_tokens": 0,
+      "completion_tokens": 1,
+      "finish_reason": {
+        "length": 1,
+        "type": "length"
+      },
+      "meta_info_subset": null,
+      "output_token_logprobs_length": 1,
+      "prompt_tokens": 56
+    },
+    "openai_chat": {
+      "finish_reason": "length",
+      "meta_info": {
+        "cached_tokens": 0,
+        "cached_tokens_details": null,
+        "completion_tokens": 1,
+        "dp_rank": null,
+        "e2e_latency": 1.252771647006739,
+        "finish_reason": {
+          "length": 1,
+          "type": "length"
+        },
+        "id": "16670f9250f5435fbb558123b70213f0",
+        "input_token_logprobs": [],
+        "input_top_logprobs": [],
+        "num_retractions": 0,
+        "output_token_logprobs": [
+          [
+            -0.7235294580459595,
+            334,
+            "**"
+          ]
+        ],
+        "output_token_logprobs_length": 1,
+        "output_top_logprobs": [
+          [
+            [
+              -0.7235294580459595,
+              334,
+              "**"
+            ],
+            [
+              -1.4735294580459595,
+              14374,
+              "###"
+            ],
+            [
+              -2.09852933883667,
+              2,
+              "#"
+            ],
+            [
+              -3.09852933883667,
+              86000,
+              "Engineering"
+            ],
+            [
+              -3.34852933883667,
+              3851,
+              "Title"
+            ],
+            [
+              -3.97352933883667,
+              565,
+              "##"
+            ],
+            [
+              -4.84852933883667,
+              1249,
+              "To"
+            ],
+            [
+              -4.84852933883667,
+              95456,
+              "Certainly"
+            ],
+            [
+              -4.97352933883667,
+              8420,
+              "Here"
+            ],
+            [
+              -5.09852933883667,
+              44364,
+              "---\n\n"
+            ],
+            [
+              -5.59852933883667,
+              4088,
+              "Valid"
+            ],
+            [
+              -5.72352933883667,
+              13799,
+              "Validation"
+            ],
+            [
+              -5.72352933883667,
+              39814,
+              "Sure"
+            ],
+            [
+              -5.84852933883667,
+              4498,
+              "When"
+            ],
+            [
+              -6.09852933883667,
+              9112,
+              "Note"
+            ],
+            [
+              -6.22352933883667,
+              58,
+              "["
+            ],
+            [
+              -6.72352933883667,
+              24973,
+              "Creating"
+            ],
+            [
+              -6.84852933883667,
+              13019,
+              "Subject"
+            ],
+            [
+              -6.84852933883667,
+              4571,
+              "Engine"
+            ],
+            [
+              -6.97352933883667,
+              9,
+              "*"
+            ]
+          ]
+        ],
+        "prompt_tokens": 56,
+        "reasoning_tokens": 0,
+        "response_sent_to_client_ts": 1780927609.769105,
+        "weight_version": "default"
+      },
+      "prompt_token_count": 56,
+      "prompt_token_ids_sha256": "5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517",
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 57
+      }
+    }
+  },
+  "run_id": "sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST_radixoff",
+  "schema": "sglang-fp4-endpoint-metadata-probe/v1",
+  "source": "live"
+}

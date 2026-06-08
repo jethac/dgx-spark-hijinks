@@ -79,13 +79,19 @@ contribution against an equivalent no-prefix/full-ragged FP4 reference for the s
 55-token prefix and query, then inspect FlashInfer FA2 paged-prefix dequant / LSE / merge
 weighting if they diverge.
 
-Prefix-reference trace implementation (`jethac/sglang@a8e8de26d`): adds
-`SGLANG_FP4_KV_TRACE_PREFIX_REF=1` and `SGLANG_FP4_KV_PREFIX_REF_MAX_TOKENS=...`.
-It captures the exact FlashInfer paged-plan tensors, dequantizes the selected cached FP4
-prefix slots through SGLang's `NVFP4KVQuantizeUtil.dequantize`, computes a torch FP32
-reference prefix-attention contribution for the same query, and logs `o2/s2` plus manual
-merge comparisons. This is inactive by default and not yet a GB10 artifact. Next live run:
-`tasks/sglang_qwen_fp4kv_prefix_ref_trace_20260608.md`.
+Prefix-reference trace result
+(`results/sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST_summary.md`):
+`jethac/sglang@2a228949a` adds and fixes
+`SGLANG_FP4_KV_TRACE_PREFIX_REF=1`. The default row still fails (`OpenAI **` vs native
+`ark`/`838`) with `cached_tokens=55`; radix-off still passes (`**`/`334`) with
+`cached_tokens=0`. For the sampled failing layer-0 request, cached paged-prefix `o2`
+matches the dequantized torch reference (`cosine=0.999997`, `max_abs=0.0078125`), `s2`
+matches after converting the reference LSE to FlashInfer's log2 convention
+(`max_abs=0.001953125`), and manual `exp2` merge exactly matches `_safe_merge_state` at
+BF16 precision (`max_abs=0.0`). This clears FP4 paged-prefix read/layout/dequant, LSE
+units, and merge-state math for the sampled failing case. The next hook moves upward:
+trace calibration/quantization-error impact at cache fill and request sequencing/state
+across the OpenAI/native radix-hit pair.
 
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest

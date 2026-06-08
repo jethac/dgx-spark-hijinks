@@ -901,12 +901,25 @@
     `VLLM_SPARK_KV_TRACE_FILE` and first-token probes before benchmark/manifest traffic.
 
 - Added SGLang FP4-KV cached-prefix reference comparator.
-  - fork commit: `jethac/sglang@a8e8de26d`
+  - fork commits: `jethac/sglang@a8e8de26d`, `0b0b6ca4a`, `2a228949a`
   - env gate: `SGLANG_FP4_KV_TRACE_PREFIX_REF=1`
   - task: `tasks/sglang_qwen_fp4kv_prefix_ref_trace_20260608.md`
   - purpose: compare FlashInfer native FP4 paged-prefix `o2/s2` against a torch reference
     computed from SGLang-dequantized cached FP4 prefix slots, after `f76f80484` proved
     sampled cached page bytes and scale bytes match write/stored/read.
+
+- Ran SGLang FP4-KV cached-prefix reference comparator.
+  - artifact: `results/sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST_summary.md`
+  - parsed artifact: `results/sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST_parsed.json`
+  - result: default FP4 still fails (`OpenAI **` vs native `ark` / `838`) with
+    `cached_tokens=55`; radix-off still passes (`**` / `334`) with `cached_tokens=0`.
+  - comparator: cached paged-prefix `o2` matches the dequantized torch reference
+    (`cosine=0.999997`, `max_abs=0.0078125`), FlashInfer-base `s2` matches after converting
+    reference LSE to log2 units (`max_abs=0.001953125`), and manual `exp2` merge matches
+    `_safe_merge_state` exactly at BF16 precision.
+  - interpretation: the remaining SGLang FP4-KV quality bug is above FP4 paged-prefix
+    read/dequant and merge math; next inspect calibration/quantization-error impact and
+    request sequencing/state across the OpenAI/native radix-hit pair.
 
 ## First Benchmark Campaign Summary
 

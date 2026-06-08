@@ -1,0 +1,193 @@
+{
+  "prefix_reference": {
+    "error": null,
+    "kv_range": [
+      0,
+      55
+    ],
+    "merge_compare": {
+      "a": {
+        "device": "cuda:0",
+        "dtype": "torch.bfloat16",
+        "shape": [
+          1,
+          12,
+          128
+        ],
+        "stride": [
+          1536,
+          128,
+          1
+        ]
+      },
+      "b": {
+        "device": "cuda:0",
+        "dtype": "torch.bfloat16",
+        "shape": [
+          1,
+          12,
+          128
+        ],
+        "stride": [
+          1536,
+          128,
+          1
+        ]
+      },
+      "cosine": 0.9999998807907104,
+      "finite_pair": true,
+      "max_abs": 0.0,
+      "rms": 0.0,
+      "shape_match": true
+    },
+    "o2_compare": {
+      "a": {
+        "device": "cuda:0",
+        "dtype": "torch.bfloat16",
+        "shape": [
+          1,
+          12,
+          128
+        ],
+        "stride": [
+          1536,
+          128,
+          1
+        ]
+      },
+      "b": {
+        "device": "cuda:0",
+        "dtype": "torch.bfloat16",
+        "shape": [
+          1,
+          12,
+          128
+        ],
+        "stride": [
+          1536,
+          128,
+          1
+        ]
+      },
+      "cosine": 0.9999971985816956,
+      "finite_pair": true,
+      "max_abs": 0.0078125,
+      "rms": 0.0006038766587153077,
+      "shape_match": true
+    },
+    "prefix_slots": {
+      "dtype": "torch.int64",
+      "head": [
+        4107,
+        4108,
+        4109,
+        4110,
+        4111,
+        4112,
+        4113,
+        4114
+      ],
+      "len": 55,
+      "shape": [
+        55
+      ],
+      "tail": [
+        4154,
+        4155,
+        4156,
+        4157,
+        4158,
+        4159,
+        4160,
+        4161
+      ]
+    },
+    "qo_range": [
+      0,
+      1
+    ],
+    "request_index": 0,
+    "s2_compare": {
+      "a": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          12
+        ],
+        "stride": [
+          12,
+          1
+        ]
+      },
+      "b": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          12
+        ],
+        "stride": [
+          12,
+          1
+        ]
+      },
+      "cosine": 1.0000001192092896,
+      "finite_pair": true,
+      "max_abs": 0.001953125,
+      "rms": 0.0006718715303577483,
+      "shape_match": true
+    },
+    "s2_compare_natural_log": {
+      "a": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          12
+        ],
+        "stride": [
+          12,
+          1
+        ]
+      },
+      "b": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          12
+        ],
+        "stride": [
+          12,
+          1
+        ]
+      },
+      "cosine": 0.9999999403953552,
+      "finite_pair": true,
+      "max_abs": 6137.994140625,
+      "rms": 2360.789794921875,
+      "shape_match": true
+    }
+  },
+  "rows": {
+    "default": {
+      "native_cached_tokens": 55,
+      "native_token": "ark",
+      "native_token_id": 838,
+      "openai_token": "**",
+      "prompt_tokens": 56,
+      "same_text": false
+    },
+    "radixoff": {
+      "native_cached_tokens": 0,
+      "native_token": "**",
+      "native_token_id": 334,
+      "openai_token": "**",
+      "prompt_tokens": 56,
+      "same_text": true
+    }
+  },
+  "run_id": "sglang_qwen_fp4kv_prefix_ref_trace_20260608T2306JST",
+  "sglang_commit": "2a228949a31c5f36776cdb4d7b286dc03e6f1e89"
+}
