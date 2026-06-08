@@ -81,6 +81,7 @@ REQUIREMENTS = (
             "results/sglang_qwen_fp4kv_autosafe*.md",
             "results/sglang_nvfp4_kv_layout_probe*.json",
             "results/sglang_nvfp4_kv_convention_probe*.json",
+            "results/sglang_fp4_pool_bridge_probe*.json",
             "results/sglang_fp4_kv_sm121_*.md",
         ),
         forbidden_claim_fragments=(

@@ -444,6 +444,15 @@
   - shape: Gemma global/full attention NHD, `batch_size=2`, `kv_len=128`, `qo_len=16`, `page_size=16`, `H_q=16`, `H_kv=2`, `D=512`, `dtype=bfloat16`, vLLM-style swizzled V scale factors.
   - result: both operations still fail at `include/flashinfer/attention/prefill.cuh:3215`; decode trait is `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4`, prefill trait is `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1`.
   - interpretation: Gemma NVFP4-KV remains blocked below vLLM routing. The next work is a FlashInfer FA2 `D=512` trait/tile fix or a mixed-KV fallback for Gemma global layers.
+  - trait audit: `DISPATCH_HEAD_DIM` already has `case 512`; the failure is `KernelTraits::IsInvalid()` clause `NUM_MMA_Q * (8 * NUM_MMA_D_VO + 2 * sizeof(DTypeQKAccum) * NUM_MMA_KV) >= 256`. For `D=512`, `NUM_MMA_D_VO=32`, so the term is `264` for decode and `272` for prefill. This is a fragment/register-shape guard, not a missing head-dim table or primarily a 99 KiB SMEM overflow. Mixed KV for global layers is the pragmatic next vLLM/Gemma path.
+
+- Ran the SGLang FP4 pool bridge on GB10.
+  - script: `scripts/sglang_fp4_pool_bridge_probe.py`
+  - artifact: `results/sglang_fp4_pool_bridge_probe_20260608.json`
+  - runtime: `nvcr.io/nvidia/sglang:26.05-py3` with `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` overlaid through `PYTHONPATH`; FlashInfer `0.6.10+cf494fca.nv26.05.cu132.50619265`; device `NVIDIA GB10`, capability `[12, 1]`.
+  - shape: `tokens=40`, `query_heads=64`, `kv_heads=4`, `head_dim=128`, page size 1, token slots `1..40` so slot 0 remains the SGLang padded slot.
+  - result: `all_ok=true`; `attention_cosine_vs_dequant=0.9999946356`, `attention_cosine_vs_source=0.9958496094`, finite output, `key_dequant_cosine_vs_source=0.9955501556`, `value_dequant_cosine_vs_source=0.9954957962`.
+  - interpretation: `MHATokenToKVPoolFP4` writes packed K/V and FP8 scale buffers that FlashInfer FA2 can consume through the same getters used by serving. The remaining SGLang FP4-KV corruption is downstream of the basic pool contract: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic bridge.
 
 ## First Benchmark Campaign Summary
 

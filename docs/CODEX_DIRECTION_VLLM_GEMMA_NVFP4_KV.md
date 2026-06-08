@@ -81,18 +81,20 @@ KV is bf16/fp8/nvfp4. Goal: replace the `da1daf40` + Transformers surgery with a
 reproducible clean-stack Gemma baseline. This is compatibility, not a speed/KV claim.
 
 **B. Break the `prefill.cuh:3215` D=512 failure — this is the keystone.**
-The standalone harness reproduction is done. The remaining question is *why* global
-`D=512` fails: is it (i) an unsupported head-dim/register/tile guard in the FA2 NVFP4
-path, or (ii) a launch/shared-memory tile overflow — i.e. the same 99 KiB/block SM12x
-ceiling that sinks SM120 FP4 GEMM tiles in TRT-LLM #11368? Inspect
-`include/flashinfer/attention/prefill.cuh` and the generated JIT instantiation for the
-failing trait, then pick a fix:
-   - if SMEM/tile: a GB10-appropriate tile config for `D=512` FP4 FA2, or
-   - if head-dim guard: extend/route the supported-head-dim set, or
-   - interim: **per-layer mixed KV** — NVFP4 KV on local (`D=256`) layers, fp8/bf16 on
-     the global (`D=512`) layers. Gemma's ~5:1 local:global ratio means this captures
-     most of the capacity win immediately while the `D=512` fix matures. The original
-     plan always allowed "Gemma = NVFP4 weights + fp8/bf16 KV first, full FP4 KV later."
+The standalone harness reproduction is done, and the first trait audit has a concrete
+answer: the `D=512` launch reaches `DISPATCH_HEAD_DIM`'s `case 512`, then trips
+`KernelTraits::IsInvalid()` in `include/flashinfer/attention/prefill.cuh`. The rejecting
+clause is `NUM_MMA_Q * (8 * NUM_MMA_D_VO + 2 * sizeof(DTypeQKAccum) * NUM_MMA_KV) >=
+256`. For `D=512`, `NUM_MMA_D_VO=32`, so `8 * NUM_MMA_D_VO` is already `256` before the
+positive KV term is added (`264` for the decode trait, `272` for prefill). This is a
+compile-time fragment/register-shape guard, not a missing head-dim table and not
+primarily a 99 KiB SMEM overflow. The practical next fixes are:
+   - **per-layer mixed KV** — NVFP4 KV on local (`D=256`) layers, fp8/bf16 on the global
+     (`D=512`) layers. Gemma's ~5:1 local:global ratio captures most of the capacity win
+     immediately while a true `D=512` kernel matures; or
+   - an alternate FlashInfer FA2 `D=512` kernel/trait that changes the fragment/register
+     shape enough to satisfy the guard. A simple head-dim support-table change or smaller
+     CTA/warp tweak is not expected to work under the current trait math.
 
 **C. Decouple SWA handling from the dual-head-dim fix using an earlier Gemma.**
 Earlier Gemmas (2/3) use SWA but uniform head dims, so they exercise the
@@ -189,10 +191,10 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
 
 ## First concrete step (no image builds)
 Two things, both on the existing image / standalone harness:
-  1. Inspect and patch the FlashInfer FA2 `D=512` trait/tile path. The focused harness
-     already reproduced the failure on `jethac/flashinfer@e152cf4d`; next decide
-     head-dim/register/tile guard vs 99 KiB SMEM overflow and either add a `D=512`-safe
-     SM12x tile or route Gemma global layers to mixed fp8/bf16 KV.
+  1. Prototype the Gemma mixed-KV fallback: keep FA2 NVFP4 KV on local `D=256` layers
+     and route global `D=512` layers to fp8/bf16 KV, with logs proving the per-layer
+     split. In parallel, treat a true FlashInfer `D=512` FA2 NVFP4 kernel as a separate
+     kernel-design task, not a dispatch-table tweak.
   2. Bring up Gemma 4 12B via **source overlay** on the clean FA2 image and capture the
      server log + backend audit (which attention/MoE backend actually got selected).
 Defer every image build until Objective E.

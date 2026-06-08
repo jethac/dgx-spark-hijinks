@@ -88,6 +88,14 @@ passing — not a dev step.
   table above): valid pairings identified, kernel math exonerated, bug localized to
   calibration / V-scale / backend integration. Do not re-run the raw-math bridge; the
   next work is finding where the *serving* path produces an unmatched pair.
+- **Pool bridge is DONE** (`results/sglang_fp4_pool_bridge_probe_20260608.json`):
+  `MHATokenToKVPoolFP4.set_kv_buffer()` writes packed K/V plus FP8 scale buffers that
+  FlashInfer FA2 can consume directly. The probe used real pool getters and passed with
+  `attention_cosine_vs_dequant=0.9999946`, `key_dequant_cosine_vs_source=0.99555`, and
+  `value_dequant_cosine_vs_source=0.99550`. This clears the basic pool layout and
+  global-scale application surface; the remaining serving corruption is later in backend
+  wrapper/server sequencing, CUDA graph state, or a model-path difference not covered by
+  the synthetic pool bridge.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -191,11 +199,10 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The convention bridge is already done — start one level down with the actual serving
-pool contract. Build a SGLang-vs-standalone-FlashInfer pool bridge on Qwen2.5 1.5B:
-quantize through `MHATokenToKVPoolFP4`, read `get_kv_buffer()`,
-`get_kv_scale_buffer()`, and `get_kv_global_scale()`, then feed those exact tensors into
-the FlashInfer FA2 wrapper and compare against the standalone dequant reference. If this
-fails, the bug is in pool layout/global-scale application. If it passes, instrument the
-backend wrapper/server sequencing to find where SGLang first produces an unmatched
-convention or V-scale layout. No serving image required.
+The convention and pool bridges are already done. Instrument the backend wrapper/server
+sequencing next: in an eager/no-graph source-overlay run, log the tensors and scalar
+arguments passed by `FlashInferAttnBackend._get_paged_kv_cache_and_kwargs()` and
+`_run_paged_native()` for the first decode layer, then compare them to the passing pool
+bridge contract. The next decisive question is whether serving diverges after the pool:
+wrong wrapper metadata, graph/capture state, stale calibration state, or a different
+decode path than the synthetic bridge. No serving image required.

@@ -290,6 +290,10 @@ Current fork verification:
   - `nvfp4_kv_quantize` with decode scale plus FA2 reader decode scale: passed with the same cosine values.
   - `nvfp4_kv_quantize` with encode scale plus FA2 reader decode scale: failed (`attention_cosine_vs_source=0.0`).
   - This clears raw FA2 reader convention math for the viable pairs, but it does not bless SGLang serving quality. Since the serving overlay had already tried the `fp4_quantize` convention and still produced corrupt text, keep debugging calibration scale plumbing, memory-pool/backend scale application, V-scale layout, and the forced-compiled decode path.
+- The SGLang pool bridge passed on GB10; see `results/sglang_fp4_pool_bridge_probe_20260608.json`.
+  - It writes synthetic K/V through `MHATokenToKVPoolFP4.set_kv_buffer()`, then feeds `get_kv_buffer()`, `get_kv_scale_buffer()`, and `get_kv_global_scale()` directly into FlashInfer FA2.
+  - Result: `attention_cosine_vs_dequant=0.9999946`, `attention_cosine_vs_source=0.99585`, finite output, and `all_ok=true`.
+  - This clears the basic pool layout/global-scale contract. The remaining quality bug is downstream: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic pool bridge.
 
 For NVFP4 validation, record:
 
