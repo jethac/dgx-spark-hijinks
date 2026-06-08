@@ -32,10 +32,11 @@ The row is invalid if a non-KV backend changes between fp8 and NVFP4, because th
 
 ## Commands
 
-Important: the commands below are the launch skeleton. The 2026-06-09 smoke showed
-that this skeleton can select `VLLM_CUTLASS` MoE, while the accepted capacity row
-used `MARLIN`. Before accepting any PPL row, add and verify the exact env/flag that
-freezes the non-KV backend to match the accepted capacity row.
+Important: keep `VLLM_TEST_FORCE_FP8_MARLIN=1` on both fp8 and NVFP4 launches. The
+2026-06-09 smoke showed the unforced skeleton selects `VLLM_CUTLASS` MoE, while the
+accepted capacity row used `MARLIN`. The follow-up backend probe
+`results/vllm_qwen_ppl_moe_backend_probe_20260609Tmarlin_server.log` proves this env
+forces the same `MARLIN` NvFp4 MoE backend before full model load.
 
 Prepare an isolated run directory:
 
@@ -52,6 +53,7 @@ Start the fp8 server:
 
 ```bash
 docker run -d --name ${RUN}_fp8 --gpus all --net host --ipc host \
+  -e VLLM_TEST_FORCE_FP8_MARLIN=1 \
   -v /home/jethac/models/aeon/qwen36-nvfp4:/models/target:ro \
   -v ${ROOT}:/work -w /work \
   jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv \
@@ -88,6 +90,7 @@ Repeat with `--kv-cache-dtype nvfp4`:
 
 ```bash
 docker run -d --name ${RUN}_nvfp4 --gpus all --net host --ipc host \
+  -e VLLM_TEST_FORCE_FP8_MARLIN=1 \
   -v /home/jethac/models/aeon/qwen36-nvfp4:/models/target:ro \
   -v ${ROOT}:/work -w /work \
   jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv \
@@ -138,4 +141,5 @@ Findings:
 
 - Both fp8 smoke launches proved `enable_prefix_caching=False`, but both selected `VLLM_CUTLASS` NvFp4 MoE while the accepted Qwen NVFP4-KV capacity row used `MARLIN`. That would make a fp8-vs-NVFP4 PPL delta non-isolated.
 - The first fp8 launch reached `GPU KV cache size: 6,076,050 tokens`, but startup took about `466.81 s` through profile/KV/cache/warmup and the readiness wait missed the API becoming healthy.
+- The follow-up backend probe with `VLLM_TEST_FORCE_FP8_MARLIN=1` selected `MARLIN` under the same no-prefix-cache launch skeleton and was killed before full model load.
 - GPU was returned idle and no PPL containers were left running.

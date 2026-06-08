@@ -46,4 +46,16 @@ Finding: the retry also selected `VLLM_CUTLASS` NvFp4 MoE. That confirms the sta
 
 No vLLM PPL containers were left running, and GPU utilization was back to idle.
 
-Next action: rerun the packet in `tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md` with the non-KV backend frozen to match the accepted capacity row before collecting fp8/NVFP4 PPL numbers.
+## Backend Isolation Probe
+
+Artifact: `results/vllm_qwen_ppl_moe_backend_probe_20260609Tmarlin_server.log`
+
+Result: `VLLM_TEST_FORCE_FP8_MARLIN=1` fixes the non-KV backend selection for this launch skeleton.
+
+Evidence:
+
+- Server args still prove `enable_prefix_caching=False` and `kv_cache_dtype='fp8'`.
+- The log records `Using 'MARLIN' NvFp4 MoE backend out of potential backends: ['VLLM_CUTLASS', 'MARLIN', 'EMULATION']`.
+- The probe was stopped immediately after backend selection, before full model load, and left the GPU idle.
+
+Next action: rerun the packet in `tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md` with `VLLM_TEST_FORCE_FP8_MARLIN=1` on both fp8 and NVFP4 launches before collecting fp8/NVFP4 PPL numbers.
