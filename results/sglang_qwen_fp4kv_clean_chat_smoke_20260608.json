@@ -1,0 +1,43 @@
+{
+  "content": "header: Re bywen, are you",
+  "content_chars": 25,
+  "elapsed_s": 0.846,
+  "endpoint": "http://127.0.0.1:30000/v1/chat/completions",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "ok": false,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "logprobs": null,
+        "matched_stop": null,
+        "message": {
+          "content": "header: Re bywen, are you",
+          "reasoning_content": null,
+          "role": "assistant",
+          "tool_calls": null
+        }
+      }
+    ],
+    "created": 1780883454,
+    "id": "99e70b9c649740a8bef1025dcff687a5",
+    "metadata": {
+      "weight_version": "default"
+    },
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 8,
+      "prompt_tokens": 37,
+      "prompt_tokens_details": null,
+      "reasoning_tokens": 0,
+      "total_tokens": 45
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

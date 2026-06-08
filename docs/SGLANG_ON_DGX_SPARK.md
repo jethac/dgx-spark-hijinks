@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; `jethac/sglang@98ad46961` clears the first gate/alias blockers; patched Triton FP4 KV can serve only with graph paths disabled and is too slow to bless.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch now reaches graph-enabled serving in a clean source overlay, but output quality is still wrong. Do not bless SGLang FP4 KV yet.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -84,6 +84,48 @@ Smallest next proof:
 - The FlashInfer-only JIT/synthetic decode probe is done for the SGLang-style linear V-scale signature.
 - Next run the clean SGLang FlashInfer FP4 KV after-row, not the site-package overlay.
 - Verify SGLang passes tuple-packed FP4 K/V plus per-block `kv_cache_sf`/linear V scale factors into FlashInfer, then require a row manifest, OpenAI benchmark, graph policy, fp8 comparator, and quality check before blessing the row.
+
+## 2026-06-08 Clean Source FP4 KV Graph Attempt
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_clean_20260608_precapture_missing.log`
+- `results/sglang_qwen_fp4kv_clean_graph_calibrated_bad_output_20260608_server.log`
+- `results/sglang_qwen_fp4kv_clean_sm120fallback_bad_output_20260608_server.log`
+- `results/sglang_qwen_fp4kv_clean_chat_smoke_20260608.json`
+- `results/sglang_qwen_fp4kv_clean_sm120fallback_chat_smoke_20260608.json`
+- `results/sglang_qwen_fp4kv_clean_sm120fallback_raw_generate_20260608.json`
+- `results/sglang_qwen_bf16_clean_good_output_20260608_server.log`
+- `results/sglang_qwen_bf16_clean_chat_smoke_20260608.json`
+- `results/sglang_qwen_bf16_clean_raw_generate_20260608.json`
+
+Setup:
+
+- base image: `nvcr.io/nvidia/sglang:26.05-py3`
+- model: `Qwen/Qwen2.5-1.5B-Instruct`
+- source install: editable `jethac/sglang` source overlay with installed NVIDIA FlashInfer plus local FlashInfer headers/JIT source
+- required escape hatch: `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, because the source tree requires FlashInfer `0.6.12` while NVIDIA 26.05 ships `0.6.10+cf494fca.nv26.05.cu132.50619265`
+- FP4 launch: `--attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40`
+
+Result:
+
+- The first clean source attempt failed during CUDA graph capture because no-scale Qwen models had not calibrated NVFP4 KV global scales before graph capture.
+- Porting the reference pre-capture calibration hook fixed that startup blocker. The log shows `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`, then normal CUDA graph capture and piecewise CUDA graph capture both completed.
+- With the writer using FlashInfer `nvfp4_kv_quantize` on SM121, the server reached readiness but failed quality: chat smoke returned `header: Re bywen, are you`, and raw generation answered `2+2 is a 20.0000000`.
+- Aligning the SM120/121 writer with the reference repo, so SM120-family devices use `fp4_quantize(..., global_scale_inv, sf_vec_size=16, ...)` instead of `nvfp4_kv_quantize`, kept graph-enabled serving working but still failed quality: chat smoke returned `Placeholder\n\nI'm here to to.`, and raw generation answered `2+2 is a 2-digit number number`.
+- A BF16 KV comparator using the same clean source overlay, same model, FlashInfer attention, and graph modes passed: chat smoke returned `spark-ok`, and raw generation answered `2+2 is 4`.
+
+Interpretation:
+
+- The pre-capture calibration port is a real compatibility fix: it moves SGLang FP4 KV from graph-capture failure to graph-enabled serving.
+- The SM120-family quantizer routing fix removes a concrete divergence from the `hikarioyama/sglang-nvfp4-kv-sm120` implementation, but it is not sufficient for correctness on GB10.
+- The remaining blocker is FP4 KV correctness, not Qwen, BF16 serving, CUDA graphs, or the clean source-overlay mechanics.
+- Do not run a throughput benchmark or capacity claim for SGLang FP4 KV until the `spark-ok` smoke and a simple raw-generation sanity check pass.
+
+Next debugging target:
+
+- Compare the SGLang end-to-end writer/readback path against the standalone FlashInfer FA2 probe: packed K/V carrier, per-block scale buffer dtype/shape, V scale-factor layout, global-scale value handed to FlashInfer planning, and the exact FA2 wrapper selected during prefill/decode.
+- Add an end-to-end per-layer or short-prefill readback/cosine probe before serving. The standalone FlashInfer kernel probe is not enough; the corruption appears after SGLang writes model KV into the serving cache and reads it back through FlashInfer attention.
 
 Likely code locations:
 

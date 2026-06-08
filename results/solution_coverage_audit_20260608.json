@@ -149,7 +149,7 @@
         "7",
         "7a"
       ],
-      "status": "`jethac/sglang@98ad46961` clears SM12x FP4 KV gate and alias blockers; patched overlay shows 1.78x fp8 pool potential and can serve only with graph paths disabled at 0.276 tok/s; clean graph-compatible serving still pending"
+      "status": "`jethac/sglang` now clears the early gate/alias blockers and reaches clean source-overlay FP4 KV serving with CUDA graphs after pre-capture calibration, but Qwen output quality is corrupted while a BF16 KV control passes under the same setup; debug writer/readback correctness before benchmarking"
     },
     {
       "area": "before/after GB10 benchmark protocol",

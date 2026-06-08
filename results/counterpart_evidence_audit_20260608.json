@@ -90,6 +90,8 @@
       "model_family": "qwen",
       "name": "sglang_clean_fp4_kv_after_row",
       "partial_matches": [
+        "results/flashinfer_sglang_linear_nvfp4_kv_probe_20260608.json",
+        "results/flashinfer_sglang_linear_nvfp4_kv_probe_genpatch_20260608.json",
         "results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md",
         "results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md",
         "results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md",
@@ -98,7 +100,13 @@
         "results/sglang_qwen25_1_5b_fp4kv_patched_triton_20260608T0352JST_startup.log",
         "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nograph_20260608T0400JST_startup.log",
         "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json",
-        "results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log"
+        "results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log",
+        "results/sglang_qwen_fp4kv_clean_20260608_precapture_missing.log",
+        "results/sglang_qwen_fp4kv_clean_chat_smoke_20260608.json",
+        "results/sglang_qwen_fp4kv_clean_graph_calibrated_bad_output_20260608_server.log",
+        "results/sglang_qwen_fp4kv_clean_sm120fallback_bad_output_20260608_server.log",
+        "results/sglang_qwen_fp4kv_clean_sm120fallback_chat_smoke_20260608.json",
+        "results/sglang_qwen_fp4kv_clean_sm120fallback_raw_generate_20260608.json"
       ],
       "runtime": "sglang",
       "status": "partial-evidence-only",
