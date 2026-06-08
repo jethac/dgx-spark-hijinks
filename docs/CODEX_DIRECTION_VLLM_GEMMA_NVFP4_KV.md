@@ -235,6 +235,15 @@ explain byte-like BF16 output. The next smallest experiment is to force a fresh 
 paged-prefill JIT namespace, clear the FlashInfer JIT cache, and rerun the exact Gemma 3
 wrapper-boundary probe before touching kernel math.
 
+Patch staged (2026-06-09): `jethac/flashinfer@3db181f4`
+(`spark/hijinks-020-nvfp4-jit-uri`) adds that namespace split by naming generated KV cache
+modules from the logical KV C++ type (`fp4x2_e2m1` for `__nv_fp4x2_e2m1`) rather than the
+carrier dtype (`u8`). It also emits a batch-prefill static assertion that FP4 KV modules
+build with `DTypeKV=__nv_fp4x2_e2m1`. Evidence packet:
+`results/vllm_gemma3_27b_flashinfer_nvfp4_jit_uri_patch_20260609.md`; live rerun packet:
+`tasks/vllm_gemma3_flashinfer_nvfp4_jit_uri_rerun_packet_20260609.md`. This is not blessed
+until the Gemma 3 wrapper-boundary probe is rerun on GB10 with FlashInfer JIT cache cleared.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate
