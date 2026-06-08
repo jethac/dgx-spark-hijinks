@@ -420,6 +420,24 @@
   - methodology: native host binaries, not containers — iterate against the running `llama-server`, rebuild/fork only if the stock server can't expose supplied-token logprobs. SM120/RTX PRO 6000 is simpler here: source-built per machine (`CMAKE_CUDA_ARCHITECTURES=121` vs `120`), no non-portable `a` cubins to ship.
   - guardrails: three claim classes never merged (serving blessed / accuracy blocked / native-FP4 unproven); top-N is not loglikelihood. Issues #8 (accuracy), #17 (serving).
 
+- Ran the SGLang standalone NVFP4-KV convention bridge on GB10.
+  - script: `scripts/sglang_nvfp4_kv_convention_probe.py`
+  - artifact: `results/sglang_nvfp4_kv_convention_probe_20260608.json`
+  - runtime: `nvcr.io/nvidia/sglang:26.05-py3`, FlashInfer `0.6.10+cf494fca.nv26.05.cu132.50619265`, Torch `2.12.0a0+5aff3928d8.nv26.05`, device `NVIDIA GB10`, capability `[12, 1]`.
+  - shape: page-size-1 decode, `tokens=40`, `query_heads=64`, `kv_heads=4`, `head_dim=128`.
+  - result: `fp4_quantize` with encode scale (`1 / decode_scale`) and FA2 reader decode scale passed (`attention_cosine_vs_source=0.9950249`, `attention_cosine_vs_dequant=0.9999955`).
+  - result: `nvfp4_kv_quantize` with decode scale and FA2 reader decode scale also passed with the same cosine values.
+  - negative: `nvfp4_kv_quantize` with encode scale plus FA2 reader decode scale failed completely (`attention_cosine_vs_source=0.0`).
+  - interpretation: the raw FA2 reader is convention-matched for the two viable pairs above, and the known `nvfp4_kv_quantize` encode/decode crossing is invalid. Because the serving overlay had already tried the `fp4_quantize` convention and still produced corrupt text, the next SGLang suspect is integration state: calibration scale plumbing, memory-pool/backend scale application, V-scale layout, or the forced-compiled decode path, not the standalone FA2 reader math.
+
+- Ran the llama.cpp supplied-token echo-logprobs probe against the pinned `b9536` server.
+  - script update: `scripts/gguf_logprobs_probe.py` now tokenizes `--context` and `--continuation`, sends `context + continuation` with `echo=true`, and only passes if prompt `tokens` plus `token_logprobs` cover the supplied continuation span.
+  - artifacts: `results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json`, `results/llamacpp_gguf_echo_logprobs_probe_20260608_max1.json`, `results/llamacpp_gguf_echo_logprobs_probe_20260608_summary.json`, `results/llamacpp_gguf_echo_logprobs_probe_20260608_server.log`.
+  - target: Qwen2.5 1.5B Q4_K_M on `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`, prompt `The capital of Japan is zebra`.
+  - tokenization: context tokens `[785, 6722, 315, 6323, 374]`; continuation tokens `[1147, 50213]`.
+  - result: both `max_tokens=0` and `max_tokens=1` returned `choices[0].logprobs.content` for a generated token (`-striped`) and did not expose prompt `tokens` or `token_logprobs`; both rows have `ok=false`.
+  - interpretation: the OpenAI echo path on pinned `b9536` cannot provide exact supplied-continuation logprobs for the `zebra` case. The llama.cpp accuracy lane needs either a newer server pin that exposes prompt-token logprobs or a `jethac/llama.cpp` endpoint fork.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

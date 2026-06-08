@@ -34,6 +34,6 @@ Current validation artifact: `results/counterpart_task_matrix_20260608.json`.
 | `vllm_qwen_nvfp4_kv_capacity` | vLLM | recorded: Qwen fp8-vs-`nvfp4` KV capacity row shows `1.751x` KV pool/concurrency and decode parity; Gemma still requires the separate vLLM direction work |
 | `llamacpp_larger_qwen_gguf` | llama.cpp | Qwen3/Qwen3.6 GGUF practical serving row |
 | `llamacpp_native_fp4_gguf` | llama.cpp | NVFP4/MXFP4 GGUF row with native FP4 dispatch evidence |
-| `llamacpp_live_loglikelihood` | llama.cpp | direct/full-vocabulary native logprob path after the live top-512 task missed the unlikely continuation |
+| `llamacpp_live_loglikelihood` | llama.cpp | direct/full-vocabulary native logprob path after both the live top-512 task and pinned-b9536 OpenAI echo probe failed to expose supplied-token logprobs |
 
 The source of truth for commands is `tasks/counterpart_evidence_tasks.jsonl`.

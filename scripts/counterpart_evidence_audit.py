@@ -80,6 +80,7 @@ REQUIREMENTS = (
             "results/sglang_qwen_fp4kv_autosafe*.log",
             "results/sglang_qwen_fp4kv_autosafe*.md",
             "results/sglang_nvfp4_kv_layout_probe*.json",
+            "results/sglang_nvfp4_kv_convention_probe*.json",
             "results/sglang_fp4_kv_sm121_*.md",
         ),
         forbidden_claim_fragments=(
@@ -253,6 +254,7 @@ REQUIREMENTS = (
             "results/llamacpp_native_loglikelihood_task_dryrun*.json",
             "results/llamacpp_native_loglikelihood_*_summary.md",
             "results/*gguf_logprobs_probe*.json",
+            "results/llamacpp_gguf_echo_logprobs_probe*.json",
         ),
     ),
 )

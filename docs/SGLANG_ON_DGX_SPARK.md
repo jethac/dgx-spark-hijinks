@@ -285,6 +285,11 @@ Current fork verification:
 - A CPU-only Docker route was attempted to avoid spending GPU time on Python-level `KV4Compatibility` tests, but `docker/arm64.Dockerfile` failed before pytest while building `sglang-kernel-cpu`; see `results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md`.
 - A no-kernel scratch-venv pytest route passed; see `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md`.
 - The site-package overlay after-row proves `fp4_e2m1` can serve only when both CUDA graph modes are disabled; that row is not blessed because it is overlay-based, very slow, and low quality.
+- The standalone convention bridge passed on GB10; see `results/sglang_nvfp4_kv_convention_probe_20260608.json`.
+  - `fp4_quantize` with encode scale (`1 / decode_scale`) plus FA2 reader decode scale: passed (`attention_cosine_vs_source=0.9950249`, `attention_cosine_vs_dequant=0.9999955`).
+  - `nvfp4_kv_quantize` with decode scale plus FA2 reader decode scale: passed with the same cosine values.
+  - `nvfp4_kv_quantize` with encode scale plus FA2 reader decode scale: failed (`attention_cosine_vs_source=0.0`).
+  - This clears raw FA2 reader convention math for the viable pairs, but it does not bless SGLang serving quality. Since the serving overlay had already tried the `fp4_quantize` convention and still produced corrupt text, keep debugging calibration scale plumbing, memory-pool/backend scale application, V-scale layout, and the forced-compiled decode path.
 
 For NVFP4 validation, record:
 

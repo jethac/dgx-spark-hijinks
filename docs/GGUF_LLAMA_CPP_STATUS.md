@@ -261,3 +261,34 @@ Accuracy status under the same server:
 - The response has `choices[0].logprobs.content`.
 - The response still lacks `choices[0].logprobs.tokens` and `choices[0].logprobs.token_logprobs`.
 - Therefore, serving is blessed for practical use, but GGUF paper-comparable lm-eval accuracy remains blocked.
+
+## 2026-06-08 Echo Logprobs Probe
+
+Target:
+
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`
+- model: `/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- probe script: `scripts/gguf_logprobs_probe.py`
+- prompt: `The capital of Japan is zebra`
+
+Artifacts:
+
+- `results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json`
+- `results/llamacpp_gguf_echo_logprobs_probe_20260608_max1.json`
+- `results/llamacpp_gguf_echo_logprobs_probe_20260608_summary.json`
+- `results/llamacpp_gguf_echo_logprobs_probe_20260608_server.log`
+
+Probe behavior:
+
+- The script tokenizes context and continuation separately.
+- Context token ids: `[785, 6722, 315, 6323, 374]`.
+- Continuation token ids: `[1147, 50213]`.
+- The OpenAI request sends `context + continuation` with `echo=true`.
+- The row passes only if prompt `tokens` plus `token_logprobs` cover the supplied continuation span.
+
+Result:
+
+- `max_tokens=0`: `ok=false`.
+- `max_tokens=1`: `ok=false`.
+- Both responses expose `choices[0].logprobs.content` for a generated token (`-striped`), not prompt `tokens`/`token_logprobs`.
+- Therefore pinned `b9536` still cannot provide exact supplied-continuation logprobs through the tested OpenAI echo path. The accuracy lane needs either a newer llama.cpp server pin that exposes prompt-token logprobs or a `jethac/llama.cpp` endpoint fork.

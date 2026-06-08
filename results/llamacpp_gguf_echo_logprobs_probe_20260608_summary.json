@@ -1,0 +1,31 @@
+{
+  "schema": "llamacpp-gguf-echo-logprobs-summary/v1",
+  "run_id": "llamacpp_gguf_echo_logprobs_probe_20260608",
+  "rows": [
+    {
+      "artifact": "results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json",
+      "ok": false,
+      "has_tokens": false,
+      "has_token_logprobs": false,
+      "covers_prompt_tokens": false,
+      "covers_continuation_span": false,
+      "notes": [
+        "logprobs object exists but does not expose both tokens and token_logprobs"
+      ],
+      "error": null
+    },
+    {
+      "artifact": "results/llamacpp_gguf_echo_logprobs_probe_20260608_max1.json",
+      "ok": false,
+      "has_tokens": false,
+      "has_token_logprobs": false,
+      "covers_prompt_tokens": false,
+      "covers_continuation_span": false,
+      "notes": [
+        "logprobs object exists but does not expose both tokens and token_logprobs"
+      ],
+      "error": null
+    }
+  ],
+  "all_ok": false
+}
