@@ -116,12 +116,17 @@ python3 scripts/record_openai_serving_row.py \
   --kv-cache-dtype fp8 --attention-backend flashinfer \
   --cuda-graph-mode default \
   --server-log "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_server.log" \
-  --process-match "vllm serve google/gemma-3-27b-it"
+  --process-match "vllm serve google/gemma-3-27b-it" || true
+
+python3 scripts/openai_first_token_probe.py \
+  --url http://127.0.0.1:8000 --model gemma3-27b-it \
+  --backend vllm --phase before --run-id vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_first_token \
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_first_token.json" || true
 
 python3 scripts/openai_quality_probe.py \
   --input-report "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_openai_benchmark.json" \
   --run-id vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_quality_from_benchmark \
-  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_quality.json"
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_quality.json" || true
 
 stop_vllm_container vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer
 else
@@ -203,18 +208,29 @@ python3 scripts/record_openai_serving_row.py \
   --kv-cache-dtype nvfp4 --attention-backend flashinfer \
   --cuda-graph-mode default \
   --server-log "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_server.log" \
-  --process-match "vllm serve google/gemma-3-27b-it"
+  --process-match "vllm serve google/gemma-3-27b-it" || true
+
+python3 scripts/openai_first_token_probe.py \
+  --url http://127.0.0.1:8000 --model gemma3-27b-it \
+  --backend vllm --phase after --run-id vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_first_token \
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_first_token.json" || true
 
 python3 scripts/openai_quality_probe.py \
   --input-report "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_openai_benchmark.json" \
   --run-id vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_quality_from_benchmark \
-  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_quality.json"
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_quality.json" || true
 
 python3 scripts/openai_quality_probe.py \
   --input-report "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_openai_benchmark.json" \
   --compare-to "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_openai_benchmark.json" \
   --run-id vllm_gemma3_27b_rung1_20260608T1924JST_quality_compare \
-  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_quality_compare.json"
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_quality_compare.json" || true
+
+python3 scripts/openai_first_token_probe.py \
+  --input-report "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_first_token.json" \
+  --compare-to "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_first_token.json" \
+  --run-id vllm_gemma3_27b_rung1_20260608T1924JST_first_token_compare \
+  --output "${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_first_token_compare.json" || true
 
 stop_vllm_container vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer
 
@@ -228,6 +244,7 @@ stop_vllm_container vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_chat_smoke.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_build_target_audit.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_quality.json
+# - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_fp8_flashinfer_first_token.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_server.log
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_import_probe.txt
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_editable_install.log
@@ -237,4 +254,6 @@ stop_vllm_container vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_chat_smoke.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_build_target_audit.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_quality.json
+# - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_nvfp4_kv_flashinfer_first_token.json
 # - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_quality_compare.json
+# - ${RESULTS_DIR}/vllm_gemma3_27b_rung1_20260608T1924JST_first_token_compare.json

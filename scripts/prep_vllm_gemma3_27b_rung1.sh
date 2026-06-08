@@ -170,12 +170,17 @@ python3 scripts/record_openai_serving_row.py \\
   --kv-cache-dtype fp8 --attention-backend flashinfer \\
   --cuda-graph-mode default \\
   --server-log "\${RESULTS_DIR}/${FP8_RUN}_server.log" \\
-  --process-match "vllm serve ${MODEL}"
+  --process-match "vllm serve ${MODEL}" || true
+
+python3 scripts/openai_first_token_probe.py \\
+  --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
+  --backend vllm --phase before --run-id ${FP8_RUN}_first_token \\
+  --output "\${RESULTS_DIR}/${FP8_RUN}_first_token.json" || true
 
 python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${FP8_RUN}_openai_benchmark.json" \\
   --run-id ${FP8_RUN}_quality_from_benchmark \\
-  --output "\${RESULTS_DIR}/${FP8_RUN}_quality.json"
+  --output "\${RESULTS_DIR}/${FP8_RUN}_quality.json" || true
 
 stop_vllm_container ${FP8_RUN}
 else
@@ -257,18 +262,29 @@ python3 scripts/record_openai_serving_row.py \\
   --kv-cache-dtype nvfp4 --attention-backend flashinfer \\
   --cuda-graph-mode default \\
   --server-log "\${RESULTS_DIR}/${NVFP4_RUN}_server.log" \\
-  --process-match "vllm serve ${MODEL}"
+  --process-match "vllm serve ${MODEL}" || true
+
+python3 scripts/openai_first_token_probe.py \\
+  --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
+  --backend vllm --phase after --run-id ${NVFP4_RUN}_first_token \\
+  --output "\${RESULTS_DIR}/${NVFP4_RUN}_first_token.json" || true
 
 python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${NVFP4_RUN}_openai_benchmark.json" \\
   --run-id ${NVFP4_RUN}_quality_from_benchmark \\
-  --output "\${RESULTS_DIR}/${NVFP4_RUN}_quality.json"
+  --output "\${RESULTS_DIR}/${NVFP4_RUN}_quality.json" || true
 
 python3 scripts/openai_quality_probe.py \\
   --input-report "\${RESULTS_DIR}/${NVFP4_RUN}_openai_benchmark.json" \\
   --compare-to "\${RESULTS_DIR}/${FP8_RUN}_openai_benchmark.json" \\
   --run-id ${PREFIX}_quality_compare \\
-  --output "\${RESULTS_DIR}/${PREFIX}_quality_compare.json"
+  --output "\${RESULTS_DIR}/${PREFIX}_quality_compare.json" || true
+
+python3 scripts/openai_first_token_probe.py \\
+  --input-report "\${RESULTS_DIR}/${NVFP4_RUN}_first_token.json" \\
+  --compare-to "\${RESULTS_DIR}/${FP8_RUN}_first_token.json" \\
+  --run-id ${PREFIX}_first_token_compare \\
+  --output "\${RESULTS_DIR}/${PREFIX}_first_token_compare.json" || true
 
 stop_vllm_container ${NVFP4_RUN}
 
@@ -282,6 +298,7 @@ stop_vllm_container ${NVFP4_RUN}
 # - \${RESULTS_DIR}/${FP8_RUN}_chat_smoke.json
 # - \${RESULTS_DIR}/${FP8_RUN}_build_target_audit.json
 # - \${RESULTS_DIR}/${FP8_RUN}_quality.json
+# - \${RESULTS_DIR}/${FP8_RUN}_first_token.json
 # - \${RESULTS_DIR}/${NVFP4_RUN}_server.log
 # - \${RESULTS_DIR}/${NVFP4_RUN}_import_probe.txt
 # - \${RESULTS_DIR}/${NVFP4_RUN}_editable_install.log
@@ -291,5 +308,7 @@ stop_vllm_container ${NVFP4_RUN}
 # - \${RESULTS_DIR}/${NVFP4_RUN}_chat_smoke.json
 # - \${RESULTS_DIR}/${NVFP4_RUN}_build_target_audit.json
 # - \${RESULTS_DIR}/${NVFP4_RUN}_quality.json
+# - \${RESULTS_DIR}/${NVFP4_RUN}_first_token.json
 # - \${RESULTS_DIR}/${PREFIX}_quality_compare.json
+# - \${RESULTS_DIR}/${PREFIX}_first_token_compare.json
 EOF

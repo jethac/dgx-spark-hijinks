@@ -700,6 +700,31 @@
   - next gate: add a stronger fp8-vs-NVFP4 correctness/localization probe for vLLM Gemma 3
     before climbing to the Gemma 4 31B rung.
 
+- Added the vLLM Gemma 3 first-token corruption localization probe.
+  - script: `scripts/openai_first_token_probe.py`
+  - plan artifact: `results/vllm_gemma3_27b_first_token_probe_plan_20260608.md`
+  - packet update: `scripts/prep_vllm_gemma3_27b_rung1.sh` now writes fp8/NVFP4
+    first-token artifacts and a first-token compare, and it continues after a red manifest
+    so diagnostic artifacts are still collected.
+  - result: ready for the next live GB10 run with a fresh stamp. This should answer whether
+    Gemma 3 NVFP4 diverges on the first generated token after prefill or only after decode
+    state starts compounding.
+
+- Captured a partial SGLang Qwen FP4-KV first-token logits dump.
+  - script: `scripts/sglang_first_token_dump_summary.py`
+  - artifact: `results/sglang_qwen_fp4kv_first_token_logits_20260608T2008JST_summary.md`
+  - dump summary:
+    `results/sglang_qwen_fp4kv_first_token_logits_20260608T2008JST_cleanup0_dump_summary.md`
+  - result: the `DUMPER_CLEANUP_PREVIOUS=0` rerun captured `55` tensor dumps and the
+    summarizer grouped `9` real-request forward passes plus `2` health-check passes.
+  - finding: for the captured native `/generate` request, logits before and after
+    `ModelRunner._preprocess_logits()` are identical (`max_abs_delta=0`, same argmax,
+    top-20 Jaccard `1.0`).
+  - caveat: this is not an OpenAI-vs-native comparator because the host probe failed due a
+    missing `transformers` import before any `/v1/chat/completions` request completed.
+  - next gate: rerun the endpoint probe inside the SGLang container or another environment
+    with `transformers`, with explicit endpoint labels or split request runs.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
