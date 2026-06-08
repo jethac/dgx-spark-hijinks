@@ -1,0 +1,864 @@
+{
+  "deswizzle_v_scale": true,
+  "dumps": [
+    {
+      "active_pages": [
+        0
+      ],
+      "active_v_bytes_repeated": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 280576,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 280576,
+        "rms": 0.0,
+        "shape": [
+          137,
+          32,
+          64
+        ]
+      },
+      "dequant_key": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 280576,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 280576,
+        "rms": 0.0,
+        "shape": [
+          137,
+          16,
+          128
+        ]
+      },
+      "dequant_value": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 280576,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 280576,
+        "rms": 0.0,
+        "shape": [
+          137,
+          16,
+          128
+        ]
+      },
+      "deswizzle_v_scale": true,
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0001.pt",
+      "last_page_len": [
+        9
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "logits_soft_cap": 50.0,
+      "num_decode_tokens": 8,
+      "num_prefill_tokens": 8,
+      "out_after": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ]
+      },
+      "out_after_vs_active_v_bytes_repeated": {
+        "actual_shape": [
+          8,
+          32,
+          64
+        ],
+        "expected_shape": [
+          137,
+          32,
+          64
+        ],
+        "same_shape": false
+      },
+      "out_after_vs_reference": {
+        "cosine": 0.0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "rms_abs": 0.0,
+        "same_shape": true
+      },
+      "out_before": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ]
+      },
+      "out_before_vs_reference": {
+        "cosine": 0.0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "rms_abs": 0.0,
+        "same_shape": true
+      },
+      "paged_kv_indices": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "query": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "head": [
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ]
+      },
+      "reference": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ]
+      },
+      "schema": "vllm-active-page-replay/v1",
+      "sm_scale": 0.08838834764831845,
+      "window_left": -1
+    },
+    {
+      "active_pages": [
+        13,
+        14
+      ],
+      "active_v_bytes_repeated": {
+        "all_finite": true,
+        "byte_like": true,
+        "dtype": "torch.float32",
+        "finite": 36864,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 128.48577880859375,
+        "min": 0.0,
+        "numel": 36864,
+        "rms": 147.6260528564453,
+        "shape": [
+          18,
+          32,
+          64
+        ]
+      },
+      "dequant_key": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 36864,
+        "head": [
+          0.234375,
+          -0.234375,
+          0.15625,
+          -0.3125,
+          -0.9375,
+          0.0,
+          -0.625,
+          -0.15625,
+          0.0,
+          -0.078125,
+          0.0,
+          -0.078125,
+          -0.078125,
+          -0.078125,
+          0.9375,
+          0.078125
+        ],
+        "max": 24.0,
+        "mean": 0.03944079205393791,
+        "min": -27.0,
+        "numel": 36864,
+        "rms": 2.728358745574951,
+        "shape": [
+          18,
+          16,
+          128
+        ]
+      },
+      "dequant_value": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 36864,
+        "head": [
+          0.0,
+          -4.875,
+          0.40625,
+          0.0,
+          0.8125,
+          -3.25,
+          -0.40625,
+          0.0,
+          0.40625,
+          -0.40625,
+          1.625,
+          0.40625,
+          -0.8125,
+          -1.21875,
+          -0.40625,
+          -1.21875
+        ],
+        "max": 15.0,
+        "mean": -0.027669906616210938,
+        "min": -15.0,
+        "numel": 36864,
+        "rms": 2.0891807079315186,
+        "shape": [
+          18,
+          16,
+          128
+        ]
+      },
+      "deswizzle_v_scale": true,
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0002.pt",
+      "last_page_len": [
+        2
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "logits_soft_cap": 50.0,
+      "num_decode_tokens": 0,
+      "num_prefill_tokens": 18,
+      "out_after": {
+        "all_finite": true,
+        "byte_like": true,
+        "dtype": "torch.float32",
+        "finite": 73728,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 128.52850341796875,
+        "min": 0.0,
+        "numel": 73728,
+        "rms": 147.44287109375,
+        "shape": [
+          18,
+          32,
+          128
+        ]
+      },
+      "out_after_vs_active_v_bytes_repeated": {
+        "cosine": 0.9488214254379272,
+        "max_abs": 242.0,
+        "mean_abs": 25.90928840637207,
+        "rms_abs": 47.216766357421875,
+        "same_shape": true
+      },
+      "out_after_vs_reference": {
+        "cosine": -0.00010323349852114916,
+        "max_abs": 262.60186767578125,
+        "mean_abs": 128.56246948242188,
+        "rms_abs": 147.45541381835938,
+        "same_shape": true
+      },
+      "out_before": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 73728,
+        "head": [
+          0.0,
+          -0.93359375,
+          0.0,
+          -0.1728515625,
+          0.0,
+          0.44140625,
+          0.0,
+          -0.35546875,
+          0.0,
+          -0.8984375,
+          0.0,
+          -0.2451171875,
+          0.0,
+          -0.6015625,
+          0.0,
+          -0.4140625
+        ],
+        "max": 13.25,
+        "mean": -0.001618496491573751,
+        "min": -17.125,
+        "numel": 73728,
+        "rms": 1.3679331541061401,
+        "shape": [
+          18,
+          32,
+          128
+        ]
+      },
+      "out_before_vs_reference": {
+        "cosine": 0.00046996213495731354,
+        "max_abs": 18.496604919433594,
+        "mean_abs": 1.6133989095687866,
+        "rms_abs": 2.3464643955230713,
+        "same_shape": true
+      },
+      "paged_kv_indices": [
+        13,
+        14
+      ],
+      "query": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 73728,
+        "head": [
+          -0.12060546875,
+          0.17578125,
+          -0.072265625,
+          -3.375,
+          -1.609375,
+          -0.474609375,
+          -0.1240234375,
+          0.390625,
+          0.024658203125,
+          -0.119140625,
+          -0.09912109375,
+          0.74609375,
+          -0.478515625,
+          -0.2177734375,
+          -0.6171875,
+          1.25
+        ],
+        "max": 11.75,
+        "mean": 0.007290762383490801,
+        "min": -10.9375,
+        "numel": 73728,
+        "rms": 2.275829553604126,
+        "shape": [
+          18,
+          32,
+          128
+        ]
+      },
+      "reference": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 73728,
+        "head": [
+          0.0,
+          -4.875,
+          0.40625,
+          0.0,
+          0.8125,
+          -3.25,
+          -0.40625,
+          0.0,
+          0.40625,
+          -0.40625,
+          1.625,
+          0.40625,
+          -0.8125,
+          -1.21875,
+          -0.40625,
+          -1.21875
+        ],
+        "max": 14.998600959777832,
+        "mean": -0.028590789064764977,
+        "min": -13.498526573181152,
+        "numel": 73728,
+        "rms": 1.9071201086044312,
+        "shape": [
+          18,
+          32,
+          128
+        ]
+      },
+      "schema": "vllm-active-page-replay/v1",
+      "sm_scale": 0.08838834764831845,
+      "window_left": -1
+    },
+    {
+      "active_pages": [
+        21,
+        22
+      ],
+      "active_v_bytes_repeated": {
+        "all_finite": true,
+        "byte_like": true,
+        "dtype": "torch.float32",
+        "finite": 47104,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 128.66525268554688,
+        "min": 0.0,
+        "numel": 47104,
+        "rms": 147.7556915283203,
+        "shape": [
+          23,
+          32,
+          64
+        ]
+      },
+      "dequant_key": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 47104,
+        "head": [
+          0.234375,
+          -0.234375,
+          0.15625,
+          -0.3125,
+          -0.9375,
+          0.0,
+          -0.625,
+          -0.15625,
+          0.0,
+          -0.078125,
+          0.0,
+          -0.078125,
+          -0.078125,
+          -0.078125,
+          0.9375,
+          0.078125
+        ],
+        "max": 24.0,
+        "mean": 0.03637769818305969,
+        "min": -27.0,
+        "numel": 47104,
+        "rms": 2.7298643589019775,
+        "shape": [
+          23,
+          16,
+          128
+        ]
+      },
+      "dequant_value": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 47104,
+        "head": [
+          0.0,
+          -4.875,
+          0.40625,
+          0.0,
+          0.8125,
+          -3.25,
+          -0.40625,
+          0.0,
+          0.40625,
+          -0.40625,
+          1.625,
+          0.40625,
+          -0.8125,
+          -1.21875,
+          -0.40625,
+          -1.21875
+        ],
+        "max": 15.0,
+        "mean": -0.029914772137999535,
+        "min": -15.0,
+        "numel": 47104,
+        "rms": 2.118767261505127,
+        "shape": [
+          23,
+          16,
+          128
+        ]
+      },
+      "deswizzle_v_scale": true,
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0003.pt",
+      "last_page_len": [
+        7
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "logits_soft_cap": 50.0,
+      "num_decode_tokens": 0,
+      "num_prefill_tokens": 23,
+      "out_after": {
+        "all_finite": true,
+        "byte_like": true,
+        "dtype": "torch.float32",
+        "finite": 94208,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 129.38995361328125,
+        "min": 0.0,
+        "numel": 94208,
+        "rms": 148.07107543945312,
+        "shape": [
+          23,
+          32,
+          128
+        ]
+      },
+      "out_after_vs_active_v_bytes_repeated": {
+        "cosine": 0.9488015174865723,
+        "max_abs": 243.0,
+        "mean_abs": 26.28031349182129,
+        "rms_abs": 47.3723258972168,
+        "same_shape": true
+      },
+      "out_after_vs_reference": {
+        "cosine": 0.0024083845783025026,
+        "max_abs": 262.4993896484375,
+        "mean_abs": 129.4263916015625,
+        "rms_abs": 148.0797119140625,
+        "same_shape": true
+      },
+      "out_before": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 94208,
+        "head": [
+          0.0,
+          -0.93359375,
+          0.0,
+          -0.1728515625,
+          0.0,
+          0.44140625,
+          0.0,
+          -0.35546875,
+          0.0,
+          -0.8984375,
+          0.0,
+          -0.2451171875,
+          0.0,
+          -0.6015625,
+          0.0,
+          -0.4140625
+        ],
+        "max": 14.75,
+        "mean": -0.00351309054531157,
+        "min": -18.25,
+        "numel": 94208,
+        "rms": 1.3660926818847656,
+        "shape": [
+          23,
+          32,
+          128
+        ]
+      },
+      "out_before_vs_reference": {
+        "cosine": -0.002833667676895857,
+        "max_abs": 19.173843383789062,
+        "mean_abs": 1.6567026376724243,
+        "rms_abs": 2.4208054542541504,
+        "same_shape": true
+      },
+      "paged_kv_indices": [
+        21,
+        22
+      ],
+      "query": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 94208,
+        "head": [
+          -0.12060546875,
+          0.17578125,
+          -0.072265625,
+          -3.375,
+          -1.609375,
+          -0.474609375,
+          -0.1240234375,
+          0.390625,
+          0.024658203125,
+          -0.119140625,
+          -0.09912109375,
+          0.74609375,
+          -0.478515625,
+          -0.2177734375,
+          -0.6171875,
+          1.25
+        ],
+        "max": 10.875,
+        "mean": 0.009695199318230152,
+        "min": -10.625,
+        "numel": 94208,
+        "rms": 2.2635579109191895,
+        "shape": [
+          23,
+          32,
+          128
+        ]
+      },
+      "reference": {
+        "all_finite": true,
+        "byte_like": false,
+        "dtype": "torch.float32",
+        "finite": 94208,
+        "head": [
+          0.0,
+          -4.875,
+          0.40625,
+          0.0,
+          0.8125,
+          -3.25,
+          -0.40625,
+          0.0,
+          0.40625,
+          -0.40625,
+          1.625,
+          0.40625,
+          -0.8125,
+          -1.21875,
+          -0.40625,
+          -1.21875
+        ],
+        "max": 14.999760627746582,
+        "mean": -0.030908361077308655,
+        "min": -13.499717712402344,
+        "numel": 94208,
+        "rms": 1.9946542978286743,
+        "shape": [
+          23,
+          32,
+          128
+        ]
+      },
+      "schema": "vllm-active-page-replay/v1",
+      "sm_scale": 0.08838834764831845,
+      "window_left": -1
+    }
+  ],
+  "head": 16,
+  "logits_soft_cap": 50.0,
+  "schema": "vllm-active-page-replay-report/v1",
+  "sm_scale_input": null
+}

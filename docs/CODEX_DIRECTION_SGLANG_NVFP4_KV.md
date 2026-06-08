@@ -21,7 +21,9 @@ page/scale mismatch hypothesis is now weaker:** vLLM Gemma 3 27B also fails FP4 
 yet its high-limit trace shows sampled read-side packed data/scale bytes match write-side
 bytes (`195 / 195`) and the failing short prompts do not skip SWA blocks; the follow-up
 active-page dump shows the exact failing paged-prefill wrapper returns byte-like BF16
-`out_after` whose first 16 values match the first 16 active packed V bytes. See
+`out_after` whose first 16 values match the first 16 active packed V bytes; the CPU replay
+against dequantized active pages then produces sane signed attention output with near-zero
+cosine versus the real wrapper output. See
 `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. The SGLang `f76f80484` write/read trace
 likewise clears the simplest stale/wrong-page scale-buffer version for sampled radix pages.
 **SGLang's job:** prove whether the reused cached-prefix contribution is numerically
@@ -121,6 +123,18 @@ paged-prefix read, LSE convention, and merge are internally consistent for the s
 failure, so the next fix/probe should compare full dense prefill versus FP4 cached-prefix
 attention quality and test whether better global scales or a selective no-reuse policy is
 needed.
+
+Radix-reuse code-read checkpoint (2026-06-09): on a radix hit, SGLang reuses physical KV
+slot IDs rather than copying K/V data or scale tensors into the new request.
+`schedule_batch.py` gets cached physical indices from `tree_cache.match_prefix(...)`;
+`common.py` writes those prefix indices into the request's `req_to_token` row and appends
+only new suffix slots; `flashinfer_backend.py` `forward_extend_merge_paged` computes
+suffix attention from fresh BF16 K/V and prefix attention from paged cached FP4 K/V.
+`MHATokenToKVPoolFP4.set_kv_buffer()` writes packed K, packed V, K scale, and V scale to
+the same physical slot, and `move_kv_cache()` copies all four buffers together. This is
+consistent with the existing traces: stale/miscopied scale bytes are no longer the leading
+theory. The next probe should compare dense full-prefill attention/logits against the FP4
+cached-prefix read path, not another scale-copy trace.
 
 Cached-prefix top-logprob post-analysis
 (`results/sglang_qwen_fp4kv_cached_prefix_toplogprob_postanalysis_20260608T2346JST.md`):

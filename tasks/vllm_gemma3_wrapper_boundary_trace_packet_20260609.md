@@ -81,6 +81,8 @@ Artifact summary:
 ```text
 results/vllm_gemma3_27b_wrapper_trace_20260609T0148JST_summary.md
 results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_summary.md
+results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_summary.md
+results/vllm_gemma3_27b_flashinfer_paged_prefill_audit_20260609.md
 ```
 
 Key result: the real FlashInfer FA2 paged prefill wrapper is the failing boundary. For a
@@ -95,17 +97,22 @@ request payloads have byte-like `out_after` tensors with max `255.0`, means arou
 packed V data bytes. This moves the next task from "dump active pages" to "replay the
 dumped paged-prefill call against a dequantized reference."
 
+The replay row completes that comparison. Dequantized CPU causal attention over the exact
+active pages produces sane signed output (mean near zero, RMS around `1.9..2.0`), while
+the real wrapper output remains byte-like and has near-zero cosine against the reference
+under all tested variants.
+
 ## Next Task
 
-Dump or reconstruct the exact active block-table paged prefill call for the failing
-layer and compare FlashInfer wrapper output with a dequantized reference. The goal is to
-prove whether the paged prefill specialization is reading packed uint8 V data as values,
-using the wrong V view, or receiving wrong wrapper metadata from vLLM.
+Audit and fix FlashInfer's paged-prefill NVFP4 specialization. The current evidence says
+vLLM is passing paired active pages and scales, but FlashInfer returns packed V carrier
+bytes as BF16-like output. Prime checks:
 
-The live dump row is green as a diagnostic artifact:
-
-- at least one `spark_active_page_prefill_*layers_5*pt` payload exists;
-- the payload has the same bad first-token signature as the wrapper trace;
-- `out_after` in the payload is byte-like and can be compared offline with its
-  `kv_data_pages[1]` / `kv_scale_pages[1]` active V payload;
-- the summary names the exact replay script or notebook that should consume the dump.
+- JIT/AOT cache-key collision: generated C++ maps `torch.uint8` to `__nv_fp4x2_e2m1`, but
+  the batch-prefill URI still names the module `dtype_kv_u8`; force a fresh NVFP4-specific
+  JIT namespace and rerun this packet before editing kernel math;
+- V element type / container type binding in generated paged prefill parameters;
+- V data pointer versus V scale pointer ordering;
+- template path selected when `kv_cache` is a tuple of packed `uint8` K/V tensors and
+  `kv_cache_sf` is a tuple of FP8 scale tensors;
+- divergence between decode, standalone prefill probe, and real paged prefill wrapper.

@@ -214,6 +214,27 @@ the first 16 active packed V data bytes from `kv_data_pages[1]`. This makes the 
 task an offline replay of the dumped paged-prefill call against a dequantized reference,
 then a FlashInfer paged-prefill audit for wrong V view / packed-carrier interpretation.
 
+Active-page replay result (2026-06-09):
+`results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_summary.md` replays the
+dumped layer-5 full-attention calls on CPU. It dequantizes active packed K/V pages, gathers
+the paged sequence, applies causal GQA attention, and compares against `out_after`. With
+V-scale deswizzle and logits softcap `50`, the replay reference is sane signed output
+(mean near `-0.03`, RMS around `1.9..2.0`), while the real wrapper output remains
+byte-range (mean `128..129`, RMS `147..148`). Cosine versus the dequantized reference is
+near zero (`-0.00010` and `0.00241` for the two request dumps). The same conclusion holds
+without softcap and without V-scale deswizzle. Next vLLM task: stop probing vLLM
+page-pairing and audit FlashInfer's paged-prefill NVFP4 specialization for wrong V
+view/type/template binding or packed-carrier interpretation.
+
+FlashInfer audit checkpoint (2026-06-09):
+`results/vllm_gemma3_27b_flashinfer_paged_prefill_audit_20260609.md` maps the relevant
+FlashInfer sites. The highest-priority hypothesis is a JIT/AOT cache-key collision:
+`torch.uint8` maps to `__nv_fp4x2_e2m1` in generated C++, but the batch-prefill URI still
+names the module `dtype_kv_u8`. A stale raw-`uint8_t` module would skip FP4 branches and can
+explain byte-like BF16 output. The next smallest experiment is to force a fresh NVFP4-specific
+paged-prefill JIT namespace, clear the FlashInfer JIT cache, and rerun the exact Gemma 3
+wrapper-boundary probe before touching kernel math.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate
