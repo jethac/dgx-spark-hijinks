@@ -164,6 +164,20 @@ FlashInfer FA2 NVFP4 attention-output probe for Gemma 3 `D=128` local/global sha
 verify output scaling, dequantization, V-scale deswizzle, and output-buffer
 interpretation against a dequantized reference.
 
+Standalone attention-output probe result (2026-06-09):
+`results/vllm_flashinfer_gemma3_attention_output_probe_20260609T0134JST_summary.md`
+extends `scripts/flashinfer_nvfp4_kv_probe.py` with signed E2M1 values, non-unit
+K/V global scales, and actual/expected output stats. The signed swizzled row
+(`FLASHINFER_PAGED_V_SF_DESWIZZLE=1`) and signed linear-control row both pass for
+NHD/HND decode and prefill at Gemma 3 geometry (`D=128`, `16` KV heads, `32` Q heads):
+minimum cosine `0.999997496604919`, max absolute error `0.0001220703125`, and `0 / 4`
+byte-like actual outputs in each row. This clears generic standalone FA2 signed-FP4,
+non-unit K/V scale, and deswizzle handling for the synthetic case. It does **not** clear
+vLLM Gemma. Next vLLM action is to instrument or dump the real wrapper boundary for the
+first failing Gemma request: actual model `query`, split packed K/V, K/V scale tensors,
+scalar `k_scale`/`v_scale`, output buffer dtype/shape/stride before and after
+`wrapper.run(...)`, and whether prefill or decode first produces byte-like output.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate

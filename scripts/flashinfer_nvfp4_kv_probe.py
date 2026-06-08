@@ -130,24 +130,38 @@ def _pack_metadata(args: argparse.Namespace) -> dict[str, Any]:
         "layouts": args.layouts,
         "kv_container": args.kv_container,
         "v_scale_layout": args.v_scale_layout,
+        "signed_values": args.signed_values,
         "backend": "fa2",
         "deswizzle_flag_requested": args.v_scale_layout == "swizzled"
         and not args.no_deswizzle_flag,
         "flashinfer_source_root": str(args.flashinfer_source_root)
         if args.flashinfer_source_root
         else None,
+        "k_global_scale": args.k_global_scale,
+        "v_global_scale": args.v_global_scale,
         "cosine_threshold": args.cosine_threshold,
         "max_abs_threshold": args.max_abs_threshold,
     }
 
 
-def _make_nvfp4_kv(torch: Any, shape: tuple[int, ...], device: str):
+def _make_nvfp4_kv(
+    torch: Any,
+    shape: tuple[int, ...],
+    device: str,
+    global_scale: float,
+    signed_values: bool,
+):
     packed = torch.randint(0, 256, shape, dtype=torch.uint8, device=device)
-    packed &= 0x77
+    if not signed_values:
+        packed &= 0x77
     sf_shape = (*shape[:-1], shape[-1] // 8)
     choices = torch.tensor([56, 48, 40, 32], dtype=torch.uint8, device=device)
     sf = choices[torch.randint(0, 4, sf_shape, device=device)]
-    return packed, sf.view(torch.float8_e4m3fn), torch.tensor(1.0, device=device)
+    return (
+        packed,
+        sf.view(torch.float8_e4m3fn),
+        torch.tensor(global_scale, device=device, dtype=torch.float32),
+    )
 
 
 def _dequant_nvfp4(torch: Any, packed: Any, sf: Any, global_scale: Any):
@@ -195,13 +209,40 @@ def _gather_sequence(torch: Any, pages: Any, layout: str, start: int, stop: int,
     return torch.cat([full.reshape(-1, pages.shape[1], pages.shape[-1]), last], dim=0)
 
 
-def _metrics(torch: Any, actual: Any, expected: Any) -> dict[str, float]:
+def _metrics(torch: Any, actual: Any, expected: Any) -> dict[str, Any]:
     a = actual.detach().float().reshape(-1)
     b = expected.detach().float().reshape(-1)
     cosine = torch.nn.functional.cosine_similarity(a, b, dim=0).item()
     max_abs = torch.max(torch.abs(a - b)).item()
     mean_abs = torch.mean(torch.abs(a - b)).item()
     return {"cosine": cosine, "max_abs": max_abs, "mean_abs": mean_abs}
+
+
+def _tensor_stats(torch: Any, tensor: Any) -> dict[str, Any]:
+    values = tensor.detach().float()
+    finite = torch.isfinite(values)
+    stats: dict[str, Any] = {
+        "shape": list(tensor.shape),
+        "dtype": str(tensor.dtype),
+        "finite": int(finite.sum().item()),
+        "numel": int(tensor.numel()),
+    }
+    if tensor.numel() == 0 or not bool(finite.any().item()):
+        return stats
+    finite_values = values[finite]
+    min_value = float(finite_values.min().item())
+    max_value = float(finite_values.max().item())
+    stats.update(
+        {
+            "min": min_value,
+            "max": max_value,
+            "mean": float(finite_values.mean().item()),
+            "rms": float(torch.sqrt(torch.mean(finite_values * finite_values)).item()),
+            "max_abs": float(finite_values.abs().max().item()),
+            "byte_like_nonnegative": bool(min_value >= 0.0 and max_value <= 255.0),
+        }
+    )
+    return stats
 
 
 def _dtype(torch: Any, name: str):
@@ -231,8 +272,12 @@ def _make_case(torch: Any, args: argparse.Namespace, layout: str, dtype: Any):
         kv_shape = (total_pages, args.page_size, args.num_kv_heads, args.head_dim // 2)
     else:
         kv_shape = (total_pages, args.num_kv_heads, args.page_size, args.head_dim // 2)
-    k_packed, k_sf, k_scale = _make_nvfp4_kv(torch, kv_shape, device)
-    v_packed, v_sf_linear, v_scale = _make_nvfp4_kv(torch, kv_shape, device)
+    k_packed, k_sf, k_scale = _make_nvfp4_kv(
+        torch, kv_shape, device, args.k_global_scale, args.signed_values
+    )
+    v_packed, v_sf_linear, v_scale = _make_nvfp4_kv(
+        torch, kv_shape, device, args.v_global_scale, args.signed_values
+    )
     k_dq = _dequant_nvfp4(torch, k_packed, k_sf, k_scale).to(dtype)
     v_dq = _dequant_nvfp4(torch, v_packed, v_sf_linear, v_scale).to(dtype)
     v_sf_for_kernel = (
@@ -302,7 +347,16 @@ def _run_decode(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: s
             )
         )
     expected = torch.stack(refs, dim=0)
-    return _metrics(torch, actual, expected)
+    metrics = _metrics(torch, actual, expected)
+    metrics.update(
+        {
+            "actual_stats": _tensor_stats(torch, actual),
+            "expected_stats": _tensor_stats(torch, expected),
+            "k_scale": float(case["k_scale"].item()),
+            "v_scale": float(case["v_scale"].item()),
+        }
+    )
+    return metrics
 
 
 def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: str, dtype: Any):
@@ -362,7 +416,16 @@ def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: 
             )
         )
     expected = torch.cat(refs, dim=0)
-    return _metrics(torch, actual, expected)
+    metrics = _metrics(torch, actual, expected)
+    metrics.update(
+        {
+            "actual_stats": _tensor_stats(torch, actual),
+            "expected_stats": _tensor_stats(torch, expected),
+            "k_scale": float(case["k_scale"].item()),
+            "v_scale": float(case["v_scale"].item()),
+        }
+    )
+    return metrics
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
@@ -455,7 +518,24 @@ def parse_args() -> argparse.Namespace:
         default="swizzled",
         help="Use vLLM-style swizzled V scale factors or SGLang-style linear V scale factors.",
     )
+    parser.add_argument(
+        "--signed-values",
+        action="store_true",
+        help="Allow negative E2M1 nibbles in synthetic packed K/V values.",
+    )
     parser.add_argument("--flashinfer-source-root", type=Path)
+    parser.add_argument(
+        "--k-global-scale",
+        type=float,
+        default=1.0,
+        help="Global dequantization scale passed as k_scale.",
+    )
+    parser.add_argument(
+        "--v-global-scale",
+        type=float,
+        default=1.0,
+        help="Global dequantization scale passed as v_scale.",
+    )
     parser.add_argument("--cosine-threshold", type=float, default=0.995)
     parser.add_argument("--max-abs-threshold", type=float, default=0.25)
     parser.add_argument("--no-deswizzle-flag", action="store_true")
