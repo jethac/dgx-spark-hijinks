@@ -216,6 +216,26 @@ Interpretation:
 - This localizes the FP4 quality failure more tightly than the earlier benchmark row. The corruption can be present at token one for a normal prompt, but another prompt can start plausibly and degrade later.
 - This is still not a serving win. It points the next SGLang work at prefill/decode state, per-layer calibration application, wrapper metadata, and scale/layout coupling around the failing prompt.
 
+## 2026-06-08 d7d931f Native `/generate` Divergence Probe
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_summary.md`
+- `results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_native_logprob_compare.json`
+- `results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_fp4_trace_excerpt.txt`
+
+Result:
+
+- The probe rendered the `medium_decode` chat prompt with the Qwen tokenizer, then called SGLang native `/generate` on matched fp8 and FP4 servers.
+- fp8 and FP4 used the same 56-token prompt and matched through the first four generated tokens: `**`, `Engineering`, ` Note`, `:`.
+- The first token-id divergence was output index `4`: fp8 chose ` Valid`, while FP4 chose ` Validate`.
+- Both alternatives were in both top-k lists, but FP4 reversed their rank. FP4 text degraded from there, but it did not reproduce the earlier `import import` collapse.
+
+Interpretation:
+
+- This points to an early decode distribution perturbation under native generation, not a total backend layout failure.
+- The next useful probe is to reconcile OpenAI Chat Completions prompt/path handling with native `/generate`, because the OpenAI logprob artifact looked worse than the native rendered-template probe.
+
 Likely code locations:
 
 - `third_party/flashinfer/include/flashinfer/vec_dtypes.cuh`: generic `vec_cast` lacks the needed FP4 E2M1 to float conversion path.

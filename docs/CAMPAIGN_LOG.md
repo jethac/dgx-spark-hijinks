@@ -481,6 +481,19 @@
   - result: fp8 passed both probes. FP4 `short_decode` began with the same high-confidence prefix (`A local AI workstation`) then drifted into mixed Chinese/repetition; FP4 `medium_decode` diverged at token one (`the following code:` vs fp8 `**Engineering Note:`) and collapsed into repeated `import` text.
   - interpretation: the quality bug is now localized beyond "bad benchmark text": one standardized prompt is wrong from the first token, while another starts plausibly and corrupts later. Next useful SGLang work is a divergence-window trace around the failing `medium_decode` prompt, not another capacity row.
 
+- Ran the SGLang native `/generate` logprob divergence probe for `medium_decode`.
+  - script: `scripts/sglang_native_logprob_compare.py`
+  - artifacts: `results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_summary.md`, `results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_native_logprob_compare.json`, and server/trace logs with the same prefix.
+  - command shape: two simultaneous NVIDIA SGLang 26.05 source-overlay servers on ports 30012 and 30013; fp8 comparator versus FP4 KV candidate; same model, FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled. The probe rendered the Qwen chat template explicitly, then called native `/generate` with `return_logprob=true`.
+  - result: fp8 and FP4 used the same 56-token rendered prompt and matched through output tokens 0-3 (`**`, `Engineering`, ` Note`, `:`). First divergence was token index 4: fp8 chose ` Valid`, FP4 chose ` Validate`; both alternatives appeared in both top-k lists, but FP4 reversed their rank.
+  - interpretation: under native `/generate`, the failure is an early decode distribution perturbation that compounds, not a total first-token collapse. The next SGLang question is why OpenAI Chat Completions looked worse than native rendered-template `/generate`.
+- Added the Gemma compatibility plan as a sequenced ladder across the whole family.
+  - doc: `docs/GEMMA_COMPATIBILITY_PLAN.md`
+  - rationale: "Gemma 4" is five models across four architectures (E2B/E4B dense-mobile+PLE+audio, 12B dense encoder-free, 26B-A4B MoE, 31B dense), plus Gemma 3 (dense, SWA, uniform head dim) and Gemma 3n (the superseded mobile line). "Fix Gemma" is a matrix, not a checkbox.
+  - structure: one-new-complication-per-rung ladder. Rung −1 = per-variant config audit (settles where `D=512` lives). Main vLLM NVFP4-KV ladder: Rung 0 Qwen (done) → Rung 1 Gemma 3 27B (isolate SWA / hybrid mixed-KV, also a shippable big-Gemma capacity win) → Rung 2 Gemma 4 12B encoder-free (add Gemma-4 arch) → Rung 3 Gemma 4 31B dense (add scale + D=512 if present) → Rung 4 Gemma 4 26B-A4B (add MoE). Mobile side track (llama.cpp/LiteRT): Gemma 3n → Gemma 4 E2B/E4B (isolate PLE/audio/elastic).
+  - discipline: prove-before-climb; assign each model to its natural runtime rather than filling all 15 cells; **measure attention geometry (per-layer head_dim, heads, KV heads, SWA layer map, KV bytes/token) from the running model every rung** — config is a hint, the running model is ground truth, and the mixed-KV layer classification must come from measured per-layer head_dim, not assumption.
+  - provenance caveat: Gemma 4 lineup/architecture is operator-provided (post-cutoff) and must be confirmed by the rung −1 audit + per-rung measurement before building on it.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

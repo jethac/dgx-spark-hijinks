@@ -152,6 +152,8 @@
         "results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp4_quality_probe.json",
         "results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_fp8_quality_probe.json",
         "results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md",
+        "results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_native_logprob_compare.json",
+        "results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_summary.md",
         "results/sglang_qwen_fp4kv_decode_dtype_bad_output_20260608_server.log",
         "results/sglang_qwen_fp4kv_decode_dtype_chat_smoke_20260608.json",
         "results/sglang_qwen_fp4kv_decode_dtype_raw_generate_20260608.json",

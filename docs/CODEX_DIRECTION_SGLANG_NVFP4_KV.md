@@ -118,6 +118,14 @@ passing — not a dev step.
   instead of `**Engineering Note:`) and collapses into repeated `import` text. This
   proves the quality bug is prompt/path-sensitive generation corruption, not just a
   missing backend trace or a capacity-only artifact gap.
+- **Native `/generate` divergence-window probe is DONE**
+  (`results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_summary.md`):
+  rendering the same `medium_decode` chat prompt with the Qwen tokenizer and calling
+  native `/generate` gives a sharper window. fp8 and FP4 match for the first four output
+  tokens (`**`, `Engineering`, ` Note`, `:`), then diverge at token index 4: fp8 selects
+  ` Valid` while FP4 selects ` Validate`. Both alternatives appear in both top-k lists,
+  but FP4 reverses their rank. This is an early decode distribution shift that compounds,
+  not a first-token catastrophe under native `/generate`.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -153,10 +161,11 @@ end-to-end path diverges from a valid pairing, suspects in order:
    3. **Per-layer calibration application / prompt-path state** — the 28-layer /
       4096-token calibration must
       apply the same global scales at quantize and at in-kernel dequant. This is the most
-      likely remaining culprit now that raw convention is understood. The logprob quality
-      probe shows one prompt diverges from token one and another drifts after an initially
-      plausible prefix, so collect a prefill/decode boundary trace before changing the
-      quantizer again.
+      likely remaining culprit now that raw convention is understood. The OpenAI chat
+      probe shows one prompt diverges from token one, while the native `/generate` probe
+      with a rendered chat template matches through token 3 and diverges at token 4. Next
+      separate OpenAI chat adapter behavior from native generation, then inspect the
+      token-4 decode perturbation before changing the quantizer again.
    4. Only then the decode kernel itself (Objective B/C overlap).
 
 **B. Confirm the FlashInfer FP4 decode kernel is numerically correct.**
@@ -241,9 +250,9 @@ Coordinate attention geometry with the vLLM lane
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The matched `d7d931f` row and logprob quality probe are done. Do not repeat them as-is.
-The next step is a divergence-window probe for the failing `medium_decode` prompt:
-capture the prefill/extend path, the first decode-step metadata, selected global scales,
-and the first-token distribution against fp8. Add `extend_ragged_no_prefix` trace only if
-the failing request does not hit the already-traced `extend_merge_paged` path. No serving
-image required until quality passes.
+The matched `d7d931f` row, OpenAI logprob probe, and native `/generate` divergence-window
+probe are done. Do not repeat them as-is. The next step is to explain the gap between the
+OpenAI Chat Completions result (apparent token-one collapse) and native `/generate` with
+the rendered Qwen chat template (token-4 rank reversal). Capture or reproduce the exact
+prompt serialization used by the OpenAI path, then compare it with the native prompt
+before touching kernel math. No serving image required until quality passes.

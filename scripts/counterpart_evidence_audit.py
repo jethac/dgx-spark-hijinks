@@ -81,6 +81,8 @@ REQUIREMENTS = (
             "results/sglang_qwen_fp4kv_autosafe*.md",
             "results/sglang_qwen_fp4kv_d7d931f_logprob_quality*.json",
             "results/sglang_qwen_fp4kv_d7d931f_logprob_quality*.md",
+            "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.json",
+            "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.md",
             "results/sglang_nvfp4_kv_layout_probe*.json",
             "results/sglang_nvfp4_kv_convention_probe*.json",
             "results/sglang_fp4_pool_bridge_probe*.json",
