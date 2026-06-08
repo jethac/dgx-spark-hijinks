@@ -97,6 +97,13 @@ repo submodules or a clean run checkout instead. `google/gemma-3-27b-it` was not
 in the existing Hugging Face cache, so the first live row needs gated HF access and enough
 download space/time.
 
+Prepared checkout: `/home/jethac/spark_tmp/dgx-spark-hijinks-vllm-gemma3-rung1-20260608`.
+The generated packet is committed at
+`docs/results/vllm_gemma3_27b_rung1_20260608TCHECKOUTJST_command_packet.sh` and passes
+`bash -n`. In that checkout, `third_party/vllm` and `third_party/flashinfer` are
+intentionally checked out at the Gemma 3 overlay commits named above, so `git submodule
+status` shows leading `+` markers for those two submodules.
+
 ## Expected Log Lines
 
 Both rows:

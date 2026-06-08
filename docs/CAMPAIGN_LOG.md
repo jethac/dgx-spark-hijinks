@@ -540,6 +540,18 @@
     submodules and gated Gemma 3 access, then run the fp8 comparator row before the NVFP4
     candidate.
 
+- Prepared the clean Linux checkout for the vLLM Gemma 3 27B Rung 1 live row.
+  - checkout: `/home/jethac/spark_tmp/dgx-spark-hijinks-vllm-gemma3-rung1-20260608`
+  - superproject: `595dfb6dba863088707afadbad816a511b803f81`
+  - source overlays: `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24` and
+    `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
+  - generated packet:
+    `docs/results/vllm_gemma3_27b_rung1_20260608TCHECKOUTJST_command_packet.sh`
+  - artifact: `results/vllm_gemma3_27b_rung1_checkout_setup_20260608.md`
+  - validation: generated packet passes `bash -n`.
+  - remaining gate: `google/gemma-3-27b-it` still needs gated access/cache confirmation
+    before the fp8 comparator row starts.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

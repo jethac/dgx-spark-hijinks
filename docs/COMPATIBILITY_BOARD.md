@@ -62,10 +62,11 @@ For Qwen thinking models, pass `CHAT_TEMPLATE_KWARGS_JSON='{"enable_thinking": f
 Preflight artifact: `results/vllm_gemma3_27b_rung1_preflight_20260608.md`.
 
 The packet generator now captures real Docker logs, waits for `/v1/models`, and removes
-containers on exit. Before running it, use a clean Linux checkout of this branch with
-initialized `third_party/vllm` and `third_party/flashinfer`; the older `/home/jethac/src/*`
-paths were absent during preflight. `google/gemma-3-27b-it` was also not found in the
-existing HF cache, so confirm gated access/cache before starting the fp8 comparator.
+containers on exit. Clean checkout artifact:
+`results/vllm_gemma3_27b_rung1_checkout_setup_20260608.md`. Generated packet:
+`docs/results/vllm_gemma3_27b_rung1_20260608TCHECKOUTJST_command_packet.sh`.
+`google/gemma-3-27b-it` was not found in the existing HF cache, so confirm gated
+access/cache before starting the fp8 comparator.
 
 ### Qwen Speed Lane
 
