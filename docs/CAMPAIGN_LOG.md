@@ -921,6 +921,20 @@
     read/dequant and merge math; next inspect calibration/quantization-error impact and
     request sequencing/state across the OpenAI/native radix-hit pair.
 
+- Added and ran SGLang FP4-KV quant-error trace.
+  - fork commit: `jethac/sglang@d4fe78078`
+  - env gate: `SGLANG_FP4_KV_TRACE_QUANT_ERROR=1`
+  - artifact: `results/sglang_qwen_fp4kv_quant_error_trace_20260608T2325JST_summary.md`
+  - parsed artifact: `results/sglang_qwen_fp4kv_quant_error_trace_20260608T2325JST_analysis.json`
+  - result: default FP4 still fails (`OpenAI **` vs native `ark` / `838`) with
+    `cached_tokens=55`; radix-off still passes (`**` / `334`) with `cached_tokens=0`.
+  - quantization: default and radix-off have identical sampled layer-0 dense-vs-dequant
+    metrics for the 56-token fill (`K cosine=0.996669`, `V cosine=0.995715`) and the same
+    global scales.
+  - interpretation: calibration/global-scale selection and ordinary FP4 quant/dequant loss
+    are not the distinguishing factor; next run
+    `tasks/sglang_qwen_fp4kv_request_order_probe_20260608.md`.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

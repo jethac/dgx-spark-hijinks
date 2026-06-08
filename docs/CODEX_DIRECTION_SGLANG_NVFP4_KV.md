@@ -93,6 +93,19 @@ units, and merge-state math for the sampled failing case. The next hook moves up
 trace calibration/quantization-error impact at cache fill and request sequencing/state
 across the OpenAI/native radix-hit pair.
 
+Quant-error trace result
+(`results/sglang_qwen_fp4kv_quant_error_trace_20260608T2325JST_summary.md`):
+`jethac/sglang@d4fe78078` adds `SGLANG_FP4_KV_TRACE_QUANT_ERROR=1`. The default row still
+fails (`OpenAI **` vs native `ark`/`838`) with `cached_tokens=55`; radix-off still passes
+(`**`/`334`) with `cached_tokens=0`. Layer-0 dense-vs-dequant error is effectively
+identical in the failing and passing rows: for the 56-token fill, K cosine is `0.996669`
+and V cosine is `0.995715` in both rows, with the same global scales
+(`k=0.1197916716337204`, `v=0.0016276042442768812`). This clears calibration/global-scale
+selection and ordinary FP4 quant/dequant loss as the distinguishing factor. The next
+hook is request-order/cache-state only: run the
+`tasks/sglang_qwen_fp4kv_request_order_probe_20260608.md` packet to prove whether the
+failure follows the second request / cached prefix, independent of endpoint.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend
