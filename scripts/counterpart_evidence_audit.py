@@ -83,6 +83,9 @@ REQUIREMENTS = (
             "results/sglang_qwen_fp4kv_d7d931f_logprob_quality*.md",
             "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.json",
             "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.md",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.json",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.md",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.log",
             "results/sglang_nvfp4_kv_layout_probe*.json",
             "results/sglang_nvfp4_kv_convention_probe*.json",
             "results/sglang_fp4_pool_bridge_probe*.json",
@@ -208,6 +211,8 @@ REQUIREMENTS = (
         partial_patterns=(
             "results/llamacpp_qwen25_1_5b_q4_k_m_*row_manifest.json",
             "results/llamacpp_qwen25_1_5b_q4_k_m_*openai_benchmark.json",
+            "results/llamacpp_nvfp4_runtime_gate_*.md",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.json",
         ),
     ),
     EvidenceRequirement(
@@ -234,6 +239,10 @@ REQUIREMENTS = (
         partial_patterns=(
             "results/llamacpp*_server.log",
             "results/llamacpp*_build_target_audit.json",
+            "results/llamacpp_nvfp4_runtime_gate_*.md",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.log",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.txt",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.json",
         ),
     ),
     EvidenceRequirement(

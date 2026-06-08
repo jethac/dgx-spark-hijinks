@@ -487,6 +487,22 @@
   - command shape: two simultaneous NVIDIA SGLang 26.05 source-overlay servers on ports 30012 and 30013; fp8 comparator versus FP4 KV candidate; same model, FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled. The probe rendered the Qwen chat template explicitly, then called native `/generate` with `return_logprob=true`.
   - result: fp8 and FP4 used the same 56-token rendered prompt and matched through output tokens 0-3 (`**`, `Engineering`, ` Note`, `:`). First divergence was token index 4: fp8 chose ` Valid`, FP4 chose ` Validate`; both alternatives appeared in both top-k lists, but FP4 reversed their rank.
   - interpretation: under native `/generate`, the failure is an early decode distribution perturbation that compounds, not a total first-token collapse. The next SGLang question is why OpenAI Chat Completions looked worse than native rendered-template `/generate`.
+
+- Ran the SGLang OpenAI-vs-native prompt reconciliation probe.
+  - script: `scripts/sglang_openai_native_reconcile.py`
+  - artifacts: `results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_summary.md`, `results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST.json`, and matching fp8/FP4 server logs, trace excerpts, and container inspect files.
+  - command shape: two simultaneous NVIDIA SGLang 26.05 source-overlay servers on ports
+    30012 and 30013; fp8 comparator versus FP4 KV candidate; same Qwen2.5 1.5B model,
+    FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise
+    graph disabled. The probe compared OpenAI Chat Completions prompt IDs against local
+    Qwen chat-template rendering and replayed native `/generate` from the same prompt IDs.
+  - result: fp8 and FP4 OpenAI prompt IDs matched the local render exactly: 56 tokens,
+    SHA-256 `5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517`, no first
+    prompt diff. FP4 OpenAI still diverged at token 4, while FP4 native `/generate` from
+    the same prompt IDs diverged at token 0 (`**` -> `ark`).
+  - interpretation: prompt serialization is retired as the cause. The remaining SGLang
+    FP4-KV quality bug is endpoint/path-specific serving numerics or metadata; next inspect
+    request metadata and pre-sampling logits/hidden state before touching kernel math again.
 - Added the Gemma compatibility plan as a sequenced ladder across the whole family.
   - doc: `docs/GEMMA_COMPATIBILITY_PLAN.md`
   - rationale: "Gemma 4" is five models across four architectures (E2B/E4B dense-mobile+PLE+audio, 12B dense encoder-free multimodal, 26B-A4B MoE, 31B dense), plus Gemma 3 (dense, SWA, uniform head dim) and Gemma 3n (the superseded mobile line). "Fix Gemma" is a matrix, not a checkbox.

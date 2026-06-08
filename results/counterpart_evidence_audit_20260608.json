@@ -159,7 +159,13 @@
         "results/sglang_qwen_fp4kv_decode_dtype_raw_generate_20260608.json",
         "results/sglang_qwen_fp4kv_eager_only_chat_smoke_20260608.json",
         "results/sglang_qwen_fp4kv_eager_only_raw_generate_20260608.json",
-        "results/sglang_qwen_fp4kv_eager_only_server_20260608.log"
+        "results/sglang_qwen_fp4kv_eager_only_server_20260608.log",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST.json",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_fp4_container_inspect.json",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_fp4_server.log",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_fp8_container_inspect.json",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_fp8_server.log",
+        "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_summary.md"
       ],
       "runtime": "sglang",
       "status": "partial-evidence-only",
@@ -387,6 +393,9 @@
       "model_family": "qwen",
       "name": "llamacpp_larger_qwen_gguf",
       "partial_matches": [
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/chat_reasoning_off.json",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/nsys_chat.json",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_openai_benchmark.json",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_row_manifest.json"
       ],
@@ -430,6 +439,12 @@
         "results/llamacpp_gguf_echo_logprobs_probe_20260608_server.log",
         "results/llamacpp_native_loglikelihood_20260608T1331JST_build_target_audit.json",
         "results/llamacpp_native_loglikelihood_20260608T1331JST_server.log",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/chat_reasoning_off.json",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/nsys_chat.json",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/nsys_cuda_gpu_kern_sum.txt",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/nsys_status.txt",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST/server_reasoning_off.log",
+        "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log"
       ],

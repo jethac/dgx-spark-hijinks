@@ -126,6 +126,15 @@ passing — not a dev step.
   ` Valid` while FP4 selects ` Validate`. Both alternatives appear in both top-k lists,
   but FP4 reverses their rank. This is an early decode distribution shift that compounds,
   not a first-token catastrophe under native `/generate`.
+- **OpenAI-vs-native prompt reconciliation is DONE**
+  (`results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_summary.md`):
+  the OpenAI path and local Qwen chat-template render use identical 56-token prompt IDs
+  for both fp8 and FP4 (`sha256=5a5d4572e0e3d940a909b85dc4a00350094cbd1d55333c3d4f0a7974a91ee517`).
+  Prompt serialization is therefore not the cause. The endpoint split is real: FP4 OpenAI
+  Chat Completions still starts plausibly and diverges at token 4, while native
+  `/generate` from the same prompt IDs diverges at token 0 (`**` -> `ark`). The next bug
+  surface is FP4 endpoint/request metadata or pre-sampling numerics, not chat-template
+  tokenization.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -161,11 +170,11 @@ end-to-end path diverges from a valid pairing, suspects in order:
    3. **Per-layer calibration application / prompt-path state** — the 28-layer /
       4096-token calibration must
       apply the same global scales at quantize and at in-kernel dequant. This is the most
-      likely remaining culprit now that raw convention is understood. The OpenAI chat
-      probe shows one prompt diverges from token one, while the native `/generate` probe
-      with a rendered chat template matches through token 3 and diverges at token 4. Next
-      separate OpenAI chat adapter behavior from native generation, then inspect the
-      token-4 decode perturbation before changing the quantizer again.
+      likely remaining culprit now that raw convention is understood. The prompt
+      reconciliation probe proves OpenAI and native paths can use identical prompt IDs,
+      yet FP4 OpenAI and native `/generate` diverge differently. Next compare FP4 request
+      metadata, forward-mode/prefill state, and pre-sampling logits/hidden states between
+      the two endpoints before changing the quantizer again.
    4. Only then the decode kernel itself (Objective B/C overlap).
 
 **B. Confirm the FlashInfer FP4 decode kernel is numerically correct.**
@@ -263,9 +272,9 @@ the decoder/KV path; it is the destination, not the stepping stone.
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The matched `d7d931f` row, OpenAI logprob probe, and native `/generate` divergence-window
-probe are done. Do not repeat them as-is. The next step is to explain the gap between the
-OpenAI Chat Completions result (apparent token-one collapse) and native `/generate` with
-the rendered Qwen chat template (token-4 rank reversal). Capture or reproduce the exact
-prompt serialization used by the OpenAI path, then compare it with the native prompt
-before touching kernel math. No serving image required until quality passes.
+The matched `d7d931f` row, OpenAI logprob probe, native `/generate` divergence-window
+probe, and OpenAI-vs-native prompt reconciliation are done. Do not repeat them as-is.
+Prompt IDs match; prompt serialization is retired as the cause. The next step is to diff
+the FP4 OpenAI Chat Completions and native `/generate` request metadata and prefill/decode
+state, then capture pre-sampling logits or hidden-state deltas for the first generated
+token. No serving image is required until quality passes.
