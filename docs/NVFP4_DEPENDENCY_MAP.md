@@ -1,6 +1,6 @@
 # NVFP4 Dependency Map
 
-Status: active FlashInfer patch branch exists.
+Status: active FlashInfer and vLLM FlashAttention patch branches exist.
 
 This map records which upstreams are likely involved if we patch NVFP4 KV for Spark.
 
@@ -12,7 +12,7 @@ This map records which upstreams are likely involved if we patch NVFP4 KV for Sp
 | `flashinfer-ai/flashinfer` | `jethac/flashinfer` | FlashInfer FA2/JIT/CUDA scale-factor and SM12x behavior |
 | `sgl-project/sglang` | `jethac/sglang` | SGLang memory pool, KV dtype, scale, and wrapper plumbing |
 | `vllm-project/FlashMLA` | `jethac/FlashMLA` only if needed | Spark MLA/DeepSeek/FlashMLA claims |
-| `vllm-project/flash-attention` | `jethac/flash-attention` only if needed | vLLM bundled FA2/FA3 audit or patch |
+| `vllm-project/flash-attention` | `jethac/flash-attention` | vLLM bundled FA2 audit and SM121a build-target patch |
 | `NVIDIA/cutlass` | only if fix lands below wrapper layer | avoid forking unless FlashInfer/CuTeDSL boundary requires it |
 
 ## Current Evidence
@@ -25,6 +25,25 @@ From `results/cuda_so_audit_vllm_flashinfer_20260607T111023Z.json`:
 - vLLM FA2 extension: `sm_80`
 - vLLM FA3 extension: `sm_90a`
 - vLLM FlashMLA extensions: `sm_100`, `sm_90a`
+
+From `results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion_summary.md`:
+
+- `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` and `VLLM_VERSION_OVERRIDE=0.1.dev1+ga919d635d` fix the vLLM clean-packaging and Docker-context versioning blockers.
+- top-level vLLM CMake accepts `12.1a` and prints `arch=compute_121a,code=sm_121a`.
+- nested pinned `vllm-project/flash-attention@dd62dac706b1cf7895bd99b18c6cb7e7e117ee25` still collapses FA2 to `FA2_ARCHS: 8.0+PTX` and compiles `_vllm_fa2_C` as `sm_80`/`compute_80`.
+- this makes `jethac/flash-attention` an active fork, not optional, for the clean vLLM FA2 native-target proof.
+
+vLLM FlashAttention FA2 patch:
+
+- fork: `jethac/flash-attention`
+- branch: `spark/hijinks-021-fa2-sm121a`
+- commit: `7d53245`
+- upstream base: `vllm-project/flash-attention@dd62dac706b1cf7895bd99b18c6cb7e7e117ee25`
+- submodule: `third_party/vllm-flash-attention`
+- change: CUDA 13 supported architectures include `12.1` and `12.1a`; FA2 CMake allowlist includes `12.0`, `12.1`, and `12.1a` in addition to `8.0+PTX`.
+- scope: FA2 C++ build targeting only. This does not enable FA3/hopper on SM12x and does not claim native FP4 tensor-core support.
+- integration hook: `VLLM_FLASH_ATTN_SRC_DIR=/opt/jethac-vllm-flash-attn` in `scripts/build_vllm_aeon_qwen_cleanfa2_image.sh`.
+- required verification: configure log showing `FA2_ARCHS: 12.1a`, successful `_vllm_fa2_C` import, and `cuobjdump` evidence for `sm_121a`.
 
 From the subagent read-only upstream investigation:
 

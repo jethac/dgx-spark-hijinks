@@ -43,10 +43,18 @@ RUN_ID=${RUN_ID:-vllm_cleanfa2_build_$(date -u +%Y%m%dT%H%M%SZ)}
 
 REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 VLLM_ROOT="${REPO_ROOT}/third_party/vllm"
+VLLM_FLASH_ATTN_ROOT="${REPO_ROOT}/third_party/vllm-flash-attention"
 LOG_PATH="${REPO_ROOT}/${RESULTS_DIR}/${RUN_ID}.log"
 mkdir -p "${REPO_ROOT}/${RESULTS_DIR}"
 DOCKERFILE=$(mktemp)
-trap 'rm -f "${DOCKERFILE}"' EXIT
+BUILD_CONTEXT=$(mktemp -d)
+trap 'rm -f "${DOCKERFILE}"; rm -rf "${BUILD_CONTEXT}"' EXIT
+
+test -d "${VLLM_ROOT}/vllm"
+test -d "${VLLM_FLASH_ATTN_ROOT}/csrc/flash_attn"
+mkdir -p "${BUILD_CONTEXT}/vllm-src" "${BUILD_CONTEXT}/vllm-flash-attn-src"
+tar -C "${VLLM_ROOT}" --exclude=.git -cf - . | tar -C "${BUILD_CONTEXT}/vllm-src" -xf -
+tar -C "${VLLM_FLASH_ATTN_ROOT}" --exclude=.git -cf - . | tar -C "${BUILD_CONTEXT}/vllm-flash-attn-src" -xf -
 
 cat >"${DOCKERFILE}" <<'EOF'
 ARG BASE_IMAGE=ghcr.io/aeon-7/vllm-spark-omni-q36:v2
@@ -76,7 +84,8 @@ RUN python3 -m pip install --no-cache-dir \
       'setuptools>=77.0.3,<81.0.0' 'setuptools-scm>=8.0' \
       'setuptools-rust>=1.9.0' wheel jinja2
 
-COPY . /opt/jethac-vllm
+COPY vllm-src/ /opt/jethac-vllm/
+COPY vllm-flash-attn-src/ /opt/jethac-vllm-flash-attn/
 WORKDIR /opt/jethac-vllm
 
 ENV VLLM_USE_PRECOMPILED=1 \
@@ -85,6 +94,7 @@ ENV VLLM_USE_PRECOMPILED=1 \
     VLLM_VERSION_OVERRIDE="${VLLM_VERSION_OVERRIDE}" \
     VLLM_PRECOMPILED_WHEEL_COMMIT="${VLLM_PRECOMPILED_WHEEL_COMMIT}" \
     VLLM_SKIP_PRECOMPILED_VERSION_SUFFIX=1 \
+    VLLM_FLASH_ATTN_SRC_DIR=/opt/jethac-vllm-flash-attn \
     REQUIRE_NATIVE_FA2_ARCH="${REQUIRE_NATIVE_FA2_ARCH}" \
     MAX_JOBS="${MAX_JOBS}" \
     NVCC_THREADS="${NVCC_THREADS}"
@@ -137,6 +147,6 @@ docker build \
   --build-arg MAX_JOBS="${MAX_JOBS}" \
   --build-arg NVCC_THREADS="${NVCC_THREADS}" \
   -t "${IMAGE_TAG}" \
-  -f "${DOCKERFILE}" "${VLLM_ROOT}" 2>&1 | tee "${LOG_PATH}"
+  -f "${DOCKERFILE}" "${BUILD_CONTEXT}" 2>&1 | tee "${LOG_PATH}"
 
 echo "wrote ${LOG_PATH}"

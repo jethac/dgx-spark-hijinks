@@ -26,6 +26,7 @@ Submodules:
 | `vllm-project/vllm` | `jethac/vllm` | `third_party/vllm` |
 | `sgl-project/sglang` | `jethac/sglang` | `third_party/sglang` |
 | `flashinfer-ai/flashinfer` | `jethac/flashinfer` | `third_party/flashinfer` |
+| `vllm-project/flash-attention` | `jethac/flash-attention` | `third_party/vllm-flash-attention` |
 | `ggml-org/llama.cpp` | `jethac/llama.cpp` | `third_party/llama.cpp` |
 | `google-ai-edge/LiteRT-LM` | `jethac/LiteRT-LM` | `third_party/LiteRT-LM` |
 
@@ -132,7 +133,8 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
-| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `db4b210c1` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; `db4b210c1` adds a precompiled FA2/FA3 skip knob for clean packaging; native-target proof pending |
+| `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `a919d635d` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; clean packaging skips bundled FA2/FA3 and preserves explicit `12.1a` targets; native FA2 proof now depends on patched vLLM FlashAttention |
+| `third_party/vllm-flash-attention` | `vllm-project/flash-attention@dd62dac` | `jethac/flash-attention@spark/hijinks-021-fa2-sm121a` at `7d53245` | submodule checkout | vLLM-pinned FA2 CMake now admits SM121/SM121a for CUDA 13 and FA2 arch selection; build/import/cuobjdump proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` | submodule checkout | SM12x FP4 KV compatibility gates, historical alias fix, pre-capture calibration, and SM120-family writer fallback are under test; clean source overlay reaches graph-enabled startup, but FP4 KV output quality is still corrupted |
 
 FlashInfer patch:

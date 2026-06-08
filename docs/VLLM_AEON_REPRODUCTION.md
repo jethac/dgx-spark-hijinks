@@ -261,7 +261,16 @@ Result: packaging/versioning is fixed, but native FA2 is not. `VLLM_PRECOMPILED_
 
 The nested pinned `vllm-project/flash-attention@dd62dac706b1cf7895bd99b18c6cb7e7e117ee25` configure then collapsed to `CUDA supported target architectures: 12.0`, selected `FA2_ARCHS: 8.0+PTX`, and launched `_vllm_fa2_C` `nvcc` commands with only `compute_80`/`sm_80`. The build was stopped rather than producing another non-native FA2 binary. The builder now fails fast when FA2 configure does not select native SM121/SM121a.
 
-Next vLLM clean-packaging step: patch or fork the pinned vLLM FlashAttention source so FA2 can select an SM12x/Spark-compatible target, then rerun this image build and the no-think Qwen row.
+Follow-up patch:
+
+- fork: `jethac/flash-attention`
+- branch: `spark/hijinks-021-fa2-sm121a`
+- commit: `7d53245`
+- submodule: `third_party/vllm-flash-attention`
+
+This is now wired into `scripts/build_vllm_aeon_qwen_cleanfa2_image.sh` through `VLLM_FLASH_ATTN_SRC_DIR=/opt/jethac-vllm-flash-attn`. The builder copies both the vLLM fork and the patched vLLM FlashAttention source into a minimal Docker build context, then fails fast unless nested FA2 configure selects native SM121/SM121a.
+
+Next vLLM clean-packaging step: rerun this image build with the patched FlashAttention source, then require successful `_vllm_fa2_C` import, `cuobjdump` evidence for `sm_121a`, and the same no-think Qwen row.
 
 ## 2026-06-08 Gemma 26B Result
 
