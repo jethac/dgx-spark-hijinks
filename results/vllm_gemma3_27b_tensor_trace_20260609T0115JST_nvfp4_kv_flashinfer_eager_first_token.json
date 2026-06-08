@@ -1,0 +1,1558 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "exact_spark_ok",
+      "elapsed_s": 11.354511366982479,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          32,
+          82,
+          101,
+          105,
+          103,
+          110,
+          115
+        ],
+        "logprob": -1.3681707382202148,
+        "script_summary": {
+          "chars": 7,
+          "control_chars": 0,
+          "non_ascii_chars": 0,
+          "replacement_chars": 0,
+          "script_counts": {
+            "LATIN": 6,
+            "SPACE": 1
+          }
+        },
+        "token": " Reigns",
+        "top_logprobs": [
+          {
+            "bytes": [
+              32,
+              82,
+              101,
+              105,
+              103,
+              110,
+              115
+            ],
+            "logprob": -1.3681707382202148,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " Reigns"
+          },
+          {
+            "bytes": [
+              32,
+              82,
+              101,
+              108,
+              101,
+              118,
+              97,
+              110,
+              99,
+              101
+            ],
+            "logprob": -2.118170738220215,
+            "script_summary": {
+              "chars": 10,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 9,
+                "SPACE": 1
+              }
+            },
+            "token": " Relevance"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              184,
+              151,
+              224,
+              184,
+              173,
+              224,
+              184,
+              135
+            ],
+            "logprob": -2.618170738220215,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "SPACE": 1,
+                "THAI": 3
+              }
+            },
+            "token": " \u0e17\u0e2d\u0e07"
+          },
+          {
+            "bytes": [
+              32,
+              81,
+              117,
+              97,
+              108,
+              105,
+              116,
+              195,
+              164,
+              116
+            ],
+            "logprob": -2.993170738220215,
+            "script_summary": {
+              "chars": 9,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 8,
+                "SPACE": 1
+              }
+            },
+            "token": " Qualit\u00e4t"
+          },
+          {
+            "bytes": [
+              209,
+              130,
+              208,
+              186,
+              208,
+              176
+            ],
+            "logprob": -3.243170738220215,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CYRILLIC": 3
+              }
+            },
+            "token": "\u0442\u043a\u0430"
+          },
+          {
+            "bytes": [
+              239,
+              163,
+              175
+            ],
+            "logprob": -3.493170738220215,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 1,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "UNNAMED": 1
+              }
+            },
+            "token": "\uf8ef"
+          },
+          {
+            "bytes": [
+              82,
+              101,
+              112,
+              111,
+              114,
+              116,
+              105,
+              110,
+              103
+            ],
+            "logprob": -4.118170738220215,
+            "script_summary": {
+              "chars": 9,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 9
+              }
+            },
+            "token": "Reporting"
+          },
+          {
+            "bytes": [
+              232,
+              189,
+              171
+            ],
+            "logprob": -4.118170738220215,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u8f6b"
+          },
+          {
+            "bytes": [
+              32,
+              227,
+              129,
+              161,
+              227,
+              130,
+              131,
+              227,
+              129,
+              134
+            ],
+            "logprob": -4.118170738220215,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "HIRAGANA": 3,
+                "SPACE": 1
+              }
+            },
+            "token": " \u3061\u3083\u3046"
+          },
+          {
+            "bytes": [
+              32,
+              67,
+              104,
+              195,
+              161,
+              118,
+              101,
+              122
+            ],
+            "logprob": -4.118170738220215,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " Ch\u00e1vez"
+          },
+          {
+            "bytes": [
+              32,
+              68,
+              117,
+              113,
+              117,
+              101
+            ],
+            "logprob": -4.243170738220215,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " Duque"
+          },
+          {
+            "bytes": [
+              230,
+              186,
+              157
+            ],
+            "logprob": -4.243170738220215,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u6e9d"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              164,
+              184,
+              224,
+              164,
+              130,
+              224,
+              164,
+              172,
+              224,
+              165,
+              139,
+              224,
+              164,
+              167
+            ],
+            "logprob": -4.243170738220215,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 5,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DEVANAGARI": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0938\u0902\u092c\u094b\u0927"
+          },
+          {
+            "bytes": [
+              231,
+              188,
+              150,
+              229,
+              136,
+              182
+            ],
+            "logprob": -4.368170738220215,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 2,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 2
+              }
+            },
+            "token": "\u7f16\u5236"
+          },
+          {
+            "bytes": [
+              32,
+              118,
+              195,
+              161,
+              108,
+              108
+            ],
+            "logprob": -4.493170738220215,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " v\u00e1ll"
+          },
+          {
+            "bytes": [
+              32,
+              72,
+              101,
+              108,
+              109
+            ],
+            "logprob": -4.493170738220215,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Helm"
+          },
+          {
+            "bytes": [
+              32,
+              101,
+              110,
+              103,
+              97,
+              110
+            ],
+            "logprob": -4.493170738220215,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " engan"
+          },
+          {
+            "bytes": [
+              32,
+              208,
+              186,
+              208,
+              176,
+              209,
+              135,
+              208,
+              181,
+              209,
+              129,
+              209,
+              130,
+              208,
+              178,
+              208,
+              190
+            ],
+            "logprob": -4.618170738220215,
+            "script_summary": {
+              "chars": 9,
+              "control_chars": 0,
+              "non_ascii_chars": 8,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CYRILLIC": 8,
+                "SPACE": 1
+              }
+            },
+            "token": " \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e"
+          },
+          {
+            "bytes": [
+              32,
+              70,
+              105,
+              122,
+              122
+            ],
+            "logprob": -4.743170738220215,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Fizz"
+          },
+          {
+            "bytes": [
+              32,
+              84,
+              117,
+              110
+            ],
+            "logprob": -4.743170738220215,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3,
+                "SPACE": 1
+              }
+            },
+            "token": " Tun"
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 38,
+        "top_logprobs": 20
+      },
+      "text": " Reigns",
+      "text_script_summary": {
+        "chars": 7,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 6,
+          "SPACE": 1
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": null,
+        "total_tokens": 19
+      }
+    },
+    {
+      "case": "simple_math",
+      "elapsed_s": 10.024774173041806,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          224,
+          170,
+          190,
+          224,
+          170,
+          176,
+          224,
+          171,
+          128
+        ],
+        "logprob": -2.3578033447265625,
+        "script_summary": {
+          "chars": 3,
+          "control_chars": 0,
+          "non_ascii_chars": 3,
+          "replacement_chars": 0,
+          "script_counts": {
+            "GUJARATI": 3
+          }
+        },
+        "token": "\u0abe\u0ab0\u0ac0",
+        "top_logprobs": [
+          {
+            "bytes": [
+              224,
+              170,
+              190,
+              224,
+              170,
+              176,
+              224,
+              171,
+              128
+            ],
+            "logprob": -2.3578033447265625,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GUJARATI": 3
+              }
+            },
+            "token": "\u0abe\u0ab0\u0ac0"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              166,
+              182,
+              224,
+              166,
+              191,
+              224,
+              166,
+              149
+            ],
+            "logprob": -2.8578033447265625,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "BENGALI": 3,
+                "SPACE": 1
+              }
+            },
+            "token": " \u09b6\u09bf\u0995"
+          },
+          {
+            "bytes": [
+              209,
+              128,
+              208,
+              189,
+              208,
+              190,
+              208,
+              179,
+              208,
+              190
+            ],
+            "logprob": -3.4828033447265625,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 5,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CYRILLIC": 5
+              }
+            },
+            "token": "\u0440\u043d\u043e\u0433\u043e"
+          },
+          {
+            "bytes": [
+              32,
+              208,
+              190,
+              209,
+              129
+            ],
+            "logprob": -3.6078033447265625,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 2,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CYRILLIC": 2,
+                "SPACE": 1
+              }
+            },
+            "token": " \u043e\u0441"
+          },
+          {
+            "bytes": [
+              32,
+              77,
+              97,
+              104,
+              101,
+              114
+            ],
+            "logprob": -3.7328033447265625,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " Maher"
+          },
+          {
+            "bytes": [
+              105,
+              115,
+              109,
+              105
+            ],
+            "logprob": -3.8578033447265625,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "ismi"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              164,
+              182,
+              224,
+              164,
+              191,
+              224,
+              164,
+              149
+            ],
+            "logprob": -3.9828033447265625,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DEVANAGARI": 3,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0936\u093f\u0915"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              168,
+              135,
+              224,
+              168,
+              149
+            ],
+            "logprob": -4.1078033447265625,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 2,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GURMUKHI": 2,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0a07\u0a15"
+          },
+          {
+            "bytes": [
+              32,
+              98,
+              111,
+              100,
+              111
+            ],
+            "logprob": -4.1078033447265625,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " bodo"
+          },
+          {
+            "bytes": [
+              233,
+              130,
+              129
+            ],
+            "logprob": -4.1078033447265625,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u9081"
+          },
+          {
+            "bytes": [
+              32,
+              77,
+              97,
+              117,
+              114,
+              101,
+              101,
+              110
+            ],
+            "logprob": -4.3578033447265625,
+            "script_summary": {
+              "chars": 8,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 7,
+                "SPACE": 1
+              }
+            },
+            "token": " Maureen"
+          },
+          {
+            "bytes": [
+              84,
+              78
+            ],
+            "logprob": -4.3578033447265625,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "TN"
+          },
+          {
+            "bytes": [
+              32,
+              216,
+              167,
+              217,
+              132,
+              217,
+              129,
+              216,
+              177,
+              217,
+              138,
+              217,
+              130
+            ],
+            "logprob": -4.3578033447265625,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 6,
+              "replacement_chars": 0,
+              "script_counts": {
+                "ARABIC": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0627\u0644\u0641\u0631\u064a\u0642"
+          },
+          {
+            "bytes": [
+              209,
+              128,
+              208,
+              189,
+              208,
+              190
+            ],
+            "logprob": -4.4828033447265625,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 3,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CYRILLIC": 3
+              }
+            },
+            "token": "\u0440\u043d\u043e"
+          },
+          {
+            "bytes": [
+              229,
+              134,
+              135
+            ],
+            "logprob": -4.4828033447265625,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u5187"
+          },
+          {
+            "bytes": [
+              32,
+              71,
+              108,
+              111,
+              114
+            ],
+            "logprob": -4.5453033447265625,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Glor"
+          },
+          {
+            "bytes": [
+              32,
+              98,
+              105,
+              115,
+              104,
+              101,
+              114
+            ],
+            "logprob": -4.6078033447265625,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " bisher"
+          },
+          {
+            "bytes": [
+              32,
+              72,
+              111,
+              119,
+              101,
+              108,
+              108
+            ],
+            "logprob": -4.6078033447265625,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " Howell"
+          },
+          {
+            "bytes": [
+              32,
+              75,
+              97,
+              110,
+              111
+            ],
+            "logprob": -4.7328033447265625,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Kano"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              166,
+              172,
+              224,
+              166,
+              155
+            ],
+            "logprob": -4.9828033447265625,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 2,
+              "replacement_chars": 0,
+              "script_counts": {
+                "BENGALI": 2,
+                "SPACE": 1
+              }
+            },
+            "token": " \u09ac\u099b"
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 43,
+        "top_logprobs": 20
+      },
+      "text": "\u0abe\u0ab0\u0ac0",
+      "text_script_summary": {
+        "chars": 3,
+        "control_chars": 0,
+        "non_ascii_chars": 3,
+        "replacement_chars": 0,
+        "script_counts": {
+          "GUJARATI": 3
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 23,
+        "prompt_tokens_details": null,
+        "total_tokens": 24
+      }
+    },
+    {
+      "case": "short_decode",
+      "elapsed_s": 9.978511910012458,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          105,
+          111,
+          97,
+          110,
+          101
+        ],
+        "logprob": -1.6336700916290283,
+        "script_summary": {
+          "chars": 5,
+          "control_chars": 0,
+          "non_ascii_chars": 0,
+          "replacement_chars": 0,
+          "script_counts": {
+            "LATIN": 5
+          }
+        },
+        "token": "ioane",
+        "top_logprobs": [
+          {
+            "bytes": [
+              105,
+              111,
+              97,
+              110,
+              101
+            ],
+            "logprob": -1.6336700916290283,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "ioane"
+          },
+          {
+            "bytes": [
+              32,
+              68,
+              101,
+              109,
+              111
+            ],
+            "logprob": -1.8836700916290283,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Demo"
+          },
+          {
+            "bytes": [
+              32,
+              74,
+              117,
+              108,
+              105,
+              97,
+              110,
+              97
+            ],
+            "logprob": -2.1336700916290283,
+            "script_summary": {
+              "chars": 8,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 7,
+                "SPACE": 1
+              }
+            },
+            "token": " Juliana"
+          },
+          {
+            "bytes": [
+              32,
+              83,
+              105,
+              100,
+              101,
+              98,
+              97,
+              114
+            ],
+            "logprob": -2.3836700916290283,
+            "script_summary": {
+              "chars": 8,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 7,
+                "SPACE": 1
+              }
+            },
+            "token": " Sidebar"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              168,
+              185,
+              224,
+              169,
+              128
+            ],
+            "logprob": -3.1336700916290283,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 2,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GURMUKHI": 2,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0a39\u0a40"
+          },
+          {
+            "bytes": [
+              32,
+              105,
+              110,
+              118,
+              97,
+              115
+            ],
+            "logprob": -3.5086700916290283,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " invas"
+          },
+          {
+            "bytes": [
+              32,
+              115,
+              105,
+              103,
+              110,
+              97,
+              116,
+              111,
+              114,
+              105,
+              101,
+              115
+            ],
+            "logprob": -3.5086700916290283,
+            "script_summary": {
+              "chars": 12,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 11,
+                "SPACE": 1
+              }
+            },
+            "token": " signatories"
+          },
+          {
+            "bytes": [
+              32,
+              77,
+              111,
+              116,
+              116
+            ],
+            "logprob": -3.5086700916290283,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Mott"
+          },
+          {
+            "bytes": [
+              232,
+              183,
+              139
+            ],
+            "logprob": -3.7586700916290283,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u8dcb"
+          },
+          {
+            "bytes": [
+              32,
+              75,
+              105,
+              97,
+              114,
+              97
+            ],
+            "logprob": -3.7586700916290283,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " Kiara"
+          },
+          {
+            "bytes": [
+              32,
+              195,
+              161,
+              112
+            ],
+            "logprob": -4.008669853210449,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2,
+                "SPACE": 1
+              }
+            },
+            "token": " \u00e1p"
+          },
+          {
+            "bytes": [
+              230,
+              178,
+              150
+            ],
+            "logprob": -4.133669853210449,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "CJK": 1
+              }
+            },
+            "token": "\u6c96"
+          },
+          {
+            "bytes": [
+              32,
+              77,
+              111,
+              120
+            ],
+            "logprob": -4.633669853210449,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3,
+                "SPACE": 1
+              }
+            },
+            "token": " Mox"
+          },
+          {
+            "bytes": [
+              224,
+              164,
+              184,
+              224,
+              164,
+              190,
+              224,
+              164,
+              174,
+              224,
+              164,
+              190,
+              224,
+              164,
+              168,
+              224,
+              165,
+              141,
+              224,
+              164,
+              175
+            ],
+            "logprob": -5.008669853210449,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 7,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DEVANAGARI": 7
+              }
+            },
+            "token": "\u0938\u093e\u092e\u093e\u0928\u094d\u092f"
+          },
+          {
+            "bytes": [
+              32,
+              70,
+              105,
+              108,
+              109,
+              101
+            ],
+            "logprob": -5.258669853210449,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " Filme"
+          },
+          {
+            "bytes": [
+              32,
+              77,
+              101,
+              114,
+              105
+            ],
+            "logprob": -5.383669853210449,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " Meri"
+          },
+          {
+            "bytes": [
+              32,
+              224,
+              170,
+              178,
+              224,
+              170,
+              190,
+              224,
+              170,
+              151,
+              224,
+              171,
+              135
+            ],
+            "logprob": -5.383669853210449,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 4,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GUJARATI": 4,
+                "SPACE": 1
+              }
+            },
+            "token": " \u0ab2\u0abe\u0a97\u0ac7"
+          },
+          {
+            "bytes": [
+              32,
+              71,
+              97,
+              114,
+              116,
+              101,
+              110
+            ],
+            "logprob": -5.508669853210449,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6,
+                "SPACE": 1
+              }
+            },
+            "token": " Garten"
+          },
+          {
+            "bytes": [
+              32,
+              110,
+              111,
+              116,
+              101,
+              98,
+              111,
+              111,
+              107,
+              115
+            ],
+            "logprob": -5.633669853210449,
+            "script_summary": {
+              "chars": 10,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 9,
+                "SPACE": 1
+              }
+            },
+            "token": " notebooks"
+          },
+          {
+            "bytes": [
+              32,
+              109,
+              111,
+              122,
+              122,
+              97,
+              114,
+              101,
+              108,
+              108,
+              97
+            ],
+            "logprob": -5.758669853210449,
+            "script_summary": {
+              "chars": 11,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 10,
+                "SPACE": 1
+              }
+            },
+            "token": " mozzarella"
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 79,
+        "top_logprobs": 20
+      },
+      "text": "ioane",
+      "text_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "total_tokens": 25
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T16:24:08Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "gemma3-27b-it",
+  "ok": true,
+  "phase": "after",
+  "run_id": "vllm_gemma3_27b_tensor_trace_20260609T0115JST_nvfp4_kv_flashinfer_eager_first_token",
+  "schema": "openai-first-token-probe/v1",
+  "started_utc": "2026-06-08T16:23:37Z",
+  "url": "http://127.0.0.1:8000"
+}

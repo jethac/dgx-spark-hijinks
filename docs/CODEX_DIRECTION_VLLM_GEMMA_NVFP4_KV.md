@@ -139,14 +139,30 @@ V-scale deswizzle contents, final hidden state, and logits before sampler prepro
 Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the source-overlay
 image/env/client packet. Its trace limit has been updated after the low-limit lesson.
 
-Tensor-trace implementation update (2026-06-09): `jethac/vllm@bfa123e1f`
+Tensor-trace implementation update (2026-06-09): `jethac/vllm@5b67b0ea2`
 (`spark/hijinks-021-gemma3-tensor-trace`) adds inactive-by-default
 `VLLM_SPARK_GEMMA_TENSOR_TRACE=1` summaries in the Gemma 3 model path and FlashInfer
 attention path. It records last-token summaries for Q/K/V, FlashInfer attention input and
 output, Gemma layer residual/norm/MLP boundaries, final hidden state, and logits top-20.
 Use `tasks/vllm_gemma3_tensor_trace_packet_20260609.md` and
 `scripts/vllm_gemma_tensor_trace_compare.py` for the next fp8-vs-NVFP4-KV rerun. The
-diagnostic goal is first-divergence localization, not a benchmark row.
+diagnostic goal is first-divergence localization, not a benchmark row. The first
+normal-compile attempt on `bfa123e1f` failed in TorchDynamo during model profiling, so
+`5b67b0ea2` disables trace emission while Dynamo is compiling; use `--enforce-eager` for
+the live tensor-summary rows.
+
+Live tensor-trace result (2026-06-09):
+`results/vllm_gemma3_27b_tensor_trace_20260609T0115JST_summary.md` records the matched
+fp8/NVFP4-KV eager diagnostic rows. fp8 returned `spark`, `4`, and `A`; NVFP4-KV returned
+` Reigns`, Gujarati text, and `ioane`, with `0.0` top-logprob overlap in all three
+first-token probes. The compare matched `561` event/layer keys and localizes the first
+strong tensor-level corruption to `flashinfer_attn_output`: NVFP4-KV outputs are
+BF16-shaped but become almost entirely nonnegative, with means around `124..126` and max
+values exactly `255.0` on many layers. The final hidden-state RMS later looks nearly
+identical, but the logits top-20 sets are disjoint. Next vLLM action is a focused
+FlashInfer FA2 NVFP4 attention-output probe for Gemma 3 `D=128` local/global shapes:
+verify output scaling, dequantization, V-scale deswizzle, and output-buffer
+interpretation against a dequantized reference.
 
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale

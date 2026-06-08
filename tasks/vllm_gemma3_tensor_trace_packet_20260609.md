@@ -1,6 +1,8 @@
 # vLLM Gemma 3 Tensor Trace Packet, 2026-06-09
 
-Status: next live diagnostic packet.
+Status: diagnostic packet complete. The first normal-compile attempt exposed a
+TorchDynamo capture guard and produced no serving row; the accepted rows used
+`--enforce-eager` and localized the NVFP4-KV failure to FlashInfer attention output.
 
 Purpose: localize the Gemma 3 27B NVFP4-KV first-token quality failure above the
 page/scale byte-pairing layer. The prior trace proved sampled read-side packed K/V and
@@ -11,7 +13,7 @@ attention output, Gemma layer hidden state, final hidden state, or logits.
 ## Source Pins
 
 - `jethac/vllm@spark/hijinks-021-gemma3-tensor-trace`
-- vLLM commit: `bfa123e1fc06b55d8fc420ef93127bcdca23c8b1`
+- vLLM commit: `5b67b0ea213a5067e7e8e9fb5705b005f6c495f5`
 - FlashInfer commit: keep the clean source-overlay pin already used for rung 1,
   `e41016fcd121986aea923d5c7e68fc9f152d2a07`.
 - Image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
@@ -39,7 +41,7 @@ Layer intent:
 
 Reuse the source-overlay pattern from
 `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md`, but mount the vLLM source at
-`bfa123e1fc06b55d8fc420ef93127bcdca23c8b1` and add:
+`5b67b0ea213a5067e7e8e9fb5705b005f6c495f5` and add:
 
 ```bash
 -e VLLM_SPARK_GEMMA_TENSOR_TRACE=1 \
@@ -62,6 +64,12 @@ Run the matched row with:
 KV_DTYPE=nvfp4
 RUN=vllm_gemma3_27b_tensor_trace_20260609TTRACEJST_nvfp4_kv_flashinfer
 ```
+
+Use `--enforce-eager` for this diagnostic-only tensor trace. A normal-compile attempt
+on `bfa123e1f` failed during model profiling because TorchDynamo captured the Python
+tensor-summary code in the Gemma 3 compiled graph. `5b67b0ea2` compiles the hook out when
+Dynamo is active, but eager remains the intended mode for collecting per-layer Python
+summaries. Do not use these rows as throughput evidence.
 
 Run `scripts/openai_first_token_probe.py` before any benchmark traffic for each row, then
 compare the first-token reports as before.
@@ -98,3 +106,26 @@ Useful outcomes:
 
 Keep the raw JSONL local or force-add only when it is small enough. Commit the summary
 and compact compare JSON first.
+
+## Live Result
+
+Artifact: `results/vllm_gemma3_27b_tensor_trace_20260609T0115JST_summary.md`.
+
+Rows:
+
+- fp8 baseline:
+  `vllm_gemma3_27b_tensor_trace_20260609T0115JST_fp8_flashinfer_eager`.
+- NVFP4-KV candidate:
+  `vllm_gemma3_27b_tensor_trace_20260609T0115JST_nvfp4_kv_flashinfer_eager`.
+
+First-token comparator result: fp8 returned `spark`, `4`, and `A`; NVFP4-KV returned
+` Reigns`, Gujarati text, and `ioane`, with `0.0` top-logprob overlap in all three
+cases.
+
+Tensor compare result: all `561` event/layer keys matched across rows, so the
+instrumentation did not lose a layer on either side. The strongest localization signal
+is `flashinfer_attn_output`: NVFP4-KV attention outputs are BF16-shaped but become
+almost entirely nonnegative with means around `124..126` and max values exactly
+`255.0` on many layers. The final hidden-state RMS later looks nearly identical, but
+the logits top-20 sets are disjoint. Next target is FlashInfer FA2 NVFP4 attention
+output scaling/dequantization/V-scale deswizzle or output-buffer interpretation.
