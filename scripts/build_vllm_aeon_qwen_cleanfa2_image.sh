@@ -52,6 +52,10 @@ trap 'rm -f "${DOCKERFILE}"; rm -rf "${BUILD_CONTEXT}"' EXIT
 
 test -d "${VLLM_ROOT}/vllm"
 test -d "${VLLM_FLASH_ATTN_ROOT}/csrc/flash_attn"
+if [[ ! -f "${VLLM_FLASH_ATTN_ROOT}/csrc/cutlass/include/cutlass/numeric_types.h" ]]; then
+  git -C "${VLLM_FLASH_ATTN_ROOT}" submodule update --init csrc/cutlass
+fi
+test -f "${VLLM_FLASH_ATTN_ROOT}/csrc/cutlass/include/cutlass/numeric_types.h"
 mkdir -p "${BUILD_CONTEXT}/vllm-src" "${BUILD_CONTEXT}/vllm-flash-attn-src"
 tar -C "${VLLM_ROOT}" --exclude=.git -cf - . | tar -C "${BUILD_CONTEXT}/vllm-src" -xf -
 tar -C "${VLLM_FLASH_ATTN_ROOT}" --exclude=.git -cf - . | tar -C "${BUILD_CONTEXT}/vllm-flash-attn-src" -xf -

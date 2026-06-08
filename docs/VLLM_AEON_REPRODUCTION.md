@@ -272,6 +272,16 @@ This is now wired into `scripts/build_vllm_aeon_qwen_cleanfa2_image.sh` through 
 
 Next vLLM clean-packaging step: rerun this image build with the patched FlashAttention source, then require successful `_vllm_fa2_C` import, `cuobjdump` evidence for `sm_121a`, and the same no-think Qwen row.
 
+Patched FlashAttention rerun:
+
+- attempted image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2`
+- artifact: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_summary.md`
+- raw log: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2.log`
+
+Result: the native FA2 target-selection blocker is fixed. The patched nested source selected `CUDA supported target architectures: 12.1a`, `FA2_ARCHS: 12.1a`, and launched `_vllm_fa2_C` compilation with `-gencode arch=compute_121a,code=sm_121a`.
+
+The build then failed because the copied FlashAttention source lacked its nested `csrc/cutlass` submodule, causing missing `cute/tensor.hpp` and `cutlass/numeric_types.h`. This is a packaging/context issue, not an SM121a CMake-selection issue. The builder now initializes `csrc/cutlass` before creating the Docker context.
+
 ## 2026-06-08 Gemma 26B Result
 
 Target:
