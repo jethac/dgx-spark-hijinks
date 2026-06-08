@@ -900,6 +900,14 @@
   - scope: next GPU-slot command packet for `jethac/vllm@e2a8197a9`, using
     `VLLM_SPARK_KV_TRACE_FILE` and first-token probes before benchmark/manifest traffic.
 
+- Added SGLang FP4-KV cached-prefix reference comparator.
+  - fork commit: `jethac/sglang@a8e8de26d`
+  - env gate: `SGLANG_FP4_KV_TRACE_PREFIX_REF=1`
+  - task: `tasks/sglang_qwen_fp4kv_prefix_ref_trace_20260608.md`
+  - purpose: compare FlashInfer native FP4 paged-prefix `o2/s2` against a torch reference
+    computed from SGLang-dequantized cached FP4 prefix slots, after `f76f80484` proved
+    sampled cached page bytes and scale bytes match write/stored/read.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

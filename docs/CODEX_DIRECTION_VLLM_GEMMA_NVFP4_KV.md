@@ -62,13 +62,16 @@ wherever KV is reused / shared / windowed, and **both runtimes hit the same shap
 - **SGLang Qwen** (see its doc): the FP4 first-token divergence localized to the
   **radix/prefix cache** — `--disable-radix-cache` makes FP4 output match fp8 again.
 
-Likely **shared root cause**: scale factors not carried / recomputed correctly when KV
-blocks are **shared, reused, windowed, or evicted** — the cache-management layer, not the
-attention math. The standalone kernel is proven; the linear-KV serving path is proven; the
-break is specifically the reuse machinery. **vLLM's job here:** debug FP4 scale/block
-handling on the SWA sliding-window local layers (how the window's KV + its scale factors
-are stored, rotated, and re-read). Compare root causes with the SGLang radix finding — a
-fix on one likely informs the other.
+Likely **shared root-cause class**: packed FP4 KV plus FP8 scales are mishandled or
+numerically mis-consumed when KV blocks are **shared, reused, windowed, or evicted** —
+the cache-management layer, not the raw attention kernel. The standalone kernel is proven;
+the linear-KV serving path is proven; the break is specifically the reuse machinery. The
+latest SGLang write/read trace clears the simplest stale/wrong-page scale-buffer hypothesis
+for sampled radix pages, so vLLM should prove both the byte pairing and the numerical
+effect of SWA/local-layer reuse. **vLLM's job here:** debug FP4 scale/block handling on the
+SWA sliding-window local layers (how the window's KV + its scale factors are stored,
+rotated, and re-read). Compare root causes with the SGLang radix finding — a fix on one
+likely informs the other.
 
 First-token update (`results/vllm_gemma3_27b_rung1_first_token_20260608T205432JST.md`):
 the refreshed packet keeps the no-downgrade source-overlay policy, reruns fp8 and NVFP4,
@@ -124,6 +127,16 @@ data/scale bytes, and `swa_skip` against the first-token quality split.
 Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the exact source
 overlay/image/env/client packet for the next GPU slot. Use it before any benchmark or row
 manifest traffic so trace limits are spent on the first-token probes.
+
+SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
+groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
+buffers use the same physical page layout for local and global layers; SWA does not rotate
+scale buffers separately. The differing path is whole-block lifecycle: skipped blocks are
+removed, nulled, and later reused by the sliding-window manager. Therefore the next vLLM
+GPU trace should include a prompt longer than `sliding_window + 2 * block_size + 1`, with
+one sliding layer and one global layer traced. If write/read bytes match but quality still
+fails, run the same prompt with `--disable-hybrid-kv-cache-manager`; if that passes, the
+bug is SWA block-table/window reuse rather than NVFP4 encode/decode.
 
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head

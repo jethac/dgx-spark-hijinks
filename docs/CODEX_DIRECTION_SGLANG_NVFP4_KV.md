@@ -19,10 +19,11 @@ mishandled on reuse. `--disable-radix-cache` is both the proof and a correctness
 (at the cost of prefix caching). **This is a cross-lane pattern:** vLLM Gemma 3 27B fails
 FP4 quality too, and its only new variable is **SWA** (sliding-window KV reuse) — see
 `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. Both are FP4 breaking in the **KV-reuse
-machinery** (prefix reuse / SWA windows), not in plain linear KV. Likely shared root cause:
-scale factors not carried/recomputed correctly when KV blocks are shared, reused, or
-evicted. **SGLang's job:** fix FP4 scale handling on the radix-cache reuse path (how a
-reused prefix's packed KV + FP8 scale buffers are matched on a cache hit); meanwhile a
+machinery** (prefix reuse / SWA windows), not in plain linear KV. The shared root-cause
+class remains "packed FP4 KV plus FP8 scales under reuse/windowing," but the
+`f76f80484` write/read trace clears the simplest stale/wrong-page scale-buffer version for
+sampled SGLang pages. **SGLang's job:** prove whether the reused cached-prefix contribution
+is numerically identical to a recomputed FP4 prefix contribution; meanwhile a
 `--disable-radix-cache` row can land a blessed-with-caveat result. Compare with vLLM's SWA
 finding.
 
@@ -77,6 +78,14 @@ sampled pages. The next hook is now numerical: compare the cached FP4 paged-pref
 contribution against an equivalent no-prefix/full-ragged FP4 reference for the same
 55-token prefix and query, then inspect FlashInfer FA2 paged-prefix dequant / LSE / merge
 weighting if they diverge.
+
+Prefix-reference trace implementation (`jethac/sglang@a8e8de26d`): adds
+`SGLANG_FP4_KV_TRACE_PREFIX_REF=1` and `SGLANG_FP4_KV_PREFIX_REF_MAX_TOKENS=...`.
+It captures the exact FlashInfer paged-plan tensors, dequantizes the selected cached FP4
+prefix slots through SGLang's `NVFP4KVQuantizeUtil.dequantize`, computes a torch FP32
+reference prefix-attention contribution for the same query, and logs `o2/s2` plus manual
+merge comparisons. This is inactive by default and not yet a GB10 artifact. Next live run:
+`tasks/sglang_qwen_fp4kv_prefix_ref_trace_20260608.md`.
 
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
