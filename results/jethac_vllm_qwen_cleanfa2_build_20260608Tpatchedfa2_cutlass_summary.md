@@ -34,7 +34,12 @@ Artifacts:
 - `jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2330JST_incontainer_cuda_artifact_arch_audit.json`
 - `jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2330JST_incontainer_cuda_so_audit.json`
 - `jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2330JST_incontainer_versions.json`
+- `jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST_incontainer_target_audit.md`
+
+Follow-up audit:
+- The first in-container audit wrapper run failed after writing JSON artifacts with `NameError: name 'HOST_IMAGE' is not defined`, leaving the generated markdown report empty.
+- `scripts/run_vllm_incontainer_target_audit.sh` was fixed and rerun as `jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST`; the rerun completed and wrote the markdown report.
 
 Known limitation:
-- The in-container audit wrapper failed after writing JSON artifacts with `NameError: name 'HOST_IMAGE' is not defined`, leaving the generated markdown report empty. The JSON artifacts contain the usable binary evidence.
 - This proves native `sm_121a` FA2 for the patched vLLM FlashAttention extension only. Other vLLM bundled objects still contain their existing prebuilt architecture mix, including `sm_120`, `sm_100`, and `sm_90a`.
+- A no-think Qwen3.6 serving row has not yet been rerun on this clean FA2 image.

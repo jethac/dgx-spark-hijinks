@@ -139,6 +139,21 @@ summary = cuda_so.get("summary", {})
 artifact_summary = artifact.get("summary", {})
 arch_counts = summary.get("architecture_counts", {})
 artifact_arch_counts = artifact_summary.get("architecture_counts", {})
+host_image = os.environ.get("HOST_IMAGE", "unknown")
+device_name = versions.get("device_name")
+device_capability = versions.get("device_capability")
+multi_processor_count = versions.get("multi_processor_count")
+torch_version = versions.get("torch")
+torch_cuda = versions.get("torch_cuda")
+torch_arch_list = versions.get("arch_list")
+packages = versions.get("packages")
+object_count = summary.get("object_count")
+objects_with_sm_120 = summary.get("objects_with_sm_120")
+objects_with_sm_121 = summary.get("objects_with_sm_121")
+artifacts_with_sm_121 = artifact_summary.get("artifacts_with_sm_121")
+artifacts_with_sm_121a = artifact_summary.get("artifacts_with_sm_121a")
+artifacts_with_compute_121 = artifact_summary.get("artifacts_with_compute_121")
+artifacts_with_compute_121a = artifact_summary.get("artifacts_with_compute_121a")
 
 def bullet(value):
     return "none" if not value else ", ".join(f"{k}={v}" for k, v in sorted(value.items()))
@@ -146,7 +161,7 @@ def bullet(value):
 lines = [
     f"# In-Container Target Audit: {run_id}",
     "",
-    f"Image: `{os.environ.get('HOST_IMAGE', 'unknown')}`",
+    f"Image: `{host_image}`",
     "",
     "Artifacts:",
     "",
@@ -156,19 +171,19 @@ lines = [
     "",
     "Findings:",
     "",
-    f"- Device: `{versions.get('device_name')}`, capability `{versions.get('device_capability')}`, SMs `{versions.get('multi_processor_count')}`.",
-    f"- Torch: `{versions.get('torch')}`, CUDA `{versions.get('torch_cuda')}`.",
-    f"- Torch arch list: `{versions.get('arch_list')}`.",
-    f"- Package roots: `{versions.get('packages')}`.",
-    f"- Inspected CUDA objects: `{summary.get('object_count')}`.",
+    f"- Device: `{device_name}`, capability `{device_capability}`, SMs `{multi_processor_count}`.",
+    f"- Torch: `{torch_version}`, CUDA `{torch_cuda}`.",
+    f"- Torch arch list: `{torch_arch_list}`.",
+    f"- Package roots: `{packages}`.",
+    f"- Inspected CUDA objects: `{object_count}`.",
     f"- Architecture counts: {bullet(arch_counts)}.",
-    f"- Objects with `sm_120`: `{summary.get('objects_with_sm_120')}`.",
-    f"- Objects with `sm_121`: `{summary.get('objects_with_sm_121')}`.",
+    f"- Objects with `sm_120`: `{objects_with_sm_120}`.",
+    f"- Objects with `sm_121`: `{objects_with_sm_121}`.",
     f"- Artifact/JIT architecture counts: {bullet(artifact_arch_counts)}.",
-    f"- Artifacts with `sm_121`: `{artifact_summary.get('artifacts_with_sm_121')}`.",
-    f"- Artifacts with `sm_121a`: `{artifact_summary.get('artifacts_with_sm_121a')}`.",
-    f"- Artifacts with `compute_121`: `{artifact_summary.get('artifacts_with_compute_121')}`.",
-    f"- Artifacts with `compute_121a`: `{artifact_summary.get('artifacts_with_compute_121a')}`.",
+    f"- Artifacts with `sm_121`: `{artifacts_with_sm_121}`.",
+    f"- Artifacts with `sm_121a`: `{artifacts_with_sm_121a}`.",
+    f"- Artifacts with `compute_121`: `{artifacts_with_compute_121}`.",
+    f"- Artifacts with `compute_121a`: `{artifacts_with_compute_121a}`.",
     "",
 ]
 
@@ -180,7 +195,7 @@ has_native = bool(
     or artifact_summary.get("artifacts_with_compute_121a")
 )
 if has_native:
-    lines.append("Conclusion: inspected CUDA objects include explicit `sm_121` target evidence.")
+    lines.append("Conclusion: inspected CUDA objects include explicit `sm_121`/`sm_121a` target evidence.")
 else:
     lines.append(
         "Conclusion: inspected CUDA objects do not include explicit `sm_121` target evidence. "

@@ -1,0 +1,30 @@
+{
+  "arch_list": [
+    "sm_80",
+    "sm_90",
+    "sm_100",
+    "sm_110",
+    "sm_120",
+    "compute_120"
+  ],
+  "device_capability": [
+    12,
+    1
+  ],
+  "device_name": "NVIDIA GB10",
+  "multi_processor_count": 48,
+  "packages": {
+    "flashinfer": {
+      "file": "/usr/local/lib/python3.12/dist-packages/flashinfer/__init__.py",
+      "version": "0.6.9rc1"
+    },
+    "vllm": {
+      "file": "/opt/jethac-vllm/vllm/__init__.py",
+      "version": "0.1.dev1+ga919d635d"
+    }
+  },
+  "schema": "container-runtime-versions/v1",
+  "torch": "2.12.0.dev20260408+cu130",
+  "torch_cuda": "13.0",
+  "total_memory": 128452014080
+}

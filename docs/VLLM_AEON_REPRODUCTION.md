@@ -282,6 +282,19 @@ Result: the native FA2 target-selection blocker is fixed. The patched nested sou
 
 The build then failed because the copied FlashAttention source lacked its nested `csrc/cutlass` submodule, causing missing `cute/tensor.hpp` and `cutlass/numeric_types.h`. This is a packaging/context issue, not an SM121a CMake-selection issue. The builder now initializes `csrc/cutlass` before creating the Docker context.
 
+Patched FlashAttention plus CUTLASS rerun:
+
+- image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+- build artifact: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_cutlass_summary.md`
+- raw log: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_cutlass.log`
+- audit artifact: `results/jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST_incontainer_target_audit.md`
+
+Result: the clean FA2 image now builds. `_vllm_fa2_C.abi3.so` linked, installed, imported from `/opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so`, and `cuobjdump` found `sm_121a` cubins in that extension.
+
+Runtime audit context: `NVIDIA GB10`, compute capability `[12, 1]`, `48` SMs, Torch `2.12.0.dev20260408+cu130`, FlashInfer `0.6.9rc1`, vLLM `0.1.dev1+ga919d635d`.
+
+Remaining caveat: this proves native `sm_121a` FA2 for the patched vLLM FlashAttention extension only. Other vLLM extension objects still contain the existing mixed prebuilt architecture surface, including `sm_120`, `sm_100`, and `sm_90a`. The next gate is the no-think Qwen3.6+DFlash serving row on this clean FA2 image.
+
 ## 2026-06-08 Gemma 26B Result
 
 Target:

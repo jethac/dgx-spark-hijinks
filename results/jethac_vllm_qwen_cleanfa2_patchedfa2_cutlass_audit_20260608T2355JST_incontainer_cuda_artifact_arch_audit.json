@@ -1,0 +1,2274 @@
+{
+  "artifacts": [
+    {
+      "architectures": [
+        "compute_120",
+        "compute_120f",
+        "compute_80",
+        "compute_89",
+        "compute_90",
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_120f",
+        "sm_75",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_100",
+          "sm_110",
+          "sm_120",
+          "sm_75",
+          "sm_80",
+          "sm_87",
+          "sm_89",
+          "sm_90",
+          "sm_90a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _C.abi3.1.sm_80.cubin\nELF file    2: _C.abi3.2.sm_87.cubin\nELF file    3: _C.abi3.3.sm_89.cubin\nELF file    4: _C.abi3.4.sm_90.cubin\nELF file    5: _C.abi3.5.sm_100.cubin\nELF file    6: _C.abi3.6.sm_110.cubin\nELF file    7: _C.abi3.7.sm_120.cubin\nELF file    8: _C.abi3.8.sm_120.cubin\nELF file    9: _C.abi3.9.sm_80.cubin\nELF file   10: _C.abi3.10.sm_120.cubin\nELF file   11: _C.abi3.11.sm_80.cubin\nELF file   12: _C.abi3.12.sm_120.cubin\nELF file   13: _C.abi3.13.sm_80.cubin\nELF file   14: _C.abi3.14.sm_120.cubin\nELF file   15: _C.abi3.15.sm_80.cubin\nELF file   16: _C.abi3.16.sm_120.cubin\nELF file   17: _C.abi3.17.sm_80.cubin\nELF file   18: _C.abi3.18.sm_120.cubin\nELF file   19: _C.abi3.19.sm_80.cubin\nELF file   20: _C.abi3.20.sm_120.cubin\nELF file   21: _C.abi3.21.sm_80.cubin\nELF file   22: _C.abi3.22.sm_120.cubin\nELF file   23: _C.abi3.23.sm_80.cubin\nELF file   24: _C.abi3.24.sm_90.cubin\nELF file   25: _C.abi3.25.sm_120.cubin\nELF file   26: _C.abi3.26.sm_80.cubin\nELF file "
+      },
+      "path": "/opt/jethac-vllm/vllm/_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "compute_120",
+        "compute_120f",
+        "compute_80",
+        "compute_89",
+        "compute_90",
+        "sm_120f",
+        "sm_80",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ]
+    },
+    {
+      "architectures": [
+        "compute_110f",
+        "compute_120",
+        "compute_120f",
+        "compute_89",
+        "compute_90",
+        "sm_100",
+        "sm_100f",
+        "sm_110",
+        "sm_110f",
+        "sm_120",
+        "sm_120f",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_100",
+          "sm_110",
+          "sm_120",
+          "sm_80",
+          "sm_87",
+          "sm_89",
+          "sm_90",
+          "sm_90a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _C_stable_libtorch.abi3.1.sm_80.cubin\nELF file    2: _C_stable_libtorch.abi3.2.sm_87.cubin\nELF file    3: _C_stable_libtorch.abi3.3.sm_89.cubin\nELF file    4: _C_stable_libtorch.abi3.4.sm_90.cubin\nELF file    5: _C_stable_libtorch.abi3.5.sm_100.cubin\nELF file    6: _C_stable_libtorch.abi3.6.sm_110.cubin\nELF file    7: _C_stable_libtorch.abi3.7.sm_120.cubin\nELF file    8: _C_stable_libtorch.abi3.8.sm_80.cubin\nELF file    9: _C_stable_libtorch.abi3.9.sm_87.cubin\nELF file   10: _C_stable_libtorch.abi3.10.sm_89.cubin\nELF file   11: _C_stable_libtorch.abi3.11.sm_90.cubin\nELF file   12: _C_stable_libtorch.abi3.12.sm_100.cubin\nELF file   13: _C_stable_libtorch.abi3.13.sm_110.cubin\nELF file   14: _C_stable_libtorch.abi3.14.sm_120.cubin\nELF file   15: _C_stable_libtorch.abi3.15.sm_80.cubin\nELF file   16: _C_stable_libtorch.abi3.16.sm_87.cubin\nELF file   17: _C_stable_libtorch.abi3.17.sm_89.cubin\nELF file   18: _C_stable_libtorch.abi3.18.sm_90.cubin\nELF file   19: _C_stable_libtor"
+      },
+      "path": "/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "compute_110f",
+        "compute_120",
+        "compute_120f",
+        "compute_89",
+        "compute_90",
+        "sm_100",
+        "sm_100f",
+        "sm_110",
+        "sm_110f",
+        "sm_120",
+        "sm_120f",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ]
+    },
+    {
+      "architectures": [
+        "compute_100f",
+        "sm_100",
+        "sm_100f",
+        "sm_90a"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_100",
+          "sm_90a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _flashmla_C.abi3.1.sm_90a.cubin\nELF file    2: _flashmla_C.abi3.2.sm_100.cubin\nELF file    3: _flashmla_C.abi3.3.sm_90a.cubin\nELF file    4: _flashmla_C.abi3.4.sm_100.cubin\nELF file    5: _flashmla_C.abi3.5.sm_90a.cubin\nELF file    6: _flashmla_C.abi3.6.sm_100.cubin\nELF file    7: _flashmla_C.abi3.7.sm_90a.cubin\nELF file    8: _flashmla_C.abi3.8.sm_100.cubin\nELF file    9: _flashmla_C.abi3.9.sm_90a.cubin\nELF file   10: _flashmla_C.abi3.10.sm_100.cubin\nELF file   11: _flashmla_C.abi3.11.sm_90a.cubin\nELF file   12: _flashmla_C.abi3.12.sm_100.cubin\nELF file   13: _flashmla_C.abi3.13.sm_90a.cubin\nELF file   14: _flashmla_C.abi3.14.sm_100.cubin\nELF file   15: _flashmla_C.abi3.15.sm_90a.cubin\nELF file   16: _flashmla_C.abi3.16.sm_100.cubin\nELF file   17: _flashmla_C.abi3.17.sm_90a.cubin\nELF file   18: _flashmla_C.abi3.18.sm_100.cubin\nELF file   19: _flashmla_C.abi3.19.sm_90a.cubin\nELF file   20: _flashmla_C.abi3.20.sm_100.cubin\nELF file   21: _flashmla_C.abi3.21.sm_90a.cubin\nE"
+      },
+      "path": "/opt/jethac-vllm/vllm/_flashmla_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "compute_100f",
+        "sm_100f"
+      ]
+    },
+    {
+      "architectures": [
+        "compute_100f",
+        "sm_100",
+        "sm_90a"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_100",
+          "sm_90a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _flashmla_extension_C.abi3.1.sm_90a.cubin\nELF file    2: _flashmla_extension_C.abi3.2.sm_100.cubin\nELF file    3: _flashmla_extension_C.abi3.3.sm_90a.cubin\nELF file    4: _flashmla_extension_C.abi3.4.sm_100.cubin\n"
+      },
+      "path": "/opt/jethac-vllm/vllm/_flashmla_extension_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "compute_100f"
+      ]
+    },
+    {
+      "architectures": [
+        "compute_110f",
+        "compute_120",
+        "compute_80",
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_120f",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_100",
+          "sm_110",
+          "sm_120",
+          "sm_80",
+          "sm_87",
+          "sm_89",
+          "sm_90",
+          "sm_90a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _moe_C.abi3.1.sm_80.cubin\nELF file    2: _moe_C.abi3.2.sm_87.cubin\nELF file    3: _moe_C.abi3.3.sm_89.cubin\nELF file    4: _moe_C.abi3.4.sm_90.cubin\nELF file    5: _moe_C.abi3.5.sm_100.cubin\nELF file    6: _moe_C.abi3.6.sm_110.cubin\nELF file    7: _moe_C.abi3.7.sm_120.cubin\nELF file    8: _moe_C.abi3.8.sm_80.cubin\nELF file    9: _moe_C.abi3.9.sm_87.cubin\nELF file   10: _moe_C.abi3.10.sm_89.cubin\nELF file   11: _moe_C.abi3.11.sm_90.cubin\nELF file   12: _moe_C.abi3.12.sm_100.cubin\nELF file   13: _moe_C.abi3.13.sm_110.cubin\nELF file   14: _moe_C.abi3.14.sm_120.cubin\nELF file   15: _moe_C.abi3.15.sm_80.cubin\nELF file   16: _moe_C.abi3.16.sm_87.cubin\nELF file   17: _moe_C.abi3.17.sm_89.cubin\nELF file   18: _moe_C.abi3.18.sm_90.cubin\nELF file   19: _moe_C.abi3.19.sm_100.cubin\nELF file   20: _moe_C.abi3.20.sm_110.cubin\nELF file   21: _moe_C.abi3.21.sm_120.cubin\nELF file   22: _moe_C.abi3.22.sm_80.cubin\nELF file   23: _moe_C.abi3.23.sm_87.cubin\nELF file   24: _moe_C.abi3.24.sm_8"
+      },
+      "path": "/opt/jethac-vllm/vllm/_moe_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "compute_110f",
+        "compute_120",
+        "compute_80",
+        "sm_100",
+        "sm_110",
+        "sm_120",
+        "sm_120f",
+        "sm_80",
+        "sm_87",
+        "sm_89",
+        "sm_90",
+        "sm_90a"
+      ]
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/cumem_allocator.abi3.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/cumem_allocator.abi3.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/spinloop.abi3.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/spinloop.abi3.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-310-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-310-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-311-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-311-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-313-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-313-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-314-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/opt/jethac-vllm/vllm/third_party/deep_gemm/_C.cpython-314-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_121a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _vllm_fa2_C.abi3.1.sm_121a.cubin\nELF file    2: _vllm_fa2_C.abi3.2.sm_121a.cubin\nELF file    3: _vllm_fa2_C.abi3.3.sm_121a.cubin\nELF file    4: _vllm_fa2_C.abi3.4.sm_121a.cubin\nELF file    5: _vllm_fa2_C.abi3.5.sm_121a.cubin\nELF file    6: _vllm_fa2_C.abi3.6.sm_121a.cubin\nELF file    7: _vllm_fa2_C.abi3.7.sm_121a.cubin\nELF file    8: _vllm_fa2_C.abi3.8.sm_121a.cubin\nELF file    9: _vllm_fa2_C.abi3.9.sm_121a.cubin\nELF file   10: _vllm_fa2_C.abi3.10.sm_121a.cubin\nELF file   11: _vllm_fa2_C.abi3.11.sm_121a.cubin\nELF file   12: _vllm_fa2_C.abi3.12.sm_121a.cubin\nELF file   13: _vllm_fa2_C.abi3.13.sm_121a.cubin\nELF file   14: _vllm_fa2_C.abi3.14.sm_121a.cubin\nELF file   15: _vllm_fa2_C.abi3.15.sm_121a.cubin\nELF file   16: _vllm_fa2_C.abi3.16.sm_121a.cubin\nELF file   17: _vllm_fa2_C.abi3.17.sm_121a.cubin\nELF file   18: _vllm_fa2_C.abi3.18.sm_121a.cubin\nELF file   19: _vllm_fa2_C.abi3.19.sm_121a.cubin\nELF file   20: _vllm_fa2_C.abi3.20.sm_121a.cubin\nELF file   21: _vllm_fa2_C.ab"
+      },
+      "path": "/opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_120f",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_120",
+          "sm_80",
+          "sm_90"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _C.abi3.1.sm_120.cubin\nELF file    2: _C.abi3.2.sm_120.cubin\nELF file    3: _C.abi3.3.sm_120.cubin\nELF file    4: _C.abi3.4.sm_120.cubin\nELF file    5: _C.abi3.5.sm_120.cubin\nELF file    6: _C.abi3.6.sm_120.cubin\nELF file    7: _C.abi3.7.sm_120.cubin\nELF file    8: _C.abi3.8.sm_120.cubin\nELF file    9: _C.abi3.9.sm_120.cubin\nELF file   10: _C.abi3.10.sm_120.cubin\nELF file   11: _C.abi3.11.sm_120.cubin\nELF file   12: _C.abi3.12.sm_120.cubin\nELF file   13: _C.abi3.13.sm_120.cubin\nELF file   14: _C.abi3.14.sm_120.cubin\nELF file   15: _C.abi3.15.sm_120.cubin\nELF file   16: _C.abi3.16.sm_120.cubin\nELF file   17: _C.abi3.17.sm_120.cubin\nELF file   18: _C.abi3.18.sm_120.cubin\nELF file   19: _C.abi3.19.sm_120.cubin\nELF file   20: _C.abi3.20.sm_120.cubin\nELF file   21: _C.abi3.21.sm_120.cubin\nELF file   22: _C.abi3.22.sm_120.cubin\nELF file   23: _C.abi3.23.sm_120.cubin\nELF file   24: _C.abi3.24.sm_120.cubin\nELF file   25: _C.abi3.25.sm_120.cubin\nELF file   26: _C.abi3.26.sm_120.c"
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_120f",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_120",
+          "sm_89"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _C_stable_libtorch.abi3.1.sm_120.cubin\nELF file    2: _C_stable_libtorch.abi3.2.sm_120.cubin\nELF file    3: _C_stable_libtorch.abi3.3.sm_120.cubin\nELF file    4: _C_stable_libtorch.abi3.4.sm_120.cubin\nELF file    5: _C_stable_libtorch.abi3.5.sm_120.cubin\nELF file    6: _C_stable_libtorch.abi3.6.sm_120.cubin\nELF file    7: _C_stable_libtorch.abi3.7.sm_120.cubin\nELF file    8: _C_stable_libtorch.abi3.8.sm_120.cubin\nELF file    9: _C_stable_libtorch.abi3.9.sm_120.cubin\nELF file   10: _C_stable_libtorch.abi3.10.sm_120.cubin\nELF file   11: _C_stable_libtorch.abi3.11.sm_89.cubin\nELF file   12: _C_stable_libtorch.abi3.12.sm_120.cubin\nELF file   13: _C_stable_libtorch.abi3.13.sm_120.cubin\nELF file   14: _C_stable_libtorch.abi3.14.sm_120.cubin\nELF file   15: _C_stable_libtorch.abi3.15.sm_120.cubin\nELF file   16: _C_stable_libtorch.abi3.16.sm_120.cubin\nELF file   17: _C_stable_libtorch.abi3.17.sm_120.cubin\n"
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/_C_stable_libtorch.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_120",
+          "sm_80"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _moe_C.abi3.1.sm_120.cubin\nELF file    2: _moe_C.abi3.2.sm_120.cubin\nELF file    3: _moe_C.abi3.3.sm_120.cubin\nELF file    4: _moe_C.abi3.4.sm_120.cubin\nELF file    5: _moe_C.abi3.5.sm_120.cubin\nELF file    6: _moe_C.abi3.6.sm_120.cubin\nELF file    7: _moe_C.abi3.7.sm_120.cubin\nELF file    8: _moe_C.abi3.8.sm_80.cubin\nELF file    9: _moe_C.abi3.9.sm_80.cubin\nELF file   10: _moe_C.abi3.10.sm_80.cubin\nELF file   11: _moe_C.abi3.11.sm_80.cubin\nELF file   12: _moe_C.abi3.12.sm_80.cubin\nELF file   13: _moe_C.abi3.13.sm_80.cubin\nELF file   14: _moe_C.abi3.14.sm_80.cubin\nELF file   15: _moe_C.abi3.15.sm_80.cubin\nELF file   16: _moe_C.abi3.16.sm_80.cubin\nELF file   17: _moe_C.abi3.17.sm_80.cubin\nELF file   18: _moe_C.abi3.18.sm_80.cubin\nELF file   19: _moe_C.abi3.19.sm_80.cubin\nELF file   20: _moe_C.abi3.20.sm_80.cubin\nELF file   21: _moe_C.abi3.21.sm_80.cubin\nELF file   22: _moe_C.abi3.22.sm_120.cubin\nELF file   23: _moe_C.abi3.23.sm_120.cubin\nELF file   24: _moe_C.abi3.24.sm_1"
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/_moe_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/cumem_allocator.abi3.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/cumem_allocator.abi3.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_80"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _vllm_fa2_C.abi3.1.sm_80.cubin\nELF file    2: _vllm_fa2_C.abi3.2.sm_80.cubin\nELF file    3: _vllm_fa2_C.abi3.3.sm_80.cubin\nELF file    4: _vllm_fa2_C.abi3.4.sm_80.cubin\nELF file    5: _vllm_fa2_C.abi3.5.sm_80.cubin\nELF file    6: _vllm_fa2_C.abi3.6.sm_80.cubin\nELF file    7: _vllm_fa2_C.abi3.7.sm_80.cubin\nELF file    8: _vllm_fa2_C.abi3.8.sm_80.cubin\nELF file    9: _vllm_fa2_C.abi3.9.sm_80.cubin\nELF file   10: _vllm_fa2_C.abi3.10.sm_80.cubin\nELF file   11: _vllm_fa2_C.abi3.11.sm_80.cubin\nELF file   12: _vllm_fa2_C.abi3.12.sm_80.cubin\nELF file   13: _vllm_fa2_C.abi3.13.sm_80.cubin\nELF file   14: _vllm_fa2_C.abi3.14.sm_80.cubin\nELF file   15: _vllm_fa2_C.abi3.15.sm_80.cubin\nELF file   16: _vllm_fa2_C.abi3.16.sm_80.cubin\nELF file   17: _vllm_fa2_C.abi3.17.sm_80.cubin\nELF file   18: _vllm_fa2_C.abi3.18.sm_80.cubin\nELF file   19: _vllm_fa2_C.abi3.19.sm_80.cubin\nELF file   20: _vllm_fa2_C.abi3.20.sm_80.cubin\nELF file   21: _vllm_fa2_C.abi3.21.sm_80.cubin\nELF file   22: _vllm_f"
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_75"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _vllm_fa3_C.abi3.1.sm_75.cubin\nELF file    2: _vllm_fa3_C.abi3.2.sm_75.cubin\nELF file    3: _vllm_fa3_C.abi3.3.sm_75.cubin\nELF file    4: _vllm_fa3_C.abi3.4.sm_75.cubin\nELF file    5: _vllm_fa3_C.abi3.5.sm_75.cubin\nELF file    6: _vllm_fa3_C.abi3.6.sm_75.cubin\nELF file    7: _vllm_fa3_C.abi3.7.sm_75.cubin\nELF file    8: _vllm_fa3_C.abi3.8.sm_75.cubin\nELF file    9: _vllm_fa3_C.abi3.9.sm_75.cubin\nELF file   10: _vllm_fa3_C.abi3.10.sm_75.cubin\nELF file   11: _vllm_fa3_C.abi3.11.sm_75.cubin\nELF file   12: _vllm_fa3_C.abi3.12.sm_75.cubin\nELF file   13: _vllm_fa3_C.abi3.13.sm_75.cubin\nELF file   14: _vllm_fa3_C.abi3.14.sm_75.cubin\nELF file   15: _vllm_fa3_C.abi3.15.sm_75.cubin\nELF file   16: _vllm_fa3_C.abi3.16.sm_75.cubin\nELF file   17: _vllm_fa3_C.abi3.17.sm_75.cubin\nELF file   18: _vllm_fa3_C.abi3.18.sm_75.cubin\nELF file   19: _vllm_fa3_C.abi3.19.sm_75.cubin\nELF file   20: _vllm_fa3_C.abi3.20.sm_75.cubin\nELF file   21: _vllm_fa3_C.abi3.21.sm_75.cubin\nELF file   22: _vllm_f"
+      },
+      "path": "/root/.cache/uv/archive-v0/4Ql2SVZIH7XHgd3N3u8Vk/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_cyutility.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_cyutility.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_ccallback_c.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_ccallback_c.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_fpumode.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_fpumode.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_ccallback.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_ccallback.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_deprecation_call.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_deprecation_call.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_deprecation_def.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_test_deprecation_def.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_uarray/_uarray.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/_uarray/_uarray.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/messagestream.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/_lib/messagestream.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_hierarchy.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_hierarchy.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_optimal_leaf_ordering.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_optimal_leaf_ordering.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_vq.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/cluster/_vq.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/fft/_pocketfft/pypocketfft.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/fft/_pocketfft/pypocketfft.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/fftpack/convolve.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/fftpack/convolve.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_dop.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_dop.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_odepack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_odepack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_quadpack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_quadpack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_test_multivariate.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_test_multivariate.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_vode.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/integrate/_vode.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_dfitpack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_dfitpack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_dierckx.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_dierckx.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_fitpack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_fitpack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_interpnd.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_interpnd.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_ppoly.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_ppoly.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_rbfinterp_pythran.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_rbfinterp_pythran.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_rgi_cython.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/interpolate/_rgi_cython.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/_fast_matrix_market/_fmm_core.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/_fast_matrix_market/_fmm_core.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_mio5_utils.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_mio5_utils.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_mio_utils.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_mio_utils.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_streams.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/io/matlab/_streams.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_batched_linalg.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_batched_linalg.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_cythonized_array_utils.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_cythonized_array_utils.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_interpolative.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_interpolative.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_lu_cython.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_lu_cython.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_update.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_decomp_update.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_fblas.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_fblas.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_flapack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_flapack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_linalg_pythran.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_linalg_pythran.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_expm.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_expm.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_schur_sqrtm.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_schur_sqrtm.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_sqrtm_triu.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_matfuncs_sqrtm_triu.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_solve_toeplitz.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/_solve_toeplitz.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/cython_blas.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/cython_blas.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/cython_lapack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/linalg/cython_lapack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_ctest.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_ctest.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_cytest.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_cytest.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_nd_image.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_nd_image.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_ni_label.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_ni_label.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_rank_filter_1d.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/ndimage/_rank_filter_1d.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/odr/__odrpack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/odr/__odrpack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_bglu_dense.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_bglu_dense.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_direct.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_direct.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_group_columns.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_group_columns.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_highspy/_core.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_highspy/_core.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_highspy/_highs_options.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_highspy/_highs_options.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lbfgsb.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lbfgsb.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lsap.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lsap.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lsq/givens_elimination.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_lsq/givens_elimination.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_minpack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_minpack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_moduleTNC.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_moduleTNC.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_pava_pybind.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_pava_pybind.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_slsqplib.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_slsqplib.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_trlib/_trlib.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_trlib/_trlib.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_zeros.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/_zeros.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/cython_optimize/_zeros.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/optimize/cython_optimize/_zeros.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_max_len_seq_inner.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_max_len_seq_inner.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_peak_finding_utils.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_peak_finding_utils.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_sigtools.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_sigtools.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_sosfilt.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_sosfilt.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_spline.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_spline.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_upfirdn_apply.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/signal/_upfirdn_apply.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/_csparsetools.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/_csparsetools.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/_sparsetools.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/_sparsetools.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_flow.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_flow.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_matching.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_matching.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_min_spanning_tree.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_min_spanning_tree.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_reordering.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_reordering.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_shortest_path.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_shortest_path.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_tools.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_tools.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_traversal.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/csgraph/_traversal.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_dsolve/_superlu.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_dsolve/_superlu.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_eigen/arpack/_arpacklib.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_eigen/arpack/_arpacklib.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_propack.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/sparse/linalg/_propack.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_ckdtree.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_ckdtree.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_distance_pybind.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_distance_pybind.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_distance_wrap.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_distance_wrap.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_hausdorff.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_hausdorff.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_qhull.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_qhull.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_voronoi.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/_voronoi.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/transform/_rigid_transform_cy.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/transform/_rigid_transform_cy.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/transform/_rotation_cy.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/spatial/transform/_rotation_cy.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_comb.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_comb.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ellip_harm_2.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ellip_harm_2.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_gufuncs.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_gufuncs.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_specfun.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_specfun.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_special_ufuncs.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_special_ufuncs.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_test_internal.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_test_internal.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ufuncs.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ufuncs.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ufuncs_cxx.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/_ufuncs_cxx.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/cython_special.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/special/cython_special.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_ansari_swilk_statistics.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_ansari_swilk_statistics.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_biasedurn.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_biasedurn.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_levy_stable/levyst.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_levy_stable/levyst.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_qmc_cy.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_qmc_cy.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_qmvnt_cy.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_qmvnt_cy.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_rcont/rcont.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_rcont/rcont.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_sobol.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_sobol.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_stats.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_stats.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_stats_pythran.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_stats_pythran.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_unuran/unuran_wrapper.cpython-312-aarch64-linux-gnu.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy/stats/_unuran/unuran_wrapper.cpython-312-aarch64-linux-gnu.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy.libs/libscipy_openblas-c5a9b014.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/WvP61xYJ61h1mtoScWOTe/scipy.libs/libscipy_openblas-c5a9b014.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/core.abi3.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/core.abi3.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/lib/libtvm_ffi.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/lib/libtvm_ffi.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [],
+      "cuobjdump": {
+        "architectures": [],
+        "returncode": 255,
+        "stderr_head": "cuobjdump info    : File '/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/lib/libtvm_ffi_testing.so' does not contain device code\n",
+        "stdout_head": ""
+      },
+      "path": "/root/.cache/uv/archive-v0/_MtTmRmm4s_XbTnWhQWkv/tvm_ffi/lib/libtvm_ffi_testing.so",
+      "suffix": ".so",
+      "text_architectures": []
+    },
+    {
+      "architectures": [
+        "sm_75"
+      ],
+      "path": "/tmp/vllm-fa2-build/CMakeFiles/4.3.2/CompilerIdCUDA/tmp/CMakeCUDACompilerId.ptx",
+      "suffix": ".ptx",
+      "text_architectures": [
+        "sm_75"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_75"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_75"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: CMakeCUDACompilerId.sm_75.sm_75.cubin\n"
+      },
+      "path": "/tmp/vllm-fa2-build/CMakeFiles/4.3.2/CompilerIdCUDA/tmp/CMakeCUDACompilerId.sm_75.cubin",
+      "suffix": ".cubin",
+      "text_architectures": [
+        "sm_75"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_75"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_75"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: a_dlink.sm_75.sm_75.cubin\n"
+      },
+      "path": "/tmp/vllm-fa2-build/CMakeFiles/4.3.2/CompilerIdCUDA/tmp/a_dlink.sm_75.cubin",
+      "suffix": ".cubin",
+      "text_architectures": [
+        "sm_75"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_121a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _vllm_fa2_C.abi3.1.sm_121a.cubin\nELF file    2: _vllm_fa2_C.abi3.2.sm_121a.cubin\nELF file    3: _vllm_fa2_C.abi3.3.sm_121a.cubin\nELF file    4: _vllm_fa2_C.abi3.4.sm_121a.cubin\nELF file    5: _vllm_fa2_C.abi3.5.sm_121a.cubin\nELF file    6: _vllm_fa2_C.abi3.6.sm_121a.cubin\nELF file    7: _vllm_fa2_C.abi3.7.sm_121a.cubin\nELF file    8: _vllm_fa2_C.abi3.8.sm_121a.cubin\nELF file    9: _vllm_fa2_C.abi3.9.sm_121a.cubin\nELF file   10: _vllm_fa2_C.abi3.10.sm_121a.cubin\nELF file   11: _vllm_fa2_C.abi3.11.sm_121a.cubin\nELF file   12: _vllm_fa2_C.abi3.12.sm_121a.cubin\nELF file   13: _vllm_fa2_C.abi3.13.sm_121a.cubin\nELF file   14: _vllm_fa2_C.abi3.14.sm_121a.cubin\nELF file   15: _vllm_fa2_C.abi3.15.sm_121a.cubin\nELF file   16: _vllm_fa2_C.abi3.16.sm_121a.cubin\nELF file   17: _vllm_fa2_C.abi3.17.sm_121a.cubin\nELF file   18: _vllm_fa2_C.abi3.18.sm_121a.cubin\nELF file   19: _vllm_fa2_C.abi3.19.sm_121a.cubin\nELF file   20: _vllm_fa2_C.abi3.20.sm_121a.cubin\nELF file   21: _vllm_fa2_C.ab"
+      },
+      "path": "/tmp/vllm-fa2-build/vllm-flash-attn/_vllm_fa2_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    },
+    {
+      "architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ],
+      "cuobjdump": {
+        "architectures": [
+          "sm_121a"
+        ],
+        "returncode": 0,
+        "stderr_head": "",
+        "stdout_head": "ELF file    1: _vllm_fa2_C.abi3.1.sm_121a.cubin\nELF file    2: _vllm_fa2_C.abi3.2.sm_121a.cubin\nELF file    3: _vllm_fa2_C.abi3.3.sm_121a.cubin\nELF file    4: _vllm_fa2_C.abi3.4.sm_121a.cubin\nELF file    5: _vllm_fa2_C.abi3.5.sm_121a.cubin\nELF file    6: _vllm_fa2_C.abi3.6.sm_121a.cubin\nELF file    7: _vllm_fa2_C.abi3.7.sm_121a.cubin\nELF file    8: _vllm_fa2_C.abi3.8.sm_121a.cubin\nELF file    9: _vllm_fa2_C.abi3.9.sm_121a.cubin\nELF file   10: _vllm_fa2_C.abi3.10.sm_121a.cubin\nELF file   11: _vllm_fa2_C.abi3.11.sm_121a.cubin\nELF file   12: _vllm_fa2_C.abi3.12.sm_121a.cubin\nELF file   13: _vllm_fa2_C.abi3.13.sm_121a.cubin\nELF file   14: _vllm_fa2_C.abi3.14.sm_121a.cubin\nELF file   15: _vllm_fa2_C.abi3.15.sm_121a.cubin\nELF file   16: _vllm_fa2_C.abi3.16.sm_121a.cubin\nELF file   17: _vllm_fa2_C.abi3.17.sm_121a.cubin\nELF file   18: _vllm_fa2_C.abi3.18.sm_121a.cubin\nELF file   19: _vllm_fa2_C.abi3.19.sm_121a.cubin\nELF file   20: _vllm_fa2_C.abi3.20.sm_121a.cubin\nELF file   21: _vllm_fa2_C.ab"
+      },
+      "path": "/tmp/vllm-fa2-install/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+      "suffix": ".so",
+      "text_architectures": [
+        "sm_100",
+        "sm_103",
+        "sm_110",
+        "sm_120",
+        "sm_121",
+        "sm_121a",
+        "sm_35",
+        "sm_37",
+        "sm_50",
+        "sm_52",
+        "sm_53",
+        "sm_60",
+        "sm_61",
+        "sm_62",
+        "sm_70",
+        "sm_72",
+        "sm_75",
+        "sm_80",
+        "sm_86",
+        "sm_87",
+        "sm_88",
+        "sm_89",
+        "sm_90"
+      ]
+    }
+  ],
+  "cuobjdump": "/usr/local/cuda/bin/cuobjdump",
+  "inputs": {
+    "packages": [
+      "vllm",
+      "flashinfer"
+    ],
+    "paths": [
+      "/root/.cache",
+      "/tmp",
+      "/var/tmp"
+    ]
+  },
+  "roots": [
+    {
+      "exists": true,
+      "package": "vllm",
+      "path": "/opt/jethac-vllm/vllm"
+    },
+    {
+      "exists": true,
+      "package": "flashinfer",
+      "path": "/usr/local/lib/python3.12/dist-packages/flashinfer"
+    },
+    {
+      "exists": true,
+      "path": "/root/.cache"
+    },
+    {
+      "exists": true,
+      "path": "/tmp"
+    },
+    {
+      "exists": true,
+      "path": "/var/tmp"
+    }
+  ],
+  "schema": "cuda-artifact-arch-audit/v1",
+  "summary": {
+    "architecture_counts": {
+      "compute_100f": 2,
+      "compute_110f": 2,
+      "compute_120": 3,
+      "compute_120f": 2,
+      "compute_80": 2,
+      "compute_89": 2,
+      "compute_90": 2,
+      "sm_100": 13,
+      "sm_100f": 2,
+      "sm_103": 8,
+      "sm_110": 11,
+      "sm_110f": 1,
+      "sm_120": 11,
+      "sm_120f": 4,
+      "sm_121": 8,
+      "sm_121a": 3,
+      "sm_35": 8,
+      "sm_37": 8,
+      "sm_50": 8,
+      "sm_52": 8,
+      "sm_53": 8,
+      "sm_60": 8,
+      "sm_61": 8,
+      "sm_62": 8,
+      "sm_70": 8,
+      "sm_72": 8,
+      "sm_75": 12,
+      "sm_80": 11,
+      "sm_86": 8,
+      "sm_87": 11,
+      "sm_88": 8,
+      "sm_89": 11,
+      "sm_90": 11,
+      "sm_90a": 5
+    },
+    "artifact_count": 137,
+    "artifacts_with_compute_121": 0,
+    "artifacts_with_compute_121a": 0,
+    "artifacts_with_sm_121": 8,
+    "artifacts_with_sm_121a": 3,
+    "suffix_counts": {
+      ".cubin": 2,
+      ".ptx": 1,
+      ".so": 134
+    }
+  }
+}

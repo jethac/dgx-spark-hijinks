@@ -345,6 +345,17 @@
   - result: patched nested vLLM FlashAttention CMake selected `CUDA supported target architectures: 12.1a`, `FA2_ARCHS: 12.1a`, and `_vllm_fa2_C` invoked `nvcc` with `arch=compute_121a,code=sm_121a`.
   - failure: the build then stopped because the copied FlashAttention tree lacked its nested `csrc/cutlass` submodule, causing missing `cute/tensor.hpp` and `cutlass/numeric_types.h`.
   - interpretation: the architecture-selection blocker is fixed; the current blocker is packaging the nested CUTLASS dependency into the clean build context. The builder now initializes `csrc/cutlass` before creating the Docker context.
+- Completed the clean vLLM FA2 SM121a build and in-container target audit.
+  - image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+  - main repo commit before build: `jethac/dgx-spark-hijinks@6b33492`
+  - vLLM fork commit: `jethac/vllm@a919d635d`
+  - FlashAttention fork commit: `jethac/flash-attention@7d53245`
+  - build artifact: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_cutlass_summary.md`
+  - audit artifact: `results/jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST_incontainer_target_audit.md`
+  - result: `_vllm_fa2_C.abi3.so` built, installed, imported, and `cuobjdump` showed `sm_121a` cubins in the patched FA2 extension.
+  - runtime evidence: `NVIDIA GB10`, compute capability `[12, 1]`, `48` SMs, Torch `2.12.0.dev20260408+cu130`, FlashInfer `0.6.9rc1`, vLLM `0.1.dev1+ga919d635d`.
+  - remaining caveat: this is native-target proof for the vLLM FlashAttention extension only. Other vLLM objects still carry their existing mixed prebuilt architecture surface, including `sm_120`, `sm_100`, and `sm_90a`.
+  - next gate: rerun the no-think Qwen3.6+DFlash serving row on this clean FA2 image.
 - Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
   - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.
