@@ -328,6 +328,14 @@
   - new vLLM env knob: `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1`, which skips extracting bundled FA2/FA3 extensions from a precompiled wheel while preserving the rest of the precompiled extension set
   - campaign scripts: `scripts/run_vllm_incontainer_target_audit.sh` and `scripts/cuda_artifact_arch_audit.py`
   - prior in-container audit interpretation: the passing `jethac/vllm@6804e1b` Qwen image has GB10 runtime evidence but no inspected `sm_121`/`sm_121a` CUDA object evidence, so the next vLLM image must replace AEON FA2 with an ABI-matched clean build and rerun the no-think Qwen row.
+- Advanced the vLLM clean FA2 image build to the next blocker.
+  - fork commit: `jethac/vllm@a919d635d`
+  - main repo script: `scripts/build_vllm_aeon_qwen_cleanfa2_image.sh`
+  - artifact: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion_summary.md`
+  - raw log: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion.log`
+  - result: `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` successfully skipped bundled FA2/FA3, and `VLLM_VERSION_OVERRIDE=0.1.dev1+ga919d635d` fixed the previous `setuptools-scm` failure from missing `.git` metadata in the Docker context.
+  - native-target finding: top-level vLLM CMake accepted `12.1a` and printed `arch=compute_121a,code=sm_121a`, but the nested pinned vLLM FlashAttention project reduced its supported target to `12.0`, selected `FA2_ARCHS: 8.0+PTX`, and compiled `_vllm_fa2_C` with only `sm_80`/`compute_80`.
+  - interpretation: the clean vLLM packaging path is past dependency/versioning, but not past native FA2. The builder now fails fast if nested FA2 does not select SM121/SM121a; next work is patching or forking the pinned vLLM FlashAttention source.
 - Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
   - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.

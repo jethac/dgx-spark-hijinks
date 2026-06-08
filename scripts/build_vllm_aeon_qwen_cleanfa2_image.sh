@@ -15,7 +15,8 @@ Environment:
   VLLM_REF=a919d635d
   VLLM_VERSION_OVERRIDE=0.1.dev1+g${VLLM_REF}
   VLLM_PRECOMPILED_WHEEL_COMMIT=4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa
-  CMAKE_CUDA_ARCHITECTURES=121-real
+  CMAKE_CUDA_ARCHITECTURES=121a-real
+  REQUIRE_NATIVE_FA2_ARCH=1
   MAX_JOBS=4
   NVCC_THREADS=1
   RESULTS_DIR=results
@@ -33,7 +34,8 @@ BASE_IMAGE=${BASE_IMAGE:-ghcr.io/aeon-7/vllm-spark-omni-q36:v2}
 VLLM_REF=${VLLM_REF:-a919d635d}
 VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE:-0.1.dev1+g${VLLM_REF}}
 VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa}
-CMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES:-121-real}
+CMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES:-121a-real}
+REQUIRE_NATIVE_FA2_ARCH=${REQUIRE_NATIVE_FA2_ARCH:-1}
 MAX_JOBS=${MAX_JOBS:-4}
 NVCC_THREADS=${NVCC_THREADS:-1}
 RESULTS_DIR=${RESULTS_DIR:-results}
@@ -54,7 +56,8 @@ ARG BASE_IMAGE=ghcr.io/aeon-7/vllm-spark-omni-q36:v2
 ARG VLLM_REF=a919d635d
 ARG VLLM_VERSION_OVERRIDE=0.1.dev1+ga919d635d
 ARG VLLM_PRECOMPILED_WHEEL_COMMIT=4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa
-ARG CMAKE_CUDA_ARCHITECTURES=121-real
+ARG CMAKE_CUDA_ARCHITECTURES=121a-real
+ARG REQUIRE_NATIVE_FA2_ARCH=1
 ARG MAX_JOBS=4
 ARG NVCC_THREADS=1
 
@@ -82,6 +85,7 @@ ENV VLLM_USE_PRECOMPILED=1 \
     VLLM_VERSION_OVERRIDE="${VLLM_VERSION_OVERRIDE}" \
     VLLM_PRECOMPILED_WHEEL_COMMIT="${VLLM_PRECOMPILED_WHEEL_COMMIT}" \
     VLLM_SKIP_PRECOMPILED_VERSION_SUFFIX=1 \
+    REQUIRE_NATIVE_FA2_ARCH="${REQUIRE_NATIVE_FA2_ARCH}" \
     MAX_JOBS="${MAX_JOBS}" \
     NVCC_THREADS="${NVCC_THREADS}"
 
@@ -98,6 +102,11 @@ RUN cmake -S . -B /tmp/vllm-fa2-build -G Ninja \
       -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc \
       -DCMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
       -DFETCHCONTENT_BASE_DIR=/opt/jethac-vllm/.deps \
+      2>&1 | tee /tmp/vllm-fa2-configure.log \
+ && if [ "${REQUIRE_NATIVE_FA2_ARCH}" = "1" ]; then \
+      grep -Eq 'FA2_ARCHS:.*12\.1a?|FA2_ARCHS:.*121a?' /tmp/vllm-fa2-configure.log || \
+        (echo "FA2 configure did not select a native SM121/SM121a arch; refusing to build a non-native FA2 binary." >&2; exit 1); \
+    fi \
  && cmake --build /tmp/vllm-fa2-build --target _vllm_fa2_C -j "${MAX_JOBS}" \
  && cmake --install /tmp/vllm-fa2-build \
       --prefix /tmp/vllm-fa2-install \
@@ -107,18 +116,14 @@ RUN cmake -S . -B /tmp/vllm-fa2-build -G Ninja \
       /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so
 
 RUN python3 - <<'PY'
-import importlib.util
 import torch
 import vllm
+import vllm.vllm_flash_attn._vllm_fa2_C as fa2_ext
 
-fa2 = importlib.util.find_spec("vllm.vllm_flash_attn._vllm_fa2_C")
-fa3 = importlib.util.find_spec("vllm.vllm_flash_attn._vllm_fa3_C")
 print("vllm", vllm.__version__, vllm.__file__)
 print("torch", torch.__version__, torch.version.cuda)
 print("arch_list", torch.cuda.get_arch_list() if torch.cuda.is_available() else [])
-print("fa2", fa2.origin if fa2 else None)
-print("fa3", fa3.origin if fa3 else None)
-assert fa2 is not None
+print("fa2", fa2_ext.__file__)
 PY
 EOF
 
@@ -128,6 +133,7 @@ docker build \
   --build-arg VLLM_VERSION_OVERRIDE="${VLLM_VERSION_OVERRIDE}" \
   --build-arg VLLM_PRECOMPILED_WHEEL_COMMIT="${VLLM_PRECOMPILED_WHEEL_COMMIT}" \
   --build-arg CMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
+  --build-arg REQUIRE_NATIVE_FA2_ARCH="${REQUIRE_NATIVE_FA2_ARCH}" \
   --build-arg MAX_JOBS="${MAX_JOBS}" \
   --build-arg NVCC_THREADS="${NVCC_THREADS}" \
   -t "${IMAGE_TAG}" \

@@ -5,14 +5,14 @@ from __future__ import annotations
 
 from typing import Any
 
-DGX_SPARK_BASELINE_SM_COUNT = 48
+REFERENCE_GB10_SM_COUNT = 48
 
 
 def collect_cuda_hardware() -> dict[str, Any]:
     """Collect CUDA device identity without making torch a hard dependency."""
     report: dict[str, Any] = {
         "schema": "spark-hardware/v1",
-        "dgx_spark_baseline_sm_count": DGX_SPARK_BASELINE_SM_COUNT,
+        "reference_sm_count": REFERENCE_GB10_SM_COUNT,
         "devices": [],
         "warnings": [],
     }
@@ -52,10 +52,11 @@ def collect_cuda_hardware() -> dict[str, Any]:
     if report["devices"]:
         first = report["devices"][0]
         sm_count = first.get("multi_processor_count")
-        if sm_count != DGX_SPARK_BASELINE_SM_COUNT:
+        if sm_count != REFERENCE_GB10_SM_COUNT:
             report["warnings"].append(
                 "first CUDA device has "
-                f"{sm_count} SMs, not the {DGX_SPARK_BASELINE_SM_COUNT}-SM DGX Spark baseline; "
+                f"{sm_count} SMs, which differs from this campaign's "
+                f"{REFERENCE_GB10_SM_COUNT}-SM GB10 reference count; "
                 "do not compare performance rows across different SM counts."
             )
     return report

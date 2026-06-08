@@ -29,7 +29,7 @@ Current GB10 evidence:
 - SM count: `48`
 - comparison key: `NVIDIA_GB10:sm_121:sms_48`
 
-The helper warns when a run reports an SM count different from the 48-SM DGX Spark baseline so performance rows are not silently compared across bins.
+The helper warns when a run reports an SM count different from the observed 48-SM GB10 reference run so performance rows are not silently compared across bins.
 
 ## Fork Audit
 
@@ -52,4 +52,4 @@ False positives checked:
 ## Remaining Work
 
 - Keep auditing any future tile, split-K, graph-size, and occupancy changes for runtime SM-count use.
-- Do not claim performance portability from the 48-SM baseline to smaller `sm_121` bins without new measurements or an explicit normalization model.
+- Do not claim performance portability from the observed 48-SM reference system to smaller `sm_121` bins without new measurements or an explicit normalization model.

@@ -15,7 +15,7 @@ Tracked by:
 - Every improvement claim needs a before row and an after row.
 - Before and after rows must use the same machine, model, prompt set, quantization, context length, batch/concurrency, and output length.
 - Before and after performance rows must also match CUDA compute capability and `multi_processor_count`; GB10 `sm_121` can appear in different SM-count bins, and correctness compatibility does not make throughput comparable.
-- See `docs/SM_COUNT_AWARENESS.md` for the current 48-SM baseline evidence and fork audit.
+- See `docs/SM_COUNT_AWARENESS.md` for the current observed 48-SM reference evidence and fork audit.
 - Capture `spark_doctor` before each run.
 - Capture CUDA build/JIT target evidence and shared-object evidence when testing kernel changes.
 - Capture runtime process evidence with `scripts/runtime_process_probe.py` for serving baselines.

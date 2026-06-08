@@ -250,6 +250,19 @@ python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
 
 Then install or build the FA2 extension against the container's actual Torch/CUDA ABI, rerun the no-think Qwen row, and run `scripts/run_vllm_incontainer_target_audit.sh` against the resulting image after a warmed request.
 
+Follow-up build attempt:
+
+- script: `scripts/build_vllm_aeon_qwen_cleanfa2_image.sh`
+- attempted image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2`
+- artifact: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion_summary.md`
+- raw log: `results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion.log`
+
+Result: packaging/versioning is fixed, but native FA2 is not. `VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1` skipped bundled FA2/FA3 extraction and `VLLM_VERSION_OVERRIDE=0.1.dev1+ga919d635d` avoided the prior `setuptools-scm` failure. Top-level vLLM CMake accepted `12.1a` and printed `arch=compute_121a,code=sm_121a`.
+
+The nested pinned `vllm-project/flash-attention@dd62dac706b1cf7895bd99b18c6cb7e7e117ee25` configure then collapsed to `CUDA supported target architectures: 12.0`, selected `FA2_ARCHS: 8.0+PTX`, and launched `_vllm_fa2_C` `nvcc` commands with only `compute_80`/`sm_80`. The build was stopped rather than producing another non-native FA2 binary. The builder now fails fast when FA2 configure does not select native SM121/SM121a.
+
+Next vLLM clean-packaging step: patch or fork the pinned vLLM FlashAttention source so FA2 can select an SM12x/Spark-compatible target, then rerun this image build and the no-think Qwen row.
+
 ## 2026-06-08 Gemma 26B Result
 
 Target:
