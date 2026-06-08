@@ -32,9 +32,18 @@ Artifact:
 
 The server returned generated-token logprobs under `choices[0].logprobs.content`, but did not return `tokens` or `token_logprobs`. That is insufficient for the current lm-eval GGUF loglikelihood path.
 
-Next proof: test llama.cpp's native `/tokenize` plus `/completion` path with token-array prompts, `n_predict=1`, `n_probs`, and `return_tokens=true`. If that can expose arbitrary target-token logprobs, fix the adapter locally; if not, this needs a llama.cpp upstream loglikelihood path.
+The native `/tokenize` plus `/completion` top-N path has now been tested at `n_probs=512`
+and failed the unlikely-continuation case: the likely continuations were scored, but the
+`zebra` continuation was not present in the returned top-N probabilities. Do not keep
+rerunning top-512 as an accuracy fix.
 
-Host-ready native probe:
+Next proof: test one newer llama.cpp server pin for supplied-token echo logprobs with
+`scripts/gguf_logprobs_probe.py`. Pass only if prompt `tokens` and `token_logprobs` cover
+the supplied continuation token ids, including the unlikely `zebra` case. If a newer pin
+still returns only generated-token `choices[0].logprobs.content`, move to a bounded
+full-vocabulary practicality probe or a `jethac/llama.cpp` endpoint fork.
+
+Historical native top-N probe, now negative at `n_probs=512`:
 
 ```bash
 python3 scripts/llamacpp_native_loglikelihood_probe.py \

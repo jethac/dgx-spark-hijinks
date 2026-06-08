@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy, and a backend trace run on `d7d931f` returned `spark-ok` plus sane raw `2+2`. Do not bless SGLang FP4 KV for serving quality or speed until the quality-positive result is repeated as a matched fp8-vs-FP4 row.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy. The matched `d7d931f` row records `1.7769x` fp8 KV capacity and backend traces for decode plus `extend_merge_paged`, with raw/chat smoke passing. Do not bless SGLang FP4 KV for serving quality or speed because the standardized FP4 benchmark content still degrades.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -166,6 +166,35 @@ Interpretation:
 - It is not a blessed serving row and not a speed claim. The FP4 throughput numbers are not comparable because the output is wrong.
 - The next SGLang target is a quality fix or a larger/model-shaped FP4 KV row that passes deterministic sanity and quality checks while preserving the `1.78x` capacity gain.
 
+## 2026-06-08 d7d931f Matched Backend Trace Row
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_raw_2plus2.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_chat_smoke.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_server.log`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_trace_excerpt.txt`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_raw_2plus2.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_chat_smoke.json`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_server.log`
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_trace_excerpt.txt`
+
+Result:
+
+- fp8 comparator: `3,105,240` KV tokens, decode `56.996`, `57.034`, and `57.266 tok/s`, raw `2+2` and chat smoke pass with normal benchmark content.
+- FP4 KV: `5,517,572` KV tokens, capacity ratio `1.7769x` versus fp8, raw `2+2` returns `4`, and chat smoke returns `spark-ok`.
+- FP4 backend trace: all 28 decode layers and all 28 `extend_merge_paged` layers use packed `uint8` K/V plus FP8 scale buffers.
+- FP4 benchmark quality still fails: `short_decode` stops at `,explain why.`, and medium/long outputs are repetitive or garbled.
+
+Interpretation:
+
+- This retires the "repeat a matched row with request-path trace" task.
+- It proves capacity, backend routing, and smoke-level sanity on `jethac/sglang@d7d931f`.
+- It is still not a blessed serving-quality or speed row. The next SGLang work is quality localization on the degraded benchmark prompts, not another capacity rerun.
+
 Likely code locations:
 
 - `third_party/flashinfer/include/flashinfer/vec_dtypes.cuh`: generic `vec_cast` lacks the needed FP4 E2M1 to float conversion path.
@@ -295,12 +324,12 @@ Current fork verification:
   - Decode result: `attention_cosine_vs_dequant=0.9999946`, `attention_cosine_vs_source=0.99585`, finite output, and `passed=true`.
   - Paged prefill result: `attention_cosine_vs_dequant=0.9999946`, `attention_cosine_vs_source=0.99576`, finite output, and `passed=true`.
   - This clears the basic pool layout/global-scale contract for decode and paged prefill. The remaining quality bug is downstream: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic pool bridge.
-- The SGLang backend decode trace passed on GB10; see `results/sglang_fp4_backend_trace_20260608T1536JST_summary.md`.
-  - `jethac/sglang@d7d931f` adds `SGLANG_FP4_KV_TRACE_BACKEND=1` to log the first native FP4-KV call per layer.
+- The SGLang matched backend trace row passed smoke on GB10; see `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md`.
+  - `jethac/sglang@d7d931f` adds `SGLANG_FP4_KV_TRACE_BACKEND=1` to log native FP4-KV backend calls.
   - The source-overlay run used NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, `--kv-cache-dtype fp4_e2m1`, FlashInfer attention, page size 1, and both CUDA graph modes disabled.
-  - It allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, and traced all 28 decode layers using packed `uint8` K/V plus FP8 scale buffers.
+  - It allocated `5,517,572` FP4 KV tokens versus `3,105,240` fp8 tokens (`1.7769x`), calibrated 28 layers, and traced all 28 decode plus all 28 `extend_merge_paged` layers using packed `uint8` K/V plus FP8 scale buffers.
   - Raw `2+2 is` returned ` 4, 2+2 is 4, 2+2 is`, and chat smoke returned exactly `spark-ok`.
-  - This is quality-positive debug evidence, not yet a blessed SGLang row. It lacks a matched fp8 comparator on the same branch and did not capture request-path prefill/extend trace lines.
+  - This is stronger capacity/routing evidence, but still not a blessed SGLang row because standardized FP4 benchmark content remains degraded versus fp8.
 
 For NVFP4 validation, record:
 

@@ -1,0 +1,38 @@
+{
+  "meta_info": {
+    "cached_tokens": 0,
+    "cached_tokens_details": null,
+    "completion_tokens": 16,
+    "dp_rank": null,
+    "e2e_latency": 2.025012619997142,
+    "finish_reason": {
+      "length": 16,
+      "type": "length"
+    },
+    "id": "921984c75a1f46dea9754e3897ef089b",
+    "num_retractions": 0,
+    "prompt_tokens": 4,
+    "reasoning_tokens": 0,
+    "response_sent_to_client_ts": 1780901363.6311865,
+    "weight_version": "default"
+  },
+  "output_ids": [
+    220,
+    19,
+    11,
+    220,
+    17,
+    10,
+    17,
+    374,
+    220,
+    19,
+    11,
+    220,
+    17,
+    10,
+    17,
+    374
+  ],
+  "text": " 4, 2+2 is 4, 2+2 is"
+}

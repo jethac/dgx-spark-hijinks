@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness passes for small and Gemma 4 26B sliding-attention shapes; vLLM now has a Qwen fp8-vs-NVFP4 KV serving capacity proof; SGLang has a capacity-only FP4 KV row with quality failure; Gemma 4 26B global-attention `D=512` still fails FlashInfer FA2 configuration.
+Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness passes for small and Gemma 4 26B sliding-attention shapes; vLLM now has a Qwen fp8-vs-NVFP4 KV serving capacity proof; SGLang has a matched FP4-KV capacity/backend-trace row with smoke passing but benchmark quality failing; Gemma 4 26B global-attention `D=512` still fails FlashInfer FA2 configuration.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -231,15 +231,15 @@ Local verification:
 
 Updated verification:
 
-- `results/sglang_fp4_backend_trace_20260608T1536JST_summary.md` records a GB10 source-overlay run on `jethac/sglang@d7d931f53` using NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1` and `SGLANG_FP4_KV_TRACE_BACKEND=1`.
-- The run allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, traced all 28 decode layers through packed `uint8` K/V and FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text.
-- This is not yet a blessed row because it has no matched fp8 comparator on the same branch and did not capture request-path prefill/extend trace lines.
+- `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md` records a GB10 matched source-overlay run on `jethac/sglang@d7d931f53` using NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1` and `SGLANG_FP4_KV_TRACE_BACKEND=1`.
+- The run allocated `5,517,572` FP4 KV tokens versus `3,105,240` fp8 tokens (`1.7769x`), calibrated 28 layers, traced all 28 decode layers and all 28 `extend_merge_paged` layers through packed `uint8` K/V and FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text.
+- This is not yet a blessed row because the FP4 standardized benchmark content remains degraded versus the matched fp8 comparator.
 
 Missing verification:
 
 - no cheap CPU-only SGLang Docker verification route is working yet; it needs a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix
-- no matched quality-positive fp8-vs-FP4 row has been repeated on `d7d931f53`
-- no request-path prefill/extend backend trace has been captured yet
+- no matched quality-positive fp8-vs-FP4 row has been produced on `d7d931f53`
+- graph-safe FP4 KV is still unproven
 
 Reference files:
 
@@ -260,7 +260,7 @@ Likely `jethac/sglang` work:
 - Ported in `67c7967`: allow `--kv-cache-dtype fp4_e2m1` with FlashInfer MHA only on SM12x where the reference path is relevant.
 - Fixed in `eefe8ad`: make the new KV4 unit tests use public prefill/decode backend fields.
 - Ported through `d7d931f`: native FP4 KV pools, separate data and scale buffers, global scales, scale getters, pre-CUDA-graph calibration, FlashInfer backend `kv_cache_sf` routing, and decode trace logging.
-- Still pending: request-path prefill/extend trace and a repeated matched fp8-vs-FP4 quality row.
+- Still pending: quality localization for the degraded benchmark prompts and a matched fp8-vs-FP4 quality row.
 - Still pending: delegate FP4 subpools through hybrid-SWA.
 - Keep SGLang Gemma blockers separate from NVFP4 KV work; Qwen/Step-like models are better first probes.
 
@@ -289,6 +289,6 @@ Current upstream SGLang risk:
 5. Start Gemma through vLLM source overlay with `--kv-cache-dtype nvfp4`; logs must prove FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback or trtllm-gen.
 6. Compare fp8 and NVFP4 on the same Gemma model, prompts, memory utilization, CUDA graph mode, and concurrency.
 7. Record KV pool tokens, maximum concurrency, memory telemetry, deterministic output, quality/PPL or retrieval sanity, TTFT, and warmed decode tok/s.
-8. Continue SGLang-specific pool/calibration work separately; the current SGLang row is capacity-only until quality passes.
+8. Continue SGLang-specific quality localization separately; the current SGLang row is capacity/routing/smoke-only until benchmark quality passes.
 
 Passing harness-only evidence is not enough for a PR. A Spark NVFP4 KV PR needs clean wheel/container evidence and a serving proof packet.

@@ -1,0 +1,2 @@
+51:[2026-06-08 06:47:42] Max concurrent requests (per dp worker) from the finalized token capacity: max_num_reqs=4096.
+52:[2026-06-08 06:47:44] KV Cache is allocated. dtype: torch.float8_e4m3fn, #tokens: 3105240, K size: 20.73 GB, V size: 20.73 GB

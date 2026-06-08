@@ -1,0 +1,162 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 7,
+      "completion_tok_s_total": 41.86633594589333,
+      "content_chars": 13,
+      "content_preview": ",explain why.",
+      "decode_s": 0.05334259298979305,
+      "decode_tok_s": 93.73372608558297,
+      "finish_reason": "stop",
+      "last_event": {
+        "choices": [],
+        "created": 1780901364,
+        "id": "5666667d40ac47379a67d204d6e1ce27",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 5,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 49
+        }
+      },
+      "matched_stop": 151645,
+      "ok": true,
+      "output_chars": 13,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 0.11942769499728456,
+      "ttft_s": 0.06608510200749151,
+      "usage": {
+        "completion_tokens": 5,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 49
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "completion_tok_s_total": 55.04547326886538,
+      "content_chars": 1262,
+      "content_preview": " the following code:\n\n a sample of of.  (code is not in in python)) use to import import numpy,import import torch import import torchvision import from from class import import tensor import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import import ",
+      "decode_s": 3.450289803004125,
+      "decode_tok_s": 55.64749947463194,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780901368,
+        "id": "c1a3625db89c42ed980782f961959b3d",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 56,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 248
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 1262,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 3.488025238009868,
+      "ttft_s": 0.03773543500574306,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 67,
+      "completion_tok_s_total": 50.18249621318496,
+      "content_chars": 265,
+      "content_preview": ",, warm. The benchmark,; a helpful assistant,,,. the user pressure, and reproducducibility. The ofa warm, warm decoded speed, user pressure, warm is a helpful assistant, and reproducecurrent, warmspeed, user pressure, warm decoded speed, warm is a helpful assistant",
+      "decode_s": 1.1432147060113493,
+      "decode_tok_s": 55.982484885358566,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780901369,
+        "id": "5497468e3e0c4d12bba5fe3aa0a51447",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2433
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 265,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 1.2753450870222878,
+      "ttft_s": 0.13213038101093844,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2433
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T06:49:29Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "after",
+  "run_id": "sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-08T06:49:24Z",
+  "url": "http://127.0.0.1:30012"
+}

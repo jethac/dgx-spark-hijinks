@@ -462,7 +462,17 @@
   - command shape: NVIDIA SGLang 26.05 source overlay, `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, `--kv-cache-dtype fp4_e2m1`, FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled.
   - result: server reached readiness, allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, and traced all 28 decode layers through native FP4 KV with packed `uint8` K/V, FP8 scale buffers, and finite per-layer global scales.
   - sanity: raw `2+2 is` returned ` 4, 2+2 is 4, 2+2 is`; chat smoke returned exactly `spark-ok`.
-  - interpretation: this is quality-positive debug evidence and shows the backend decode call contract matches the cleared pool bridge. It is not yet a blessed SGLang FP4-KV row because it lacks a matched fp8 comparator on the same branch and the trace did not capture request-path prefill/extend.
+  - interpretation at the time: this was quality-positive debug evidence and showed the backend decode call contract matched the cleared pool bridge, but it was not yet a blessed SGLang FP4-KV row. It is superseded by the matched fp8-vs-FP4 trace row below.
+
+- Ran the matched SGLang fp8-vs-FP4 KV row on the backend trace branch.
+  - fork commit: `jethac/sglang@d7d931f530160ba86a2d55b4636d64baaeda3bec`
+  - artifacts: `results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md`, plus fp8/fp4 row manifests, OpenAI benchmarks, raw `2+2`, chat smoke, server logs, runtime probes, build-target audits, and trace excerpts.
+  - command shape: NVIDIA SGLang 26.05 source overlay, `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, `--attention-backend flashinfer`, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled; FP4 row adds `--kv-cache-dtype fp4_e2m1` and `SGLANG_FP4_KV_TRACE_BACKEND=1`; fp8 comparator uses `--kv-cache-dtype fp8_e4m3`.
+  - capacity: fp8 allocated `3,105,240` KV tokens; FP4 allocated `5,517,572` KV tokens, or `1.7769x` fp8.
+  - trace: FP4 row calibrated 28 layers and logged all 28 decode plus all 28 `extend_merge_paged` layers through packed `uint8` K/V and FP8 scale buffers.
+  - smoke: fp8 raw `2+2 is` returned ` 4. 2+2 is 4. 2+2 is`; FP4 returned ` 4, 2+2 is 4, 2+2 is`; both chat smokes returned `spark-ok`.
+  - benchmark: fp8 produced normal compact benchmark text at about `57 tok/s`; FP4 short/medium/long benchmark content remained degraded even though raw/chat smoke passed.
+  - interpretation: this retires the missing matched-comparator/request-trace task, but does not bless SGLang FP4 KV quality or speed. The next SGLang task is quality localization on the degraded benchmark prompts.
 
 ## First Benchmark Campaign Summary
 

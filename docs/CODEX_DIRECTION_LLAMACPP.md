@@ -125,21 +125,23 @@ yourself with different arch flags and observe:
       practical-runtime parallel to the NVFP4-KV work; a matched KV-dtype capacity row lets
       us compare the practical path against vLLM/SGLang.
 
-## Set up jethac/llama.cpp and build it
-We have two independent reasons to own the source and a build — the native-NVFP4-on-sm_121
-investigation (Objective B) and the eventual loglikelihood endpoint (Objective A.3).
-Building llama.cpp is cheap; treat your own build as the default working surface, not a last
-resort.
+## When to set up jethac/llama.cpp
+We have two independent reasons to own the source and a build: the native-NVFP4-on-sm_121
+investigation (Objective B) and a possible loglikelihood endpoint (Objective A.3). Do not
+let that obscure the accuracy stop point: first run the newer-pin echo-span probe below.
+Create the fork/submodule immediately after that probe fails, or when explicitly switching
+to the native-FP4 lane.
 
 1. Fork `ggml-org/llama.cpp` → `jethac/llama.cpp`; add as submodule `third_party/llama.cpp`.
 2. Create the issue-named worktree branch off a **recent upstream master** ref (or the
    relevant native-FP4 PR, e.g. #22196) — pin + record the exact commit for reproducibility
-   (master NVFP4 is in flux, so pin a chosen commit, don't float HEAD). **Build it yourself
-   on GB10.** Record what commit `b9536` was built from too, kept only as the serving
-   baseline to diff against.
-3. **Build freely; just don't ship a kernel patch yet.** Reading answers part of the arch
-   question; building with different arch flags answers the rest (Objective B.1). Produce a
-   findings artifact for Objective B.1/B.2, and for Objective A locate where
+   (master NVFP4 is in flux, so pin a chosen commit, don't float HEAD). Build it yourself
+   on GB10 for the native-FP4 lane. Record what commit `b9536` was built from too, kept
+   only as the serving baseline to diff against.
+3. Build freely for source inspection and dispatch proof; just don't ship a kernel patch
+   yet. Reading answers part of the arch question; building with different arch flags
+   answers the rest (Objective B.1). Produce a findings artifact for Objective B.1/B.2,
+   and for Objective A locate where
    `llama-perplexity`'s `--multiple-choice`/`--hellaswag` modes read per-token logits for
    *supplied* tokens (the loglikelihood primitive to lift into a server endpoint) and whether
    master's server already exposes prompt-token logprobs.
@@ -184,15 +186,7 @@ thinking-disabled finding visible (it's the difference between empty and useful 
   a native-FP4-on-sm_121 issue.
 
 ## First concrete step
-Two tracks now run in parallel.
-
-**Track 1 — native FP4 (do this):** set up `jethac/llama.cpp` off a recent master ref and
-**build it on GB10** per "Set up jethac/llama.cpp" above. Building it ourselves — cheap for
-llama.cpp — is how we both read the native NVFP4 path and answer the sm_121 dispatch
-question (compile with `121a`/`121`/`120f`, `cuobjdump`, run an NVFP4 GGUF). No kernel patch
-yet; the build is the experiment.
-
-**Track 2 — accuracy (probe before forking-for-code):** the pinned `b9536` server already
+**Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
 endpoint, run **one newer-pin echo-span probe** with `scripts/gguf_logprobs_probe.py`:
 start a newer `llama-server` manually, then probe:
@@ -221,3 +215,7 @@ Pass condition: prompt `tokens` and `token_logprobs` cover continuation token id
 full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or move
 directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named worktree
 for a direct supplied-token loglikelihood endpoint.
+
+Native FP4 can run in parallel as a separate lane after this docs stop point: set up
+`jethac/llama.cpp` off a recent master ref, build on GB10, and use cuobjdump/runtime
+dispatch evidence plus an actual NVFP4/MXFP4 GGUF to prove or deny the native FP4 path.

@@ -7,15 +7,16 @@
 > whole NVFP4-KV effort.
 
 ## Why this, why now
-The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. But it
-produces **corrupt output even in eager/no-graph mode** (raw `2+2` fails; benchmark text
-degenerates). The underlying FlashInfer FA2 NVFP4-KV kernel is proven correct standalone
-(`jethac/flashinfer@e152cf4d`, cosine ≥ 0.99999946), and the layout probe ruled out
-scale-rank as the cause (`results/sglang_nvfp4_kv_layout_probe_20260608.json`, dequant
-cosine 0.9999957). **So the bug is in SGLang's integration of a correct kernel, not in
-the kernel math.** The job: find and fix that bug, then land a blessed matched
-fp8-vs-FP4 serving row. This is plausibly higher leverage than the vLLM KV lane, which
-hasn't even served NVFP4 KV yet.
+The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
+`d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend
+trace covers both decode and `extend_merge_paged`. But the standardized FP4 benchmark
+text still degenerates, while fp8 produces normal text. The underlying FlashInfer FA2
+NVFP4-KV kernel is proven correct standalone (`jethac/flashinfer@e152cf4d`, cosine ≥
+0.99999946), and the layout probe ruled out scale-rank as the cause
+(`results/sglang_nvfp4_kv_layout_probe_20260608.json`, dequant cosine 0.9999957).
+**So the bug is in SGLang's integration or quality-sensitive serving path, not in the
+basic kernel math or pool contract.** The job: find and fix that bug, then land a
+blessed matched fp8-vs-FP4 serving row.
 
 ## Prime suspect — read this first
 Turn 1 of this whole investigation was: "SM120/121 should use the `fp4_quantize`
@@ -98,23 +99,25 @@ passing — not a dev step.
   global-scale application surface for decode and paged prefill; the remaining serving
   corruption is later in backend wrapper/server sequencing, CUDA graph state, or a
   model-path difference not covered by the synthetic pool bridge.
-- **Backend decode trace is now captured** (`results/sglang_fp4_backend_trace_20260608T1536JST_summary.md`):
+- **Backend trace and matched comparator are now captured**
+  (`results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md`):
   `jethac/sglang@d7d931f` adds opt-in `SGLANG_FP4_KV_TRACE_BACKEND=1` logging. A
   source-overlay Qwen run on the NVIDIA 26.05 image, with
-  `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, reached readiness, allocated `5,516,867`
-  FP4 KV tokens, calibrated 28 layers, traced all 28 decode layers through packed
-  `uint8` K/V plus FP8 scale buffers, returned `spark-ok`, and produced sane raw
-  `2+2` text. This is quality-positive debug evidence, not a blessed row yet: it lacks
-  matched fp8-vs-FP4 benchmarking on the same branch and did not capture request-path
-  `extend_*` trace lines.
+  `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, reached readiness, allocated `5,517,572`
+  FP4 KV tokens versus `3,105,240` fp8 tokens (`1.7769x`), calibrated 28 layers, traced
+  all 28 decode layers and all 28 `extend_merge_paged` layers through packed `uint8` K/V
+  plus FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text. This
+  is still not a blessed row because the FP4 standardized benchmark content remains
+  degraded.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
 
 ## The SGLang problem, precisely
-1. **Quality corruption in eager mode** (keystone). Output is wrong even with CUDA graph
-   and piecewise capture disabled — so it is not merely a graph bug. A correct kernel is
-   being fed wrong-convention or wrong-scale data by the SGLang path.
+1. **Quality corruption in eager/no-graph serving** (keystone). The latest trace row
+   passes raw/chat smoke, but the standardized benchmark content still degrades with
+   CUDA graph and piecewise capture disabled. This is not merely a graph bug, and it is
+   subtler than the earlier raw `2+2` failure.
 2. **Worse corruption with CUDA graphs.** Graph-enabled decode corrupts output, so the
    fork currently auto-disables capture (`SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` opt-in).
    This forces the slow no-graph path (an early variant measured 0.276 tok/s). Separable
@@ -210,9 +213,9 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-Backend decode tracing is now done. The next step is to make the trace cover
-request-path prefill/extend explicitly, then repeat the matched fp8-vs-FP4 Qwen row on
-`jethac/sglang@d7d931f` with `SGLANG_FP4_KV_TRACE_BACKEND=1` enabled for the first layer.
-If the quality-positive `spark-ok` / raw `2+2` result holds, promote it from debug
-evidence into a blessed SGLang FP4-KV row with the standard capacity, quality, and speed
-comparators. No serving image required.
+The matched `d7d931f` row is done and captured both decode and request-path
+`extend_merge_paged`. Do not repeat it as-is. The next step is a quality-localization
+probe that compares fp8 and FP4 logits/text under the same prompts that degrade in the
+standard benchmark, while preserving the backend trace. Add `extend_ragged_no_prefix`
+trace only if a failing request does not hit the already-traced `extend_merge_paged`
+path. No serving image required until quality passes.

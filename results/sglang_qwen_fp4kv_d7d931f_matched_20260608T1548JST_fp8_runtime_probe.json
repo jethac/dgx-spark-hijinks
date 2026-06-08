@@ -1,0 +1,241 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 94 %"
+    }
+  },
+  "finished_utc": "2026-06-08T06:48:07Z",
+  "match": "sglang",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    760107,
+    760393,
+    760394,
+    760837
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "python3",
+        "-m",
+        "sglang.launch_server",
+        "--model-path",
+        "Qwen/Qwen2.5-1.5B-Instruct",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "30012",
+        "--tp",
+        "1",
+        "--dtype",
+        "bfloat16",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--attention-backend",
+        "flashinfer",
+        "--page-size",
+        "1",
+        "--mem-fraction-static",
+        "0.40",
+        "--disable-cuda-graph",
+        "--disable-piecewise-cuda-graph"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 760107,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "python3",
+        "PPid": "760084",
+        "Pid": "760107",
+        "State": "S (sleeping)",
+        "Tgid": "760107",
+        "Threads": "70",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1318352 kB",
+        "VmRSS": "1311352 kB",
+        "VmSize": "23632292 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::scheduler"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 760393,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::schedul",
+        "PPid": "760107",
+        "Pid": "760393",
+        "State": "R (running)",
+        "Tgid": "760393",
+        "Threads": "92",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "4429508 kB",
+        "VmRSS": "2811728 kB",
+        "VmSize": "95749292 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::detokenizer"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 760394,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::detoken",
+        "PPid": "760107",
+        "Pid": "760394",
+        "State": "S (sleeping)",
+        "Tgid": "760394",
+        "Threads": "43",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1144532 kB",
+        "VmRSS": "1142528 kB",
+        "VmSize": "23712604 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "python3",
+        "/home/jethac/spark_tmp/sglang_matched_d7d931f_20260608T1545JST/hijinks/scripts/record_openai_serving_row.py",
+        "--backend",
+        "sglang",
+        "--phase",
+        "after",
+        "--run-id",
+        "sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8",
+        "--url",
+        "http://127.0.0.1:30012",
+        "--model",
+        "Qwen/Qwen2.5-1.5B-Instruct",
+        "--results-dir",
+        "/home/jethac/spark_tmp/sglang_matched_d7d931f_20260608T1545JST/hijinks/results",
+        "--runtime-ref",
+        "nvcr.io/nvidia/sglang:26.05-py3 + jethac/sglang@d7d931f source overlay",
+        "--container-image",
+        "nvcr.io/nvidia/sglang:26.05-py3",
+        "--quantization",
+        "bf16",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--attention-backend",
+        "flashinfer",
+        "--cuda-graph-mode",
+        "no-graph",
+        "--server-log",
+        "/home/jethac/spark_tmp/sglang_matched_d7d931f_20260608T1545JST/hijinks/results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_server.log",
+        "--process-match",
+        "sglang",
+        "--chat-smoke-max-tokens",
+        "64"
+      ],
+      "cwd": {
+        "path": "/home/jethac"
+      },
+      "environment": {
+        "values": {}
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 760837,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "python3",
+        "PPid": "760054",
+        "Pid": "760837",
+        "State": "S (sleeping)",
+        "Tgid": "760837",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "13924 kB",
+        "VmRSS": "13924 kB",
+        "VmSize": "35492 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780901287,
+          "id": "Qwen/Qwen2.5-1.5B-Instruct",
+          "max_model_len": 32768,
+          "object": "model",
+          "owned_by": "sglang",
+          "parent": null,
+          "root": "Qwen/Qwen2.5-1.5B-Instruct"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-08T06:48:07Z",
+  "url": "http://127.0.0.1:30012"
+}

@@ -48,7 +48,7 @@
       "plan_ids": [
         "5"
       ],
-      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration; in-container audit found GB10 runtime evidence but no `sm_121`/`sm_121a` CUDA object evidence; `jethac/vllm@db4b210c1` adds a precompiled-install knob to skip bundled FA2/FA3 so the next image can supply a clean ABI-matched FA2 build"
+      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration; clean `jethac/vllm@a919d635d` plus `jethac/flash-attention@7d53245` serves Qwen36 at 61.07/56.97/60.10 tok/s with separate `sm_121a` FA2 cubin proof; Qwen NVFP4-KV now records `1.751x` fp8 KV pool/concurrency with decode parity; remaining vLLM gaps are official packaging, Gemma NVFP4-KV, native FP4 weight/MoE proof, and accuracy"
     },
     {
       "area": "NVFP4 on Spark",
@@ -57,7 +57,7 @@
         "3",
         "7"
       ],
-      "status": "SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing/deswizzle branches pushed; standalone GB10 FA2 NVFP4 KV passes small and Gemma 4 26B sliding shapes; checkpoint audit added for NVFP4 format/sensitive tensor/EOS metadata; Gemma 4 26B global `D=512` fails; SGLang FP4 KV now has a correctness-safe no-graph serving path; TensorRT-LLM #11368 documents a separate GB10 FP4 GEMM shared-memory tile gap"
+      "status": "SM121 `b12x` GEMM dispatch enabled; FlashInfer FA2 KV stride/page and vLLM FA2 routing/deswizzle branches pushed; standalone GB10 FA2 NVFP4 KV passes small and Gemma 4 26B sliding shapes; vLLM Qwen NVFP4-KV serves with `1.751x` fp8 KV pool/concurrency and normal content; checkpoint audit added for NVFP4 format/sensitive tensor/EOS metadata; Gemma 4 26B global `D=512` fails; SGLang FP4 KV has a matched `d7d931f` row with `1.7769x` fp8 capacity plus decode/`extend_merge_paged` backend traces and smoke passing, but standardized output quality still fails; SGLang convention bridge proves viable raw FA2 reader pairs and clears the invalid crossed `nvfp4_kv_quantize` encode-scale case; SGLang pool bridge clears `MHATokenToKVPoolFP4` layout/global-scale application for decode and paged prefill; TensorRT-LLM #11368 documents a separate GB10 FP4 GEMM shared-memory tile gap"
     },
     {
       "area": "llama.cpp / lm-eval GGUF accuracy",
@@ -65,7 +65,7 @@
       "plan_ids": [
         "8"
       ],
-      "status": "native loglikelihood adapter prototype and tiny JSONL task harness added; counterpart audit keeps live llama-server proof pending"
+      "status": "native loglikelihood adapter prototype and tiny JSONL task harness ran against live llama-server; top-512 native probabilities scored likely continuations but missed the unlikely continuation; OpenAI echo on pinned `b9536` also returns generated-token `logprobs.content`, not prompt `tokens`/`token_logprobs`, so arbitrary continuation scoring remains blocked"
     },
     {
       "area": "HF fallback telemetry and containment",
@@ -149,7 +149,7 @@
         "7",
         "7a"
       ],
-      "status": "`jethac/sglang` now clears early gate/alias blockers, calibrates before capture, and auto-disables CUDA graph capture for native FP4 KV because graph-enabled decode corrupts output; default no-graph Qwen FP4 KV passes `spark-ok` and raw `2+2 is 4`; matched fp8-vs-fp4 benchmark row still pending"
+      "status": "`jethac/sglang` now clears early gate/alias blockers, calibrates before capture, and auto-disables CUDA graph capture for native FP4 KV because graph-enabled decode corrupts output; standalone convention bridge shows raw FA2 math is correct for viable pairs; pool bridge shows `MHATokenToKVPoolFP4` tensors feed FlashInfer FA2 decode and paged prefill correctly; matched `d7d931f` row records `5,517,572` FP4 tokens versus `3,105,240` fp8 tokens (`1.7769x`), raw/chat smoke passes, and backend trace covers all 28 decode plus all 28 `extend_merge_paged` layers through packed `uint8` K/V and FP8 scale buffers. Next: localize why standardized FP4 benchmark content remains degraded before blessing quality or speed."
     },
     {
       "area": "before/after GB10 benchmark protocol",
@@ -167,7 +167,13 @@
       "plan_ids": [
         "qwen-speed"
       ],
-      "status": "SGLang Qwen BF16/auto and fp8 rows captured; SGLang FP4 KV now passes quality only with graph capture disabled by default but still needs matched capacity/throughput benchmarking; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` derived AEON Qwen row passes at 47.22/58.88/61.62 tok/s but still lacks clean fork packaging and native-target proof; `jethac/vllm@db4b210c1` prepares the clean FA2 packaging experiment; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
+      "status": "SGLang Qwen BF16/auto and fp8 rows captured; SGLang FP4 KV matched `d7d931f` row captures `1.7769x` fp8 capacity and smoke passing but fails standardized benchmark quality; llama.cpp Qwen2.5 1.5B Q4_K_M row captured at 167-175 tok/s; AEON Qwen36 NVFP4+DFlash passes vLLM smoke and compact serving at about 50-56 tok/s when `chat_template_kwargs={\"enable_thinking\": false}` is set; `jethac/vllm@6804e1b` derived AEON Qwen row passes at 47.22/58.88/61.62 tok/s but still lacks native FP4 weight/MoE proof; `jethac/vllm@a919d635d` clean FA2 row passes at 61.07/56.97/60.10 tok/s with separate `sm_121a` FA2 cubin proof; no-DFlash vLLM Qwen NVFP4-KV records `1.751x` fp8 KV pool/concurrency with decode parity; `scripts/qwen_speed_lane.py` records already-running Qwen servers"
+    },
+    {
+      "area": "vLLM FlashAttention FA2 native-target proof",
+      "issue": "[#21](https://github.com/jethac/dgx-spark-hijinks/issues/21)",
+      "plan_ids": [],
+      "status": "`jethac/flash-attention@spark/hijinks-021-fa2-sm121a` adds SM121/SM121a to the vLLM-pinned FA2 CMake path and is wired as `third_party/vllm-flash-attention`; clean image build/import/cuobjdump proof still pending"
     }
   ],
   "missing_issue_plan_ids": [],
@@ -349,7 +355,7 @@
     },
     {
       "id": "8",
-      "status": "missing",
+      "status": "blocked",
       "title": "llama.cpp / lm-eval accuracy"
     },
     {

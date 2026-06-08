@@ -78,9 +78,22 @@ This is not a model-quality failure and not a CUDA failure. It is an API/schema 
 
 Until one of those passes `scripts/gguf_logprobs_probe.py` or the native endpoint probe below, GGUF remains a throughput/serving path, not a paper-comparable accuracy path.
 
-## Next Proof
+## Current Accuracy Frontier
 
-The best candidate is llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.
+The native non-OpenAI `/completion` top-N route has now been tested on the live pinned
+`b9536` server with `n_probs=512`. It scored likely continuations, but missed the unlikely
+`zebra` continuation, so top-N probabilities are not enough for lm-eval-style arbitrary
+continuation scoring.
+
+The next bounded proof is one newer llama.cpp server pin with the OpenAI echo-span probe.
+Pass only if prompt `tokens` and `token_logprobs` cover the supplied continuation token ids
+for the `zebra` case. If the newer pin still returns only generated-token
+`choices[0].logprobs.content`, stop tuning top-N and move to full-vocabulary practicality
+or a `jethac/llama.cpp` supplied-token loglikelihood endpoint.
+
+## Historical Native Top-N Probe
+
+The older candidate was llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.
 
 Upstream API reference: `https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md`
 
@@ -135,7 +148,7 @@ Live result:
 - task artifact: `results/llamacpp_native_loglikelihood_20260608T1331JST_task.json`
 - result: `ok=false`; likely continuations were scored, but the unlikely `zebra` continuation was not present in the returned top-512 probabilities
 
-Interpretation: the native endpoint path is not yet sufficient for lm-eval-style arbitrary continuation scoring at this setting. The next GGUF accuracy fix needs direct supplied-token logprobs, full-vocabulary probabilities, or another native scoring path.
+Interpretation: the native endpoint top-N path is not sufficient for lm-eval-style arbitrary continuation scoring at this setting. The next GGUF accuracy fix needs direct supplied-token logprobs, full-vocabulary probabilities, or another native scoring path.
 
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 

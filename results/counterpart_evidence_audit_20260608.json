@@ -1,6 +1,6 @@
 {
   "all_claim_ready": false,
-  "claim_ready_count": 1,
+  "claim_ready_count": 2,
   "missing_or_partial": [
     "sglang_gemma_nvfp4_ordinary_kv",
     "sglang_clean_fp4_kv_after_row",
@@ -11,7 +11,7 @@
   ],
   "missing_or_partial_count": 6,
   "repo_root": ".",
-  "requirement_count": 7,
+  "requirement_count": 8,
   "requirements": [
     {
       "acceptance": "SGLang serves a Gemma NVFP4-weight checkpoint with BF16/fp8 ordinary KV, deterministic output sanity, backend logs, and row manifest.",
@@ -52,12 +52,17 @@
       "title": "SGLang Gemma NVFP4-weight serving with ordinary KV"
     },
     {
-      "acceptance": "Clean fork/container SGLang FP4 KV row serves with graphs or a justified graph policy, quality check, fp8 comparator, and row manifest.",
+      "acceptance": "Clean fork/container SGLang FP4 KV row serves with a justified graph policy, passes deterministic quality checks, includes an fp8 comparator, and records capacity and throughput in row manifests.",
       "blocked_matches": [],
       "claim_groups": [
         {
           "accepted_matches": [],
-          "ignored_matches": [],
+          "ignored_matches": [
+            "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_row_manifest.json",
+            "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_row_manifest.json",
+            "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_row_manifest.json",
+            "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_row_manifest.json"
+          ],
           "ok": false,
           "patterns": [
             "results/sglang*fp4kv*row_manifest.json",
@@ -67,7 +72,11 @@
         {
           "accepted_matches": [],
           "ignored_matches": [
-            "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json"
+            "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json",
+            "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_openai_benchmark.json",
+            "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_openai_benchmark.json",
+            "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_openai_benchmark.json",
+            "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_openai_benchmark.json"
           ],
           "ok": false,
           "patterns": [
@@ -82,10 +91,20 @@
         "_patched_",
         "_nograph",
         "_nographs",
-        "_startup"
+        "_startup",
+        "_autosafe",
+        "_d7d931f_matched_"
       ],
       "ignored_claim_matches": [
-        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json"
+        "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_row_manifest.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_row_manifest.json",
+        "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp4_row_manifest.json",
+        "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_fp8_row_manifest.json"
       ],
       "model_family": "qwen",
       "name": "sglang_clean_fp4_kv_after_row",
@@ -95,6 +114,9 @@
         "results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md",
         "results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md",
         "results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md",
+        "results/sglang_fp4_pool_bridge_probe_20260608.json",
+        "results/sglang_fp4_pool_bridge_probe_prefill_20260608.json",
+        "results/sglang_nvfp4_kv_convention_probe_20260608.json",
         "results/sglang_nvfp4_kv_layout_probe_20260608.json",
         "results/sglang_qwen25_1_5b_fp4kv_20260608T0336JST_startup.log",
         "results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log",
@@ -102,6 +124,21 @@
         "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nograph_20260608T0400JST_startup.log",
         "results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json",
         "results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_build_target_audit.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_chat_smoke.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_build_target_audit.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_chat_smoke.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_raw_2plus2.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_row_manifest.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_runtime_probe.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_server.log",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_openai_benchmark.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_raw_2plus2.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_row_manifest.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_runtime_probe.json",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_server.log",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_summary.md",
         "results/sglang_qwen_fp4kv_autosafe_chat_smoke_20260608.json",
         "results/sglang_qwen_fp4kv_autosafe_raw_generate_20260608.json",
         "results/sglang_qwen_fp4kv_autosafe_server_20260608.log",
@@ -120,7 +157,7 @@
       ],
       "runtime": "sglang",
       "status": "partial-evidence-only",
-      "title": "SGLang graph-compatible FP4 KV after-row"
+      "title": "SGLang FP4 KV capacity and quality after-row"
     },
     {
       "acceptance": "SGLang Qwen-class speculative row records target/drafter, accepted-draft metrics, quality, and speed against a non-speculative comparator.",
@@ -168,11 +205,13 @@
         {
           "accepted_matches": [
             "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json",
-            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json"
+            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json",
+            "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_row_manifest.json"
           ],
           "ignored_matches": [
             "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
             "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
+            "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_row_manifest.json",
             "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
           ],
           "ok": true,
@@ -184,11 +223,13 @@
         {
           "accepted_matches": [
             "results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json",
-            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json"
+            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json",
+            "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_openai_benchmark.json"
           ],
           "ignored_matches": [
             "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json",
-            "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_openai_benchmark.json"
+            "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_openai_benchmark.json",
+            "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_openai_benchmark.json"
           ],
           "ok": true,
           "patterns": [
@@ -201,7 +242,9 @@
         "results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json",
         "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json",
         "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json",
-        "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json"
+        "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_openai_benchmark.json",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_row_manifest.json"
       ],
       "claim_ready": true,
       "forbidden_claim_fragments": [],
@@ -210,6 +253,8 @@
         "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
         "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_openai_benchmark.json",
         "results/aeon_qwen36_dflash_tailnet_retry_20260608T074311JST_row_manifest.json",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_openai_benchmark.json",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_row_manifest.json",
         "results/qwen_speed_lane_dryrun_20260608_vllm_vllm-qwen36-nvfp4-dflash_row_manifest.json"
       ],
       "model_family": "qwen",
@@ -228,6 +273,83 @@
       "runtime": "vllm",
       "status": "claim-evidence-present",
       "title": "vLLM Qwen3.6 NVFP4+DFlash local serving row"
+    },
+    {
+      "acceptance": "vLLM serves the same Qwen-class model with matched fp8 and NVFP4 KV settings, logs FlashInfer FA2 NVFP4 KV selection, records KV capacity, quality, and serving manifests for both rows.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json",
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_row_manifest.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+          ],
+          "ok": true,
+          "patterns": [
+            "results/vllm*qwen*nvfp4*kv*row_manifest.json",
+            "results/*qwen*nvfp4*kv*vllm*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_openai_benchmark.json",
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_openai_benchmark.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_openai_benchmark.json"
+          ],
+          "ok": true,
+          "patterns": [
+            "results/vllm*qwen*nvfp4*kv*openai_benchmark.json",
+            "results/*qwen*nvfp4*kv*vllm*openai_benchmark.json"
+          ]
+        },
+        {
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+          ],
+          "ok": true,
+          "patterns": [
+            "results/vllm*qwen*fp8*kv*row_manifest.json",
+            "results/vllm*qwen*nvfp4*kv*fp8*row_manifest.json",
+            "results/*qwen*fp8*kv*vllm*row_manifest.json"
+          ]
+        }
+      ],
+      "claim_matches": [
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_row_manifest.json"
+      ],
+      "claim_ready": true,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+      ],
+      "model_family": "qwen",
+      "name": "vllm_qwen_nvfp4_kv_capacity",
+      "partial_matches": [
+        "results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_nhd_debug_20260608.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_1024_20260608T0340JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_20260608T0333JST.json",
+        "results/vllm_aeon_qwen_patch_port_20260608T0619JST.md",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T170531Z.json",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json",
+        "results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md"
+      ],
+      "runtime": "vllm",
+      "status": "claim-evidence-present",
+      "title": "vLLM Qwen fp8-vs-NVFP4 KV capacity row"
     },
     {
       "acceptance": "llama.cpp serves a Qwen3/Qwen3.6-class GGUF with build-target evidence, llama-bench, OpenAI smoke, and row manifest.",
@@ -299,6 +421,9 @@
       "name": "llamacpp_native_fp4_gguf",
       "partial_matches": [
         "results/llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log",
+        "results/llamacpp_gguf_echo_logprobs_probe_20260608_server.log",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_build_target_audit.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_server.log",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log"
       ],
@@ -313,22 +438,26 @@
         {
           "accepted_matches": [],
           "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_20260608T1331JST_probe.json",
             "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
             "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json"
           ],
           "ok": false,
           "patterns": [
-            "results/llamacpp_native_loglikelihood_probe_*.json"
+            "results/llamacpp_native_loglikelihood_probe_*.json",
+            "results/llamacpp_native_loglikelihood_*_probe.json"
           ]
         },
         {
           "accepted_matches": [],
           "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_20260608T1331JST_task.json",
             "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
           ],
           "ok": false,
           "patterns": [
-            "results/llamacpp_native_loglikelihood_task_*.json"
+            "results/llamacpp_native_loglikelihood_task_*.json",
+            "results/llamacpp_native_loglikelihood_*_task.json"
           ]
         }
       ],
@@ -336,6 +465,8 @@
       "claim_ready": false,
       "forbidden_claim_fragments": [],
       "ignored_claim_matches": [
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_probe.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_task.json",
         "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
@@ -345,6 +476,10 @@
       "partial_matches": [
         "results/gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json",
         "results/gguf_logprobs_probe_llamacpp_b9536_reasoning_off_20260607T135911Z.json",
+        "results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json",
+        "results/llamacpp_gguf_echo_logprobs_probe_20260608_max1.json",
+        "results/llamacpp_gguf_echo_logprobs_probe_20260608_summary.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md",
         "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json",
