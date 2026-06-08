@@ -169,11 +169,12 @@ FlashInfer FA2 NVFP4 KV patch:
 
 vLLM SM12x NVFP4 KV routing patch:
 
-- commit: `8916796bc50926fd61e606718b194a71e2e31a24`
+- current commit: `3658ba7123c3eb2211f18a882af1b993112fadb1`
+- routing/deswizzle probe commit: `8916796bc50926fd61e606718b194a71e2e31a24`
 - branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-007-nvfp4-kv-sm121
 - purpose: route SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 while preserving the existing SM100 TRTLLM NVFP4 path
 - vLLM-specific layout fix: enable FlashInfer's `FLASHINFER_PAGED_V_SF_DESWIZZLE` JIT path because vLLM's NVFP4 cache writer stores V scale factors swizzled for the old SM100 TRTLLM path
-- touched files: `vllm/v1/attention/backends/flashinfer.py`, `tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py`, `docs/design/attention_backends.md`
+- touched files: `vllm/v1/attention/backends/flashinfer.py`, `vllm/model_executor/layers/attention/attention.py`, `tests/kernels/attention/test_flashinfer_nvfp4_sm12x_routing.py`, `docs/design/attention_backends.md`
 - upstream guidance checked: `CONTRIBUTING.md`, `docs/contributing/README.md`, and `AGENTS.md`; commit was made with DCO sign-off
 - local verification: Python syntax compile and staged `git diff --check` passed
 - local pytest limitation: vLLM pytest collection is blocked in this Windows workspace because `tblib` is not installed

@@ -201,8 +201,10 @@ thinking-disabled finding visible (it's the difference between empty and useful 
 
 ## First concrete step
 **Native FP4 next stop point:** run an actual NVFP4 GGUF on the pinned `jethac/llama.cpp`
-build and compare it to a BF16/Q8 reference. The arch-build row is complete; do not spend
-more cycles on compile-flag archaeology until runtime dispatch/correctness is tested.
+build and compare it to a BF16/Q8 reference. The arch-build row is complete and the first
+runtime-dispatch smoke is recorded; do not spend more cycles on compile-flag archaeology
+until runtime correctness/speed is tested. Use
+`tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md` as the next Linux-host packet.
 
 **Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an

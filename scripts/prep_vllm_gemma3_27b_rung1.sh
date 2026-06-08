@@ -15,6 +15,7 @@ Environment:
   GPU_MEMORY_UTILIZATION=0.85
   MAX_MODEL_LEN=131072
   MAX_NUM_BATCHED_TOKENS=4096
+  VLLM_SOURCE_COMMIT=3658ba7123c3eb2211f18a882af1b993112fadb1
   VLLM_PRECOMPILED_WHEEL_COMMIT=8916796bc50926fd61e606718b194a71e2e31a24
 EOF
 }
@@ -34,6 +35,7 @@ STAMP=${STAMP:-$(date +%Y%m%dT%H%MJST)}
 GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.85}
 MAX_MODEL_LEN=${MAX_MODEL_LEN:-131072}
 MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS:-4096}
+VLLM_SOURCE_COMMIT=${VLLM_SOURCE_COMMIT:-3658ba7123c3eb2211f18a882af1b993112fadb1}
 VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-8916796bc50926fd61e606718b194a71e2e31a24}
 
 MODEL=google/gemma-3-27b-it
@@ -57,6 +59,7 @@ export IMAGE=${IMAGE}
 export GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION}
 export MAX_MODEL_LEN=${MAX_MODEL_LEN}
 export MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS}
+export VLLM_SOURCE_COMMIT=${VLLM_SOURCE_COMMIT}
 export VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT}
 
 mkdir -p "\${RESULTS_DIR}"
@@ -150,7 +153,7 @@ python scripts/record_openai_serving_row.py \\
   --backend vllm --phase before --run-id ${FP8_RUN} \\
   --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
   --results-dir "\${RESULTS_DIR}" \\
-  --runtime-ref "jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24 + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay" \\
+  --runtime-ref "jethac/vllm@${VLLM_SOURCE_COMMIT} + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay; precompiled wheel base ${VLLM_PRECOMPILED_WHEEL_COMMIT}" \\
   --container-image "\${IMAGE}" \\
   --kv-cache-dtype fp8 --attention-backend flashinfer \\
   --cuda-graph-mode default \\
@@ -227,7 +230,7 @@ python scripts/record_openai_serving_row.py \\
   --backend vllm --phase after --run-id ${NVFP4_RUN} \\
   --url http://127.0.0.1:8000 --model ${SERVED_MODEL} \\
   --results-dir "\${RESULTS_DIR}" \\
-  --runtime-ref "jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24 + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay" \\
+  --runtime-ref "jethac/vllm@${VLLM_SOURCE_COMMIT} + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay; precompiled wheel base ${VLLM_PRECOMPILED_WHEEL_COMMIT}" \\
   --container-image "\${IMAGE}" \\
   --kv-cache-dtype nvfp4 --attention-backend flashinfer \\
   --cuda-graph-mode default \\

@@ -10,8 +10,9 @@ container was started and no GPU work was consumed.
 - model: `google/gemma-3-27b-it`
 - served model name: `gemma3-27b-it`
 - runtime image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
-- vLLM overlay: `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`
+- vLLM overlay: `jethac/vllm@3658ba7123c3eb2211f18a882af1b993112fadb1`
 - FlashInfer overlay: `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`
+- precompiled wheel base: `8916796bc50926fd61e606718b194a71e2e31a24`
 - max model length: `131072`
 - GPU memory utilization: `0.85`
 - attention backend: `flashinfer`
@@ -104,12 +105,29 @@ The generated packet is committed at
 intentionally checked out at the Gemma 3 overlay commits named above, so `git submodule
 status` shows leading `+` markers for those two submodules.
 
+The vLLM overlay commit includes the env-gated runtime geometry hook. The remote run
+checkout was updated and verified:
+
+```text
++3658ba7123c3eb2211f18a882af1b993112fadb1 third_party/vllm (v0.13.0rc1-5248-g3658ba712)
+298:                "SPARK_GEMMA_KV_GEOMETRY layer=%s heads=%s kv_heads=%s "
+593:            "SPARK_GEMMA_KV_SPEC layer=%s spec=%s block_size=%s "
+```
+
 HF access probe:
 `results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json`. The model metadata is
 visible and reports manual gating, but a config/tokenizer-only snapshot fails with
 `GatedRepoError` because no `HF_TOKEN` is present in the container environment. Disk
 headroom is sufficient. The fp8 comparator row should not be started until HF auth/access
 is available.
+
+Remote auth recheck:
+`results/vllm_gemma3_27b_rung1_auth_recheck_20260608T181438JST.md`. SSH key auth works,
+the host is reachable and idle, no Docker containers were running, but `HF_TOKEN` is still
+absent, no root or `jethac` Hugging Face token file exists, and `google/gemma-3-27b-it` is
+still not cached under `/home/jethac/.cache/huggingface/hub`. The live packet is now
+geometry-ready, but starting it before HF auth/cache clears would only test Hugging Face
+authentication failure.
 
 ## Expected Log Lines
 

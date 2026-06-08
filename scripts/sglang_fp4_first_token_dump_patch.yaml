@@ -1,0 +1,61 @@
+patches:
+  - target: sglang.srt.model_executor.model_runner.ModelRunner.sample
+    preamble: |
+      import os
+    edits:
+      - match: |
+          self._preprocess_logits(logits_output, forward_batch.sampling_info)
+        replacement: |
+          if (
+              os.getenv("SGLANG_FP4_FIRST_TOKEN_DUMP", "0") == "1"
+              and logits_output.next_token_logits is not None
+          ):
+              rid0 = None
+              if getattr(forward_batch, "rids", None):
+                  rid0 = str(forward_batch.rids[0])
+              rid_filter = os.getenv("SGLANG_FP4_FIRST_TOKEN_DUMP_RID")
+              if rid_filter in (None, "", rid0):
+                  dump_kwargs = {
+                      "phase": "before_preprocess",
+                      "forward_mode": str(forward_batch.forward_mode),
+                      "rid": rid0 or "none",
+                      "forward_pass_id": int(getattr(self, "forward_pass_id", -1)),
+                  }
+                  dumper.dump(
+                      "fp4_first_token__next_token_logits",
+                      logits_output.next_token_logits.detach(),
+                      **dump_kwargs,
+                  )
+                  dumper.dump(
+                      "fp4_first_token__input_ids",
+                      forward_batch.input_ids.detach(),
+                      **dump_kwargs,
+                  )
+                  dumper.dump(
+                      "fp4_first_token__positions",
+                      forward_batch.positions.detach(),
+                      **dump_kwargs,
+                  )
+                  dumper.dump(
+                      "fp4_first_token__seq_lens",
+                      forward_batch.seq_lens.detach(),
+                      **dump_kwargs,
+                  )
+          self._preprocess_logits(logits_output, forward_batch.sampling_info)
+          if (
+              os.getenv("SGLANG_FP4_FIRST_TOKEN_DUMP", "0") == "1"
+              and logits_output.next_token_logits is not None
+          ):
+              rid0 = None
+              if getattr(forward_batch, "rids", None):
+                  rid0 = str(forward_batch.rids[0])
+              rid_filter = os.getenv("SGLANG_FP4_FIRST_TOKEN_DUMP_RID")
+              if rid_filter in (None, "", rid0):
+                  dumper.dump(
+                      "fp4_first_token__next_token_logits",
+                      logits_output.next_token_logits.detach(),
+                      phase="after_preprocess",
+                      forward_mode=str(forward_batch.forward_mode),
+                      rid=rid0 or "none",
+                      forward_pass_id=int(getattr(self, "forward_pass_id", -1)),
+                  )

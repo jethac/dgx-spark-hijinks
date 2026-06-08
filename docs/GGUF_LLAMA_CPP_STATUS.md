@@ -1,7 +1,8 @@
 # GGUF llama.cpp Status
 
 Status: practical serving works; paper-comparable lm-eval accuracy is blocked; native
-NVFP4 build/emission is proven but runtime dispatch/correctness is untested.
+NVFP4 build/emission and first runtime dispatch are proven, but correctness and matched
+speed are untested.
 
 Tracked by:
 
@@ -172,9 +173,24 @@ Build matrix result on the GB10 CUDA 13.0 host:
 | `120f` | configure failed | none | CMake rejected the arch value before CUDA compilation |
 
 Interpretation: llama.cpp can build and emit native block-scale FP4 PTX for `sm_121a`
-under this toolkit. This is not runtime proof. No NVFP4 GGUF has yet been served through
-this build, and no output/correctness or PP/TG speed row should cite this artifact as more
-than build/emission evidence.
+under this toolkit. This arch artifact alone is not runtime proof, and no
+output/correctness or PP/TG speed row should cite it as more than build/emission evidence.
+
+## 2026-06-08 Native FP4 Runtime Gate
+
+Artifact: `results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md`.
+
+This advances the native FP4 lane from build/emission to first runtime dispatch evidence:
+the pinned `jethac/llama.cpp@19bba67c1` build loaded a converted Qwen3.6 NVFP4 GGUF on
+GB10, returned a small reasoning-off chat smoke, and Nsight Systems reported
+`GGML_TYPE_NVFP4` matmul activity. Correctness versus BF16/Q8 and matched speed remain
+unproven.
+
+Next packet: `tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md`.
+
+Run the packet only on the Linux GB10 host with the prior runtime-gate artifacts and a
+same-lineage BF16 or Q8_0 reference GGUF. This workspace did not have the required
+`/home/jethac/...` build/model paths available for a live correctness probe.
 
 ## Practical Serving Note
 

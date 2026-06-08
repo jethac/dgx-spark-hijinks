@@ -135,6 +135,16 @@ passing — not a dev step.
   `/generate` from the same prompt IDs diverges at token 0 (`**` -> `ark`). The next bug
   surface is FP4 endpoint/request metadata or pre-sampling numerics, not chat-template
   tokenization.
+- **Endpoint metadata localization packet is DONE**
+  (`results/sglang_qwen_fp4kv_endpoint_metadata_20260608T1819JST_summary.md`):
+  an offline pass over the prompt-reconciliation artifact records the same 56-token prompt
+  hash for FP4 OpenAI and native paths, the OpenAI first token `**`, and the native first
+  token `ark` (`838`). Existing backend traces cover decode and `extend_merge_paged`, but
+  they are not request-tagged, so they cannot separate OpenAI request state from native
+  `/generate` request state. The smallest next hook is now defined:
+  `scripts/sglang_fp4_first_token_dump_patch.yaml` patches only `ModelRunner.sample()` to
+  dump `next_token_logits` before/after `_preprocess_logits()` plus `ForwardBatch`
+  `input_ids`, `positions`, `seq_lens`, and `rids`.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -273,8 +283,9 @@ the decoder/KV path; it is the destination, not the stepping stone.
 
 ## First concrete step (no image builds)
 The matched `d7d931f` row, OpenAI logprob probe, native `/generate` divergence-window
-probe, and OpenAI-vs-native prompt reconciliation are done. Do not repeat them as-is.
-Prompt IDs match; prompt serialization is retired as the cause. The next step is to diff
-the FP4 OpenAI Chat Completions and native `/generate` request metadata and prefill/decode
-state, then capture pre-sampling logits or hidden-state deltas for the first generated
-token. No serving image is required until quality passes.
+probe, OpenAI-vs-native prompt reconciliation, and offline endpoint metadata localization
+are done. Do not repeat them as-is. Prompt IDs match; prompt serialization is retired as
+the cause, and untagged backend traces are insufficient for the endpoint split. The next
+step is a live one-token FP4 run with `scripts/sglang_fp4_first_token_dump_patch.yaml`
+enabled, then compare OpenAI versus native `next_token_logits` before and after
+`ModelRunner._preprocess_logits()`. No serving image is required until quality passes.

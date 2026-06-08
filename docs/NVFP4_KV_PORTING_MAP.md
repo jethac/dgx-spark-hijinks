@@ -14,7 +14,7 @@ The KV lane is higher priority because it targets Spark's bottleneck directly: u
 | lane | fork branch | worktree | base/current commit | reference |
 |---|---|---|---|---|
 | FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | current `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`; based on `a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
-| vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | current `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`; based on `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
+| vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | current `jethac/vllm@3658ba7123c3eb2211f18a882af1b993112fadb1`; based on `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
 | SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121-serving` | `third_party/sglang` | current `jethac/sglang@d7d931f53`; based on `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
 
 Reference clones are local scratch only:
@@ -95,13 +95,15 @@ Gemma 4 26B-shaped verification:
 
 Current `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` patch:
 
-- commit: `8916796bc50926fd61e606718b194a71e2e31a24`
+- commit: `3658ba7123c3eb2211f18a882af1b993112fadb1`
 - branch URL: https://github.com/jethac/vllm/tree/spark/hijinks-007-nvfp4-kv-sm121
 - routes SM12x `--kv-cache-dtype nvfp4` through FlashInfer FA2 instead of `trtllm-gen`
 - keeps SM100 NVFP4 on the existing TRTLLM path
 - uses model dtype query/output on the SM12x FA2 path instead of the TRTLLM FP8-query/FP8-output workaround
 - enables `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1` before FlashInfer JIT planning on the vLLM SM12x NVFP4 FA2 path
 - adds a one-time runtime log noting FlashInfer FA2 NVFP4 KV plus vLLM V-scale-factor deswizzle
+- adds env-gated per-layer KV geometry/spec logging for Gemma rung evidence under
+  `VLLM_SPARK_KV_GEOMETRY_LOG=1`
 - explicitly rejects DCP for this first SM12x NVFP4 FA2 path
 - adds wrapper-routing and deswizzle-flag regression tests
 - updates vLLM's attention backend design doc to mention the SM12x FA2 NVFP4 KV route

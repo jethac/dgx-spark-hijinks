@@ -604,6 +604,33 @@
     Hugging Face authentication/access, not disk headroom, target image availability, or
     source-checkout setup.
 
+- Added the SGLang FP4 endpoint metadata localization packet.
+  - script: `scripts/sglang_fp4_endpoint_metadata_probe.py`
+  - first-token dump hook: `scripts/sglang_fp4_first_token_dump_patch.yaml`
+  - artifact: `results/sglang_qwen_fp4kv_endpoint_metadata_20260608T1819JST_summary.md`
+  - result: the FP4 OpenAI and native paths still share the same 56-token prompt hash, but
+    OpenAI starts with `**` while native `/generate` starts with `ark` token `838`; current
+    backend traces cover decode and `extend_merge_paged` but are not request-tagged.
+  - interpretation: the next SGLang proof is a live one-token request-tagged dump of
+    `next_token_logits` before and after `ModelRunner._preprocess_logits()`, not another
+    capacity row and not Gemma.
+
+- Closed the vLLM Gemma 3 Rung 1 geometry-hook prep gap.
+  - vLLM fork commit: `jethac/vllm@3658ba7123c3eb2211f18a882af1b993112fadb1`
+  - artifact: `results/vllm_gemma3_27b_rung1_auth_recheck_20260608T181438JST.md`
+  - result: the remote run checkout now contains `SPARK_GEMMA_KV_GEOMETRY` and
+    `SPARK_GEMMA_KV_SPEC` logging in the vLLM overlay; the host remains reachable and idle.
+  - blocker: `google/gemma-3-27b-it` still has no token/cache on the host, so starting the
+    fp8 comparator would only test gated Hugging Face access.
+
+- Added the llama.cpp NVFP4 correctness/speed run packet.
+  - packet: `tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md`
+  - doc update: `docs/GGUF_LLAMA_CPP_STATUS.md`
+  - result: the previous runtime gate is now treated as first NVFP4 GGUF dispatch proof,
+    while correctness versus BF16/Q8 and matched PP/TG speed remain explicitly unproven.
+  - next gate: run the packet on the Linux GB10 host with a same-lineage BF16 or Q8_0
+    Qwen3.6 reference GGUF.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
