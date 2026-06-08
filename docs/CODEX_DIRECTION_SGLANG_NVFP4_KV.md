@@ -28,10 +28,35 @@ without reciprocating = off-by-`s_enc²` → NaN/garbage logits.
 The current SGLang patch (`jethac/sglang@67c7967` → `eefe8aded`) **routes SM12x through
 `nvfp4_kv_quantize`** (the multiply convention). The eager-mode corruption is exactly
 the symptom you'd expect if its GB10-runnable FlashInfer FA2 consumer expects the
-**divide** convention. **First hypothesis to test: is SGLang's quantize convention
-matched to what the FlashInfer FA2 NVFP4-KV consumer actually consumes?** A direct test
-is swapping SM12x to `fp4_quantize` + inverted global scale and checking whether raw
-`2+2` returns `4`. If it does, the rest is mostly bookkeeping.
+**divide** convention.
+
+**CONFIRMED on hardware (2026-06-08).** The convention bridge
+(`results/sglang_nvfp4_kv_convention_probe_20260608.json`) ran all four quantizer/reader
+pairings on GB10. The FA2 reader is a **decode-convention reader**; matched pairs are
+numerically correct (cosine 0.995 vs source, 0.99999 vs dequant), and the naive
+`nvfp4_kv_quantize` + **encode** scale → decode reader is the literal **cosine-0.0**
+off-by-`s_enc²` failure:
+
+| quantizer | reader | attn cosine vs source | verdict |
+|---|---|---:|---|
+| `fp4_quantize` encode | decode | 0.995 | ✓ valid pair |
+| `nvfp4_kv_quantize` **encode** | decode | **0.000** | ✗ the crossed garbage case |
+| `nvfp4_kv_quantize` decode | decode | 0.995 | ✓ valid pair |
+| `nvfp4_kv_quantize` decode | encode | 0.248 | ✗ mismatched |
+
+So the kernel math is **exonerated** and the valid pairings are known: either
+`fp4_quantize` + encode scale, or `nvfp4_kv_quantize` + **decode** (inverted) scale.
+SGLang's remaining serving corruption means the **full path produces an unmatched pair**
+— the bug is now in calibration / V-scale / backend integration (Objective A), not in
+the convention at the raw-math level.
+
+**vLLM is now your reference implementation.** vLLM consumes the *same* FlashInfer FA2
+reader and, as of 2026-06-08, serves it **cleanly** with normal content and 1.751× fp8
+capacity (`results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`, server log:
+`Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x with vLLM V-scale-factor
+deswizzle enabled`). vLLM has therefore already produced a correct end-to-end matched
+pair on GB10. Diff SGLang's quantize convention + V-scale layout + calibration against
+what vLLM's clean row does; the divergence is the bug.
 
 ## Methodology / sequencing constraint
 Do NOT build a container image in the dev loop. SGLang already iterates the right cheap
@@ -59,6 +84,10 @@ passing — not a dev step.
 - **Negative results that narrow the search**: scale-rank (4D vs 3D) is NOT the bug
   (layout probe dequant cosine 0.9999957); the FlashInfer FA2 NVFP4-KV kernel is correct
   standalone (e152cf4d). Do not re-investigate either — they're cleared.
+- **Convention bridge is DONE** (`sglang_nvfp4_kv_convention_probe_20260608.json`, see
+  table above): valid pairings identified, kernel math exonerated, bug localized to
+  calibration / V-scale / backend integration. Do not re-run the raw-math bridge; the
+  next work is finding where the *serving* path produces an unmatched pair.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -76,20 +105,24 @@ before starting.
    Confirm the decode path is numerically correct, not merely compiling.
 
 ## Objectives, in order
-**A. Root-cause and fix the eager-mode quality corruption (keystone).**
-Build the numerical bridge: feed identical KV through (i) SGLang's
-quantize→memory-pool→FlashInfer-wrapper path and (ii) the proven standalone FlashInfer
-reference, and diff per layer / per op to localize divergence. Test suspects in order:
-   1. **Global-scale convention** — encode-multiply (`nvfp4_kv_quantize`) vs decode-divide
-      (`fp4_quantize` + inverted scale). Confirm the convention matches the consumer; try
-      the fallback path and check raw `2+2`.
+**A. Fix the eager-mode quality corruption (keystone).**
+The raw-math convention bridge is done (kernel exonerated; valid pairings known). The
+bug is in the **serving path producing an unmatched pair**. Trace where SGLang's
+end-to-end path diverges from a valid pairing, suspects in order:
+   1. **Global-scale convention in the serving path** — the bridge proved
+      `nvfp4_kv_quantize` + **encode** scale → decode reader is cosine-0 garbage. Confirm
+      which scale SGLang actually feeds at serving time; switch to a valid pairing
+      (`fp4_quantize` + encode, or `nvfp4_kv_quantize` + **decode/inverted**) and check
+      raw `2+2`. **Cross-check against vLLM's clean row, which already gets this right.**
    2. **V-scale layout** — SGLang default is **symmetric-linear** V scale-factors;
       vLLM uses **B2 swizzle + in-kernel deswizzle**. SGLang must consume the FlashInfer
-      kernel built **without** `FLASHINFER_PAGED_V_SF_DESWIZZLE`. A layout/macro mismatch
-      here corrupts V exactly like a convention mismatch.
+      kernel built **without** `FLASHINFER_PAGED_V_SF_DESWIZZLE` (vLLM's clean row builds
+      it **with** the macro — so do not copy vLLM's flag, copy its *matched-ness*). A
+      layout/macro mismatch corrupts V exactly like a convention mismatch.
    3. **Per-layer calibration application** — the 28-layer / 4096-token calibration must
-      apply the same global scales at quantize and at in-kernel dequant.
-   4. Only then the decode kernel itself (Objective C overlap).
+      apply the same global scales at quantize and at in-kernel dequant. This is the most
+      likely remaining culprit now that raw convention is understood.
+   4. Only then the decode kernel itself (Objective B/C overlap).
 
 **B. Confirm the FlashInfer FP4 decode kernel is numerically correct.**
 The decode compile fixes (`vec_dtypes.cuh`, group6 dtype, packed head-dim) must be
@@ -158,9 +191,11 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-Build the SGLang-vs-standalone-FlashInfer **numerical bridge** on Qwen2.5 1.5B by
-extending `scripts/sglang_nvfp4_kv_layout_probe.py`, and run the single decisive test:
-swap SM12x quantization to `fp4_quantize` + inverted global scale and check whether raw
-`2+2` returns `4` in eager mode. That one result either confirms the convention
-mismatch (and points straight at the fix) or clears it and sends the search to V-scale
-layout / calibration. Everything downstream depends on it. No serving image required.
+The convention bridge is already done — start one level down. In an eager (no-graph)
+overlay run, instrument the SGLang serving path to log which global-scale convention and
+V-scale layout it actually feeds the FlashInfer FA2 reader per layer, and compare that to
+(a) the valid pairings from the bridge table and (b) what vLLM's clean Qwen row feeds.
+Find the first layer/op where SGLang produces an **unmatched** pair — that is the bug.
+Then switch SGLang to a valid pairing and confirm raw `2+2` returns `4`. Most likely
+locus given current evidence: the per-layer calibration applying a scale in the wrong
+convention. No serving image required.

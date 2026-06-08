@@ -37,6 +37,17 @@ Only bake a new image once Gemma 4 serves correctly with the FA2 NVFP4-KV path p
 - FlashInfer FA2 NVFP4-KV kernel correctness: `jethac/flashinfer@e152cf4d`
   (`spark/hijinks-007-fa2-nvfp4-kv-sm121`), cosine ≥ 0.99999946 standalone, including
   Gemma sliding/local `D=256`.
+- **vLLM NVFP4-KV now SERVES on Qwen (2026-06-08) — founding goal reached for the
+  standard-attention path.** Image
+  `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv` (vLLM fork +
+  FlashInfer `e152cf4d`) served Qwen3.6 with a matched fp8-vs-NVFP4 row
+  (`results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`). Server log proves
+  the path: `Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x with vLLM
+  V-scale-factor deswizzle enabled`. **1.751× fp8 KV pool/concurrency** (11,146,226 vs
+  6,364,935 tokens at 262k ctx, 0.85 mem), decode parity (~43 tok/s), **normal content**.
+  Done — do not redo. Caveats: derived proof image (not the overlay loop), still MARLIN
+  weight-only FP4 (not native FP4 MoE). **The only remaining vLLM NVFP4-KV target is
+  Gemma.**
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (esp. "Smallest GB10 Proof Sequence") and
 `docs/GEMMA4_ON_DGX_SPARK.md` before starting.
@@ -83,12 +94,16 @@ hybrid-local/global KV plumbing *without* the `D=512` blocker. Use one as the fi
 end-to-end NVFP4-KV-on-Gemma proof; it de-risks the SWA path independently.
 
 **D. Prove NVFP4-KV-on-Gemma in a running server (overlay, no image build).**
-Using source overlay on the proven image, marry the re-derived `jethac/vllm@8916796`
-routing with `jethac/flashinfer@e152cf4d` and start Gemma with `--kv-cache-dtype nvfp4`.
-The **server log must prove FA2 NVFP4 KV was selected** — not fp8/bf16 fallback, not
-trtllm-gen. Then record a matched fp8-vs-NVFP4 row (same model/prompts/mem-fraction/
-graph-mode): KV pool tokens, max concurrency, memory telemetry, deterministic output,
-quality (PPL or retrieval sanity), TTFT, warmed decode tok/s.
+The Qwen equivalent is DONE (see proven list) and is your template: the
+`...-flashinfer-e152cf4d-nvfp4kv` row hit exactly this gate on standard attention. For
+Gemma, marry the re-derived `jethac/vllm@8916796` routing with
+`jethac/flashinfer@e152cf4d` and start Gemma with `--kv-cache-dtype nvfp4`. The **server
+log must prove FA2 NVFP4 KV was selected** — not fp8/bf16 fallback, not trtllm-gen. Then
+record a matched fp8-vs-NVFP4 row (same model/prompts/mem-fraction/graph-mode): KV pool
+tokens, max concurrency, memory telemetry, deterministic output, quality (PPL or
+retrieval sanity), TTFT, warmed decode tok/s. The only delta from the working Qwen row
+is Gemma's heterogeneous attention + the `D=512` global fix (Objectives A–C) — once those
+clear, D should fall out the same way Qwen did.
 
 **E. Only now: bake the deliverable image.** Once Objective D's row passes its gates,
 build the clean Gemma NVFP4-KV image as the reproducible artifact + CI handoff. The
