@@ -149,7 +149,8 @@
       "claim_groups": [
         {
           "accepted_matches": [
-            "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json"
+            "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json",
+            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json"
           ],
           "ignored_matches": [
             "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_row_manifest.json",
@@ -164,7 +165,8 @@
         },
         {
           "accepted_matches": [
-            "results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json"
+            "results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json",
+            "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json"
           ],
           "ignored_matches": [
             "results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_openai_benchmark.json",
@@ -179,7 +181,9 @@
       ],
       "claim_matches": [
         "results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json",
-        "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json"
+        "results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json",
+        "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json",
+        "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json"
       ],
       "claim_ready": true,
       "forbidden_claim_fragments": [],

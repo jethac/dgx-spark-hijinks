@@ -157,7 +157,51 @@ The server then exited before health:
 ModuleNotFoundError: No module named 'compressed_tensors.compressors.pack_quantized'
 ```
 
-Interpretation: the matched fork row is blocked on dependency/API drift between the newer `jethac/vllm` branch and AEON's older base environment. This is not an `sm_121` kernel failure and not a Qwen model-load failure. The next attempt should update only the required `compressed-tensors` dependency in the derived image, then rerun the same no-think Qwen row.
+Interpretation: this stop point was dependency/API drift between the newer `jethac/vllm` branch and AEON's older base environment. It was not an `sm_121` kernel failure and not a Qwen model-load failure. The follow-up row below clears this blocker.
+
+## 2026-06-08 Matched Fork Passing Row
+
+Artifact: `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md`.
+
+The derived fork row passes after three narrow image layers over the first `jethac/vllm` build:
+
+- `compressed-tensors==0.17.0 --no-deps`, matching the fork's requirements.
+- `humming-kernels[cu13]==0.1.4 --no-deps` plus `pyelftools`.
+- AEON's original `_vllm_fa2_C.abi3.so`, restored after the precompiled fork FA2 extension hit a PyTorch ABI mismatch.
+
+Target:
+
+- image: `jethac-vllm-aeon-q36:6804e1b81-ct017-humming-aeonfa2`
+- base: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2`
+- fork: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+- Qwen chat setting: `chat_template_kwargs={"enable_thinking": false}`
+
+Backend evidence from `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_server.log`:
+
+- `vllm 0.1.dev1+g6804e1b81`
+- `Qwen3_5MoeForConditionalGeneration`
+- `DFlashDraftModel`
+- `FlashInferCutlassNvFp4LinearKernel`
+- `'MARLIN' NvFp4 MoE backend`
+- FlashAttention 2
+- CUDA graph capture
+- `GPU KV cache size: 1,251,446 tokens`
+- maximum concurrency `4.77x` at `262,144` tokens/request
+
+Compact benchmark:
+
+| case | prompt tokens | generated tokens | TTFT seconds | decode tok/s |
+|---|---:|---:|---:|---:|
+| `short_decode` | 27 | 64 | 0.124 | 47.22 |
+| `medium_decode` | 39 | 192 | 0.093 | 58.88 |
+| `long_prefill` | 2271 | 64 | 0.448 | 61.62 |
+
+Caveats:
+
+- This proves a `jethac/vllm` fork can serve the AEON Qwen3.6 NVFP4+DFlash row on GB10, but it is still an AEON-derived container recipe.
+- The passing image depends on AEON's FA2 binary, so it is not a clean fork wheel/container proof.
+- The server still warns that the selected FP4 path uses Marlin weight-only FP4 rather than native FP4 compute.
+- The host-side `.so` audit could not import container-local packages, and the build-target audit found no accepted native `sm_121` or `sm_121a` target strings. The next proof needs an in-container binary/JIT audit.
 
 ## 2026-06-08 Gemma 26B Result
 

@@ -1,0 +1,341 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 96 %"
+    }
+  },
+  "finished_utc": "2026-06-08T00:18:14Z",
+  "match": "vllm",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    626181,
+    626239,
+    626599,
+    628438
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "bash",
+        "scripts/run_aeon_vllm_reproduction.sh",
+        "qwen36-dflash",
+        "jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST"
+      ],
+      "cwd": {
+        "path": "/home/jethac/dgx-spark-hijinks-live-jethac_qwen36_aeonfa2_row_20260608T0908JST"
+      },
+      "environment": {
+        "values": {
+          "CUDA_SO_PACKAGE": "vllm,flashinfer"
+        }
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 626181,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "bash",
+        "PPid": "626155",
+        "Pid": "626181",
+        "State": "S (sleeping)",
+        "Tgid": "626181",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "2836 kB",
+        "VmRSS": "2744 kB",
+        "VmSize": "20848 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "/usr/bin/python3",
+        "/usr/local/bin/vllm",
+        "serve",
+        "/models/target",
+        "--served-model-name",
+        "qwen36-35b-heretic",
+        "qwen36-fast",
+        "qwen36-deep",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--tensor-parallel-size",
+        "1",
+        "--dtype",
+        "auto",
+        "--quantization",
+        "compressed-tensors",
+        "--max-model-len",
+        "262144",
+        "--max-num-seqs",
+        "128",
+        "--max-num-batched-tokens",
+        "65536",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--enable-chunked-prefill",
+        "--enable-prefix-caching",
+        "--load-format",
+        "safetensors",
+        "--trust-remote-code",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--speculative-config",
+        "{\"method\":\"dflash\",\"model\":\"/models/drafter\",\"num_speculative_tokens\":15}",
+        "--attention-backend",
+        "flash_attn"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 626239,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "vllm",
+        "PPid": "626214",
+        "Pid": "626239",
+        "State": "S (sleeping)",
+        "Tgid": "626239",
+        "Threads": "103",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "4038800 kB",
+        "VmRSS": "3744688 kB",
+        "VmSize": "36324600 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "VLLM::EngineCore"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 626599,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "VLLM::EngineCor",
+        "PPid": "626239",
+        "Pid": "626599",
+        "State": "S (sleeping)",
+        "Tgid": "626599",
+        "Threads": "148",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "24028240 kB",
+        "VmRSS": "3198352 kB",
+        "VmSize": "1314966040 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "python3",
+        "/home/jethac/dgx-spark-hijinks-live-jethac_qwen36_aeonfa2_row_20260608T0908JST/scripts/record_openai_serving_row.py",
+        "--backend",
+        "vllm",
+        "--phase",
+        "exploratory",
+        "--run-id",
+        "jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "qwen36-fast",
+        "--results-dir",
+        "results",
+        "--runtime-ref",
+        "ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3 + compressed-tensors==0.17.0 + humming-kernels==0.1.4 + AEON FA2 binary",
+        "--container-image",
+        "jethac-vllm-aeon-q36:6804e1b81-ct017-humming-aeonfa2",
+        "--quantization",
+        "compressed-tensors-nvfp4",
+        "--kv-cache-dtype",
+        "auto",
+        "--attention-backend",
+        "flash_attn",
+        "--cuda-graph-mode",
+        "enabled",
+        "--chat-smoke-prompt",
+        "Reply with exactly this text: spark-ok",
+        "--chat-smoke-max-tokens",
+        "64",
+        "--benchmark-prompt-suffix",
+        "--chat-template-kwargs-json",
+        "{\"enable_thinking\": false}",
+        "--cuda-so-package",
+        "vllm",
+        "--cuda-so-package",
+        "flashinfer",
+        "--server-log",
+        "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_server.log",
+        "--process-match",
+        "vllm"
+      ],
+      "cwd": {
+        "path": "/home/jethac/dgx-spark-hijinks-live-jethac_qwen36_aeonfa2_row_20260608T0908JST"
+      },
+      "environment": {
+        "values": {
+          "CUDA_SO_PACKAGE": "vllm,flashinfer"
+        }
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 628438,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "python3",
+        "PPid": "626181",
+        "Pid": "628438",
+        "State": "S (sleeping)",
+        "Tgid": "628438",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "13572 kB",
+        "VmRSS": "13572 kB",
+        "VmSize": "35360 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780877894,
+          "id": "qwen36-35b-heretic",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780877894,
+              "group": null,
+              "id": "modelperm-b2f826b12f0a58b1",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        },
+        {
+          "created": 1780877894,
+          "id": "qwen36-fast",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780877894,
+              "group": null,
+              "id": "modelperm-8c1c960da6ee8d78",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        },
+        {
+          "created": 1780877894,
+          "id": "qwen36-deep",
+          "max_model_len": 262144,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780877894,
+              "group": null,
+              "id": "modelperm-92616066c4b47b62",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "/models/target"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-08T00:18:14Z",
+  "url": "http://127.0.0.1:8000"
+}

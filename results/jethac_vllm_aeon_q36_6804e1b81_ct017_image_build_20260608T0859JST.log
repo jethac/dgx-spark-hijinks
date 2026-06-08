@@ -1,0 +1,43 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.ct017
+#1 transferring dockerfile: 940B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/jethac-vllm-aeon-q36:6804e1b81
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/3] FROM docker.io/library/jethac-vllm-aeon-q36:6804e1b81
+#4 DONE 0.0s
+
+#5 [2/3] RUN python3 -m pip install --no-cache-dir --no-deps 'compressed-tensors==0.17.0'
+#5 0.388 Collecting compressed-tensors==0.17.0
+#5 0.418   Downloading compressed_tensors-0.17.0-py3-none-any.whl.metadata (4.7 kB)
+#5 0.423 Downloading compressed_tensors-0.17.0-py3-none-any.whl (211 kB)
+#5 0.439    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 211.7/211.7 kB 14.0 MB/s eta 0:00:00
+#5 0.441 Installing collected packages: compressed-tensors
+#5 0.441   Attempting uninstall: compressed-tensors
+#5 0.461     Found existing installation: compressed-tensors 0.14.0.1
+#5 0.467     Uninstalling compressed-tensors-0.14.0.1:
+#5 0.517       Successfully uninstalled compressed-tensors-0.14.0.1
+#5 0.563 Successfully installed compressed-tensors-0.17.0
+#5 0.563 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#5 DONE 0.6s
+
+#6 [3/3] RUN python3 - <<'PY'
+#6 2.678 vllm 0.1.dev1+g6804e1b81 /opt/jethac-vllm/vllm/__init__.py
+#6 2.678 torch 2.12.0.dev20260408+cu130
+#6 2.678 compressed-tensors 0.17.0 /usr/local/lib/python3.12/dist-packages/compressed_tensors/__init__.py
+#6 2.678 pack_quantized ModuleSpec(name='compressed_tensors.compressors.pack_quantized', loader=<_frozen_importlib_external.SourceFileLoader object at 0xfe7b5070bc80>, origin='/usr/local/lib/python3.12/dist-packages/compressed_tensors/compressors/pack_quantized/__init__.py', submodule_search_locations=['/usr/local/lib/python3.12/dist-packages/compressed_tensors/compressors/pack_quantized'])
+#6 2.678 pack_to_int32 <function pack_to_int32 at 0xfe7b50485bc0>
+#6 DONE 3.3s
+
+#7 exporting to image
+#7 exporting layers 0.0s done
+#7 writing image sha256:409ca91e653f03f3b24fe3fcff6eee66aa9d188cfe7678867192633abee21564 done
+#7 naming to docker.io/library/jethac-vllm-aeon-q36:6804e1b81-ct017 done
+#7 DONE 0.0s

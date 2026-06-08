@@ -1,0 +1,45 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.ct017-humming-pyelftools
+#1 transferring dockerfile: 904B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/jethac-vllm-aeon-q36:6804e1b81-ct017
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/3] FROM docker.io/library/jethac-vllm-aeon-q36:6804e1b81-ct017
+#4 CACHED
+
+#5 [2/3] RUN python3 -m pip install --no-cache-dir --no-deps pyelftools 'humming-kernels[cu13]==0.1.4'
+#5 0.347 Collecting pyelftools
+#5 0.379   Downloading pyelftools-0.33-py3-none-any.whl.metadata (1.0 kB)
+#5 0.394 Collecting humming-kernels==0.1.4 (from humming-kernels[cu13]==0.1.4)
+#5 0.418   Downloading humming_kernels-0.1.4-py3-none-any.whl.metadata (4.1 kB)
+#5 0.423 Downloading humming_kernels-0.1.4-py3-none-any.whl (161 kB)
+#5 0.437    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 161.3/161.3 kB 11.8 MB/s eta 0:00:00
+#5 0.441 Downloading pyelftools-0.33-py3-none-any.whl (201 kB)
+#5 0.449    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 201.2/201.2 kB 25.8 MB/s eta 0:00:00
+#5 0.452 Installing collected packages: pyelftools, humming-kernels
+#5 0.560 Successfully installed humming-kernels-0.1.4 pyelftools-0.33
+#5 0.560 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#5 DONE 0.6s
+
+#6 [3/3] RUN python3 - <<'PY'
+#6 2.659 W0608 00:02:56.927000 7 torch/utils/cpp_extension.py:140] No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+#6 2.679 vllm 0.1.dev1+g6804e1b81 /opt/jethac-vllm/vllm/__init__.py
+#6 2.679 torch 2.12.0.dev20260408+cu130
+#6 2.679 compressed-tensors 0.17.0
+#6 2.679 humming-kernels 0.1.4
+#6 2.679 pyelftools 0.33
+#6 2.679 DataType <class 'humming.dtypes.DataType'>
+#6 DONE 3.5s
+
+#7 exporting to image
+#7 exporting layers 0.0s done
+#7 writing image sha256:282538a76fb0e3d4d025b98da8eff5748099d0681865524f9e310436ff1be7f5 done
+#7 naming to docker.io/library/jethac-vllm-aeon-q36:6804e1b81-ct017-humming done
+#7 DONE 0.0s

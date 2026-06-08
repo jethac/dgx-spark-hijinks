@@ -39,7 +39,7 @@ python3 scripts/counterpart_evidence_audit.py \
   --output results/counterpart_evidence_audit_YYYYMMDD.json
 ```
 
-Current validation artifact: `results/counterpart_evidence_audit_20260608.json`. It intentionally reports all seven counterpart proof rows as missing, partial, or blocked; AEON source coverage is not the same thing as SGLang/llama.cpp serving evidence.
+Current validation artifact: `results/counterpart_evidence_audit_20260608.json`. It now accepts the AEON and derived `jethac/vllm` Qwen3.6+DFlash rows as claim evidence, while the SGLang and llama.cpp counterpart rows remain missing or partial. AEON source coverage is not the same thing as SGLang/llama.cpp serving evidence.
 
 The command contracts for those seven rows live in `tasks/counterpart_evidence_tasks.jsonl` and are validated by:
 
@@ -78,7 +78,7 @@ AEON's DFlash result is the main single-stream multiplier, but the port story is
 
 | runtime | current evidence | decision |
 |---|---|---|
-| vLLM | AEON Gemma DFlash and Qwen36 DFlash rows are locally reproduced; Qwen36 requires `chat_template_kwargs={"enable_thinking": false}` for normal OpenAI content output | run matched `jethac/vllm` fork row, then decide what belongs upstream |
+| vLLM | AEON Gemma DFlash, AEON Qwen36 DFlash, and derived `jethac/vllm` Qwen36 DFlash rows are locally reproduced; Qwen36 requires `chat_template_kwargs={"enable_thinking": false}` for normal OpenAI content output | replace AEON-binary dependencies with clean fork packaging and collect native-target evidence before deciding what belongs upstream |
 | SGLang | current `jethac/sglang@98ad46961` tree contains DFlash surfaces including `python/sglang/srt/arg_groups/speculative_hook.py`, `python/sglang/srt/models/dflash.py`, Qwen model `set_dflash_layers_to_capture` hooks, and metrics for accepted drafts | candidate, not proven; add a SGLang Qwen/Gemma DFlash smoke only after ordinary Qwen/Gemma serving is stable |
 | llama.cpp | no `third_party/llama.cpp` submodule exists because no llama.cpp code change has been needed yet; current proof is practical GGUF serving and native loglikelihood harness work | do not port DFlash literally; evaluate llama.cpp-native speculative/draft-model support only when a GGUF drafter/model pair exists |
 
@@ -87,12 +87,12 @@ AEON's DFlash result is the main single-stream multiplier, but the port story is
 1. SGLang Gemma NVFP4-weight serving with ordinary KV.
 2. SGLang graph-compatible FP4 KV after-row with quality checks; current overlay row proves capacity but not usable speed.
 3. SGLang DFlash or EAGLE row on a Qwen-class model if ordinary serving is stable.
-4. Matched `jethac/vllm` Qwen3.6 NVFP4+DFlash local serving row.
+4. Clean `jethac/vllm` packaging and in-container native-target audit for Qwen3.6 NVFP4+DFlash.
 5. llama.cpp larger Qwen3/Qwen3.6 GGUF rows.
 6. llama.cpp native NVFP4/MXFP4 GGUF tensor-core proof, separate from Q4_0/Q4_K serving.
 7. llama.cpp live native loglikelihood task proof before paper-comparable GGUF accuracy claims.
 
-These seven rows are now mechanically tracked by `scripts/counterpart_evidence_audit.py`.
+These rows are mechanically tracked by `scripts/counterpart_evidence_audit.py`; the vLLM row is claim-ready for serving evidence, while clean packaging and native-target proof remain tracked in the runtime docs.
 
 ## Explicit Non-Ports
 
@@ -107,7 +107,7 @@ Do not spend time porting these directly:
 
 ## Next Proof Order
 
-1. Run the matched `jethac/vllm` Qwen36 row with the same `chat_template_kwargs={"enable_thinking": false}` control used by the passing AEON row.
+1. Run an in-container binary/JIT target audit for the passing `jethac/vllm` Qwen36 image, then remove the AEON FA2 binary dependency if possible.
 2. Run `scripts/nvfp4_checkpoint_audit.py` on any NVFP4 Qwen/Gemma checkpoint before using it as speed evidence or conversion input.
 3. Run the Qwen speed lane for vLLM/SGLang/llama.cpp with `scripts/qwen_speed_lane.py`.
 4. Attempt SGLang Gemma NVFP4-weight serving with ordinary KV.

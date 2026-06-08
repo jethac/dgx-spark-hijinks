@@ -279,7 +279,7 @@
 - Added a counterpart evidence audit for AEON-derived non-vLLM work.
   - script: `scripts/counterpart_evidence_audit.py`
   - artifact: `results/counterpart_evidence_audit_20260608.json`
-  - result at creation time: all seven counterpart proof rows were still missing, partial, or blocked: SGLang Gemma NVFP4 ordinary-KV serving, SGLang clean FP4-KV after-row, SGLang DFlash/EAGLE Qwen, vLLM Qwen3.6 NVFP4+DFlash serving, larger Qwen llama.cpp GGUF, llama.cpp native FP4 GGUF, and live llama.cpp loglikelihood.
+  - result at creation time: all seven counterpart proof rows were still missing, partial, or blocked. The later `jethac/vllm` Qwen3.6+DFlash row moved the vLLM requirement to claim-ready for serving evidence; the SGLang and llama.cpp counterpart rows remain missing or partial.
   - interpretation: AEON source-port coverage is useful but does not satisfy the SGLang/llama.cpp counterpart acceptance tests.
 - Added live task contracts for the missing counterpart rows.
   - task file: `tasks/counterpart_evidence_tasks.jsonl`
@@ -315,6 +315,14 @@
   - stop-point artifact: `results/jethac_qwen36_dflash_depstop_20260608T0850JST_summary.md`
   - result: image imports `vllm 0.1.dev1+g6804e1b81`, but serving exits before health because the AEON base environment lacks `compressed_tensors.compressors.pack_quantized`.
   - interpretation: fork parity is now blocked on dependency/API drift, not image build, Qwen weights, or `sm_121` kernels.
+- Advanced the matched `jethac/vllm` Qwen3.6 row past the dependency stop point.
+  - passing image: `jethac-vllm-aeon-q36:6804e1b81-ct017-humming-aeonfa2`
+  - fork commit: `jethac/vllm@6804e1b81e6ea2ca53bb5021151bdad0f201b11d3`
+  - summary artifact: `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md`
+  - image layers: `compressed-tensors==0.17.0`, `humming-kernels[cu13]==0.1.4` plus `pyelftools`, and AEON's original FA2 binary restored after a PyTorch ABI mismatch.
+  - backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, and `1,251,446` KV tokens.
+  - compact decode: `47.22 tok/s` short, `58.88 tok/s` medium, `61.62 tok/s` long-prefill.
+  - interpretation: this is a passing fork-derived vLLM Qwen serving row, but not clean fork packaging and not native `sm_121a` target proof because it still depends on AEON's FA2 binary and only host-side audits were captured.
 
 ## First Benchmark Campaign Summary
 
