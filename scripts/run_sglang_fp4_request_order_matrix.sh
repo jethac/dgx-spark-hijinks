@@ -4,6 +4,9 @@ set -uo pipefail
 IMAGE=${IMAGE:-nvcr.io/nvidia/sglang:26.05-py3}
 RUNTIME_IMAGE=${RUNTIME_IMAGE:-}
 PREPARE_RUST_IMAGE=${PREPARE_RUST_IMAGE:-1}
+PREPARE_SOURCE_STACK_IMAGE=${PREPARE_SOURCE_STACK_IMAGE:-0}
+SOURCE_STACK_IMAGE=${SOURCE_STACK_IMAGE:-}
+INSTALL_SOURCE_STACK_PER_CASE=${INSTALL_SOURCE_STACK_PER_CASE:-1}
 MODEL=${MODEL:-Qwen/Qwen2.5-1.5B-Instruct}
 PORT=${PORT:-30000}
 RUN_ID=${RUN_ID:-sglang_qwen_fp4kv_matrix_$(date -u +%Y%m%dT%H%M%SZ)}
@@ -17,7 +20,27 @@ if [[ -z "${RUNTIME_IMAGE}" ]]; then
   RUNTIME_IMAGE="${IMAGE}"
 fi
 
-if [[ "${PREPARE_RUST_IMAGE}" == "1" ]]; then
+if [[ "${PREPARE_SOURCE_STACK_IMAGE}" == "1" ]]; then
+  source_image_tag=$(
+    printf '%s' "${RUN_ID}" |
+      tr '[:upper:]' '[:lower:]' |
+      tr -c 'a-z0-9_.-' '-'
+  )
+  if [[ -n "${SOURCE_STACK_IMAGE}" ]]; then
+    RUNTIME_IMAGE="${SOURCE_STACK_IMAGE}"
+  else
+    RUNTIME_IMAGE="sglang-source-stack-${source_image_tag}"
+  fi
+  OUTPUT_IMAGE="${RUNTIME_IMAGE}" \
+    IMAGE="${IMAGE}" \
+    PREPARE_RUST_IMAGE="${PREPARE_RUST_IMAGE}" \
+    RUN_ID="${RUN_ID}_source_stack" \
+    REPO_ROOT="${REPO_ROOT}" \
+    RESULTS_DIR="${RESULTS_DIR}" \
+    HF_CACHE="${HF_CACHE}" \
+    bash "${REPO_ROOT}/scripts/prepare_sglang_source_stack_image.sh"
+  INSTALL_SOURCE_STACK_PER_CASE=0
+elif [[ "${PREPARE_RUST_IMAGE}" == "1" ]]; then
   image_tag=$(
     printf '%s' "${RUN_ID}" |
       tr '[:upper:]' '[:lower:]' |
@@ -69,8 +92,9 @@ run_case() {
       -v "${HF_CACHE}:/root/.cache/huggingface" \
       -w /work \
       "${COMMON_ENVS[@]}" "${extra_envs[@]}" \
+      -e SGLANG_MATRIX_INSTALL_SOURCE_STACK="${INSTALL_SOURCE_STACK_PER_CASE}" \
       "${RUNTIME_IMAGE}" \
-      bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/flashinfer; git config --global --add safe.directory /work/third_party/sglang; python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache > /work/${flashinfer_install_log} 2>&1 || true; rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer /usr/local/lib/python3.12/dist-packages/flashinfer_python-*.dist-info /usr/local/lib/python3.12/dist-packages/flashinfer_cubin* /usr/local/lib/python3.12/dist-packages/flashinfer_jit_cache* /root/.cache/flashinfer >> /work/${flashinfer_install_log} 2>&1 || true; python3 -m pip install --upgrade --no-deps 'nvidia-cutlass-dsl[cu13]>=4.5.0' >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/flashinfer >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --upgrade --no-deps 'sglang-kernel==0.4.3' > /work/${install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/sglang/python >> /work/${install_log} 2>&1; python3 -c 'import flashinfer, importlib.metadata as md; print(\"flashinfer\", getattr(flashinfer, \"__version__\", None), getattr(flashinfer, \"__file__\", None)); print(\"flashinfer_python\", md.version(\"flashinfer_python\")); print(\"sglang_kernel\", md.version(\"sglang-kernel\")); print(\"sglang\", md.version(\"sglang\"))' >> /work/${install_log} 2>&1; exec python3 -m sglang.launch_server --model-path ${MODEL} --attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port ${PORT}"
+      bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/flashinfer; git config --global --add safe.directory /work/third_party/sglang; if [[ \"\${SGLANG_MATRIX_INSTALL_SOURCE_STACK}\" == \"1\" ]]; then python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache > /work/${flashinfer_install_log} 2>&1 || true; rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer /usr/local/lib/python3.12/dist-packages/flashinfer_python-*.dist-info /usr/local/lib/python3.12/dist-packages/flashinfer_cubin* /usr/local/lib/python3.12/dist-packages/flashinfer_jit_cache* /root/.cache/flashinfer >> /work/${flashinfer_install_log} 2>&1 || true; python3 -m pip install --upgrade --no-deps 'nvidia-cutlass-dsl[cu13]>=4.5.0' >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/flashinfer >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --upgrade --no-deps 'sglang-kernel==0.4.3' > /work/${install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/sglang/python >> /work/${install_log} 2>&1; else echo \"using prepared source-stack image ${RUNTIME_IMAGE}\" > /work/${install_log}; : > /work/${flashinfer_install_log}; fi; python3 -c 'import flashinfer, importlib.metadata as md, sgl_kernel; print(\"flashinfer\", getattr(flashinfer, \"__version__\", None), getattr(flashinfer, \"__file__\", None)); print(\"flashinfer_python\", md.version(\"flashinfer_python\")); print(\"sglang_kernel\", md.version(\"sglang-kernel\")); print(\"sglang\", md.version(\"sglang\")); print(\"sgl_kernel\", getattr(sgl_kernel, \"__file__\", None)); print(\"common_ops\", getattr(getattr(sgl_kernel, \"common_ops\", None), \"__file__\", None))' >> /work/${install_log} 2>&1; exec python3 -m sglang.launch_server --model-path ${MODEL} --attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port ${PORT}"
   )
   echo "${cid}" >"${REPO_ROOT}/${cid_file}"
 

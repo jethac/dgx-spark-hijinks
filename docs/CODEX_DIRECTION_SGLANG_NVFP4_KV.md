@@ -200,6 +200,31 @@ succeeds, emits `compute_121a` ptxas warnings but no hard failure, installs
 ABI blocker is therefore cleared. The next matrix run should prepare a source-stack image
 once and run all four rows from it; rebuilding `sglang-kernel` inside each row is too slow.
 
+Source-stack matrix result
+(`results/sglang_qwen_fp4kv_matrix_20260609tprep1jst.md`): the reusable image
+`sglang-source-stack-20260609tprep1jst` installs editable `jethac/flashinfer@4c3c0d99`,
+editable `jethac/sglang@d96869237`, and the source-built `sglang-kernel 0.4.3` against
+the NVIDIA 26.05 Torch/CUDA stack. The loaded extension is the rebuilt
+`/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so`, so the
+runtime ABI blocker is cleared for real matrix rows. The four-row result keeps SGLang FP4
+KV red but localizes it further:
+
+- default cached-prefix reuse still fails: the second request reuses `55` cached tokens and
+  returns `ark`/`838` while fresh rows return `**`/`334`;
+- `SGLANG_FLASHINFER_USE_PAGED=1` with the radix hit changes the token to newline, but
+  cached-prefix logprobs still differ from fresh rows, so full-paged attention alone is not
+  an equivalence fix;
+- `SGLANG_RADIX_FORCE_MISS=1` is clean: all rows have `cached_tokens=0`, token `**`, and
+  identical logprob;
+- force-miss plus full-paged is also internally clean, with `cached_tokens=0` and identical
+  newline logprobs.
+
+Decision: the failure follows FP4 cached-prefix reuse, not the PyPI wheel, FlashInfer
+version guard, endpoint formatting, or ordinary full recompute. The next SGLang probe
+should compare dense full-prefill attention/logits against the FP4 cached-prefix path.
+`SGLANG_RADIX_FORCE_MISS=1`, namespace isolation, and `--disable-radix-cache` stay in the
+diagnostic/emergency-workaround bucket; they are not the blessed capacity path.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

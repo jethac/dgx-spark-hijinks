@@ -1,0 +1,706 @@
+{
+  "cases": {
+    "default": {
+      "ok": true,
+      "rows": [
+        {
+          "name": "baseline_openai_then_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-first",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 55,
+              "endpoint": "native_generate",
+              "logprob": -0.5874708890914917,
+              "rid": "native-second",
+              "token": "ark",
+              "token_id": 838
+            }
+          ]
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-first",
+              "token": "**",
+              "token_id": 334
+            },
+            {
+              "cached_tokens": 55,
+              "endpoint": "openai_chat",
+              "logprob": -0.5874708890914917,
+              "rid": "openai-second",
+              "token": "ark",
+              "token_id": null
+            }
+          ]
+        },
+        {
+          "name": "flush_between_openai_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-flush-first",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-after-flush",
+              "token": "**",
+              "token_id": 334
+            }
+          ]
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-namespace-a",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-namespace-b",
+              "token": "**",
+              "token_id": 334
+            }
+          ]
+        }
+      ],
+      "token_summary": [
+        {
+          "name": "baseline_openai_then_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 55,
+            "extra_key": null,
+            "logprob": -0.5874708890914917,
+            "rid": "native-second",
+            "token": "ark",
+            "token_id": 838
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "openai-first",
+            "token": "**",
+            "token_id": null
+          }
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "native-first",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 55,
+            "extra_key": null,
+            "logprob": -0.5874708890914917,
+            "rid": "openai-second",
+            "token": "ark",
+            "token_id": null
+          }
+        },
+        {
+          "name": "flush_between_openai_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "native-after-flush",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "openai-flush-first",
+            "token": "**",
+            "token_id": null
+          }
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-native",
+            "logprob": -0.7235294580459595,
+            "rid": "native-namespace-b",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": "fp4-order-openai",
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-openai",
+            "logprob": -0.7235294580459595,
+            "rid": "openai-namespace-a",
+            "token": "**",
+            "token_id": null
+          }
+        }
+      ]
+    },
+    "force_miss": {
+      "ok": true,
+      "rows": [
+        {
+          "name": "baseline_openai_then_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-first",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-second",
+              "token": "**",
+              "token_id": 334
+            }
+          ]
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-first",
+              "token": "**",
+              "token_id": 334
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-second",
+              "token": "**",
+              "token_id": null
+            }
+          ]
+        },
+        {
+          "name": "flush_between_openai_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-flush-first",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-after-flush",
+              "token": "**",
+              "token_id": 334
+            }
+          ]
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -0.7235294580459595,
+              "rid": "openai-namespace-a",
+              "token": "**",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -0.7235294580459595,
+              "rid": "native-namespace-b",
+              "token": "**",
+              "token_id": 334
+            }
+          ]
+        }
+      ],
+      "token_summary": [
+        {
+          "name": "baseline_openai_then_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "native-second",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "openai-first",
+            "token": "**",
+            "token_id": null
+          }
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "native-first",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "openai-second",
+            "token": "**",
+            "token_id": null
+          }
+        },
+        {
+          "name": "flush_between_openai_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "native-after-flush",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -0.7235294580459595,
+            "rid": "openai-flush-first",
+            "token": "**",
+            "token_id": null
+          }
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-native",
+            "logprob": -0.7235294580459595,
+            "rid": "native-namespace-b",
+            "token": "**",
+            "token_id": 334
+          },
+          "openai_chat": {
+            "cache_salt": "fp4-order-openai",
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-openai",
+            "logprob": -0.7235294580459595,
+            "rid": "openai-namespace-a",
+            "token": "**",
+            "token_id": null
+          }
+        }
+      ]
+    },
+    "force_miss_full_paged": {
+      "ok": true,
+      "rows": [
+        {
+          "name": "baseline_openai_then_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-first",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-second",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-first",
+              "token": "\n",
+              "token_id": 198
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-second",
+              "token": "\n",
+              "token_id": null
+            }
+          ]
+        },
+        {
+          "name": "flush_between_openai_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-flush-first",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-after-flush",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-namespace-a",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-namespace-b",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        }
+      ],
+      "token_summary": [
+        {
+          "name": "baseline_openai_then_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "native-second",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "openai-first",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "native-first",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "openai-second",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "flush_between_openai_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "native-after-flush",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "openai-flush-first",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-native",
+            "logprob": -1.710477352142334,
+            "rid": "native-namespace-b",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": "fp4-order-openai",
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-openai",
+            "logprob": -1.710477352142334,
+            "rid": "openai-namespace-a",
+            "token": "\n",
+            "token_id": null
+          }
+        }
+      ]
+    },
+    "full_paged": {
+      "ok": true,
+      "rows": [
+        {
+          "name": "baseline_openai_then_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-first",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 55,
+              "endpoint": "native_generate",
+              "logprob": -1.2086365222930908,
+              "rid": "native-second",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-first",
+              "token": "\n",
+              "token_id": 198
+            },
+            {
+              "cached_tokens": 55,
+              "endpoint": "openai_chat",
+              "logprob": -1.2086365222930908,
+              "rid": "openai-second",
+              "token": "\n",
+              "token_id": null
+            }
+          ]
+        },
+        {
+          "name": "flush_between_openai_native",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-flush-first",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-after-flush",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "requests": [
+            {
+              "cached_tokens": 0,
+              "endpoint": "openai_chat",
+              "logprob": -1.710477352142334,
+              "rid": "openai-namespace-a",
+              "token": "\n",
+              "token_id": null
+            },
+            {
+              "cached_tokens": 0,
+              "endpoint": "native_generate",
+              "logprob": -1.710477352142334,
+              "rid": "native-namespace-b",
+              "token": "\n",
+              "token_id": 198
+            }
+          ]
+        }
+      ],
+      "token_summary": [
+        {
+          "name": "baseline_openai_then_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 55,
+            "extra_key": null,
+            "logprob": -1.2086365222930908,
+            "rid": "native-second",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "openai-first",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "reverse_native_then_openai",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "native-first",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 55,
+            "extra_key": null,
+            "logprob": -1.2086365222930908,
+            "rid": "openai-second",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "flush_between_openai_native",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "native-after-flush",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": null,
+            "logprob": -1.710477352142334,
+            "rid": "openai-flush-first",
+            "token": "\n",
+            "token_id": null
+          }
+        },
+        {
+          "name": "namespace_isolation_extra_key",
+          "native_generate": {
+            "cache_salt": null,
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-native",
+            "logprob": -1.710477352142334,
+            "rid": "native-namespace-b",
+            "token": "\n",
+            "token_id": 198
+          },
+          "openai_chat": {
+            "cache_salt": "fp4-order-openai",
+            "cached_tokens": 0,
+            "extra_key": "fp4-order-openai",
+            "logprob": -1.710477352142334,
+            "rid": "openai-namespace-a",
+            "token": "\n",
+            "token_id": null
+          }
+        }
+      ]
+    }
+  },
+  "run_id": "sglang_qwen_fp4kv_matrix_20260609tprep1jst",
+  "schema": "sglang-fp4-kv-matrix-summary/v1"
+}

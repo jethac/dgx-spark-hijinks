@@ -51,6 +51,22 @@ Run the cheap no-code matrix before adding new instrumentation:
 - Interpretation: the `sglang-kernel` ABI blocker is cleared. Rerun the matrix from a
   prepared source-stack image so the four rows do not rebuild `sglang-kernel` independently.
 
+2026-06-09 source-stack matrix:
+
+- Runner: `scripts/run_sglang_fp4_request_order_matrix.sh`
+- Prepared image helper: `scripts/prepare_sglang_source_stack_image.sh`
+- Artifact: `results/sglang_qwen_fp4kv_matrix_20260609tprep1jst.md`
+- Stack: reusable image `sglang-source-stack-20260609tprep1jst` with editable
+  `jethac/flashinfer@4c3c0d99`, editable `jethac/sglang@d96869237`, source-built
+  `sglang-kernel 0.4.3`, and rebuilt
+  `/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so`.
+- Outcome: all four rows run. Default cached-prefix reuse remains bad
+  (`cached_tokens=55`, `ark`/838); force-miss rows are clean (`cached_tokens=0`,
+  identical logprobs); full-paged-with-reuse changes the token class to newline but still
+  gives cached-prefix logprobs different from fresh output.
+- Interpretation: do not rerun this matrix unless the cache/reuse implementation changes.
+  The next probe is dense full-prefill versus FP4 cached-prefix attention/logit comparison.
+
 Decision rule for this matrix:
 
 - Full-paged cached-prefix passes while default fails -> bug is split ragged/paged merge

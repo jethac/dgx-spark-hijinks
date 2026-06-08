@@ -303,6 +303,32 @@ identity, and final C++ `paged_run` argument interpretation in both the live ser
 and offline replay process. The likely remaining gap is module cache / generated source /
 compiled object identity or C++ argument interpretation, not vLLM's Python plan fields.
 
+Sharpened correctness check (2026-06-09): do not let replay-vs-replay agreement masquerade
+as correctness. The fresh-wrapper result rules out long-lived wrapper state, but both live
+and fresh wrappers can still faithfully read the same wrong bytes. The next vLLM probe must
+compare **dequant(on-page packed data, on-page scale) against a BF16 KV reference** for a
+failing position/layer, not only compare two FP4 replays.
+
+Prioritize intra-page slice-offset math before returning to cross-block mismatch. The
+measured Gemma 3 geometry is `head_dim=128`, `kv_heads=16`, so one token's FP4 KV page
+layout is:
+
+```text
+bytes_per_token = 2304
+[K_data 1024 | K_scale 128 | V_data 1024 | V_scale 128]
+```
+
+Hypothesis: `nvfp4_kv_cache_split_views` or the FlashInfer paged-prefill offset logic may
+compute K-scale / V-data / V-scale offsets from a geometry assumption that works for Qwen
+but is wrong for Gemma's `D=128, kv_heads=16` layout. That would preserve capacity,
+routing, physical page IDs, and even same-page data/scale sampling while still making the
+kernel read the wrong intra-page slice. Concrete check: for one failing 18-token Gemma
+position, dump the byte offsets used for K data, K scale, V data, and V scale reads; compare
+them with the expected `0`, `1024`, `1152`, and `2176` offsets; then dequantize the on-page
+K/V with the correct offsets and compare to the BF16 KV reference. Cross-check the same
+offset calculation on the working Qwen geometry to explain why Qwen lands while Gemma
+does not.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate

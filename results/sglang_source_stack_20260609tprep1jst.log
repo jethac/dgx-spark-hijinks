@@ -1,0 +1,1123 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.2 driver version 595.58.03 with kernel driver version 580.159.03.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+
++ git config --global --add safe.directory /work
++ git config --global --add safe.directory /work/third_party/flashinfer
++ git config --global --add safe.directory /work/third_party/sglang
++ python3 -
+{
+  "capability": [
+    12,
+    1
+  ],
+  "device": "NVIDIA GB10",
+  "torch": "2.12.0a0+5aff3928d8.nv26.05",
+  "torch_cuda": "13.2"
+}
++ python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache sglang-kernel
+Found existing installation: flashinfer-python 0.6.10+cf494fca.nv26.5.cu132.50619265
+Uninstalling flashinfer-python-0.6.10+cf494fca.nv26.5.cu132.50619265:
+  Successfully uninstalled flashinfer-python-0.6.10+cf494fca.nv26.5.cu132.50619265
+Found existing installation: flashinfer-cubin 0.6.10+cf494fca.nv26.5.cu132.50619265
+Uninstalling flashinfer-cubin-0.6.10+cf494fca.nv26.5.cu132.50619265:
+  Successfully uninstalled flashinfer-cubin-0.6.10+cf494fca.nv26.5.cu132.50619265
+Found existing installation: flashinfer-jit-cache 0.6.10+cf494fca.nv26.5.cu132.50619265
+Uninstalling flashinfer-jit-cache-0.6.10+cf494fca.nv26.5.cu132.50619265:
+  Successfully uninstalled flashinfer-jit-cache-0.6.10+cf494fca.nv26.5.cu132.50619265
+Found existing installation: sglang-kernel 0.4.2+nv26.5.51621272
+Uninstalling sglang-kernel-0.4.2+nv26.5.51621272:
+  Successfully uninstalled sglang-kernel-0.4.2+nv26.5.51621272
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer '/usr/local/lib/python3.12/dist-packages/flashinfer_python-*.dist-info' '/usr/local/lib/python3.12/dist-packages/flashinfer_cubin*' '/usr/local/lib/python3.12/dist-packages/flashinfer_jit_cache*' /usr/local/lib/python3.12/dist-packages/sgl_kernel '/usr/local/lib/python3.12/dist-packages/sglang_kernel-*.dist-info' /root/.cache/flashinfer
++ python3 -m pip install --upgrade --no-deps 'nvidia-cutlass-dsl[cu13]>=4.5.0' scikit-build-core ninja cmake wheel
+Collecting nvidia-cutlass-dsl>=4.5.0 (from nvidia-cutlass-dsl[cu13]>=4.5.0)
+  Downloading nvidia_cutlass_dsl-4.5.2-py3-none-any.whl.metadata (2.8 kB)
+Requirement already satisfied: scikit-build-core in /usr/local/lib/python3.12/dist-packages (0.12.2)
+Requirement already satisfied: ninja in /usr/local/lib/python3.12/dist-packages (1.13.0)
+Requirement already satisfied: cmake in /usr/local/lib/python3.12/dist-packages (3.31.6)
+Collecting cmake
+  Downloading cmake-4.3.2-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (6.5 kB)
+Requirement already satisfied: wheel in /usr/local/lib/python3.12/dist-packages (0.47.0)
+Downloading nvidia_cutlass_dsl-4.5.2-py3-none-any.whl (10 kB)
+Downloading cmake-4.3.2-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (29.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 29.6/29.6 MB 193.2 MB/s  0:00:00
+Installing collected packages: nvidia-cutlass-dsl, cmake
+  Attempting uninstall: nvidia-cutlass-dsl
+    Found existing installation: nvidia-cutlass-dsl 4.4.2
+    Uninstalling nvidia-cutlass-dsl-4.4.2:
+      Successfully uninstalled nvidia-cutlass-dsl-4.4.2
+  Attempting uninstall: cmake
+    Found existing installation: cmake 3.31.6
+    Uninstalling cmake-3.31.6:
+      Successfully uninstalled cmake-3.31.6
+
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Successfully installed cmake-4.3.2 nvidia-cutlass-dsl-4.5.2
++ python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/flashinfer
+Obtaining file:///work/third_party/flashinfer
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: flashinfer-python
+  Building editable for flashinfer-python (pyproject.toml): started
+  Building editable for flashinfer-python (pyproject.toml): finished with status 'done'
+  Created wheel for flashinfer-python: filename=flashinfer_python-0.6.13-0.editable-py3-none-any.whl size=13108 sha256=7bc947c12f98f457757d26d5c3ca638800a850fa27fd9842c70f38e35f4a892b
+  Stored in directory: /tmp/pip-ephem-wheel-cache-37bg2bwh/wheels/a6/ef/96/2e583962bfd0a748ac15204680670632072bbae09cd6463919
+Successfully built flashinfer-python
+Installing collected packages: flashinfer-python
+Successfully installed flashinfer-python-0.6.13
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ cd /work/third_party/sglang/sgl-kernel
++ CMAKE_BUILD_PARALLEL_LEVEL=2
++ MAX_JOBS=12
++ CMAKE_ARGS='-DSGL_KERNEL_COMPILE_THREADS=1 -DENABLE_BELOW_SM90=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSGL_KERNEL_BUILD_SM90=OFF -DSGL_KERNEL_BUILD_SM100=ON -DSGL_KERNEL_ENABLE_FA3=OFF -DSGL_KERNEL_ENABLE_FLASHMLA=OFF -DSGL_KERNEL_ENABLE_SPATIAL=OFF'
++ python3 -m pip install --no-deps --no-build-isolation -v .
+Using pip 26.1.1 from /usr/local/lib/python3.12/dist-packages/pip (python 3.12)
+Processing ./.
+  Preparing metadata (pyproject.toml): started
+  Running command Preparing metadata (pyproject.toml)
+  *** scikit-build-core 0.12.2 using CMake 4.3.2 (metadata_wheel)
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: sglang-kernel
+  Running command Building wheel for sglang-kernel (pyproject.toml)
+  Building wheel for sglang-kernel (pyproject.toml): started
+  *** scikit-build-core 0.12.2 using CMake 4.3.2 (wheel)
+  *** Configuring CMake...
+  loading initial cache file /tmp/tmpgoxh8tlg/build/CMakeInit.txt
+  -- The CXX compiler identification is GNU 13.3.0
+  -- The CUDA compiler identification is NVIDIA 13.2.78 with host compiler GNU 13.3.0
+  -- Detecting CXX compiler ABI info
+  -- Detecting CXX compiler ABI info - done
+  -- Check for working CXX compiler: /usr/bin/aarch64-linux-gnu-g++ - skipped
+  -- Detecting CXX compile features
+  -- Detecting CXX compile features - done
+  -- Detecting CUDA compiler ABI info
+  -- Detecting CUDA compiler ABI info - done
+  -- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc - skipped
+  -- Detecting CUDA compile features
+  -- Detecting CUDA compile features - done
+  -- Found Python: /usr/bin/python3 (found version "3.12.3") found components: Interpreter Development.Module Development.SABIModule
+  -- Found CUDAToolkit: /usr/local/cuda/targets/sbsa-linux/include;/usr/local/cuda/targets/sbsa-linux/include/cccl (found version "13.2.78")
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+  -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+  -- Found Threads: TRUE
+  -- Detected CUDA_VERSION=
+  -- Found CUDA: /usr/local/cuda (found version "13.2")
+  -- Found CUDAToolkit: /usr/local/cuda/include (found version "13.2.78")
+  -- PyTorch: CUDA detected: 13.2
+  -- PyTorch: CUDA nvcc is: /usr/local/cuda/bin/nvcc
+  -- PyTorch: CUDA toolkit directory: /usr/local/cuda
+  -- PyTorch: Header version is: 13.2
+  -- Found Python: /usr/bin/python3 (found version "3.12.3") found components: Interpreter
+  -- /usr/local/cuda-13.2/targets/sbsa-linux/lib/libnvrtc.so shorthash is 24fbaf49
+  -- USE_CUDNN is set to 0. Compiling without cuDNN support
+  -- USE_CUSPARSELT is set to 0. Compiling without cuSPARSELt support
+  -- USE_CUDSS is set to 0. Compiling without cuDSS support
+  -- USE_CUFILE is set to 0. Compiling without cuFile support
+  CMake Warning at /usr/local/lib/python3.12/dist-packages/torch/share/cmake/Caffe2/public/cuda.cmake:332 (message):
+    pytorch is not compatible with `CMAKE_CUDA_ARCHITECTURES` and will ignore
+    its value.  Please configure `TORCH_CUDA_ARCH_LIST` instead.
+  Call Stack (most recent call first):
+    /usr/local/lib/python3.12/dist-packages/torch/share/cmake/Caffe2/Caffe2Config.cmake:86 (include)
+    /usr/local/lib/python3.12/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:62 (find_package)
+    CMakeLists.txt:42 (find_package)
+
+
+  -- Added CUDA NVCC flags for: -gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_100,code=sm_100;-gencode;arch=compute_110,code=sm_110;-gencode;arch=compute_120,code=sm_120;-gencode;arch=compute_120,code=compute_120
+  CMake Warning at /usr/local/lib/python3.12/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:22 (message):
+    library kineto not found.
+  Call Stack (most recent call first):
+    /usr/local/lib/python3.12/dist-packages/torch/share/cmake/Torch/TorchConfig.cmake:119 (append_torchlib_if_found)
+    CMakeLists.txt:42 (find_package)
+
+
+  -- Found Torch: /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch.so
+  -- For aarch64, disable gencode below SM90 by default
+  -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter
+  -- Using new C++11 ABI (-D_GLIBCXX_USE_CXX11_ABI=1)
+  -- Bypassing GPU check: using NVIDIA/CUDA.
+  -- Found CUDAToolkit: /usr/local/cuda/targets/sbsa-linux/include;/usr/local/cuda/targets/sbsa-linux/include/cccl (found version "13.2.78")
+  -- clang-format not found.
+  -- black not found.
+  -- Found IBVerbs: /usr/include
+  -- Found NUMA: /usr/include
+  -- Using the multi-header code from /tmp/tmpgoxh8tlg/build/_deps/json-src/include/
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/CMakeLists.txt:149 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/CMakeLists.txt:151 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/CMakeLists.txt:153 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  -- Found Python: /usr/bin/python3 (found suitable version "3.12.3", minimum required is "3.8") found components: Interpreter Development.Module
+  CMake Deprecation Warning at /tmp/tmpgoxh8tlg/build/_deps/dlpack-src/CMakeLists.txt:5 (cmake_minimum_required):
+    Compatibility with CMake < 3.10 will be removed from a future version of
+    CMake.
+
+    Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+    to tell CMake that the project requires at least <min> but has been updated
+    to work with policies introduced by <max> or earlier.
+
+
+  -- The C compiler identification is GNU 13.3.0
+  -- Detecting C compiler ABI info
+  -- Detecting C compiler ABI info - done
+  -- Check for working C compiler: /usr/bin/aarch64-linux-gnu-gcc - skipped
+  -- Detecting C compile features
+  -- Detecting C compile features - done
+  -- C++11 support has been enabled by default.
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/apps/nccl/CMakeLists.txt:32 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/apps/nccl/CMakeLists.txt:34 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  CMake Warning (dev) at /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/apps/nccl/CMakeLists.txt:36 (install):
+    Policy CMP0177 is not set: install() DESTINATION paths are normalized.  Run
+    "cmake --help-policy CMP0177" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+
+  -- Configuring done (66.5s)
+  -- Generating done (0.0s)
+  -- Build files have been written to: /tmp/tmpgoxh8tlg/build
+  *** Building project with Ninja...
+  [0/2] Re-checking globbed directories...
+  [1/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/bootstrap/socket.cc.o
+  [2/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/c_style_remnants.cc.o
+  [3/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/bootstrap/bootstrap.cc.o
+  [4/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/connection.cc.o
+  [5/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/communicator.cc.o
+  [6/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/core.cc.o
+  [7/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/context.cc.o
+  [8/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/debug.cc.o
+  [9/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/endpoint.cc.o
+  [10/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/env.cpp.o
+  [11/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/errors.cc.o
+  [12/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/executor/execution_plan.cc.o
+  [13/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/executor/executor.cc.o
+  [14/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/fifo.cc.o
+  [15/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/gpu_utils.cc.o
+  [16/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/ib.cc.o
+  [17/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/memory_channel.cc.o
+  [18/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/npkit/npkit.cc.o
+  [19/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/numa.cc.o
+  [20/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/nvls.cc.o
+  [21/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/port_channel.cc.o
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc: In member function ‘mscclpp::ProxyHandlerResult mscclpp::ProxyService::handleTrigger(mscclpp::ProxyTrigger)’:
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:70:81: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     70 |   std::shared_ptr<Host2DeviceSemaphore> semaphore = semaphores_[trigger->fields.chanId];
+        |                                                                 ~~~~~~~~~~~~~~~~^~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:76:55: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     76 |     RegisteredMemory& dst = memories_[trigger->fields.dstMemoryId];
+        |                                       ~~~~~~~~~~~~~~~~^~~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:77:55: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     77 |     RegisteredMemory& src = memories_[trigger->fields.srcMemoryId];
+        |                                       ~~~~~~~~~~~~~~~~^~~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:78:57: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     78 |     semaphore->connection()->write(dst, trigger->fields.dstOffset, src, trigger->fields.srcOffset,
+        |                                         ~~~~~~~~~~~~~~~~^~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:78:89: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     78 |     semaphore->connection()->write(dst, trigger->fields.dstOffset, src, trigger->fields.srcOffset,
+        |                                                                         ~~~~~~~~~~~~~~~~^~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:79:52: warning: array subscript ‘mscclpp::ChannelTrigger[0]’ is partly outside array bounds of ‘mscclpp::ProxyTrigger [1]’ [-Warray-bounds=]
+     79 |                                    trigger->fields.size);
+        |                                    ~~~~~~~~~~~~~~~~^~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/src/port_channel.cc:68:61: note: object ‘triggerRaw’ of size 16
+     68 | ProxyHandlerResult ProxyService::handleTrigger(ProxyTrigger triggerRaw) {
+        |                                                ~~~~~~~~~~~~~^~~~~~~~~~
+  [22/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/proxy.cc.o
+  [23/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/registered_memory.cc.o
+  [24/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/semaphore.cc.o
+  [25/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/utils.cc.o
+  [26/127] Building CXX object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/utils_internal.cc.o
+  [27/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_internals.cpp.o
+  [28/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_func.cpp.o
+  [29/127] Building CUDA object mscclpp-build/CMakeFiles/mscclpp_obj.dir/src/executor/execution_kernel.cu.o
+  [30/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_type.cpp.o
+  [31/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_enum.cpp.o
+  [32/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_static_property.cpp.o
+  [33/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/nb_ndarray.cpp.o
+  [34/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/error.cpp.o
+  [35/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/common.cpp.o
+  [36/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/trampoline.cpp.o
+  [37/127] Linking CXX static library mscclpp-build/libmscclpp_static.a
+  [38/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/nanobind-static.dir/__/__/__/_deps/nanobind-src/src/implicit.cpp.o
+  [39/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/env_py.cpp.o
+  [40/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/error_py.cpp.o
+  [41/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/executor_py.cpp.o
+  [42/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/core_py.cpp.o
+  [43/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/fifo_py.cpp.o
+  [44/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/gpu_utils_py.cpp.o
+  [45/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/memory_channel_py.cpp.o
+  [46/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/npkit_py.cpp.o
+  [47/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/numa_py.cpp.o
+  [48/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/nvls_py.cpp.o
+  [49/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/port_channel_py.cpp.o
+  [50/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/utils_py.cpp.o
+  [51/127] Linking CXX static library mscclpp-build/python/mscclpp/libnanobind-static.a
+  [52/127] Building CXX object mscclpp-build/python/mscclpp/CMakeFiles/mscclpp_py.dir/semaphore_py.cpp.o
+  [53/127] Building CXX object mscclpp-build/python/test/CMakeFiles/mscclpp_py_test.dir/_cpp/proxy_test.cpp.o
+  [54/127] Building CUDA object mscclpp-build/apps/nccl/CMakeFiles/mscclpp_nccl_obj.dir/src/nccl.cu.o
+  [55/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/allreduce/custom_all_reduce.cu.o
+  [56/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/allreduce/mscclpp_allreduce.cu.o
+  [57/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/attention/merge_attn_states.cu.o
+  [58/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/attention/vertical_slash_index.cu.o
+  [59/127] Building CXX object CMakeFiles/common_ops_sm100_build.dir/csrc/common_extension.cc.o
+  [60/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/activation.cu.o
+  [61/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/concat_mla.cu.o
+  [62/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/copy.cu.o
+  [63/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/dsv4_norm_rope.cu.o
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi8EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi7EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi6EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi5EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi4EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi3EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi2EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi1EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi0EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl192ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl128ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e42fused_q_indexer_rope_hadamard_quant_kernelENS_36FusedQIndexerRopeHadamardQuantParamsE is out of range. .minnctapersm will be ignored
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi8EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi7EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi6EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi5EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi4EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi3EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi2EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi1EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi0EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl192ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl128ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e42fused_q_indexer_rope_hadamard_quant_kernelENS_36FusedQIndexerRopeHadamardQuantParamsE is out of range. .minnctapersm will be ignored
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=128L, kRopeDim=64L]" at line 571
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/elementwise/dsv4_norm_rope.cu(281): warning #186-D: pointless comparison of unsigned integer with zero
+      const bool is_rope_lane = lane_id >= kWarpSize - kRopeSize;
+                                        ^
+            detected during instantiation of "void <unnamed>::fused_q_norm_rope_kernel<kHeadDim,kRopeDim>(<unnamed>::FusedQNormRopeParams) [with kHeadDim=192L, kRopeDim=64L]" at line 574
+
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi8EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi7EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi6EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi5EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi4EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi3EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi2EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi1EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e33fused_k_norm_rope_flashmla_kernelILl512ELl64ELi0EEEvNS_28FusedKNormRopeFlashMLAParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl192ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e24fused_q_norm_rope_kernelILl128ELl64EEEvNS_20FusedQNormRopeParamsE is out of range. .minnctapersm will be ignored
+  ptxas warning : Value of threads per SM for entry _ZN50_GLOBAL__N__a22e6e4b_17_dsv4_norm_rope_cu_984a323e42fused_q_indexer_rope_hadamard_quant_kernelENS_36FusedQIndexerRopeHadamardQuantParamsE is out of range. .minnctapersm will be ignored
+  [64/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/fused_add_rms_norm_kernel.cu.o
+  [65/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/attention/cutlass_mla_kernel.cu.o
+  /work/third_party/sglang/sgl-kernel/csrc/attention/cutlass_mla_kernel.cu: In function ‘void cutlass_mla_decode(const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, double, int64_t)’:
+  /work/third_party/sglang/sgl-kernel/csrc/attention/cutlass_mla_kernel.cu:226:35: warning: narrowing conversion of ‘(char)(& q_nope)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    226 |   at::cuda::CUDAGuard device_guard{(char)q_nope.get_device()};
+        |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+  At global scope:
+  cc1plus: note: unrecognized command-line option ‘-Wno-clang-format-violations’ may have been intended to silence earlier diagnostics
+  [66/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/topk.cu.o
+  [67/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/elementwise/pos_enc.cu.o
+  [68/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/expert_specialization/es_fp8_blockwise.cu.o
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 1597; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 7470; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 11367; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 15418; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 21535; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 25450; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 31323; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 35220; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 39271; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-9_es_fp8_blockwise.compute_120a.ptx, line 45388; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 1597; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 7470; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 11367; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 15418; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 21535; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 25450; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 31323; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 35220; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 39271; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008b2_00000000-6_es_fp8_blockwise.compute_121a.ptx, line 45388; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  [69/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/expert_specialization/es_sm100_mxfp8_blockscaled.cu.o
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1696; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1703; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1710; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1716; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1819; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1826; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1833; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 1839; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5804; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5811; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5818; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5824; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5927; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5934; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5941; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-11_es_sm100_mxfp8_blockscaled.compute_90.ptx, line 5947; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1426; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1444; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1463; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1480; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1586; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1604; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1623; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 1640; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4612; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4630; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4649; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4666; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4772; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4790; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4809; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-9_es_sm100_mxfp8_blockscaled.compute_120a.ptx, line 4826; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1426; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1444; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1463; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1480; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1586; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1604; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1623; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 1640; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4612; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4630; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4649; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4666; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4772; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4790; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4809; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_000008d9_00000000-6_es_sm100_mxfp8_blockscaled.compute_121a.ptx, line 4826; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  [70/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/awq_kernel.cu.o
+  [71/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/bmm_fp8.cu.o
+  [72/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/expert_specialization/es_sm100_mxfp8_blockscaled_group_quant.cu.o
+  [73/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/dsv3_fused_a_gemm.cu.o
+  [74/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/dsv3_router_gemm_bf16_out.cu.o
+  [75/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/dsv3_router_gemm_entry.cu.o
+  [76/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/dsv3_router_gemm_float_out.cu.o
+  [77/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/fp8_blockwise_gemm_kernel.cu.o
+  ptxas /tmp/tmpxft_00000aa7_00000000-9_fp8_blockwise_gemm_kernel.compute_120a.ptx, line 1358; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-9_fp8_blockwise_gemm_kernel.compute_120a.ptx, line 7123; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-9_fp8_blockwise_gemm_kernel.compute_120a.ptx, line 11164; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-9_fp8_blockwise_gemm_kernel.compute_120a.ptx, line 16929; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_00000aa7_00000000-6_fp8_blockwise_gemm_kernel.compute_121a.ptx, line 1358; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-6_fp8_blockwise_gemm_kernel.compute_121a.ptx, line 7123; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-6_fp8_blockwise_gemm_kernel.compute_121a.ptx, line 11164; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000aa7_00000000-6_fp8_blockwise_gemm_kernel.compute_121a.ptx, line 16929; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  [78/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/int8_gemm_kernel.cu.o
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 65285; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 67127; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 68864; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 71257; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 73601; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 75443; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 80556; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 82416; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 84173; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 86585; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 89109; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 93342; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 97292; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 99198; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 100935; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 103456; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 105800; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 107706; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 112883; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 114807; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 116564; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 119104; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 121628; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-9_int8_gemm_kernel.compute_120a.ptx, line 125989; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 65285; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 67127; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 68864; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 71257; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 73601; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 75443; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 80556; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 82416; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 84173; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 86585; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 89109; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 93342; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 97292; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 99198; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 100935; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 103456; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 105800; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 107706; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 112883; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 114807; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 116564; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 119104; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 121628; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000b1b_00000000-6_int8_gemm_kernel.compute_121a.ptx, line 125989; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  [79/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/per_token_group_quant_8bit.cu.o
+  [80/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/per_token_group_quant_8bit_v2.cu.o
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  /work/third_party/sglang/sgl-kernel/csrc/gemm/per_token_group_quant_8bit_v2.cu(279): warning #174-D: expression has no effect
+          subwarps_per_block,
+          ^
+
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+  [81/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/per_token_quant_fp8.cu.o
+  [82/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/qserve_w4a8_per_chn_gemm.cu.o
+  [83/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/qserve_w4a8_per_group_gemm.cu.o
+  [84/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/fp8_gemm_kernel.cu.o
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 2057; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 2178; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 13097; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 13218; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 23148; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 23269; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 35164; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-11_fp8_gemm_kernel.compute_90.ptx, line 35285; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_90' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 538; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 553; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 3204; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 3219; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 10113; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 12937; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 16847; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 16862; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 19565; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 19580; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 26616; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 29568; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 33605; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 33620; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 36213; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 36228; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 42967; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 45688; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 49496; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 49511; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 52104; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 52119; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 58858; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 61579; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 77298; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 77408; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 87826; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 87936; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 97625; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 97735; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 108937; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-9_fp8_gemm_kernel.compute_120a.ptx, line 109047; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 538; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 553; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 3204; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 3219; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 10113; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 12937; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 16847; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 16862; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 19565; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 19580; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 26616; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 29568; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 33605; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 33620; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 36213; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 36228; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 42967; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 45688; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 49496; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 49511; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 52104; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 52119; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 58858; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 61579; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 77298; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 77408; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 87826; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 87936; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 97625; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 97735; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 108937; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000ae0_00000000-6_fp8_gemm_kernel.compute_121a.ptx, line 109047; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  [85/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/gemm/gptq/gptq_kernel.cu.o
+  [86/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/kvcacheio/transfer.cu.o
+  [87/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/grammar/apply_token_bitmask_inplace_cuda.cu.o
+  [88/127] Building CXX object CMakeFiles/common_ops_sm100_build.dir/csrc/memory/weak_ref_tensor.cpp.o
+  [89/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/mamba/causal_conv1d.cu.o
+  /work/third_party/sglang/sgl-kernel/csrc/mamba/causal_conv1d.cu: In function ‘void causal_conv1d_fwd(const at::Tensor&, const at::Tensor&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, bool, int64_t)’:
+  /work/third_party/sglang/sgl-kernel/csrc/mamba/causal_conv1d.cu:193:35: warning: narrowing conversion of ‘(char)(& x)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    193 |     at::cuda::CUDAGuard device_guard{(char)x.get_device()};
+        |                                   ^~~~~~~~~~~~~~~~~~~~
+  /work/third_party/sglang/sgl-kernel/csrc/mamba/causal_conv1d.cu: In function ‘void causal_conv1d_update(const at::Tensor&, const at::Tensor&, const at::Tensor&, const std::optional<at::Tensor>&, bool, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, int64_t)’:
+  /work/third_party/sglang/sgl-kernel/csrc/mamba/causal_conv1d.cu:286:35: warning: narrowing conversion of ‘(char)(& x)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    286 |     at::cuda::CUDAGuard device_guard{(char)x.get_device()};
+        |                                   ^~~~~~~~~~~~~~~~~~~~
+  At global scope:
+  cc1plus: note: unrecognized command-line option ‘-Wno-clang-format-violations’ may have been intended to silence earlier diagnostics
+  [90/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/cutlass_moe/w4a8/scaled_mm_entry.cu.o
+  [91/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/cutlass_moe/w4a8/w4a8_moe_data.cu.o
+  [92/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_align_kernel.cu.o
+  [93/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_fused_gate.cu.o
+  [94/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/cutlass_moe/w4a8/w4a8_grouped_mm_c3x.cu.o
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 7792; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 7808; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 7824; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 7840; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 10796; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 10812; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 10828; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 10843; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 26973; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 26989; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 27005; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 27020; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 35470; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 35486; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 35502; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 35517; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-9_w4a8_grouped_mm_c3x.compute_120a.ptx, line 85701; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 7792; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 7808; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 7824; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 7840; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 10796; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 10812; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 10828; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 10843; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 26973; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 26989; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 27005; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 27020; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 35470; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 35486; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 35502; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 35517; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000dc3_00000000-6_w4a8_grouped_mm_c3x.compute_121a.ptx, line 85701; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  [95/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/fused_qknorm_rope_kernel.cu.o
+  [96/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/kimi_k2_moe_fused_gate.cu.o
+  [97/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_sum.cu.o
+  [98/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_sum_reduce.cu.o
+  [99/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_topk_softmax_kernels.cu.o
+  [100/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/moe_topk_sigmoid_kernels.cu.o
+  [101/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/prepare_moe_input.cu.o
+  [102/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/quantization/gguf/gguf_kernel.cu.o
+  [103/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/speculative/eagle_utils.cu.o
+  [104/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/speculative/ngram_utils.cu.o
+  [105/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/speculative/packbit.cu.o
+  [106/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/speculative/speculative_sampling.cu.o
+  [107/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/csrc/moe/fp8_blockwise_moe_kernel.cu.o
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 26326; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 30862; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 34774; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 40408; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 44944; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-9_fp8_blockwise_moe_kernel.compute_120a.ptx, line 48856; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_120a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 26326; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 30862; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 34774; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 40408; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 44944; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas /tmp/tmpxft_00000fdc_00000000-6_fp8_blockwise_moe_kernel.compute_121a.ptx, line 48856; warning : Advisory: '.multicast::cluster' modifier on instruction 'cp.async.bulk{.tensor}' should be used on .target 'sm_90a/sm_100a/sm_100f/sm_103a/sm_103f/sm_110a/sm_110f' instead of .target 'sm_121a' as this feature is expected to have substantially reduced performance on some future architectures
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  ptxas info    : (C7506) Potential Performance Loss: 'setmaxnreg' ignored to maintain compatibility into 'extern' call.
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig1; LayoutD = cutlass::layout::ColumnMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:360:96:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:717:67:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    264 |   at::cuda::CUDAGuard device_guard{(char)a_ptrs.get_device()};
+        |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig2; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:392:93:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:717:67:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig3; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:423:93:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:717:67:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig1; LayoutD = cutlass::layout::ColumnMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:360:96:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:737:63:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig2; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:392:93:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:737:63:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm100_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm100_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfig3; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:423:93:   required from ‘void sm100_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:737:63:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:264:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigSmallM; LayoutD = cutlass::layout::ColumnMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:528:100:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:765:66:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    145 |   at::cuda::CUDAGuard device_guard{(char)a_ptrs.get_device()};
+        |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigH20LargeK; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:565:100:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:765:66:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::bfloat16_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigHx00AndH20SmallK; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:600:107:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::bfloat16_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:765:66:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigSmallM; LayoutD = cutlass::layout::ColumnMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:528:100:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:785:62:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigH20LargeK; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:565:100:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:785:62:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu: In instantiation of ‘void launch_sm90_fp8_blockwise_scaled_group_mm(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t; ScheduleConfig = sm90_fp8_blockwise_group_mm_dispatch_shape<cutlass::half_t>(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&)::MmaConfigHx00AndH20SmallK; LayoutD = cutlass::layout::RowMajor]’:
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:600:107:   required from ‘void sm90_fp8_blockwise_group_mm_dispatch_shape(at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&) [with OutType = cutlass::half_t]’
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:785:62:   required from here
+  /work/third_party/sglang/sgl-kernel/csrc/moe/fp8_blockwise_moe_kernel.cu:145:35: warning: narrowing conversion of ‘(char)(& a_ptrs)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+  cc1plus: note: unrecognized command-line option ‘-Wno-clang-format-violations’ may have been intended to silence earlier diagnostics
+  [108/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flashinfer-src/csrc/norm.cu.o
+  [109/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flashinfer-src/csrc/renorm.cu.o
+  [110/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flash-attention-src/csrc/flash_attn/src/flash_fwd_sparse_hdim128_bf16_causal_sm80.cu.o
+  [111/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flash-attention-src/csrc/flash_attn/src/flash_fwd_sparse_hdim128_bf16_sm80.cu.o
+  [112/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flash-attention-src/csrc/flash_attn/src/flash_fwd_sparse_hdim128_fp16_causal_sm80.cu.o
+  [113/127] Building CXX object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp.o
+  In file included from /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/integer_subbyte.h:46,
+                   from /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/numeric_types.h:40,
+                   from /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp:12:
+  /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/platform/platform.h:657:21: warning: ‘long4’ is deprecated: use long4_16a or long4_32a [-Wdeprecated-declarations]
+    657 | struct alignment_of<long4> {
+        |                     ^~~~~
+  In file included from /usr/local/cuda/targets/sbsa-linux/include/driver_types.h:61,
+                   from /usr/local/cuda/targets/sbsa-linux/include/builtin_types.h:59,
+                   from /usr/local/cuda/targets/sbsa-linux/include/cuda_runtime.h:90,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/CUDAMiscFunctions.h:7,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/CUDAException.h:6,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/CUDAAllocatorConfig.h:5,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/CUDACachingAllocator.h:6,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/impl/CUDAGuardImpl.h:9,
+                   from /usr/local/lib/python3.12/dist-packages/torch/include/c10/cuda/CUDAGuard.h:8,
+                   from /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp:7:
+  /usr/local/cuda/targets/sbsa-linux/include/vector_types.h:535:98: note: declared here
+    535 | typedef __device_builtin__ struct long4 __VECTOR_TYPE_DEPRECATED__("use long4_16a or long4_32a") long4;
+        |                                                                                                  ^~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/platform/platform.h:661:21: warning: ‘ulong4’ is deprecated: use ulong4_16a or ulong4_32a [-Wdeprecated-declarations]
+    661 | struct alignment_of<ulong4> {
+        |                     ^~~~~~
+  /usr/local/cuda/targets/sbsa-linux/include/vector_types.h:536:101: note: declared here
+    536 | typedef __device_builtin__ struct ulong4 __VECTOR_TYPE_DEPRECATED__("use ulong4_16a or ulong4_32a") ulong4;
+        |                                                                                                     ^~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/platform/platform.h:665:21: warning: ‘longlong4’ is deprecated: use longlong4_16a or longlong4_32a [-Wdeprecated-declarations]
+    665 | struct alignment_of<longlong4> {
+        |                     ^~~~~~~~~
+  /usr/local/cuda/targets/sbsa-linux/include/vector_types.h:553:110: note: declared here
+    553 | typedef __device_builtin__ struct longlong4 __VECTOR_TYPE_DEPRECATED__("use longlong4_16a or longlong4_32a") longlong4;
+        |                                                                                                              ^~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/platform/platform.h:669:21: warning: ‘ulonglong4’ is deprecated: use ulonglong4_16a or ulonglong4_32a [-Wdeprecated-declarations]
+    669 | struct alignment_of<ulonglong4> {
+        |                     ^~~~~~~~~~
+  /usr/local/cuda/targets/sbsa-linux/include/vector_types.h:554:113: note: declared here
+    554 | typedef __device_builtin__ struct ulonglong4 __VECTOR_TYPE_DEPRECATED__("use ulonglong4_16a or ulonglong4_32a") ulonglong4;
+        |                                                                                                                 ^~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-cutlass-src/include/cutlass/platform/platform.h:673:21: warning: ‘double4’ is deprecated: use double4_16a or double4_32a [-Wdeprecated-declarations]
+    673 | struct alignment_of<double4> {
+        |                     ^~~~~~~
+  /usr/local/cuda/targets/sbsa-linux/include/vector_types.h:564:104: note: declared here
+    564 | typedef __device_builtin__ struct double4 __VECTOR_TYPE_DEPRECATED__("use double4_16a or double4_32a") double4;
+        |                                                                                                        ^~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp: In function ‘std::vector<at::Tensor> flash::mha_fwd_sparse(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, double, double, bool, double, bool, std::optional<at::Generator>)’:
+  /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp:509:38: warning: narrowing conversion of ‘(char)(& q)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    509 |     at::cuda::CUDAGuard device_guard{(char)q.get_device()};
+        |                                      ^~~~~~~~~~~~~~~~~~~~
+  /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp: In function ‘std::vector<at::Tensor> flash::mha_varlen_fwd_sparse(at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const at::Tensor&, const std::optional<at::Tensor>&, const at::Tensor&, const at::Tensor&, const std::optional<at::Tensor>&, const std::optional<at::Tensor>&, int64_t, int64_t, double, double, bool, bool, double, bool, std::optional<at::Generator>)’:
+  /tmp/tmpgoxh8tlg/build/_deps/repo-flash-attention-src/csrc/flash_attn/flash_sparse_api.cpp:713:38: warning: narrowing conversion of ‘(char)(& q)->at::Tensor::<anonymous>.at::TensorBase::get_device()’ from ‘char’ to ‘c10::DeviceIndex’ {aka ‘signed char’} [-Wnarrowing]
+    713 |     at::cuda::CUDAGuard device_guard{(char)q.get_device()};
+        |                                      ^~~~~~~~~~~~~~~~~~~~
+  [114/127] Linking CXX shared library mscclpp-build/mscclpp.so.0.6.0
+  [115/127] Linking CXX shared module mscclpp-build/python/mscclpp/_mscclpp.cpython-312-aarch64-linux-gnu.so
+  [116/127] Building CXX object _deps/dlpack-build/CMakeFiles/mock.dir/contrib/mock_main.cc.o
+  [117/127] Building C object _deps/dlpack-build/CMakeFiles/mock.dir/contrib/mock_c.c.o
+  [118/127] Linking CXX shared module mscclpp-build/python/test/_ext.cpython-312-aarch64-linux-gnu.so
+  [119/127] Linking CXX shared library mscclpp-build/apps/nccl/mscclpp_nccl.so.0.6.0
+  [120/127] Creating library symlink mscclpp-build/mscclpp.so.0 mscclpp-build/mscclpp.so
+  [121/127] cd /tmp/tmpgoxh8tlg/build/mscclpp-build/python && /usr/local/lib/python3.12/dist-packages/cmake/data/bin/cmake -E copy_if_different /tmp/tmpgoxh8tlg/build/mscclpp-build/python/mscclpp/_mscclpp.*.so /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/python/mscclpp && /usr/local/lib/python3.12/dist-packages/cmake/data/bin/cmake -E copy_if_different /tmp/tmpgoxh8tlg/build/mscclpp-build/python/test/_ext.*.so /tmp/tmpgoxh8tlg/build/_deps/repo-mscclpp-src/python/test/_cpp
+  [122/127] Linking CXX executable _deps/dlpack-src/bin/mock
+  [123/127] Creating library symlink mscclpp-build/apps/nccl/mscclpp_nccl.so.0 mscclpp-build/apps/nccl/mscclpp_nccl.so
+  [124/127] Linking CXX static library mscclpp-build/apps/nccl/libmscclpp_nccl_static.a
+  [125/127] Building CUDA object CMakeFiles/common_ops_sm100_build.dir/_deps/repo-flash-attention-src/csrc/flash_attn/src/flash_fwd_sparse_hdim128_fp16_sm80.cu.o
+  [126/127] Linking CXX shared module sm100/common_ops.abi3.so
+  *** Installing project into wheel...
+  -- Install configuration: "Release"
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/assert_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/atomic_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/concurrency_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/copy_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/core.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/env.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/errors.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/executor.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/fifo.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/fifo_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/gpu.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/gpu_data_types.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/gpu_utils.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/memory_channel.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/memory_channel_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/numa.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/nvls.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/nvls_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/packet_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/poll_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/port_channel.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/port_channel_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/proxy.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/semaphore.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/semaphore_device.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/utils.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/npkit/npkit.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/npkit/npkit_event.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/mscclpp/npkit/npkit_struct.hpp
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp.so.0.6.0
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp.so.0
+  -- Set non-toolchain portion of runtime path of "/tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp.so.0.6.0" to ""
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp.so
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/libmscclpp_static.a
+  -- Up-to-date: /tmp/tmpgoxh8tlg/wheel/platlib/include
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/include/dlpack
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/include/dlpack/dlpack.h
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/lib/cmake/dlpack/dlpackConfig.cmake
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/lib/cmake/dlpack/dlpackConfigVersion.cmake
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/lib/cmake/dlpack/dlpackTargets.cmake
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./_mscclpp.cpython-312-aarch64-linux-gnu.so
+  -- Set non-toolchain portion of runtime path of "/tmp/tmpgoxh8tlg/wheel/platlib/./_mscclpp.cpython-312-aarch64-linux-gnu.so" to ""
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./include/include/nccl.h
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp_nccl.so.0.6.0
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp_nccl.so.0
+  -- Set non-toolchain portion of runtime path of "/tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp_nccl.so.0.6.0" to ""
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/mscclpp_nccl.so
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/./lib/libmscclpp_nccl_static.a
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/sgl_kernel/sm100/common_ops.abi3.so
+  -- Set non-toolchain portion of runtime path of "/tmp/tmpgoxh8tlg/wheel/platlib/sgl_kernel/sm100/common_ops.abi3.so" to ""
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/swiglu.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/swiglu_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/swiglu_details/_swiglu.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/compaction_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/compaction_details/_masked_compaction.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/compaction.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/mxfp_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/mxfp_details/_upcast_from_mxfp.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/mxfp_details/_downcast_to_mxfp.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/flexpoint.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/__init__.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics_details/mxfp.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/reduce.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/testing.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/hopper_value.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/blackwell_scale.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/base.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/cdna4_scale.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/hopper_scale.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/blackwell_value.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout_details/strided.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/bitmatrix_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/bitmatrix_details/sum_bitmatrix_rows.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/bitmatrix.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/layout.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/tensor_details/ragged_tensor.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/numerics.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/distributed.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/roofline.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/topk_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/topk_details/_topk_forward.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/topk_details/_topk_backward.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/topk_details/__init__.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/_p_matmul_ogs.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/opt_flags.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/opt_flags_details
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/opt_flags_details/opt_flags_amd.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/opt_flags_details/opt_flags_nvidia.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/_matmul_ogs.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/matmul_ogs_details/_common.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/proton_opts.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/topk.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/__init__.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/target_info.py
+  -- Installing: /tmp/tmpgoxh8tlg/wheel/platlib/triton_kernels/specialize.py
+  *** Making wheel...
+  *** Created sglang_kernel-0.4.3-cp310-abi3-linux_aarch64.whl
+  Building wheel for sglang-kernel (pyproject.toml): finished with status 'done'
+  Created wheel for sglang-kernel: filename=sglang_kernel-0.4.3-cp310-abi3-linux_aarch64.whl size=29091315 sha256=76a8b94b1f6687894cd794c5576740858607636b6b5c686c7473bdcafbf9bfa5
+  Stored in directory: /root/.cache/pip/wheels/f4/9e/91/52010f7e77bbed49ef0a79fe6f74d675b5de49ca1b8d8ff5d0
+Successfully built sglang-kernel
+Installing collected packages: sglang-kernel
+Successfully installed sglang-kernel-0.4.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ cd /work
++ python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/sglang/python
+Obtaining file:///work/third_party/sglang/python
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: sglang
+  Building editable for sglang (pyproject.toml): started
+  Building editable for sglang (pyproject.toml): finished with status 'done'
+  Created wheel for sglang: filename=sglang-0.5.12.post2.dev1019+gd96869237-0.editable-py3-none-any.whl size=7052 sha256=178a3a73a74cb585bb2ab9cb651cfe010091ef25076b33287510daae39049b59
+  Stored in directory: /tmp/pip-ephem-wheel-cache-poilyv7y/wheels/67/eb/36/434f1df347056d85e8a6f54b863abba8a284630bac7bc53eca
+Successfully built sglang
+Installing collected packages: sglang
+  Attempting uninstall: sglang
+    Found existing installation: sglang 0.5.11+nv26.5.51621272
+    Uninstalling sglang-0.5.11+nv26.5.51621272:
+      Successfully uninstalled sglang-0.5.11+nv26.5.51621272
+Successfully installed sglang-0.5.12.post2.dev1019+gd96869237
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ python3 -
+{
+  "capability": [
+    12,
+    1
+  ],
+  "common_ops_root": [],
+  "common_ops_sm100": [
+    "/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so"
+  ],
+  "common_ops_sm90": [],
+  "device": "NVIDIA GB10",
+  "flashinfer_python": "0.6.13",
+  "loaded_common_ops": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so",
+  "sgl_kernel_file": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py",
+  "sglang": "0.5.12.post2.dev1019+gd96869237",
+  "sglang_kernel": "0.4.3",
+  "torch": "2.12.0a0+5aff3928d8.nv26.05",
+  "torch_cuda": "13.2"
+}
