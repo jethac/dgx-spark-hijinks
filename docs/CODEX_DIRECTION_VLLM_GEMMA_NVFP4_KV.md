@@ -66,6 +66,11 @@ dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.
    `D=256` but fails global `D=512` with FlashInfer "invalid configuration" at
    `prefill.cuh:3215`
    (`results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json`).
+   A focused NHD rerun on `jethac/flashinfer@e152cf4d` in the Qwen-proven NVFP4-KV
+   image reproduced the same blocker: decode fails with `NUM_MMA_Q=1
+   NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4`, and
+   prefill fails with `NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1`
+   (`results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_nhd_debug_20260608.json`).
 
 ## Objectives, in order
 
@@ -75,12 +80,13 @@ Record the *actually selected* attention + MoE backend, quantization path, and w
 KV is bf16/fp8/nvfp4. Goal: replace the `da1daf40` + Transformers surgery with a
 reproducible clean-stack Gemma baseline. This is compatibility, not a speed/KV claim.
 
-**B. Diagnose and break the `prefill.cuh:3215` D=512 failure — this is the keystone.**
-Done entirely in a **standalone FlashInfer harness on GB10** (no image). Determine *why*
-global `D=512` fails: is it (i) an unsupported head-dim guard in the FA2 NVFP4 path, or
-(ii) a launch/shared-memory tile overflow — i.e. the same GB10 99 KiB SMEM ceiling that
-sinks SM120 FP4 GEMM tiles in TRT-LLM #11368? Capture the exact CUDA error and the
-kernel's requested smem/grid. Then pick a fix:
+**B. Break the `prefill.cuh:3215` D=512 failure — this is the keystone.**
+The standalone harness reproduction is done. The remaining question is *why* global
+`D=512` fails: is it (i) an unsupported head-dim/register/tile guard in the FA2 NVFP4
+path, or (ii) a launch/shared-memory tile overflow — i.e. the same 99 KiB/block SM12x
+ceiling that sinks SM120 FP4 GEMM tiles in TRT-LLM #11368? Inspect
+`include/flashinfer/attention/prefill.cuh` and the generated JIT instantiation for the
+failing trait, then pick a fix:
    - if SMEM/tile: a GB10-appropriate tile config for `D=512` FP4 FA2, or
    - if head-dim guard: extend/route the supported-head-dim set, or
    - interim: **per-layer mixed KV** — NVFP4 KV on local (`D=256`) layers, fp8/bf16 on
@@ -166,7 +172,7 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
 - Explicit scope labels for what's untested (MLA, attention sinks, TP>1, page sizes).
 
 ## Guardrails
-- **Validate on `sm_121a` only.** PGX = GB10. SM120 is a compiled-but-unclaimed build
+- **Validate on `sm_121a` only.** This campaign's validation hardware is GB10. SM120 is a compiled-but-unclaimed build
   target; never put a correctness/capacity claim on hardware we can't run. See the
   "SM120 ride-along" section for how to build for it without claiming it.
 - **Re-derive against current vLLM main; do not blind patch-apply.** The reference was
@@ -183,10 +189,10 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
 
 ## First concrete step (no image builds)
 Two things, both on the existing image / standalone harness:
-  1. Reproduce the `prefill.cuh:3215` D=512 failure in a **standalone FlashInfer
-     harness** under a debug build that prints the exact CUDA error + requested
-     shared-memory size. Head-dim guard vs SMEM overflow is the single highest-leverage
-     unknown and decides the Objective B fix. No vLLM image needed.
+  1. Inspect and patch the FlashInfer FA2 `D=512` trait/tile path. The focused harness
+     already reproduced the failure on `jethac/flashinfer@e152cf4d`; next decide
+     head-dim/register/tile guard vs 99 KiB SMEM overflow and either add a `D=512`-safe
+     SM12x tile or route Gemma global layers to mixed fp8/bf16 KV.
   2. Bring up Gemma 4 12B via **source overlay** on the clean FA2 image and capture the
      server log + backend audit (which attention/MoE backend actually got selected).
 Defer every image build until Objective E.

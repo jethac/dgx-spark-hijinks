@@ -291,4 +291,10 @@ Result:
 - `max_tokens=0`: `ok=false`.
 - `max_tokens=1`: `ok=false`.
 - Both responses expose `choices[0].logprobs.content` for a generated token (`-striped`), not prompt `tokens`/`token_logprobs`.
-- Therefore pinned `b9536` still cannot provide exact supplied-continuation logprobs through the tested OpenAI echo path. The accuracy lane needs either a newer llama.cpp server pin that exposes prompt-token logprobs or a `jethac/llama.cpp` endpoint fork.
+- Therefore pinned `b9536` still cannot provide exact supplied-continuation logprobs through the tested OpenAI echo path.
+
+Next decision:
+
+- Try one newer llama.cpp server pin with the same `scripts/gguf_logprobs_probe.py` echo-span check.
+- Pass condition: returned prompt-token logprobs cover the supplied continuation tokens `[1147, 50213]`.
+- If the newest pin still exposes generated-token `logprobs.content` only, stop probing stock endpoints and use a `jethac/llama.cpp` endpoint fork for direct supplied-token loglikelihood.

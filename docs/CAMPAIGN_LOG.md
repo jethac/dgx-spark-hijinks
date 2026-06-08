@@ -438,6 +438,13 @@
   - result: both `max_tokens=0` and `max_tokens=1` returned `choices[0].logprobs.content` for a generated token (`-striped`) and did not expose prompt `tokens` or `token_logprobs`; both rows have `ok=false`.
   - interpretation: the OpenAI echo path on pinned `b9536` cannot provide exact supplied-continuation logprobs for the `zebra` case. The llama.cpp accuracy lane needs either a newer server pin that exposes prompt-token logprobs or a `jethac/llama.cpp` endpoint fork.
 
+- Re-ran the focused Gemma 4 26B global-attention FlashInfer FA2 NVFP4-KV blocker on the Qwen-proven vLLM image.
+  - artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_nhd_debug_20260608.json`
+  - image/source: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv`, FlashInfer `0.6.13` from `/opt/jethac-flashinfer`, git `e152cf4d`.
+  - shape: Gemma global/full attention NHD, `batch_size=2`, `kv_len=128`, `qo_len=16`, `page_size=16`, `H_q=16`, `H_kv=2`, `D=512`, `dtype=bfloat16`, vLLM-style swizzled V scale factors.
+  - result: both operations still fail at `include/flashinfer/attention/prefill.cuh:3215`; decode trait is `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4`, prefill trait is `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1`.
+  - interpretation: Gemma NVFP4-KV remains blocked below vLLM routing. The next work is a FlashInfer FA2 `D=512` trait/tile fix or a mixed-KV fallback for Gemma global layers.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

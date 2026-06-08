@@ -118,9 +118,10 @@ thinking-disabled finding visible (it's the difference between empty and useful 
   submodule, and issue-named worktree. Issues: #8 (accuracy), #17 (serving).
 
 ## First concrete step (no rebuilds yet)
-Run the single decisive accuracy test against the live `b9536` `llama-server`: probe every
-candidate endpoint/flag for the **exact logprob of a supplied unlikely token** (`zebra`),
-rank-independent — native `/completion` prompt echo, `post_sampling_probs` over prompt
-tokens, and `/v1/completions` `echo=true` `token_logprobs`. If any returns it, Objective A
-is an adapter; if none does on `b9536`, Objective A is a build-pin or `jethac/llama.cpp`
-endpoint fork. That one result decides whether this lane needs code or just glue.
+The pinned `b9536` server has already failed both native top-N and OpenAI `echo=true`
+supplied-token probes. Run **one newer-pin echo-span probe** with the existing
+`scripts/gguf_logprobs_probe.py`: if a newer server exposes prompt-token logprobs that
+cover the supplied unlikely continuation (`zebra`), Objective A is an adapter on that
+pin. If the newest pin still returns generated-token `logprobs.content` only, stop
+probing stock endpoints and create a `jethac/llama.cpp` endpoint fork for direct
+supplied-token loglikelihood.

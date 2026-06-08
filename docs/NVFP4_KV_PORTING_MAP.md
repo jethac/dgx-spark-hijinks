@@ -83,6 +83,11 @@ Gemma 4 26B-shaped verification:
 - global/full attention artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json`
   - shape: `H_q=16`, `H_kv=2`, `D=512`, `page=16`, `kv_len=128`, `qo_len=16`
   - result: NHD/HND decode and prefill all failed with FlashInfer FA2 invalid configuration from `prefill.cuh:3215`
+- focused debug artifact: `results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_nhd_debug_20260608.json`
+  - image/source: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv`, FlashInfer `0.6.13` from `/opt/jethac-flashinfer`, git `e152cf4d`
+  - shape: same Gemma global NHD case, `H_q=16`, `H_kv=2`, `D=512`, `page=16`, `kv_len=128`, `qo_len=16`
+  - result: decode failed with `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=1 NUM_WARPS_KV=4`; prefill failed with `NUM_MMA_KV=2 NUM_WARPS_Q=4 NUM_WARPS_KV=1`
+  - conclusion: the Qwen-proven vLLM image still cannot launch Gemma global `D=512`; this is a FlashInfer FA2 trait/tile blocker below vLLM routing.
 - conclusion: the first model-shaped proof is mixed. Gemma 4 26B local attention is viable in the standalone patched FlashInfer path, but global attention is currently a blocker for Gemma 4 26B NVFP4-KV serving.
 
 ## vLLM Reference Map
@@ -160,7 +165,7 @@ Likely `jethac/vllm` work:
 - Ported in `2c1405d`: runtime logging that proves FA2 native NVFP4 KV routing was selected.
 - Ported in `8916796`: vLLM enables FlashInfer's V-scale-factor deswizzle JIT macro for its swizzled V-scale writer.
 - Done for Qwen in `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`: fp8-vs-NVFP4 KV pool tokens, maximum concurrency, normal output content, TTFT, and warmed decode are recorded.
-- Still pending for Gemma: source-overlay baseline, FA2 NVFP4 KV selection, and either a `D=512` global-attention fix or a mixed-KV fallback.
+- Still pending for Gemma: source-overlay baseline, FA2 NVFP4 KV selection, and either a `D=512` global-attention trait/tile fix or a mixed-KV fallback.
 
 Likely `jethac/flashinfer` work:
 
@@ -169,8 +174,8 @@ Likely `jethac/flashinfer` work:
 - Ported in `e152cf4d`: compile-time gated B2-style V scale-factor de-swizzle; the vLLM branch must enable this path when using the interleaved vLLM cache layout.
 - Passed: GB10 standalone harness coverage for NHD/HND paged KV at `H_q=4`, `H_kv=2`, `D=128`, `page=16`, with swizzled V scale factors and de-swizzle enabled.
 - Passed: Gemma 4 26B sliding/local attention shape `H_q=16`, `H_kv=8`, `D=256`, `page=16`, `kv_len=1024`, `qo_len=128`.
-- Failed: Gemma 4 26B global/full attention shape `H_q=16`, `H_kv=2`, `D=512`, `page=16` with FlashInfer invalid configuration.
-- Still pending: fix or fallback route for `D=512` global attention before Gemma 4 26B serving.
+- Failed: Gemma 4 26B global/full attention shape `H_q=16`, `H_kv=2`, `D=512`, `page=16` with FlashInfer invalid configuration; focused rerun reproduced the exact failing traits on `jethac/flashinfer@e152cf4d`.
+- Still pending: inspect the FlashInfer FA2 `D=512` trait/tile path and either add a 99 KiB-safe SM12x kernel configuration or route Gemma global layers to fp8/bf16 mixed KV before Gemma 4 26B serving.
 - Still pending: clean wheel/container build proof and runtime logs proving native FA2 NVFP4 KV selection.
 
 Patch ownership from the SM120 vLLM reference:

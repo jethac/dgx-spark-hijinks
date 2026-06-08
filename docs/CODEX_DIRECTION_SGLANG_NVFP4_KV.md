@@ -191,11 +191,11 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The convention bridge is already done — start one level down. In an eager (no-graph)
-overlay run, instrument the SGLang serving path to log which global-scale convention and
-V-scale layout it actually feeds the FlashInfer FA2 reader per layer, and compare that to
-(a) the valid pairings from the bridge table and (b) what vLLM's clean Qwen row feeds.
-Find the first layer/op where SGLang produces an **unmatched** pair — that is the bug.
-Then switch SGLang to a valid pairing and confirm raw `2+2` returns `4`. Most likely
-locus given current evidence: the per-layer calibration applying a scale in the wrong
-convention. No serving image required.
+The convention bridge is already done — start one level down with the actual serving
+pool contract. Build a SGLang-vs-standalone-FlashInfer pool bridge on Qwen2.5 1.5B:
+quantize through `MHATokenToKVPoolFP4`, read `get_kv_buffer()`,
+`get_kv_scale_buffer()`, and `get_kv_global_scale()`, then feed those exact tensors into
+the FlashInfer FA2 wrapper and compare against the standalone dequant reference. If this
+fails, the bug is in pool layout/global-scale application. If it passes, instrument the
+backend wrapper/server sequencing to find where SGLang first produces an unmatched
+convention or V-scale layout. No serving image required.
