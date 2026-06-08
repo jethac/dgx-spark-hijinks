@@ -59,7 +59,11 @@ def _patch_flashinfer(source_root: Path) -> None:
     attention_modules.generate_additional_params = local_utils.generate_additional_params
 
     def filename_safe_dtype_map_kv(dtype):
-        if jit_utils.dtype_map_kv[dtype] == "__nv_fp4x2_e2m1":
+        import torch  # type: ignore
+
+        if dtype is torch.uint8 or dtype == torch.uint8:
+            return "fp4x2_e2m1"
+        if hasattr(torch, "float4_e2m1fn_x2") and dtype == torch.float4_e2m1fn_x2:
             return "fp4x2_e2m1"
         return jit_utils.filename_safe_dtype_map[dtype]
 

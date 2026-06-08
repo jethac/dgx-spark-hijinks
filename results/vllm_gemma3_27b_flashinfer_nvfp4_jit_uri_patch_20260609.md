@@ -40,6 +40,9 @@ Top-level source-overlay correction:
   FlashInfer `get_batch_prefill_uri` binding used by `flashinfer.prefill`, so the live
   container uses a `dtype_kv_fp4x2_e2m1` batch-prefill namespace without importing the
   whole `/flashinfer-src` Python package.
+- The live container's installed FlashInfer is older than the fork and does not expose
+  `dtype_map_kv`, so the monkeypatch treats `torch.uint8` explicitly as the packed FP4 KV
+  carrier for this experiment.
 - Whole-source Python import was tested and is not viable in this container because the
   source package's CuteDSL/CUTLASS Python dependency path raises
   `AttributeError: module 'cutlass.cute.nvgpu' has no attribute 'OperandMajorMode'`.
@@ -58,6 +61,15 @@ git -C third_party\flashinfer diff --check
 
 Limit: importing FlashInfer URI helpers on Windows failed because `tvm_ffi` is not present
 in this local environment. The live proof must run inside the GB10 source-overlay container.
+
+Remote container URI smoke passed after the overlay correction:
+
+```text
+flashinfer_file=/usr/local/lib/python3.12/dist-packages/flashinfer/__init__.py
+prefill_uri=batch_prefill_with_kv_cache_dtype_q_bf16_dtype_kv_fp4x2_e2m1_...
+has_fp4_name=true
+has_u8_name=false
+```
 
 ## Required Live Rerun
 
