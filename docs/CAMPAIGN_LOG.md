@@ -366,16 +366,21 @@
   - backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, FlashInfer FP4 GEMM autotune, CUDA graphs, and `1,241,920` KV tokens.
   - interpretation: this closes the clean vLLM Qwen packaging gap and pairs serving evidence with separate FA2 `sm_121a` cubin proof. It is not a speedup claim and it still does not prove native FP4 weight/MoE compute; the server warns that the selected weight path is Marlin weight-only FP4.
   - failed first recorder pass: `jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST` hit a PowerShell-to-SSH JSON quoting bug for `chat_template_kwargs`, producing a recorder `JSONDecodeError`. The server had started and served; classify that failed row as operator quoting, not runtime/model failure.
-- Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
+- Moved the clean SGLang FP4 KV row from corrupted graph serving to an autosafe no-graph capacity path.
   - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.
   - graph-enabled negative artifacts: `results/sglang_qwen_fp4kv_decode_dtype_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_decode_dtype_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_decode_dtype_bad_output_20260608_server.log`.
   - layout probe: `results/sglang_nvfp4_kv_layout_probe_20260608.json`; both 4D and 3D scale-factor forms matched a faithful dequant reference at cosine `0.9999957`, so scale-rank was not the serving corruption root cause.
   - eager/no-graph positive artifacts: `results/sglang_qwen_fp4kv_eager_only_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_eager_only_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_eager_only_server_20260608.log`.
   - auto-safe default artifacts: `results/sglang_qwen_fp4kv_autosafe_chat_smoke_20260608.json`, `results/sglang_qwen_fp4kv_autosafe_raw_generate_20260608.json`, `results/sglang_qwen_fp4kv_autosafe_server_20260608.log`.
-  - result: the fork now disables CUDA graph and piecewise graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. Default launch logs the disable warning, returns `spark-ok`, and raw generation gives a sane `2+2 is 4` answer.
-  - interpretation: SGLang FP4 KV is correctness-safe enough for a matched fp8-vs-fp4 capacity row, but graph-enabled FP4 KV remains a separate corruption bug and no speed claim has been banked.
+  - result at this stage: the fork disables CUDA graph and piecewise graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. The early autosafe smoke looked better than graph-enabled decode, but this was not enough evidence to bless quality.
+  - interpretation: SGLang FP4 KV needed a matched fp8-vs-fp4 row with standardized quality checks before any serving claim.
   - related upstream note: TensorRT-LLM #11368 documents a separate GB10 FP4 GEMM problem where SM120 tile configs exceed GB10's 99 KiB shared-memory limit, explaining why SM12x dispatch/JIT targeting alone may not improve MoE-shaped FP4 GEMM performance.
+- Recorded the matched SGLang Qwen autosafe fp8-vs-FP4 KV row.
+  - summary: `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_summary.md`
+  - fp8 comparator: `3,101,822` KV tokens, no-graph policy match, decode `56.73`, `56.81`, and `57.10 tok/s`, raw `2+2` returns `4`.
+  - FP4 KV: `5,519,481` KV tokens, auto-safe no-graph policy, `1.779x` fp8 capacity, and `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`.
+  - negative result: standardized FP4 raw `2+2` and compact benchmark content fail quality, so this is a capacity proof rather than a blessed serving or speed row.
 
 ## First Benchmark Campaign Summary
 

@@ -1,0 +1,30 @@
+{
+  "id": "292fd3211e374bbead9d9b8e07db505c",
+  "object": "chat.completion",
+  "created": 1780892338,
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "\n\n=\n\n= (answer)= is a question. I am",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "length",
+      "matched_stop": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 40,
+    "total_tokens": 56,
+    "completion_tokens": 16,
+    "prompt_tokens_details": null,
+    "reasoning_tokens": 0
+  },
+  "metadata": {
+    "weight_version": "default"
+  }
+}

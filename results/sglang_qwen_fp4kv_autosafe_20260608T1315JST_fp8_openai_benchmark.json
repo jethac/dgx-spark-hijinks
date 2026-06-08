@@ -1,0 +1,162 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "completion_tok_s_total": 54.10422063915868,
+      "content_chars": 409,
+      "content_preview": "A local AI workstation benefits from fast memory because it allows for efficient storage and retrieval of large amounts of data required for training machine learning models. Fast memory enables the workstation to process complex algorithms quickly, reducing computation time and improving overall performance. Additionally, faster memory speeds can help reduce latency in real-time applications, leading to a",
+      "decode_s": 1.1282030679867603,
+      "decode_tok_s": 56.72737631728462,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780892213,
+        "id": "7d91d1a2e1f24770a7e44d8fe2758bd4",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 44,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 108
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 409,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 1.1829021699959412,
+      "ttft_s": 0.05469910200918093,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 44,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 108
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 195,
+      "completion_tok_s_total": 56.17954522685203,
+      "content_chars": 884,
+      "content_preview": "**Engineering Note: Validating GPU Kernel Usage on an LLM Server**\n\n### Objective:\nTo ensure that the Large Language Model (LLM) server is utilizing the correct and intended GPU kernels for optimal performance.\n\n### Methodology:\n\n1 that the LLM server is configured to use specific GPU kernels designed for its model. This involves verifying the following steps:\n\n#### 1. Identify the Correct GPU Kernels\n\n- **Step 1:** Review the documentation or specifications provided by the LLM provider.\n- **Ste",
+      "decode_s": 3.3796201369841583,
+      "decode_tok_s": 56.81111847420028,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780892217,
+        "id": "a494dcea55954728aa92eff4afb7c351",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 56,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 248
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 884,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 3.417613994999556,
+      "ttft_s": 0.037993858015397564,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 56,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 248
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 45,
+      "completion_tok_s_total": 48.28863092966122,
+      "content_chars": 207,
+      "content_preview": "1. Capture environment metadata:, including:\n2. Capture backend selection, including cold-start time.\n3. Capture warm decode speed, including memory pressure.\n.\n.\n capture output quality, including reproduc.",
+      "decode_s": 0.7530117070127744,
+      "decode_tok_s": 57.1040258730938,
+      "finish_reason": "stop",
+      "last_event": {
+        "choices": [],
+        "created": 1780892218,
+        "id": "ea03338ee97a48f0a6c18f8ab76d9c3c",
+        "model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 43,
+          "prompt_tokens": 2369,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2412
+        }
+      },
+      "matched_stop": 151645,
+      "ok": true,
+      "output_chars": 207,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 0.8904787560168188,
+      "ttft_s": 0.13746704900404438,
+      "usage": {
+        "completion_tokens": 43,
+        "prompt_tokens": 2369,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2412
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T04:16:58Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "models_response": null,
+  "ok": true,
+  "phase": "before",
+  "run_id": "sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-08T04:16:52Z",
+  "url": "http://127.0.0.1:30000"
+}

@@ -1,0 +1,237 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 95 %"
+    }
+  },
+  "finished_utc": "2026-06-08T04:18:57Z",
+  "match": "sglang",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    716538,
+    716867,
+    716868,
+    717823
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "python3",
+        "-m",
+        "sglang.launch_server",
+        "--model-path",
+        "Qwen/Qwen2.5-1.5B-Instruct",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "30000",
+        "--tp",
+        "1",
+        "--dtype",
+        "bfloat16",
+        "--kv-cache-dtype",
+        "fp4_e2m1",
+        "--attention-backend",
+        "flashinfer",
+        "--page-size",
+        "1",
+        "--mem-fraction-static",
+        "0.40"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 716538,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "python3",
+        "PPid": "716515",
+        "Pid": "716538",
+        "State": "S (sleeping)",
+        "Tgid": "716538",
+        "Threads": "70",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1304792 kB",
+        "VmRSS": "1299728 kB",
+        "VmSize": "23622776 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::scheduler"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 716867,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::schedul",
+        "PPid": "716538",
+        "Pid": "716867",
+        "State": "R (running)",
+        "Tgid": "716867",
+        "Threads": "98",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "4425552 kB",
+        "VmRSS": "2834344 kB",
+        "VmSize": "96115128 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "sglang::detokenizer"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 716868,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "sglang::detoken",
+        "PPid": "716538",
+        "Pid": "716868",
+        "State": "S (sleeping)",
+        "Tgid": "716868",
+        "Threads": "43",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "1151940 kB",
+        "VmRSS": "1151940 kB",
+        "VmSize": "23719336 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "python3",
+        "scripts/record_openai_serving_row.py",
+        "--backend",
+        "sglang",
+        "--phase",
+        "after",
+        "--run-id",
+        "sglang_qwen_fp4kv_autosafe_20260608T1315JST",
+        "--url",
+        "http://127.0.0.1:30000",
+        "--model",
+        "Qwen/Qwen2.5-1.5B-Instruct",
+        "--runtime-ref",
+        "nvcr.io/nvidia/sglang:26.05-py3 + jethac/sglang clean source overlay; installed NVIDIA FlashInfer; FP4 autosafe no-graph policy",
+        "--container-image",
+        "nvcr.io/nvidia/sglang:26.05-py3",
+        "--quantization",
+        "bf16",
+        "--kv-cache-dtype",
+        "fp4_e2m1",
+        "--attention-backend",
+        "flashinfer",
+        "--cuda-graph-mode",
+        "auto-safe-no-graph",
+        "--server-log",
+        "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_server.log",
+        "--process-match",
+        "sglang",
+        "--chat-smoke-max-tokens",
+        "64"
+      ],
+      "cwd": {
+        "path": "/home/jethac/dgx-spark-hijinks-live-sglang_qwen_fp4kv_autosafe_20260608T1315JST"
+      },
+      "environment": {
+        "values": {}
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 717823,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "python3",
+        "PPid": "716484",
+        "Pid": "717823",
+        "State": "S (sleeping)",
+        "Tgid": "717823",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "13424 kB",
+        "VmRSS": "13424 kB",
+        "VmSize": "35236 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780892337,
+          "id": "Qwen/Qwen2.5-1.5B-Instruct",
+          "max_model_len": 32768,
+          "object": "model",
+          "owned_by": "sglang",
+          "parent": null,
+          "root": "Qwen/Qwen2.5-1.5B-Instruct"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-08T04:18:57Z",
+  "url": "http://127.0.0.1:30000"
+}

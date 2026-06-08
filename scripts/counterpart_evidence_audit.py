@@ -50,10 +50,11 @@ REQUIREMENTS = (
         name="sglang_clean_fp4_kv_after_row",
         runtime="sglang",
         model_family="qwen",
-        title="SGLang graph-compatible FP4 KV after-row",
+        title="SGLang FP4 KV capacity and quality after-row",
         acceptance=(
-            "Clean fork/container SGLang FP4 KV row serves with graphs or a justified graph "
-            "policy, quality check, fp8 comparator, and row manifest."
+            "Clean fork/container SGLang FP4 KV row serves with a justified graph policy, "
+            "passes deterministic quality checks, includes an fp8 comparator, and records "
+            "capacity and throughput in row manifests."
         ),
         claim_groups=(
             (
@@ -77,10 +78,17 @@ REQUIREMENTS = (
             "results/sglang_qwen_fp4kv_eager_only*.log",
             "results/sglang_qwen_fp4kv_autosafe*.json",
             "results/sglang_qwen_fp4kv_autosafe*.log",
+            "results/sglang_qwen_fp4kv_autosafe*.md",
             "results/sglang_nvfp4_kv_layout_probe*.json",
             "results/sglang_fp4_kv_sm121_*.md",
         ),
-        forbidden_claim_fragments=("_patched_", "_nograph", "_nographs", "_startup"),
+        forbidden_claim_fragments=(
+            "_patched_",
+            "_nograph",
+            "_nographs",
+            "_startup",
+            "_autosafe",
+        ),
     ),
     EvidenceRequirement(
         name="sglang_dflash_or_eagle_qwen",

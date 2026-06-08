@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch now serves Qwen correctly by auto-disabling CUDA graph capture for native FP4 KV. Do not bless SGLang FP4 KV for graph-enabled performance yet.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy, but standardized output quality still fails. Do not bless SGLang FP4 KV for serving quality or speed yet.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -126,20 +126,45 @@ Result:
 - A BF16 KV comparator using the same clean source overlay, same model, FlashInfer attention, and graph modes passed: chat smoke returned `spark-ok`, and raw generation answered `2+2 is 4`.
 - A scale-factor layout probe showed the installed NVIDIA FlashInfer FA2 path accepts both 4D `[tokens, 1, heads, sf_cols]` and 3D `[tokens, heads, sf_cols]` scale-factor tensors for this page-size-1 shape, both at cosine `0.9999957` versus a faithful dequant reference. Scale-rank mismatch is not the current corruption root cause.
 - Matching the reference decode planning call shape, so FlashInfer decode planning uses the packed KV storage dtype instead of the logical FP4 dtype, did not fix graph-enabled output. The graph-enabled run still returned `Placeholder\n\nI'm here to to.` and `2+2 is a 2-digit number number`.
-- Disabling both normal CUDA graph and piecewise CUDA graph fixed Qwen output quality for the FP4 KV path: chat smoke returned `spark-ok`, and raw generation returned semantically correct `2+2 is 4` text.
-- The fork now disables CUDA graph capture automatically for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. A default launch without manual graph flags logs `Disabling CUDA graph capture for native FP4 KV cache`, reaches readiness, returns `spark-ok`, and answers `2+2 is 4`.
+- Disabling both normal CUDA graph and piecewise CUDA graph initially improved the FP4 KV path enough for ad hoc smoke checks, but the later standardized fp8-vs-FP4 row still failed deterministic output quality.
+- The fork now disables CUDA graph capture automatically for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. The matched autosafe row logs `Disabling CUDA graph capture for native FP4 KV cache`, reaches readiness, and returns `spark-ok`, but its standardized raw `2+2` artifact is malformed and the benchmark text degenerates.
 
 Interpretation:
 
 - The pre-capture calibration port is a real compatibility fix: it moves SGLang FP4 KV from graph-capture failure to serving.
 - The SM120-family quantizer routing fix removes a concrete divergence from the `hikarioyama/sglang-nvfp4-kv-sm120` implementation, but it is not sufficient for correctness on GB10.
-- The remaining blocker is graph-safe FP4 KV, not the packed FP4 writer, Qwen, BF16 serving, or the clean source-overlay mechanics.
-- SGLang FP4 KV is now a correctness-safe capacity lane only when graph capture is disabled. Do not claim graph-enabled speed, and do not compare throughput against fp8 until the graph policy is explicit in the row manifest.
+- The remaining blocker is FP4 KV output quality under serving, plus graph-safe FP4 KV if we want the normal high-performance path. The packed writer and capacity allocation are real, but they are not sufficient.
+- SGLang FP4 KV is now a capacity-proven lane only when graph capture is disabled. Do not claim graph-enabled speed or no-graph serving quality until the deterministic sanity and quality comparator pass.
 
 Next debugging target:
 
-- Add an end-to-end graph replay probe before re-enabling graphs. Eager/default-safe serving is correct, while graph-enabled serving corrupts decode output.
-- Build a matched fp8-vs-fp4 capacity/quality/throughput row with graph policy recorded. The first blessed SGLang FP4 KV row must say that CUDA graph capture was disabled by the fork.
+- Add an end-to-end graph replay probe before re-enabling graphs, but keep quality debugging first because the autosafe no-graph row still corrupts output.
+- Build the next matched fp8-vs-fp4 row only after the FP4 side passes deterministic sanity. The first blessed SGLang FP4 KV row must record graph policy, capacity tokens, throughput, and quality.
+
+## 2026-06-08 Autosafe fp8-vs-FP4 KV Row
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_summary.md`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_row_manifest.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_raw_2plus2.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_row_manifest.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_raw_2plus2.json`
+
+Result:
+
+- fp8 comparator: `3,101,822` KV tokens, CUDA graphs disabled to match the FP4 policy, decode `56.73`, `56.81`, and `57.10 tok/s`, raw `2+2` returns `4`.
+- FP4 KV: `5,519,481` KV tokens, auto-safe no-graph policy, `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`, capacity ratio `1.779x` versus fp8.
+- FP4 output quality fails: raw `2+2` returns malformed text, and the compact benchmark output is repetitive or incoherent even though the row manifest is mechanically `ok=true`.
+- The build-target audit for these row logs still does not provide accepted native build-target evidence.
+
+Interpretation:
+
+- This is the cleanest SGLang FP4 KV capacity proof so far.
+- It is not a blessed serving row and not a speed claim. The FP4 throughput numbers are not comparable because the output is wrong.
+- The next SGLang target is a quality fix or a larger/model-shaped FP4 KV row that passes deterministic sanity and quality checks while preserving the `1.78x` capacity gain.
 
 Likely code locations:
 

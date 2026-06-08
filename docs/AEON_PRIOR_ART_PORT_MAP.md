@@ -85,7 +85,7 @@ AEON's DFlash result is the main single-stream multiplier, but the port story is
 ## Still Needed Counterparts
 
 1. SGLang Gemma NVFP4-weight serving with ordinary KV.
-2. SGLang graph-compatible FP4 KV after-row with quality checks; current overlay row proves capacity but not usable speed.
+2. SGLang FP4 KV after-row with quality checks; the autosafe source-overlay row proves `1.779x` fp8 capacity but still fails standardized output quality.
 3. SGLang DFlash or EAGLE row on a Qwen-class model if ordinary serving is stable.
 4. Clean `jethac/vllm` packaging for Qwen3.6 NVFP4+DFlash using the precompiled FA2/FA3 skip knob, followed by in-container native-target/JIT audit.
 5. llama.cpp larger Qwen3/Qwen3.6 GGUF rows.

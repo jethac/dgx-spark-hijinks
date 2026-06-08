@@ -9,7 +9,7 @@ Qwen is a first-class Spark target alongside Gemma, not a secondary check. Gemma
 | runtime | row | status |
 |---|---|---|
 | vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on the AEON image. A derived `jethac/vllm@6804e1b` row also passes at `47.22`, `58.88`, and `61.62 tok/s`, but depends on AEON's FA2 binary. The clean `jethac/vllm@a919d635d` + `jethac/flash-attention@7d53245` image now serves at `61.07`, `56.97`, and `60.10 tok/s` with separate `sm_121a` FA2 binary proof; this is serving parity/clean packaging, not a speedup claim |
-| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; earlier patched fp4-KV proved about `1.78x` fp8 KV capacity but was slow/bad. The current `jethac/sglang` source overlay is correctness-safe only with CUDA graph capture disabled and still needs a clean fp8-vs-fp4 row |
+| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; the matched autosafe fp8-vs-FP4 row proves about `1.78x` fp8 KV capacity, but FP4 output quality fails standardized checks. SGLang FP4 KV remains unblessed |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
 ## vLLM Target
@@ -80,9 +80,9 @@ Current SGLang Qwen evidence:
 - stock `fp4_e2m1` with FlashInfer attention fails at the compatibility gate.
 - stock `fp4_e2m1` with Triton attention reaches FP4 KV allocation, `5,534,509` tokens or about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
 - patched overlay using `jethac/sglang@98ad46961` gate/alias changes clears the stock SGLang blockers. FlashInfer attention reaches an `sm_121a` JIT compile and fails in FlashInfer FP4 decode. Triton attention serves only after disabling both standard and piecewise CUDA graphs, with `5,541,103` FP4 KV tokens, but the short decode row is only `0.276 tok/s` and output is repetitive.
-- newer clean-source evidence on `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` calibrates FP4 KV, disables CUDA graph and piecewise graph capture by default for native FP4 KV, reaches readiness, returns `spark-ok`, and answers `2+2 is 4` sanely. This is a correctness-safe debug proof, not a claim-ready fp8-vs-fp4 benchmark.
+- newer clean-source evidence on `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` calibrates FP4 KV and disables CUDA graph and piecewise graph capture by default for native FP4 KV. The matched autosafe row allocates `5,519,481` FP4 KV tokens versus `3,101,822` fp8 tokens, but raw `2+2` and compact benchmark content fail quality.
 
-Interpretation: FP4 KV capacity is real on this Qwen row, and the current fork has a no-graph correctness-safe path. The next after-row must be a clean `jethac/sglang` fp8-vs-`fp4_e2m1` row with graph policy, quality checks, capacity tokens, and throughput recorded. Graph-enabled FP4 KV remains a separate corruption bug.
+Interpretation: FP4 KV capacity is real on this Qwen row, but quality is not fixed. The next after-row must preserve the clean `jethac/sglang` fp8-vs-`fp4_e2m1` discipline while adding a deterministic quality pass before any throughput claim. Graph-enabled FP4 KV remains a separate corruption bug.
 
 ## llama.cpp Target
 

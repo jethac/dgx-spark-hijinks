@@ -174,6 +174,29 @@ Interpretation:
 - patched `jethac/sglang@98ad46961` overlay cleared those SGLang blockers. FlashInfer attention then failed inside FlashInfer FP4 E2M1 decode JIT, while Triton attention served only with both CUDA graph modes disabled.
 - The patched no-graphs Triton FP4 KV row allocated `5,541,103` KV tokens but decoded at only `0.276 tok/s` on `short_decode` with visibly repetitive output. This is a capacity/debug proof, not a blessed FP4 KV serving result.
 
+## 2026-06-08: SGLang Qwen FP4 KV Autosafe Capacity Row
+
+Artifacts:
+
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_summary.md`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_row_manifest.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_fp8_raw_2plus2.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_row_manifest.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_openai_benchmark.json`
+- `results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_raw_2plus2.json`
+
+Result:
+
+- fp8 comparator: `3,101,822` KV tokens, no-graph policy matched to FP4, decode `56.73`, `56.81`, and `57.10 tok/s`, raw `2+2` returns `4`.
+- FP4 KV: `5,519,481` KV tokens, auto-safe no-graph policy, `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`, `1.779x` fp8 capacity.
+- FP4 quality fails: raw `2+2` is malformed and benchmark text degenerates.
+
+Interpretation:
+
+- This proves the FP4 KV capacity path in the clean SGLang source-overlay stack.
+- It does not prove SGLang FP4 KV serving quality, graph safety, or speed. Keep the counterpart row partial until quality passes.
+
 ## 2026-06-07: SGLang Gemma 4 E2B Blocker
 
 Target:
