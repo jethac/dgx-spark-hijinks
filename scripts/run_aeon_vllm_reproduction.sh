@@ -29,6 +29,7 @@ Environment:
   CHAT_TEMPLATE_KWARGS_JSON=...        OpenAI chat_template_kwargs JSON
   KV_CACHE_DTYPE=auto                  value passed to --kv-cache-dtype and manifest
   ENABLE_DFLASH=1                      set to 0 to run the target model without DFlash
+  SERVE_ATTENTION_BACKEND=...          override vLLM --attention-backend
   STOP_AFTER_RECORD=0                  set to 1 to remove the container after RECORD=1
 EOF
 }
@@ -54,6 +55,7 @@ RUNTIME_REF=${RUNTIME_REF:-}
 CUDA_SO_PACKAGE=${CUDA_SO_PACKAGE:-}
 KV_CACHE_DTYPE=${KV_CACHE_DTYPE:-auto}
 ENABLE_DFLASH=${ENABLE_DFLASH:-1}
+SERVE_ATTENTION_BACKEND=${SERVE_ATTENTION_BACKEND:-}
 STOP_AFTER_RECORD=${STOP_AFTER_RECORD:-0}
 
 if [[ "${ENABLE_DFLASH}" != "0" && "${ENABLE_DFLASH}" != "1" ]]; then
@@ -141,7 +143,6 @@ case "${TARGET}" in
       --enable-auto-tool-choice
       --tool-call-parser qwen3_coder
       --reasoning-parser qwen3
-      --attention-backend flash_attn
     )
     DFLASH_CONFIG='{"method":"dflash","model":"/models/drafter","num_speculative_tokens":15}'
     QUANTIZATION=compressed-tensors-nvfp4
@@ -152,6 +153,13 @@ case "${TARGET}" in
     exit 2
     ;;
 esac
+
+if [[ -n "${SERVE_ATTENTION_BACKEND}" ]]; then
+  SERVE_ARGS+=(--attention-backend "${SERVE_ATTENTION_BACKEND}")
+  ATTENTION_BACKEND="${SERVE_ATTENTION_BACKEND}"
+elif [[ "${TARGET}" == "qwen36-dflash" ]]; then
+  SERVE_ARGS+=(--attention-backend flash_attn)
+fi
 
 if [[ "${KV_CACHE_DTYPE}" != "auto" ]]; then
   SERVE_ARGS+=(--kv-cache-dtype "${KV_CACHE_DTYPE}")
