@@ -742,6 +742,18 @@
     endpoint request tags or split runs to isolate endpoint metadata, scheduler/cache state,
     or FP4-KV endpoint-specific request handling.
 
+- Captured the paired SGLang Qwen fp8-KV OpenAI/native first-token control.
+  - artifact: `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_summary.md`
+  - endpoint probe: `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST.json`
+  - dump summary: `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_dump_summary.md`
+  - result: under the same prompt, same OpenAI/native sequence, same no-graph policy, and
+    `--kv-cache-dtype fp8_e4m3`, both endpoints return `**`.
+  - localization: both endpoint candidate prefill dump groups argmax `334`, so the FP4
+    row's native argmax `838` is FP4-KV-specific rather than a generic endpoint mismatch.
+  - next gate: compare fp8 and FP4 tensor state at or before the first prefill attention/KV
+    write for native `/generate`, with explicit endpoint request tags and no unrelated
+    warmup request.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

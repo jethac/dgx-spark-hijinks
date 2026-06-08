@@ -231,3 +231,17 @@ Live paired result:
 - interpretation: the first-token split is earlier than `_preprocess_logits()`; keep SGLang
   FP4 KV red and focus the next probe on endpoint metadata / scheduler state / FP4-KV
   endpoint-specific request handling.
+
+Live fp8 control:
+
+- artifact: `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_summary.md`
+- endpoint probe:
+  `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST.json`
+- compact dump summary:
+  `results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_dump_summary.md`
+- result: under the same OpenAI/native sequence, no-graph policy, and 56-token prompt hash,
+  `--kv-cache-dtype fp8_e4m3` returns `**` on both endpoints. Both endpoint candidate
+  prefill groups argmax `334`.
+- interpretation: the OpenAI/native sequence can agree in SGLang; the FP4 row's native
+  prefill argmax `838` is FP4-KV-specific. The next diagnostic should compare fp8 and FP4
+  tensor state at or before the first prefill attention/KV write for native `/generate`.
