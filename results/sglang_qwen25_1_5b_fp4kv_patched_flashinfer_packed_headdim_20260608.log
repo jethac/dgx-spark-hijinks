@@ -1,0 +1,1 @@
+{'server_args_fa4_gate': True, 'server_args_mha_gate': True, 'kvfp4_alias': True, 'mha_fp4_raw_kv_accessor': True, 'flashinfer_packed_fp4_kv_helper': True, 'flashinfer_packed_fp4_kv_self_call_sites': 0, 'flashinfer_packed_fp4_kv_forward_batch_call_sites': 5}
