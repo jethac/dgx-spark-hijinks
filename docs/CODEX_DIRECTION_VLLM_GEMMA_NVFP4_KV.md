@@ -112,6 +112,15 @@ probes should show `swa_skip.num_skipped_tokens == 0`; if they still corrupt out
 clean slot/page metadata, the next suspect is NVFP4 data/scale contents or V-scale
 swizzle/deswizzle, not SWA eviction.
 
+Implementation update (2026-06-08): `jethac/vllm@e2a8197a9` implements the Python-side
+trace hooks above in `vllm/v1/attention/backends/flashinfer.py` and
+`vllm/v1/core/single_type_kv_cache_manager.py`. Events are inactive unless
+`VLLM_SPARK_KV_TRACE=1` is set, and include `fi_metadata`, `kv_write_pre`,
+`kv_write_post_nvfp4`, `kv_read_views_nvfp4`, and `swa_skip`. Next vLLM action is to rerun
+the Gemma 3 27B fp8/NVFP4 first-token packet with `VLLM_SPARK_KV_TRACE_FILE` enabled for
+layers 0/1, then compare slot mapping, block-table pages, NVFP4 split-view offsets, sampled
+data/scale bytes, and `swa_skip` against the first-token quality split.
+
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.

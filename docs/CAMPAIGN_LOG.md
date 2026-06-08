@@ -842,6 +842,43 @@
     `swa_skip.num_skipped_tokens == 0`; if corruption remains, focus on NVFP4 data/scale
     contents or V-scale swizzle/deswizzle rather than SWA eviction.
 
+- Added and ran SGLang FP4-KV cached merge-state tracing.
+  - fork commits: `jethac/sglang@ed1a7d6b1` added the merge-state trace,
+    `jethac/sglang@991ac1e63` fixed the diagnostic dedupe key.
+  - env gate: `SGLANG_FP4_KV_TRACE_MERGE_STATE=1`
+  - artifact: `results/sglang_qwen_fp4kv_merge_trace_20260608T220823JST_summary.md`
+  - rows:
+    `results/sglang_qwen_fp4kv_merge_trace_20260608T220823JST_default.json`,
+    `results/sglang_qwen_fp4kv_merge_trace_20260608T220823JST_radixoff.json`
+  - result: default FP4 still fails (`OpenAI **` vs native `ark` / `838`) with
+    `cached_tokens=55`; radix-off still passes (`**` vs `**` / `334`) with
+    `cached_tokens=0`.
+  - localization: layer 0 samples readable, nonzero packed K/V bytes and FP8 K/V scale
+    bytes at pages `4113..4116`; `o1/s1`, `o2/s2`, and merged tensors are finite.
+  - interpretation: the defect is past gross page-list/view mismatch and past a non-finite
+    merge-state failure. Next compare write-time bytes/scales from
+    `MHATokenToKVPoolFP4.set_kv_buffer()` against the read-time page bytes, or build a
+    same-prompt no-prefix reference for the paged-prefix contribution.
+
+- Implemented vLLM Gemma NVFP4-KV trace hooks in the vLLM fork.
+  - fork commit: `jethac/vllm@e2a8197a9`
+  - files: `vllm/v1/attention/backends/flashinfer.py`,
+    `vllm/v1/core/single_type_kv_cache_manager.py`
+  - env gates: `VLLM_SPARK_KV_TRACE`, `VLLM_SPARK_KV_TRACE_FILE`,
+    `VLLM_SPARK_KV_TRACE_LAYERS`, `VLLM_SPARK_KV_TRACE_LIMIT`,
+    `VLLM_SPARK_KV_TRACE_VALUES`
+  - events: `fi_metadata`, `kv_write_pre`, `kv_write_post_nvfp4`,
+    `kv_read_views_nvfp4`, and `swa_skip`.
+  - next gate: rerun Gemma 3 27B fp8/NVFP4 first-token packet with trace file enabled and
+    verify slot/page metadata, NVFP4 data/scale offsets, sampled bytes, and short-prompt
+    `swa_skip` before climbing to Gemma 4 31B.
+
+- Recorded the Gemma Rung -1 sidecar audit.
+  - artifact: `results/gemma_rung_minus1_audit_sidecar_20260608.md`
+  - conclusion: Gemma 3 27B has measured vLLM geometry but red NVFP4-KV quality; Gemma 4
+    31B is the next clean dense `D=512` rung after Gemma 3 is green; Gemma 4 26B-A4B then
+    adds MoE; Gemma 4 12B remains the final fused multimodal/KV rung.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

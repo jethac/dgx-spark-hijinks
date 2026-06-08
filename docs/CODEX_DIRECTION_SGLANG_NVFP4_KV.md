@@ -51,6 +51,21 @@ V scale. So a gross page-list mismatch is not observed. The next hook moves insi
 `extend_merge_paged`: sample actual FP4 data/scale bytes at the reused page IDs and log
 `o1/s1/o2/s2` before `_safe_merge_state`.
 
+Merge-state trace result
+(`results/sglang_qwen_fp4kv_merge_trace_20260608T220823JST_summary.md`):
+`jethac/sglang@991ac1e63` adds `SGLANG_FP4_KV_TRACE_MERGE_STATE=1` and records the
+layer-0 cached-prefix merge. The default row still fails (`OpenAI **` vs native
+`ark`/`838`) with `cached_tokens=55`; radix-off still passes (`**`/`334`) with
+`cached_tokens=0` and no paged-prefix merge. The failing layer-0 trace sees readable,
+nonzero packed K/V bytes and FP8 K/V scale bytes at pages `4113..4116`, and `o1/s1`,
+`o2/s2`, and merged output are all finite. The merged sample matches the paged-prefix
+sample, which is plausible for a 55-token cached prefix over a one-token ragged suffix and
+is not alone proof of a merge bug. The next hook is now **write/read pairing**: trace
+`MHATokenToKVPoolFP4.set_kv_buffer()` for the same physical page IDs and verify the bytes
+and scale bytes written during cache fill match those read during radix reuse. If they
+match, build a same-prompt no-prefix reference for the paged-prefix contribution and
+inspect FlashInfer FA2 paged-prefix numerics / merge weighting.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend
