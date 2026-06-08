@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy, but standardized output quality still fails. Do not bless SGLang FP4 KV for serving quality or speed yet.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy, and a backend trace run on `d7d931f` returned `spark-ok` plus sane raw `2+2`. Do not bless SGLang FP4 KV for serving quality or speed until the quality-positive result is repeated as a matched fp8-vs-FP4 row.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -295,6 +295,12 @@ Current fork verification:
   - Decode result: `attention_cosine_vs_dequant=0.9999946`, `attention_cosine_vs_source=0.99585`, finite output, and `passed=true`.
   - Paged prefill result: `attention_cosine_vs_dequant=0.9999946`, `attention_cosine_vs_source=0.99576`, finite output, and `passed=true`.
   - This clears the basic pool layout/global-scale contract for decode and paged prefill. The remaining quality bug is downstream: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic pool bridge.
+- The SGLang backend decode trace passed on GB10; see `results/sglang_fp4_backend_trace_20260608T1536JST_summary.md`.
+  - `jethac/sglang@d7d931f` adds `SGLANG_FP4_KV_TRACE_BACKEND=1` to log the first native FP4-KV call per layer.
+  - The source-overlay run used NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, `--kv-cache-dtype fp4_e2m1`, FlashInfer attention, page size 1, and both CUDA graph modes disabled.
+  - It allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, and traced all 28 decode layers using packed `uint8` K/V plus FP8 scale buffers.
+  - Raw `2+2 is` returned ` 4, 2+2 is 4, 2+2 is`, and chat smoke returned exactly `spark-ok`.
+  - This is quality-positive debug evidence, not yet a blessed SGLang row. It lacks a matched fp8 comparator on the same branch and did not capture request-path prefill/extend trace lines.
 
 For NVFP4 validation, record:
 

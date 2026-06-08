@@ -98,6 +98,15 @@ passing — not a dev step.
   global-scale application surface for decode and paged prefill; the remaining serving
   corruption is later in backend wrapper/server sequencing, CUDA graph state, or a
   model-path difference not covered by the synthetic pool bridge.
+- **Backend decode trace is now captured** (`results/sglang_fp4_backend_trace_20260608T1536JST_summary.md`):
+  `jethac/sglang@d7d931f` adds opt-in `SGLANG_FP4_KV_TRACE_BACKEND=1` logging. A
+  source-overlay Qwen run on the NVIDIA 26.05 image, with
+  `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, reached readiness, allocated `5,516,867`
+  FP4 KV tokens, calibrated 28 layers, traced all 28 decode layers through packed
+  `uint8` K/V plus FP8 scale buffers, returned `spark-ok`, and produced sane raw
+  `2+2` text. This is quality-positive debug evidence, not a blessed row yet: it lacks
+  matched fp8-vs-FP4 benchmarking on the same branch and did not capture request-path
+  `extend_*` trace lines.
 
 Read `docs/NVFP4_KV_PORTING_MAP.md` (SGLang Reference Map) and the autosafe summary
 before starting.
@@ -201,11 +210,9 @@ attention geometry with the vLLM lane (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV
   in-flight upstream work to avoid collisions on the backend selector.
 
 ## First concrete step (no image builds)
-The convention and pool bridges are already done for decode and paged prefill. Instrument
-the backend wrapper/server sequencing next: in an eager/no-graph source-overlay run, log
-the tensors and scalar arguments passed by
-`FlashInferAttnBackend._get_paged_kv_cache_and_kwargs()` and `_run_paged_native()` for
-the first real model layer, then compare them to the passing pool bridge contract. The
-next decisive question is whether serving diverges after the pool: wrong wrapper
-metadata, graph/capture state, stale calibration state, or a different model-serving path
-than the synthetic bridge. No serving image required.
+Backend decode tracing is now done. The next step is to make the trace cover
+request-path prefill/extend explicitly, then repeat the matched fp8-vs-FP4 Qwen row on
+`jethac/sglang@d7d931f` with `SGLANG_FP4_KV_TRACE_BACKEND=1` enabled for the first layer.
+If the quality-positive `spark-ok` / raw `2+2` result holds, promote it from debug
+evidence into a blessed SGLang FP4-KV row with the standard capacity, quality, and speed
+comparators. No serving image required.

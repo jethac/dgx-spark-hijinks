@@ -119,9 +119,33 @@ thinking-disabled finding visible (it's the difference between empty and useful 
 
 ## First concrete step (no rebuilds yet)
 The pinned `b9536` server has already failed both native top-N and OpenAI `echo=true`
-supplied-token probes. Run **one newer-pin echo-span probe** with the existing
-`scripts/gguf_logprobs_probe.py`: if a newer server exposes prompt-token logprobs that
-cover the supplied unlikely continuation (`zebra`), Objective A is an adapter on that
-pin. If the newest pin still returns generated-token `logprobs.content` only, stop
-probing stock endpoints and create a `jethac/llama.cpp` endpoint fork for direct
-supplied-token loglikelihood.
+supplied-token probes. There is no `third_party/llama.cpp` submodule or local llama.cpp
+worktree yet; do not create one until the stock newer-pin probe below fails.
+
+Run **one newer-pin echo-span probe** with the existing `scripts/gguf_logprobs_probe.py`:
+start a newer `llama-server` manually, then probe:
+
+```bash
+python3 scripts/gguf_logprobs_probe.py \
+  --url http://127.0.0.1:18085 \
+  --model qwen25-logprob-newer \
+  --context "The capital of Japan is" \
+  --continuation " zebra" \
+  --max-tokens 0 \
+  --output results/llamacpp_newer_echo_logprobs_max0.json
+
+python3 scripts/gguf_logprobs_probe.py \
+  --url http://127.0.0.1:18085 \
+  --model qwen25-logprob-newer \
+  --context "The capital of Japan is" \
+  --continuation " zebra" \
+  --max-tokens 1 \
+  --output results/llamacpp_newer_echo_logprobs_max1.json
+```
+
+Pass condition: prompt `tokens` and `token_logprobs` cover continuation token ids
+`[1147, 50213]`. If the newer pin still returns only generated-token
+`choices[0].logprobs.content`, do not keep tuning top-N. Either run one bounded
+full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or move
+directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named worktree
+for a direct supplied-token loglikelihood endpoint.

@@ -455,6 +455,15 @@
   - widened result: decode and paged prefill both pass; prefill has `attention_cosine_vs_dequant=0.9999946356`, `attention_cosine_vs_source=0.9957648516`, finite output, and `passed=true`.
   - interpretation: `MHATokenToKVPoolFP4` writes packed K/V and FP8 scale buffers that FlashInfer FA2 can consume through the same getters used by serving for decode and paged prefill. The remaining SGLang FP4-KV corruption is downstream of the basic pool contract: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic bridge.
 
+- Added and ran SGLang FP4-KV backend trace instrumentation.
+  - fork commit: `jethac/sglang@d7d931f530160ba86a2d55b4636d64baaeda3bec`
+  - knob: `SGLANG_FP4_KV_TRACE_BACKEND=1`
+  - artifacts: `results/sglang_fp4_backend_trace_20260608T1536JST_summary.md`, `results/sglang_fp4_backend_trace_20260608T1536JST_server.log`, `results/sglang_fp4_backend_trace_20260608T1536JST_trace_excerpt.txt`, `results/sglang_fp4_backend_trace_20260608T1536JST_raw_2plus2.json`, `results/sglang_fp4_backend_trace_20260608T1536JST_chat_smoke.json`
+  - command shape: NVIDIA SGLang 26.05 source overlay, `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1`, `--kv-cache-dtype fp4_e2m1`, FlashInfer attention, page size 1, memory fraction 0.40, CUDA graph and piecewise graph disabled.
+  - result: server reached readiness, allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, and traced all 28 decode layers through native FP4 KV with packed `uint8` K/V, FP8 scale buffers, and finite per-layer global scales.
+  - sanity: raw `2+2 is` returned ` 4, 2+2 is 4, 2+2 is`; chat smoke returned exactly `spark-ok`.
+  - interpretation: this is quality-positive debug evidence and shows the backend decode call contract matches the cleared pool bridge. It is not yet a blessed SGLang FP4-KV row because it lacks a matched fp8 comparator on the same branch and the trace did not capture request-path prefill/extend.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

@@ -15,7 +15,7 @@ The KV lane is higher priority because it targets Spark's bottleneck directly: u
 |---|---|---|---|---|
 | FlashInfer FA2 NVFP4 KV | `jethac/flashinfer:spark/hijinks-007-fa2-nvfp4-kv-sm121` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | current `jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61`; based on `a42c8f0751c70a2f69596f063170e284710c94ac` | `hikarioyama/vllm-nvfp4-kv-sm120`, `hikarioyama/sglang-nvfp4-kv-sm120` |
 | vLLM NVFP4 KV | `jethac/vllm:spark/hijinks-007-nvfp4-kv-sm121` | `B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121` | current `jethac/vllm@8916796bc50926fd61e606718b194a71e2e31a24`; based on `vllm-project/vllm@4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa` | `hikarioyama/vllm-nvfp4-kv-sm120@f6156ee3b22b24885a52c02bdafb34a9c201fe86` |
-| SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` | `B:/workshop/worktrees/sglang/spark-hijinks-018-fp4-e2m1-kv-sm121` | current `jethac/sglang@eefe8aded`; based on `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
+| SGLang FP4 KV | `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121-serving` | `third_party/sglang` | current `jethac/sglang@d7d931f53`; based on `sgl-project/sglang@02be2e71899491b7aaf2849dce6431f61fc190b6` | `hikarioyama/sglang-nvfp4-kv-sm120@9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` |
 
 Reference clones are local scratch only:
 
@@ -196,14 +196,15 @@ Current upstream vLLM risk:
 
 ## SGLang Reference Map
 
-Current `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121` patch:
+Current `jethac/sglang:spark/hijinks-018-fp4-e2m1-kv-sm121-serving` patch:
 
-- commit: `eefe8aded`
-- branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121
+- commit: `d7d931f53`
+- branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121-serving
 - allows `flashinfer` in MHA `fp4_e2m1` KV compatibility gates only when `is_sm120_supported()` is true, which covers SM120 and GB10/SM121 in SGLang's helper naming
 - lets `NVFP4KVQuantizeUtil.quantize()` run on SM120-family devices and route SM100/SM120 through `flashinfer.nvfp4_kv_quantize`; SM90 keeps the existing `fp4_quantize` fallback
 - adds server-args unit coverage for SM12x FlashInfer MHA KV4 acceptance, non-SM12x rejection, and FA4-prefill plus FlashInfer-decode acceptance
 - fixes the unit-test helper to populate public prefill/decode backend fields before `_handle_kv4_compatibility()` recomputes the effective backend strings
+- adds opt-in `SGLANG_FP4_KV_TRACE_BACKEND=1` logging for native FP4-KV backend calls so serving can be compared directly to the passing pool bridge contract
 
 Local verification:
 
@@ -228,11 +229,17 @@ Local verification:
   - command: `python -m pytest test/registered/unit/server_args/test_server_args.py -k KV4Compatibility -q`
   - outcome: `3 passed, 56 deselected, 3 warnings`
 
+Updated verification:
+
+- `results/sglang_fp4_backend_trace_20260608T1536JST_summary.md` records a GB10 source-overlay run on `jethac/sglang@d7d931f53` using NVIDIA SGLang 26.05 with `SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1` and `SGLANG_FP4_KV_TRACE_BACKEND=1`.
+- The run allocated `5,516,867` FP4 KV tokens, calibrated 28 layers, traced all 28 decode layers through packed `uint8` K/V and FP8 scale buffers, returned `spark-ok`, and produced sane raw `2+2` text.
+- This is not yet a blessed row because it has no matched fp8 comparator on the same branch and did not capture request-path prefill/extend trace lines.
+
 Missing verification:
 
 - no cheap CPU-only SGLang Docker verification route is working yet; it needs a no-kernel pytest image or an ARM64 CPU-kernel build-flag fix
-- no SGLang native FP4 KV memory-pool or FlashInfer backend wrapper patch has landed yet
-- no GB10 `fp4_e2m1` serving proof exists yet
+- no matched quality-positive fp8-vs-FP4 row has been repeated on `d7d931f53`
+- no request-path prefill/extend backend trace has been captured yet
 
 Reference files:
 
@@ -252,10 +259,9 @@ Likely `jethac/sglang` work:
 
 - Ported in `67c7967`: allow `--kv-cache-dtype fp4_e2m1` with FlashInfer MHA only on SM12x where the reference path is relevant.
 - Fixed in `eefe8ad`: make the new KV4 unit tests use public prefill/decode backend fields.
-- Still pending: wire native FP4 KV pools, separate data and scale buffers, global scales, and scale getters.
-- Add or preserve pre-CUDA-graph calibration for NVFP4 KV global scales.
-- Delegate FP4 subpools through hybrid-SWA.
-- Route FlashInfer backend calls with `kv_cache_sf` and page-size-specific handling.
+- Ported through `d7d931f`: native FP4 KV pools, separate data and scale buffers, global scales, scale getters, pre-CUDA-graph calibration, FlashInfer backend `kv_cache_sf` routing, and decode trace logging.
+- Still pending: request-path prefill/extend trace and a repeated matched fp8-vs-FP4 quality row.
+- Still pending: delegate FP4 subpools through hybrid-SWA.
 - Keep SGLang Gemma blockers separate from NVFP4 KV work; Qwen/Step-like models are better first probes.
 
 Likely `jethac/flashinfer` work:

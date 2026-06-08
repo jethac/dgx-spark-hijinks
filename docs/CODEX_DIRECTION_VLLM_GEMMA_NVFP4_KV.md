@@ -96,6 +96,37 @@ primarily a 99 KiB SMEM overflow. The practical next fixes are:
      shape enough to satisfy the guard. A simple head-dim support-table change or smaller
      CTA/warp tweak is not expected to work under the current trait math.
 
+Explorer read-only audit (2026-06-08): prototype **NVFP4 local + bf16 global** first,
+not fp8 global. vLLM already has a manual `kv_cache_dtype_skip_layers` escape path that
+falls skipped layers back to `auto`/model dtype, which is enough for bf16 global. fp8
+global needs a real per-layer fallback dtype string, so it is a second step.
+
+Likely insertion points and risks:
+
+- `vllm/model_executor/models/gemma4.py`: `Gemma4DecoderLayer.__init__` already
+  classifies global/full layers and selects `global_head_dim` vs `head_dim`;
+  `Gemma4Attention.__init__` constructs the per-layer `Attention`.
+- `vllm/model_executor/layers/attention/attention.py`: `Attention.__init__` resolves
+  `kv_cache_dtype`, applies `kv_cache_dtype_skip_layers`, selects the backend, and
+  instantiates the impl. Extending skip matching to `full_attention` is the smallest
+  Gemma-local policy hook for bf16 global fallback.
+- `vllm/v1/kv_cache_interface.py`: `AttentionSpec` already carries per-layer `dtype` and
+  `kv_quant_mode`. fp8 fallback likely needs a `cache_dtype_str`-style field to preserve
+  `fp8`/`fp8_e4m3`/`fp8_e5m2`, similar to MLA specs.
+- `vllm/v1/core/kv_cache_utils.py`: allocator grouping is the main risk. Local NVFP4
+  `D=256` and global bf16/fp8 `D=512` may have incompatible page sizes; generalize the
+  existing multi-page-size/bucketing path instead of adding a Gemma-only manager.
+- `vllm/v1/worker/gpu_model_runner.py`, `vllm/v1/worker/gpu/attn_utils.py`, and
+  `vllm/v1/worker/utils.py`: several reshape/zeroing paths still use global
+  `cache_config.cache_dtype`; these must derive layout from each `AttentionSpec` or a
+  global `--kv-cache-dtype nvfp4` run can reshape bf16 global layers as packed NVFP4.
+- `vllm/v1/attention/backends/flashinfer.py`: `FlashInferMetadataBuilder` uses global
+  `cache_config.cache_dtype` when `kv_cache_spec.kv_quant_mode != NONE`; mixed
+  fp8/NVFP4 must dispatch from the layer/group spec.
+- `vllm/model_executor/models/config.py`: Gemma 4 currently forces `TRITON_ATTN` for
+  heterogeneous `head_dim/global_head_dim`; relax this only after per-layer routing is
+  explicit, or global `D=512` can accidentally hit the known FlashInfer NVFP4 guard.
+
 **C. Decouple SWA handling from the dual-head-dim fix using an earlier Gemma.**
 Earlier Gemmas (2/3) use SWA but uniform head dims, so they exercise the
 hybrid-local/global KV plumbing *without* the `D=512` blocker. Use one as the first
@@ -191,10 +222,12 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
 
 ## First concrete step (no image builds)
 Two things, both on the existing image / standalone harness:
-  1. Prototype the Gemma mixed-KV fallback: keep FA2 NVFP4 KV on local `D=256` layers
-     and route global `D=512` layers to fp8/bf16 KV, with logs proving the per-layer
-     split. In parallel, treat a true FlashInfer `D=512` FA2 NVFP4 kernel as a separate
-     kernel-design task, not a dispatch-table tweak.
+  1. Prototype the Gemma mixed-KV fallback as **NVFP4 local + bf16 global** first: keep
+     FA2 NVFP4 KV on local `D=256` layers and route global `D=512` layers to model dtype,
+     with logs proving the per-layer split. Do not start with fp8 global until the
+     per-layer dtype-string/plumbing risk is solved. In parallel, treat a true FlashInfer
+     `D=512` FA2 NVFP4 kernel as a separate kernel-design task, not a dispatch-table
+     tweak.
   2. Bring up Gemma 4 12B via **source overlay** on the clean FA2 image and capture the
      server log + backend audit (which attention/MoE backend actually got selected).
 Defer every image build until Objective E.

@@ -1,0 +1,30 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "matched_stop": 151645,
+      "message": {
+        "content": "spark-ok",
+        "reasoning_content": null,
+        "role": "assistant",
+        "tool_calls": null
+      }
+    }
+  ],
+  "created": 1780900578,
+  "id": "0e4a61a5f1bd42c0824881b146dc5de7",
+  "metadata": {
+    "weight_version": "default"
+  },
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 3,
+    "prompt_tokens": 37,
+    "prompt_tokens_details": null,
+    "reasoning_tokens": 0,
+    "total_tokens": 40
+  }
+}
