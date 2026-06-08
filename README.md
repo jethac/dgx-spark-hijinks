@@ -36,6 +36,7 @@ Next vLLM proof lane: AEON Gemma and AEON Qwen3.6 NVFP4+DFlash are now locally r
 - NVFP4 dependency map: [docs/NVFP4_DEPENDENCY_MAP.md](docs/NVFP4_DEPENDENCY_MAP.md)
 - vLLM Gemma + NVFP4 KV direction (for Codex): [docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md](docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md)
 - SGLang NVFP4 KV direction (for Codex): [docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md](docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md)
+- llama.cpp direction (for Codex): [docs/CODEX_DIRECTION_LLAMACPP.md](docs/CODEX_DIRECTION_LLAMACPP.md)
 - FlashInfer performance hypotheses: [docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md](docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md)
 - Upstream latest release audit: [docs/UPSTREAM_LATEST_RELEASE_AUDIT.md](docs/UPSTREAM_LATEST_RELEASE_AUDIT.md)
 - Runtime availability: [docs/RUNTIME_AVAILABILITY.md](docs/RUNTIME_AVAILABILITY.md)

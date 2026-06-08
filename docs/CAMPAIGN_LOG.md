@@ -403,6 +403,14 @@
   - methodology: no image builds in the dev loop — iterate via editable source overlay on stock `nvcr.io/nvidia/sglang:26.05-py3` and use the standalone FlashInfer reference as ground truth.
   - tracker: linked the direction doc from `README.md`; SGLang NVFP4 KV remains issue #18.
 
+- Set standing llama.cpp-lane direction: unblock GGUF lm-eval accuracy and prove-or-deny native FP4.
+  - doc: `docs/CODEX_DIRECTION_LLAMACPP.md`
+  - framing: llama.cpp is the fastest practical runtime on the box and already blessed for serving (~175 tok/s Qwen2.5 1.5B, ~77 tok/s Gemma 4 26B), but two campaign deliverables stay red: GGUF lm-eval accuracy (blocked since day one, 120 `loader_failed` rows) and native `sm_121a` FP4 dispatch (`BLACKWELL_NATIVE_FP4=1` is compiled in but never proven to engage on k-quant models).
+  - keystone (A): get exact per-continuation-token logprobs from supplied/prompt-echo tokens, not top-N. The `n_probs=512` native path is a cleared dead end — it misses unlikely continuations (the `zebra` failure). Decisive first test: probe every `b9536` endpoint for the exact logprob of a supplied unlikely token, rank-independent; if none returns it, escalate to a build-pin or a `jethac/llama.cpp` endpoint fork. Fixing this gives the whole campaign a quantization-accuracy oracle it currently lacks.
+  - (B): prove or deny native FP4 via cuobjdump/dispatch evidence (a k-quant model on an FP4-capable build proves nothing), and chase MXFP4/GPT-OSS — since llama.cpp avoids triton it may be the only working MXFP4-on-Spark path where triton #8335 blocks `sm_121a`. (C) larger Qwen3/3.6 GGUF row; (D) keep serving recipes current.
+  - methodology: native host binaries, not containers — iterate against the running `llama-server`, rebuild/fork only if the stock server can't expose supplied-token logprobs. SM120/RTX PRO 6000 is simpler here: source-built per machine (`CMAKE_CUDA_ARCHITECTURES=121` vs `120`), no non-portable `a` cubins to ship.
+  - guardrails: three claim classes never merged (serving blessed / accuracy blocked / native-FP4 unproven); top-N is not loglikelihood. Issues #8 (accuracy), #17 (serving).
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
