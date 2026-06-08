@@ -51,7 +51,8 @@ LABEL org.opencontainers.image.source="https://github.com/jethac/flashinfer" \
 
 RUN python3 -m pip install --no-cache-dir \
       'apache-tvm-ffi>=0.1.6,!=0.1.8,!=0.1.8.post0,<0.2' \
-      'setuptools>=77' 'packaging>=24'
+      'setuptools>=77' 'packaging>=24' \
+      'nvidia-cutlass-dsl[cu13]>=4.5.2'
 
 RUN git clone "${FLASHINFER_REPO}" /opt/jethac-flashinfer \
  && cd /opt/jethac-flashinfer \
