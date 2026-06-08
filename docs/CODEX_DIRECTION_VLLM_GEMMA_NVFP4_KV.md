@@ -276,14 +276,20 @@ layer-5 dump produce the same sane signed output (`head=[0.0, -4.875, 0.40625, 0
 RMS `1.9469819068908691`) and near-zero cosine against the live byte-like wrapper output.
 Therefore nonzero physical page IDs / page offset alone do not reproduce the failure.
 
-Current target: compare the live vLLM long-lived
-`BatchPrefillWithPagedKVCacheWrapper` state against the direct replay wrapper. The remaining
-difference is not data pages, scale pages, output contiguity, or physical page IDs in
-isolation; it is likely plan reuse, wrapper metadata, split-kv/JIT module selection, or a
-run/plan argument that differs between the direct replay and vLLM's wrapper path. The next
-trace should dump wrapper plan fields immediately before `run(...)` and a direct in-process
-fresh-wrapper replay from the same live tensors before returning from the vLLM attention
-call.
+Fresh-wrapper replay result (2026-06-09):
+`results/vllm_gemma3_27b_fresh_wrapper_replay_20260609.md` compares the live long-lived
+`BatchPrefillWithPagedKVCacheWrapper` against a brand-new wrapper created inside the same
+vLLM attention call. The fresh wrapper is planned from the live wrapper buffers and run on
+the same live query/KV/scales. It returns output identical to the reused wrapper:
+fresh-vs-live `max_abs_diff=0.0`, `mean_abs_diff=0.0`, `rms_diff=0.0`, with cosine `1.0`
+on the byte-like layer-5 calls. The first-token signatures remain red (`" Reigns"`,
+Gujarati token, `"ioane"`). Therefore long-lived wrapper state/reuse is not the cause.
+
+Current target: compare the exact live-process FlashInfer module/plan path against the
+offline replay path. The remaining difference is not data pages, scale pages, output
+contiguity, physical page IDs, or wrapper lifetime in isolation; it is likely module cache
+identity, generated module arguments, plan fields, or a run/plan argument/layout difference
+between `scripts/vllm_active_page_flashinfer_replay.py` and vLLM's live wrapper call.
 
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
@@ -295,9 +301,12 @@ one sliding layer and one global layer traced. If write/read bytes match but qua
 fails, run the same prompt with `--disable-hybrid-kv-cache-manager`; if that passes, the
 bug is SWA block-table/window reuse rather than NVFP4 encode/decode.
 
-## The Gemma problem, precisely (three intertwined blockers)
-Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
-dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.
+## The Gemma 4 problem, precisely (three intertwined blockers)
+Gemma 4's blocker and the later NVFP4-KV blocker are the same blocker: heterogeneous/dual
+head dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA. This is
+not the current Gemma 3 Rung 1 failure: Gemma 3 is uniform `D=128`, and its live failure is
+now narrowed to the live FlashInfer module/plan path after direct replay and fresh-wrapper
+replay both falsified simpler wrapper/page hypotheses.
 
 Rung -1 config audit update (2026-06-08): this statement applies to the audited Gemma 4
 server models, not Gemma 3. `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md` shows Gemma 3 27B is
