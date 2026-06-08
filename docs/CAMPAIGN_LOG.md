@@ -832,6 +832,16 @@
   - interpretation: gross cached-prefix page-list mismatch is not observed; next inspect
     actual FP4 data/scale bytes and `o1/s1/o2/s2` before `_safe_merge_state`.
 
+- Recorded the vLLM Gemma NVFP4-KV trace plan from the parallel read-only audit.
+  - doc: `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`
+  - scope: Python-side JSONL instrumentation only, compatible with the source-overlay loop.
+  - env gates: `VLLM_SPARK_KV_TRACE`, `VLLM_SPARK_KV_TRACE_FILE`,
+    `VLLM_SPARK_KV_TRACE_LAYERS`, `VLLM_SPARK_KV_TRACE_LIMIT`,
+    `VLLM_SPARK_KV_TRACE_VALUES`.
+  - required first gate: prove short Gemma 3 prompts have
+    `swa_skip.num_skipped_tokens == 0`; if corruption remains, focus on NVFP4 data/scale
+    contents or V-scale swizzle/deswizzle rather than SWA eviction.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

@@ -92,6 +92,26 @@ read-side `nvfp4_kv_cache_split_views` / paged metadata. The invariant to prove 
 write-side slot mapping and read-side page IDs pair packed data and FP8 scale views from
 the same physical block.
 
+Minimal vLLM trace plan (read-only audit, 2026-06-08): keep this Python-side so it works
+in the source-overlay loop and does not require a new image or C++ rebuild. Add env-gated
+JSONL tracing with `VLLM_SPARK_KV_TRACE=1`,
+`VLLM_SPARK_KV_TRACE_FILE=/tmp/vllm_gemma3_kv_trace.jsonl`,
+`VLLM_SPARK_KV_TRACE_LAYERS=...`, `VLLM_SPARK_KV_TRACE_LIMIT=4`, and
+`VLLM_SPARK_KV_TRACE_VALUES=8`. Patch points:
+
+- `vllm/v1/attention/backends/flashinfer.py`:
+  `_compute_flashinfer_kv_metadata`, `FlashInferMetadataBuilder.build`,
+  `FlashInferImpl.do_kv_cache_update`, and `FlashInferImpl.forward`.
+- `vllm/utils/torch_utils.py`: `nvfp4_kv_cache_split_views`.
+- `vllm/v1/core/single_type_kv_cache_manager.py`:
+  `remove_skipped_blocks` and `SlidingWindowManager.get_num_skipped_tokens`.
+
+Trace events should cover `fi_metadata`, `kv_write_pre`, `kv_write_post_nvfp4`,
+`kv_read_views_nvfp4`, and `swa_skip`. Required short-prompt gate: Gemma 3 first-token
+probes should show `swa_skip.num_skipped_tokens == 0`; if they still corrupt output with
+clean slot/page metadata, the next suspect is NVFP4 data/scale contents or V-scale
+swizzle/deswizzle, not SWA eviction.
+
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.
