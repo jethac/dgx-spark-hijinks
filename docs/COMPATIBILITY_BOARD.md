@@ -69,7 +69,14 @@ HF access probe `results/vllm_gemma3_27b_hf_access_probe_20260608T173133JST.json
 confirms the model is manually gated: model metadata is visible, but even the small
 config/tokenizer snapshot fails with `GatedRepoError` because no `HF_TOKEN` is present in
 the container environment. Disk headroom is sufficient. Provide/verify HF auth before
-starting the fp8 comparator.
+starting the fp8 comparator. Follow-up artifact
+`results/vllm_gemma3_27b_hf_access_probe_20260608T1832JST.md` clears the auth/cache
+blocker: the container sees `HF_TOKEN` and downloads the config/tokenizer snapshot for
+`google/gemma-3-27b-it`. The live blocker moved to vLLM packaging: the current
+`3658ba712` overlay is configured to use precompiled wheel metadata from
+`8916796bc50926fd61e606718b194a71e2e31a24`, but that metadata returns 404 for the `cu130`
+paths, so the packet must be rebased to a source/precompiled-wheel pair with published
+CUDA 13 metadata before fp8 serving starts.
 
 ### Qwen Speed Lane
 

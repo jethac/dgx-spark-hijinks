@@ -129,6 +129,17 @@ still not cached under `/home/jethac/.cache/huggingface/hub`. The live packet is
 geometry-ready, but starting it before HF auth/cache clears would only test Hugging Face
 authentication failure.
 
+HF access cleared:
+`results/vllm_gemma3_27b_hf_access_probe_20260608T1832JST.md`. A user-scoped token file
+and profile loader now make `HF_TOKEN` available for `jethac`, and the container probe
+passes `model_info` plus the config/tokenizer snapshot for
+`google/gemma-3-27b-it@005ad3404e59d6023443cb575daa05336842228a`. The next packet
+attempt did not fail on Hugging Face access; it failed during editable vLLM install because
+`wheels.vllm.ai` has no `cu130` metadata for
+`8916796bc50926fd61e606718b194a71e2e31a24`. Do not rerun the current packet unchanged.
+Repair the vLLM source/precompiled-wheel pair first, likely by moving the geometry hook
+onto the proven `a919d635d` lane or another commit with published CUDA 13 metadata.
+
 ## Expected Log Lines
 
 Both rows:

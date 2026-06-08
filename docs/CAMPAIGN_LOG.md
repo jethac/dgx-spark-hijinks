@@ -623,6 +623,16 @@
   - blocker: `google/gemma-3-27b-it` still has no token/cache on the host, so starting the
     fp8 comparator would only test gated Hugging Face access.
 
+- Cleared the vLLM Gemma 3 Rung 1 Hugging Face auth/cache blocker.
+  - artifact: `results/vllm_gemma3_27b_hf_access_probe_20260608T1832JST.md`
+  - result: the `jethac` user now has a token-file/profile-loader setup, the container sees
+    `HF_TOKEN`, and `google/gemma-3-27b-it` config/tokenizer snapshot download succeeds at
+    revision `005ad3404e59d6023443cb575daa05336842228a`.
+  - new blocker: the prepared packet fails during editable vLLM install because
+    `wheels.vllm.ai` returns 404 for `8916796bc50926fd61e606718b194a71e2e31a24` under the
+    `cu130` metadata paths. The next vLLM step is to rebase the geometry overlay onto a
+    source/precompiled-wheel pair with published CUDA 13 metadata before running fp8.
+
 - Added the llama.cpp NVFP4 correctness/speed run packet.
   - packet: `tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md`
   - doc update: `docs/GGUF_LLAMA_CPP_STATUS.md`
