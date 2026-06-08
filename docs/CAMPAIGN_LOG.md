@@ -781,6 +781,17 @@
   - validation: `python -m py_compile` passes for all three touched files; no serving claim
     is made until the traced default/radix-off run is captured on GB10.
 
+- Captured the vLLM Gemma 3 27B Rung 1 first-token diagnostic.
+  - artifact: `results/vllm_gemma3_27b_rung1_first_token_20260608T205432JST.md`
+  - packet: `docs/results/vllm_gemma3_27b_rung1_20260608T205432JST_command_packet.sh`
+  - result: fp8 still serves cleanly; NVFP4 still selects FlashInfer FA2 and records
+    `1,595,236` KV tokens / `12.17x` concurrency, but remains quality-red.
+  - first-token finding: fp8 chooses `spark`, `4`, and `A`; NVFP4 chooses unrelated
+    Cyrillic/CJK tokens with `0.0` top-logprob overlap for all three cases.
+  - localization: Gemma 3 NVFP4 corruption is present before sampling on the first
+    generated token, so the next vLLM diagnostic should trace SWA block lifecycle, slot
+    mapping, NVFP4 split/view offsets, and FlashInfer read-side page IDs.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

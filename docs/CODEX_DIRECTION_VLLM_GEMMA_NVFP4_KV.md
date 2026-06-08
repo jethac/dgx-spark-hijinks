@@ -70,6 +70,22 @@ handling on the SWA sliding-window local layers (how the window's KV + its scale
 are stored, rotated, and re-read). Compare root causes with the SGLang radix finding — a
 fix on one likely informs the other.
 
+First-token update (`results/vllm_gemma3_27b_rung1_first_token_20260608T205432JST.md`):
+the refreshed packet keeps the no-downgrade source-overlay policy, reruns fp8 and NVFP4,
+and proves NVFP4 corruption is present on the first generated token. The fp8 row chooses
+`spark`, `4`, and `A`; the NVFP4 row chooses unrelated Cyrillic/CJK tokens with `0.0`
+top-logprob overlap for every probe case. So this is not late decode compounding or
+sampling noise; attention/KV state or logits are already wrong before sampling.
+
+vLLM code-map audit: Gemma 3 SWA uses common `SlidingWindowSpec` and common block-table
+machinery. NVFP4 data and scales are not separate pools; they are slices of the same
+physical KV page (`[K_data | K_scale | V_data | V_scale]`). Therefore the next audit is:
+`SlidingWindowManager` / skipped-block lifecycle, `BlockTable` slot mapping,
+`FlashInferImpl.do_kv_cache_update`, `reshape_and_cache_nvfp4_dispatch`, and FlashInfer
+read-side `nvfp4_kv_cache_split_views` / paged metadata. The invariant to prove is that
+write-side slot mapping and read-side page IDs pair packed data and FP8 scale views from
+the same physical block.
+
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.

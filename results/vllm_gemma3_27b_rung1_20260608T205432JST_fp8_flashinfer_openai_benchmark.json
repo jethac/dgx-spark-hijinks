@@ -1,0 +1,153 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 66,
+      "completion_tok_s_total": 4.119673836597884,
+      "content_chars": 332,
+      "content_preview": "A local AI workstation thrives on fast memory (RAM) because AI tasks, particularly those involving large language models or complex image/video processing, are incredibly memory-intensive. These models and the data they operate on need to be loaded into RAM for the GPU to access quickly.  Slow RAM creates a bottleneck, forcing the",
+      "decode_s": 15.092533554998226,
+      "decode_tok_s": 4.240507385110632,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780920301,
+        "id": "chatcmpl-9a6b6876b4d6311e",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-897927c6",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 24,
+          "total_tokens": 88
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 332,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 15.535210441041272,
+      "ttft_s": 0.44267688604304567,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "total_tokens": 88
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 194,
+      "completion_tok_s_total": 4.129472224737449,
+      "content_chars": 926,
+      "content_preview": "## Engineering Note: LLM Server GPU Kernel Validation\n\n**Subject:** Validating Correct GPU Kernel Usage in LLM Server\n\n**Date:** October 26, 2023\n\n**Purpose:** This note outlines the process for verifying that the LLM server is utilizing the expected GPU kernels for optimal performance and correctness. Incorrect kernel usage can indicate configuration errors or library mismatches.\n\n**Methodology:** Validation relies on observing GPU activity during inference and comparing it against expected ker",
+      "decode_s": 46.20285877096467,
+      "decode_tok_s": 4.155587015768359,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780920317,
+        "id": "chatcmpl-9aa0977c1861decd",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-897927c6",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 36,
+          "total_tokens": 228
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 926,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 46.49504574696766,
+      "ttft_s": 0.2921869760029949,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 36,
+        "total_tokens": 228
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 66,
+      "completion_tok_s_total": 3.815566579318742,
+      "content_chars": 367,
+      "content_preview": "Okay, despite the extreme repetition, here's a summarized list of five key requirements for your inference server benchmark:\n\n*   **Environment & Configuration Capture:** Thoroughly document the hardware, software (OS, drivers, libraries), and specific configuration settings used during the benchmark. This ensures context and allows for comparisons across different",
+      "decode_s": 15.205098630976863,
+      "decode_tok_s": 4.209114426236923,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780920363,
+        "id": "chatcmpl-93f827d44e9a2f26",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-897927c6",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2266,
+          "total_tokens": 2330
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 367,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 16.773393589013722,
+      "ttft_s": 1.5682949580368586,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2266,
+        "total_tokens": 2330
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T12:06:20Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "gemma3-27b-it",
+  "models_response": null,
+  "ok": true,
+  "phase": "before",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-08T12:05:01Z",
+  "url": "http://127.0.0.1:8000"
+}

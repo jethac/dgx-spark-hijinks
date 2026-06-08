@@ -1,0 +1,200 @@
+{
+  "commands": {
+    "nvidia_smi_query": {
+      "cmd": [
+        "nvidia-smi",
+        "--query-gpu=name,compute_cap,driver_version,utilization.gpu",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "NVIDIA GB10, 12.1, 580.159.03, 96 %"
+    }
+  },
+  "finished_utc": "2026-06-08T12:06:20Z",
+  "match": "vllm serve google/gemma-3-27b-it",
+  "packages": {
+    "flashinfer": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")"
+    },
+    "sglang": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'sglang'\")"
+    },
+    "torch": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'torch'\")"
+    },
+    "transformers": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'transformers'\")"
+    },
+    "triton": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'triton'\")"
+    },
+    "vllm": {
+      "available": false,
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")"
+    }
+  },
+  "pids": [
+    876966,
+    879729
+  ],
+  "platform": {
+    "executable": "/usr/bin/python3",
+    "machine": "aarch64",
+    "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+    "system": "Linux"
+  },
+  "processes": [
+    {
+      "cmdline": [
+        "/usr/bin/python3",
+        "/usr/local/bin/vllm",
+        "serve",
+        "google/gemma-3-27b-it",
+        "--served-model-name",
+        "gemma3-27b-it",
+        "--dtype",
+        "bfloat16",
+        "--kv-cache-dtype",
+        "fp8",
+        "--attention-backend",
+        "flashinfer",
+        "--max-model-len",
+        "131072",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--max-num-batched-tokens",
+        "4096",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "cwd": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "environment": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "maps": {
+        "error": "PermissionError(13, 'Permission denied')"
+      },
+      "pid": 876966,
+      "status": {
+        "Gid": "0\t0\t0\t0",
+        "Name": "vllm",
+        "PPid": "876943",
+        "Pid": "876966",
+        "State": "S (sleeping)",
+        "Tgid": "876966",
+        "Threads": "103",
+        "Uid": "0\t0\t0\t0",
+        "VmHWM": "2429824 kB",
+        "VmRSS": "1950208 kB",
+        "VmSize": "25316044 kB"
+      }
+    },
+    {
+      "cmdline": [
+        "python3",
+        "scripts/record_openai_serving_row.py",
+        "--backend",
+        "vllm",
+        "--phase",
+        "before",
+        "--run-id",
+        "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma3-27b-it",
+        "--results-dir",
+        "results",
+        "--runtime-ref",
+        "jethac/vllm@25ab073ef87f4443616fbaf00a2f6f09a9087c1f + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay; precompiled wheel base 4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa",
+        "--container-image",
+        "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+        "--kv-cache-dtype",
+        "fp8",
+        "--attention-backend",
+        "flashinfer",
+        "--cuda-graph-mode",
+        "default",
+        "--server-log",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_server.log",
+        "--process-match",
+        "vllm serve google/gemma-3-27b-it"
+      ],
+      "cwd": {
+        "path": "/home/jethac/spark_tmp/dgx-spark-hijinks-vllm-gemma3-rung1-20260608"
+      },
+      "environment": {
+        "values": {
+          "FLASHINFER_SRC": "/home/jethac/spark_tmp/dgx-spark-hijinks-vllm-gemma3-rung1-20260608/third_party/flashinfer",
+          "VLLM_PRECOMPILED_WHEEL_COMMIT": "4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa",
+          "VLLM_SOURCE_COMMIT": "25ab073ef87f4443616fbaf00a2f6f09a9087c1f",
+          "VLLM_SRC": "/home/jethac/spark_tmp/dgx-spark-hijinks-vllm-gemma3-rung1-20260608/third_party/vllm",
+          "VLLM_VERSION_OVERRIDE": "0.1.dev1+g25ab073ef"
+        }
+      },
+      "maps": {
+        "matched_count": 0,
+        "matched_paths": []
+      },
+      "pid": 879729,
+      "status": {
+        "Gid": "1000\t1000\t1000\t1000",
+        "Name": "python3",
+        "PPid": "876908",
+        "Pid": "879729",
+        "State": "S (sleeping)",
+        "Tgid": "879729",
+        "Threads": "1",
+        "Uid": "1000\t1000\t1000\t1000",
+        "VmHWM": "13284 kB",
+        "VmRSS": "13284 kB",
+        "VmSize": "35236 kB"
+      }
+    }
+  ],
+  "schema": "runtime-process-probe/v1",
+  "server": {
+    "models": {
+      "data": [
+        {
+          "created": 1780920380,
+          "id": "gemma3-27b-it",
+          "max_model_len": 131072,
+          "object": "model",
+          "owned_by": "vllm",
+          "parent": null,
+          "permission": [
+            {
+              "allow_create_engine": false,
+              "allow_fine_tuning": false,
+              "allow_logprobs": true,
+              "allow_sampling": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "created": 1780920380,
+              "group": null,
+              "id": "modelperm-a2b1ea62c8071ff2",
+              "is_blocking": false,
+              "object": "model_permission",
+              "organization": "*"
+            }
+          ],
+          "root": "google/gemma-3-27b-it"
+        }
+      ],
+      "object": "list"
+    }
+  },
+  "started_utc": "2026-06-08T12:06:20Z",
+  "url": "http://127.0.0.1:8000"
+}

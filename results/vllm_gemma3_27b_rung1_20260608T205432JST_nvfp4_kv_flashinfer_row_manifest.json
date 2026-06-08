@@ -1,0 +1,112 @@
+{
+  "artifacts": {
+    "build_target_audit": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_build_target_audit.json",
+    "chat_smoke": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_chat_smoke.json",
+    "openai_benchmark": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_openai_benchmark.json",
+    "runtime_probe": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_runtime_probe.json",
+    "server_log": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_server.log"
+  },
+  "backend": "vllm",
+  "commands": {
+    "build_target_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_build_target_audit.py",
+        "--log",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_server.log",
+        "--output",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_build_target_audit.json"
+      ],
+      "finished_unix": 1780921096.011882,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780921095.9441593
+    },
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma3-27b-it",
+        "--prompt",
+        "Reply with exactly this text: spark-ok",
+        "--max-tokens",
+        "8",
+        "--output",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_chat_smoke.json"
+      ],
+      "finished_unix": 1780921017.3488324,
+      "ok": false,
+      "returncode": 2,
+      "started_unix": 1780921015.1737094
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "gemma3-27b-it",
+        "--backend",
+        "vllm",
+        "--phase",
+        "after",
+        "--run-id",
+        "vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer",
+        "--prompt-suffix",
+        "",
+        "--output",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_openai_benchmark.json"
+      ],
+      "finished_unix": 1780921095.8119602,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780921017.3488865
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--match",
+        "vllm serve google/gemma-3-27b-it",
+        "--output",
+        "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_runtime_probe.json"
+      ],
+      "finished_unix": 1780921095.943716,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780921095.8493242
+    }
+  },
+  "dry_run": false,
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "metadata": {
+    "attention_backend": "flashinfer",
+    "container_digest": null,
+    "container_image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+    "cuda_graph_mode": "default",
+    "kv_cache_dtype": "nvfp4",
+    "model_revision": null,
+    "quantization": null,
+    "runtime_ref": "jethac/vllm@25ab073ef87f4443616fbaf00a2f6f09a9087c1f + jethac/flashinfer@e152cf4da4ab2a9d093b7d9d4b499198b0211c61 source overlay; precompiled wheel base 4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa"
+  },
+  "model": "gemma3-27b-it",
+  "ok": false,
+  "phase": "after",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer",
+  "schema": "openai-serving-row-manifest/v1"
+}

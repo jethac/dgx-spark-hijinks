@@ -1,0 +1,99 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "decode_tok_s": 4.240507385110632,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 332,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "A local AI workstation thrives on fast m",
+        "top_word": "ram",
+        "top_word_fraction": 0.05555555555555555,
+        "unique_word_ratio": 0.8148148148148148,
+        "word_count": 54
+      },
+      "source": "benchmark",
+      "text": "A local AI workstation thrives on fast memory (RAM) because AI tasks, particularly those involving large language models or complex image/video processing, are incredibly memory-intensive. These models and the data they operate on need to be loaded into RAM for the GPU to access quickly.  Slow RAM creates a bottleneck, forcing the",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "total_tokens": 88
+      }
+    },
+    {
+      "case": "medium_decode",
+      "decode_tok_s": 4.155587015768359,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 500,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.05970149253731343,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "## Engineering Note: LLM Server GPU Kern",
+        "top_word": "gpu",
+        "top_word_fraction": 0.058823529411764705,
+        "unique_word_ratio": 0.75,
+        "word_count": 68
+      },
+      "source": "benchmark",
+      "text": "## Engineering Note: LLM Server GPU Kernel Validation\n\n**Subject:** Validating Correct GPU Kernel Usage in LLM Server\n\n**Date:** October 26, 2023\n\n**Purpose:** This note outlines the process for verifying that the LLM server is utilizing the expected GPU kernels for optimal performance and correctness. Incorrect kernel usage can indicate configuration errors or library mismatches.\n\n**Methodology:** Validation relies on observing GPU activity during inference and comparing it against expected ker",
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 36,
+        "total_tokens": 228
+      }
+    },
+    {
+      "case": "long_prefill",
+      "decode_tok_s": 4.209114426236923,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 367,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "Okay, despite the extreme repetition, he",
+        "top_word": "the",
+        "top_word_fraction": 0.06521739130434782,
+        "unique_word_ratio": 0.8695652173913043,
+        "word_count": 46
+      },
+      "source": "benchmark",
+      "text": "Okay, despite the extreme repetition, here's a summarized list of five key requirements for your inference server benchmark:\n\n*   **Environment & Configuration Capture:** Thoroughly document the hardware, software (OS, drivers, libraries), and specific configuration settings used during the benchmark. This ensures context and allows for comparisons across different",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2266,
+        "total_tokens": 2330
+      }
+    }
+  ],
+  "model": "gemma3-27b-it",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_quality_from_benchmark",
+  "schema": "openai-quality-probe/v1",
+  "source_report": "results/vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_openai_benchmark.json"
+}

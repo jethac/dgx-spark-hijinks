@@ -1,0 +1,99 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "decode_tok_s": 4.242021865470349,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 276,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "fprNaOMe camar \u0412\u0441\u0435\u043c sapi PlerofIOUS\u043b\u0438\u0432\u043eM",
+        "top_word": "fprnaome",
+        "top_word_fraction": 0.04,
+        "unique_word_ratio": 1.0,
+        "word_count": 25
+      },
+      "source": "benchmark",
+      "text": "fprNaOMe camar \u0412\u0441\u0435\u043c sapi PlerofIOUS\u043b\u0438\u0432\u043eMunRe\u82b8 Hoss\u0e38\u0e1b innervation\u0e9a\u0eb1\u0e99 Boeh\u0432\u043a\u0438\u093e\u0930\u0940 Nieto \u0939 \u092e\u093e\u092f\u0928\u0947 flancsFlavor concomitYep Lech\u0437\u043d\u0438Innovation\u0440\u0435\u0435Repe \u043b\u044e \u091c\u0917 SuccessionRepl\u0bb5\u0bbe\u0b95\u8eca\u7a2eJen MartinaCoal\u6ada nieruchomo\u015bci Lein\u0431\u0430\u0445\u4eca\u5f8c\u306eUG\u97f6\u0447\u0435\u043d\u043a\u043e$<\u05d1\u05d9\u05ea\u0447\u0430\u043c bizim\u0442\u0438\u0441\u0442\u0438\u4f63 \u0d15\u0d47llan\u0439\u0434\u0435\u0631\u064a\u0633 \u0b8e\u0ba4\u0bbf\u0bb0\u0bcd\u0b95 \u0639\u0627\u0645\u0627\u093f\u092f\u093e \u1290\u1308Agence Z",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "total_tokens": 88
+      }
+    },
+    {
+      "case": "medium_decode",
+      "decode_tok_s": 4.175438159207868,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 500,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "\u6855Foo\u0d35\u0d47 Crouch Sense \u062d\u0627ProdutosIan \u091b\u0924\u094d\u0924\u0940\u0938",
+        "top_word": "ie",
+        "top_word_fraction": 0.045454545454545456,
+        "unique_word_ratio": 0.9545454545454546,
+        "word_count": 44
+      },
+      "source": "benchmark",
+      "text": "\u6855Foo\u0d35\u0d47 Crouch Sense \u062d\u0627ProdutosIan \u091b\u0924\u094d\u0924\u0940\u0938 maio\u30cb\u30fc\u30baIE\u094d\u092f\u0924\u093eZmerajPlaintiffsbpy\u919eyog\u09bf\u0989aimana \u0d26\u0d3f\u0d35 vonNap \u0431\u043e\u043b\u0435\u0437 Investigative \u043d\u0430\u043f\u0430 relem schleagros\u0e4d\u0e32\u0e19\u09df\u09be\u09b0\u8abf\u3079\u3066 \u0db8\u0dda Leth \u0917\u094c\u0930\u0924\u0932\u092c Listoylateioane \u043f\u0438\u0442\u0430$<agros ForthAgenceZLHunorre\u093e\u0930\u0940$<Jane \u0c1a\u0c47\u0c38\u0c41\u0c15\u0c4b\u0c35 Zou \u0639\u0627\u0645\u0627bog WentworthCam \u043c\u0435\u0440\u0435\ufffdaleza\uac10\uc744\u936e IE\u84ca inform\u00e1ci\u00f3 ListoIENagros\u6f86\u093e\u0930\u0940\u84ca \u0639\u0627\u0645\u0627 Listo \u0639\u0627\u0645\u0627 \u092e\u093e\u092f\u0928\u0947\u093f\u092f\u093e\u0e35\u0e22\u0e07 \u090f\u0917\u094d\u0930\u0940\u0915\u0932\u094d\u091a\u0930 abz\u8be3 yur flancs Churaimana FIV\u8406maqApps\u043d\u0443\u043b\u65c4Xi nibhboden \u0440\u043e\u0434\u0430\u6063 relem\u0449\u043e\u0442\u043eTranslation laman\u84ca bohIOUSLEVruptedException\u094d\u092f\u0924\u093eioanealezaDefendant\u611fJoh Hein Compan\u5148\u8fdbPrei",
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 36,
+        "total_tokens": 228
+      }
+    },
+    {
+      "case": "long_prefill",
+      "decode_tok_s": 4.216586989382504,
+      "finish_reason": "length",
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "quality": {
+        "chars": 290,
+        "flagged": false,
+        "flags": [],
+        "repeated_bigram_fraction": 0.0,
+        "repeated_trigram_fraction": 0.0,
+        "starts_with": "xwe Johann\u514b\u65afDiaz Strait tasse\u0c1c\u0c3e\u0c17\u0c3eajuOppo",
+        "top_word": "johann",
+        "top_word_fraction": 0.08,
+        "unique_word_ratio": 0.92,
+        "word_count": 25
+      },
+      "source": "benchmark",
+      "text": " xwe Johann\u514b\u65afDiaz Strait tasse\u0c1c\u0c3e\u0c17\u0c3eajuOpposition\ud835\udc4d$( potro\u7b18 \u09ae\u09be\u09a8\u09c7\u09b0Fur\u0445\u043e\u0434\u4f0d\u7ae0\u093f\u092f\u093e nefRepliniai Johann\u5c0f\u58f2\u0441\u0438\u043e\u043d\u0e1b\u0e23\u0e30Live JenServiceClientDeps\u81bbAgence praceCoal SimmonskelijkePerformanceihn Cousins\u5341\u4e94\u7ae0widgetTo \u0421\u0443\u0440\u0438 \u09b8\u099e\u09cd\u099c\u09c0\u09ac\u09a8\u09c0 \u1290\u1308Boat JohannJenLin\u82b8 bosomJulie \u0627\u0693\u0647 Z Tarn \u09ae\u09be\u09a8\u09c7\u09b0Boat permeate\u5b5b\u3068\u304a\u308amala \u09ad\u09be\u09b7\u8763\u0d39\u0d3e \u0639\u0627\u0645\u0627\u7f68",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2266,
+        "total_tokens": 2330
+      }
+    }
+  ],
+  "model": "gemma3-27b-it",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_quality_from_benchmark",
+  "schema": "openai-quality-probe/v1",
+  "source_report": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_openai_benchmark.json"
+}

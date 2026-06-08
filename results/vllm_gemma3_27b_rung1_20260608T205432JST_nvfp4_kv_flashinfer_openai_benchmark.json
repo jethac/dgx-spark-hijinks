@@ -1,0 +1,153 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 66,
+      "completion_tok_s_total": 4.1553069796097,
+      "content_chars": 276,
+      "content_preview": "fprNaOMe camar \u0412\u0441\u0435\u043c sapi PlerofIOUS\u043b\u0438\u0432\u043eMunRe\u82b8 Hoss\u0e38\u0e1b innervation\u0e9a\u0eb1\u0e99 Boeh\u0432\u043a\u0438\u093e\u0930\u0940 Nieto \u0939 \u092e\u093e\u092f\u0928\u0947 flancsFlavor concomitYep Lech\u0437\u043d\u0438Innovation\u0440\u0435\u0435Repe \u043b\u044e \u091c\u0917 SuccessionRepl\u0bb5\u0bbe\u0b95\u8eca\u7a2eJen MartinaCoal\u6ada nieruchomo\u015bci Lein\u0431\u0430\u0445\u4eca\u5f8c\u306eUG\u97f6\u0447\u0435\u043d\u043a\u043e$<\u05d1\u05d9\u05ea\u0447\u0430\u043c bizim\u0442\u0438\u0441\u0442\u0438\u4f63 \u0d15\u0d47llan\u0439\u0434\u0435\u0631\u064a\u0633 \u0b8e\u0ba4\u0bbf\u0bb0\u0bcd\u0b95 \u0639\u0627\u0645\u0627\u093f\u092f\u093e \u1290\u1308Agence Z",
+      "decode_s": 15.087145241035614,
+      "decode_tok_s": 4.242021865470349,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780921017,
+        "id": "chatcmpl-ae53a70bf5d94b18",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-7ddbd732",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 24,
+          "total_tokens": 88
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 276,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 15.4019908310147,
+      "ttft_s": 0.31484558997908607,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "total_tokens": 88
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 194,
+      "completion_tok_s_total": 4.148850445115536,
+      "content_chars": 885,
+      "content_preview": "\u6855Foo\u0d35\u0d47 Crouch Sense \u062d\u0627ProdutosIan \u091b\u0924\u094d\u0924\u0940\u0938 maio\u30cb\u30fc\u30baIE\u094d\u092f\u0924\u093eZmerajPlaintiffsbpy\u919eyog\u09bf\u0989aimana \u0d26\u0d3f\u0d35 vonNap \u0431\u043e\u043b\u0435\u0437 Investigative \u043d\u0430\u043f\u0430 relem schleagros\u0e4d\u0e32\u0e19\u09df\u09be\u09b0\u8abf\u3079\u3066 \u0db8\u0dda Leth \u0917\u094c\u0930\u0924\u0932\u092c Listoylateioane \u043f\u0438\u0442\u0430$<agros ForthAgenceZLHunorre\u093e\u0930\u0940$<Jane \u0c1a\u0c47\u0c38\u0c41\u0c15\u0c4b\u0c35 Zou \u0639\u0627\u0645\u0627bog WentworthCam \u043c\u0435\u0440\u0435\ufffdaleza\uac10\uc744\u936e IE\u84ca inform\u00e1ci\u00f3 ListoIENagros\u6f86\u093e\u0930\u0940\u84ca \u0639\u0627\u0645\u0627 Listo \u0639\u0627\u0645\u0627 \u092e\u093e\u092f\u0928\u0947\u093f\u092f\u093e\u0e35\u0e22\u0e07 \u090f\u0917\u094d\u0930\u0940\u0915\u0932\u094d\u091a\u0930 abz\u8be3 yur flancs Churaimana FIV\u8406maqApps\u043d\u0443\u043b\u65c4Xi nibhboden \u0440\u043e\u0434\u0430\u6063 relem\u0449\u043e\u0442\u043eTranslation laman\u84ca bohIOUSLEVruptedException\u094d\u092f\u0924\u093eioanealezaDefendant\u611fJoh Hein Compan\u5148\u8fdbPrei",
+      "decode_s": 45.98319809301756,
+      "decode_tok_s": 4.175438159207868,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780921032,
+        "id": "chatcmpl-8fe04846f5361013",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-7ddbd732",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 36,
+          "total_tokens": 228
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 885,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 46.27787926798919,
+      "ttft_s": 0.29468117497162893,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 36,
+        "total_tokens": 228
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 66,
+      "completion_tok_s_total": 3.8224485741283285,
+      "content_chars": 290,
+      "content_preview": " xwe Johann\u514b\u65afDiaz Strait tasse\u0c1c\u0c3e\u0c17\u0c3eajuOpposition\ud835\udc4d$( potro\u7b18 \u09ae\u09be\u09a8\u09c7\u09b0Fur\u0445\u043e\u0434\u4f0d\u7ae0\u093f\u092f\u093e nefRepliniai Johann\u5c0f\u58f2\u0441\u0438\u043e\u043d\u0e1b\u0e23\u0e30Live JenServiceClientDeps\u81bbAgence praceCoal SimmonskelijkePerformanceihn Cousins\u5341\u4e94\u7ae0widgetTo \u0421\u0443\u0440\u0438 \u09b8\u099e\u09cd\u099c\u09c0\u09ac\u09a8\u09c0 \u1290\u1308Boat JohannJenLin\u82b8 bosomJulie \u0627\u0693\u0647 Z Tarn \u09ae\u09be\u09a8\u09c7\u09b0Boat permeate\u5b5b\u3068\u304a\u308amala \u09ad\u09be\u09b7\u8763\u0d39\u0d3e \u0639\u0627\u0645\u0627\u7f68",
+      "decode_s": 15.17815241595963,
+      "decode_tok_s": 4.216586989382504,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1780921079,
+        "id": "chatcmpl-a78788d36b8ea2c6",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "system_fingerprint": "vllm-0.1.dev1+g25ab073ef-7ddbd732",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2266,
+          "total_tokens": 2330
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 290,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 16.743194514943752,
+      "ttft_s": 1.5650420989841223,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2266,
+        "total_tokens": 2330
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T12:18:15Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "gemma3-27b-it",
+  "models_response": null,
+  "ok": true,
+  "phase": "after",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-08T12:16:57Z",
+  "url": "http://127.0.0.1:8000"
+}

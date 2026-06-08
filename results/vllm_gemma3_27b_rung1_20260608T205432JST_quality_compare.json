@@ -1,0 +1,43 @@
+{
+  "baseline_run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer",
+  "baseline_source": "results/vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_openai_benchmark.json",
+  "candidate_run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_quality_compare",
+  "candidate_source": "results/vllm_gemma3_27b_rung1_20260608T205432JST_nvfp4_kv_flashinfer_openai_benchmark.json",
+  "comparisons": [
+    {
+      "baseline_chars": 367,
+      "baseline_flags": [],
+      "baseline_starts_with": "Okay, despite the extreme repetition, he",
+      "candidate_chars": 290,
+      "candidate_flags": [],
+      "candidate_starts_with": "xwe Johann\u514b\u65afDiaz Strait tasse\u0c1c\u0c3e\u0c17\u0c3eajuOppo",
+      "case": "long_prefill",
+      "ok": true,
+      "text_similarity": 0.0213089802130898
+    },
+    {
+      "baseline_chars": 500,
+      "baseline_flags": [],
+      "baseline_starts_with": "## Engineering Note: LLM Server GPU Kern",
+      "candidate_chars": 500,
+      "candidate_flags": [],
+      "candidate_starts_with": "\u6855Foo\u0d35\u0d47 Crouch Sense \u062d\u0627ProdutosIan \u091b\u0924\u094d\u0924\u0940\u0938",
+      "case": "medium_decode",
+      "ok": true,
+      "text_similarity": 0.014
+    },
+    {
+      "baseline_chars": 332,
+      "baseline_flags": [],
+      "baseline_starts_with": "A local AI workstation thrives on fast m",
+      "candidate_chars": 276,
+      "candidate_flags": [],
+      "candidate_starts_with": "fprNaOMe camar \u0412\u0441\u0435\u043c sapi PlerofIOUS\u043b\u0438\u0432\u043eM",
+      "case": "short_decode",
+      "ok": true,
+      "text_similarity": 0.006578947368421052
+    }
+  ],
+  "ok": true,
+  "schema": "openai-quality-compare/v1"
+}
