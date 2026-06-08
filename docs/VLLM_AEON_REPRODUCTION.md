@@ -293,7 +293,20 @@ Result: the clean FA2 image now builds. `_vllm_fa2_C.abi3.so` linked, installed,
 
 Runtime audit context: `NVIDIA GB10`, compute capability `[12, 1]`, `48` SMs, Torch `2.12.0.dev20260408+cu130`, FlashInfer `0.6.9rc1`, vLLM `0.1.dev1+ga919d635d`.
 
-Remaining caveat: this proves native `sm_121a` FA2 for the patched vLLM FlashAttention extension only. Other vLLM extension objects still contain the existing mixed prebuilt architecture surface, including `sm_120`, `sm_100`, and `sm_90a`. The next gate is the no-think Qwen3.6+DFlash serving row on this clean FA2 image.
+Remaining caveat: this proves native `sm_121a` FA2 for the patched vLLM FlashAttention extension only. Other vLLM extension objects still contain the existing mixed prebuilt architecture surface, including `sm_120`, `sm_100`, and `sm_90a`.
+
+Clean FA2 serving rerun:
+
+- run id: `jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST`
+- summary artifact: `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_summary.md`
+- row manifest: `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_row_manifest.json`, `ok=true`
+- chat smoke: `spark-ok` in normal `message.content` with `chat_template_kwargs={"enable_thinking": false}`
+- compact decode: `61.07 tok/s` short, `56.97 tok/s` medium, `60.10 tok/s` long-prefill
+- backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, FlashInfer FP4 GEMM autotune, CUDA graphs, and `1,241,920` KV tokens
+
+Interpretation: this closes the clean-packaging gap for the Qwen3.6 NVFP4+DFlash vLLM row. The row runs through a `jethac/vllm` image that skips AEON's FA2 binary and uses the patched `jethac/flash-attention` FA2 extension with separate `sm_121a` cubin proof. It does not prove a speedup over the AEON-derived row and it does not prove native FP4 weight/MoE compute; the selected weight path still warns that it is using Marlin weight-only FP4.
+
+Failed first recorder pass: run id `jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST` started the same server but passed malformed JSON for `chat_template_kwargs` through a PowerShell-to-SSH quoting bug, producing a recorder `JSONDecodeError`. Treat that artifact as operator error, not model/runtime failure.
 
 ## 2026-06-08 Gemma 26B Result
 

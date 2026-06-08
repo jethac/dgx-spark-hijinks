@@ -1,0 +1,27 @@
+{
+  "cuobjdump": "/usr/local/cuda/bin/cuobjdump",
+  "inputs": {
+    "packages": [
+      "vllm",
+      "flashinfer"
+    ],
+    "paths": []
+  },
+  "objects": [
+    {
+      "error": "ModuleNotFoundError(\"No module named 'vllm'\")",
+      "package": "vllm"
+    },
+    {
+      "error": "ModuleNotFoundError(\"No module named 'flashinfer'\")",
+      "package": "flashinfer"
+    }
+  ],
+  "schema": "cuda-so-audit/v1",
+  "summary": {
+    "architecture_counts": {},
+    "object_count": 2,
+    "objects_with_sm_120": 0,
+    "objects_with_sm_121": 0
+  }
+}

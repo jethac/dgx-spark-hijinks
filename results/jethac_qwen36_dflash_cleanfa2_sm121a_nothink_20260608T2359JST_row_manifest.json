@@ -1,0 +1,133 @@
+{
+  "artifacts": {
+    "build_target_audit": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_build_target_audit.json",
+    "chat_smoke": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_chat_smoke.json",
+    "cuda_so_audit": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_cuda_so_audit.json",
+    "openai_benchmark": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_openai_benchmark.json",
+    "runtime_probe": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_runtime_probe.json",
+    "server_log": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_server.log"
+  },
+  "backend": "vllm",
+  "commands": {
+    "build_target_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_build_target_audit.py",
+        "--log",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_server.log",
+        "--output",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_build_target_audit.json"
+      ],
+      "finished_unix": 1780891031.5031345,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780891031.4759672
+    },
+    "chat_smoke": {
+      "command": [
+        "python",
+        "scripts/openai_chat_smoke.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "qwen36-fast",
+        "--prompt",
+        "Reply with exactly this text: spark-ok",
+        "--max-tokens",
+        "64",
+        "--chat-template-kwargs-json",
+        "{\\ enable_thinking\\: false}",
+        "--output",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_chat_smoke.json"
+      ],
+      "finished_unix": 1780891031.35262,
+      "ok": false,
+      "returncode": 1,
+      "started_unix": 1780891031.2297354
+    },
+    "cuda_so_audit": {
+      "command": [
+        "python",
+        "scripts/cuda_so_audit.py",
+        "--output",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_cuda_so_audit.json",
+        "--package",
+        "vllm",
+        "--package",
+        "flashinfer"
+      ],
+      "finished_unix": 1780891031.5230021,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780891031.5032628
+    },
+    "openai_benchmark": {
+      "command": [
+        "python",
+        "scripts/openai_serving_benchmark.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--model",
+        "qwen36-fast",
+        "--backend",
+        "vllm",
+        "--phase",
+        "exploratory",
+        "--run-id",
+        "jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST",
+        "--prompt-suffix",
+        "",
+        "--chat-template-kwargs-json",
+        "{\\ enable_thinking\\: false}",
+        "--output",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_openai_benchmark.json"
+      ],
+      "finished_unix": 1780891031.3834417,
+      "ok": false,
+      "returncode": 2,
+      "started_unix": 1780891031.3526754
+    },
+    "runtime_probe": {
+      "command": [
+        "python",
+        "scripts/runtime_process_probe.py",
+        "--url",
+        "http://127.0.0.1:8000",
+        "--match",
+        "vllm",
+        "--output",
+        "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST_runtime_probe.json"
+      ],
+      "finished_unix": 1780891031.4757314,
+      "ok": true,
+      "returncode": 0,
+      "started_unix": 1780891031.3835979
+    }
+  },
+  "dry_run": false,
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "metadata": {
+    "attention_backend": "flash_attn",
+    "container_digest": null,
+    "container_image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+    "cuda_graph_mode": "enabled",
+    "kv_cache_dtype": "auto",
+    "model_revision": null,
+    "quantization": "compressed-tensors-nvfp4",
+    "runtime_ref": "ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@a919d635d + jethac/flash-attention@7d53245 + clean FA2 sm_121a"
+  },
+  "model": "qwen36-fast",
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST",
+  "schema": "openai-serving-row-manifest/v1"
+}

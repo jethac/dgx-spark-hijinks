@@ -356,6 +356,16 @@
   - runtime evidence: `NVIDIA GB10`, compute capability `[12, 1]`, `48` SMs, Torch `2.12.0.dev20260408+cu130`, FlashInfer `0.6.9rc1`, vLLM `0.1.dev1+ga919d635d`.
   - remaining caveat: this is native-target proof for the vLLM FlashAttention extension only. Other vLLM objects still carry their existing mixed prebuilt architecture surface, including `sm_120`, `sm_100`, and `sm_90a`.
   - next gate: rerun the no-think Qwen3.6+DFlash serving row on this clean FA2 image.
+- Ran the no-think Qwen3.6+DFlash serving row on the clean vLLM FA2 SM121a image.
+  - image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+  - run id: `jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST`
+  - summary artifact: `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_summary.md`
+  - manifest: `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_row_manifest.json`, `ok=true`.
+  - smoke: normal OpenAI `message.content` returned `spark-ok` with `chat_template_kwargs={"enable_thinking": false}`.
+  - compact decode: `61.07 tok/s` short, `56.97 tok/s` medium, `60.10 tok/s` long-prefill.
+  - backend evidence: `Qwen3_5MoeForConditionalGeneration`, `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, FlashInfer FP4 GEMM autotune, CUDA graphs, and `1,241,920` KV tokens.
+  - interpretation: this closes the clean vLLM Qwen packaging gap and pairs serving evidence with separate FA2 `sm_121a` cubin proof. It is not a speedup claim and it still does not prove native FP4 weight/MoE compute; the server warns that the selected weight path is Marlin weight-only FP4.
+  - failed first recorder pass: `jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST` hit a PowerShell-to-SSH JSON quoting bug for `chat_template_kwargs`, producing a recorder `JSONDecodeError`. The server had started and served; classify that failed row as operator quoting, not runtime/model failure.
 - Moved the clean SGLang FP4 KV row from corrupted graph serving to correctness-safe no-graph serving.
   - fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - live image: `nvcr.io/nvidia/sglang:26.05-py3` with editable source overlay and local FlashInfer JIT headers/source.

@@ -1,0 +1,24 @@
+{
+  "backend": "vllm",
+  "cases": [],
+  "error": "JSONDecodeError('Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')",
+  "finished_utc": "2026-06-08T03:57:11Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "qwen36-fast",
+  "models_response": null,
+  "ok": false,
+  "phase": "exploratory",
+  "run_id": "jethac_qwen36_dflash_cleanfa2_sm121a_nothink_20260608T2359JST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-08T03:57:11Z",
+  "url": "http://127.0.0.1:8000"
+}

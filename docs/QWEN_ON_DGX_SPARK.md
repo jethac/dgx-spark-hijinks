@@ -8,8 +8,8 @@ Qwen is a first-class Spark target alongside Gemma, not a secondary check. Gemma
 
 | runtime | row | status |
 |---|---|---|
-| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on the AEON image. A derived `jethac/vllm@6804e1b` row also passes at `47.22`, `58.88`, and `61.62 tok/s`, but still depends on AEON's FA2 binary and lacks native-target proof. Fork head `db4b210c1` adds the precompiled FA2/FA3 skip knob for the next clean-image attempt |
-| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; patched fp4-KV can serve only with graph paths disabled and collapses to about 0.28 tok/s |
+| vLLM | AEON-7 Qwen3.6 35B-A3B NVFP4 + DFlash | local `v2` row passes OpenAI smoke and compact serving when `chat_template_kwargs={"enable_thinking": false}` is set; decode is about `50-56 tok/s` on the AEON image. A derived `jethac/vllm@6804e1b` row also passes at `47.22`, `58.88`, and `61.62 tok/s`, but depends on AEON's FA2 binary. The clean `jethac/vllm@a919d635d` + `jethac/flash-attention@7d53245` image now serves at `61.07`, `56.97`, and `60.10 tok/s` with separate `sm_121a` FA2 binary proof; this is serving parity/clean packaging, not a speedup claim |
+| SGLang | `Qwen/Qwen2.5-1.5B-Instruct` BF16/fp8/fp4-KV | local GB10 BF16/auto and fp8 rows pass at about 58-59 tok/s decode; earlier patched fp4-KV proved about `1.78x` fp8 KV capacity but was slow/bad. The current `jethac/sglang` source overlay is correctness-safe only with CUDA graph capture disabled and still needs a clean fp8-vs-fp4 row |
 | llama.cpp | `Qwen/Qwen2.5-1.5B-Instruct-GGUF` Q4_K_M | local GB10 row passes OpenAI smoke and compact serving at about 167-175 tok/s decode; lm-eval logprobs schema still blocked |
 
 ## vLLM Target
@@ -45,8 +45,8 @@ Current local setup:
 - `scripts/pull_container_with_evidence.sh ghcr.io/aeon-7/vllm-spark-omni-q36:v2 RUN_ID` is the preferred image acquisition path when Docker pulls stall or fail to register.
 - `scripts/qwen_speed_lane.py --input tasks/qwen_speed_lane_sample.jsonl --campaign-id RUN_ID` records already-running vLLM, SGLang, and llama.cpp Qwen servers with the shared row manifest wrapper.
 - preflight artifact `results/aeon_vllm_reproduction_preflight_20260608T0430JST.md` confirms the GHCR image resolves and the Qwen target/drafter HF repos are public and non-gated from the GB10 host.
-- current status: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json` and `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json` are both `ok=true`; chat smoke returns normal `message.content` after disabling Qwen thinking with `chat_template_kwargs={"enable_thinking": false}`.
-- remaining proof: add a clean container/install path and collect native `sm_121`/`sm_121a` build-target proof or explicitly classify the path as family/PTX-only.
+- current status: `results/aeon_qwen36_dflash_nothink_20260608T0834JST_row_manifest.json`, `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_row_manifest.json`, and `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_row_manifest.json` are `ok=true`; chat smoke returns normal `message.content` after disabling Qwen thinking with `chat_template_kwargs={"enable_thinking": false}`.
+- clean native-target proof: `results/jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST_incontainer_target_audit.md` proves the patched FA2 extension contains `sm_121a` cubins. The clean serving row selects FlashAttention 2, but its server log still does not contain accepted build-target strings.
 
 Current local AEON Qwen evidence:
 
@@ -54,6 +54,7 @@ Current local AEON Qwen evidence:
 - `results/aeon_qwen36_dflash_nothink_20260608T0834JST_openai_benchmark.json`: compact serving passes with `50.37`, `55.84`, and `53.75 tok/s` decode for short, medium, and long-prefill cases.
 - `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_openai_benchmark.json`: derived `jethac/vllm` compact serving passes with `47.22`, `58.88`, and `61.62 tok/s` decode for short, medium, and long-prefill cases.
 - `results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_server.log`: target `Qwen3_5MoeForConditionalGeneration`, drafter `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, `1,251,446` KV tokens, `4.77x` max concurrency at 262k context.
+- `results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_summary.md`: clean FA2 image serves Qwen3.6 NVFP4+DFlash with `61.07`, `56.97`, and `60.10 tok/s` decode; server log shows `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, FlashInfer FP4 GEMM autotune, `1,241,920` KV tokens, and `4.74x` max concurrency at 262k context.
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_nvfp4_checkpoint_audit.json`: `ok=true`, compressed-tensors NVFP4, `124306` safetensors keys, `0` quantized sensitive keys.
 - `results/aeon_qwen36_dflash_tailnet_retry2_20260608T075346JST_server.log`: target `Qwen3_5MoeForConditionalGeneration`, drafter `DFlashDraftModel`, `FlashInferCutlassNvFp4LinearKernel`, `MARLIN` NvFp4 MoE, FlashAttention 2, CUDA graphs, `585168` KV tokens, `4.73x` max concurrency at 262k context.
 - `results/aeon_qwen36_dflash_nothink_20260608T0834JST_build_target_audit.json`: no accepted native `sm_121` or `sm_121a` target evidence in the server log.
@@ -79,8 +80,9 @@ Current SGLang Qwen evidence:
 - stock `fp4_e2m1` with FlashInfer attention fails at the compatibility gate.
 - stock `fp4_e2m1` with Triton attention reaches FP4 KV allocation, `5,534,509` tokens or about `1.78x` fp8 capacity, then fails on missing `KVFP4QuantizeUtil`.
 - patched overlay using `jethac/sglang@98ad46961` gate/alias changes clears the stock SGLang blockers. FlashInfer attention reaches an `sm_121a` JIT compile and fails in FlashInfer FP4 decode. Triton attention serves only after disabling both standard and piecewise CUDA graphs, with `5,541,103` FP4 KV tokens, but the short decode row is only `0.276 tok/s` and output is repetitive.
+- newer clean-source evidence on `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` calibrates FP4 KV, disables CUDA graph and piecewise graph capture by default for native FP4 KV, reaches readiness, returns `spark-ok`, and answers `2+2 is 4` sanely. This is a correctness-safe debug proof, not a claim-ready fp8-vs-fp4 benchmark.
 
-Interpretation: FP4 KV capacity is real on this Qwen row, but the serving path is not performance-usable yet. The next after-row must be a clean fork/container with graph-compatible FP4 KV and a quality check, not a site-package overlay.
+Interpretation: FP4 KV capacity is real on this Qwen row, and the current fork has a no-graph correctness-safe path. The next after-row must be a clean `jethac/sglang` fp8-vs-`fp4_e2m1` row with graph policy, quality checks, capacity tokens, and throughput recorded. Graph-enabled FP4 KV remains a separate corruption bug.
 
 ## llama.cpp Target
 
