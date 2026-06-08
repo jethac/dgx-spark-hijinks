@@ -524,6 +524,22 @@
     pinned source build; runtime dispatch, correctness, and speed on an actual NVFP4 GGUF
     remain the next gate.
 
+- Tightened the vLLM Gemma 3 27B Rung 1 live packet after host preflight.
+  - script: `scripts/prep_vllm_gemma3_27b_rung1.sh`
+  - doc: `docs/VLLM_GEMMA3_27B_RUNG1_PREP_20260608.md`
+  - preflight artifact: `results/vllm_gemma3_27b_rung1_preflight_20260608.md`
+  - result: the Spark-class Linux endpoint is reachable, idle, and has the target vLLM
+    image locally, but the older `/home/jethac/src/vllm` and `/home/jethac/src/flashinfer`
+    assumptions are false, the existing Linux repo checkout is stale/dirty, and
+    `google/gemma-3-27b-it` was not found in the bounded HF cache search.
+  - fix: generated packets now stream `docker logs -f` into `_server.log`, write container
+    IDs, wait for `/v1/models` before recording rows, and remove row containers on exit.
+    This prevents the next Gemma Rung 1 run from recording only a Docker container ID as
+    the server log or racing readiness.
+  - next gate: create/sync a clean Linux run checkout with initialized vLLM/FlashInfer
+    submodules and gated Gemma 3 access, then run the fp8 comparator row before the NVFP4
+    candidate.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

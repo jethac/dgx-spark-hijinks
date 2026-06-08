@@ -25,11 +25,13 @@ container was started and no GPU work was consumed.
 Use:
 
 ```bash
+mkdir -p docs/results
+
 STAMP=20260608T0000JST \
-  scripts/prep_vllm_gemma3_27b_rung1.sh \
-  B:/workshop/worktrees/vllm/spark-hijinks-007-nvfp4-kv-sm121 \
-  B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121 \
-  B:/workshop/hf-cache \
+  bash scripts/prep_vllm_gemma3_27b_rung1.sh \
+  third_party/vllm \
+  third_party/flashinfer \
+  /home/jethac/.cache/huggingface \
   results \
   > docs/results/vllm_gemma3_27b_rung1_20260608T0000JST_command_packet.sh
 ```
@@ -42,6 +44,8 @@ start serving.
 With `STAMP=20260608T0000JST`, the live run must produce:
 
 - `docs/results/vllm_gemma3_27b_rung1_20260608T0000JST_command_packet.sh`
+- `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_container_id.txt`
+- `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_docker_logs_pid.txt`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_server.log`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_import_probe.txt`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_editable_install.log`
@@ -51,6 +55,8 @@ With `STAMP=20260608T0000JST`, the live run must produce:
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_chat_smoke.json`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_build_target_audit.json`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_fp8_flashinfer_quality.json`
+- `results/vllm_gemma3_27b_rung1_20260608T0000JST_nvfp4_kv_flashinfer_container_id.txt`
+- `results/vllm_gemma3_27b_rung1_20260608T0000JST_nvfp4_kv_flashinfer_docker_logs_pid.txt`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_nvfp4_kv_flashinfer_server.log`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_nvfp4_kv_flashinfer_import_probe.txt`
 - `results/vllm_gemma3_27b_rung1_20260608T0000JST_nvfp4_kv_flashinfer_editable_install.log`
@@ -75,6 +81,21 @@ With `STAMP=20260608T0000JST`, the live run must produce:
 
 Do not pass `--kv-cache-dtype-skip-layers` for the green row. This rung is meant to prove
 uniform-`D=128` Gemma SWA with all decoder attention layers on the selected KV dtype.
+
+## Live Packet Behavior
+
+The generated packet now starts each Docker container detached, writes the container ID,
+streams `docker logs -f` to the expected `_server.log`, waits for
+`http://127.0.0.1:8000/v1/models`, and only then records the OpenAI serving row. The
+server log is therefore the actual vLLM log stream, not the Docker client output. A shell
+`EXIT` trap removes both row containers if readiness or recording fails.
+
+Live preflight from 2026-06-08 found the Spark-class host reachable and idle, with the
+target image present and no Docker containers running. It also found that the older
+`/home/jethac/src/vllm` and `/home/jethac/src/flashinfer` paths are absent; use initialized
+repo submodules or a clean run checkout instead. `google/gemma-3-27b-it` was not present
+in the existing Hugging Face cache, so the first live row needs gated HF access and enough
+download space/time.
 
 ## Expected Log Lines
 

@@ -47,6 +47,7 @@ cat <<EOF
 # Prep-only command packet for ${PREFIX}
 # This file is intentionally printed by the prep script. Review it, then run
 # one server row at a time on the Spark host when the GPU is available.
+set -euo pipefail
 
 export VLLM_SRC=${VLLM_SRC}
 export FLASHINFER_SRC=${FLASHINFER_SRC}
@@ -59,6 +60,32 @@ export MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS}
 export VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT}
 
 mkdir -p "\${RESULTS_DIR}"
+
+wait_for_vllm() {
+  local run_name=\$1
+  local log_path=\$2
+  local deadline=\$((SECONDS + 1800))
+  until curl -fsS http://127.0.0.1:8000/v1/models >/dev/null 2>&1; do
+    if ! docker inspect -f '{{.State.Running}}' "\${run_name}" 2>/dev/null | grep -q '^true$'; then
+      echo "Container \${run_name} exited before readiness. Last log lines:" >&2
+      tail -80 "\${log_path}" >&2 || true
+      return 1
+    fi
+    if (( SECONDS > deadline )); then
+      echo "Timed out waiting for \${run_name}. Last log lines:" >&2
+      tail -120 "\${log_path}" >&2 || true
+      return 1
+    fi
+    sleep 10
+  done
+}
+
+stop_vllm_container() {
+  local run_name=\$1
+  docker rm -f "\${run_name}" >/dev/null 2>&1 || true
+}
+
+trap 'stop_vllm_container ${FP8_RUN}; stop_vllm_container ${NVFP4_RUN}' EXIT
 
 # Start the fp8 comparator row. Stop this container before starting the NVFP4 row.
 docker rm -f ${FP8_RUN} >/dev/null 2>&1 || true
@@ -113,7 +140,11 @@ exec vllm serve ${MODEL} \\
   --disable-log-requests \\
   --host 0.0.0.0 \\
   --port 8000
-' > "${RESULTS_DIR}/${FP8_RUN}_server.log" 2>&1
+'
+docker inspect -f '{{.Id}}' ${FP8_RUN} > "\${RESULTS_DIR}/${FP8_RUN}_container_id.txt"
+docker logs -f ${FP8_RUN} > "\${RESULTS_DIR}/${FP8_RUN}_server.log" 2>&1 &
+echo "\$!" > "\${RESULTS_DIR}/${FP8_RUN}_docker_logs_pid.txt"
+wait_for_vllm ${FP8_RUN} "\${RESULTS_DIR}/${FP8_RUN}_server.log"
 
 python scripts/record_openai_serving_row.py \\
   --backend vllm --phase before --run-id ${FP8_RUN} \\
@@ -131,7 +162,7 @@ python scripts/openai_quality_probe.py \\
   --run-id ${FP8_RUN}_quality_from_benchmark \\
   --output "\${RESULTS_DIR}/${FP8_RUN}_quality.json"
 
-docker rm -f ${FP8_RUN}
+stop_vllm_container ${FP8_RUN}
 
 # Start the NVFP4-KV candidate row with the same geometry and serving settings.
 docker rm -f ${NVFP4_RUN} >/dev/null 2>&1 || true
@@ -186,7 +217,11 @@ exec vllm serve ${MODEL} \\
   --disable-log-requests \\
   --host 0.0.0.0 \\
   --port 8000
-' > "${RESULTS_DIR}/${NVFP4_RUN}_server.log" 2>&1
+'
+docker inspect -f '{{.Id}}' ${NVFP4_RUN} > "\${RESULTS_DIR}/${NVFP4_RUN}_container_id.txt"
+docker logs -f ${NVFP4_RUN} > "\${RESULTS_DIR}/${NVFP4_RUN}_server.log" 2>&1 &
+echo "\$!" > "\${RESULTS_DIR}/${NVFP4_RUN}_docker_logs_pid.txt"
+wait_for_vllm ${NVFP4_RUN} "\${RESULTS_DIR}/${NVFP4_RUN}_server.log"
 
 python scripts/record_openai_serving_row.py \\
   --backend vllm --phase after --run-id ${NVFP4_RUN} \\
@@ -210,7 +245,7 @@ python scripts/openai_quality_probe.py \\
   --run-id ${PREFIX}_quality_compare \\
   --output "\${RESULTS_DIR}/${PREFIX}_quality_compare.json"
 
-docker rm -f ${NVFP4_RUN}
+stop_vllm_container ${NVFP4_RUN}
 
 # Planned artifacts:
 # - \${RESULTS_DIR}/${FP8_RUN}_server.log
