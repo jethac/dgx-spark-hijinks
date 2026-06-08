@@ -1,0 +1,18 @@
+Obtaining file:///vllm-src
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: vllm
+  Building editable for vllm (pyproject.toml): started
+  Building editable for vllm (pyproject.toml): finished with status 'done'
+  Created wheel for vllm: filename=vllm-0.1.dev1+g13da71884-0.editable-cp312-cp312-linux_aarch64.whl size=12489 sha256=981ceb5ce63a8c64fe704d27c26be34fdba25a04074c4a03ef8fa3e9a5392257
+  Stored in directory: /tmp/pip-ephem-wheel-cache-gyv4a0f1/wheels/c5/bc/ea/e276ecfe88538c1dd4076d1d2cc29fcba210f193764cbf53a4
+Successfully built vllm
+Installing collected packages: vllm
+  Attempting uninstall: vllm
+    Found existing installation: vllm 0.1.dev1+ga919d635d
+    Uninstalling vllm-0.1.dev1+ga919d635d:
+      Successfully uninstalled vllm-0.1.dev1+ga919d635d
+Successfully installed vllm-0.1.dev1+g13da71884
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv

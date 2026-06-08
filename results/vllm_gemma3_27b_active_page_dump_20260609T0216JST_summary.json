@@ -1,0 +1,1140 @@
+{
+  "byte_like_outputs": 2,
+  "dump_dir": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump",
+  "dumps": [
+    {
+      "active_pages": [
+        0
+      ],
+      "event": "prefill",
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0001.pt",
+      "k_scale": 1.0,
+      "kv_data_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 16384,
+          "head": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "nonzero": 0,
+          "numel": 16384,
+          "rms": 0.0,
+          "shape": [
+            1,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 16384,
+          "head": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "nonzero": 0,
+          "numel": 16384,
+          "rms": 0.0,
+          "shape": [
+            1,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_data_views": [
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 0,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 18432,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_scale_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 2048,
+          "head": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "numel": 2048,
+          "rms": 0.0,
+          "shape": [
+            1,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 2048,
+          "head": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "numel": 2048,
+          "rms": 0.0,
+          "shape": [
+            1,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "kv_scale_views": [
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 16384,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 34816,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "num_decode_tokens": 8,
+      "num_prefill_tokens": 8,
+      "out_after": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 32768,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "out_after_byte_like": false,
+      "out_before": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 32768,
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "paged_kv_indices_head": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "paged_kv_indptr": [
+        8,
+        9
+      ],
+      "paged_kv_last_page_len": [
+        9
+      ],
+      "query": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 32768,
+        "head": [
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0,
+          -0.0,
+          -0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "numel": 32768,
+        "rms": 0.0,
+        "shape": [
+          8,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "schema": "spark-active-page-prefill-dump/v1",
+      "v_scale": 1.0,
+      "window_left": -1
+    },
+    {
+      "active_pages": [
+        13,
+        14
+      ],
+      "event": "prefill",
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0002.pt",
+      "k_scale": 1.0,
+      "kv_data_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 32768,
+          "head": [
+            179,
+            194,
+            15,
+            174,
+            152,
+            152,
+            153,
+            23,
+            137,
+            28,
+            184,
+            203,
+            128,
+            35,
+            146,
+            191
+          ],
+          "max": 255.0,
+          "mean": 68.57635498046875,
+          "min": 0.0,
+          "nonzero": 18273,
+          "numel": 32768,
+          "rms": 107.01478576660156,
+          "shape": [
+            2,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 32768,
+          "head": [
+            240,
+            1,
+            226,
+            137,
+            145,
+            20,
+            186,
+            185,
+            33,
+            65,
+            47,
+            233,
+            91,
+            34,
+            145,
+            25
+          ],
+          "max": 255.0,
+          "mean": 72.27325439453125,
+          "min": 0.0,
+          "nonzero": 18400,
+          "numel": 32768,
+          "rms": 110.71955108642578,
+          "shape": [
+            2,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_data_views": [
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 0,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 18432,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_scale_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 4096,
+          "head": [
+            0.15625,
+            0.75,
+            1.0,
+            4.5,
+            0.203125,
+            0.5625,
+            1.25,
+            1.25,
+            0.28125,
+            0.375,
+            1.5,
+            0.5,
+            0.4375,
+            0.46875,
+            2.25,
+            1.125
+          ],
+          "max": 4.5,
+          "mean": 0.49118995666503906,
+          "min": 0.0,
+          "numel": 4096,
+          "rms": 0.8146488070487976,
+          "shape": [
+            2,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 4096,
+          "head": [
+            0.8125,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0,
+            1.25,
+            0.34375,
+            0.28125,
+            0.28125,
+            0.75,
+            0.15625,
+            0.4375,
+            0.4375,
+            1.0
+          ],
+          "max": 2.5,
+          "mean": 0.3330249786376953,
+          "min": 0.0,
+          "numel": 4096,
+          "rms": 0.5632284879684448,
+          "shape": [
+            2,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "kv_scale_views": [
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 16384,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 34816,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "num_decode_tokens": 0,
+      "num_prefill_tokens": 18,
+      "out_after": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 73728,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 128.52850341796875,
+        "min": 0.0,
+        "numel": 73728,
+        "rms": 147.44287109375,
+        "shape": [
+          18,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "out_after_byte_like": true,
+      "out_before": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 73728,
+        "head": [
+          0.0,
+          -0.93359375,
+          0.0,
+          -0.1728515625,
+          0.0,
+          0.44140625,
+          0.0,
+          -0.35546875,
+          0.0,
+          -0.8984375,
+          0.0,
+          -0.2451171875,
+          0.0,
+          -0.6015625,
+          0.0,
+          -0.4140625
+        ],
+        "max": 13.25,
+        "mean": -0.001618496491573751,
+        "min": -17.125,
+        "numel": 73728,
+        "rms": 1.3679331541061401,
+        "shape": [
+          18,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "paged_kv_indices_head": [
+        13,
+        14
+      ],
+      "paged_kv_indptr": [
+        0,
+        2
+      ],
+      "paged_kv_last_page_len": [
+        2
+      ],
+      "query": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 73728,
+        "head": [
+          -0.12060546875,
+          0.17578125,
+          -0.072265625,
+          -3.375,
+          -1.609375,
+          -0.474609375,
+          -0.1240234375,
+          0.390625,
+          0.024658203125,
+          -0.119140625,
+          -0.09912109375,
+          0.74609375,
+          -0.478515625,
+          -0.2177734375,
+          -0.6171875,
+          1.25
+        ],
+        "max": 11.75,
+        "mean": 0.007290762383490801,
+        "min": -10.9375,
+        "numel": 73728,
+        "rms": 2.275829553604126,
+        "shape": [
+          18,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "schema": "spark-active-page-prefill-dump/v1",
+      "v_scale": 1.0,
+      "window_left": -1
+    },
+    {
+      "active_pages": [
+        21,
+        22
+      ],
+      "event": "prefill",
+      "file": "results\\vllm_gemma3_27b_active_page_dump_20260609T0216JST_nvfp4_kv_flashinfer_eager_active_page_dump\\spark_active_page_prefill_language_model_model_layers_5_self_attn_attn_0003.pt",
+      "k_scale": 1.0,
+      "kv_data_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 32768,
+          "head": [
+            179,
+            194,
+            15,
+            174,
+            152,
+            152,
+            153,
+            23,
+            137,
+            28,
+            184,
+            203,
+            128,
+            35,
+            146,
+            191
+          ],
+          "max": 255.0,
+          "mean": 87.9378662109375,
+          "min": 0.0,
+          "nonzero": 23367,
+          "numel": 32768,
+          "rms": 121.22526550292969,
+          "shape": [
+            2,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.uint8",
+          "finite": 32768,
+          "head": [
+            240,
+            1,
+            226,
+            137,
+            145,
+            20,
+            186,
+            185,
+            33,
+            65,
+            47,
+            233,
+            91,
+            34,
+            145,
+            25
+          ],
+          "max": 255.0,
+          "mean": 92.4781494140625,
+          "min": 0.0,
+          "nonzero": 23520,
+          "numel": 32768,
+          "rms": 125.26598358154297,
+          "shape": [
+            2,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            16384,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_data_views": [
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 0,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.uint8",
+          "shape": [
+            132615,
+            16,
+            16,
+            64
+          ],
+          "storage_offset": 18432,
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        }
+      ],
+      "kv_scale_pages": [
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 4096,
+          "head": [
+            0.15625,
+            0.75,
+            1.0,
+            4.5,
+            0.203125,
+            0.5625,
+            1.25,
+            1.25,
+            0.28125,
+            0.375,
+            1.5,
+            0.5,
+            0.4375,
+            0.46875,
+            2.25,
+            1.125
+          ],
+          "max": 4.5,
+          "mean": 0.6290645599365234,
+          "min": 0.0,
+          "numel": 4096,
+          "rms": 0.9250540733337402,
+          "shape": [
+            2,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "all_finite": true,
+          "dtype": "torch.float8_e4m3fn",
+          "finite": 4096,
+          "head": [
+            0.8125,
+            0.6875,
+            0.75,
+            0.8125,
+            0.875,
+            0.9375,
+            1.0,
+            1.375,
+            0.34375,
+            0.28125,
+            0.28125,
+            0.75,
+            0.15625,
+            0.4375,
+            0.4375,
+            1.0
+          ],
+          "max": 2.5,
+          "mean": 0.4264335632324219,
+          "min": 0.0,
+          "numel": 4096,
+          "rms": 0.640569806098938,
+          "shape": [
+            2,
+            16,
+            16,
+            8
+          ],
+          "stride": [
+            2048,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "kv_scale_views": [
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 16384,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        },
+        {
+          "dtype": "torch.float8_e4m3fn",
+          "shape": [
+            132615,
+            16,
+            16,
+            8
+          ],
+          "storage_offset": 34816,
+          "stride": [
+            36864,
+            128,
+            8,
+            1
+          ]
+        }
+      ],
+      "layer_name": "language_model.model.layers.5.self_attn.attn",
+      "num_decode_tokens": 0,
+      "num_prefill_tokens": 23,
+      "out_after": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 94208,
+        "head": [
+          240.0,
+          1.0,
+          226.0,
+          137.0,
+          145.0,
+          20.0,
+          186.0,
+          185.0,
+          33.0,
+          65.0,
+          47.0,
+          233.0,
+          91.0,
+          34.0,
+          145.0,
+          25.0
+        ],
+        "max": 255.0,
+        "mean": 129.38995361328125,
+        "min": 0.0,
+        "numel": 94208,
+        "rms": 148.07107543945312,
+        "shape": [
+          23,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "out_after_byte_like": true,
+      "out_before": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 94208,
+        "head": [
+          0.0,
+          -0.93359375,
+          0.0,
+          -0.1728515625,
+          0.0,
+          0.44140625,
+          0.0,
+          -0.35546875,
+          0.0,
+          -0.8984375,
+          0.0,
+          -0.2451171875,
+          0.0,
+          -0.6015625,
+          0.0,
+          -0.4140625
+        ],
+        "max": 14.75,
+        "mean": -0.00351309054531157,
+        "min": -18.25,
+        "numel": 94208,
+        "rms": 1.3660926818847656,
+        "shape": [
+          23,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "paged_kv_indices_head": [
+        21,
+        22
+      ],
+      "paged_kv_indptr": [
+        0,
+        2
+      ],
+      "paged_kv_last_page_len": [
+        7
+      ],
+      "query": {
+        "all_finite": true,
+        "dtype": "torch.bfloat16",
+        "finite": 94208,
+        "head": [
+          -0.12060546875,
+          0.17578125,
+          -0.072265625,
+          -3.375,
+          -1.609375,
+          -0.474609375,
+          -0.1240234375,
+          0.390625,
+          0.024658203125,
+          -0.119140625,
+          -0.09912109375,
+          0.74609375,
+          -0.478515625,
+          -0.2177734375,
+          -0.6171875,
+          1.25
+        ],
+        "max": 10.875,
+        "mean": 0.009695199318230152,
+        "min": -10.625,
+        "numel": 94208,
+        "rms": 2.2635579109191895,
+        "shape": [
+          23,
+          32,
+          128
+        ],
+        "stride": [
+          4096,
+          128,
+          1
+        ]
+      },
+      "schema": "spark-active-page-prefill-dump/v1",
+      "v_scale": 1.0,
+      "window_left": -1
+    }
+  ],
+  "file_count": 3,
+  "head": 16,
+  "schema": "vllm-active-page-dump-summary/v1"
+}

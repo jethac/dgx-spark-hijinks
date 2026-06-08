@@ -19,7 +19,9 @@ mishandled on reuse. `--disable-radix-cache` is both the proof and a correctness
 (at the cost of prefix caching). **This remains a cross-lane pattern, but the simple
 page/scale mismatch hypothesis is now weaker:** vLLM Gemma 3 27B also fails FP4 quality,
 yet its high-limit trace shows sampled read-side packed data/scale bytes match write-side
-bytes (`195 / 195`) and the failing short prompts do not skip SWA blocks; see
+bytes (`195 / 195`) and the failing short prompts do not skip SWA blocks; the follow-up
+active-page dump shows the exact failing paged-prefill wrapper returns byte-like BF16
+`out_after` whose first 16 values match the first 16 active packed V bytes. See
 `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. The SGLang `f76f80484` write/read trace
 likewise clears the simplest stale/wrong-page scale-buffer version for sampled radix pages.
 **SGLang's job:** prove whether the reused cached-prefix contribution is numerically

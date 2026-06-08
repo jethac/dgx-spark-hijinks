@@ -196,6 +196,24 @@ appears in local/SWA prefill calls, while short prompts remain far below the SWA
 Next vLLM action is no longer a generic FA2 probe; dump/replay the exact active
 block-table paged prefill call and compare wrapper output against a dequantized reference.
 
+Active-page dump implementation update (2026-06-09): `jethac/vllm@13da71884640567682cd3ddd4650d2ba3ecb5543`
+adds `VLLM_SPARK_ACTIVE_PAGE_DUMP=1` for the same wrapper path. It writes small
+`torch.save` payloads under `VLLM_SPARK_ACTIVE_PAGE_DUMP_DIR` with the active
+`paged_kv_indptr`, `paged_kv_indices`, `paged_kv_last_page_len`, `query`, `out_before`,
+`out_after`, and selected active K/V data plus FP8 scale pages. Use
+`tasks/vllm_gemma3_wrapper_boundary_trace_packet_20260609.md` for the next live row.
+This is diagnostic-only; do not enable it in speed or capacity rows.
+
+Active-page dump result (2026-06-09):
+`results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_summary.md` records the live
+NVFP4-only source-overlay row. The bad first-token signature repeats (` Reigns`,
+Gujarati text, `ioane`). Two useful layer-5 full-attention prefill payloads were dumped:
+active pages `[13, 14]` and `[21, 22]`, with byte-like `out_after` tensors (max `255.0`,
+means around `128..129`). In both, the first 16 `out_after` BF16 values exactly match
+the first 16 active packed V data bytes from `kv_data_pages[1]`. This makes the next
+task an offline replay of the dumped paged-prefill call against a dequantized reference,
+then a FlashInfer paged-prefill audit for wrong V view / packed-carrier interpretation.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate

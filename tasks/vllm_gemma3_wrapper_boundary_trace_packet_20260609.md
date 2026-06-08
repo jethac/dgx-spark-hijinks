@@ -11,6 +11,7 @@ Commit:
 
 ```text
 0e07e130d94eddfed209f846ce6c9959c636da02 Trace Gemma FlashInfer wrapper boundary
+13da71884640567682cd3ddd4650d2ba3ecb5543 Dump Gemma active FlashInfer prefill pages
 ```
 
 The patch adds inactive-by-default wrapper events in
@@ -24,6 +25,20 @@ The patch adds inactive-by-default wrapper events in
 The events are gated by the existing `VLLM_SPARK_GEMMA_TENSOR_TRACE` environment and
 record wrapper type, local/global window state, token counts, scalar K/V scales, compact
 query/output summaries, and compact KV argument metadata.
+
+The follow-up commit adds an inactive-by-default active-page dump:
+
+```text
+VLLM_SPARK_ACTIVE_PAGE_DUMP=1
+VLLM_SPARK_ACTIVE_PAGE_DUMP_DIR=/results/active_page_dump
+VLLM_SPARK_ACTIVE_PAGE_DUMP_LIMIT=1
+VLLM_SPARK_ACTIVE_PAGE_DUMP_PAGES=4
+```
+
+It writes small `torch.save` payloads containing `query`, `out_before`, `out_after`,
+the wrapper's active `paged_kv_indptr` / `paged_kv_indices` /
+`paged_kv_last_page_len`, and the selected active K/V data and FP8 scale pages. This is
+for replay/debug only and must not be enabled in benchmark rows.
 
 ## Run
 
@@ -39,6 +54,10 @@ FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1
 VLLM_SPARK_KV_TRACE=1
 VLLM_SPARK_GEMMA_TENSOR_TRACE=1
 VLLM_SPARK_GEMMA_TENSOR_TRACE_LAYERS=layers.0.self_attn.attn,layers.5.self_attn.attn,lm_head
+VLLM_SPARK_ACTIVE_PAGE_DUMP=1
+VLLM_SPARK_ACTIVE_PAGE_DUMP_DIR=/results/active_page_dump
+VLLM_SPARK_ACTIVE_PAGE_DUMP_LIMIT=1
+VLLM_SPARK_ACTIVE_PAGE_DUMP_PAGES=4
 ```
 
 Serve with:
@@ -61,6 +80,7 @@ Artifact summary:
 
 ```text
 results/vllm_gemma3_27b_wrapper_trace_20260609T0148JST_summary.md
+results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_summary.md
 ```
 
 Key result: the real FlashInfer FA2 paged prefill wrapper is the failing boundary. For a
@@ -69,9 +89,23 @@ byte-like BF16 `out_after` immediately after `BatchPrefillWithPagedKVCacheWrappe
 The corrupted output head aligns with packed active-page `v_data_head`, making the next
 task an active-page replay/dequantized-reference comparison.
 
+The active-page dump row confirms this against the exact selected pages. The two useful
+request payloads have byte-like `out_after` tensors with max `255.0`, means around
+`128..129`, and first 16 `out_after` BF16 values exactly matching the first 16 active
+packed V data bytes. This moves the next task from "dump active pages" to "replay the
+dumped paged-prefill call against a dequantized reference."
+
 ## Next Task
 
 Dump or reconstruct the exact active block-table paged prefill call for the failing
 layer and compare FlashInfer wrapper output with a dequantized reference. The goal is to
 prove whether the paged prefill specialization is reading packed uint8 V data as values,
 using the wrong V view, or receiving wrong wrapper metadata from vLLM.
+
+The live dump row is green as a diagnostic artifact:
+
+- at least one `spark_active_page_prefill_*layers_5*pt` payload exists;
+- the payload has the same bad first-token signature as the wrapper trace;
+- `out_after` in the payload is byte-like and can be compared offline with its
+  `kv_data_pages[1]` / `kv_scale_pages[1]` active V payload;
+- the summary names the exact replay script or notebook that should consume the dump.
