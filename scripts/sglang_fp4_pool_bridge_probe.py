@@ -93,6 +93,132 @@ def reference_attention(
     return out
 
 
+def _attention_metrics(
+    actual: torch.Tensor,
+    reference_dequant: torch.Tensor,
+    reference_source: torch.Tensor,
+) -> dict[str, Any]:
+    return {
+        "finite": bool(torch.isfinite(actual).all().item()),
+        "attention_cosine_vs_dequant": cosine(actual, reference_dequant),
+        "attention_relative_error_vs_dequant": relative_error(actual, reference_dequant),
+        "attention_cosine_vs_source": cosine(actual, reference_source),
+        "attention_relative_error_vs_source": relative_error(actual, reference_source),
+    }
+
+
+def _passed(result: dict[str, Any], cosine_threshold: float) -> bool:
+    return bool(
+        result.get("finite")
+        and result.get("attention_cosine_vs_dequant", 0.0) >= cosine_threshold
+    )
+
+
+def run_decode(
+    flashinfer: Any,
+    *,
+    q: torch.Tensor,
+    k_buf: torch.Tensor,
+    v_buf: torch.Tensor,
+    k_sf: torch.Tensor,
+    v_sf: torch.Tensor,
+    k_scale: float,
+    v_scale: float,
+    loc: torch.Tensor,
+    reference_dequant: torch.Tensor,
+    reference_source: torch.Tensor,
+    args: argparse.Namespace,
+    dtype: torch.dtype,
+) -> dict[str, Any]:
+    workspace = torch.empty(args.workspace_mib * 1024 * 1024, dtype=torch.uint8, device=q.device)
+    wrapper = flashinfer.BatchDecodeWithPagedKVCacheWrapper(
+        workspace, "NHD", use_tensor_cores=True, backend="fa2"
+    )
+    kv_indptr = torch.tensor([0, args.tokens], dtype=torch.int32, device=q.device)
+    kv_indices = loc.to(torch.int32)
+    last_page_len = torch.tensor([1], dtype=torch.int32, device=q.device)
+    wrapper.plan(
+        kv_indptr,
+        kv_indices,
+        last_page_len,
+        args.query_heads,
+        args.kv_heads,
+        args.head_dim,
+        args.page_size,
+        q_data_type=dtype,
+        kv_data_type=torch.uint8,
+    )
+    result: dict[str, Any] = {"passed": False}
+    try:
+        actual = wrapper.run(
+            q,
+            (k_buf, v_buf),
+            k_scale=float(k_scale),
+            v_scale=float(v_scale),
+            kv_cache_sf=(k_sf.unsqueeze(1), v_sf.unsqueeze(1)),
+        )
+        result.update(_attention_metrics(actual, reference_dequant, reference_source))
+        result["passed"] = _passed(result, args.cosine_threshold)
+    except Exception as exc:  # pragma: no cover - diagnostic path
+        result.update({"error": repr(exc), "traceback": traceback.format_exc()})
+    return result
+
+
+def run_prefill(
+    flashinfer: Any,
+    *,
+    q: torch.Tensor,
+    k_buf: torch.Tensor,
+    v_buf: torch.Tensor,
+    k_sf: torch.Tensor,
+    v_sf: torch.Tensor,
+    k_scale: float,
+    v_scale: float,
+    loc: torch.Tensor,
+    reference_dequant: torch.Tensor,
+    reference_source: torch.Tensor,
+    args: argparse.Namespace,
+    dtype: torch.dtype,
+) -> dict[str, Any]:
+    workspace = torch.empty(args.workspace_mib * 1024 * 1024, dtype=torch.uint8, device=q.device)
+    wrapper = flashinfer.BatchPrefillWithPagedKVCacheWrapper(
+        workspace, "NHD", backend="fa2"
+    )
+    qo_indptr = torch.tensor([0, q.shape[0]], dtype=torch.int32, device=q.device)
+    kv_indptr = torch.tensor([0, args.tokens], dtype=torch.int32, device=q.device)
+    kv_indices = loc.to(torch.int32)
+    last_page_len = torch.tensor([1], dtype=torch.int32, device=q.device)
+    wrapper.plan(
+        qo_indptr,
+        kv_indptr,
+        kv_indices,
+        last_page_len,
+        args.query_heads,
+        args.kv_heads,
+        args.head_dim,
+        args.page_size,
+        causal=False,
+        pos_encoding_mode="NONE",
+        logits_soft_cap=0.0,
+        q_data_type=dtype,
+        kv_data_type=torch.uint8,
+    )
+    result: dict[str, Any] = {"passed": False}
+    try:
+        actual = wrapper.run(
+            q,
+            (k_buf, v_buf),
+            k_scale=float(k_scale),
+            v_scale=float(v_scale),
+            kv_cache_sf=(k_sf.unsqueeze(1), v_sf.unsqueeze(1)),
+        )
+        result.update(_attention_metrics(actual, reference_dequant, reference_source))
+        result["passed"] = _passed(result, args.cosine_threshold)
+    except Exception as exc:  # pragma: no cover - diagnostic path
+        result.update({"error": repr(exc), "traceback": traceback.format_exc()})
+    return result
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     _maybe_add_sglang_source(args.sglang_python)
 
@@ -122,6 +248,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     )
     q = (
         torch.randn(args.batch_size, args.query_heads, args.head_dim, dtype=dtype, device=device)
+        * args.input_scale
+    )
+    q_prefill = (
+        torch.randn(args.prefill_qo_len, args.query_heads, args.head_dim, dtype=dtype, device=device)
         * args.input_scale
     )
 
@@ -165,54 +295,57 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         kv_heads=args.kv_heads,
         head_dim=args.head_dim,
     )
-
-    workspace = torch.empty(args.workspace_mib * 1024 * 1024, dtype=torch.uint8, device=device)
-    wrapper = flashinfer.BatchDecodeWithPagedKVCacheWrapper(
-        workspace, "NHD", use_tensor_cores=True, backend="fa2"
+    prefill_reference_dequant = reference_attention(
+        q_prefill,
+        k_dequant,
+        v_dequant,
+        query_heads=args.query_heads,
+        kv_heads=args.kv_heads,
+        head_dim=args.head_dim,
     )
-    kv_indptr = torch.tensor([0, args.tokens], dtype=torch.int32, device=device)
-    kv_indices = loc.to(torch.int32)
-    last_page_len = torch.tensor([1], dtype=torch.int32, device=device)
-    wrapper.plan(
-        kv_indptr,
-        kv_indices,
-        last_page_len,
-        args.query_heads,
-        args.kv_heads,
-        args.head_dim,
-        args.page_size,
-        q_data_type=dtype,
-        kv_data_type=torch.uint8,
+    prefill_reference_source = reference_attention(
+        q_prefill,
+        key,
+        value,
+        query_heads=args.query_heads,
+        kv_heads=args.kv_heads,
+        head_dim=args.head_dim,
     )
 
-    result: dict[str, Any] = {"passed": False}
-    try:
-        actual = wrapper.run(
-            q,
-            (k_buf, v_buf),
-            k_scale=float(k_scale),
-            v_scale=float(v_scale),
-            kv_cache_sf=(k_sf.unsqueeze(1), v_sf.unsqueeze(1)),
-        )
-        result.update(
-            {
-                "finite": bool(torch.isfinite(actual).all().item()),
-                "attention_cosine_vs_dequant": cosine(actual, reference_dequant),
-                "attention_relative_error_vs_dequant": relative_error(
-                    actual, reference_dequant
-                ),
-                "attention_cosine_vs_source": cosine(actual, reference_source),
-                "attention_relative_error_vs_source": relative_error(actual, reference_source),
-                "key_dequant_cosine_vs_source": cosine(k_dequant, key),
-                "value_dequant_cosine_vs_source": cosine(v_dequant, value),
-            }
-        )
-        result["passed"] = bool(
-            result["finite"]
-            and result["attention_cosine_vs_dequant"] >= args.cosine_threshold
-        )
-    except Exception as exc:  # pragma: no cover - diagnostic path
-        result.update({"error": repr(exc), "traceback": traceback.format_exc()})
+    decode_result = run_decode(
+        flashinfer,
+        q=q,
+        k_buf=k_buf,
+        v_buf=v_buf,
+        k_sf=k_sf,
+        v_sf=v_sf,
+        k_scale=k_scale,
+        v_scale=v_scale,
+        loc=loc,
+        reference_dequant=reference_dequant,
+        reference_source=reference_source,
+        args=args,
+        dtype=dtype,
+    )
+    prefill_result = run_prefill(
+        flashinfer,
+        q=q_prefill,
+        k_buf=k_buf,
+        v_buf=v_buf,
+        k_sf=k_sf,
+        v_sf=v_sf,
+        k_scale=k_scale,
+        v_scale=v_scale,
+        loc=loc,
+        reference_dequant=prefill_reference_dequant,
+        reference_source=prefill_reference_source,
+        args=args,
+        dtype=dtype,
+    )
+    shared_metrics = {
+        "key_dequant_cosine_vs_source": cosine(k_dequant, key),
+        "value_dequant_cosine_vs_source": cosine(v_dequant, value),
+    }
 
     return {
         "schema": "sglang-fp4-pool-bridge-probe/v1",
@@ -231,6 +364,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "kv_heads": args.kv_heads,
             "head_dim": args.head_dim,
             "page_size": args.page_size,
+            "prefill_qo_len": args.prefill_qo_len,
         },
         "pool": {
             "k_buffer_shape": list(k_buf.shape),
@@ -242,8 +376,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "loc_start": int(loc[0].item()),
             "loc_stop_inclusive": int(loc[-1].item()),
         },
-        "result": result,
-        "all_ok": bool(result["passed"]),
+        "shared_metrics": shared_metrics,
+        "results": {
+            "decode": decode_result,
+            "prefill": prefill_result,
+        },
+        "all_ok": bool(decode_result["passed"] and prefill_result["passed"]),
     }
 
 
@@ -257,6 +395,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--kv-heads", type=int, default=4)
     parser.add_argument("--head-dim", type=int, default=128)
     parser.add_argument("--page-size", type=int, default=1)
+    parser.add_argument("--prefill-qo-len", type=int, default=8)
     parser.add_argument("--seed", type=int, default=5)
     parser.add_argument("--input-scale", type=float, default=0.5)
     parser.add_argument("--workspace-mib", type=int, default=128)

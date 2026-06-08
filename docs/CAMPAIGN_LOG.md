@@ -448,11 +448,12 @@
 
 - Ran the SGLang FP4 pool bridge on GB10.
   - script: `scripts/sglang_fp4_pool_bridge_probe.py`
-  - artifact: `results/sglang_fp4_pool_bridge_probe_20260608.json`
+  - artifacts: `results/sglang_fp4_pool_bridge_probe_20260608.json`, `results/sglang_fp4_pool_bridge_probe_prefill_20260608.json`
   - runtime: `nvcr.io/nvidia/sglang:26.05-py3` with `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` overlaid through `PYTHONPATH`; FlashInfer `0.6.10+cf494fca.nv26.05.cu132.50619265`; device `NVIDIA GB10`, capability `[12, 1]`.
   - shape: `tokens=40`, `query_heads=64`, `kv_heads=4`, `head_dim=128`, page size 1, token slots `1..40` so slot 0 remains the SGLang padded slot.
-  - result: `all_ok=true`; `attention_cosine_vs_dequant=0.9999946356`, `attention_cosine_vs_source=0.9958496094`, finite output, `key_dequant_cosine_vs_source=0.9955501556`, `value_dequant_cosine_vs_source=0.9954957962`.
-  - interpretation: `MHATokenToKVPoolFP4` writes packed K/V and FP8 scale buffers that FlashInfer FA2 can consume through the same getters used by serving. The remaining SGLang FP4-KV corruption is downstream of the basic pool contract: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic bridge.
+  - decode result: `all_ok=true`; `attention_cosine_vs_dequant=0.9999946356`, `attention_cosine_vs_source=0.9958496094`, finite output, `key_dequant_cosine_vs_source=0.9955501556`, `value_dequant_cosine_vs_source=0.9954957962`.
+  - widened result: decode and paged prefill both pass; prefill has `attention_cosine_vs_dequant=0.9999946356`, `attention_cosine_vs_source=0.9957648516`, finite output, and `passed=true`.
+  - interpretation: `MHATokenToKVPoolFP4` writes packed K/V and FP8 scale buffers that FlashInfer FA2 can consume through the same getters used by serving for decode and paged prefill. The remaining SGLang FP4-KV corruption is downstream of the basic pool contract: backend wrapper metadata, graph/capture state, stale calibration state, or a model-serving path not covered by the synthetic bridge.
 
 ## First Benchmark Campaign Summary
 
