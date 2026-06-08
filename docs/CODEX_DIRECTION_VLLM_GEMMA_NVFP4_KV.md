@@ -52,6 +52,24 @@ Only bake a new image once Gemma 4 serves correctly with the FA2 NVFP4-KV path p
 Read `docs/NVFP4_KV_PORTING_MAP.md` (esp. "Smallest GB10 Proof Sequence") and
 `docs/GEMMA4_ON_DGX_SPARK.md` before starting.
 
+## FP4 KV breaks in the KV-reuse machinery (cross-lane finding, 2026-06-08) — NEXT FOCUS
+Plain linear / full-attention FP4 KV is **clean** (Qwen, 1.751×). But FP4 KV breaks
+wherever KV is reused / shared / windowed, and **both runtimes hit the same shape**:
+- **vLLM Gemma 3 27B Rung 1** (`results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md`):
+  capacity ✓ (1.777×), geometry ✓ (D=128, 52 local SWA + 10 global), FA2 NVFP4 path
+  selected ✓ — but **output quality FAILS**. The *only* new variable vs the clean Qwen row
+  is **SWA**. So the bug is **FP4 KV × hybrid-SWA (sliding-window local) attention**.
+- **SGLang Qwen** (see its doc): the FP4 first-token divergence localized to the
+  **radix/prefix cache** — `--disable-radix-cache` makes FP4 output match fp8 again.
+
+Likely **shared root cause**: scale factors not carried / recomputed correctly when KV
+blocks are **shared, reused, windowed, or evicted** — the cache-management layer, not the
+attention math. The standalone kernel is proven; the linear-KV serving path is proven; the
+break is specifically the reuse machinery. **vLLM's job here:** debug FP4 scale/block
+handling on the SWA sliding-window local layers (how the window's KV + its scale factors
+are stored, rotated, and re-read). Compare root causes with the SGLang radix finding — a
+fix on one likely informs the other.
+
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.

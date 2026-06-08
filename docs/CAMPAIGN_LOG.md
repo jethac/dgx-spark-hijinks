@@ -770,6 +770,17 @@
     `extend_prefix_lens_cpu`, `use_ragged`, `extend_no_prefix`, and `extend_merge_paged`
     for the default FP4 native request versus the radix-off FP4 native request.
 
+- Added SGLang FP4-KV radix/reuse instrumentation.
+  - fork commit: `jethac/sglang@ce1b6d15e76985240e91592a0f44c0f282fc65af`
+  - branch: `spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
+  - files: `schedule_batch.py`, `forward_batch_info.py`, `flashinfer_backend.py`
+  - behavior: inactive unless `SGLANG_FP4_KV_TRACE_RADIX=1` is set.
+  - purpose: request-tagged tracing from radix prefix match through `ForwardBatch` to
+    FlashInfer prefill/extend path selection, so default FP4 and radix-off FP4 runs can
+    prove whether packed FP4 KV bytes and FP8 scale buffers stay aligned under prefix reuse.
+  - validation: `python -m py_compile` passes for all three touched files; no serving claim
+    is made until the traced default/radix-off run is captured on GB10.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

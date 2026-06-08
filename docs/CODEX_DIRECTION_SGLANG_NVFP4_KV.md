@@ -6,6 +6,32 @@
 > being the headline capacity win, and that bug is the highest-leverage thing in the
 > whole NVFP4-KV effort.
 
+## ROOT CAUSE LOCALIZED — the radix/prefix cache (2026-06-08) — NEXT FOCUS
+The first-token divergence test cornered it
+(`results/sglang_qwen_fp4kv_radix_isolation_20260608T2038JST_summary.md`):
+- fp8: OpenAI and native endpoints agree (`**`).
+- FP4 default: diverge (OpenAI `**`, native `ark`/838).
+- **FP4 with `--disable-radix-cache`: agree again (`**`/334).** Skip-warmup alone does NOT
+  fix it; radix-off does.
+
+So the SGLang FP4-KV bug is **radix/prefix-cache KV reuse** — a cached FP4 KV prefix is
+mishandled on reuse. `--disable-radix-cache` is both the proof and a correctness workaround
+(at the cost of prefix caching). **This is a cross-lane pattern:** vLLM Gemma 3 27B fails
+FP4 quality too, and its only new variable is **SWA** (sliding-window KV reuse) — see
+`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. Both are FP4 breaking in the **KV-reuse
+machinery** (prefix reuse / SWA windows), not in plain linear KV. Likely shared root cause:
+scale factors not carried/recomputed correctly when KV blocks are shared, reused, or
+evicted. **SGLang's job:** fix FP4 scale handling on the radix-cache reuse path (how a
+reused prefix's packed KV + FP8 scale buffers are matched on a cache hit); meanwhile a
+`--disable-radix-cache` row can land a blessed-with-caveat result. Compare with vLLM's SWA
+finding.
+
+Instrumentation head: `jethac/sglang@ce1b6d15e` adds inactive-by-default
+`SGLANG_FP4_KV_TRACE_RADIX=1` logs through `Req.init_next_round_input`,
+`ForwardBatch.init_new`, and FlashInfer prefill/extend path selection. Use it to compare
+the default FP4 native request against the radix-off request and prove whether the cached
+prefix's packed KV bytes and FP8 scale buffers stay aligned.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend
