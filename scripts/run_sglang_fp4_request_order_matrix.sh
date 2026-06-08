@@ -50,6 +50,7 @@ run_case() {
   local out="results/${RUN_ID}_${name}.json"
   local server_log="results/${RUN_ID}_${name}_server.log"
   local inspect="results/${RUN_ID}_${name}_container_inspect.json"
+  local flashinfer_install_log="results/${RUN_ID}_${name}_flashinfer_editable_install.log"
   local install_log="results/${RUN_ID}_${name}_editable_install.log"
   local cid_file="results/${RUN_ID}_${name}_container_id.txt"
 
@@ -69,7 +70,7 @@ run_case() {
       -w /work \
       "${COMMON_ENVS[@]}" "${extra_envs[@]}" \
       "${RUNTIME_IMAGE}" \
-      bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/sglang; python3 -m pip install --no-deps -e /work/third_party/sglang/python > /work/${install_log} 2>&1; exec python3 -m sglang.launch_server --model-path ${MODEL} --attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port ${PORT}"
+      bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/flashinfer; git config --global --add safe.directory /work/third_party/sglang; python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache > /work/${flashinfer_install_log} 2>&1 || true; rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer /usr/local/lib/python3.12/dist-packages/flashinfer_python-*.dist-info /usr/local/lib/python3.12/dist-packages/flashinfer_cubin* /usr/local/lib/python3.12/dist-packages/flashinfer_jit_cache* /root/.cache/flashinfer >> /work/${flashinfer_install_log} 2>&1 || true; python3 -m pip install --upgrade --no-deps 'nvidia-cutlass-dsl[cu13]>=4.5.0' >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/flashinfer >> /work/${flashinfer_install_log} 2>&1; python3 -m pip install --upgrade --no-deps 'sglang-kernel==0.4.3' > /work/${install_log} 2>&1; python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/sglang/python >> /work/${install_log} 2>&1; python3 -c 'import flashinfer, importlib.metadata as md; print(\"flashinfer\", getattr(flashinfer, \"__version__\", None), getattr(flashinfer, \"__file__\", None)); print(\"flashinfer_python\", md.version(\"flashinfer_python\")); print(\"sglang_kernel\", md.version(\"sglang-kernel\")); print(\"sglang\", md.version(\"sglang\"))' >> /work/${install_log} 2>&1; exec python3 -m sglang.launch_server --model-path ${MODEL} --attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port ${PORT}"
   )
   echo "${cid}" >"${REPO_ROOT}/${cid_file}"
 

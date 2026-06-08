@@ -173,16 +173,21 @@ Interpretation:
   full-paged reuse.
 
 Matrix execution stop point
-(`results/sglang_qwen_fp4kv_matrix_20260609tmatrix6jst.md`): the runner now gets past the
-source-overlay build prerequisites without downgrading Python packages. It builds a
-throwaway image from `nvcr.io/nvidia/sglang:26.05-py3` with rustup stable (`rustc 1.96.0`)
-and `protobuf-compiler`; `pip install --no-deps -e /work/third_party/sglang/python`
-successfully installs `sglang-0.5.12.post2.dev1018+gd4fe78078`. The server then exits
-before health because the NGC 26.05 image has
-`flashinfer_python 0.6.10+cf494fca.nv26.5.cu132.50619265`, while this SGLang source
-requires `>=0.6.12`. The four matrix rows therefore produced no request JSON and are not
-quality evidence. Next run must pair the SGLang overlay with a FlashInfer `>=0.6.12` build
-that preserves the GB10 FP4-KV patches and kernel-selection evidence.
+(`results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst.md`): the runner now gets past the
+source-overlay build prerequisites and the FlashInfer version guard without downgrading the
+runtime stack. It builds a throwaway image from `nvcr.io/nvidia/sglang:26.05-py3` with
+rustup stable (`rustc 1.96.0`) and `protobuf-compiler`, removes stale FlashInfer packages
+and cache state, upgrades CUTLASS DSL to `4.5.2`, installs editable
+`jethac/flashinfer@4c3c0d99`, then installs editable
+`jethac/sglang@d4fe78078`. The version probe reaches `flashinfer_python 0.6.13`,
+`sglang-kernel 0.4.3`, and `sglang 0.5.12.post2.dev1018+gd4fe78078`. The server then
+exits before health because PyPI `sglang-kernel 0.4.3` loads an `sm100/common_ops.abi3.so`
+that is ABI-incompatible with the NVIDIA 26.05 Torch/CUDA stack on GB10
+(`undefined symbol: _ZNK2at10TensorBase14const_data_ptrIiLi0EEEPKT_v`). The four matrix
+rows therefore produced no request JSON and are not quality evidence. Next run must build
+`sglang-kernel` from source against the same container Torch/CUDA stack, or source a
+matching ARM64 CUDA 13.x wheel with SM121-compatible `common_ops`. Do not downgrade
+SGLang, Torch, FlashInfer, or the container to make the guard pass.
 
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest

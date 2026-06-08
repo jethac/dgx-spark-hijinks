@@ -27,14 +27,18 @@ Run the cheap no-code matrix before adding new instrumentation:
 2026-06-09 execution stop point:
 
 - Runner: `scripts/run_sglang_fp4_request_order_matrix.sh`
-- Artifact: `results/sglang_qwen_fp4kv_matrix_20260609tmatrix6jst.md`
-- Outcome: source overlay builds and installs cleanly from `jethac/sglang@d4fe78078`
-  when the throwaway image provides rustup stable and `protoc`, but SGLang exits before
-  health because NGC 26.05 ships `flashinfer_python 0.6.10...` and the source overlay
-  requires `>=0.6.12`.
-- Interpretation: no row evidence yet. Do not downgrade SGLang or bless the older
-  FlashInfer package. Re-run the same matrix only after pairing the overlay with a
-  FlashInfer `>=0.6.12` build that keeps the GB10 FP4-KV patches/evidence.
+- Artifact: `results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst.md`
+- Outcome: source overlay builds and installs cleanly from `jethac/sglang@d4fe78078`,
+  editable `jethac/flashinfer@4c3c0d99` satisfies SGLang's `flashinfer_python>=0.6.12`
+  guard, and `sglang-kernel 0.4.3` satisfies SGLang's version guard. SGLang still exits
+  before health because the PyPI `sglang-kernel 0.4.3` wheel tries to load
+  `sgl_kernel/sm100/common_ops.abi3.so`, which is ABI-incompatible with the NVIDIA 26.05
+  Torch/CUDA stack on GB10.
+- Interpretation: no row evidence yet. The active blocker is now `sglang-kernel`
+  build-target/ABI compatibility, not FlashInfer. Re-run the same matrix only after
+  building `sglang-kernel` from source against the container Torch/CUDA stack, or after
+  finding a matching ARM64 CUDA 13.x wheel with SM121-compatible `common_ops`. Do not
+  downgrade SGLang, Torch, FlashInfer, or the container to make the guard pass.
 
 Decision rule for this matrix:
 

@@ -1,0 +1,22 @@
+{
+  "cases": {
+    "default": {
+      "missing": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-matrix-20260609/results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst_default.json",
+      "ok": false
+    },
+    "force_miss": {
+      "missing": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-matrix-20260609/results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst_force_miss.json",
+      "ok": false
+    },
+    "force_miss_full_paged": {
+      "missing": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-matrix-20260609/results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst_force_miss_full_paged.json",
+      "ok": false
+    },
+    "full_paged": {
+      "missing": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-matrix-20260609/results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst_full_paged.json",
+      "ok": false
+    }
+  },
+  "run_id": "sglang_qwen_fp4kv_matrix_20260609tmatrix10jst",
+  "schema": "sglang-fp4-kv-matrix-summary/v1"
+}
