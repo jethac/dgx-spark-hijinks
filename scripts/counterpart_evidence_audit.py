@@ -66,6 +66,7 @@ REQUIREMENTS = (
             ),
         ),
         partial_patterns=(
+            "results/flashinfer_sglang_linear_nvfp4_kv_probe*.json",
             "results/sglang_qwen25_1_5b_fp4kv*_startup.log",
             "results/sglang_qwen25_1_5b_fp4kv*_openai_benchmark.json",
             "results/sglang_fp4_kv_sm121_*.md",

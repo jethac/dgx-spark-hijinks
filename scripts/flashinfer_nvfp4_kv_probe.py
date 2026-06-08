@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import math
 import os
@@ -85,6 +86,37 @@ def _configure_flashinfer_source_tree(flashinfer: Any, source_root: Path | None)
     return data_paths
 
 
+def _patch_flashinfer_attention_jit_generators(source_root: Path | None) -> dict[str, str]:
+    """Use the source checkout's attention JIT helpers with installed FlashInfer.
+
+    NVIDIA's SGLang container ships a FlashInfer Python package that is compatible
+    with the container's CUTLASS bindings. Importing a newer checkout wholesale can
+    fail before attention JIT runs, but compiling patched headers still needs the
+    matching generated parameter structs.
+    """
+    if source_root is None:
+        return {}
+    utils_path = source_root.resolve() / "flashinfer" / "jit" / "attention" / "utils.py"
+    if not utils_path.exists():
+        return {"attention_jit_utils": "missing"}
+
+    spec = importlib.util.spec_from_file_location(
+        "_spark_flashinfer_attention_jit_utils", utils_path
+    )
+    if spec is None or spec.loader is None:
+        return {"attention_jit_utils": "unloadable"}
+
+    local_utils = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(local_utils)
+
+    import flashinfer.jit.attention.modules as attention_modules  # type: ignore
+    import flashinfer.jit.attention.utils as attention_utils  # type: ignore
+
+    attention_utils.generate_additional_params = local_utils.generate_additional_params
+    attention_modules.generate_additional_params = local_utils.generate_additional_params
+    return {"attention_jit_utils": str(utils_path)}
+
+
 def _pack_metadata(args: argparse.Namespace) -> dict[str, Any]:
     return {
         "batch_size": args.batch_size,
@@ -96,8 +128,11 @@ def _pack_metadata(args: argparse.Namespace) -> dict[str, Any]:
         "head_dim": args.head_dim,
         "dtype": args.dtype,
         "layouts": args.layouts,
+        "kv_container": args.kv_container,
+        "v_scale_layout": args.v_scale_layout,
         "backend": "fa2",
-        "deswizzle_flag_requested": not args.no_deswizzle_flag,
+        "deswizzle_flag_requested": args.v_scale_layout == "swizzled"
+        and not args.no_deswizzle_flag,
         "flashinfer_source_root": str(args.flashinfer_source_root)
         if args.flashinfer_source_root
         else None,
@@ -200,13 +235,17 @@ def _make_case(torch: Any, args: argparse.Namespace, layout: str, dtype: Any):
     v_packed, v_sf_linear, v_scale = _make_nvfp4_kv(torch, kv_shape, device)
     k_dq = _dequant_nvfp4(torch, k_packed, k_sf, k_scale).to(dtype)
     v_dq = _dequant_nvfp4(torch, v_packed, v_sf_linear, v_scale).to(dtype)
-    v_sf_swizzled = _swizzle_v_sf(torch, v_sf_linear, layout)
-    if layout == "NHD":
-        kv_cache = torch.stack([k_packed, v_packed], dim=1)
-        kv_cache_sf = torch.stack([k_sf, v_sf_swizzled], dim=1)
+    v_sf_for_kernel = (
+        _swizzle_v_sf(torch, v_sf_linear, layout)
+        if args.v_scale_layout == "swizzled"
+        else v_sf_linear
+    )
+    if args.kv_container == "tuple":
+        kv_cache = (k_packed, v_packed)
+        kv_cache_sf = (k_sf, v_sf_for_kernel)
     else:
         kv_cache = torch.stack([k_packed, v_packed], dim=1)
-        kv_cache_sf = torch.stack([k_sf, v_sf_swizzled], dim=1)
+        kv_cache_sf = torch.stack([k_sf, v_sf_for_kernel], dim=1)
     return {
         "kv_cache": kv_cache,
         "kv_cache_sf": kv_cache_sf,
@@ -257,7 +296,11 @@ def _run_decode(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: s
         last_len = int(last_lens[i])
         ki = _gather_sequence(torch, case["k_dq"], layout, start, stop, last_len)
         vi = _gather_sequence(torch, case["v_dq"], layout, start, stop, last_len)
-        refs.append(flashinfer.decode.single_decode_with_kv_cache(q[i], ki, vi, pos_encoding_mode="NONE"))
+        refs.append(
+            flashinfer.decode.single_decode_with_kv_cache(
+                q[i], ki, vi, pos_encoding_mode="NONE"
+            )
+        )
     expected = torch.stack(refs, dim=0)
     return _metrics(torch, actual, expected)
 
@@ -323,7 +366,7 @@ def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: 
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
-    _ensure_deswizzle_flag(not args.no_deswizzle_flag)
+    _ensure_deswizzle_flag(args.v_scale_layout == "swizzled" and not args.no_deswizzle_flag)
     _add_local_imports()
 
     import torch  # type: ignore
@@ -333,6 +376,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     source_paths = _configure_flashinfer_source_tree(
         flashinfer, args.flashinfer_source_root
     )
+    source_paths.update(_patch_flashinfer_attention_jit_generators(args.flashinfer_source_root))
     torch.manual_seed(args.seed)
     dtype = _dtype(torch, args.dtype)
     hardware = collect_cuda_hardware()
@@ -399,6 +443,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--head-dim", type=int, default=128)
     parser.add_argument("--dtype", choices=["float16", "bfloat16"], default="bfloat16")
     parser.add_argument("--layouts", nargs="+", choices=["NHD", "HND"], default=["NHD", "HND"])
+    parser.add_argument(
+        "--kv-container",
+        choices=["stacked", "tuple"],
+        default="stacked",
+        help="Pass paged KV/SF as one stacked tensor or as separate (k, v) tuples.",
+    )
+    parser.add_argument(
+        "--v-scale-layout",
+        choices=["swizzled", "linear"],
+        default="swizzled",
+        help="Use vLLM-style swizzled V scale factors or SGLang-style linear V scale factors.",
+    )
     parser.add_argument("--flashinfer-source-root", type=Path)
     parser.add_argument("--cosine-threshold", type=float, default=0.995)
     parser.add_argument("--max-abs-threshold", type=float, default=0.25)

@@ -28,6 +28,7 @@ Keep these separate in reports:
 - NVIDIA 26.05 BF16 Spark evidence: `nvcr.io/nvidia/sglang:26.05-py3` serves `Qwen/Qwen2.5-1.5B-Instruct` on our GB10 with BF16 KV.
 - hikarioyama SM120 NVFP4 KV evidence: `hikarioyama/sglang-nvfp4-kv-sm120` at `9b2160f0fb8e11dbbb5171a57f06a02b0e9ba6e2` reports `fp4_e2m1` KV, FlashInfer FA2 patches, FP4 pools, hybrid-SWA support, and global-scale calibration on SM120 hardware.
 - jethac FlashInfer SM121 `mm_fp4` dispatch evidence: our FlashInfer fork changes dense/MoE GEMM auto-dispatch on GB10, but it does not validate SGLang KV attention.
+- jethac FlashInfer FA2 NVFP4 KV SGLang-layout evidence: `results/flashinfer_sglang_linear_nvfp4_kv_probe_genpatch_20260608.json` passes a standalone FlashInfer FA2 paged NVFP4 KV probe on GB10 `sm_121` with tuple-packed `uint8` K/V, SGLang-style linear V scale factors, NHD/HND layouts, and prefill/decode cosine near `0.999999`. This proves the synthetic kernel/scale-buffer signature, not SGLang serving, graph replay, model output quality, KV capacity, or throughput.
 - AEON vLLM evidence: useful recipe evidence for NVFP4 weights and DFlash on GB10, not evidence that Gemma 4 works with FP4 KV in SGLang.
 
 Do not merge those into "SGLang NVFP4 works on Spark" until the GB10 `fp4_e2m1` serving row exists.
@@ -57,6 +58,7 @@ Artifacts:
 - `results/sglang_qwen25_1_5b_fp4kv_triton_20260608T0338JST_startup.log`
 - `results/sglang_qwen25_1_5b_fp4kv_patched_flashinfer_20260608T0349JST_startup.log`
 - `results/sglang_qwen25_1_5b_fp4kv_patched_triton_nographs_20260608T0404JST_openai_benchmark.json`
+- `results/flashinfer_sglang_linear_nvfp4_kv_probe_genpatch_20260608.json`
 
 Result:
 
@@ -68,19 +70,20 @@ Result:
 - stock `fp4_e2m1` with Triton attention allocates `5,534,509` KV tokens, about `1.78x` fp8 capacity, then fails before health because `KVFP4QuantizeUtil` cannot be imported from `kvfp4_tensor.py`.
 - patched FlashInfer attention clears the SGLang gate and alias blockers, allocates `5,539,718` FP4 KV tokens, targets `compute_121a,code=sm_121a`, then fails compiling FlashInfer FP4 decode at `vec_dtypes.cuh(117)`.
 - patched Triton attention with normal graph capture hangs at the first CUDA graph batch. With only `--disable-cuda-graph`, it still enters piecewise graph capture and stalls. With both `--disable-cuda-graph` and `--disable-piecewise-cuda-graph`, it serves and allocates `5,541,103` FP4 KV tokens, but short decode is only `0.276 tok/s` and output quality is visibly poor.
+- A standalone FlashInfer FA2 NVFP4 KV probe now passes the SGLang-style linear V-scale signature on GB10: tuple-packed `uint8` K/V, BF16 Q/output, `head_dim=128`, `page_size=16`, NHD/HND prefill and decode, with cosine about `0.999999` and max absolute error at or below `0.015625`.
 
 Interpretation:
 
 - This confirms fp8 is a valid SGLang Qwen comparator on our GB10.
 - This also confirms stock NVIDIA 26.05 SGLang does not yet provide a working `fp4_e2m1` serving row for this Qwen model.
 - The SGLang fork fixes are necessary but not sufficient. The remaining blockers are FlashInfer FP4 E2M1 decode support for the FlashInfer-attention path and graph-compatible Triton FP4 KV serving with sane output.
+- The standalone FlashInfer probe retires the synthetic decode blocker for the SGLang-style linear V-scale path. It does not prove clean SGLang `fp4_e2m1` serving; SGLang still has to pass the packed K/V plus scale buffers through its FlashInfer backend, serve under an accepted graph policy, and pass fp8-vs-fp4 quality/speed/capacity checks.
 
 Smallest next proof:
 
-- Do not spend another full Qwen serving launch first.
-- Run a FlashInfer-only JIT compile probe for the failing signature: BF16 Q, FP4 E2M1 KV, BF16 output, int32 indices, head dim 128, batch decode, `sm_121a`, and a fresh JIT cache.
-- If that still fails at `include/flashinfer/vec_dtypes.cuh:117`, fix FlashInfer before returning to SGLang serving.
-- If it compiles, run a tiny synthetic decode with `kv_cache_sf` scale buffers before trying the clean SGLang after-row.
+- The FlashInfer-only JIT/synthetic decode probe is done for the SGLang-style linear V-scale signature.
+- Next run the clean SGLang FlashInfer FP4 KV after-row, not the site-package overlay.
+- Verify SGLang passes tuple-packed FP4 K/V plus per-block `kv_cache_sf`/linear V scale factors into FlashInfer, then require a row manifest, OpenAI benchmark, graph policy, fp8 comparator, and quality check before blessing the row.
 
 Likely code locations:
 
