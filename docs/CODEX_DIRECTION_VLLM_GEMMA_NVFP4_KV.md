@@ -285,11 +285,23 @@ fresh-vs-live `max_abs_diff=0.0`, `mean_abs_diff=0.0`, `rms_diff=0.0`, with cosi
 on the byte-like layer-5 calls. The first-token signatures remain red (`" Reigns"`,
 Gujarati token, `"ioane"`). Therefore long-lived wrapper state/reuse is not the cause.
 
-Current target: compare the exact live-process FlashInfer module/plan path against the
-offline replay path. The remaining difference is not data pages, scale pages, output
-contiguity, physical page IDs, or wrapper lifetime in isolation; it is likely module cache
-identity, generated module arguments, plan fields, or a run/plan argument/layout difference
-between `scripts/vllm_active_page_flashinfer_replay.py` and vLLM's live wrapper call.
+Plan-signature trace result (2026-06-09):
+`jethac/vllm@1fabc6649` adds live wrapper/module/tensor signatures, and
+`results/vllm_gemma3_27b_plan_signature_trace_20260609.md` records the rerun. The known
+bad first tokens still reproduce. For the failing 18-token layer-5 call, live vLLM resolves
+FA2/NHD, BF16 query/output, uint8 KV, `fixed_split_size=-1`, `disable_split_kv=False`,
+`FLASHINFER_PAGED_V_SF_DESWIZZLE=1`, `qo_indptr=[0,18]`, pages `[13,14]`, last-page
+length `[2]`, and `plan_info=(1,18,0,64,0,16,32,0,48,56,0,0,0,0,0)`. The updated offline
+replay uses the same explicit plan fields (`window_left`, `head_dim_vo`, `o_data_type`,
+split-K flags) and still produces sane signed BF16 output while the original live output is
+byte-like (`actual_vs_original_out_after cosine=-0.00506`). Therefore the remaining
+difference is not the Python-visible wrapper plan/run signature either.
+
+Current target: instrument FlashInfer below the Python wrapper. Stamp/log the generated
+batch-prefill module URI, JIT directory/source path, compile flags, loaded object/function
+identity, and final C++ `paged_run` argument interpretation in both the live server process
+and offline replay process. The likely remaining gap is module cache / generated source /
+compiled object identity or C++ argument interpretation, not vLLM's Python plan fields.
 
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale

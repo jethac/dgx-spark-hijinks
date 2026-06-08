@@ -1,0 +1,629 @@
+{
+  "active_pages": [
+    13,
+    14
+  ],
+  "active_v_bytes_repeated": {
+    "all_finite": true,
+    "byte_like": true,
+    "dtype": "torch.float32",
+    "finite": 36864,
+    "head": [
+      240.0,
+      1.0,
+      226.0,
+      137.0,
+      145.0,
+      20.0,
+      186.0,
+      185.0,
+      33.0,
+      65.0,
+      47.0,
+      233.0,
+      91.0,
+      34.0,
+      145.0,
+      25.0
+    ],
+    "max": 255.0,
+    "mean": 128.48577880859375,
+    "min": 0.0,
+    "numel": 36864,
+    "rms": 147.62606811523438,
+    "shape": [
+      18,
+      32,
+      64
+    ]
+  },
+  "actual": {
+    "all_finite": true,
+    "byte_like": false,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      0.0,
+      -4.875,
+      0.40625,
+      0.0,
+      0.8125,
+      -3.25,
+      -0.40625,
+      0.0,
+      0.40625,
+      -0.40625,
+      1.625,
+      0.40625,
+      -0.8125,
+      -1.21875,
+      -0.40625,
+      -1.21875
+    ],
+    "max": 15.0,
+    "mean": -0.015198326669633389,
+    "min": -13.5,
+    "numel": 73728,
+    "rms": 1.9469819068908691,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "actual_vs_active_v_bytes_repeated": {
+    "cosine": -0.011256215162575245,
+    "max_abs": 257.84375,
+    "mean_abs": 128.52818298339844,
+    "rms_abs": 147.6586151123047,
+    "same_shape": true
+  },
+  "actual_vs_original_out_after": {
+    "cosine": -0.005058457143604755,
+    "max_abs": 259.09375,
+    "mean_abs": 128.56124877929688,
+    "rms_abs": 147.465576171875,
+    "same_shape": true
+  },
+  "actual_vs_reference": {
+    "cosine": 0.6811760663986206,
+    "max_abs": 13.85010051727295,
+    "mean_abs": 0.7769775390625,
+    "rms_abs": 1.5392377376556396,
+    "same_shape": true
+  },
+  "dump": "results/plantrace_compare_layer5_0002.pt",
+  "elapsed_sec": 0.07071341399569064,
+  "flashinfer_extra_cudaflags": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+  "flashinfer_kv_data_shape": [
+    15,
+    16,
+    16,
+    64
+  ],
+  "flashinfer_kv_indices": [
+    13,
+    14
+  ],
+  "flashinfer_kv_scale_shape": [
+    15,
+    16,
+    16,
+    8
+  ],
+  "last_page_len": [
+    2
+  ],
+  "layer_name": "language_model.model.layers.5.self_attn.attn",
+  "logits_soft_cap": 50.0,
+  "original_out_after": {
+    "all_finite": true,
+    "byte_like": true,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      240.0,
+      1.0,
+      226.0,
+      137.0,
+      145.0,
+      20.0,
+      186.0,
+      185.0,
+      33.0,
+      65.0,
+      47.0,
+      233.0,
+      91.0,
+      34.0,
+      145.0,
+      25.0
+    ],
+    "max": 255.0,
+    "mean": 128.52850341796875,
+    "min": 0.0,
+    "numel": 73728,
+    "rms": 147.44287109375,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "page_placement": "sparse",
+  "paged_kv_indices": [
+    13,
+    14
+  ],
+  "reference": {
+    "all_finite": true,
+    "byte_like": false,
+    "dtype": "torch.float32",
+    "finite": 73728,
+    "head": [
+      0.0,
+      -4.875,
+      0.40625,
+      0.0,
+      0.8125,
+      -3.25,
+      -0.40625,
+      0.0,
+      0.40625,
+      -0.40625,
+      1.625,
+      0.40625,
+      -0.8125,
+      -1.21875,
+      -0.40625,
+      -1.21875
+    ],
+    "max": 14.998600959777832,
+    "mean": -0.028590790927410126,
+    "min": -13.498526573181152,
+    "numel": 73728,
+    "rms": 1.9071201086044312,
+    "shape": [
+      18,
+      32,
+      128
+    ]
+  },
+  "run_signature": {
+    "kv_cache_arg": [
+      {
+        "data_ptr": 13671555072,
+        "device": "cuda:0",
+        "dtype": "torch.uint8",
+        "head": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "shape": [
+          15,
+          16,
+          16,
+          64
+        ],
+        "storage_data_ptr": 13671555072,
+        "storage_offset": 0,
+        "stride": [
+          16384,
+          1024,
+          64,
+          1
+        ],
+        "tail": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "data_ptr": 13671801344,
+        "device": "cuda:0",
+        "dtype": "torch.uint8",
+        "head": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "shape": [
+          15,
+          16,
+          16,
+          64
+        ],
+        "storage_data_ptr": 13671801344,
+        "storage_offset": 0,
+        "stride": [
+          16384,
+          1024,
+          64,
+          1
+        ],
+        "tail": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "kv_cache_sf": [
+      {
+        "data_ptr": 13672047616,
+        "device": "cuda:0",
+        "dtype": "torch.float8_e4m3fn",
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "shape": [
+          15,
+          16,
+          16,
+          8
+        ],
+        "storage_data_ptr": 13672047616,
+        "storage_offset": 0,
+        "stride": [
+          2048,
+          128,
+          8,
+          1
+        ],
+        "tail": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "data_ptr": 13672078848,
+        "device": "cuda:0",
+        "dtype": "torch.float8_e4m3fn",
+        "head": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "shape": [
+          15,
+          16,
+          16,
+          8
+        ],
+        "storage_data_ptr": 13672078848,
+        "storage_offset": 0,
+        "stride": [
+          2048,
+          128,
+          8,
+          1
+        ],
+        "tail": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "out_arg": {
+      "data_ptr": 13672110592,
+      "device": "cuda:0",
+      "dtype": "torch.bfloat16",
+      "head": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "shape": [
+        18,
+        32,
+        128
+      ],
+      "storage_data_ptr": 13672110592,
+      "storage_offset": 0,
+      "stride": [
+        4096,
+        128,
+        1
+      ],
+      "tail": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "query": {
+      "data_ptr": 13671333888,
+      "device": "cuda:0",
+      "dtype": "torch.bfloat16",
+      "head": [
+        -0.12060546875,
+        0.17578125,
+        -0.072265625,
+        -3.375,
+        -1.609375,
+        -0.474609375,
+        -0.1240234375,
+        0.390625,
+        0.024658203125,
+        -0.119140625,
+        -0.09912109375,
+        0.74609375,
+        -0.478515625,
+        -0.2177734375,
+        -0.6171875,
+        1.25
+      ],
+      "shape": [
+        18,
+        32,
+        128
+      ],
+      "storage_data_ptr": 13671333888,
+      "storage_offset": 0,
+      "stride": [
+        4096,
+        128,
+        1
+      ],
+      "tail": [
+        -0.32421875,
+        1.8046875,
+        0.35546875,
+        -0.26171875,
+        -2.828125,
+        1.0703125,
+        1.7265625,
+        0.51171875,
+        -2.21875,
+        -0.427734375,
+        -0.53125,
+        -3.328125,
+        0.78125,
+        -0.02099609375,
+        1.9375,
+        3.375
+      ]
+    }
+  },
+  "schema": "vllm-active-page-flashinfer-replay/v1",
+  "sm_scale": 0.08838834764831845,
+  "source_paths": {
+    "source_root": "/flashinfer-src"
+  },
+  "window_left": -1,
+  "wrapper_plan": {
+    "backend": "fa2",
+    "batch_size": 1,
+    "cached_kv_data_type": "torch.uint8",
+    "cached_module": {
+      "file": null,
+      "has_paged_run": true,
+      "has_plan": true,
+      "has_ragged_run": true,
+      "name": null,
+      "repr": "namespace(plan=ffi.Function, ragged_run=<function get_batch_prefill_module.<locals>.ragged_run at 0xed13afa5bb00>, paged_run=<function get_batch_prefill_module.<locals>.paged_run at 0xed13afa385e0>)",
+      "type": "SimpleNamespace"
+    },
+    "cached_o_data_type": "torch.bfloat16",
+    "cached_q_data_type": "torch.bfloat16",
+    "causal": true,
+    "jit_module": null,
+    "kv_layout": "NHD",
+    "logits_soft_cap": 50.0,
+    "max_kv_len": 18,
+    "max_q_len": 18,
+    "num_kv_heads": 16,
+    "num_qo_heads": 32,
+    "paged_kv_indices": {
+      "data_ptr": 13671800832,
+      "device": "cuda:0",
+      "dtype": "torch.int32",
+      "head": [
+        13,
+        14
+      ],
+      "shape": [
+        2
+      ],
+      "storage_data_ptr": 13671800832,
+      "storage_offset": 0,
+      "stride": [
+        1
+      ]
+    },
+    "paged_kv_indptr": {
+      "data_ptr": 13672109568,
+      "device": "cuda:0",
+      "dtype": "torch.int32",
+      "head": [
+        0,
+        2
+      ],
+      "shape": [
+        2
+      ],
+      "storage_data_ptr": 13672109568,
+      "storage_offset": 0,
+      "stride": [
+        1
+      ]
+    },
+    "paged_kv_last_page_len": {
+      "data_ptr": 13672110080,
+      "device": "cuda:0",
+      "dtype": "torch.int32",
+      "head": [
+        2
+      ],
+      "shape": [
+        1
+      ],
+      "storage_data_ptr": 13672110080,
+      "storage_offset": 0,
+      "stride": [
+        1
+      ]
+    },
+    "plan_info_repr": "(1, 18, 0, 64, 0, 16, 32, 0, 48, 56, 0, 0, 0, 0, 0)",
+    "plan_info_type": "Array",
+    "qo_indptr": {
+      "data_ptr": 13672078336,
+      "device": "cuda:0",
+      "dtype": "torch.int32",
+      "head": [
+        0,
+        18
+      ],
+      "shape": [
+        2
+      ],
+      "storage_data_ptr": 13672078336,
+      "storage_offset": 0,
+      "stride": [
+        1
+      ]
+    },
+    "qo_indptr_last": 18,
+    "sm_scale": 0.08838834764831845,
+    "use_cuda_graph": false,
+    "window_left": -1,
+    "workspace_size": 268435456,
+    "wrapper_type": "BatchPrefillWithPagedKVCacheWrapper"
+  }
+}

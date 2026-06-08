@@ -1,0 +1,15 @@
+{
+  "capability": [
+    12,
+    1
+  ],
+  "device": "NVIDIA GB10",
+  "flashinfer": "0.6.9rc1",
+  "flashinfer_file": "/usr/local/lib/python3.12/dist-packages/flashinfer/__init__.py",
+  "torch": "2.12.0.dev20260408+cu130",
+  "torch_cuda": "13.0",
+  "transformers": "5.6.2",
+  "vllm": "0.1.dev1+g1fabc6649",
+  "vllm_fa2": "/vllm-src/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+  "vllm_file": "/vllm-src/vllm/__init__.py"
+}

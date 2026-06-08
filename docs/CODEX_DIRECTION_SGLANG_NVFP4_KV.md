@@ -145,6 +145,33 @@ isolation rows have `20 / 20` overlap. This keeps selective no-reuse in the diag
 emergency-workaround bucket only. The accepted fix must preserve FP4 prefix reuse and
 recover the top-logprob distribution.
 
+No-code diagnostic switch checkpoint (2026-06-09): do not add a new switch before using
+the existing ones.
+
+- `SGLANG_FLASHINFER_USE_PAGED=1` forces extend away from
+  `ragged suffix + paged cached prefix + _safe_merge_state` while keeping the radix prefix
+  hit. Expected trace: `prefix_indices_len=55`, `extend_prefix_lens_cpu=[55]`,
+  `use_ragged=False`, label `forward_extend_paged`, paged plan length `[56]`.
+- `SGLANG_RADIX_FORCE_MISS=1` forces a radix miss without disabling the server's radix-cache
+  feature path. Expected trace: `prefix_indices_len=0`, `extend_prefix_lens_cpu=[0]`, full
+  prompt in `input_ids`, label `forward_extend_ragged_no_prefix` unless paged is also
+  forced.
+
+Next SGLang live matrix:
+
+1. Default FP4: cached prefix hit, `forward_extend_merge_paged`, known bad.
+2. `SGLANG_FLASHINFER_USE_PAGED=1`: cached prefix hit, full paged attention.
+3. `SGLANG_RADIX_FORCE_MISS=1`: full recompute, no prefix hit.
+4. Both env vars: full recompute through full paged attention.
+
+Interpretation:
+
+- If row 2 passes while row 1 fails, the bug is split ragged/paged merge interaction.
+- If rows 1 and 2 fail while rows 3 and 4 pass, reused FP4 prefix state/contribution is
+  the bug.
+- If row 4 passes, it is the cleanest full-paged FP4 recompute comparator against cached
+  full-paged reuse.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

@@ -29,6 +29,114 @@ from vllm_active_page_replay import (  # noqa: E402
 DESWIZZLE_FLAG = "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1"
 
 
+def _safe_repr(value: Any, limit: int = 240) -> str | None:
+    if value is None:
+        return None
+    try:
+        text = repr(value)
+    except Exception as exc:
+        text = f"<repr_error:{type(exc).__name__}>"
+    if len(text) > limit:
+        return text[:limit] + "..."
+    return text
+
+
+def _tensor_head(tensor: torch.Tensor | None, limit: int = 16) -> list[Any] | None:
+    if tensor is None:
+        return None
+    tensor = tensor.detach()
+    if tensor.numel() == 0:
+        return []
+    flat = tensor.reshape(-1)
+    values: list[Any] = []
+    for item in flat[: min(limit, flat.numel())].cpu().tolist():
+        values.append(item)
+    return values
+
+
+def _tensor_payload(tensor: torch.Tensor | None, limit: int = 16) -> dict[str, Any] | None:
+    if tensor is None:
+        return None
+    payload: dict[str, Any] = {
+        "shape": list(tensor.shape),
+        "stride": list(tensor.stride()),
+        "storage_offset": int(tensor.storage_offset()),
+        "dtype": str(tensor.dtype),
+        "device": str(tensor.device),
+        "head": _tensor_head(tensor, limit),
+    }
+    if tensor.numel() > limit:
+        payload["tail"] = _tensor_head(tensor.reshape(-1)[-limit:], limit)
+    try:
+        payload["data_ptr"] = int(tensor.data_ptr())
+        payload["storage_data_ptr"] = int(tensor.untyped_storage().data_ptr())
+    except Exception as exc:
+        payload["ptr_error"] = type(exc).__name__
+    return payload
+
+
+def _tuple_payload(
+    tensors: tuple[torch.Tensor, ...] | torch.Tensor | None,
+    limit: int = 16,
+) -> list[dict[str, Any] | None] | dict[str, Any] | None:
+    if tensors is None:
+        return None
+    if isinstance(tensors, tuple):
+        return [_tensor_payload(tensor, limit) for tensor in tensors]
+    return _tensor_payload(tensors, limit)
+
+
+def _module_payload(module: object) -> dict[str, Any] | None:
+    if module is None:
+        return None
+    return {
+        "type": type(module).__name__,
+        "name": getattr(module, "__name__", None),
+        "file": getattr(module, "__file__", None),
+        "repr": _safe_repr(module),
+        "has_plan": hasattr(module, "plan"),
+        "has_paged_run": hasattr(module, "paged_run"),
+        "has_ragged_run": hasattr(module, "ragged_run"),
+    }
+
+
+def _wrapper_payload(wrapper: Any) -> dict[str, Any]:
+    return {
+        "wrapper_type": type(wrapper).__name__,
+        "backend": getattr(wrapper, "_backend", None),
+        "kv_layout": getattr(wrapper, "_kv_layout", None),
+        "use_cuda_graph": bool(getattr(wrapper, "_use_cuda_graph", False)),
+        "causal": bool(getattr(wrapper, "_causal", False)),
+        "window_left": int(getattr(wrapper, "_window_left", -9999)),
+        "logits_soft_cap": getattr(wrapper, "_logits_soft_cap", None),
+        "sm_scale": getattr(wrapper, "_sm_scale", None),
+        "batch_size": int(getattr(wrapper, "_batch_size", -1)),
+        "num_qo_heads": int(getattr(wrapper, "_num_qo_heads", -1)),
+        "num_kv_heads": int(getattr(wrapper, "_num_kv_heads", -1)),
+        "qo_indptr_last": int(getattr(wrapper, "_qo_indptr_last", -1)),
+        "max_q_len": int(getattr(wrapper, "_max_q_len", -1)),
+        "max_kv_len": int(getattr(wrapper, "_max_kv_len", -1)),
+        "workspace_size": int(getattr(wrapper, "_workspace_size", -1)),
+        "cached_q_data_type": str(getattr(wrapper, "_cached_q_data_type", None)),
+        "cached_kv_data_type": str(getattr(wrapper, "_cached_kv_data_type", None)),
+        "cached_o_data_type": str(getattr(wrapper, "_cached_o_data_type", None)),
+        "plan_info_type": type(getattr(wrapper, "_plan_info", None)).__name__,
+        "plan_info_repr": _safe_repr(getattr(wrapper, "_plan_info", None)),
+        "cached_module": _module_payload(getattr(wrapper, "_cached_module", None)),
+        "jit_module": _module_payload(getattr(wrapper, "_jit_module", None)),
+        "qo_indptr": _tensor_payload(getattr(wrapper, "_qo_indptr_buf", None)),
+        "paged_kv_indptr": _tensor_payload(
+            getattr(wrapper, "_paged_kv_indptr_buf", None)
+        ),
+        "paged_kv_indices": _tensor_payload(
+            getattr(wrapper, "_paged_kv_indices_buf", None)
+        ),
+        "paged_kv_last_page_len": _tensor_payload(
+            getattr(wrapper, "_paged_kv_last_page_len_buf", None)
+        ),
+    }
+
+
 def _ensure_deswizzle_flag(enabled: bool) -> None:
     if not enabled:
         return
@@ -157,13 +265,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         k_data.shape[2],
         query.shape[2],
         k_data.shape[1],
+        head_dim_vo=query.shape[2],
         causal=True,
         pos_encoding_mode="NONE",
+        window_left=int(obj.get("window_left", -1)),
         logits_soft_cap=args.logits_soft_cap,
         sm_scale=sm_scale,
         kv_data_type=torch.uint8,
         q_data_type=query.dtype,
+        o_data_type=query.dtype,
+        fixed_split_size=-1,
+        disable_split_kv=False,
     )
+    wrapper_plan = _wrapper_payload(wrapper)
+    run_signature = {
+        "query": _tensor_payload(query, args.head),
+        "kv_cache_arg": _tuple_payload((k_data, v_data), args.head),
+        "kv_cache_sf": _tuple_payload((k_sf, v_sf), args.head),
+        "out_arg": _tensor_payload(out, args.head),
+    }
     started = time.perf_counter()
     wrapper.run(
         query,
@@ -197,6 +317,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "flashinfer_kv_indices": [int(x) for x in kv_indices.cpu().tolist()],
         "flashinfer_kv_data_shape": list(k_data.shape),
         "flashinfer_kv_scale_shape": list(k_sf.shape),
+        "wrapper_plan": wrapper_plan,
+        "run_signature": run_signature,
         "last_page_len": [int(x) for x in obj["paged_kv_last_page_len"].tolist()],
         "logits_soft_cap": args.logits_soft_cap,
         "sm_scale": sm_scale,

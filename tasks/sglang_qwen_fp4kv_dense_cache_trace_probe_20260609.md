@@ -15,6 +15,23 @@ Driver:
   - cached failure: `native-second` / `openai-second`, `cached_tokens=55`
   - controls: flush-between and namespace-isolation, both `cached_tokens=0`
 
+Run the cheap no-code matrix before adding new instrumentation:
+
+- Default FP4: expected cached prefix hit, `forward_extend_merge_paged`, known bad.
+- `SGLANG_FLASHINFER_USE_PAGED=1`: keep the radix prefix hit, but force full paged
+  attention instead of ragged suffix + paged cached prefix + merge.
+- `SGLANG_RADIX_FORCE_MISS=1`: force full recompute without disabling the server's radix
+  feature path.
+- Both env vars: full recompute through full paged attention.
+
+Decision rule for this matrix:
+
+- Full-paged cached-prefix passes while default fails -> bug is split ragged/paged merge
+  interaction.
+- Default and full-paged cached-prefix fail while force-miss rows pass -> reused FP4
+  prefix state/contribution is the bug.
+- Force-miss + full-paged passing is the cleanest full-paged FP4 recompute comparator.
+
 Instrumentation gate:
 
 ```bash
