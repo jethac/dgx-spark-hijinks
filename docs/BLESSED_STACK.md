@@ -40,8 +40,8 @@ From the initial personal Gemma 4 benchmark run:
 - NVIDIA SGLang `26.05-py3` is not currently a working Gemma 4 E2B path in our test: default Gemma4 multimodal setup crashes in the audio tower, and `--language-only` is not a valid standalone workaround.
 - HF fallback is not a transparent substitute for vLLM; several rows died with `returncode=-9`.
 - GGUF accuracy through the tested lm-eval/llama.cpp path is blocked by logprobs/API compatibility.
-- `--kv-cache-dtype nvfp4` is not blessed on Spark yet.
-- Qwen speed/capacity is now a required benchmark lane. Small SGLang Qwen BF16/auto and fp8 rows are locally proven at about 58-59 tok/s; AEON Qwen3.6 NVFP4+DFlash is locally reproduced at about 50-56 tok/s when Qwen thinking is disabled with `chat_template_kwargs`; clean `jethac/vllm@a919d635d` + `jethac/flash-attention@7d53245` packaging serves the same Qwen row at `61.07`, `56.97`, and `60.10 tok/s` with separate `sm_121a` FA2 cubin proof.
+- `--kv-cache-dtype nvfp4` is not generally blessed on Spark yet. vLLM Qwen has a capacity-proven FlashInfer FA2 NVFP4-KV row, but Gemma remains blocked by the global `D=512` FlashInfer shape and SGLang remains blocked by FP4-KV quality corruption.
+- Qwen speed/capacity is now a required benchmark lane. Small SGLang Qwen BF16/auto and fp8 rows are locally proven at about 58-59 tok/s; AEON Qwen3.6 NVFP4+DFlash is locally reproduced at about 50-56 tok/s when Qwen thinking is disabled with `chat_template_kwargs`; clean `jethac/vllm@a919d635d` + `jethac/flash-attention@7d53245` packaging serves the same Qwen row at `61.07`, `56.97`, and `60.10 tok/s` with separate `sm_121a` FA2 cubin proof; a no-DFlash vLLM Qwen NVFP4-KV row records `1.751x` fp8 KV pool/concurrency through FlashInfer FA2 with decode-speed parity.
 - `hikarioyama/vllm-nvfp4-kv-sm120` and `hikarioyama/sglang-nvfp4-kv-sm120` are audited SM120 reference implementations and should be used as prior art for our forks. They are not GB10 `sm_121` blessed stacks until fp8-vs-NVFP4 quality, capacity, and speed are reproduced on Spark-class hardware.
 - Multi-Spark recipes are not validated because we currently have only one unit.
 - The inspected vLLM/FlashInfer extension set has no explicit `sm_121` SASS. General vLLM extensions include `sm_120`, while several attention/MLA extensions are `sm_80`, `sm_90a`, or `sm_100` only. Treat this as a validation requirement, not an automatic failure.
@@ -59,7 +59,7 @@ To be tested:
 
 - NVIDIA/vLLM NGC container validated for DGX Spark, if available for the target date.
 - vLLM native FP4 weight/MoE proof for the passing Qwen3.6 NVFP4+DFlash row. Clean FA2 packaging is now proven, but the server still selects Marlin weight-only FP4 and warns that the weight path is not native FP4 compute.
-- AEON Gemma and Qwen3.6 NVFP4+DFlash are now measured locally, and both the AEON-derived and clean-FA2 `jethac/vllm` Qwen rows pass; the remaining vLLM gap is native FP4 weight/MoE evidence, NVFP4 KV capacity evidence, accuracy, and upstreamable packaging beyond this AEON-checkpoint recipe.
+- AEON Gemma and Qwen3.6 NVFP4+DFlash are now measured locally, both the AEON-derived and clean-FA2 `jethac/vllm` Qwen rows pass, and the Qwen NVFP4-KV row proves the expected capacity gain. The remaining vLLM gaps are Gemma NVFP4-KV, native FP4 weight/MoE evidence, accuracy, and upstreamable packaging beyond this AEON-checkpoint recipe.
 - vLLM build with native `Gemma4UnifiedForConditionalGeneration`.
 - SGLang Gemma model-path fix or documented go/no-go, then NVFP4/fp8 quality comparison on Spark.
 - SGLang Qwen fp8-vs-`fp4_e2m1` KV clean quality fix after the autosafe capacity row; the capacity delta is recorded, but the FP4 quality check still fails.

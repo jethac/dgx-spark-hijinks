@@ -1,0 +1,222 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from tmp.HFWeb55XCr
+#1 transferring dockerfile: 2.34kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass
+#4 DONE 0.1s
+
+#5 [2/6] RUN python3 -m pip install --no-cache-dir       'apache-tvm-ffi>=0.1.6,!=0.1.8,!=0.1.8.post0,<0.2'       'setuptools>=77' 'packaging>=24'
+#5 0.433 Requirement already satisfied: apache-tvm-ffi!=0.1.8,!=0.1.8.post0,<0.2,>=0.1.6 in /usr/local/lib/python3.12/dist-packages (0.1.10)
+#5 0.433 Requirement already satisfied: setuptools>=77 in /usr/local/lib/python3.12/dist-packages (78.1.0)
+#5 0.433 Requirement already satisfied: packaging>=24 in /usr/local/lib/python3.12/dist-packages (26.0)
+#5 0.434 Requirement already satisfied: typing-extensions>=4.5 in /usr/local/lib/python3.12/dist-packages (from apache-tvm-ffi!=0.1.8,!=0.1.8.post0,<0.2,>=0.1.6) (4.15.0)
+#5 0.934 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#5 DONE 1.0s
+
+#6 [3/6] RUN git clone "https://github.com/jethac/flashinfer.git" /opt/jethac-flashinfer  && cd /opt/jethac-flashinfer  && git checkout "e152cf4da4ab2a9d093b7d9d4b499198b0211c61"  && git submodule update --init 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+#6 0.158 Cloning into '/opt/jethac-flashinfer'...
+#6 4.365 Note: switching to 'e152cf4da4ab2a9d093b7d9d4b499198b0211c61'.
+#6 4.365
+#6 4.365 You are in 'detached HEAD' state. You can look around, make experimental
+#6 4.365 changes and commit them, and you can discard any commits you make in this
+#6 4.365 state without impacting any branches by switching back to a branch.
+#6 4.365
+#6 4.365 If you want to create a new branch to retain commits you create, you may
+#6 4.365 do so (now or later) by using -c with the switch command. Example:
+#6 4.365
+#6 4.365   git switch -c <new-branch-name>
+#6 4.365
+#6 4.365 Or undo this operation with:
+#6 4.365
+#6 4.365   git switch -
+#6 4.365
+#6 4.365 Turn off this advice by setting config variable advice.detachedHead to false
+#6 4.365
+#6 4.365 HEAD is now at e152cf4d Add FA2 NVFP4 KV scale stride plumbing
+#6 4.389 Submodule '3rdparty/cccl' (https://github.com/NVIDIA/cccl.git) registered for path '3rdparty/cccl'
+#6 4.389 Submodule '3rdparty/cutlass' (https://github.com/NVIDIA/cutlass.git) registered for path '3rdparty/cutlass'
+#6 4.389 Submodule '3rdparty/spdlog' (https://github.com/gabime/spdlog.git) registered for path '3rdparty/spdlog'
+#6 4.392 Cloning into '/opt/jethac-flashinfer/3rdparty/cccl'...
+#6 17.46 Cloning into '/opt/jethac-flashinfer/3rdparty/cutlass'...
+#6 21.07 Cloning into '/opt/jethac-flashinfer/3rdparty/spdlog'...
+#6 23.79 Submodule path '3rdparty/cccl': checked out '876867684f7fac130e0f5911236e0a92a970d4fd'
+#6 24.17 Submodule path '3rdparty/cutlass': checked out 'b46b16d003484063bca4ed365e44095c4c6ed633'
+#6 24.19 Submodule path '3rdparty/spdlog': checked out 'c3aed4b68373955e1cc94307683d44dca1515d2b'
+#6 DONE 24.4s
+
+#7 [4/6] RUN python3 -m pip uninstall -y flashinfer-python flashinfer-jit-cache flashinfer-cubin || true  && find /usr/local/lib/python3.12/dist-packages -maxdepth 1       ( -name 'flashinfer' -o -name 'flashinfer-*.dist-info'          -o -name 'flashinfer_python-*.dist-info'          -o -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info'          -o -name 'flashinfer_cubin' -o -name 'flashinfer_cubin-*.dist-info' )       -print -exec rm -rf {} +
+#7 0.293 Found existing installation: flashinfer-python 0.6.9rc1
+#7 0.336 Uninstalling flashinfer-python-0.6.9rc1:
+#7 1.044   Successfully uninstalled flashinfer-python-0.6.9rc1
+#7 1.106 WARNING: Skipping flashinfer-jit-cache as it is not installed.
+#7 1.133 WARNING: Skipping flashinfer-cubin as it is not installed.
+#7 1.133 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#7 DONE 1.2s
+
+#8 [5/6] RUN cd /opt/jethac-flashinfer  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#8 0.290 Using pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)
+#8 0.370 Obtaining file:///opt/jethac-flashinfer
+#8 0.372   Running command Checking if build backend supports build_editable
+#8 0.372   Checking if build backend supports build_editable: started
+#8 0.485   Created build metadata file with version 0.6.13
+#8 0.496   Checking if build backend supports build_editable: finished with status 'done'
+#8 0.496   Preparing editable metadata (pyproject.toml): started
+#8 0.496   Running command Preparing editable metadata (pyproject.toml)
+#8 0.611   [06/08/26 04:57:12] WARNING  toml section missing      _pyproject_reading.py:235
+#8 0.611                                PosixPath('pyproject.toml
+#8 0.611                                ') does not contain any
+#8 0.611                                of the tool sections:
+#8 0.611                                ['setuptools_scm',
+#8 0.611                                'vcs-versioning']
+#8 0.685   /usr/local/lib/python3.12/dist-packages/setuptools/dist.py:484: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#8 0.685   !!
+#8 0.685
+#8 0.685           ********************************************************************************
+#8 0.685           Pattern 'LICENSE*.txt' did not match any files.
+#8 0.685
+#8 0.685           This deprecation is overdue, please update your project and remove deprecated
+#8 0.685           calls to avoid build errors in the future.
+#8 0.685           ********************************************************************************
+#8 0.685
+#8 0.685   !!
+#8 0.685     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#8 0.690   Created build metadata file with version 0.6.13
+#8 0.690   running dist_info
+#8 0.698   creating /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info
+#8 0.698   writing /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/PKG-INFO
+#8 0.699   writing dependency_links to /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/dependency_links.txt
+#8 0.699   writing entry points to /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/entry_points.txt
+#8 0.699   writing requirements to /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/requires.txt
+#8 0.699   writing top-level names to /tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/top_level.txt
+#8 0.699   writing manifest file '/tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/SOURCES.txt'
+#8 0.843   /usr/local/lib/python3.12/dist-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#8 0.843     return get_active_overrides().subprocess_timeout
+#8 0.973   adding license file 'LICENSE'
+#8 0.999   writing manifest file '/tmp/pip-modern-metadata-m4_8qo80/flashinfer_python.egg-info/SOURCES.txt'
+#8 0.999   creating '/tmp/pip-modern-metadata-m4_8qo80/flashinfer_python-0.6.13.dist-info'
+#8 1.032   Preparing editable metadata (pyproject.toml): finished with status 'done'
+#8 1.062   Running command Building editable for flashinfer-python (pyproject.toml)
+#8 1.062 Building wheels for collected packages: flashinfer-python
+#8 1.062   Building editable for flashinfer-python (pyproject.toml): started
+#8 1.179   [06/08/26 04:57:12] WARNING  toml section missing      _pyproject_reading.py:235
+#8 1.179                                PosixPath('pyproject.toml
+#8 1.179                                ') does not contain any
+#8 1.179                                of the tool sections:
+#8 1.179                                ['setuptools_scm',
+#8 1.179                                'vcs-versioning']
+#8 1.243   /usr/local/lib/python3.12/dist-packages/setuptools/dist.py:484: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#8 1.243   !!
+#8 1.243
+#8 1.243           ********************************************************************************
+#8 1.244           Pattern 'LICENSE*.txt' did not match any files.
+#8 1.244
+#8 1.244           This deprecation is overdue, please update your project and remove deprecated
+#8 1.244           calls to avoid build errors in the future.
+#8 1.244           ********************************************************************************
+#8 1.244
+#8 1.244   !!
+#8 1.244     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#8 1.248   Created build metadata file with version 0.6.13
+#8 1.248   running editable_wheel
+#8 1.259   creating /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info
+#8 1.259   writing /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/PKG-INFO
+#8 1.260   writing dependency_links to /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/dependency_links.txt
+#8 1.260   writing entry points to /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/entry_points.txt
+#8 1.260   writing requirements to /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/requires.txt
+#8 1.260   writing top-level names to /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/top_level.txt
+#8 1.260   writing manifest file '/tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/SOURCES.txt'
+#8 1.389   /usr/local/lib/python3.12/dist-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#8 1.389     return get_active_overrides().subprocess_timeout
+#8 1.517   adding license file 'LICENSE'
+#8 1.543   writing manifest file '/tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python.egg-info/SOURCES.txt'
+#8 1.543   creating '/tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python-0.6.13.dist-info'
+#8 1.549   creating /tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python-0.6.13.dist-info/WHEEL
+#8 1.561   running build_py
+#8 1.699   Editable install will be performed using a meta path finder.
+#8 1.699
+#8 1.699   Options like `package-data`, `include/exclude-package-data` or
+#8 1.699   `packages.find.exclude/include` may have no effect.
+#8 1.699
+#8 1.851   adding '__editable___flashinfer_python_0_6_13_finder.py'
+#8 1.851   adding '__editable__.flashinfer_python-0.6.13.pth'
+#8 1.851   creating '/tmp/pip-wheel-f6ultwlb/.tmp-4m_9cney/flashinfer_python-0.6.13-0.editable-py3-none-any.whl' and adding '/tmp/tmp1z_tf7cwflashinfer_python-0.6.13-0.editable-py3-none-any.whl' to it
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/licenses/LICENSE'
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/METADATA'
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/WHEEL'
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/entry_points.txt'
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/top_level.txt'
+#8 1.852   adding 'flashinfer_python-0.6.13.dist-info/RECORD'
+#8 1.855   /usr/local/lib/python3.12/dist-packages/setuptools/command/editable_wheel.py:342: InformationOnly: Editable installation.
+#8 1.855   !!
+#8 1.855
+#8 1.855           ********************************************************************************
+#8 1.855           Please be careful with folders in your working directory with the same
+#8 1.855           name as your package as they may take precedence during imports.
+#8 1.855           ********************************************************************************
+#8 1.855
+#8 1.855   !!
+#8 1.855     with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+#8 1.883   Building editable for flashinfer-python (pyproject.toml): finished with status 'done'
+#8 1.884   Created wheel for flashinfer-python: filename=flashinfer_python-0.6.13-0.editable-py3-none-any.whl size=13099 sha256=98a2a353221d321a882730804a6e7a3292186a5f3c9c5e773a40a0d5aa1eea6f
+#8 1.884   Stored in directory: /tmp/pip-ephem-wheel-cache-cyx_s1ot/wheels/3f/04/c6/c320b36ea96f37e54e4c8a7a7a8e93fa3ceef624246c2a2969
+#8 1.886 Successfully built flashinfer-python
+#8 1.886 Installing collected packages: flashinfer-python
+#8 1.894   changing mode of /usr/local/bin/flashinfer to 755
+#8 1.900 Successfully installed flashinfer-python-0.6.13
+#8 1.900 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#8 DONE 2.0s
+
+#9 [6/6] RUN python3 - <<'PY'
+#9 1.863 Traceback (most recent call last):
+#9 1.863   File "<stdin>", line 18, in <module>
+#9 1.863 AssertionError: patched FlashInfer stride/deswizzle source markers were not found
+#9 1.863 flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+#9 1.863 vllm 0.1.dev1+ga919d635d /opt/jethac-vllm/vllm/__init__.py
+#9 1.863 flashinfer_source_hits []
+#9 ERROR: process "/bin/sh -c python3 - <<'PY'\nfrom pathlib import Path\nimport flashinfer\nimport vllm\n\nroot = Path(flashinfer.__file__).resolve().parent\nsource_hits = []\nfor path in root.rglob(\"*.py\"):\n    text = path.read_text(errors=\"ignore\")\n    if \"maybe_k_cache_sf_stride_page\" in text or \"FLASHINFER_PAGED_V_SF_DESWIZZLE\" in text:\n        source_hits.append(str(path))\n\nbackend = Path(vllm.__file__).resolve().parent / \"v1/attention/backends/flashinfer.py\"\nbackend_text = backend.read_text(errors=\"ignore\")\n\nprint(\"flashinfer\", getattr(flashinfer, \"__version__\", None), flashinfer.__file__)\nprint(\"vllm\", getattr(vllm, \"__version__\", None), vllm.__file__)\nprint(\"flashinfer_source_hits\", source_hits[:10])\nassert source_hits, \"patched FlashInfer stride/deswizzle source markers were not found\"\nassert \"use_fa2_nvfp4_kv\" in backend_text, \"vLLM NVFP4-KV FA2 routing marker missing\"\nassert \"FLASHINFER_PAGED_V_SF_DESWIZZLE\" in backend_text, \"vLLM deswizzle flag marker missing\"\nPY" did not complete successfully: exit code: 1
+------
+ > [6/6] RUN python3 - <<'PY':
+1.863 Traceback (most recent call last):
+1.863   File "<stdin>", line 18, in <module>
+1.863 AssertionError: patched FlashInfer stride/deswizzle source markers were not found
+1.863 flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+1.863 vllm 0.1.dev1+ga919d635d /opt/jethac-vllm/vllm/__init__.py
+1.863 flashinfer_source_hits []
+------
+tmp.HFWeb55XCr:31
+--------------------
+  30 |
+  31 | >>> RUN python3 - <<'PY'
+  32 | >>> from pathlib import Path
+  33 | >>> import flashinfer
+  34 | >>> import vllm
+  35 | >>>
+  36 | >>> root = Path(flashinfer.__file__).resolve().parent
+  37 | >>> source_hits = []
+  38 | >>> for path in root.rglob("*.py"):
+  39 | >>>     text = path.read_text(errors="ignore")
+  40 | >>>     if "maybe_k_cache_sf_stride_page" in text or "FLASHINFER_PAGED_V_SF_DESWIZZLE" in text:
+  41 | >>>         source_hits.append(str(path))
+  42 | >>>
+  43 | >>> backend = Path(vllm.__file__).resolve().parent / "v1/attention/backends/flashinfer.py"
+  44 | >>> backend_text = backend.read_text(errors="ignore")
+  45 | >>>
+  46 | >>> print("flashinfer", getattr(flashinfer, "__version__", None), flashinfer.__file__)
+  47 | >>> print("vllm", getattr(vllm, "__version__", None), vllm.__file__)
+  48 | >>> print("flashinfer_source_hits", source_hits[:10])
+  49 | >>> assert source_hits, "patched FlashInfer stride/deswizzle source markers were not found"
+  50 | >>> assert "use_fa2_nvfp4_kv" in backend_text, "vLLM NVFP4-KV FA2 routing marker missing"
+  51 | >>> assert "FLASHINFER_PAGED_V_SF_DESWIZZLE" in backend_text, "vLLM deswizzle flag marker missing"
+  52 | >>> PY
+  53 |
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c python3 - <<'PY'\nfrom pathlib import Path\nimport flashinfer\nimport vllm\n\nroot = Path(flashinfer.__file__).resolve().parent\nsource_hits = []\nfor path in root.rglob(\"*.py\"):\n    text = path.read_text(errors=\"ignore\")\n    if \"maybe_k_cache_sf_stride_page\" in text or \"FLASHINFER_PAGED_V_SF_DESWIZZLE\" in text:\n        source_hits.append(str(path))\n\nbackend = Path(vllm.__file__).resolve().parent / \"v1/attention/backends/flashinfer.py\"\nbackend_text = backend.read_text(errors=\"ignore\")\n\nprint(\"flashinfer\", getattr(flashinfer, \"__version__\", None), flashinfer.__file__)\nprint(\"vllm\", getattr(vllm, \"__version__\", None), vllm.__file__)\nprint(\"flashinfer_source_hits\", source_hits[:10])\nassert source_hits, \"patched FlashInfer stride/deswizzle source markers were not found\"\nassert \"use_fa2_nvfp4_kv\" in backend_text, \"vLLM NVFP4-KV FA2 routing marker missing\"\nassert \"FLASHINFER_PAGED_V_SF_DESWIZZLE\" in backend_text, \"vLLM deswizzle flag marker missing\"\nPY" did not complete successfully: exit code: 1

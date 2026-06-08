@@ -1,0 +1,31 @@
+{
+  "created_unix": 1780896613.0176961,
+  "inputs": {
+    "allow_family_targets": [],
+    "logs": [
+      "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_server.log"
+    ]
+  },
+  "logs": [
+    {
+      "accepted_spark_target_evidence": false,
+      "allowed_family_targets": [],
+      "evidence": [],
+      "exists": true,
+      "findings": [
+        "WARN: no CUDA architecture target evidence found in log."
+      ],
+      "has_native_fp4_target": false,
+      "has_spark_target": false,
+      "path": "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_server.log",
+      "unallowed_family_targets": []
+    }
+  ],
+  "schema": "cuda-build-target-audit/v1",
+  "summary": {
+    "accepted_log_count": 0,
+    "log_count": 1,
+    "missing_or_unaccepted_count": 1,
+    "native_fp4_log_count": 0
+  }
+}

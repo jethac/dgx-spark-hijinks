@@ -197,6 +197,42 @@ Interpretation:
 - This proves the FP4 KV capacity path in the clean SGLang source-overlay stack.
 - It does not prove SGLang FP4 KV serving quality, graph safety, or speed. Keep the counterpart row partial until quality passes.
 
+## 2026-06-08: vLLM Qwen NVFP4-KV Capacity Row
+
+Target:
+
+- image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv`
+- runtime ref: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@a919d635d + jethac/flashinfer@e152cf4d`
+- model: AEON Qwen3.6 35B-A3B NVFP4 weights, no DFlash
+- attention backend argument: `flashinfer`
+- max model length: `262144`
+- memory utilization: `0.85`
+
+Artifacts:
+
+- summary: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`
+- fp8 comparator manifest: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json`
+- fp8 comparator benchmark: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_openai_benchmark.json`
+- fp8 comparator server log: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_server.log`
+- NVFP4-KV manifest: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_row_manifest.json`
+- NVFP4-KV benchmark: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_openai_benchmark.json`
+- NVFP4-KV server log: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_server.log`
+
+Result:
+
+- fp8 KV: `6,364,935` KV tokens, `24.28x` max concurrency at 262k context.
+- NVFP4 KV: `11,146,226` KV tokens, `42.52x` max concurrency at 262k context.
+- capacity/concurrency ratio: `1.751x`.
+- decode: fp8 `43.001`, `42.512`, `42.684 tok/s`; NVFP4 KV `43.014`, `42.615`, `42.898 tok/s`.
+- backend proof: the NVFP4 server log says `Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x with vLLM V-scale-factor deswizzle enabled.`
+
+Interpretation:
+
+- This is the first end-to-end vLLM NVFP4-KV serving capacity proof on the Qwen lane.
+- It proves capacity/concurrency and normal content with Qwen thinking disabled; it does not prove a decode-speed uplift.
+- It does not prove Gemma NVFP4-KV. Gemma remains blocked by heterogeneous attention dimensions and the FlashInfer FA2 global `D=512` failure.
+- It does not prove native FP4 weight/MoE MMA. The server still selects `MARLIN` NvFp4 MoE for weights.
+
 ## 2026-06-07: SGLang Gemma 4 E2B Blocker
 
 Target:

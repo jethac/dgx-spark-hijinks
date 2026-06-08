@@ -1,0 +1,230 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from tmp.kKiCU1BjzW
+#1 transferring dockerfile: 2.52kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass
+#4 CACHED
+
+#5 [2/6] RUN python3 -m pip install --no-cache-dir       'apache-tvm-ffi>=0.1.6,!=0.1.8,!=0.1.8.post0,<0.2'       'setuptools>=77' 'packaging>=24'       'nvidia-cutlass-dsl[cu13]>=4.5.2'
+#5 0.301 Requirement already satisfied: apache-tvm-ffi!=0.1.8,!=0.1.8.post0,<0.2,>=0.1.6 in /usr/local/lib/python3.12/dist-packages (0.1.10)
+#5 0.301 Requirement already satisfied: setuptools>=77 in /usr/local/lib/python3.12/dist-packages (78.1.0)
+#5 0.301 Requirement already satisfied: packaging>=24 in /usr/local/lib/python3.12/dist-packages (26.0)
+#5 0.345 Collecting nvidia-cutlass-dsl>=4.5.2 (from nvidia-cutlass-dsl[cu13]>=4.5.2)
+#5 0.376   Downloading nvidia_cutlass_dsl-4.5.2-py3-none-any.whl.metadata (2.8 kB)
+#5 0.379 Requirement already satisfied: typing-extensions>=4.5 in /usr/local/lib/python3.12/dist-packages (from apache-tvm-ffi!=0.1.8,!=0.1.8.post0,<0.2,>=0.1.6) (4.15.0)
+#5 0.400 Collecting nvidia-cutlass-dsl-libs-base==4.5.2 (from nvidia-cutlass-dsl>=4.5.2->nvidia-cutlass-dsl[cu13]>=4.5.2)
+#5 0.403   Downloading nvidia_cutlass_dsl_libs_base-4.5.2-cp312-cp312-manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#5 0.408 Requirement already satisfied: numpy in /usr/local/lib/python3.12/dist-packages (from nvidia-cutlass-dsl-libs-base==4.5.2->nvidia-cutlass-dsl>=4.5.2->nvidia-cutlass-dsl[cu13]>=4.5.2) (2.2.6)
+#5 0.408 Requirement already satisfied: cuda-python>=12.8 in /usr/local/lib/python3.12/dist-packages (from nvidia-cutlass-dsl-libs-base==4.5.2->nvidia-cutlass-dsl>=4.5.2->nvidia-cutlass-dsl[cu13]>=4.5.2) (13.2.0)
+#5 0.582 Collecting nvidia-cutlass-dsl-libs-cu13==4.5.2 (from nvidia-cutlass-dsl[cu13]>=4.5.2)
+#5 0.587   Downloading nvidia_cutlass_dsl_libs_cu13-4.5.2-cp312-cp312-manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#5 0.592 Requirement already satisfied: cuda-bindings~=13.2.0 in /usr/local/lib/python3.12/dist-packages (from cuda-python>=12.8->nvidia-cutlass-dsl-libs-base==4.5.2->nvidia-cutlass-dsl>=4.5.2->nvidia-cutlass-dsl[cu13]>=4.5.2) (13.2.0)
+#5 0.592 Requirement already satisfied: cuda-pathfinder~=1.1 in /usr/local/lib/python3.12/dist-packages (from cuda-python>=12.8->nvidia-cutlass-dsl-libs-base==4.5.2->nvidia-cutlass-dsl>=4.5.2->nvidia-cutlass-dsl[cu13]>=4.5.2) (1.2.2)
+#5 0.605 Downloading nvidia_cutlass_dsl-4.5.2-py3-none-any.whl (10 kB)
+#5 0.609 Downloading nvidia_cutlass_dsl_libs_base-4.5.2-cp312-cp312-manylinux_2_28_aarch64.whl (75.6 MB)
+#5 1.008    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 75.6/75.6 MB 259.0 MB/s eta 0:00:00
+#5 1.012 Downloading nvidia_cutlass_dsl_libs_cu13-4.5.2-cp312-cp312-manylinux_2_28_aarch64.whl (79.1 MB)
+#5 1.295    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.1/79.1 MB 254.9 MB/s eta 0:00:00
+#5 1.876 Installing collected packages: nvidia-cutlass-dsl-libs-base, nvidia-cutlass-dsl-libs-cu13, nvidia-cutlass-dsl
+#5 1.876   Attempting uninstall: nvidia-cutlass-dsl-libs-base
+#5 1.895     Found existing installation: nvidia-cutlass-dsl-libs-base 4.4.2
+#5 1.904     Uninstalling nvidia-cutlass-dsl-libs-base-4.4.2:
+#5 2.183       Successfully uninstalled nvidia-cutlass-dsl-libs-base-4.4.2
+#5 4.026   Attempting uninstall: nvidia-cutlass-dsl
+#5 4.034     Found existing installation: nvidia-cutlass-dsl 4.4.2
+#5 4.035     Uninstalling nvidia-cutlass-dsl-4.4.2:
+#5 4.036       Successfully uninstalled nvidia-cutlass-dsl-4.4.2
+#5 4.041 Successfully installed nvidia-cutlass-dsl-4.5.2 nvidia-cutlass-dsl-libs-base-4.5.2 nvidia-cutlass-dsl-libs-cu13-4.5.2
+#5 4.041 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires flashinfer-cubin==0.6.12, which is not installed.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires tilelang==0.1.9, which is not installed.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires tokenspeed-mla==0.1.2, which is not installed.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires apache-tvm-ffi==0.1.9, but you have apache-tvm-ffi 0.1.10 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires fastsafetensors>=0.3.2, but you have fastsafetensors 0.2.2 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires flashinfer-python==0.6.12, but you have flashinfer-python 0.6.9rc1 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires llguidance<1.8.0,>=1.7.0; platform_machine == "x86_64" or platform_machine == "arm64" or platform_machine == "aarch64" or platform_machine == "ppc64le", but you have llguidance 1.3.0 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires mistral_common[image]>=1.11.3, but you have mistral-common 1.11.0 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires numba==0.65.0, but you have numba 0.61.2 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires nvidia-cudnn-frontend>=1.19.1, but you have nvidia-cudnn-frontend 1.18.0 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires outlines_core==0.2.14, but you have outlines-core 0.2.11 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires torch==2.11.0, but you have torch 2.12.0.dev20260408+cu130 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires torchaudio==2.11.0, but you have torchaudio 2.11.0.dev20260408+cu130 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires torchvision==0.26.0, but you have torchvision 0.27.0.dev20260408+cu130 which is incompatible.
+#5 4.041 vllm 0.1.dev1+ga919d635d requires xgrammar<1.0.0,>=0.2.0; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64" or platform_machine == "s390x" or platform_machine == "ppc64le", but you have xgrammar 0.1.33 which is incompatible.
+#5 4.041 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#5 DONE 4.2s
+
+#6 [3/6] RUN git clone "https://github.com/jethac/flashinfer.git" /opt/jethac-flashinfer  && cd /opt/jethac-flashinfer  && git checkout "e152cf4da4ab2a9d093b7d9d4b499198b0211c61"  && git submodule update --init 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+#6 0.150 Cloning into '/opt/jethac-flashinfer'...
+#6 4.674 Note: switching to 'e152cf4da4ab2a9d093b7d9d4b499198b0211c61'.
+#6 4.674
+#6 4.674 You are in 'detached HEAD' state. You can look around, make experimental
+#6 4.674 changes and commit them, and you can discard any commits you make in this
+#6 4.674 state without impacting any branches by switching back to a branch.
+#6 4.674
+#6 4.674 If you want to create a new branch to retain commits you create, you may
+#6 4.674 do so (now or later) by using -c with the switch command. Example:
+#6 4.674
+#6 4.674   git switch -c <new-branch-name>
+#6 4.674
+#6 4.674 Or undo this operation with:
+#6 4.674
+#6 4.674   git switch -
+#6 4.674
+#6 4.674 Turn off this advice by setting config variable advice.detachedHead to false
+#6 4.674
+#6 4.674 HEAD is now at e152cf4d Add FA2 NVFP4 KV scale stride plumbing
+#6 4.697 Submodule '3rdparty/cccl' (https://github.com/NVIDIA/cccl.git) registered for path '3rdparty/cccl'
+#6 4.697 Submodule '3rdparty/cutlass' (https://github.com/NVIDIA/cutlass.git) registered for path '3rdparty/cutlass'
+#6 4.698 Submodule '3rdparty/spdlog' (https://github.com/gabime/spdlog.git) registered for path '3rdparty/spdlog'
+#6 4.701 Cloning into '/opt/jethac-flashinfer/3rdparty/cccl'...
+#6 15.00 Cloning into '/opt/jethac-flashinfer/3rdparty/cutlass'...
+#6 18.85 Cloning into '/opt/jethac-flashinfer/3rdparty/spdlog'...
+#6 21.70 Submodule path '3rdparty/cccl': checked out '876867684f7fac130e0f5911236e0a92a970d4fd'
+#6 22.11 Submodule path '3rdparty/cutlass': checked out 'b46b16d003484063bca4ed365e44095c4c6ed633'
+#6 22.12 Submodule path '3rdparty/spdlog': checked out 'c3aed4b68373955e1cc94307683d44dca1515d2b'
+#6 DONE 22.3s
+
+#7 [4/6] RUN python3 -m pip uninstall -y flashinfer-python flashinfer-jit-cache flashinfer-cubin || true  && find /usr/local/lib/python3.12/dist-packages -maxdepth 1       ( -name 'flashinfer' -o -name 'flashinfer-*.dist-info'          -o -name 'flashinfer_python-*.dist-info'          -o -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info'          -o -name 'flashinfer_cubin' -o -name 'flashinfer_cubin-*.dist-info' )       -print -exec rm -rf {} +
+#7 0.272 Found existing installation: flashinfer-python 0.6.9rc1
+#7 0.311 Uninstalling flashinfer-python-0.6.9rc1:
+#7 0.701   Successfully uninstalled flashinfer-python-0.6.9rc1
+#7 0.766 WARNING: Skipping flashinfer-jit-cache as it is not installed.
+#7 0.792 WARNING: Skipping flashinfer-cubin as it is not installed.
+#7 0.792 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#7 DONE 0.8s
+
+#8 [5/6] RUN cd /opt/jethac-flashinfer  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#8 0.335 Using pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)
+#8 0.415 Obtaining file:///opt/jethac-flashinfer
+#8 0.415   Checking if build backend supports build_editable: started
+#8 0.416   Running command Checking if build backend supports build_editable
+#8 0.493   Created build metadata file with version 0.6.13
+#8 0.506   Checking if build backend supports build_editable: finished with status 'done'
+#8 0.506   Preparing editable metadata (pyproject.toml): started
+#8 0.507   Running command Preparing editable metadata (pyproject.toml)
+#8 0.609   [06/08/26 05:04:26] WARNING  toml section missing      _pyproject_reading.py:235
+#8 0.609                                PosixPath('pyproject.toml
+#8 0.609                                ') does not contain any
+#8 0.609                                of the tool sections:
+#8 0.609                                ['setuptools_scm',
+#8 0.609                                'vcs-versioning']
+#8 0.678   /usr/local/lib/python3.12/dist-packages/setuptools/dist.py:484: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#8 0.678   !!
+#8 0.678
+#8 0.678           ********************************************************************************
+#8 0.678           Pattern 'LICENSE*.txt' did not match any files.
+#8 0.678
+#8 0.678           This deprecation is overdue, please update your project and remove deprecated
+#8 0.678           calls to avoid build errors in the future.
+#8 0.678           ********************************************************************************
+#8 0.678
+#8 0.678   !!
+#8 0.678     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#8 0.682   Created build metadata file with version 0.6.13
+#8 0.682   running dist_info
+#8 0.690   creating /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info
+#8 0.690   writing /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/PKG-INFO
+#8 0.691   writing dependency_links to /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/dependency_links.txt
+#8 0.691   writing entry points to /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/entry_points.txt
+#8 0.691   writing requirements to /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/requires.txt
+#8 0.691   writing top-level names to /tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/top_level.txt
+#8 0.691   writing manifest file '/tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/SOURCES.txt'
+#8 0.835   /usr/local/lib/python3.12/dist-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#8 0.835     return get_active_overrides().subprocess_timeout
+#8 0.963   adding license file 'LICENSE'
+#8 0.989   writing manifest file '/tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python.egg-info/SOURCES.txt'
+#8 0.989   creating '/tmp/pip-modern-metadata-7uv3lfyp/flashinfer_python-0.6.13.dist-info'
+#8 1.017   Preparing editable metadata (pyproject.toml): finished with status 'done'
+#8 1.046   Running command Building editable for flashinfer-python (pyproject.toml)
+#8 1.046 Building wheels for collected packages: flashinfer-python
+#8 1.046   Building editable for flashinfer-python (pyproject.toml): started
+#8 1.161   [06/08/26 05:04:26] WARNING  toml section missing      _pyproject_reading.py:235
+#8 1.161                                PosixPath('pyproject.toml
+#8 1.161                                ') does not contain any
+#8 1.161                                of the tool sections:
+#8 1.161                                ['setuptools_scm',
+#8 1.161                                'vcs-versioning']
+#8 1.227   /usr/local/lib/python3.12/dist-packages/setuptools/dist.py:484: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#8 1.227   !!
+#8 1.227
+#8 1.227           ********************************************************************************
+#8 1.227           Pattern 'LICENSE*.txt' did not match any files.
+#8 1.227
+#8 1.227           This deprecation is overdue, please update your project and remove deprecated
+#8 1.227           calls to avoid build errors in the future.
+#8 1.227           ********************************************************************************
+#8 1.227
+#8 1.227   !!
+#8 1.227     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#8 1.232   Created build metadata file with version 0.6.13
+#8 1.232   running editable_wheel
+#8 1.243   creating /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info
+#8 1.243   writing /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/PKG-INFO
+#8 1.244   writing dependency_links to /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/dependency_links.txt
+#8 1.244   writing entry points to /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/entry_points.txt
+#8 1.244   writing requirements to /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/requires.txt
+#8 1.244   writing top-level names to /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/top_level.txt
+#8 1.244   writing manifest file '/tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/SOURCES.txt'
+#8 1.378   /usr/local/lib/python3.12/dist-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#8 1.378     return get_active_overrides().subprocess_timeout
+#8 1.499   adding license file 'LICENSE'
+#8 1.525   writing manifest file '/tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python.egg-info/SOURCES.txt'
+#8 1.525   creating '/tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python-0.6.13.dist-info'
+#8 1.530   creating /tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python-0.6.13.dist-info/WHEEL
+#8 1.542   running build_py
+#8 1.675   Editable install will be performed using a meta path finder.
+#8 1.675
+#8 1.675   Options like `package-data`, `include/exclude-package-data` or
+#8 1.675   `packages.find.exclude/include` may have no effect.
+#8 1.675
+#8 1.824   adding '__editable___flashinfer_python_0_6_13_finder.py'
+#8 1.824   adding '__editable__.flashinfer_python-0.6.13.pth'
+#8 1.824   creating '/tmp/pip-wheel-8cd1jknw/.tmp-vzc6frtt/flashinfer_python-0.6.13-0.editable-py3-none-any.whl' and adding '/tmp/tmpmc2r9k9hflashinfer_python-0.6.13-0.editable-py3-none-any.whl' to it
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/licenses/LICENSE'
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/METADATA'
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/WHEEL'
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/entry_points.txt'
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/top_level.txt'
+#8 1.824   adding 'flashinfer_python-0.6.13.dist-info/RECORD'
+#8 1.824   /usr/local/lib/python3.12/dist-packages/setuptools/command/editable_wheel.py:342: InformationOnly: Editable installation.
+#8 1.824   !!
+#8 1.824
+#8 1.824           ********************************************************************************
+#8 1.824           Please be careful with folders in your working directory with the same
+#8 1.824           name as your package as they may take precedence during imports.
+#8 1.824           ********************************************************************************
+#8 1.824
+#8 1.824   !!
+#8 1.825     with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+#8 1.848   Building editable for flashinfer-python (pyproject.toml): finished with status 'done'
+#8 1.848   Created wheel for flashinfer-python: filename=flashinfer_python-0.6.13-0.editable-py3-none-any.whl size=13099 sha256=a366817ca3bf294b75d2e6138c059410b53d4752310c34c718f83a53ca6d257d
+#8 1.848   Stored in directory: /tmp/pip-ephem-wheel-cache-_c_rcvr0/wheels/3f/04/c6/c320b36ea96f37e54e4c8a7a7a8e93fa3ceef624246c2a2969
+#8 1.850 Successfully built flashinfer-python
+#8 1.850 Installing collected packages: flashinfer-python
+#8 1.868   changing mode of /usr/local/bin/flashinfer to 755
+#8 1.875 Successfully installed flashinfer-python-0.6.13
+#8 1.875 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#8 DONE 2.0s
+
+#9 [6/6] RUN python3 - <<'PY'
+#9 2.316 flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+#9 2.316 vllm 0.1.dev1+ga919d635d /opt/jethac-vllm/vllm/__init__.py
+#9 2.316 flashinfer_source_hits ['/opt/jethac-flashinfer/tests/jit/test_attention_utils.py', '/opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh', '/opt/jethac-flashinfer/include/flashinfer/attention/persistent.cuh']
+#9 DONE 2.8s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 2.0s done
+#10 writing image sha256:eebee444c59bdf5b2e2919d5e59a9b039db23ab264cac0013005f88d57e3c56b done
+#10 naming to docker.io/library/jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv done
+#10 DONE 2.0s

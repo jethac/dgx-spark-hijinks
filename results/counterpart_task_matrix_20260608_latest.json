@@ -1,6 +1,6 @@
 {
   "audit": "results/counterpart_evidence_audit_20260608_latest.json",
-  "audit_missing_or_partial_count": 7,
+  "audit_missing_or_partial_count": 6,
   "duplicate_requirements": [],
   "missing_tasks_for_audit": [],
   "ok": true,
@@ -56,7 +56,8 @@
   ],
   "schema": "counterpart-task-matrix/v1",
   "task_already_claim_ready": [
-    "vllm_qwen36_nvfp4_dflash"
+    "vllm_qwen36_nvfp4_dflash",
+    "vllm_qwen_nvfp4_kv_capacity"
   ],
   "task_count": 8,
   "task_without_audit_requirement": [],

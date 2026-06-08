@@ -1,6 +1,6 @@
 # NVFP4 KV Porting Map
 
-Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness passes for small and Gemma 4 26B sliding-attention shapes; Gemma 4 26B global-attention `D=512` fails FlashInfer FA2 configuration; clean vLLM/SGLang serving and capacity proof pending.
+Status: FlashInfer FA2 KV stride/page patch and vLLM SM12x NVFP4 FA2 routing/deswizzle patch are pushed; standalone GB10 FlashInfer FA2 NVFP4 KV correctness passes for small and Gemma 4 26B sliding-attention shapes; vLLM now has a Qwen fp8-vs-NVFP4 KV serving capacity proof; SGLang has a capacity-only FP4 KV row with quality failure; Gemma 4 26B global-attention `D=512` still fails FlashInfer FA2 configuration.
 
 This map turns the SM120 reference repos into an upstream-shaped port plan. The working priority is:
 
@@ -118,12 +118,23 @@ Local verification:
   - non-NVFP4 case still selects `auto`
   - deswizzle flag helper sets `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`
 
+GB10 Qwen serving verification:
+
+- artifact summary: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`
+- image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv`
+- runtime ref: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@a919d635d + jethac/flashinfer@e152cf4d`
+- model: AEON Qwen3.6 35B-A3B NVFP4 weights, no DFlash
+- fp8 comparator: `6,364,935` KV tokens, `24.28x` max concurrency at 262k context, decode `43.001`, `42.512`, and `42.684 tok/s`
+- NVFP4-KV row: `11,146,226` KV tokens, `42.52x` max concurrency at 262k context, decode `43.014`, `42.615`, and `42.898 tok/s`
+- capacity result: `1.751x` fp8 KV pool/concurrency with decode-speed parity
+- server-log proof: `Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x with vLLM V-scale-factor deswizzle enabled.`
+- limitation: this proves Qwen/standard-attention NVFP4-KV integration and capacity; it does not fix Gemma 4's heterogeneous attention path or native FP4 weight/MoE MMA.
+
 Missing verification:
 
-- no vLLM wheel/container build has been run yet with `jethac/flashinfer@e152cf4d`
-- standalone FlashInfer NHD/HND FA2 NVFP4 KV correctness has passed with the same deswizzle flag; vLLM's full installed integration still needs a harness/server run
-- no GB10 server log has selected the FA2 NVFP4 KV path yet
-- no fp8-vs-NVFP4 KV correctness, capacity, quality, or throughput row exists yet
+- Gemma 4 serving still needs a source-overlay run on the clean FA2 image once the `D=512` FlashInfer FA2 blocker is understood or routed around.
+- The Qwen derived image proves packaging for this row, but the Gemma dev loop should now use source overlay plus standalone FlashInfer harnesses, not repeated image builds.
+- Native-target proof for the exact serving kernels remains separate from the server-log capacity proof.
 
 Family/architecture note:
 
@@ -148,7 +159,8 @@ Likely `jethac/vllm` work:
 - Already present upstream and retained: split NVFP4 data and scale views are passed through `nvfp4_kv_cache_split_views()` and `kv_cache_sf`.
 - Ported in `2c1405d`: runtime logging that proves FA2 native NVFP4 KV routing was selected.
 - Ported in `8916796`: vLLM enables FlashInfer's V-scale-factor deswizzle JIT macro for its swizzled V-scale writer.
-- Add serving proof scripts/docs for fp8-vs-NVFP4 KV pool tokens, maximum concurrency, quality, TTFT, and warmed decode.
+- Done for Qwen in `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`: fp8-vs-NVFP4 KV pool tokens, maximum concurrency, normal output content, TTFT, and warmed decode are recorded.
+- Still pending for Gemma: source-overlay baseline, FA2 NVFP4 KV selection, and either a `D=512` global-attention fix or a mixed-KV fallback.
 
 Likely `jethac/flashinfer` work:
 
@@ -260,10 +272,11 @@ Current upstream SGLang risk:
 
 1. Keep existing NVIDIA SGLang 26.05 Qwen BF16 and vLLM 26B/12B rows as baselines; do not merge them into NVFP4-KV claims.
 2. Port FlashInfer FA2 stride/page work into a clean `jethac/flashinfer` branch.
-3. Fix or route around the Gemma 4 26B global/full attention `D=512` FlashInfer FA2 invalid-configuration failure.
-4. Start vLLM with `--kv-cache-dtype nvfp4`; logs must prove FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback or trtllm-gen.
-5. Compare fp8 and NVFP4 on the same model, prompts, memory utilization, CUDA graph mode, and concurrency.
-6. Record KV pool tokens, maximum concurrency, memory telemetry, deterministic output, quality/PPL or retrieval sanity, TTFT, and warmed decode tok/s.
-7. Only after vLLM proof, port or validate the SGLang-specific pool/calibration path.
+3. Done for Qwen/vLLM: start with `--kv-cache-dtype nvfp4`, prove FlashInfer FA2 native NVFP4 KV in the server log, and compare fp8 versus NVFP4 on matched Qwen settings.
+4. Fix or route around the Gemma 4 26B global/full attention `D=512` FlashInfer FA2 invalid-configuration failure.
+5. Start Gemma through vLLM source overlay with `--kv-cache-dtype nvfp4`; logs must prove FlashInfer FA2 native NVFP4 KV, not fp8/bf16 fallback or trtllm-gen.
+6. Compare fp8 and NVFP4 on the same Gemma model, prompts, memory utilization, CUDA graph mode, and concurrency.
+7. Record KV pool tokens, maximum concurrency, memory telemetry, deterministic output, quality/PPL or retrieval sanity, TTFT, and warmed decode tok/s.
+8. Continue SGLang-specific pool/calibration work separately; the current SGLang row is capacity-only until quality passes.
 
 Passing harness-only evidence is not enough for a PR. A Spark NVFP4 KV PR needs clean wheel/container evidence and a serving proof packet.

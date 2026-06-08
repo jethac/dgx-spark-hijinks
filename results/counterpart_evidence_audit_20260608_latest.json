@@ -1,16 +1,15 @@
 {
   "all_claim_ready": false,
-  "claim_ready_count": 1,
+  "claim_ready_count": 2,
   "missing_or_partial": [
     "sglang_gemma_nvfp4_ordinary_kv",
     "sglang_clean_fp4_kv_after_row",
     "sglang_dflash_or_eagle_qwen",
-    "vllm_qwen_nvfp4_kv_capacity",
     "llamacpp_larger_qwen_gguf",
     "llamacpp_native_fp4_gguf",
     "llamacpp_live_loglikelihood"
   ],
-  "missing_or_partial_count": 7,
+  "missing_or_partial_count": 6,
   "repo_root": ".",
   "requirement_count": 8,
   "requirements": [
@@ -268,37 +267,60 @@
       "blocked_matches": [],
       "claim_groups": [
         {
-          "accepted_matches": [],
-          "ignored_matches": [],
-          "ok": false,
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json",
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_row_manifest.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+          ],
+          "ok": true,
           "patterns": [
             "results/vllm*qwen*nvfp4*kv*row_manifest.json",
             "results/*qwen*nvfp4*kv*vllm*row_manifest.json"
           ]
         },
         {
-          "accepted_matches": [],
-          "ignored_matches": [],
-          "ok": false,
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_openai_benchmark.json",
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_openai_benchmark.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_openai_benchmark.json"
+          ],
+          "ok": true,
           "patterns": [
             "results/vllm*qwen*nvfp4*kv*openai_benchmark.json",
             "results/*qwen*nvfp4*kv*vllm*openai_benchmark.json"
           ]
         },
         {
-          "accepted_matches": [],
-          "ignored_matches": [],
-          "ok": false,
+          "accepted_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json"
+          ],
+          "ignored_matches": [
+            "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+          ],
+          "ok": true,
           "patterns": [
             "results/vllm*qwen*fp8*kv*row_manifest.json",
+            "results/vllm*qwen*nvfp4*kv*fp8*row_manifest.json",
             "results/*qwen*fp8*kv*vllm*row_manifest.json"
           ]
         }
       ],
-      "claim_matches": [],
-      "claim_ready": false,
+      "claim_matches": [
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1442JST_fp8_flashinfer_row_manifest.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_nvfp4_kv_flashinfer_row_manifest.json"
+      ],
+      "claim_ready": true,
       "forbidden_claim_fragments": [],
-      "ignored_claim_matches": [],
+      "ignored_claim_matches": [
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_openai_benchmark.json",
+        "results/vllm_qwen_nvfp4_kv_capacity_20260608T1435JST_fp8_row_manifest.json"
+      ],
       "model_family": "qwen",
       "name": "vllm_qwen_nvfp4_kv_capacity",
       "partial_matches": [
@@ -313,7 +335,7 @@
         "results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md"
       ],
       "runtime": "vllm",
-      "status": "partial-evidence-only",
+      "status": "claim-evidence-present",
       "title": "vLLM Qwen fp8-vs-NVFP4 KV capacity row"
     },
     {

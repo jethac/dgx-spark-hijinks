@@ -387,6 +387,15 @@
   - FP4 KV: `5,519,481` KV tokens, auto-safe no-graph policy, `1.779x` fp8 capacity, and `NVFP4 KV cache calibrated 28 layers from 4096 eager prefill tokens`.
   - negative result: standardized FP4 raw `2+2` and compact benchmark content fail quality, so this is a capacity proof rather than a blessed serving or speed row.
 
+- Recorded the matched vLLM Qwen fp8-vs-NVFP4 KV capacity row.
+  - summary: `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`
+  - image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv`
+  - runtime ref: `ghcr.io/aeon-7/vllm-spark-omni-q36:v2 + jethac/vllm@a919d635d + jethac/flashinfer@e152cf4d`
+  - fp8 comparator: `6,364,935` KV tokens, `24.28x` max concurrency at 262k context, decode `43.001`, `42.512`, and `42.684 tok/s`.
+  - NVFP4 KV: `11,146,226` KV tokens, `42.52x` max concurrency at 262k context, decode `43.014`, `42.615`, and `42.898 tok/s`.
+  - backend evidence: `kv_cache_dtype='nvfp4'`, `Using nvfp4 data type to store kv cache`, `Using AttentionBackendEnum.FLASHINFER backend`, and `Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x with vLLM V-scale-factor deswizzle enabled.`
+  - interpretation: this is the first end-to-end vLLM NVFP4-KV serving capacity proof on the Qwen lane (`1.751x` fp8 KV pool/concurrency with normal content). It is not a decode-speed win, not native FP4 weight/MoE proof, and not a Gemma proof. Future Gemma work follows `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md` via source overlay and the standalone `D=512` FlashInfer diagnosis rather than more image-build iteration.
+
 - Set standing vLLM-lane direction toward Gemma 4 (and earlier Gemmas) on Spark with NVFP4 KV.
   - doc: `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`
   - framing: Gemma's serving blocker and the NVFP4-KV blocker are the same blocker — heterogeneous/dual head dims (local `D=256`, global `D=512`) plus alternating SWA force `TRITON_ATTN`, so the native FA2 `sm_121a` path never engages and the FA2 NVFP4-KV path fails Gemma global `D=512` at `prefill.cuh:3215` while passing local `D=256`.

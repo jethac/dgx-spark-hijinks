@@ -168,6 +168,7 @@ REQUIREMENTS = (
             ),
             (
                 "results/vllm*qwen*fp8*kv*row_manifest.json",
+                "results/vllm*qwen*nvfp4*kv*fp8*row_manifest.json",
                 "results/*qwen*fp8*kv*vllm*row_manifest.json",
             ),
         ),
