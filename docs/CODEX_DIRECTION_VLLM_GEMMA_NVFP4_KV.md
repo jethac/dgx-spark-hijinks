@@ -139,6 +139,15 @@ V-scale deswizzle contents, final hidden state, and logits before sampler prepro
 Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the source-overlay
 image/env/client packet. Its trace limit has been updated after the low-limit lesson.
 
+Tensor-trace implementation update (2026-06-09): `jethac/vllm@bfa123e1f`
+(`spark/hijinks-021-gemma3-tensor-trace`) adds inactive-by-default
+`VLLM_SPARK_GEMMA_TENSOR_TRACE=1` summaries in the Gemma 3 model path and FlashInfer
+attention path. It records last-token summaries for Q/K/V, FlashInfer attention input and
+output, Gemma layer residual/norm/MLP boundaries, final hidden state, and logits top-20.
+Use `tasks/vllm_gemma3_tensor_trace_packet_20260609.md` and
+`scripts/vllm_gemma_tensor_trace_compare.py` for the next fp8-vs-NVFP4-KV rerun. The
+diagnostic goal is first-divergence localization, not a benchmark row.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate
