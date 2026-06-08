@@ -66,6 +66,18 @@ and scale bytes written during cache fill match those read during radix reuse. I
 match, build a same-prompt no-prefix reference for the paged-prefix contribution and
 inspect FlashInfer FA2 paged-prefix numerics / merge weighting.
 
+Write/read trace result
+(`results/sglang_qwen_fp4kv_write_read_trace_20260608T222204JST_summary.md`):
+`jethac/sglang@f76f80484` adds `SGLANG_FP4_KV_TRACE_WRITE_READ=1`. The default row still
+fails (`OpenAI **` vs native `ark`/`838`) with `cached_tokens=55`; radix-off still passes
+(`**`/`334`) with `cached_tokens=0`. For layer 0 cached pages `4113..4116`, sampled K
+data, V data, K scale, and V scale all match write input bytes = stored bytes = read bytes.
+This clears the simple "scale buffer not copied / stale / wrong page" hypothesis for the
+sampled pages. The next hook is now numerical: compare the cached FP4 paged-prefix
+contribution against an equivalent no-prefix/full-ragged FP4 reference for the same
+55-token prefix and query, then inspect FlashInfer FA2 paged-prefix dequant / LSE / merge
+weighting if they diverge.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

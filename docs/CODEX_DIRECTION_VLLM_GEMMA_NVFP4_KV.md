@@ -121,6 +121,10 @@ the Gemma 3 27B fp8/NVFP4 first-token packet with `VLLM_SPARK_KV_TRACE_FILE` ena
 layers 0/1, then compare slot mapping, block-table pages, NVFP4 split-view offsets, sampled
 data/scale bytes, and `swa_skip` against the first-token quality split.
 
+Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the exact source
+overlay/image/env/client packet for the next GPU slot. Use it before any benchmark or row
+manifest traffic so trace limits are spent on the first-token probes.
+
 ## The Gemma problem, precisely (three intertwined blockers)
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.

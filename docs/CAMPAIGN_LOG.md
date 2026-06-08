@@ -879,6 +879,27 @@
     31B is the next clean dense `D=512` rung after Gemma 3 is green; Gemma 4 26B-A4B then
     adds MoE; Gemma 4 12B remains the final fused multimodal/KV rung.
 
+- Added and ran SGLang FP4-KV write/read pairing trace.
+  - fork commit: `jethac/sglang@f76f80484`
+  - env gate: `SGLANG_FP4_KV_TRACE_WRITE_READ=1`
+  - artifact: `results/sglang_qwen_fp4kv_write_read_trace_20260608T222204JST_summary.md`
+  - rows:
+    `results/sglang_qwen_fp4kv_write_read_trace_20260608T222204JST_default.json`,
+    `results/sglang_qwen_fp4kv_write_read_trace_20260608T222204JST_radixoff.json`
+  - result: default FP4 still fails (`OpenAI **` vs native `ark` / `838`) with
+    `cached_tokens=55`; radix-off still passes (`**` vs `**` / `334`) with
+    `cached_tokens=0`.
+  - localization: for sampled layer-0 cached pages `4113..4116`, K data, V data, K scale,
+    and V scale all match write input bytes = stored bytes = read bytes.
+  - interpretation: sampled cached-prefix bytes/scales are structurally correct; next
+    build a cached-paged-vs-recomputed-ragged numerical comparator for the same 55-token
+    prefix contribution.
+
+- Recorded the vLLM Gemma 3 NVFP4 trace packet.
+  - task: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md`
+  - scope: next GPU-slot command packet for `jethac/vllm@e2a8197a9`, using
+    `VLLM_SPARK_KV_TRACE_FILE` and first-token probes before benchmark/manifest traffic.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
