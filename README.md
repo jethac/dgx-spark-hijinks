@@ -18,6 +18,7 @@ Next vLLM proof lane: AEON Gemma and AEON Qwen3.6 NVFP4+DFlash are now locally r
 - Full solution plan: [docs/DGX_SPARK_SOLUTIONS.md](docs/DGX_SPARK_SOLUTIONS.md)
 - Solution status: [docs/SOLUTIONS_STATUS.md](docs/SOLUTIONS_STATUS.md)
 - Compatibility board: [docs/COMPATIBILITY_BOARD.md](docs/COMPATIBILITY_BOARD.md)
+- Gemma compatibility plan (3 → 3n → 4 ladder): [docs/GEMMA_COMPATIBILITY_PLAN.md](docs/GEMMA_COMPATIBILITY_PLAN.md)
 - Wheel/container matrix: [docs/WHEEL_CONTAINER_MATRIX.md](docs/WHEEL_CONTAINER_MATRIX.md)
 - Initial benchmark report: [docs/BENCHMARKING_REPORT.md](docs/BENCHMARKING_REPORT.md)
 - Problems encountered: [docs/GEMMA4_ON_DGX_SPARK.md](docs/GEMMA4_ON_DGX_SPARK.md)
