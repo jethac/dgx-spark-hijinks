@@ -1,0 +1,4 @@
+ARCH=120f
+BUILD_DIR=/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-120f-20260608T165912JST
+CONFIGURE_RC=1
+BUILD_RC=SKIPPED

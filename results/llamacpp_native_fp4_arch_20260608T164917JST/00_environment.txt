@@ -1,0 +1,15 @@
+host=thinkstationpgx-00b4
+2026-06-08T16:49:17+09:00
+Linux thinkstationpgx-00b4 6.17.0-1021-nvidia #21-Ubuntu SMP PREEMPT_DYNAMIC Wed May 27 19:14:05 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux
+NVIDIA GB10, 12.1, [N/A]
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2025 NVIDIA Corporation
+Built on Wed_Aug_20_01:57:39_PM_PDT_2025
+Cuda compilation tools, release 13.0, V13.0.88
+Build cuda_13.0.r13.0/compiler.36424714_0
+cmake version 3.28.3
+GNU Make 4.3
+artifact_dir=/home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST
+source_dir=/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67
+pin=19bba67c1f4db723c60a0d421aa0788bf4ddc699
+branch=spark/native-fp4-sm121-20260608

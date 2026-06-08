@@ -1,6 +1,7 @@
 # GGUF llama.cpp Status
 
-Status: practical serving works; paper-comparable lm-eval accuracy is blocked.
+Status: practical serving works; paper-comparable lm-eval accuracy is blocked; native
+NVFP4 build/emission is proven but runtime dispatch/correctness is untested.
 
 Tracked by:
 
@@ -153,6 +154,27 @@ Interpretation: the native endpoint top-N path is not sufficient for lm-eval-sty
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 
 For Qwen speed, the next serving proof is separate from the accuracy adapter: run a Qwen3/Qwen3.6-class instruct GGUF with the same `b9536` CUDA build and row recorder. The existing Qwen2.5 1.5B Q4_K_M row proves practical small-Qwen serving, but the counterpart matrix still requires a larger Qwen3/Qwen3.6 GGUF row. Native FP4 GGUF remains blocked until an actual NVFP4/MXFP4 GGUF artifact is available and the runtime dispatch evidence proves that path, not just a Q4_K/Q4_0 model on a build compiled with Blackwell FP4 support.
+
+## 2026-06-08 Native FP4 Arch Probe
+
+Artifact: `results/llamacpp_native_fp4_arch_20260608T164917JST_summary.md`.
+
+This row set up `jethac/llama.cpp` as `third_party/llama.cpp` and pinned branch
+`spark/native-fp4-sm121-20260608` at
+`19bba67c1f4db723c60a0d421aa0788bf4ddc699`.
+
+Build matrix result on the GB10 CUDA 13.0 host:
+
+| requested arch | result | emitted target | evidence |
+|---|---|---|---|
+| `121a` | configure/build ok | `sm_121a` | `2592` `mxf4nvf4.block_scale.scale_vec::4X` PTX hits |
+| `121` | configure/build ok | rewritten to `sm_121a` | same block-scale PTX evidence |
+| `120f` | configure failed | none | CMake rejected the arch value before CUDA compilation |
+
+Interpretation: llama.cpp can build and emit native block-scale FP4 PTX for `sm_121a`
+under this toolkit. This is not runtime proof. No NVFP4 GGUF has yet been served through
+this build, and no output/correctness or PP/TG speed row should cite this artifact as more
+than build/emission evidence.
 
 ## Practical Serving Note
 

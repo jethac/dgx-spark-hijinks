@@ -11,3 +11,7 @@
 	path = third_party/vllm-flash-attention
 	url = git@github.com:jethac/flash-attention.git
 	branch = spark/hijinks-021-fa2-sm121a
+[submodule "third_party/llama.cpp"]
+	path = third_party/llama.cpp
+	url = git@github.com:jethac/llama.cpp.git
+	branch = spark/native-fp4-sm121-20260608

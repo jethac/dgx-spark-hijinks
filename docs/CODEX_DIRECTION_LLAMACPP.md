@@ -5,7 +5,8 @@
 > 26B) and already blessed for serving. Two things are still red and both are real
 > campaign deliverables: **GGUF lm-eval accuracy** (blocked since day one) and **native
 > sm_121a FP4 dispatch** (now merged upstream as `GGML_TYPE_NVFP4` + Blackwell tensor-core
-> MMQ, but unverified on our sm_121 box). This lane owns the campaign's *accuracy oracle*
+> MMQ). The first build/emission checkpoint is now green on our sm_121 box; runtime
+> dispatch and model correctness remain unproven. This lane owns the campaign's *accuracy oracle*
 > and — surprisingly — may be the simplest path to a first proof of native FP4 tensor-core
 > use on this silicon in *any* runtime (one source-built binary, no container surgery).
 
@@ -51,12 +52,12 @@ Read `docs/GGUF_LLAMA_CPP_STATUS.md` (Fix Options + Next Proof) and
    and read back each continuation token's own logprob. top-N sampling can't provide that
    for unlikely continuations. The fix needs **supplied-token / prompt-token (echo)
    logprobs**, not bigger top-N.
-2. **Native sm_121a FP4 dispatch is unverified — but the code now exists upstream.** See
-   "Upstream NVFP4 reality" below. NVFP4 is a real merged GGUF type with native Blackwell
-   MMQ. `BLACKWELL_NATIVE_FP4=1`/`ARCHS=1210` mean our `b9536` build *compiled* that path —
-   but every model we ran is Q4_0/Q4_K_M (integer k-quants), so it has **never been
-   exercised** on our box, and upstream has open sm_120/121 compile + correctness issues.
-   A k-quant model on an FP4-capable build proves nothing about native FP4 dispatch.
+2. **Native sm_121a FP4 build/emission is proven; runtime dispatch is not.** See
+   "Upstream NVFP4 reality" and "2026-06-08 native FP4 arch checkpoint" below. NVFP4 is a
+   real merged GGUF type with native Blackwell MMQ. Our source-built `jethac/llama.cpp`
+   pin emits block-scale `mxf4nvf4` PTX for `sm_121a`, but every model we have actually
+   served is still Q4_0/Q4_K_M (integer k-quants). A k-quant model on an FP4-capable build
+   proves nothing about native FP4 runtime dispatch or correctness.
 3. **Counterpart coverage gap.** Only Qwen2.5 1.5B exists; the speed/counterpart matrix
    still wants a larger Qwen3/Qwen3.6-class GGUF row on the same `b9536` build.
 
@@ -79,6 +80,28 @@ llama.cpp moved faster than this lane's earlier notes assumed. As of spring 2026
   NVFP4 correctness risk (#22042). Refs: PR #17906, PR #22196, issues #18250 (SM120 native
   NVFP4 MoE — twin of vllm #31085), #19662, discussion #22042.
 
+## 2026-06-08 native FP4 arch checkpoint
+
+Artifact: `results/llamacpp_native_fp4_arch_20260608T164917JST_summary.md`.
+
+This checkpoint did the fork/submodule setup and answered the compile/emission part of
+the native FP4 question for CUDA 13.0 on GB10:
+
+- `jethac/llama.cpp@spark/native-fp4-sm121-20260608` is pinned at
+  `19bba67c1f4db723c60a0d421aa0788bf4ddc699`.
+- `CMAKE_CUDA_ARCHITECTURES=121a` configures and builds, emits `sm_121a` cubins, and
+  `cuobjdump --dump-ptx` finds `2592` `mxf4nvf4.block_scale.scale_vec::4X` hits.
+- `CMAKE_CUDA_ARCHITECTURES=121` also configures and builds, but this llama.cpp pin
+  rewrites it to `121a`; it is not an independent non-`a` result.
+- `CMAKE_CUDA_ARCHITECTURES=120f` fails at CMake configure-time under this host toolchain,
+  before CUDA compilation.
+- The installed `b9536` serving baseline contains `sm_121a` cubins, but its PTX dump does
+  not retain block-scale strings; keep it as a serving baseline, not a native-FP4 proof.
+
+Claim boundary: this proves native FP4 code can be built and emitted for `sm_121a`. It does
+not prove an NVFP4 GGUF selects that path at runtime, produces correct output, or improves
+prefill/decode.
+
 ## Objectives, in order
 **A. Unblock GGUF lm-eval accuracy (keystone — and a campaign-wide tool).**
 Get **exact per-continuation-token logprobs from supplied tokens**, not top-N:
@@ -98,23 +121,17 @@ Deliverable: `scripts/gguf_logprobs_probe.py` (or the native probe) passes, plus
 lm-eval task row — separating GGUF accuracy from throughput as the campaign requires.
 
 **B. Determine whether native NVFP4 actually dispatches *correctly* on sm_121.**
-The code exists (above); the question is whether it fires and is right on GB10. The build
-*is* the experiment — `jethac/llama.cpp` builds in minutes on the box, so compile it
-yourself with different arch flags and observe:
-   1. **Resolve the arch gating by building it** (the keystone): read where
-      `BLACKWELL_NATIVE_FP4` / `BLACKWELL_MMA_AVAILABLE` are defined and what arch guards the
-      native FP4 MMQ path — then *settle it empirically*. Compile `jethac/llama.cpp` on GB10
-      with `CMAKE_CUDA_ARCHITECTURES=121a`, then `121`, then `120f`, and record which
-      compile (reproducing or dodging #19662's block-scale-MMA failure) and what `cuobjdump`
-      shows for the FP4 MMA. That directly answers the #3170-vs-"`120f` covers sm_121"
-      contradiction for our toolkit (CUDA 13.0) — no guessing from source. Same arch wall as
-      the kernel lanes; cross-ref the "SM120 ride-along" section of
-      `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`.
-   2. **Confirm what actually emits**: `cuobjdump` your own build (and the installed
-      `b9536`) for the `mxf4nvf4.block_scale` MMA, and trace whether an FP4 model dispatches
-      it vs falls back. Record as fact, not inference.
-   3. **The cheap experiment** (queue, don't block the read on it): convert/grab one NVFP4
-      GGUF (e.g. Qwen3.6 NVFP4 via modelopt) and run it on `b9536`. Capture: (a) does the
+The build/emission gate is cleared for `121a`; the remaining question is whether an actual
+NVFP4 GGUF fires that path and is right on GB10:
+   1. **Runtime dispatch gate**: run one NVFP4 GGUF on
+      `jethac/llama.cpp@19bba67c1f4db723c60a0d421aa0788bf4ddc699` and capture logs plus
+      profiler/cuobjdump-backed evidence that the native FP4 MMQ path is selected rather
+      than a fallback.
+   2. **Correctness gate**: compare output/logits or task accuracy against a BF16/Q8
+      reference before using any speed row as evidence.
+   3. **Speed profile gate**: convert/grab one NVFP4
+      GGUF (e.g. Qwen3.6 NVFP4 via modelopt) and run it on the pinned
+      `jethac/llama.cpp` build. Capture: (a) does the
       native FP4 MMA dispatch on sm_121, (b) is output correct vs a bf16/Q8 reference, (c)
       prefill (PP) speed vs Q4_K_M. That single row is our first proof-or-disproof of
       native FP4 tensor-core use on this silicon in any runtime.
@@ -125,15 +142,12 @@ yourself with different arch flags and observe:
       practical-runtime parallel to the NVFP4-KV work; a matched KV-dtype capacity row lets
       us compare the practical path against vLLM/SGLang.
 
-## When to set up jethac/llama.cpp
-We have two independent reasons to own the source and a build: the native-NVFP4-on-sm_121
-investigation (Objective B) and a possible loglikelihood endpoint (Objective A.3). Do not
-let that obscure the accuracy stop point: first run the newer-pin echo-span probe below.
-Create the fork/submodule immediately after that probe fails, or when explicitly switching
-to the native-FP4 lane.
+## jethac/llama.cpp source setup
+The fork and submodule now exist because the native-FP4 arch build needed an exact pinned
+source tree:
 
-1. Fork `ggml-org/llama.cpp` → `jethac/llama.cpp`; add as submodule `third_party/llama.cpp`.
-2. Create the issue-named worktree branch off a **recent upstream master** ref (or the
+1. Fork `ggml-org/llama.cpp` → `jethac/llama.cpp`; submodule `third_party/llama.cpp`.
+2. Issue-named worktree branch off a **recent upstream master** ref (or the
    relevant native-FP4 PR, e.g. #22196) — pin + record the exact commit for reproducibility
    (master NVFP4 is in flux, so pin a chosen commit, don't float HEAD). Build it yourself
    on GB10 for the native-FP4 lane. Record what commit `b9536` was built from too, kept
@@ -186,6 +200,10 @@ thinking-disabled finding visible (it's the difference between empty and useful 
   a native-FP4-on-sm_121 issue.
 
 ## First concrete step
+**Native FP4 next stop point:** run an actual NVFP4 GGUF on the pinned `jethac/llama.cpp`
+build and compare it to a BF16/Q8 reference. The arch-build row is complete; do not spend
+more cycles on compile-flag archaeology until runtime dispatch/correctness is tested.
+
 **Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
 endpoint, run **one newer-pin echo-span probe** with `scripts/gguf_logprobs_probe.py`:

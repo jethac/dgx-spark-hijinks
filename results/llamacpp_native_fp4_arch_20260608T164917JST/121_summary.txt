@@ -1,0 +1,14 @@
+ARCH=121
+BUILD_DIR=/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-121-20260608T165509JST
+CONFIGURE_RC=0
+BUILD_RC=0
+/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-121-20260608T165509JST/bin/libggml-cuda.so.0.13.1
+/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-121-20260608T165509JST/bin/llama-bench
+/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-121-20260608T165509JST/bin/llama-server
+CUOBJ_TARGET=/home/jethac/src/llama.cpp-native-fp4-sm121-19bba67/build-native-fp4-121-20260608T165509JST/bin/libggml-cuda.so.0.13.1
+       138 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/121_cuobjdump_list_elf.txt
+   9540330 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/121_cuobjdump_ptx.txt
+  12446074 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/121_cuobjdump_sass.txt
+      5184 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/121_cuobjdump_ptx_block_scale_hits.txt
+         0 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/121_cuobjdump_sass_block_scale_hits.txt
+  21991726 total

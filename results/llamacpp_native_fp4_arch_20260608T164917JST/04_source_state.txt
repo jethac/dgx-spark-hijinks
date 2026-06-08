@@ -1,0 +1,2 @@
+19bba67c1f4db723c60a0d421aa0788bf4ddc699
+19bba67c1 (HEAD, origin/spark/native-fp4-sm121-20260608, origin/master, origin/HEAD, spark/native-fp4-sm121-20260608) HIP: add gfx1152 and gfx1153 to RDNA3.5 (#24129)

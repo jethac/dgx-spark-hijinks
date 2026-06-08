@@ -1,0 +1,10 @@
+BASE_SOURCE=/home/jethac/src/llama.cpp-b9536
+308f61c31f083251ce8150f10b9ef97679b500b5
+308f61c31 (HEAD, tag: b9536, origin/master, origin/HEAD, master) opencl: improve get_rows, cpy, concat and q6_k flat gemv (#24160)
+BASE_CUOBJ_TARGET=/home/jethac/src/llama.cpp-b9536/build/bin/libggml-cuda.so.0.13.1
+       138 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/b9536_cuobjdump_list_elf.txt
+      1104 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/b9536_cuobjdump_ptx.txt
+  12444832 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/b9536_cuobjdump_sass.txt
+         0 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/b9536_cuobjdump_ptx_block_scale_hits.txt
+         0 /home/jethac/spark_tmp/llamacpp_native_fp4_arch_20260608T164917JST/b9536_cuobjdump_sass_block_scale_hits.txt
+  12446074 total

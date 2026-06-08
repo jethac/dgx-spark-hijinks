@@ -1,0 +1,200 @@
+4:arch = sm_121a
+5:code version = [9,0]
+13:arch = sm_121a
+14:code version = [1,8]
+19:	code for sm_121a
+20:	.target	sm_121a
+558:arch = sm_121a
+559:code version = [9,0]
+567:arch = sm_121a
+568:code version = [1,8]
+573:	code for sm_121a
+574:	.target	sm_121a
+1000:arch = sm_121a
+1001:code version = [9,0]
+1009:arch = sm_121a
+1010:code version = [1,8]
+1015:	code for sm_121a
+1016:	.target	sm_121a
+5205:arch = sm_121a
+5206:code version = [9,0]
+5214:arch = sm_121a
+5215:code version = [1,8]
+5220:	code for sm_121a
+5221:	.target	sm_121a
+5295:arch = sm_121a
+5296:code version = [9,0]
+5304:arch = sm_121a
+5305:code version = [1,8]
+5310:	code for sm_121a
+5311:	.target	sm_121a
+5737:arch = sm_121a
+5738:code version = [9,0]
+5746:arch = sm_121a
+5747:code version = [1,8]
+5752:	code for sm_121a
+5753:	.target	sm_121a
+5755:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort33DeviceSegmentedSortFallbackKernelILNS0_9SortOrderE1ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvPKT1_PS9_NS1_20device_double_bufferIS9_EEPKT2_PSF_NSD_ISF_EET3_T4_
+28032:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort30DeviceSegmentedSortKernelSmallILNS0_9SortOrderE1ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvjjjPKjSA_PKT1_PSB_PKT2_PSF_T3_T4_
+31157:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort30DeviceSegmentedSortKernelLargeILNS0_9SortOrderE1ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvPKjPKT1_PSB_NS1_20device_double_bufferISB_EEPKT2_PSH_NSF_ISH_EET3_T4_
+51610:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort33DeviceSegmentedSortFallbackKernelILNS0_9SortOrderE0ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvPKT1_PS9_NS1_20device_double_bufferIS9_EEPKT2_PSF_NSD_ISF_EET3_T4_
+73839:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort30DeviceSegmentedSortKernelSmallILNS0_9SortOrderE0ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvjjjPKjSA_PKT1_PSB_PKT2_PSF_T3_T4_
+76964:		Function : _ZN3cub18CUB_300001_SM_12106detail14segmented_sort30DeviceSegmentedSortKernelLargeILNS0_9SortOrderE0ENS2_10policy_hubIfiE9Policy860EfiPiS8_iEEvPKjPKT1_PSB_NS1_20device_double_bufferISB_EEPKT2_PSH_NSF_ISH_EET3_T4_
+97369:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceSegmentedRadixSortKernelINS1_5radix10policy_hubIfiiE10Policy1000ELb1ELNS0_9SortOrderE1EfiPiS9_iNS1_21identity_decomposer_tEEEvPKT2_PSB_PKT3_PSF_T4_T5_iiiT7_
+102702:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceSegmentedRadixSortKernelINS1_5radix10policy_hubIfiiE10Policy1000ELb0ELNS0_9SortOrderE1EfiPiS9_iNS1_21identity_decomposer_tEEEvPKT2_PSB_PKT3_PSF_T4_T5_iiiT7_
+116723:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort29DeviceRadixSortOnesweepKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE1EfijiiNS1_21identity_decomposer_tEEEvPT5_SB_PT3_PKSC_PT1_PKSG_PT2_PKSK_T4_iiT6_
+123672:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceRadixSortHistogramKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE1EfjNS1_21identity_decomposer_tEEEvPT2_PKT1_SA_iiT3_
+125213:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort31DeviceRadixSortSingleTileKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE1EfijNS1_21identity_decomposer_tEEEvPKT1_PSA_PKT2_PSE_T3_iiT4_
+127394:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceSegmentedRadixSortKernelINS1_5radix10policy_hubIfiiE10Policy1000ELb1ELNS0_9SortOrderE0EfiPiS9_iNS1_21identity_decomposer_tEEEvPKT2_PSB_PKT3_PSF_T4_T5_iiiT7_
+132695:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceSegmentedRadixSortKernelINS1_5radix10policy_hubIfiiE10Policy1000ELb0ELNS0_9SortOrderE0EfiPiS9_iNS1_21identity_decomposer_tEEEvPKT2_PSB_PKT3_PSF_T4_T5_iiiT7_
+146588:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort29DeviceRadixSortOnesweepKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE0EfijiiNS1_21identity_decomposer_tEEEvPT5_SB_PT3_PKSC_PT1_PKSG_PT2_PKSK_T4_iiT6_
+153649:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort33DeviceRadixSortExclusiveSumKernelINS1_5radix10policy_hubIfijE10Policy1000EjEEvPT0_
+153878:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort30DeviceRadixSortHistogramKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE0EfjNS1_21identity_decomposer_tEEEvPT2_PKT1_SA_iiT3_
+155419:		Function : _ZN3cub18CUB_300001_SM_12106detail10radix_sort31DeviceRadixSortSingleTileKernelINS1_5radix10policy_hubIfijE10Policy1000ELNS0_9SortOrderE0EfijNS1_21identity_decomposer_tEEEvPKT1_PSA_PKT2_PSE_T3_iiT4_
+157600:		Function : _ZN3cub18CUB_300001_SM_12106detail19three_way_partition29DeviceThreeWayPartitionKernelINS2_10policy_hubIjiE10Policy1000EN6thrust24THRUST_300001_SM_1210_NS17counting_iteratorIjNS8_11use_defaultESA_SA_EEPjSC_NS8_16reverse_iteratorISC_EESC_NS0_13ScanTileStateImLb1EEENS0_21DispatchSegmentedSortILNS0_9SortOrderE1EfiiPiSJ_NS1_14segmented_sort10policy_hubIfiEEE22LargeSegmentsSelectorTENSN_22SmallSegmentsSelectorTEiNS2_19streaming_context_tIlEEEEvT0_T1_T2_T3_T4_T5_T6_T7_T8_iT9_
+165941:		Function : _ZN3cub18CUB_300001_SM_12106detail19three_way_partition29DeviceThreeWayPartitionKernelINS2_10policy_hubIjiE10Policy1000EN6thrust24THRUST_300001_SM_1210_NS17counting_iteratorIjNS8_11use_defaultESA_SA_EEPjSC_NS8_16reverse_iteratorISC_EESC_NS0_13ScanTileStateImLb1EEENS0_21DispatchSegmentedSortILNS0_9SortOrderE0EfiiPiSJ_NS1_14segmented_sort10policy_hubIfiEEE22LargeSegmentsSelectorTENSN_22SmallSegmentsSelectorTEiNS2_19streaming_context_tIlEEEEvT0_T1_T2_T3_T4_T5_T6_T7_T8_iT9_
+174282:		Function : _ZN3cub18CUB_300001_SM_12106detail19three_way_partition33DeviceThreeWayPartitionInitKernelINS0_13ScanTileStateImLb1EEEPjEEvT_iT0_
+174367:		Function : _ZN3cub18CUB_300001_SM_12106detail11EmptyKernelIvEEvv
+174955:arch = sm_121a
+174956:code version = [9,0]
+174964:arch = sm_121a
+174965:code version = [1,8]
+174970:	code for sm_121a
+174971:	.target	sm_121a
+222701:arch = sm_121a
+222702:code version = [9,0]
+222710:arch = sm_121a
+222711:code version = [1,8]
+222716:	code for sm_121a
+222717:	.target	sm_121a
+222876:arch = sm_121a
+222877:code version = [9,0]
+222885:arch = sm_121a
+222886:code version = [1,8]
+222891:	code for sm_121a
+222892:	.target	sm_121a
+228756:arch = sm_121a
+228757:code version = [9,0]
+228765:arch = sm_121a
+228766:code version = [1,8]
+228771:	code for sm_121a
+228772:	.target	sm_121a
+229422:arch = sm_121a
+229423:code version = [9,0]
+229431:arch = sm_121a
+229432:code version = [1,8]
+229437:	code for sm_121a
+229438:	.target	sm_121a
+231213:arch = sm_121a
+231214:code version = [9,0]
+231222:arch = sm_121a
+231223:code version = [1,8]
+231228:	code for sm_121a
+231229:	.target	sm_121a
+233532:arch = sm_121a
+233533:code version = [9,0]
+233541:arch = sm_121a
+233542:code version = [1,8]
+233547:	code for sm_121a
+233548:	.target	sm_121a
+237099:arch = sm_121a
+237100:code version = [9,0]
+237108:arch = sm_121a
+237109:code version = [1,8]
+237114:	code for sm_121a
+237115:	.target	sm_121a
+267638:arch = sm_121a
+267639:code version = [9,0]
+267647:arch = sm_121a
+267648:code version = [1,8]
+267653:	code for sm_121a
+267654:	.target	sm_121a
+268192:arch = sm_121a
+268193:code version = [9,0]
+268201:arch = sm_121a
+268202:code version = [1,8]
+268207:	code for sm_121a
+268208:	.target	sm_121a
+303300:arch = sm_121a
+303301:code version = [9,0]
+303309:arch = sm_121a
+303310:code version = [1,8]
+303315:	code for sm_121a
+303316:	.target	sm_121a
+307981:arch = sm_121a
+307982:code version = [9,0]
+307990:arch = sm_121a
+307991:code version = [1,8]
+307996:	code for sm_121a
+307997:	.target	sm_121a
+307999:		Function : _ZN3cub18CUB_300001_SM_12106detail4scan16DeviceScanKernelINS2_10policy_hubIfffyN4cuda3std3__44plusIvEEE10Policy1000EPKfPfNS0_13ScanTileStateIfLb1EEES9_NS0_8NullTypeEyfLb0ESH_EEvT0_T1_T2_iT3_T4_T5_
+310660:		Function : _ZN3cub18CUB_300001_SM_12106detail4scan20DeviceScanInitKernelINS0_13ScanTileStateIfLb1EEEEEvT_i
+310729:		Function : _ZN3cub18CUB_300001_SM_12106detail11EmptyKernelIvEEvv
+311675:arch = sm_121a
+311676:code version = [9,0]
+311684:arch = sm_121a
+311685:code version = [1,8]
+311690:	code for sm_121a
+311691:	.target	sm_121a
+313178:arch = sm_121a
+313179:code version = [9,0]
+313187:arch = sm_121a
+313188:code version = [1,8]
+313193:	code for sm_121a
+313194:	.target	sm_121a
+313332:arch = sm_121a
+313333:code version = [9,0]
+313341:arch = sm_121a
+313342:code version = [1,8]
+313347:	code for sm_121a
+313348:	.target	sm_121a
+313353:arch = sm_121a
+313354:code version = [9,0]
+313362:arch = sm_121a
+313363:code version = [1,8]
+313368:	code for sm_121a
+313369:	.target	sm_121a
+343753:arch = sm_121a
+343754:code version = [9,0]
+343762:arch = sm_121a
+343763:code version = [1,8]
+343768:	code for sm_121a
+343769:	.target	sm_121a
+347555:        /*3310*/                   HMMA.16816.F32 R80, R80, R84, RZ ;                                          /* 0x000000545050723c */
+347563:        /*3350*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347577:        /*33c0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347591:        /*3430*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347605:        /*34a0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347619:        /*3510*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347633:        /*3580*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347647:        /*35f0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347661:        /*3660*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347675:        /*36d0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347689:        /*3740*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347699:        /*3790*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347713:        /*3800*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347723:        /*3850*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347737:        /*38c0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347751:        /*3930*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347761:        /*3980*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347775:        /*39f0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347785:        /*3a40*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347799:        /*3ab0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347809:        /*3b00*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347823:        /*3b70*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347833:        /*3bc0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347847:        /*3c30*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347857:        /*3c80*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347871:        /*3cf0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347881:        /*3d40*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347895:        /*3db0*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347905:        /*3e00*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347919:        /*3e70*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347929:        /*3ec0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347943:        /*3f30*/                   HMMA.16816.F32 R80, R76, R86, R80 ;                                         /* 0x000000564c50723c */
+347957:        /*3fa0*/                   HMMA.16816.F32 R80, R72, R84, R80 ;                                         /* 0x000000544850723c */
+347975:        /*4030*/                   HMMA.16816.F32 R76, R76, R86, R80 ;                                         /* 0x000000564c4c723c */
+347995:        /*40d0*/                   HMMA.16816.F32 R72, R72, R84, R76 ;                                         /* 0x000000544848723c */
+348005:        /*4120*/                   HMMA.16816.F32 R72, R80, R86, R72 ;                                         /* 0x000000565048723c */
+348159:        /*45f0*/                   HMMA.16816.F16 R30, R88, R34, R30 ;                                         /* 0x00000022581e723c */
+348185:        /*46c0*/                   HMMA.16816.F16 R28, R88, R34, R28 ;                                         /* 0x00000022581c723c */

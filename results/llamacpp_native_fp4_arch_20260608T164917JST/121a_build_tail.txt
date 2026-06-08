@@ -1,0 +1,120 @@
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/chat-peg-parser.cpp.o
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/arg.cpp.o
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/imatrix-loader.cpp.o
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/download.cpp.o
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/fit.cpp.o
+[ 89%] Building CXX object common/CMakeFiles/llama-common.dir/chat.cpp.o
+[ 91%] Building CXX object common/CMakeFiles/llama-common.dir/common.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/json-partial.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/debug.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/llguidance.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/hf-cache.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/json-schema-to-grammar.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/log.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/ngram-cache.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/ngram-map.cpp.o
+[ 92%] Building CXX object common/CMakeFiles/llama-common.dir/ngram-mod.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/peg-parser.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/preset.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/regex-partial.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/reasoning-budget.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/sampling.cpp.o
+[ 94%] Building CXX object common/CMakeFiles/llama-common.dir/speculative.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/unicode.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/lexer.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/parser.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/runtime.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/value.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/string.cpp.o
+[ 96%] Building CXX object common/CMakeFiles/llama-common.dir/jinja/caps.cpp.o
+[ 98%] Linking CXX shared library ../bin/libllama-common.so
+[ 98%] Built target llama-common
+[ 98%] Building CXX object tools/llama-bench/CMakeFiles/llama-bench-impl.dir/llama-bench.cpp.o
+[ 98%] Linking CXX shared library ../../bin/libllama-bench-impl.so
+[ 98%] Built target llama-bench-impl
+[ 98%] Building CXX object tools/llama-bench/CMakeFiles/llama-bench.dir/main.cpp.o
+[100%] Linking CXX executable ../../bin/llama-bench
+[100%] Built target llama-bench
+[  0%] Built target llama-common-base
+[  1%] Building CXX object tools/ui/CMakeFiles/llama-ui-embed.dir/embed.cpp.o
+[  1%] Built target cpp-httplib
+[  3%] Built target ggml-base
+[  6%] Built target ggml-cpu
+[ 40%] Built target ggml-cuda
+[ 41%] Built target ggml
+[ 41%] Linking CXX executable llama-ui-embed
+[ 78%] Built target llama
+[ 78%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/mtmd-audio.cpp.o
+[ 78%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/mtmd-helper.cpp.o
+[ 78%] Built target llama-ui-embed
+[ 78%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/clip.cpp.o
+[ 78%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/cogvlm.cpp.o
+[ 78%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/dotsocr.cpp.o
+[ 80%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/gemma4a.cpp.o
+[ 80%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/gemma4uv.cpp.o
+[ 80%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/glm4v.cpp.o
+[ 80%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/mtmd.cpp.o
+[ 81%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/conformer.cpp.o
+[ 81%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/mtmd-image.cpp.o
+[ 81%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/exaone4_5.cpp.o
+[ 81%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/gemma4ua.cpp.o
+[ 81%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/gemma4v.cpp.o
+[ 81%] Provisioning UI assets
+-- UI: npm not found, skipping npm build
+-- UI: downloading from b9556: https://huggingface.co/buckets/ggml-org/llama-ui/resolve/b9556
+[ 90%] Built target llama-common
+[ 90%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/granite-speech.cpp.o
+-- UI: download bundle.css from b9556 failed: "HTTP response code said error"
+-- UI: downloading from latest: https://huggingface.co/buckets/ggml-org/llama-ui/resolve/latest
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/granite4-vision.cpp.o
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/hunyuanvl.cpp.o
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/internvl.cpp.o
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/kimivl.cpp.o
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/kimik25.cpp.o
+-- UI: downloaded bundle.css
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/nemotron-v2-vl.cpp.o
+[ 92%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/llama4.cpp.o
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/llava.cpp.o
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/minicpmv.cpp.o
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/paddleocr.cpp.o
+-- UI: downloaded bundle.js
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/pixtral.cpp.o
+-- UI: downloaded index.html
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/qwen2vl.cpp.o
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/qwen3vl.cpp.o
+[ 93%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/mimovl.cpp.o
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/qwen3a.cpp.o
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/step3vl.cpp.o
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/siglip.cpp.o
+-- UI: downloaded loading.html
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/whisper-enc.cpp.o
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/deepseekocr.cpp.o
+[ 95%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/deepseekocr2.cpp.o
+-- UI: verifying checksums
+-- UI: all checksums verified
+-- UI: HF download succeeded, stamp updated (latest)
+[ 96%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/mobilenetv5.cpp.o
+[ 96%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/youtuvl.cpp.o
+[ 96%] Building CXX object tools/mtmd/CMakeFiles/mtmd.dir/models/yasa2.cpp.o
+[ 96%] Built target llama-ui-assets
+[ 96%] Building CXX object tools/ui/CMakeFiles/llama-ui.dir/ui.cpp.o
+[ 96%] Linking CXX shared library ../../bin/libmtmd.so
+[ 96%] Built target mtmd
+[ 96%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-chat.cpp.o
+[ 96%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-queue.cpp.o
+[ 96%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-task.cpp.o
+[ 98%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-common.cpp.o
+[ 98%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-context.cpp.o
+[ 98%] Building CXX object tools/server/CMakeFiles/server-context.dir/server-tools.cpp.o
+[ 98%] Linking CXX static library libllama-ui.a
+[ 98%] Built target llama-ui
+[ 98%] Linking CXX static library libserver-context.a
+[ 98%] Built target server-context
+[ 98%] Building CXX object tools/server/CMakeFiles/llama-server-impl.dir/server-models.cpp.o
+[100%] Building CXX object tools/server/CMakeFiles/llama-server-impl.dir/server-http.cpp.o
+[100%] Building CXX object tools/server/CMakeFiles/llama-server-impl.dir/server.cpp.o
+[100%] Linking CXX shared library ../../bin/libllama-server-impl.so
+[100%] Built target llama-server-impl
+[100%] Building CXX object tools/server/CMakeFiles/llama-server.dir/main.cpp.o
+[100%] Linking CXX executable ../../bin/llama-server
+[100%] Built target llama-server

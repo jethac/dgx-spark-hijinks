@@ -508,6 +508,22 @@
     smallest Gemma 4 server rung, but not a pure architecture-only rung. Next vLLM live
     rung remains Gemma 3 27B; next SGLang live work remains Qwen FP4-KV quality.
 
+- Completed the first llama.cpp native FP4 arch-build checkpoint in parallel with the
+  Gemma audit.
+  - submodule/fork: `third_party/llama.cpp` -> `jethac/llama.cpp`, branch
+    `spark/native-fp4-sm121-20260608`
+  - pinned commit: `19bba67c1f4db723c60a0d421aa0788bf4ddc699`
+  - artifact: `results/llamacpp_native_fp4_arch_20260608T164917JST_summary.md`
+  - result: `CMAKE_CUDA_ARCHITECTURES=121a` configures/builds and emits `sm_121a` cubins
+    with `2592` `mxf4nvf4.block_scale.scale_vec::4X` PTX hits.
+  - result: `CMAKE_CUDA_ARCHITECTURES=121` is accepted but rewritten by this llama.cpp pin
+    to `121a`, so it is not an independent non-`a` build.
+  - result: `CMAKE_CUDA_ARCHITECTURES=120f` fails at CMake configure-time under this CUDA
+    13.0/CMake 3.28.3 toolchain.
+  - interpretation: native block-scale FP4 code emission on `sm_121a` is proven for the
+    pinned source build; runtime dispatch, correctness, and speed on an actual NVFP4 GGUF
+    remain the next gate.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
