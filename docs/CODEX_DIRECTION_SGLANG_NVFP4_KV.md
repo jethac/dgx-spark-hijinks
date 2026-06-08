@@ -208,6 +208,12 @@ FlashInfer guard — don't edit `prefill.cuh` trait math here; that lands once, 
 Coordinate attention geometry with the vLLM lane
 (`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`).
 
+Rung -1 config audit update (2026-06-08): `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md` shows
+Gemma 3 27B is the SWA-only server rung: uniform `D=128`, 52 sliding layers, 10 full layers,
+and no `D=512`. Gemma 4 12B/31B/26B-A4B all carry full-attention `D=512`, with 26B-A4B
+also adding MoE. Once Qwen FP4-KV quality is blessed, SGLang Gemma should mirror the vLLM
+ladder by starting with Gemma 3 27B, not Gemma 4.
+
 ## Evidence gates (a row isn't a claim without these)
 - Source-overlay/build evidence with a valid `sm_121a`/`compute_121a` FlashInfer target.
 - `cuobjdump`/JIT-cache proof the running FP4 KV decode kernel matches the claimed path.

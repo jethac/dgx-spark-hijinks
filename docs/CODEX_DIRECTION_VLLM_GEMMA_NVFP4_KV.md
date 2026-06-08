@@ -56,6 +56,12 @@ Read `docs/NVFP4_KV_PORTING_MAP.md` (esp. "Smallest GB10 Proof Sequence") and
 Gemma's blocker and the NVFP4-KV blocker are the same blocker: heterogeneous/dual head
 dimensions (local layers `D=256`, global layers `D=512`) plus alternating SWA.
 
+Rung -1 config audit update (2026-06-08): this statement applies to the audited Gemma 4
+server models, not Gemma 3. `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md` shows Gemma 3 27B is
+uniform `D=128` with SWA/full layer alternation and no `D=512`; Gemma 4 12B, 31B, and
+26B-A4B all carry full-attention `D=512`. Therefore the next vLLM rung is Gemma 3 27B to
+prove SWA/hybrid KV separately before returning to Gemma 4 mixed-KV.
+
 1. **Model-arch support.** Gemma 4 needs `Gemma4UnifiedForConditionalGeneration`;
    released vLLM 0.22.1 can't load it. So far it only ran via source `da1daf40` +
    Transformers-main surgery (7.7 tok/s, forced Triton).
@@ -138,10 +144,11 @@ per-`AttentionSpec` dtype. The only shared surface is the FlashInfer guard itsel
 coordinate so neither lane edits `prefill.cuh`'s trait math blindly — any real D=512 kernel
 work lands once, in FlashInfer, not twice.
 
-**C. Decouple SWA handling from the dual-head-dim fix using an earlier Gemma.**
-Earlier Gemmas (2/3) use SWA but uniform head dims, so they exercise the
-hybrid-local/global KV plumbing *without* the `D=512` blocker. Use one as the first
-end-to-end NVFP4-KV-on-Gemma proof; it de-risks the SWA path independently.
+**C. Decouple SWA handling from the dual-head-dim fix using Gemma 3 27B.**
+The Rung -1 audit confirms `google/gemma-3-27b-it` has SWA/full layer alternation with
+uniform `D=128` and no `global_head_dim=512`. Use it as the first end-to-end
+NVFP4-KV-on-Gemma proof; it de-risks the SWA path independently. Do not call it a `D=256`
+test.
 
 **D. Prove NVFP4-KV-on-Gemma in a running server (overlay, no image build).**
 The Qwen equivalent is DONE (see proven list) and is your template: the
@@ -232,13 +239,15 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
   issues so we don't collide on `flashinfer.py` / the SM12x backend selector.
 
 ## First concrete step (no image builds)
-Two things, both on the existing image / standalone harness:
-  1. Prototype the Gemma mixed-KV fallback as **NVFP4 local + bf16 global** first: keep
-     FA2 NVFP4 KV on local `D=256` layers and route global `D=512` layers to model dtype,
-     with logs proving the per-layer split. Do not start with fp8 global until the
-     per-layer dtype-string/plumbing risk is solved. In parallel, treat a true FlashInfer
-     `D=512` FA2 NVFP4 kernel as a separate kernel-design task, not a dispatch-table
-     tweak.
-  2. Bring up Gemma 4 12B via **source overlay** on the clean FA2 image and capture the
-     server log + backend audit (which attention/MoE backend actually got selected).
+Bring up **Gemma 3 27B Rung 1** through source overlay on the proven Qwen NVFP4-KV stack,
+with matched fp8-vs-NVFP4 KV rows. The server log/artifact must include running-model
+geometry for every layer: `head_dim`, query heads, KV heads, full/sliding layer map,
+window, selected backend/KV dtype, KV page layout, and runtime bytes/token. Gate green only
+when both local/sliding and full/global Gemma 3 layers select the intended FA2 NVFP4-KV path,
+capacity improves versus fp8 at matched settings, and output quality passes a real
+comparator.
+
+After Gemma 3 is green, return to Gemma 4. The audit shows Gemma 4 12B already carries
+`D=512`, so it is a smallest-Gemma-4 compatibility rung, not a pure model-architecture rung.
+Prototype mixed KV as **NVFP4 local + bf16 global** before any full `D=512` NVFP4 claim.
 Defer every image build until Objective E.

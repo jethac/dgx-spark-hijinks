@@ -23,11 +23,11 @@ is the live status snapshot, and the per-lane mechanics live in
 ## The Gemma lineup (what each model brings)
 | family | type | new complication | lane |
 |---|---|---|---|
-| **Gemma 3** (1/4/12/27B) | dense, SWA 5:1, **uniform head dim 256**, mature | SWA / hybrid local-global KV | vLLM/SGLang |
+| **Gemma 3** (1/4/12/27B) | dense, SWA 5:1, **uniform head dim 128 on audited 27B config**, mature | SWA / hybrid local-global KV | vLLM/SGLang |
 | **Gemma 3n** (E2B/E4B) | dense mobile, PLE, audio, MatFormer/elastic, KV-share | mobile memory machinery | llama.cpp/LiteRT |
 | **Gemma 4 E2B/E4B** | dense mobile, PLE, audio (supersedes 3n) | (inherits 3n machinery) | llama.cpp/LiteRT |
-| **Gemma 4 12B** | dense, **encoder-free**, newest | Gemma-4 arch support | vLLM/SGLang |
-| **Gemma 4 31B** | dense | scale + D=512 *if present* | vLLM/SGLang |
+| **Gemma 4 12B** | dense, unified, vision+audio config, newest | smallest Gemma-4 server rung; already has D=512 full attention | vLLM/SGLang |
+| **Gemma 4 31B** | dense | dense D=512 isolation at scale | vLLM/SGLang |
 | **Gemma 4 26B-A4B** | **MoE** (~4B active) | MoE weights + expert routing | vLLM/SGLang |
 
 ## Rung −1 — Config audit (first pass; re-confirmed every rung)
@@ -45,22 +45,32 @@ It decides whether the top of the ladder is clean:
 - **If 31B also has the dual head dim**, then 31B isolates D=512 (dense) and 26B-A4B adds
   only MoE on top — clean. Preferred outcome; confirm it.
 
+**2026-06-08 result:** done in `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md` with machine-readable
+artifact `results/gemma_rung_minus1_config_audit_20260608.json`. The audit corrected two
+planning assumptions:
+
+- Gemma 3 27B normalizes to uniform `head_dim=128`, not `256`; it still cleanly isolates
+  SWA/hybrid local-global KV because it has no `global_head_dim=512`.
+- `D=512` appears in Gemma 4 12B, 31B, and 26B-A4B. Gemma 4 31B is dense and therefore
+  still isolates dense `D=512` before 26B-A4B adds MoE. Gemma 4 12B is the smallest Gemma
+  4 server rung, but it is not architecture-only: it already brings heterogeneous
+  `D=256`/`D=512` attention and vision/audio config blocks.
+
 ## Main ladder — vLLM NVFP4-KV capacity
 - **Rung 0 — Qwen (standard attention).** ✅ vLLM done (1.751× fp8 KV, clean,
   `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`). SGLang in progress
   (long-sequence quality bug; see its direction doc). Foundation for everything above.
 - **Rung 1 — Gemma 3 27B.** *New: SWA / hybrid local-global mixed-KV.* Uniform head dim
-  256, dense, mature ecosystem support, no D=512, no Gemma-4-newness risk — isolates the
+  128, dense, mature ecosystem support, no D=512, no Gemma-4-newness risk — isolates the
   mixed-KV plumbing alone. **Also a real shippable capacity win** (first big Gemma-family
   NVFP4-KV row), not throwaway de-risk. vLLM mechanism: per-layer `kv_cache_dtype_skip_
   layers` / per-`AttentionSpec` dtype. SGLang mechanism: SWA subpool delegation.
-- **Rung 2 — Gemma 4 12B (encoder-free).** *New: Gemma-4 architecture support.* SWA already
-  proven on rung 1; encoder-free + dense = fewest remaining confounds. Main risk is
-  ecosystem maturity (newest variant) → Objective A (does it load cleanly) is the work,
-  not the KV path.
-- **Rung 3 — Gemma 4 31B (dense).** *New: scale + D=512 if present (per audit).* The
-  capacity hero — biggest dense KV, no MoE confound. If it carries the dual head dim, this
-  is where the D=512 mixed-KV dodge gets proven on a dense model.
+- **Rung 2 — Gemma 4 12B.** *New: smallest Gemma-4 server model, but audit shows it also
+  carries D=512 full attention and vision/audio config blocks.* Treat this as a compatibility
+  rung with explicit scope, not a pure architecture-isolation rung.
+- **Rung 3 — Gemma 4 31B (dense).** *New: dense D=512 at scale.* The capacity hero —
+  biggest dense KV, no MoE confound. This is where the D=512 mixed-KV dodge gets proven on
+  a dense model if the smaller 12B compatibility rung does not already clear it.
 - **Rung 4 — Gemma 4 26B-A4B (MoE).** *New: MoE — NVFP4-MoE-weights + expert routing — on
   an attention/KV base already solved.* Most existing evidence (AEON image, ~48 tok/s
   NVFP4-weights), tackled **last** among server models because it stacks the most.
@@ -90,7 +100,5 @@ is PLE / audio / elastic, validated on the practical/GGUF rails.
 - Explicit scope labels for what's untested on that rung.
 
 ## First moves
-1. **Rung −1 config audit** of Gemma 3 27B + all Gemma 4 variants (settles the D=512
-   location and rung 3-vs-4 cleanliness).
-2. **Rung 1: Gemma 3 27B on vLLM** — the SWA-isolation rung and first big Gemma capacity
+1. **Rung 1: Gemma 3 27B on vLLM** — the SWA-isolation rung and first big Gemma capacity
    win. Climb only after it's green.

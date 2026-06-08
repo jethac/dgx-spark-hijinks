@@ -494,6 +494,20 @@
   - discipline: prove-before-climb; assign each model to its natural runtime rather than filling all 15 cells; **measure attention geometry (per-layer head_dim, heads, KV heads, SWA layer map, KV bytes/token) from the running model every rung** — config is a hint, the running model is ground truth, and the mixed-KV layer classification must come from measured per-layer head_dim, not assumption.
   - provenance caveat: Gemma 4 lineup/architecture is operator-provided (post-cutoff) and must be confirmed by the rung −1 audit + per-rung measurement before building on it.
 
+- Completed the Gemma Rung −1 config audit.
+  - script: `scripts/gemma_rung_minus1_config_audit.py`
+  - artifact: `results/gemma_rung_minus1_config_audit_20260608.json`
+  - report: `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md`
+  - result: `google/gemma-3-27b-it` normalizes to uniform `D=128` (not the earlier
+    plan's `D=256`), with 52 sliding layers and 10 full layers; no `global_head_dim=512`.
+  - result: `D=512` appears in all audited Gemma 4 server configs. 12B has 40 sliding
+    `D=256` + 8 full `D=512` layers and vision/audio config blocks; 31B has 50 sliding
+    `D=256` + 10 full `D=512` layers and is dense; 26B-A4B has 25 sliding `D=256` + 5
+    full `D=512` layers plus MoE (`128` experts, top-`8`).
+  - decision: 31B still isolates dense `D=512` before 26B-A4B adds MoE. Gemma 4 12B is the
+    smallest Gemma 4 server rung, but not a pure architecture-only rung. Next vLLM live
+    rung remains Gemma 3 27B; next SGLang live work remains Qwen FP4-KV quality.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
