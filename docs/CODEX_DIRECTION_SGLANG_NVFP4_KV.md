@@ -189,6 +189,17 @@ rows therefore produced no request JSON and are not quality evidence. Next run m
 matching ARM64 CUDA 13.x wheel with SM121-compatible `common_ops`. Do not downgrade
 SGLang, Torch, FlashInfer, or the container to make the guard pass.
 
+Kernel source-build follow-up
+(`results/sglang_kernel_source_build_20260609Tprobe3jst.md`): `jethac/sglang@d96869237`
+adds default-on `sgl-kernel` CMake switches so the GB10 probe can build only the
+precise-math `sm100` package path instead of compiling SM90/FA3/FlashMLA too. The narrow
+source build against NVIDIA 26.05 Torch `2.12.0a0+5aff3928d8.nv26.05` and CUDA `13.2`
+succeeds, emits `compute_121a` ptxas warnings but no hard failure, installs
+`sglang-kernel 0.4.3`, and imports
+`/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so` on GB10. The
+ABI blocker is therefore cleared. The next matrix run should prepare a source-stack image
+once and run all four rows from it; rebuilding `sglang-kernel` inside each row is too slow.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend

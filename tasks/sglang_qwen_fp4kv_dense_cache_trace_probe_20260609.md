@@ -40,6 +40,17 @@ Run the cheap no-code matrix before adding new instrumentation:
   finding a matching ARM64 CUDA 13.x wheel with SM121-compatible `common_ops`. Do not
   downgrade SGLang, Torch, FlashInfer, or the container to make the guard pass.
 
+2026-06-09 source-build unblock:
+
+- Probe: `scripts/probe_sglang_kernel_source_build.sh`
+- Artifact: `results/sglang_kernel_source_build_20260609Tprobe3jst.md`
+- Outcome: `jethac/sglang@d96869237` adds selectable `sgl-kernel` build targets, and a
+  narrow source build against the NVIDIA 26.05 Torch/CUDA stack succeeds. The installed
+  `sglang-kernel 0.4.3` imports
+  `/usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so` on GB10.
+- Interpretation: the `sglang-kernel` ABI blocker is cleared. Rerun the matrix from a
+  prepared source-stack image so the four rows do not rebuild `sglang-kernel` independently.
+
 Decision rule for this matrix:
 
 - Full-paged cached-prefix passes while default fails -> bug is split ragged/paged merge
