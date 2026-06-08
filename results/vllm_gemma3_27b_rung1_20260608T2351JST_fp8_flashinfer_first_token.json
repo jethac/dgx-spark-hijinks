@@ -1,0 +1,1273 @@
+{
+  "backend": "vllm",
+  "cases": [
+    {
+      "case": "exact_spark_ok",
+      "elapsed_s": 0.8858761410228908,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          115,
+          112,
+          97,
+          114,
+          107
+        ],
+        "logprob": 0.0,
+        "script_summary": {
+          "chars": 5,
+          "control_chars": 0,
+          "non_ascii_chars": 0,
+          "replacement_chars": 0,
+          "script_counts": {
+            "LATIN": 5
+          }
+        },
+        "token": "spark",
+        "top_logprobs": [
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              114,
+              107
+            ],
+            "logprob": 0.0,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "spark"
+          },
+          {
+            "bytes": [
+              32,
+              115,
+              112,
+              97,
+              114,
+              107
+            ],
+            "logprob": -25.75,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5,
+                "SPACE": 1
+              }
+            },
+            "token": " spark"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              114
+            ],
+            "logprob": -26.5,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "spar"
+          },
+          {
+            "bytes": [
+              115,
+              112
+            ],
+            "logprob": -30.25,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "sp"
+          },
+          {
+            "bytes": [
+              83,
+              112,
+              97,
+              114,
+              107
+            ],
+            "logprob": -31.25,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "Spark"
+          },
+          {
+            "bytes": [
+              111,
+              107
+            ],
+            "logprob": -34.0,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "ok"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              110
+            ],
+            "logprob": -36.5,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "span"
+          },
+          {
+            "bytes": [
+              42,
+              42
+            ],
+            "logprob": -36.5,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "ASTERISK": 2
+              }
+            },
+            "token": "**"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              114,
+              115,
+              101
+            ],
+            "logprob": -36.75,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6
+              }
+            },
+            "token": "sparse"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97
+            ],
+            "logprob": -37.0,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3
+              }
+            },
+            "token": "spa"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              119,
+              110
+            ],
+            "logprob": -37.0,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "spawn"
+          },
+          {
+            "bytes": [
+              112,
+              97,
+              114,
+              107
+            ],
+            "logprob": -37.0,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "park"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              111,
+              116
+            ],
+            "logprob": -37.0,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "spot"
+          },
+          {
+            "bytes": [
+              60
+            ],
+            "logprob": -37.125,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LESS-THAN": 1
+              }
+            },
+            "token": "<"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              117,
+              114
+            ],
+            "logprob": -37.125,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "spur"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              121
+            ],
+            "logprob": -37.875,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3
+              }
+            },
+            "token": "spy"
+          },
+          {
+            "bytes": [
+              96,
+              96,
+              96
+            ],
+            "logprob": -38.125,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GRAVE": 3
+              }
+            },
+            "token": "```"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              97,
+              109
+            ],
+            "logprob": -38.5,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "spam"
+          },
+          {
+            "bytes": [
+              111,
+              107,
+              97,
+              121
+            ],
+            "logprob": -38.625,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "okay"
+          },
+          {
+            "bytes": [
+              115,
+              112,
+              114,
+              105,
+              110,
+              103
+            ],
+            "logprob": -39.0,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6
+              }
+            },
+            "token": "spring"
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 38,
+        "top_logprobs": 20
+      },
+      "text": "spark",
+      "text_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": null,
+        "total_tokens": 19
+      }
+    },
+    {
+      "case": "simple_math",
+      "elapsed_s": 0.28111506102140993,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          52
+        ],
+        "logprob": 0.0,
+        "script_summary": {
+          "chars": 1,
+          "control_chars": 0,
+          "non_ascii_chars": 0,
+          "replacement_chars": 0,
+          "script_counts": {
+            "DIGIT": 1
+          }
+        },
+        "token": "4",
+        "top_logprobs": [
+          {
+            "bytes": [
+              52
+            ],
+            "logprob": 0.0,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DIGIT": 1
+              }
+            },
+            "token": "4"
+          },
+          {
+            "bytes": [
+              32
+            ],
+            "logprob": -28.25,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "SPACE": 1
+              }
+            },
+            "token": " "
+          },
+          {
+            "bytes": [
+              226,
+              129,
+              180
+            ],
+            "logprob": -28.875,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "SUPERSCRIPT": 1
+              }
+            },
+            "token": "\u2074"
+          },
+          {
+            "bytes": [
+              219,
+              180
+            ],
+            "logprob": -29.75,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "EXTENDED": 1
+              }
+            },
+            "token": "\u06f4"
+          },
+          {
+            "bytes": [
+              239,
+              188,
+              148
+            ],
+            "logprob": -29.875,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "FULLWIDTH": 1
+              }
+            },
+            "token": "\uff14"
+          },
+          {
+            "bytes": [
+              217,
+              164
+            ],
+            "logprob": -31.0,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "ARABIC-INDIC": 1
+              }
+            },
+            "token": "\u0664"
+          },
+          {
+            "bytes": [
+              50
+            ],
+            "logprob": -31.75,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DIGIT": 1
+              }
+            },
+            "token": "2"
+          },
+          {
+            "bytes": [
+              224,
+              165,
+              170
+            ],
+            "logprob": -32.0,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DEVANAGARI": 1
+              }
+            },
+            "token": "\u096a"
+          },
+          {
+            "bytes": [
+              54
+            ],
+            "logprob": -33.5,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DIGIT": 1
+              }
+            },
+            "token": "6"
+          },
+          {
+            "bytes": [
+              70,
+              111,
+              117,
+              114
+            ],
+            "logprob": -33.5,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "Four"
+          },
+          {
+            "bytes": [],
+            "logprob": -33.875,
+            "script_summary": {
+              "chars": 0,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {}
+            },
+            "token": ""
+          },
+          {
+            "bytes": [
+              48
+            ],
+            "logprob": -34.125,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DIGIT": 1
+              }
+            },
+            "token": "0"
+          },
+          {
+            "bytes": [
+              53
+            ],
+            "logprob": -34.25,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "DIGIT": 1
+              }
+            },
+            "token": "5"
+          },
+          {
+            "bytes": [
+              58
+            ],
+            "logprob": -34.25,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "COLON": 1
+              }
+            },
+            "token": ":"
+          },
+          {
+            "bytes": [
+              40
+            ],
+            "logprob": -34.625,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LEFT": 1
+              }
+            },
+            "token": "("
+          },
+          {
+            "bytes": [
+              60,
+              101,
+              110,
+              100,
+              95,
+              111,
+              102,
+              95,
+              116,
+              117,
+              114,
+              110,
+              62
+            ],
+            "logprob": -34.75,
+            "script_summary": {
+              "chars": 13,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "GREATER-THAN": 1,
+                "LATIN": 9,
+                "LESS-THAN": 1,
+                "LOW": 2
+              }
+            },
+            "token": "<end_of_turn>"
+          },
+          {
+            "bytes": [
+              226,
+              130,
+              132
+            ],
+            "logprob": -34.875,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "SUBSCRIPT": 1
+              }
+            },
+            "token": "\u2084"
+          },
+          {
+            "bytes": [
+              42,
+              42
+            ],
+            "logprob": -35.0,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "ASTERISK": 2
+              }
+            },
+            "token": "**"
+          },
+          {
+            "bytes": [
+              224,
+              167,
+              170
+            ],
+            "logprob": -35.125,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 1,
+              "replacement_chars": 0,
+              "script_counts": {
+                "BENGALI": 1
+              }
+            },
+            "token": "\u09ea"
+          },
+          {
+            "bytes": [
+              32,
+              32
+            ],
+            "logprob": -35.125,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "SPACE": 2
+              }
+            },
+            "token": "  "
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 43,
+        "top_logprobs": 20
+      },
+      "text": "4",
+      "text_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "DIGIT": 1
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 23,
+        "prompt_tokens_details": null,
+        "total_tokens": 24
+      }
+    },
+    {
+      "case": "short_decode",
+      "elapsed_s": 0.29059527500066906,
+      "finish_reason": "length",
+      "first_logprob": {
+        "available": true,
+        "bytes": [
+          65
+        ],
+        "logprob": -5.483612312673358e-06,
+        "script_summary": {
+          "chars": 1,
+          "control_chars": 0,
+          "non_ascii_chars": 0,
+          "replacement_chars": 0,
+          "script_counts": {
+            "LATIN": 1
+          }
+        },
+        "token": "A",
+        "top_logprobs": [
+          {
+            "bytes": [
+              65
+            ],
+            "logprob": -5.483612312673358e-06,
+            "script_summary": {
+              "chars": 1,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 1
+              }
+            },
+            "token": "A"
+          },
+          {
+            "bytes": [
+              70,
+              97,
+              115,
+              116
+            ],
+            "logprob": -12.250005722045898,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "Fast"
+          },
+          {
+            "bytes": [
+              76,
+              111,
+              99,
+              97,
+              108
+            ],
+            "logprob": -14.250005722045898,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "Local"
+          },
+          {
+            "bytes": [
+              70,
+              111,
+              114
+            ],
+            "logprob": -16.2500057220459,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3
+              }
+            },
+            "token": "For"
+          },
+          {
+            "bytes": [
+              82,
+              117,
+              110,
+              110,
+              105,
+              110,
+              103
+            ],
+            "logprob": -22.0000057220459,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 7
+              }
+            },
+            "token": "Running"
+          },
+          {
+            "bytes": [
+              76,
+              111,
+              99
+            ],
+            "logprob": -22.0000057220459,
+            "script_summary": {
+              "chars": 3,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 3
+              }
+            },
+            "token": "Loc"
+          },
+          {
+            "bytes": [
+              70,
+              97,
+              115,
+              116,
+              101,
+              114
+            ],
+            "logprob": -23.2500057220459,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6
+              }
+            },
+            "token": "Faster"
+          },
+          {
+            "bytes": [
+              76,
+              97,
+              114,
+              103,
+              101
+            ],
+            "logprob": -25.2500057220459,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "Large"
+          },
+          {
+            "bytes": [
+              87,
+              104,
+              101,
+              110
+            ],
+            "logprob": -26.2500057220459,
+            "script_summary": {
+              "chars": 4,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 4
+              }
+            },
+            "token": "When"
+          },
+          {
+            "bytes": [
+              35,
+              35
+            ],
+            "logprob": -27.0000057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "NUMBER": 2
+              }
+            },
+            "token": "##"
+          },
+          {
+            "bytes": [
+              65,
+              73
+            ],
+            "logprob": -28.5000057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "AI"
+          },
+          {
+            "bytes": [
+              66,
+              101,
+              99,
+              97,
+              117,
+              115,
+              101
+            ],
+            "logprob": -28.7500057220459,
+            "script_summary": {
+              "chars": 7,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 7
+              }
+            },
+            "token": "Because"
+          },
+          {
+            "bytes": [
+              65,
+              110
+            ],
+            "logprob": -29.0000057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "An"
+          },
+          {
+            "bytes": [
+              87,
+              104,
+              105,
+              108,
+              101
+            ],
+            "logprob": -29.0000057220459,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "While"
+          },
+          {
+            "bytes": [
+              32,
+              65
+            ],
+            "logprob": -29.5000057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 1,
+                "SPACE": 1
+              }
+            },
+            "token": " A"
+          },
+          {
+            "bytes": [
+              82,
+              97,
+              112,
+              105,
+              100
+            ],
+            "logprob": -30.0000057220459,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "Rapid"
+          },
+          {
+            "bytes": [
+              73,
+              110
+            ],
+            "logprob": -30.2500057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "In"
+          },
+          {
+            "bytes": [
+              72,
+              97,
+              118,
+              105,
+              110,
+              103
+            ],
+            "logprob": -30.2500057220459,
+            "script_summary": {
+              "chars": 6,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 6
+              }
+            },
+            "token": "Having"
+          },
+          {
+            "bytes": [
+              73,
+              102
+            ],
+            "logprob": -31.0000057220459,
+            "script_summary": {
+              "chars": 2,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 2
+              }
+            },
+            "token": "If"
+          },
+          {
+            "bytes": [
+              85,
+              115,
+              105,
+              110,
+              103
+            ],
+            "logprob": -31.2500057220459,
+            "script_summary": {
+              "chars": 5,
+              "control_chars": 0,
+              "non_ascii_chars": 0,
+              "replacement_chars": 0,
+              "script_counts": {
+                "LATIN": 5
+              }
+            },
+            "token": "Using"
+          }
+        ]
+      },
+      "ok": true,
+      "payload": {
+        "chat_template_kwargs_json": null,
+        "max_tokens": 1,
+        "message_chars": 79,
+        "top_logprobs": 20
+      },
+      "text": "A",
+      "text_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 1
+        }
+      },
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "total_tokens": 25
+      }
+    }
+  ],
+  "finished_utc": "2026-06-08T15:02:29Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "gemma3-27b-it",
+  "ok": true,
+  "phase": "before",
+  "run_id": "vllm_gemma3_27b_rung1_20260608T2351JST_fp8_flashinfer_first_token",
+  "schema": "openai-first-token-probe/v1",
+  "started_utc": "2026-06-08T15:02:28Z",
+  "url": "http://127.0.0.1:8000"
+}

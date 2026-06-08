@@ -1,0 +1,109 @@
+{
+  "schema": "vllm-gemma3-nvfp4-kv-trace-analysis/v1",
+  "run_id": "vllm_gemma3_27b_rung1_20260609T0015JST",
+  "trace_file": "results/vllm_gemma3_27b_rung1_20260609T0015JST_nvfp4_kv_flashinfer_kv_trace.jsonl",
+  "compare_file": "results/vllm_gemma3_27b_rung1_20260609T0015JST_first_token_compare.json",
+  "event_counts": {
+    "fi_metadata": 234,
+    "kv_write_post_nvfp4": 558,
+    "kv_write_pre": 558,
+    "swa_skip": 90,
+    "kv_read_views_nvfp4": 234
+  },
+  "write_samples": 195,
+  "read_samples": 195,
+  "matched_read_samples": 195,
+  "mismatched_read_samples": 0,
+  "read_samples_missing_write": 0,
+  "mismatch_examples": [],
+  "request_swa_skip_events": 18,
+  "max_request_num_skipped_tokens": 0,
+  "first_token_compare_ok": false,
+  "comparisons": [
+    {
+      "baseline_first_token": "spark",
+      "baseline_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "baseline_text": "spark",
+      "candidate_first_token": " примере",
+      "candidate_script_summary": {
+        "chars": 8,
+        "control_chars": 0,
+        "non_ascii_chars": 7,
+        "replacement_chars": 0,
+        "script_counts": {
+          "CYRILLIC": 7,
+          "SPACE": 1
+        }
+      },
+      "candidate_text": " примере",
+      "case": "exact_spark_ok",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    },
+    {
+      "baseline_first_token": "4",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "DIGIT": 1
+        }
+      },
+      "baseline_text": "4",
+      "candidate_first_token": "Liv",
+      "candidate_script_summary": {
+        "chars": 3,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 3
+        }
+      },
+      "candidate_text": "Liv",
+      "case": "simple_math",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    },
+    {
+      "baseline_first_token": "A",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 1
+        }
+      },
+      "baseline_text": "A",
+      "candidate_first_token": "ന്ന",
+      "candidate_script_summary": {
+        "chars": 3,
+        "control_chars": 0,
+        "non_ascii_chars": 3,
+        "replacement_chars": 0,
+        "script_counts": {
+          "MALAYALAM": 3
+        }
+      },
+      "candidate_text": "ന്ന",
+      "case": "short_decode",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    }
+  ]
+}

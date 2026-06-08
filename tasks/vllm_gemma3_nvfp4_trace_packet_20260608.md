@@ -40,7 +40,7 @@ Trace envs for both rows:
 
 ```bash
 VLLM_SPARK_KV_TRACE=1
-VLLM_SPARK_KV_TRACE_LIMIT=8
+VLLM_SPARK_KV_TRACE_LIMIT=512
 VLLM_SPARK_KV_TRACE_VALUES=16
 VLLM_SPARK_KV_TRACE_LAYERS=layers.0.self_attn.attn,layers.5.self_attn.attn,layers.6.self_attn.attn
 ```
@@ -60,7 +60,7 @@ docker run -d --gpus all --ipc=host --network=host --name ${RUN} \
   -e VLLM_SPARK_KV_GEOMETRY_LOG=1 \
   -e VLLM_SPARK_KV_TRACE=1 \
   -e VLLM_SPARK_KV_TRACE_FILE=/results/${RUN}_kv_trace.jsonl \
-  -e VLLM_SPARK_KV_TRACE_LIMIT=8 \
+  -e VLLM_SPARK_KV_TRACE_LIMIT=512 \
   -e VLLM_SPARK_KV_TRACE_VALUES=16 \
   -e VLLM_SPARK_KV_TRACE_LAYERS=layers.0.self_attn.attn,layers.5.self_attn.attn,layers.6.self_attn.attn \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
@@ -153,7 +153,8 @@ Pass:
 Fail:
 
 - no `*_kv_trace.jsonl`
-- trace limit is consumed before client probes
+- trace limit is consumed before client probes (the first live `LIMIT=8` run hit this; use
+  `512` or higher unless warmup tracing is disabled)
 - NVFP4 falls back away from FlashInfer FA2
 - fp8 comparator fails
 - NVFP4 trace shows page or scale/data view mismatch for the same sampled slot

@@ -52,26 +52,25 @@ Only bake a new image once Gemma 4 serves correctly with the FA2 NVFP4-KV path p
 Read `docs/NVFP4_KV_PORTING_MAP.md` (esp. "Smallest GB10 Proof Sequence") and
 `docs/GEMMA4_ON_DGX_SPARK.md` before starting.
 
-## FP4 KV breaks in the KV-reuse machinery (cross-lane finding, 2026-06-08) — NEXT FOCUS
+## FP4 KV quality breaks after the linear Qwen path (cross-lane finding, 2026-06-09) — NEXT FOCUS
 Plain linear / full-attention FP4 KV is **clean** (Qwen, 1.751×). But FP4 KV breaks
-wherever KV is reused / shared / windowed, and **both runtimes hit the same shape**:
+outside that simple Qwen path, and **both runtimes now point above raw kernel bring-up**:
 - **vLLM Gemma 3 27B Rung 1** (`results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md`):
   capacity ✓ (1.777×), geometry ✓ (D=128, 52 local SWA + 10 global), FA2 NVFP4 path
-  selected ✓ — but **output quality FAILS**. The *only* new variable vs the clean Qwen row
-  is **SWA**. So the bug is **FP4 KV × hybrid-SWA (sliding-window local) attention**.
+  selected ✓ — but **output quality FAILS**.
 - **SGLang Qwen** (see its doc): the FP4 first-token divergence localized to the
   **radix/prefix cache** — `--disable-radix-cache` makes FP4 output match fp8 again.
 
-Likely **shared root-cause class**: packed FP4 KV plus FP8 scales are mishandled or
-numerically mis-consumed when KV blocks are **shared, reused, windowed, or evicted** —
-the cache-management layer, not the raw attention kernel. The standalone kernel is proven;
-the linear-KV serving path is proven; the break is specifically the reuse machinery. The
-latest SGLang write/read trace clears the simplest stale/wrong-page scale-buffer hypothesis
-for sampled radix pages, so vLLM should prove both the byte pairing and the numerical
-effect of SWA/local-layer reuse. **vLLM's job here:** debug FP4 scale/block handling on the
-SWA sliding-window local layers (how the window's KV + its scale factors are stored,
-rotated, and re-read). Compare root causes with the SGLang radix finding — a fix on one
-likely informs the other.
+Earlier wording over-weighted SWA/window reuse. The updated vLLM trace
+(`results/vllm_gemma3_27b_rung1_trace_20260609T0015JST_summary.md`) proves the failing
+short prompts do **not** require sliding-window eviction (`max_request_num_skipped_tokens=0`)
+and sampled read-side packed data/scale bytes match write-side bytes (`195 / 195`,
+`0` mismatches). SGLang similarly cleared simple stale/wrong-page scale-buffer hypotheses
+for sampled cached-prefix pages. So the live shared root-cause class is narrower:
+**linear full-attention NVFP4 KV is proven, but non-Qwen/reused/windowed model paths need
+tensor-level attention/logit comparison because byte-level page pairing is no longer enough.**
+Compare root causes with the SGLang radix finding, but do not assume the vLLM Gemma 3
+failure is SWA eviction until a long-prompt trace proves it.
 
 First-token update (`results/vllm_gemma3_27b_rung1_first_token_20260608T205432JST.md`):
 the refreshed packet keeps the no-downgrade source-overlay policy, reruns fp8 and NVFP4,
@@ -99,8 +98,8 @@ Minimal vLLM trace plan (read-only audit, 2026-06-08): keep this Python-side so 
 in the source-overlay loop and does not require a new image or C++ rebuild. Add env-gated
 JSONL tracing with `VLLM_SPARK_KV_TRACE=1`,
 `VLLM_SPARK_KV_TRACE_FILE=/tmp/vllm_gemma3_kv_trace.jsonl`,
-`VLLM_SPARK_KV_TRACE_LAYERS=...`, `VLLM_SPARK_KV_TRACE_LIMIT=4`, and
-`VLLM_SPARK_KV_TRACE_VALUES=8`. Patch points:
+`VLLM_SPARK_KV_TRACE_LAYERS=...`, `VLLM_SPARK_KV_TRACE_LIMIT=512` or higher, and
+`VLLM_SPARK_KV_TRACE_VALUES=16`. Patch points:
 
 - `vllm/v1/attention/backends/flashinfer.py`:
   `_compute_flashinfer_kv_metadata`, `FlashInferMetadataBuilder.build`,
@@ -124,9 +123,21 @@ the Gemma 3 27B fp8/NVFP4 first-token packet with `VLLM_SPARK_KV_TRACE_FILE` ena
 layers 0/1, then compare slot mapping, block-table pages, NVFP4 split-view offsets, sampled
 data/scale bytes, and `swa_skip` against the first-token quality split.
 
-Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the exact source
-overlay/image/env/client packet for the next GPU slot. Use it before any benchmark or row
-manifest traffic so trace limits are spent on the first-token probes.
+Trace run result (2026-06-09):
+`results/vllm_gemma3_27b_rung1_trace_20260609T0015JST_summary.md` records the clean
+source-overlay rerun. fp8 first-token probes pass; NVFP4-KV reproduces the immediate
+quality failure with `0.0` top-logprob overlap for all three probes. The first
+`TRACE_LIMIT=8` row was unusable for page-pair proof because warmup/graph-capture consumed
+the budget. The high-limit rerun records `558` writes, `234` read-view events, and `195 /
+195` matched read samples with `0` mismatches and `0` missing writes. For client requests,
+`max_request_num_skipped_tokens=0`. **Conclusion:** Gemma 3 NVFP4-KV is still red, but not
+because sampled packed data and scale views point at different physical pages, and not
+because these first-token prompts rotate or evict the SWA window. Next vLLM action is a
+tensor-level compare: local/global attention output, NVFP4 quant/dequant numerical error,
+V-scale deswizzle contents, final hidden state, and logits before sampler preprocessing.
+
+Run packet: `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the source-overlay
+image/env/client packet. Its trace limit has been updated after the low-limit lesson.
 
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale

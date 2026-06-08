@@ -1,0 +1,93 @@
+{
+  "baseline_run_id": "vllm_gemma3_27b_rung1_20260608T2351JST_fp8_flashinfer_first_token",
+  "candidate_run_id": "vllm_gemma3_27b_rung1_20260608T2351JST_first_token_compare",
+  "comparisons": [
+    {
+      "baseline_first_token": "spark",
+      "baseline_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "baseline_text": "spark",
+      "candidate_first_token": " \u043f\u0440\u0438\u043c\u0435\u0440\u0435",
+      "candidate_script_summary": {
+        "chars": 8,
+        "control_chars": 0,
+        "non_ascii_chars": 7,
+        "replacement_chars": 0,
+        "script_counts": {
+          "CYRILLIC": 7,
+          "SPACE": 1
+        }
+      },
+      "candidate_text": " \u043f\u0440\u0438\u043c\u0435\u0440\u0435",
+      "case": "exact_spark_ok",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    },
+    {
+      "baseline_first_token": "4",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "DIGIT": 1
+        }
+      },
+      "baseline_text": "4",
+      "candidate_first_token": "Liv",
+      "candidate_script_summary": {
+        "chars": 3,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 3
+        }
+      },
+      "candidate_text": "Liv",
+      "case": "simple_math",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    },
+    {
+      "baseline_first_token": "A",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 1
+        }
+      },
+      "baseline_text": "A",
+      "candidate_first_token": "\u0d28\u0d4d\u0d28",
+      "candidate_script_summary": {
+        "chars": 3,
+        "control_chars": 0,
+        "non_ascii_chars": 3,
+        "replacement_chars": 0,
+        "script_counts": {
+          "MALAYALAM": 3
+        }
+      },
+      "candidate_text": "\u0d28\u0d4d\u0d28",
+      "case": "short_decode",
+      "ok": false,
+      "top_logprob_overlap": [],
+      "top_logprob_overlap_ratio": 0.0
+    }
+  ],
+  "ok": false,
+  "schema": "openai-first-token-compare/v1"
+}

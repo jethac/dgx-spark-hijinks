@@ -16,17 +16,16 @@ The first-token divergence test cornered it
 
 So the SGLang FP4-KV bug is **radix/prefix-cache KV reuse** — a cached FP4 KV prefix is
 mishandled on reuse. `--disable-radix-cache` is both the proof and a correctness workaround
-(at the cost of prefix caching). **This is a cross-lane pattern:** vLLM Gemma 3 27B fails
-FP4 quality too, and its only new variable is **SWA** (sliding-window KV reuse) — see
-`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. Both are FP4 breaking in the **KV-reuse
-machinery** (prefix reuse / SWA windows), not in plain linear KV. The shared root-cause
-class remains "packed FP4 KV plus FP8 scales under reuse/windowing," but the
-`f76f80484` write/read trace clears the simplest stale/wrong-page scale-buffer version for
-sampled SGLang pages. **SGLang's job:** prove whether the reused cached-prefix contribution
-is numerically identical to a recomputed FP4 prefix contribution. A `--disable-radix-cache`
-row is diagnostic/emergency workaround evidence only; it must not be blessed as an FP4-KV
-serving result because prefix reuse is part of the serving behavior the capacity win must
-survive. Compare with vLLM's SWA finding.
+(at the cost of prefix caching). **This remains a cross-lane pattern, but the simple
+page/scale mismatch hypothesis is now weaker:** vLLM Gemma 3 27B also fails FP4 quality,
+yet its high-limit trace shows sampled read-side packed data/scale bytes match write-side
+bytes (`195 / 195`) and the failing short prompts do not skip SWA blocks; see
+`docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`. The SGLang `f76f80484` write/read trace
+likewise clears the simplest stale/wrong-page scale-buffer version for sampled radix pages.
+**SGLang's job:** prove whether the reused cached-prefix contribution is numerically
+identical to a recomputed FP4 prefix contribution. A `--disable-radix-cache` row is
+diagnostic/emergency workaround evidence only; it must not be blessed as an FP4-KV serving
+result because prefix reuse is part of the serving behavior the capacity win must survive.
 
 Instrumentation head: `jethac/sglang@ce1b6d15e` adds inactive-by-default
 `SGLANG_FP4_KV_TRACE_RADIX=1` logs through `Req.init_next_round_input`,
