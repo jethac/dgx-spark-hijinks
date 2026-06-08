@@ -754,6 +754,22 @@
     write for native `/generate`, with explicit endpoint request tags and no unrelated
     warmup request.
 
+- Captured SGLang Qwen FP4-KV radix-cache isolation.
+  - artifact: `results/sglang_qwen_fp4kv_radix_isolation_20260608T2038JST_summary.md`
+  - rows:
+    `results/sglang_qwen_fp4kv_first_token_noradix_20260608T2033JST.json`,
+    `results/sglang_qwen_fp4kv_first_token_skipwarmup_20260608T2036JST.json`,
+    `results/sglang_qwen_fp4kv_first_token_radixoff_20260608T2038JST.json`
+  - result: `--skip-server-warmup` alone still fails (`**` vs `ark` / token id `838`),
+    while `--disable-radix-cache` fixes the first-token split both with and without public
+    warmup (`**` vs `**`).
+  - localization: the FP4 native `/generate` failure is now narrowed to radix/prefix-cache
+    reuse or FP4 cached-prefix read/merge behavior. Disabling radix cache is a diagnostic
+    workaround, not a blessed serving fix.
+  - next gate: instrument `tree_cache.match_prefix`, `prefix_indices`,
+    `extend_prefix_lens_cpu`, `use_ragged`, `extend_no_prefix`, and `extend_merge_paged`
+    for the default FP4 native request versus the radix-off FP4 native request.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

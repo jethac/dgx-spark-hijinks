@@ -245,3 +245,12 @@ Live fp8 control:
 - interpretation: the OpenAI/native sequence can agree in SGLang; the FP4 row's native
   prefill argmax `838` is FP4-KV-specific. The next diagnostic should compare fp8 and FP4
   tensor state at or before the first prefill attention/KV write for native `/generate`.
+
+Live radix-cache isolation:
+
+- artifact: `results/sglang_qwen_fp4kv_radix_isolation_20260608T2038JST_summary.md`
+- result: `--skip-server-warmup` alone does not fix the FP4 first-token split, but
+  `--disable-radix-cache` fixes it both with and without public warmup.
+- interpretation: the FP4 native `/generate` first-token failure is localized to
+  radix/prefix-cache reuse or FP4 cached-prefix read/merge behavior, not public warmup,
+  prompt serialization, endpoint sequencing, or logits preprocessing.
