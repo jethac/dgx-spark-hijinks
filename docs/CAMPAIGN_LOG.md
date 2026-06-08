@@ -817,6 +817,21 @@
     `do_kv_cache_update`, `reshape_and_cache_nvfp4_dispatch`, and
     `nvfp4_kv_cache_split_views`.
 
+- Added and ran SGLang FP4-KV cached page-pair tracing.
+  - fork commit: `jethac/sglang@839cb7457`
+  - env gate: `SGLANG_FP4_KV_TRACE_PAGE_PAIR=1`
+  - artifact: `results/sglang_qwen_fp4kv_page_pair_trace_20260608T214649JST_summary.md`
+  - rows:
+    `results/sglang_qwen_fp4kv_page_pair_trace_20260608T214649JST_default.json`,
+    `results/sglang_qwen_fp4kv_page_pair_trace_20260608T214649JST_radixoff.json`
+  - result: default FP4 still fails (`**` vs `ark` / `838`) with `cached_tokens=55`;
+    radix-off still passes (`**` vs `**` / `334`) with `cached_tokens=0`.
+  - localization: the default row's paged plan consumes the same 55 page IDs as the radix
+    prefix (`4113..4167`), and all 28 layer page-pair traces report matching first
+    dimensions for K data, V data, K scale, and V scale.
+  - interpretation: gross cached-prefix page-list mismatch is not observed; next inspect
+    actual FP4 data/scale bytes and `o1/s1/o2/s2` before `_safe_merge_state`.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

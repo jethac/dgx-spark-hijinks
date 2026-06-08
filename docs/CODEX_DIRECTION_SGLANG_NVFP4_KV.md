@@ -41,6 +41,16 @@ the default FP4 native request fails (`**` vs `ark`/`838`) while reusing a 55-to
 page handling, not raw quantizer math, pool layout, prompt serialization, or graph capture.
 The next hook must compare reused page IDs with K-data/K-scale/V-data/V-scale page IDs.
 
+Page-pair trace result
+(`results/sglang_qwen_fp4kv_page_pair_trace_20260608T214649JST_summary.md`):
+`jethac/sglang@839cb7457` adds `SGLANG_FP4_KV_TRACE_PAGE_PAIR=1` and records the
+FlashInfer paged plan plus FP4 data/scale view geometry. The default row still fails, but
+the paged plan consumes the same 55 logical page IDs as the radix prefix (`4113..4167`),
+and all 28 layers report matching first-dimension extents for K data, V data, K scale, and
+V scale. So a gross page-list mismatch is not observed. The next hook moves inside
+`extend_merge_paged`: sample actual FP4 data/scale bytes at the reused page IDs and log
+`o1/s1/o2/s2` before `_safe_merge_state`.
+
 ## Why this, why now
 The SGLang FP4 KV row already expands the KV pool ~1.78× over fp8 on GB10. The newest
 `d7d931f` matched row improves the evidence: raw `2+2` and chat smoke pass, and backend
