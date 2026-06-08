@@ -178,6 +178,24 @@ first failing Gemma request: actual model `query`, split packed K/V, K/V scale t
 scalar `k_scale`/`v_scale`, output buffer dtype/shape/stride before and after
 `wrapper.run(...)`, and whether prefill or decode first produces byte-like output.
 
+Wrapper-boundary trace result (2026-06-09):
+`results/vllm_gemma3_27b_wrapper_trace_20260609T0148JST_summary.md` runs
+`jethac/vllm@0e07e130d94eddfed209f846ce6c9959c636da02` in the no-downgrade source
+overlay and reproduces the same bad first tokens (` Reigns`, Gujarati text, `ioane`).
+The real Gemma/FlashInfer FA2 paged prefill wrapper is now the failing boundary. For the
+24-token full/global layer call (`window_left=-1`, `num_prefill_tokens=24`,
+`num_decode_tokens=0`), the actual model `query_last` and `out_before` are sane signed
+BF16 tensors, but immediately after `BatchPrefillWithPagedKVCacheWrapper.run(...)`
+`out_after` becomes byte-like BF16: head `[240.0, 1.7265625, 226.0, 137.0, 145.0, 20.0,
+186.0, 185.0]`, max `255.0`, mean `129.27871704101562`, RMS
+`147.77296447753906`. The subsequent `flashinfer_attn_output` event matches that tensor.
+The active layer-5 KV sample has `v_data_head` beginning `[240, 1, 226, 137, 145, 20,
+186, 185, ...]`, so the live clue is that the paged prefill path is returning or
+interpreting packed V payload bytes as attention output. The same byte-like pattern also
+appears in local/SWA prefill calls, while short prompts remain far below the SWA window.
+Next vLLM action is no longer a generic FA2 probe; dump/replay the exact active
+block-table paged prefill call and compare wrapper output against a dequantized reference.
+
 SWA code-read update (2026-06-08): Gemma 3 local layers are real `SlidingWindowSpec`
 groups, while global layers are `FullAttentionSpec`. NVFP4 packed data and FP8 scale
 buffers use the same physical page layout for local and global layers; SWA does not rotate
