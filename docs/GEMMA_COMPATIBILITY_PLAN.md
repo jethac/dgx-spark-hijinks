@@ -8,8 +8,8 @@ is the live status snapshot, and the per-lane mechanics live in
 `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md` and `docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md`.
 
 > Provenance note: Gemma 4 is past the assistant's training cutoff. Its lineup and
-> per-variant architecture below are **operator-provided** and must be confirmed by the
-> rung −1 config audit before any rung is built on them.
+> per-variant encoder/modality architecture below are **operator-provided** and must be
+> confirmed from the running model on each rung before any serving row is green.
 
 ## Principles
 - **One new thing per rung.** If a step introduces two complications (e.g. SWA *and* a new
@@ -26,17 +26,17 @@ is the live status snapshot, and the per-lane mechanics live in
 | **Gemma 3** (1/4/12/27B) | dense, SWA 5:1, **uniform head dim 128 on audited 27B config**, mature | SWA / hybrid local-global KV | vLLM/SGLang |
 | **Gemma 3n** (E2B/E4B) | dense mobile, PLE, audio, MatFormer/elastic, KV-share | mobile memory machinery | llama.cpp/LiteRT |
 | **Gemma 4 E2B/E4B** | dense mobile, PLE, audio (supersedes 3n) | (inherits 3n machinery) | llama.cpp/LiteRT |
-| **Gemma 4 12B** | dense, unified, vision+audio config, newest | smallest Gemma-4 server rung; already has D=512 full attention | vLLM/SGLang |
-| **Gemma 4 31B** | dense | dense D=512 isolation at scale | vLLM/SGLang |
-| **Gemma 4 26B-A4B** | **MoE** (~4B active) | MoE weights + expert routing | vLLM/SGLang |
+| **Gemma 4 31B** | dense, **encoder-based** multimodal (text+vision), D=512 | dense D=512 mixed-KV (run text-only) | vLLM/SGLang |
+| **Gemma 4 26B-A4B** | **MoE** (~4B active), encoder-based multimodal (text+vision), D=512 | MoE on top of D=512 (run text-only) | vLLM/SGLang |
+| **Gemma 4 12B** | dense, **encoder-free** multimodal (**text+vision+audio**), D=512 | multimodality fused into the decoder/KV — hardest | vLLM/SGLang |
 
-## Rung −1 — Config audit (first pass; re-confirmed every rung)
+## Rung -1 — Config audit (first pass; re-confirmed every rung)
 Audit the actual config of every variant we plan to climb: head dim (uniform vs dual, and
 *where* `D=512` appears), SWA pattern, dense vs MoE, encoders (vision/audio vs
 encoder-free), PLE. This is the cheap planning pass from config files — but it is *not* the
 final word. **Every rung re-measures geometry from the running model** (per the evidence
 gate), because config can be ambiguous and the running model is what actually dispatches.
-Treat rung −1 as "plan the ladder"; treat the per-rung measurement as "confirm the rung."
+Treat rung -1 as "plan the ladder"; treat the per-rung measurement as "confirm the rung."
 It decides whether the top of the ladder is clean:
 - **If `D=512` lives only in the 26B-A4B**, then 31B is uniform-head ("bigger 12B", no new
   category) and the 26B-A4B hits **D=512 + MoE together** — a double-step this lineup
@@ -46,34 +46,46 @@ It decides whether the top of the ladder is clean:
   only MoE on top — clean. Preferred outcome; confirm it.
 
 **2026-06-08 result:** done in `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md` with machine-readable
-artifact `results/gemma_rung_minus1_config_audit_20260608.json`. The audit corrected two
-planning assumptions:
+artifact `results/gemma_rung_minus1_config_audit_20260608.json`. A stricter variant pass is
+recorded in `results/gemma_rung_minus1_config_audit_strict_20260608.json`. The audit
+settled the config-derived attention ladder and records the operator-provided modality
+ordering:
 
 - Gemma 3 27B normalizes to uniform `head_dim=128`, not `256`; it still cleanly isolates
   SWA/hybrid local-global KV because it has no `global_head_dim=512`.
 - `D=512` appears in Gemma 4 12B, 31B, and 26B-A4B. Gemma 4 31B is dense and therefore
-  still isolates dense `D=512` before 26B-A4B adds MoE. Gemma 4 12B is the smallest Gemma
-  4 server rung, but it is not architecture-only: it already brings heterogeneous
-  `D=256`/`D=512` attention and vision/audio config blocks.
+  isolates dense `D=512` before 26B-A4B adds MoE.
+- Operator-provided architecture makes 12B the hardest server rung despite its smaller
+  size: Gemma 4 12B is encoder-free multimodal, so multimodality is fused into the
+  decoder/KV path instead of being quarantined by text-only serving.
 
 ## Main ladder — vLLM NVFP4-KV capacity
 - **Rung 0 — Qwen (standard attention).** ✅ vLLM done (1.751× fp8 KV, clean,
   `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md`). SGLang in progress
   (long-sequence quality bug; see its direction doc). Foundation for everything above.
-- **Rung 1 — Gemma 3 27B.** *New: SWA / hybrid local-global mixed-KV.* Uniform head dim
-  128, dense, mature ecosystem support, no D=512, no Gemma-4-newness risk — isolates the
-  mixed-KV plumbing alone. **Also a real shippable capacity win** (first big Gemma-family
-  NVFP4-KV row), not throwaway de-risk. vLLM mechanism: per-layer `kv_cache_dtype_skip_
-  layers` / per-`AttentionSpec` dtype. SGLang mechanism: SWA subpool delegation.
-- **Rung 2 — Gemma 4 12B.** *New: smallest Gemma-4 server model, but audit shows it also
-  carries D=512 full attention and vision/audio config blocks.* Treat this as a compatibility
-  rung with explicit scope, not a pure architecture-isolation rung.
-- **Rung 3 — Gemma 4 31B (dense).** *New: dense D=512 at scale.* The capacity hero —
-  biggest dense KV, no MoE confound. This is where the D=512 mixed-KV dodge gets proven on
-  a dense model if the smaller 12B compatibility rung does not already clear it.
-- **Rung 4 — Gemma 4 26B-A4B (MoE).** *New: MoE — NVFP4-MoE-weights + expert routing — on
-  an attention/KV base already solved.* Most existing evidence (AEON image, ~48 tok/s
-  NVFP4-weights), tackled **last** among server models because it stacks the most.
+> **Isolation lever (rungs 1–3):** Gemma 3 27B, Gemma 4 31B, and 26B-A4B are all
+> **encoder-based**, so **serving text-only quarantines vision in the unfired encoder** and
+> isolates the KV/attention path cleanly. Only the encoder-free 12B (rung 4) forces
+> multimodality into the KV cache — which is exactly why it moved from a stepping stone to
+> the final rung. Net climb: SWA → dense D=512 → MoE → multimodal-in-KV, one new thing each.
+
+- **Rung 1 — Gemma 3 27B (text-only).** *New: SWA / hybrid local-global KV pool.* Uniform
+  head dim 128, dense, encoder-based (vision quarantined by serving text-only), mature, no
+  D=512. All layers FP4 — no mixed *dtype* needed yet, so this isolates the SWA KV plumbing
+  alone. **Also a shippable capacity win** — first big Gemma-family NVFP4-KV row. vLLM:
+  hybrid-SWA KV pool. SGLang: SWA subpool delegation.
+- **Rung 2 — Gemma 4 31B (text-only).** *New: dense D=512 mixed-KV.* Encoder-based
+  (text-only quarantines vision) + dense (no MoE confound) → the clean place to prove the
+  per-layer mixed-KV dodge (NVFP4 local D=256 / bf16-or-fp8 global D=512). The capacity hero:
+  biggest dense KV. This is where D=512 gets solved.
+- **Rung 3 — Gemma 4 26B-A4B (text-only).** *New: MoE — NVFP4-MoE-weights + expert routing
+  — on a D=512 attention/KV base already solved.* Encoder-based (text-only isolates KV).
+  Most existing evidence (AEON image, ~48 tok/s NVFP4-weights). Adds exactly one thing: MoE.
+- **Rung 4 — Gemma 4 12B — the destination.** *New: encoder-free multimodal **through the
+  KV**.* Vision+audio are fused into the decoder, so unlike rungs 1–3 you can't quarantine
+  them by serving text-only — multimodality is in the KV path itself. By here text + D=512 +
+  MoE are all solved, so the one new thing is multimodal KV. **Highest payoff:** multimodal
+  contexts are KV-heavy, exactly where FP4-KV capacity flexes hardest.
 
 ## Side track — mobile (llama.cpp + LiteRT-LM)
 NVFP4-KV capacity is not the goal here; these are tiny on-device models. The complication

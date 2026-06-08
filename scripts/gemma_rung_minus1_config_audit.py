@@ -28,21 +28,56 @@ DEFAULT_MODELS = {
         "model_id": "google/gemma-3-27b-it",
         "rung": "rung_1_swa_isolation",
         "expected_role": "dense Gemma 3 SWA rung",
+        "operator_architecture_hint": "encoder_based_multimodal_text_only_quarantines_vision",
     },
     "gemma4_12b": {
         "model_id": "google/gemma-4-12B-it",
-        "rung": "rung_2_gemma4_arch",
-        "expected_role": "Gemma 4 12B unified architecture rung",
+        "rung": "rung_4_encoder_free_multimodal_kv_destination",
+        "expected_role": "Gemma 4 12B encoder-free multimodal KV destination",
+        "operator_architecture_hint": "encoder_free_multimodal_fused_into_decoder_kv",
     },
     "gemma4_31b": {
         "model_id": "google/gemma-4-31B-it",
-        "rung": "rung_3_dense_d512",
+        "rung": "rung_2_dense_d512_text_only",
         "expected_role": "dense D=512 isolation rung if config confirms it",
+        "operator_architecture_hint": "encoder_based_multimodal_text_only_quarantines_vision",
     },
     "gemma4_26b_a4b": {
         "model_id": "google/gemma-4-26B-A4B-it",
-        "rung": "rung_4_moe",
+        "rung": "rung_3_moe_text_only",
         "expected_role": "MoE rung after dense D=512 is understood",
+        "operator_architecture_hint": "encoder_based_multimodal_text_only_quarantines_vision",
+    },
+}
+
+VARIANT_MODELS = {
+    "gemma4_12b_qat_q4_0_unquantized": {
+        "model_id": "google/gemma-4-12B-it-qat-q4_0-unquantized",
+        "rung": "rung_4_gemma4_12b_qat_unquantized_probe",
+        "expected_role": "Gemma 4 12B QAT-unquantized compatibility check",
+        "variant_of": "gemma4_12b",
+        "operator_architecture_hint": "encoder_free_multimodal_fused_into_decoder_kv",
+    },
+    "gemma4_12b_qat_w4a16_ct": {
+        "model_id": "google/gemma-4-12B-it-qat-w4a16-ct",
+        "rung": "rung_4_gemma4_12b_qat_w4a16_probe",
+        "expected_role": "Gemma 4 12B W4A16 checkpoint geometry check",
+        "variant_of": "gemma4_12b",
+        "operator_architecture_hint": "encoder_free_multimodal_fused_into_decoder_kv",
+    },
+    "gemma4_31b_qat_w4a16_ct": {
+        "model_id": "google/gemma-4-31B-it-qat-w4a16-ct",
+        "rung": "rung_2_gemma4_31b_qat_w4a16_probe",
+        "expected_role": "Gemma 4 31B W4A16 checkpoint geometry check",
+        "variant_of": "gemma4_31b",
+        "operator_architecture_hint": "encoder_based_multimodal_text_only_quarantines_vision",
+    },
+    "gemma4_26b_a4b_qat_q4_0_unquantized": {
+        "model_id": "google/gemma-4-26B-A4B-it-qat-q4_0-unquantized",
+        "rung": "rung_3_gemma4_26b_a4b_qat_unquantized_probe",
+        "expected_role": "Gemma 4 26B-A4B QAT-unquantized compatibility check",
+        "variant_of": "gemma4_26b_a4b",
+        "operator_architecture_hint": "encoder_based_multimodal_text_only_quarantines_vision",
     },
 }
 
@@ -141,6 +176,36 @@ def summarize(model_key: str, model_id: str, raw: dict[str, Any], normalized: di
     )
     has_d512 = 512 in head_dims
     is_moe = bool(norm_text.get("enable_moe_block") or norm_text.get("num_experts"))
+    bf16_bytes_total = sum(
+        row["bf16_raw_kv_bytes_per_token"] or 0 for row in layers
+    )
+    bf16_bytes_by_layer_type: dict[str, int] = {}
+    for row in layers:
+        layer_type = row["layer_type"]
+        bf16_bytes_by_layer_type[layer_type] = (
+            bf16_bytes_by_layer_type.get(layer_type, 0)
+            + (row["bf16_raw_kv_bytes_per_token"] or 0)
+        )
+    ple_like_keys = [
+        key
+        for key in (
+            "hidden_size_per_layer_input",
+            "vocab_size_per_layer_input",
+            "num_kv_shared_layers",
+        )
+        if key in norm_text
+    ]
+    has_text_config = isinstance(raw.get("text_config"), dict)
+    has_vision_config = raw.get("vision_config") is not None
+    has_audio_config = raw.get("audio_config") is not None
+    if has_text_config and (has_vision_config or has_audio_config):
+        config_wrapper_status = "wrapper_with_text_config_and_modality_configs"
+    elif has_text_config:
+        config_wrapper_status = "wrapper_with_text_config_only"
+    elif has_vision_config or has_audio_config:
+        config_wrapper_status = "root_config_with_modality_configs"
+    else:
+        config_wrapper_status = "text_only_root_config"
     return {
         "model_key": model_key,
         "model_id": model_id,
@@ -165,22 +230,21 @@ def summarize(model_key: str, model_id: str, raw: dict[str, Any], normalized: di
         "head_dims_observed_from_normalized_config": head_dims,
         "sliding_head_dims": sliding_head_dims,
         "full_head_dims": full_head_dims,
+        "bf16_raw_kv_bytes_per_token_total": bf16_bytes_total,
+        "bf16_raw_kv_bytes_per_token_by_layer_type": bf16_bytes_by_layer_type,
         "has_d512": has_d512,
         "is_moe": is_moe,
         "num_experts": norm_text.get("num_experts"),
         "top_k_experts": norm_text.get("top_k_experts"),
         "moe_intermediate_size": norm_text.get("moe_intermediate_size"),
         "expert_intermediate_size": norm_text.get("expert_intermediate_size"),
-        "has_vision_config": raw.get("vision_config") is not None,
-        "has_audio_config": raw.get("audio_config") is not None,
-        "has_ple_like_fields": any(
-            key in norm_text
-            for key in (
-                "hidden_size_per_layer_input",
-                "vocab_size_per_layer_input",
-                "num_kv_shared_layers",
-            )
-        ),
+        "has_text_config": has_text_config,
+        "has_vision_config": has_vision_config,
+        "has_audio_config": has_audio_config,
+        "config_wrapper_status": config_wrapper_status,
+        "is_text_only_root_config": config_wrapper_status == "text_only_root_config",
+        "has_ple_like_fields": bool(ple_like_keys),
+        "ple_like_keys_present": ple_like_keys,
         "layers": layers,
     }
 
@@ -193,6 +257,11 @@ def main() -> int:
         action="store_true",
         help="Do not contact Hugging Face; use cached config files only.",
     )
+    parser.add_argument(
+        "--include-cached-variants",
+        action="store_true",
+        help="Also audit cached QAT/server checkpoint variants used by the campaign.",
+    )
     args = parser.parse_args()
 
     output = Path(args.output)
@@ -200,7 +269,11 @@ def main() -> int:
 
     models: dict[str, Any] = {}
     errors: dict[str, str] = {}
-    for key, meta in DEFAULT_MODELS.items():
+    model_specs = dict(DEFAULT_MODELS)
+    if args.include_cached_variants:
+        model_specs.update(VARIANT_MODELS)
+
+    for key, meta in model_specs.items():
         model_id = meta["model_id"]
         try:
             config_path = Path(
@@ -256,14 +329,15 @@ def main() -> int:
             "recommended_main_ladder_after_audit": [
                 "rung_0_qwen_standard_attention_done",
                 "rung_1_gemma3_27b_swa_uniform_d128_no_d512",
-                "rung_2_gemma4_12b_unified_arch_plus_d512_audio",
-                "rung_3_gemma4_31b_dense_d512",
-                "rung_4_gemma4_26b_a4b_moe_on_d512_base",
+                "rung_2_gemma4_31b_dense_d512_text_only",
+                "rung_3_gemma4_26b_a4b_moe_text_only",
+                "rung_4_gemma4_12b_encoder_free_multimodal_kv",
             ],
             "notes": [
                 "Gemma 3 27B config normalizes to uniform D=128, not D=256.",
                 "Gemma 4 31B carries full-attention D=512 and is dense, so it can isolate D=512 before MoE.",
                 "Gemma 4 26B-A4B carries both D=512 full attention and MoE.",
+                "Operator-provided architecture order puts Gemma 4 12B last because its multimodality is fused into the decoder/KV path.",
                 "Every serving rung must re-measure this from the running model.",
             ],
         },

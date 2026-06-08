@@ -214,6 +214,13 @@ and no `D=512`. Gemma 4 12B/31B/26B-A4B all carry full-attention `D=512`, with 2
 also adding MoE. Once Qwen FP4-KV quality is blessed, SGLang Gemma should mirror the vLLM
 ladder by starting with Gemma 3 27B, not Gemma 4.
 
+Ladder order update (2026-06-08): after Gemma 3 27B, the next SGLang Gemma rung is **Gemma
+4 31B text-only**, not 12B. Operator-provided architecture says 31B and 26B-A4B are
+encoder-based text+vision models, so text-only serving quarantines vision in the unfired
+encoder and isolates attention/KV. Prove dense `D=512` mixed-KV on 31B, then add MoE on
+26B-A4B text-only. Gemma 4 12B is last because its encoder-free multimodality is fused into
+the decoder/KV path; it is the destination, not the stepping stone.
+
 ## Evidence gates (a row isn't a claim without these)
 - Source-overlay/build evidence with a valid `sm_121a`/`compute_121a` FlashInfer target.
 - `cuobjdump`/JIT-cache proof the running FP4 KV decode kernel matches the claimed path.

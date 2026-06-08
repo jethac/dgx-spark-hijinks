@@ -62,6 +62,13 @@ uniform `D=128` with SWA/full layer alternation and no `D=512`; Gemma 4 12B, 31B
 26B-A4B all carry full-attention `D=512`. Therefore the next vLLM rung is Gemma 3 27B to
 prove SWA/hybrid KV separately before returning to Gemma 4 mixed-KV.
 
+Ladder order update (2026-06-08): after Gemma 3 27B, do **not** jump to 12B. Use the
+operator-provided encoder/modality architecture to preserve one new complication per rung:
+Gemma 4 31B text-only is the clean dense `D=512` mixed-KV rung; Gemma 4 26B-A4B text-only
+adds MoE; Gemma 4 12B is last because its encoder-free multimodality is fused into the
+decoder/KV path and cannot be quarantined by text-only serving. Confirm this from the
+running model on every rung.
+
 1. **Model-arch support.** Gemma 4 needs `Gemma4UnifiedForConditionalGeneration`;
    released vLLM 0.22.1 can't load it. So far it only ran via source `da1daf40` +
    Transformers-main surgery (7.7 tok/s, forced Triton).
@@ -81,10 +88,11 @@ prove SWA/hybrid KV separately before returning to Gemma 4 mixed-KV.
 ## Objectives, in order
 
 **A. Get Gemma onto the clean jethac stack with the backend recorded (overlay, no image).**
-Load Gemma 4 12B and 26B via source overlay on the `cleanfa2-patchedfa2-cutlass` image.
-Record the *actually selected* attention + MoE backend, quantization path, and whether
-KV is bf16/fp8/nvfp4. Goal: replace the `da1daf40` + Transformers surgery with a
-reproducible clean-stack Gemma baseline. This is compatibility, not a speed/KV claim.
+Load Gemma rungs through source overlay on the `cleanfa2-patchedfa2-cutlass` image and
+record the *actually selected* attention + MoE backend, quantization path, and whether KV is
+bf16/fp8/nvfp4. The immediate sequence is Gemma 3 27B -> Gemma 4 31B text-only -> Gemma 4
+26B-A4B text-only -> Gemma 4 12B. Goal: replace the `da1daf40` + Transformers surgery with
+a reproducible clean-stack Gemma baseline. This is compatibility, not a speed/KV claim.
 
 **B. Break the `prefill.cuh:3215` D=512 failure — this is the keystone.**
 The standalone harness reproduction is done, and the first trait audit has a concrete
@@ -247,7 +255,8 @@ when both local/sliding and full/global Gemma 3 layers select the intended FA2 N
 capacity improves versus fp8 at matched settings, and output quality passes a real
 comparator.
 
-After Gemma 3 is green, return to Gemma 4. The audit shows Gemma 4 12B already carries
-`D=512`, so it is a smallest-Gemma-4 compatibility rung, not a pure model-architecture rung.
-Prototype mixed KV as **NVFP4 local + bf16 global** before any full `D=512` NVFP4 claim.
-Defer every image build until Objective E.
+After Gemma 3 is green, the next vLLM rung is **Gemma 4 31B text-only**, not 12B. Use it
+to prove the per-layer mixed-KV dodge on a dense, encoder-quarantined `D=512` model:
+**NVFP4 local + bf16 global** before any full `D=512` NVFP4 claim. Then add MoE on 26B-A4B
+text-only. Defer Gemma 4 12B until the final multimodal-KV rung, and defer every image
+build until Objective E.

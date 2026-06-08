@@ -489,12 +489,12 @@
   - interpretation: under native `/generate`, the failure is an early decode distribution perturbation that compounds, not a total first-token collapse. The next SGLang question is why OpenAI Chat Completions looked worse than native rendered-template `/generate`.
 - Added the Gemma compatibility plan as a sequenced ladder across the whole family.
   - doc: `docs/GEMMA_COMPATIBILITY_PLAN.md`
-  - rationale: "Gemma 4" is five models across four architectures (E2B/E4B dense-mobile+PLE+audio, 12B dense encoder-free, 26B-A4B MoE, 31B dense), plus Gemma 3 (dense, SWA, uniform head dim) and Gemma 3n (the superseded mobile line). "Fix Gemma" is a matrix, not a checkbox.
-  - structure: one-new-complication-per-rung ladder. Rung −1 = per-variant config audit (settles where `D=512` lives). Main vLLM NVFP4-KV ladder: Rung 0 Qwen (done) → Rung 1 Gemma 3 27B (isolate SWA / hybrid mixed-KV, also a shippable big-Gemma capacity win) → Rung 2 Gemma 4 12B encoder-free (add Gemma-4 arch) → Rung 3 Gemma 4 31B dense (add scale + D=512 if present) → Rung 4 Gemma 4 26B-A4B (add MoE). Mobile side track (llama.cpp/LiteRT): Gemma 3n → Gemma 4 E2B/E4B (isolate PLE/audio/elastic).
+  - rationale: "Gemma 4" is five models across four architectures (E2B/E4B dense-mobile+PLE+audio, 12B dense encoder-free multimodal, 26B-A4B MoE, 31B dense), plus Gemma 3 (dense, SWA, uniform head dim) and Gemma 3n (the superseded mobile line). "Fix Gemma" is a matrix, not a checkbox.
+  - structure: one-new-complication-per-rung ladder. Rung -1 = per-variant config audit (settles where `D=512` lives). Main vLLM NVFP4-KV ladder: Rung 0 Qwen (done) -> Rung 1 Gemma 3 27B (isolate SWA / hybrid mixed-KV, also a shippable big-Gemma capacity win) -> Rung 2 Gemma 4 31B text-only (dense D=512 mixed-KV) -> Rung 3 Gemma 4 26B-A4B text-only (add MoE) -> Rung 4 Gemma 4 12B (encoder-free multimodal through decoder/KV). Mobile side track (llama.cpp/LiteRT): Gemma 3n -> Gemma 4 E2B/E4B (isolate PLE/audio/elastic).
   - discipline: prove-before-climb; assign each model to its natural runtime rather than filling all 15 cells; **measure attention geometry (per-layer head_dim, heads, KV heads, SWA layer map, KV bytes/token) from the running model every rung** — config is a hint, the running model is ground truth, and the mixed-KV layer classification must come from measured per-layer head_dim, not assumption.
-  - provenance caveat: Gemma 4 lineup/architecture is operator-provided (post-cutoff) and must be confirmed by the rung −1 audit + per-rung measurement before building on it.
+  - provenance caveat: Gemma 4 lineup/architecture is operator-provided (post-cutoff) and must be confirmed by the rung -1 audit + per-rung measurement before building on it.
 
-- Completed the Gemma Rung −1 config audit.
+- Completed the Gemma Rung -1 config audit.
   - script: `scripts/gemma_rung_minus1_config_audit.py`
   - artifact: `results/gemma_rung_minus1_config_audit_20260608.json`
   - report: `docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md`
@@ -504,9 +504,31 @@
     `D=256` + 8 full `D=512` layers and vision/audio config blocks; 31B has 50 sliding
     `D=256` + 10 full `D=512` layers and is dense; 26B-A4B has 25 sliding `D=256` + 5
     full `D=512` layers plus MoE (`128` experts, top-`8`).
-  - decision: 31B still isolates dense `D=512` before 26B-A4B adds MoE. Gemma 4 12B is the
-    smallest Gemma 4 server rung, but not a pure architecture-only rung. Next vLLM live
-    rung remains Gemma 3 27B; next SGLang live work remains Qwen FP4-KV quality.
+  - decision: 31B isolates dense `D=512` before 26B-A4B adds MoE. The later ladder
+    correction moves Gemma 4 12B to the final multimodal-KV rung. Next vLLM live rung
+    remains Gemma 3 27B; next SGLang live work remains Qwen FP4-KV quality.
+
+- Tightened the Gemma Rung -1 audit against cached QAT/server variants.
+  - artifact: `results/gemma_rung_minus1_config_audit_strict_20260608.json`
+  - script update: `scripts/gemma_rung_minus1_config_audit.py` now records config wrapper
+    status, operator architecture hints, PLE-like keys, and config-derived BF16 raw KV
+    bytes/token totals.
+  - result: 12B QAT variants preserve the base 12B geometry: 40 sliding `D=256` + 8 full
+    `D=512`; 31B W4A16 preserves 50 sliding `D=256` + 10 full `D=512`; 26B-A4B
+    QAT-unquantized preserves 25 sliding `D=256` + 5 full `D=512` and MoE.
+  - correction: config wrapper fields alone do not decide whether modality is quarantined
+    in an unfired encoder or fused into the decoder/KV. The ladder now follows the
+    operator-provided architecture: 31B and 26B-A4B are text-only encoder-quarantine rungs;
+    12B is the final encoder-free multimodal-KV rung.
+
+- Integrated the first llama.cpp NVFP4 GGUF runtime smoke from the parallel lane.
+  - artifact: `results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md`
+  - source: `jethac/llama.cpp@19bba67c1`, built for `sm_121a`
+  - result: cached AEON Qwen3.6 NVFP4 converted to NVFP4 GGUF, loaded in `llama-server`,
+    and returned `The capital of Japan is Tokyo.`
+  - profiler evidence: Nsight summary shows `GGML_TYPE_NVFP4` matmul and
+    `quantize_mmq_nvfp4` kernels. This is runtime dispatch/smoke evidence, not an accuracy
+    or speed benchmark.
 
 - Completed the first llama.cpp native FP4 arch-build checkpoint in parallel with the
   Gemma audit.

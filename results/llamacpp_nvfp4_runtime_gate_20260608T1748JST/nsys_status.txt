@@ -1,0 +1,3 @@
+pid=812803
+health_ok at 5
+-rw-rw-r-- 1 jethac jethac 836K Jun  8 17:53 /home/jethac/spark_tmp/llamacpp_nvfp4_runtime_gate_20260608T1748JST/nsys_llamacpp_nvfp4.nsys-rep
