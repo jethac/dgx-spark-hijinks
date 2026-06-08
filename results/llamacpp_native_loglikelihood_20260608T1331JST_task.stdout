@@ -1,0 +1,214 @@
+{
+  "cases": [
+    {
+      "all_tokens_greedy": true,
+      "case": "tokyo_likely",
+      "context": "The capital of Japan is",
+      "context_tokens": [
+        {
+          "id": 785,
+          "piece": "The"
+        },
+        {
+          "id": 6722,
+          "piece": " capital"
+        },
+        {
+          "id": 315,
+          "piece": " of"
+        },
+        {
+          "id": 6323,
+          "piece": " Japan"
+        },
+        {
+          "id": 374,
+          "piece": " is"
+        }
+      ],
+      "continuation": " Tokyo",
+      "continuation_tokens": [
+        {
+          "id": 26194,
+          "piece": " Tokyo"
+        }
+      ],
+      "expected_greedy": true,
+      "lm_eval_loglikelihood_tuple": [
+        -1.7286205291748047,
+        true
+      ],
+      "scored_tokens": [
+        {
+          "generated_tokens": [
+            26194
+          ],
+          "index": 0,
+          "target_found": true,
+          "target_id": 26194,
+          "target_is_greedy": true,
+          "target_logprob": -1.7286205291748047,
+          "top_entry_count": 512,
+          "top_token_id": 26194
+        }
+      ],
+      "target_found": true,
+      "target_logprob_sum": -1.7286205291748047
+    },
+    {
+      "all_tokens_greedy": false,
+      "case": "zebra_unlikely",
+      "context": "The capital of Japan is",
+      "context_tokens": [
+        {
+          "id": 785,
+          "piece": "The"
+        },
+        {
+          "id": 6722,
+          "piece": " capital"
+        },
+        {
+          "id": 315,
+          "piece": " of"
+        },
+        {
+          "id": 6323,
+          "piece": " Japan"
+        },
+        {
+          "id": 374,
+          "piece": " is"
+        }
+      ],
+      "continuation": " zebra",
+      "continuation_tokens": [
+        {
+          "id": 1147,
+          "piece": " z"
+        },
+        {
+          "id": 50213,
+          "piece": "ebra"
+        }
+      ],
+      "expected_greedy": false,
+      "lm_eval_loglikelihood_tuple": [
+        null,
+        false
+      ],
+      "scored_tokens": [
+        {
+          "generated_tokens": [
+            26194
+          ],
+          "index": 0,
+          "target_found": false,
+          "target_id": 1147,
+          "target_is_greedy": false,
+          "target_logprob": null,
+          "top_entry_count": 512,
+          "top_token_id": 26194
+        },
+        {
+          "generated_tokens": [
+            19684
+          ],
+          "index": 1,
+          "target_found": true,
+          "target_id": 50213,
+          "target_is_greedy": false,
+          "target_logprob": -9.481486320495605,
+          "top_entry_count": 512,
+          "top_token_id": 19684
+        }
+      ],
+      "target_found": false,
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": true,
+      "case": "qwen_name",
+      "context": "The model family Qwen was developed by",
+      "context_tokens": [
+        {
+          "id": 785,
+          "piece": "The"
+        },
+        {
+          "id": 1614,
+          "piece": " model"
+        },
+        {
+          "id": 2997,
+          "piece": " family"
+        },
+        {
+          "id": 1207,
+          "piece": " Q"
+        },
+        {
+          "id": 16948,
+          "piece": "wen"
+        },
+        {
+          "id": 572,
+          "piece": " was"
+        },
+        {
+          "id": 7881,
+          "piece": " developed"
+        },
+        {
+          "id": 553,
+          "piece": " by"
+        }
+      ],
+      "continuation": " Alibaba",
+      "continuation_tokens": [
+        {
+          "id": 54364,
+          "piece": " Alibaba"
+        }
+      ],
+      "expected_greedy": null,
+      "lm_eval_loglikelihood_tuple": [
+        -0.6194323301315308,
+        true
+      ],
+      "scored_tokens": [
+        {
+          "generated_tokens": [
+            54364
+          ],
+          "index": 0,
+          "target_found": true,
+          "target_id": 54364,
+          "target_is_greedy": true,
+          "target_logprob": -0.6194323301315308,
+          "top_entry_count": 512,
+          "top_token_id": 54364
+        }
+      ],
+      "target_found": true,
+      "target_logprob_sum": -0.6194323301315308
+    }
+  ],
+  "completion_endpoint": "http://127.0.0.1:18083/completion",
+  "dry_run": false,
+  "elapsed_s": 0.091,
+  "input": "tasks/llamacpp_loglikelihood_smoke.jsonl",
+  "n_probs": 512,
+  "ok": false,
+  "schema": "llamacpp-native-loglikelihood-task/v1",
+  "summary": {
+    "expected_greedy_checked": 2,
+    "expected_greedy_mismatches": 0,
+    "greedy_known": 3,
+    "ok": false,
+    "target_found": 2,
+    "target_missing": 1,
+    "total": 3
+  },
+  "tokenize_endpoint": "http://127.0.0.1:18083/tokenize"
+}

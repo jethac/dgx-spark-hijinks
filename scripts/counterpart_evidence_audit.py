@@ -148,6 +148,37 @@ REQUIREMENTS = (
         ),
     ),
     EvidenceRequirement(
+        name="vllm_qwen_nvfp4_kv_capacity",
+        runtime="vllm",
+        model_family="qwen",
+        title="vLLM Qwen fp8-vs-NVFP4 KV capacity row",
+        acceptance=(
+            "vLLM serves the same Qwen-class model with matched fp8 and NVFP4 KV "
+            "settings, logs FlashInfer FA2 NVFP4 KV selection, records KV capacity, "
+            "quality, and serving manifests for both rows."
+        ),
+        claim_groups=(
+            (
+                "results/vllm*qwen*nvfp4*kv*row_manifest.json",
+                "results/*qwen*nvfp4*kv*vllm*row_manifest.json",
+            ),
+            (
+                "results/vllm*qwen*nvfp4*kv*openai_benchmark.json",
+                "results/*qwen*nvfp4*kv*vllm*openai_benchmark.json",
+            ),
+            (
+                "results/vllm*qwen*fp8*kv*row_manifest.json",
+                "results/*qwen*fp8*kv*vllm*row_manifest.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/vllm_nvfp4_sm12x_routing_probe_*.json",
+            "results/flashinfer_nvfp4_kv_probe_*.json",
+            "results/vllm_qwen_dflash_sm121a_patch_verify_*.md",
+            "results/vllm_aeon_qwen_patch_port_*.md",
+        ),
+    ),
+    EvidenceRequirement(
         name="llamacpp_larger_qwen_gguf",
         runtime="llamacpp",
         model_family="qwen",
@@ -207,12 +238,19 @@ REQUIREMENTS = (
             "server and prove arbitrary continuation-token logprobs."
         ),
         claim_groups=(
-            ("results/llamacpp_native_loglikelihood_probe_*.json",),
-            ("results/llamacpp_native_loglikelihood_task_*.json",),
+            (
+                "results/llamacpp_native_loglikelihood_probe_*.json",
+                "results/llamacpp_native_loglikelihood_*_probe.json",
+            ),
+            (
+                "results/llamacpp_native_loglikelihood_task_*.json",
+                "results/llamacpp_native_loglikelihood_*_task.json",
+            ),
         ),
         partial_patterns=(
             "results/llamacpp_native_loglikelihood_probe*_selftest*.json",
             "results/llamacpp_native_loglikelihood_task_dryrun*.json",
+            "results/llamacpp_native_loglikelihood_*_summary.md",
             "results/*gguf_logprobs_probe*.json",
         ),
     ),

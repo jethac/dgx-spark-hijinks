@@ -228,6 +228,11 @@
   - dry-run artifact: `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json`
   - validation: Python compile, task dry-run, no-server failure path, and `git diff --check` passed.
   - interpretation: this makes the next live GGUF accuracy proof one command after starting llama-server; it still does not prove paper-comparable GGUF accuracy until run against the server.
+- Ran the llama.cpp native loglikelihood task against a live Qwen2.5 1.5B Q4_K_M llama-server.
+  - summary: `results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md`
+  - server evidence: `NVIDIA GB10`, `CUDA : ARCHS = 1210`, `USE_GRAPHS = 1`.
+  - result: likely continuations were scored, but the unlikely `zebra` continuation was missing from top-512 probabilities; task `ok=false`.
+  - interpretation: the OpenAI schema blocker has a live native-endpoint follow-up, but the native top-N path still does not satisfy arbitrary continuation-token scoring for lm-eval.
 - Added the public compatibility board.
   - doc: `docs/COMPATIBILITY_BOARD.md`
   - purpose: recurring runtime/status view covering vLLM, SGLang, llama.cpp, FlashInfer, LiteRT-LM, HF fallback, model lanes, live proof queue, and update cadence.

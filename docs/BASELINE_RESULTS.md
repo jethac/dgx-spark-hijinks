@@ -633,6 +633,28 @@ Interpretation:
 - This row is Q4_K_M GGUF, not NVFP4/MXFP4 GGUF. It does not prove native `sm_121a` FP4 tensor-core MMA dispatch.
 - The logprobs probe still fails the lm-eval compatibility check for the same schema reason as the Gemma llama.cpp row.
 
+## 2026-06-08: llama.cpp Native Loglikelihood Live Probe
+
+Artifacts:
+
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md`
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_probe.json`
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_task.json`
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_server.log`
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_build_target_audit.json`
+
+Result:
+
+- live `llama-server` loaded the Qwen2.5 1.5B Q4_K_M GGUF on CUDA, with log evidence `NVIDIA GB10`, `CUDA : ARCHS = 1210`, and `USE_GRAPHS = 1`.
+- native `/tokenize` plus `/completion` scoring at `n_probs=512` found likely continuation tokens.
+- the `zebra_unlikely` continuation was not present in the returned top-512 probabilities.
+- task summary: `target_found=2`, `target_missing=1`, `ok=false`.
+
+Interpretation:
+
+- This is a live negative result for the current GGUF accuracy adapter path.
+- llama.cpp practical serving remains blessed, but paper-comparable lm-eval-style GGUF accuracy remains blocked until the native API can score arbitrary supplied continuation tokens.
+
 ## 2026-06-07: LiteRT-LM Gemma 4 E2B CPU/GPU Smoke
 
 Target:

@@ -125,7 +125,17 @@ python3 scripts/llamacpp_native_loglikelihood_task.py \
   --output results/llamacpp_native_loglikelihood_task.json
 ```
 
-Dry-run artifact `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json` proves the JSONL task file and command shape. It does not prove llama.cpp can return the target-token logprobs.
+Dry-run artifact `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json` proves the JSONL task file and command shape. The first live server attempt is recorded in `results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md`.
+
+Live result:
+
+- binary: `/home/jethac/src/llama.cpp-b9536/build/bin/llama-server`
+- model: `qwen2.5-1.5b-instruct-q4_k_m.gguf`
+- `n_probs`: `512`
+- task artifact: `results/llamacpp_native_loglikelihood_20260608T1331JST_task.json`
+- result: `ok=false`; likely continuations were scored, but the unlikely `zebra` continuation was not present in the returned top-512 probabilities
+
+Interpretation: the native endpoint path is not yet sufficient for lm-eval-style arbitrary continuation scoring at this setting. The next GGUF accuracy fix needs direct supplied-token logprobs, full-vocabulary probabilities, or another native scoring path.
 
 If the native endpoint cannot return arbitrary target-token logprobs, this needs a llama.cpp upstream endpoint or a different accuracy backend.
 

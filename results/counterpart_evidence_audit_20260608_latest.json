@@ -5,13 +5,14 @@
     "sglang_gemma_nvfp4_ordinary_kv",
     "sglang_clean_fp4_kv_after_row",
     "sglang_dflash_or_eagle_qwen",
+    "vllm_qwen_nvfp4_kv_capacity",
     "llamacpp_larger_qwen_gguf",
     "llamacpp_native_fp4_gguf",
     "llamacpp_live_loglikelihood"
   ],
-  "missing_or_partial_count": 6,
+  "missing_or_partial_count": 7,
   "repo_root": ".",
-  "requirement_count": 7,
+  "requirement_count": 8,
   "requirements": [
     {
       "acceptance": "SGLang serves a Gemma NVFP4-weight checkpoint with BF16/fp8 ordinary KV, deterministic output sanity, backend logs, and row manifest.",
@@ -263,6 +264,59 @@
       "title": "vLLM Qwen3.6 NVFP4+DFlash local serving row"
     },
     {
+      "acceptance": "vLLM serves the same Qwen-class model with matched fp8 and NVFP4 KV settings, logs FlashInfer FA2 NVFP4 KV selection, records KV capacity, quality, and serving manifests for both rows.",
+      "blocked_matches": [],
+      "claim_groups": [
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/vllm*qwen*nvfp4*kv*row_manifest.json",
+            "results/*qwen*nvfp4*kv*vllm*row_manifest.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/vllm*qwen*nvfp4*kv*openai_benchmark.json",
+            "results/*qwen*nvfp4*kv*vllm*openai_benchmark.json"
+          ]
+        },
+        {
+          "accepted_matches": [],
+          "ignored_matches": [],
+          "ok": false,
+          "patterns": [
+            "results/vllm*qwen*fp8*kv*row_manifest.json",
+            "results/*qwen*fp8*kv*vllm*row_manifest.json"
+          ]
+        }
+      ],
+      "claim_matches": [],
+      "claim_ready": false,
+      "forbidden_claim_fragments": [],
+      "ignored_claim_matches": [],
+      "model_family": "qwen",
+      "name": "vllm_qwen_nvfp4_kv_capacity",
+      "partial_matches": [
+        "results/flashinfer_nvfp4_kv_probe_20260608T023901JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_global_20260608T0335JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_1024_20260608T0340JST.json",
+        "results/flashinfer_nvfp4_kv_probe_gemma4_26b_sliding_20260608T0333JST.json",
+        "results/vllm_aeon_qwen_patch_port_20260608T0619JST.md",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T165144Z.json",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T170531Z.json",
+        "results/vllm_nvfp4_sm12x_routing_probe_20260607T171227Z.json",
+        "results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md"
+      ],
+      "runtime": "vllm",
+      "status": "partial-evidence-only",
+      "title": "vLLM Qwen fp8-vs-NVFP4 KV capacity row"
+    },
+    {
       "acceptance": "llama.cpp serves a Qwen3/Qwen3.6-class GGUF with build-target evidence, llama-bench, OpenAI smoke, and row manifest.",
       "blocked_matches": [],
       "claim_groups": [
@@ -332,6 +386,8 @@
       "name": "llamacpp_native_fp4_gguf",
       "partial_matches": [
         "results/llamacpp_gemma4_26b_q4_0_20260607T135911Z_server.log",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_build_target_audit.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_server.log",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_build_target_audit.json",
         "results/llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST_server.log"
       ],
@@ -346,22 +402,26 @@
         {
           "accepted_matches": [],
           "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_20260608T1331JST_probe.json",
             "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
             "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json"
           ],
           "ok": false,
           "patterns": [
-            "results/llamacpp_native_loglikelihood_probe_*.json"
+            "results/llamacpp_native_loglikelihood_probe_*.json",
+            "results/llamacpp_native_loglikelihood_*_probe.json"
           ]
         },
         {
           "accepted_matches": [],
           "ignored_matches": [
+            "results/llamacpp_native_loglikelihood_20260608T1331JST_task.json",
             "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
           ],
           "ok": false,
           "patterns": [
-            "results/llamacpp_native_loglikelihood_task_*.json"
+            "results/llamacpp_native_loglikelihood_task_*.json",
+            "results/llamacpp_native_loglikelihood_*_task.json"
           ]
         }
       ],
@@ -369,6 +429,8 @@
       "claim_ready": false,
       "forbidden_claim_fragments": [],
       "ignored_claim_matches": [
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_probe.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_task.json",
         "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json"
@@ -378,6 +440,7 @@
       "partial_matches": [
         "results/gguf_logprobs_probe_llamacpp_b9536_20260607T1145Z.json",
         "results/gguf_logprobs_probe_llamacpp_b9536_reasoning_off_20260607T135911Z.json",
+        "results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md",
         "results/llamacpp_native_loglikelihood_probe_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_probe_v2_selftest_20260608.json",
         "results/llamacpp_native_loglikelihood_task_dryrun_20260608.json",

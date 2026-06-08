@@ -1,6 +1,6 @@
 {
   "audit": "results/counterpart_evidence_audit_20260608_latest.json",
-  "audit_missing_or_partial_count": 6,
+  "audit_missing_or_partial_count": 7,
   "duplicate_requirements": [],
   "missing_tasks_for_audit": [],
   "ok": true,
@@ -33,17 +33,23 @@
       "findings": [],
       "line": 5,
       "ok": true,
-      "requirement": "llamacpp_larger_qwen_gguf"
+      "requirement": "vllm_qwen_nvfp4_kv_capacity"
     },
     {
       "findings": [],
       "line": 6,
       "ok": true,
-      "requirement": "llamacpp_native_fp4_gguf"
+      "requirement": "llamacpp_larger_qwen_gguf"
     },
     {
       "findings": [],
       "line": 7,
+      "ok": true,
+      "requirement": "llamacpp_native_fp4_gguf"
+    },
+    {
+      "findings": [],
+      "line": 8,
       "ok": true,
       "requirement": "llamacpp_live_loglikelihood"
     }
@@ -52,7 +58,7 @@
   "task_already_claim_ready": [
     "vllm_qwen36_nvfp4_dflash"
   ],
-  "task_count": 7,
+  "task_count": 8,
   "task_without_audit_requirement": [],
   "tasks": "tasks/counterpart_evidence_tasks.jsonl"
 }

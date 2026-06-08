@@ -1,0 +1,144 @@
+{
+  "cases": [
+    {
+      "all_tokens_greedy": true,
+      "case": "pair_1",
+      "context": "The capital of Japan is",
+      "context_tokens": [
+        {
+          "id": 785,
+          "piece": "The"
+        },
+        {
+          "id": 6722,
+          "piece": " capital"
+        },
+        {
+          "id": 315,
+          "piece": " of"
+        },
+        {
+          "id": 6323,
+          "piece": " Japan"
+        },
+        {
+          "id": 374,
+          "piece": " is"
+        }
+      ],
+      "continuation": " Tokyo",
+      "continuation_tokens": [
+        {
+          "id": 26194,
+          "piece": " Tokyo"
+        }
+      ],
+      "lm_eval_loglikelihood_tuple": [
+        -1.7286205291748047,
+        true
+      ],
+      "scored_tokens": [
+        {
+          "generated_tokens": [
+            26194
+          ],
+          "index": 0,
+          "target_found": true,
+          "target_id": 26194,
+          "target_is_greedy": true,
+          "target_logprob": -1.7286205291748047,
+          "top_entry_count": 512,
+          "top_token_id": 26194
+        }
+      ],
+      "target_found": true,
+      "target_logprob_sum": -1.7286205291748047
+    },
+    {
+      "all_tokens_greedy": false,
+      "case": "pair_2",
+      "context": "The capital of Japan is",
+      "context_tokens": [
+        {
+          "id": 785,
+          "piece": "The"
+        },
+        {
+          "id": 6722,
+          "piece": " capital"
+        },
+        {
+          "id": 315,
+          "piece": " of"
+        },
+        {
+          "id": 6323,
+          "piece": " Japan"
+        },
+        {
+          "id": 374,
+          "piece": " is"
+        }
+      ],
+      "continuation": " zebra",
+      "continuation_tokens": [
+        {
+          "id": 1147,
+          "piece": " z"
+        },
+        {
+          "id": 50213,
+          "piece": "ebra"
+        }
+      ],
+      "lm_eval_loglikelihood_tuple": [
+        null,
+        false
+      ],
+      "scored_tokens": [
+        {
+          "generated_tokens": [
+            26194
+          ],
+          "index": 0,
+          "target_found": false,
+          "target_id": 1147,
+          "target_is_greedy": false,
+          "target_logprob": null,
+          "top_entry_count": 512,
+          "top_token_id": 26194
+        },
+        {
+          "generated_tokens": [
+            19684
+          ],
+          "index": 1,
+          "target_found": true,
+          "target_id": 50213,
+          "target_is_greedy": false,
+          "target_logprob": -9.481486320495605,
+          "top_entry_count": 512,
+          "top_token_id": 19684
+        }
+      ],
+      "target_found": false,
+      "target_logprob_sum": null
+    }
+  ],
+  "classification": {
+    "all_greedy_known": true,
+    "all_targets_scored": false,
+    "looks_lm_eval_candidate": false,
+    "notes": [
+      "native endpoint returns top-N probabilities; lm-eval needs every continuation token",
+      "no explicit unlikely-continuation case was provided; arbitrary-token coverage is weaker"
+    ],
+    "unlikely_target_scored": false
+  },
+  "completion_endpoint": "http://127.0.0.1:18083/completion",
+  "elapsed_s": 0.079,
+  "n_probs": 512,
+  "ok": false,
+  "schema": "llamacpp-native-loglikelihood-probe/v2",
+  "tokenize_endpoint": "http://127.0.0.1:18083/tokenize"
+}

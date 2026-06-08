@@ -1,0 +1,11 @@
+run_id=llamacpp_native_loglikelihood_20260608T1331JST
+repo_commit=3abc49036bedb37e0b5e3a62365b2d1cdb6ee370
+llama_server=/home/jethac/src/llama.cpp-b9536/build/bin/llama-server
+model=/home/jethac/models/qwen2.5-1.5b-instruct-gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf
+alias=qwen25-loglikelihood
+port=18083
+2026-06-08T13:32:55+09:00
+probe_rc=2
+task_rc=2
+build_target_audit_rc=0
+2026-06-08T13:32:58+09:00
