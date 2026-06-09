@@ -39,6 +39,7 @@ Interpretation:
 - K quantization perturbs the attention logits enough to move the attention output and downstream first token.
 - Direct write-time K reconstruction still has high raw cosine (`~0.9967`) but large absolute error (`max_abs ~41-42`, RMS `~6`) on layer-0 K, which is enough to flip softmax behavior in this Qwen row.
 - The simple FlashInfer/SGLang global-scale convention suspicion was falsified by `scripts/sglang_fp4_quant_scale_probe.py`: SGLang's current convention and FlashInfer's helper convention both reconstruct a synthetic KV tensor at about `cosine ~0.9955`.
+- A direct dense-vs-cached scale diff on the same failing artifact also falsifies a stale or inverted cached-prefix global-scale explanation. Layer-0 dense write/dequant, dense-quant attention, and the failing `extend_merge_paged` cached-prefix call all use `k=0.1197916716337204`, `v=0.0016276042442768812`; FlashInfer's wrapper applies the same handedness as the local FP4-dequant reference.
 
 Next target:
 

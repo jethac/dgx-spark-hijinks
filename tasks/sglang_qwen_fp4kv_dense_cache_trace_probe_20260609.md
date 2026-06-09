@@ -136,6 +136,12 @@ SGLANG_FP4_KV_TRACE_VALUES=64
 - Interpretation: the blocker is K-side attention-logit sensitivity. The paged prefix
   read/LSE and merge are internally correct relative to FP4; the K quantization error is
   enough to move the softmax winner even though direct K reconstruction cosine is high.
+- Follow-up direct scale diff: dense/write, dense-quant reference, and cached-prefix
+  `extend_merge_paged` all use the same layer-0 global scales
+  (`k=0.1197916716337204`, `v=0.0016276042442768812`). FlashInfer's paged wrapper applies
+  those scales in the same handedness as the local FP4-dequant reference (`k_scale` folded
+  into `sm_scale`, `v_scale` applied to the output). This falsifies a stale or inverted
+  cached-prefix global-scale explanation for the captured row.
 - Next: investigate K scale quality/policy, including per-head/per-group K scales or
   FP8/BF16 K with FP4 V. Quantify capacity loss before considering a K-not-FP4 fallback
   blessed.

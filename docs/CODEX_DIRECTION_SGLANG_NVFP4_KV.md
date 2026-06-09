@@ -37,6 +37,18 @@ also falsified: `scripts/sglang_fp4_quant_scale_probe.py` shows SGLang's current
 scale convention and FlashInfer's helper convention both reconstruct a synthetic KV
 tensor around `cosine ~0.9955`.
 
+Follow-up direct scale diff, 2026-06-09: the captured failing run does not show a
+dense-vs-cached global-scale mismatch. Layer 0 dense write/dequant and dense-quant
+attention both record `k_global=0.1197916716337204` and
+`v_global=0.0016276042442768812`; the failing `extend_merge_paged` cached-prefix call
+receives the same `k_scale` and `v_scale`. FlashInfer's paged prefill/decode wrappers
+use that handedness by multiplying `k_scale` into `sm_scale` and applying `v_scale` to
+the output, matching the local dequant reference. Since the paged prefix `o2/s2` already
+matches the local FP4-dequant attention reference, a stale value or reciprocal-scale
+interpretation is falsified for this row. The key distinction is that the dense no-prefix
+serving path uses BF16 K/V attention; the FP4-dequant reference inside that same dense
+row is already bad on K-only.
+
 Next target: K-side policy/quality. Investigate calibrated K scale quality, per-head or
 per-group K scales, FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not
 spend more time on radix page pairing or `_safe_merge_state` for this row unless new
