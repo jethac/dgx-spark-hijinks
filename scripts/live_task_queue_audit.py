@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the ordered live-task queue used when the GB10 host is reachable."""
+"""Validate the ordered live-task queue used when the GB10 host is usable."""
 
 from __future__ import annotations
 

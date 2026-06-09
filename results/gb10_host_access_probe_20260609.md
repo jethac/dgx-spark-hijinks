@@ -5,10 +5,11 @@ Target: `100.113.98.11`
 Usable for live work: `False`
 
 ## Findings
-- INFO: Tailscale control plane lists target thinkstationpgx-00b4 online=True active=True relay=tok tx=93288 rx=0.
+- INFO: Tailscale control plane lists target thinkstationpgx-00b4 online=True active=True relay=tok tx=281112 rx=0.
 - WARN: Tailscale peer rx_bytes is 0; this looks like one-way reachability.
 - WARN: tailscale ping did not reach the target.
 - WARN: TCP/22 is not reachable.
+- WARN: SSH probe did not succeed.
 
 ## Tailscale Peer
 - `host_name`: `thinkstationpgx-00b4`
@@ -17,7 +18,7 @@ Usable for live work: `False`
 - `active`: `True`
 - `relay`: `tok`
 - `cur_addr`: ``
-- `tx_bytes`: `93288`
+- `tx_bytes`: `281112`
 - `rx_bytes`: `0`
 - `last_seen`: `2026-06-08T20:20:47.1Z`
 

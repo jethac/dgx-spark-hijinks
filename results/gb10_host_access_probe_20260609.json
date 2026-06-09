@@ -12,7 +12,7 @@
         "jethac@100.113.98.11",
         "hostname && date"
       ],
-      "elapsed_s": 8.038233599974774,
+      "elapsed_s": 8.02102320000995,
       "returncode": 255,
       "stderr": "ssh: connect to host 100.113.98.11 port 22: Connection timed out",
       "stdout": ""
@@ -26,7 +26,7 @@
         "--timeout=5s",
         "100.113.98.11"
       ],
-      "elapsed_s": 5.0224649999290705,
+      "elapsed_s": 5.022901699994691,
       "returncode": 1,
       "stderr": "no reply",
       "stdout": "ping \"100.113.98.11\" timed out"
@@ -37,7 +37,7 @@
         "status",
         "--json"
       ],
-      "elapsed_s": 0.02438979991711676,
+      "elapsed_s": 0.025282699964009225,
       "returncode": 0,
       "stderr": "",
       "stdout": "<redacted; target peer summary recorded separately>"
@@ -47,19 +47,20 @@
         "C:\\Program Files\\Tailscale\\tailscale.EXE",
         "status"
       ],
-      "elapsed_s": 0.02300190005917102,
+      "elapsed_s": 0.026631199987605214,
       "returncode": 0,
       "stderr": "",
       "stdout": "<redacted; target peer summary recorded separately>"
     }
   },
   "findings": [
-    "INFO: Tailscale control plane lists target thinkstationpgx-00b4 online=True active=True relay=tok tx=93288 rx=0.",
+    "INFO: Tailscale control plane lists target thinkstationpgx-00b4 online=True active=True relay=tok tx=281112 rx=0.",
     "WARN: Tailscale peer rx_bytes is 0; this looks like one-way reachability.",
     "WARN: tailscale ping did not reach the target.",
-    "WARN: TCP/22 is not reachable."
+    "WARN: TCP/22 is not reachable.",
+    "WARN: SSH probe did not succeed."
   ],
-  "finished_utc": "2026-06-09T02:19:14Z",
+  "finished_utc": "2026-06-09T04:02:56Z",
   "peer": {
     "active": true,
     "cur_addr": "",
@@ -74,7 +75,7 @@
       "100.113.98.11",
       "fd7a:115c:a1e0::1638:620c"
     ],
-    "tx_bytes": 93288
+    "tx_bytes": 281112
   },
   "platform": {
     "executable": "C:\\Program Files\\Python311\\python.exe",
@@ -83,7 +84,7 @@
     "system": "Windows"
   },
   "schema": "gb10-host-access-probe/v1",
-  "started_utc": "2026-06-09T02:18:53Z",
+  "started_utc": "2026-06-09T04:02:35Z",
   "tailscale": {
     "available": true,
     "path": "C:\\Program Files\\Tailscale\\tailscale.EXE"
@@ -96,7 +97,7 @@
   },
   "tcp": {
     "ssh": {
-      "elapsed_s": 8.019485999946482,
+      "elapsed_s": 8.007564699975774,
       "error": "TimeoutError('timed out')",
       "host": "100.113.98.11",
       "ok": false,

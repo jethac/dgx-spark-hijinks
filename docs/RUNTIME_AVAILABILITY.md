@@ -15,6 +15,7 @@ Artifact:
 
 - `results/runtime_availability_20260607T1155Z.json`
 - `results/spark_doctor_tailnet_reconnect_20260608T074035JST.json`
+- `results/gb10_host_access_probe_20260609.json`
 
 Summary:
 
@@ -37,6 +38,12 @@ Summary:
 - stale/unreachable LAN IP from this client: `192.168.68.112`
 - live doctor result: Linux `aarch64`, `NVIDIA GB10`, compute capability `12.1`, driver `580.159.03`, CUDA `13.0`
 - caveat: the reconnect doctor used system Python, where Torch is unavailable, so that artifact does not record SM count
+
+2026-06-09 control-path note:
+
+- the same Tailscale IP is visible in the control plane, but live work is not currently usable from this workspace
+- `results/gb10_host_access_probe_20260609.json` records `usable_for_live_work=false`
+- Tailscale ping, TCP/22, and SSH time out; the peer is active via relay `tok` with `rx_bytes=0`
 
 Docker images currently present include:
 

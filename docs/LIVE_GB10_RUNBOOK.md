@@ -30,7 +30,8 @@ python scripts\gb10_host_access_probe.py `
 Proceed only when `usable_for_live_work` is `true`. If Tailscale ping, TCP/22, or SSH
 fails, do not start a live run. Continue offline repo work instead.
 
-When SSH is reachable, run the queue audit before picking work:
+When the host-access probe reports `usable_for_live_work=true`, run the queue audit
+before picking work:
 
 ```bash
 python3 scripts/live_task_queue_audit.py \

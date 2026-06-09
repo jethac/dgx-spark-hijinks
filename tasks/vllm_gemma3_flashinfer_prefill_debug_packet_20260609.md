@@ -1,6 +1,6 @@
 # vLLM Gemma 3 FlashInfer Paged-Prefill Debug Packet
 
-Status: staged; waiting for GB10 host access.
+Status: staged; waiting for host-access probe `usable_for_live_work=true`.
 
 Goal: distinguish a live generated-module / C++ binding mismatch from an FP4 V-fragment
 kernel bug in the vLLM Gemma 3 NVFP4-KV failure.

@@ -206,8 +206,17 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
     else:
         report["findings"].append(f"WARN: TCP/{args.ssh_port} is not reachable.")
 
+    ssh = report["commands"].get("ssh_probe")
+    ssh_ok = True
+    if args.ssh_user:
+        ssh_ok = isinstance(ssh, dict) and ssh.get("returncode") == 0
+        if ssh_ok:
+            report["findings"].append("OK: SSH probe succeeded.")
+        else:
+            report["findings"].append("WARN: SSH probe did not succeed.")
+
     report["usable_for_live_work"] = (
-        ping.get("returncode") == 0 and bool(tcp.get("ok"))
+        ping.get("returncode") == 0 and bool(tcp.get("ok")) and ssh_ok
     )
     report["finished_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     return report

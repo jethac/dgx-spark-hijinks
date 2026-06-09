@@ -998,8 +998,9 @@
   - local verification: `python -m py_compile` for touched files and `git diff --check`
     passed for the fork; `bash -n scripts/run_sglang_fp4_dense_cache_trace.sh` and
     `git diff --check` passed for the campaign runner.
-  - live status: queued. The host answers Tailscale ping, but TCP/22 and `tailscale ssh`
-    fail from this workspace, so no live trace row was run in this stop point.
+  - live status: queued. Later host-access probes show the node visible in the Tailscale
+    control plane, but Tailscale ping, TCP/22, and SSH time out from this workspace, so no
+    live trace row was run in this stop point.
 
 - Added the llama.cpp supplied-token loglikelihood contract.
   - task packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`
