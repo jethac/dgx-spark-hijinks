@@ -142,7 +142,25 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   those scales in the same handedness as the local FP4-dequant reference (`k_scale` folded
   into `sm_scale`, `v_scale` applied to the output). This falsifies a stale or inverted
   cached-prefix global-scale explanation for the captured row.
-- Next: investigate K scale quality/policy, including per-head/per-group K scales or
+
+2026-06-09 K-scale policy probe:
+
+- Fork commits: `jethac/sglang@dfd426442` added the inactive multiplier trace, and
+  `jethac/sglang@e4f24bbd3` added the experimental runtime K global-scale multiplier.
+- Trace run id: `sglang_qwen_fp4kv_kscale_trace_c3dae30f_dfd426442_20260609T`
+- Actual serving run id:
+  `sglang_qwen_fp4kv_kscale_actual_c3dae30f_e4f24bbd3_20260609Tactual0125`
+- Offline result: K global-scale multiplier `0.125` improves the main row's K-only
+  attention reference cosine from `0.7893718481063843` to `0.9584803581237793`, and the
+  K+V attention reference from `0.7876883745193481` to `0.9561840295791626`. Direct K
+  reconstruction gets worse (`~0.9967` to `0.8765701055526733`), so this is optimizing
+  attention-logit behavior rather than raw K reconstruction.
+- Actual serving result: still red with radix cache on. Fresh rows still emit `**`
+  (`-0.7235294580459595`), but the 55-token radix-hit row emits `To` / token id `1249`
+  (`-1.7186779975891113`) instead of `**`. The first layer-0 attention divergence improves
+  from `0.006467887232207366` to `0.1657561728524288`, but remains far from a pass.
+- Decision: a scalar K multiplier is not a blessable fix. Next: investigate K scale
+  quality/policy beyond a single global scalar, including per-head/per-group K scales or
   FP8/BF16 K with FP4 V. Quantify capacity loss before considering a K-not-FP4 fallback
   blessed.
 

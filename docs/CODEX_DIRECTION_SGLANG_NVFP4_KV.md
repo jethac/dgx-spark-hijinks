@@ -49,6 +49,19 @@ interpretation is falsified for this row. The key distinction is that the dense 
 serving path uses BF16 K/V attention; the FP4-dequant reference inside that same dense
 row is already bad on K-only.
 
+K-scale policy probe, 2026-06-09: a scalar K scale is a real lever, but not a sufficient
+fix. The inactive trace sweep in `jethac/sglang@dfd426442` tested K global-scale
+multipliers `0.125,0.25,0.5,1,2,4,8` on the same layer-0 row. The best offline setting,
+`0.125`, improved the FP4 K-only attention reference cosine from `0.7893718481063843`
+to `0.9584803581237793`, and the FP4 K+V reference from `0.7876883745193481` to
+`0.9561840295791626`, while direct K reconstruction dropped from about `0.9967` to
+`0.8766`. The actual serving test in `jethac/sglang@e4f24bbd3` with
+`SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER=0.125` did not pass: the radix-hit second
+request changed from `ark` to `To`, not back to `**`, and the first layer-0 attention
+divergence improved only from `0.006467887232207366` to `0.1657561728524288`. Treat
+this as evidence that the current global K calibration is not attention-quality
+optimal, but do not bless a scalar multiplier as a workaround.
+
 Next target: K-side policy/quality. Investigate calibrated K scale quality, per-head or
 per-group K scales, FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not
 spend more time on radix page pairing or `_safe_merge_state` for this row unless new
