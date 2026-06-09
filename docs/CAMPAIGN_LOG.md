@@ -1049,6 +1049,11 @@
     passed through `server-context.cpp`, `server-task.cpp`, `server.cpp`, and final link.
   - live status: GB10 runtime validation remains pending because the Tailnet host is
     visible but not reachable over Tailscale ping, TCP/22, or SSH from this workspace.
+- Root-caused the 2026-06-09 host outage: **vLLM unified-memory OOM → kernel hung-task deadlock, NOT thermal.**
+  - doc: `docs/INCIDENT_20260609_OOM_DEADLOCK.md`
+  - evidence (live SSH after recovery): global OOM-killer killed `VLLM::EngineCor` (pid 400721, in a Docker container) mapping ~123 GB on a 119 GiB box; the killed process held an mmap rw-semaphore in the NVIDIA driver, so `jbd2`/`gnome-shell`/`gsd-color`/`systemd-journal` blocked 122→368 s and never cleared. `kernel.hung_task_panic=0` → no auto-reboot → required a physical power-cycle. GPU 40 °C, zero thermal/throttle events — heat exonerated. Recurring: NVRM OOM + OOM-kills on Jun 06, 07, and 09.
+  - root cause: GB10 unified memory — `--gpu-memory-utilization` is a fraction of the *shared* 119 GiB pool, not separate VRAM. Big model + NVFP4 KV pool (especially the matched fp8-vs-nvfp4 comparator running two servers at once) exceeds the pool; global OOM + driver-held mmap_lock deadlocks the kernel (vs a clean CUDA-process kill on a discrete-VRAM box).
+  - standing mitigations: leave ≥15–20 GiB OS headroom (don't run 0.85+ mem-fraction); never run the fp8+nvfp4 comparators concurrently at high mem-fraction (sequential, or cap so the sum < ~100 GiB); cgroup-limit the container (`--memory`) so a runaway is killed in-cgroup instead of wedging the kernel; optionally `kernel.hung_task_panic=1`+`kernel.panic=30` so a headless hang auto-reboots. Linked from README Start Here.
 
 ## First Benchmark Campaign Summary
 

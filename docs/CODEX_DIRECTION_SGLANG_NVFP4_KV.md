@@ -278,6 +278,19 @@ deswizzle enabled`). vLLM has therefore already produced a correct end-to-end ma
 pair on GB10. Diff SGLang's quantize convention + V-scale layout + calibration against
 what vLLM's clean row does; the divergence is the bug.
 
+## GB10 memory safety (MANDATORY — read before any serving run)
+GB10 has **unified memory**: the KV pool + model + a second comparator server all draw on
+one shared ~119 GiB CPU+GPU pool. On 2026-06-09 a vLLM run exhausted it and deadlocked the
+kernel (`docs/INCIDENT_20260609_OOM_DEADLOCK.md`); the same risk applies to SGLang's matched
+fp8-vs-fp4 rows. Rules:
+- Leave **≥15–20 GiB OS headroom**; keep `--mem-fraction-static` conservative (the FP4 KV
+  pool is *large* by design — 1.78× fp8 — so a high fraction overshoots fast).
+- **Never run the fp8 and fp4 comparator servers concurrently** at high mem-fraction — run
+  them **sequentially** (stop server A before starting server B) or cap each so the sum
+  < ~100 GiB. The matched-row pattern is the exact trigger from the incident.
+- **Cgroup-limit the container** so a runaway is OOM-killed in-cgroup instead of wedging the
+  kernel. Pre-run: `free -h` should show ~115 GiB available.
+
 ## Methodology / sequencing constraint
 Do NOT build a container image in the dev loop. SGLang already iterates the right cheap
 way and should keep doing so:

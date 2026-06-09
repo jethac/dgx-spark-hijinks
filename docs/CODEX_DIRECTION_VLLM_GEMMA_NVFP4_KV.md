@@ -10,6 +10,19 @@ NVFP4 KV cache on GB10 is the founding goal of this whole campaign — it target
 actual bottleneck (memory / context length / concurrency), not decode FLOPs. Reorient
 the vLLM NVFP4-KV work so that **Gemma is the target model**, not Qwen.
 
+## GB10 memory safety (MANDATORY — read before any serving run)
+GB10 has **unified memory**: `--gpu-memory-utilization` is a fraction of the *shared*
+~119 GiB CPU+GPU pool, not a separate VRAM budget. On 2026-06-09 a vLLM run mapped ~123 GB,
+the global OOM-killer fired while the EngineCore held the NVIDIA driver mmap lock, and the
+whole box deadlocked (`docs/INCIDENT_20260609_OOM_DEADLOCK.md`). Rules:
+- Leave **≥15–20 GiB OS headroom**; do not run `--gpu-memory-utilization` ≥ 0.85 on this box.
+- **Never run the fp8 and nvfp4 comparator servers concurrently** at high mem-fraction —
+  two big servers double the footprint and exceed the pool. Run them **sequentially** (tear
+  down server A before starting server B), or cap each so the sum < ~100 GiB.
+- **Cgroup-limit the container** (`docker run --memory=<N>g --memory-swap=<N>g`) so a runaway
+  is OOM-killed in-cgroup instead of triggering a global OOM that wedges the kernel.
+- Pre-run: `free -h` should show ~115 GiB available; size `weights + KV_pool + 20 GiB` ≤ 119.
+
 ## Methodology / sequencing constraint
 Do NOT build a fresh vLLM image as part of the dev loop. An image build is the final
 packaging *deliverable*, gated on Gemma 4 actually serving correctly with NVFP4 KV
