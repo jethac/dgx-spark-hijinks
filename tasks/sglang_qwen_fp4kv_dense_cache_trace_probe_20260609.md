@@ -159,10 +159,28 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   (`-0.7235294580459595`), but the 55-token radix-hit row emits `To` / token id `1249`
   (`-1.7186779975891113`) instead of `**`. The first layer-0 attention divergence improves
   from `0.006467887232207366` to `0.1657561728524288`, but remains far from a pass.
-- Decision: a scalar K multiplier is not a blessable fix. Next: investigate K scale
-  quality/policy beyond a single global scalar, including per-head/per-group K scales or
-  FP8/BF16 K with FP4 V. Quantify capacity loss before considering a K-not-FP4 fallback
-  blessed.
+
+2026-06-09 per-head folded-SF policy probe:
+
+- Fork commit: `jethac/sglang@d6fa9d104` added inactive
+  `SGLANG_FP4_KV_TRACE_K_HEAD_SCALE_POLICY=1`.
+- Parent commit: `7fec106` exposes it through
+  `scripts/run_sglang_fp4_dense_cache_trace.sh` as `K_HEAD_SCALE_POLICY=1`.
+- Run id: `sglang_qwen_fp4kv_khead_policy_c3dae30f_d6fa9d104_20260609T1430Z`
+- Method: quantize each KV head with its own amax-derived K global, fold that
+  head/global ratio into the existing FP8 block-scale buffer, and dequantize under the
+  single scalar K global FlashInfer receives. This tests whether the current storage
+  layout can represent a finer effective K policy without changing the wrapper ABI.
+- Main row result: best multiplier remains `0.125`. FP4 K+V attention cosine improves
+  from `0.7876883745193481` to `0.954595148563385`, and K-only from
+  `0.7893718481063843` to `0.9574685096740723`; direct K reconstruction drops to
+  `0.8836419582366943`. The row still serves red (`ark` on the radix-hit request),
+  because this was trace-only.
+- Decision: per-head amax granularity is not a compelling next serving patch; it lands
+  in the same quality regime as scalar `0.125`, which already failed real serving. Next
+  should test a stronger quality objective or a mixed policy such as FP8/BF16 K with
+  NVFP4 V. Capacity warning: naive FP8 K + NVFP4 V gives about `1.28x` fp8 KV capacity,
+  versus about `1.78x` for NVFP4 K+V.
 
 Implemented insertion points:
 

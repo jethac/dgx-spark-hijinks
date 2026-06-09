@@ -62,11 +62,25 @@ divergence improved only from `0.006467887232207366` to `0.1657561728524288`. Tr
 this as evidence that the current global K calibration is not attention-quality
 optimal, but do not bless a scalar multiplier as a workaround.
 
+Per-head K scale policy probe, 2026-06-09: `jethac/sglang@d6fa9d104` tested whether a
+finer K policy can fit the current layout by quantizing each KV head with its own
+amax-derived K global, folding the head/global ratio into the existing FP8 block-scale
+buffer, and dequantizing under the single scalar K global that FlashInfer receives. The
+best main-row setting is again multiplier `0.125`: FP4 K+V attention cosine improves
+from `0.7876883745193481` to `0.954595148563385`, and K-only from
+`0.7893718481063843` to `0.9574685096740723`, while direct K reconstruction drops to
+`0.8836419582366943`. This is no better than the scalar `0.125` regime, and the scalar
+runtime run already failed real radix-on serving. Do not implement per-head serving
+policy as the next fix unless new evidence appears; it is currently a trace-only
+falsifier for "head granularity is enough."
+
 Next target: K-side policy/quality. Investigate calibrated K scale quality, per-head or
-per-group K scales, FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not
-spend more time on radix page pairing or `_safe_merge_state` for this row unless new
-evidence contradicts the K-only split. A K-not-FP4 fallback must be reported with its
-capacity cost before it can be considered a blessed serving result.
+per-group K scales only if they are tied to a stronger quality objective than amax,
+FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not spend more time on
+radix page pairing or `_safe_merge_state` for this row unless new evidence contradicts
+the K-only split. A K-not-FP4 fallback must be reported with its capacity cost before it
+can be considered a blessed serving result: naive FP8 K + NVFP4 V gives about
+`16 / (8 + 4.5) = 1.28x` the fp8 KV pool, versus about `1.78x` for NVFP4 K+V.
 
 ## 2026-06-09 update — current-head source-stack retest still red
 
