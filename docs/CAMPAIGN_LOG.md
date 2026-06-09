@@ -991,11 +991,13 @@
   - SGLang fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
   - commit: `795f087ca`
   - task packet: `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
+  - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
   - env gate: `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1`
   - purpose: compare full-prefill and cached-prefix Qwen FP4-KV tensors at FlashInfer
     attention, Qwen2 hidden states, raw/sampled logits, and sampler preprocessing.
   - local verification: `python -m py_compile` for touched files and `git diff --check`
-    passed.
+    passed for the fork; `bash -n scripts/run_sglang_fp4_dense_cache_trace.sh` and
+    `git diff --check` passed for the campaign runner.
   - live status: queued. The host answers Tailscale ping, but TCP/22 and `tailscale ssh`
     fail from this workspace, so no live trace row was run in this stop point.
 

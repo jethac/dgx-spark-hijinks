@@ -113,6 +113,30 @@ Implemented insertion points:
   - The existing patch target in `scripts/sglang_fp4_first_token_dump_patch.yaml` proves
     this location is sufficient for the sampler boundary.
 
+Runner:
+
+```bash
+RUN_ID=sglang_qwen_fp4kv_dense_cache_$(date -u +%Y%m%dT%H%M%SZ) \
+PREPARE_SOURCE_STACK_IMAGE=1 \
+TRACE_LAYERS=0,1,7,13,20,27 \
+TRACE_VALUES=64 \
+bash scripts/run_sglang_fp4_dense_cache_trace.sh
+```
+
+Default `CASES=default` runs the known failing cached-prefix row only. If the default row
+localizes the first divergence to attention, run the full-paged comparator without changing
+the source stack:
+
+```bash
+RUN_ID=sglang_qwen_fp4kv_dense_cache_fullpaged_$(date -u +%Y%m%dT%H%M%SZ) \
+SOURCE_STACK_IMAGE=<prepared-source-stack-image> \
+PREPARE_SOURCE_STACK_IMAGE=0 \
+PREPARE_RUST_IMAGE=0 \
+INSTALL_SOURCE_STACK_PER_CASE=0 \
+CASES=full_paged \
+bash scripts/run_sglang_fp4_dense_cache_trace.sh
+```
+
 Capture key:
 
 ```text

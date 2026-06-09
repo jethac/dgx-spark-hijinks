@@ -174,6 +174,12 @@ Packaging note: use `scripts/prepare_sglang_source_stack_image.sh` or the per-ca
 installer `scripts/install_sglang_source_stack.sh`. The current runner source-builds the
 patched stack instead of installing the PyPI `sglang-kernel` wheel.
 
+Queued dense-cache trace command: `scripts/run_sglang_fp4_dense_cache_trace.sh` wraps the
+same source-built stack plus `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1` and
+`scripts/sglang_fp4_request_order_probe.py`. Default `CASES=default` runs the known failing
+cached-prefix row; use `CASES=full_paged` only as the follow-up comparator after the default
+row localizes the first divergence.
+
 ## Update Cadence
 
 Update this board whenever any of the following changes:
