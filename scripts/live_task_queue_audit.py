@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,27 @@ REQUIRED_FIELDS = (
     "needs_live_gb10",
     "why_now",
     "acceptance",
+)
+
+NUMBER_WORDS = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+}
+COUNT_PHRASE_RE = re.compile(
+    r"(queue currently contains|live queue audit is green with)\s+"
+    r"([A-Za-z0-9_-]+)\s+(?:queued\s+)?items",
+    re.IGNORECASE,
 )
 
 
@@ -127,10 +149,76 @@ def validate_row(root: Path, row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def parse_count(raw: str) -> int | None:
+    lowered = raw.lower()
+    if lowered.isdigit():
+        return int(lowered)
+    return NUMBER_WORDS.get(lowered)
+
+
+def validate_docs(
+    root: Path,
+    doc_paths: list[str],
+    *,
+    expected_count: int,
+    ids: list[str],
+) -> list[dict[str, Any]]:
+    checks: list[dict[str, Any]] = []
+    for raw_path in doc_paths:
+        path = root / raw_path
+        findings: list[str] = []
+        if not path.exists():
+            checks.append(
+                {
+                    "path": raw_path,
+                    "ok": False,
+                    "findings": [f"doc does not exist: {raw_path}"],
+                    "count_phrases": [],
+                }
+            )
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        count_phrases = []
+        for match in COUNT_PHRASE_RE.finditer(text):
+            parsed = parse_count(match.group(2))
+            count_phrases.append(
+                {
+                    "phrase": match.group(0),
+                    "parsed_count": parsed,
+                }
+            )
+            if parsed != expected_count:
+                findings.append(
+                    f"queue count phrase {match.group(0)!r} parsed as {parsed}, "
+                    f"expected {expected_count}"
+                )
+        if raw_path.replace("\\", "/").endswith("LIVE_GB10_RUNBOOK.md"):
+            missing = [task_id for task_id in ids if f"`{task_id}`" not in text]
+            if missing:
+                findings.append(
+                    "runbook is missing queued task id(s): " + ", ".join(missing)
+                )
+        checks.append(
+            {
+                "path": raw_path,
+                "ok": not findings,
+                "findings": findings,
+                "count_phrases": count_phrases,
+            }
+        )
+    return checks
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--queue", default="tasks/live_gb10_queue.jsonl")
     parser.add_argument("--output", default="results/live_task_queue_audit_20260609.json")
+    parser.add_argument(
+        "--doc",
+        action="append",
+        default=None,
+        help="documentation file to scan for live-queue count drift",
+    )
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parents[1]
@@ -167,6 +255,16 @@ def main() -> int:
 
     live_required = [row for row in rows if row.get("needs_live_gb10") is True]
     offline_possible = [row for row in rows if row.get("needs_live_gb10") is False]
+    doc_paths = args.doc or [
+        "docs/LIVE_GB10_RUNBOOK.md",
+        "docs/SOLUTIONS_STATUS.md",
+    ]
+    doc_checks = validate_docs(
+        root,
+        doc_paths,
+        expected_count=len(rows),
+        ids=ids,
+    )
     summary = {
         "schema": "live-task-queue-audit/v1",
         "queue": rel(queue_path, root),
@@ -176,6 +274,7 @@ def main() -> int:
         "duplicate_ids": duplicate_ids,
         "priority_order_ok": priority_order_ok,
         "row_checks": row_checks,
+        "doc_checks": doc_checks,
         "next_live_tasks": [
             {
                 "id": row["id"],
@@ -187,7 +286,11 @@ def main() -> int:
             }
             for row in sorted(live_required, key=lambda item: item["priority"])[:5]
         ],
-        "ok": all(check["ok"] for check in row_checks) and not duplicate_ids,
+        "ok": (
+            all(check["ok"] for check in row_checks)
+            and all(check["ok"] for check in doc_checks)
+            and not duplicate_ids
+        ),
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(summary, indent=2, sort_keys=True) + "\n"

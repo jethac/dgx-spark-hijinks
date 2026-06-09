@@ -1,4 +1,28 @@
 {
+  "doc_checks": [
+    {
+      "count_phrases": [
+        {
+          "parsed_count": 9,
+          "phrase": "queue currently contains nine items"
+        }
+      ],
+      "findings": [],
+      "ok": true,
+      "path": "docs/LIVE_GB10_RUNBOOK.md"
+    },
+    {
+      "count_phrases": [
+        {
+          "parsed_count": 9,
+          "phrase": "live queue audit is green with nine queued items"
+        }
+      ],
+      "findings": [],
+      "ok": true,
+      "path": "docs/SOLUTIONS_STATUS.md"
+    }
+  ],
   "duplicate_ids": [],
   "live_gb10_required_count": 9,
   "next_live_tasks": [
