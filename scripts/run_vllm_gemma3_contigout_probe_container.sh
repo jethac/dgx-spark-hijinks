@@ -21,6 +21,7 @@ VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE:-0.1.dev1+gcontigout}
 FLASHINFER_PREFILL_DEBUG_ONCE=${FLASHINFER_PREFILL_DEBUG_ONCE:-0}
 FLASHINFER_EXTRA_CUDAFLAGS=${FLASHINFER_EXTRA_CUDAFLAGS:-"-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1 -gencode=arch=compute_121a,code=sm_121a"}
 FLASHINFER_CLEAR_PREFILL_CACHE=${FLASHINFER_CLEAR_PREFILL_CACHE:-1}
+SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=${SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG:-1}
 
 mkdir -p "${RESULTS_DIR}/${RUN}_active_page_dump"
 if [[ -z "${HF_TOKEN:-}" && -f "${HF_CACHE}/token" ]]; then
@@ -76,6 +77,7 @@ docker run -d --gpus all --ipc=host --network=host \
   -e FLASHINFER_PREFILL_DEBUG_ONCE \
   -e FLASHINFER_EXTRA_CUDAFLAGS \
   -e FLASHINFER_CLEAR_PREFILL_CACHE \
+  -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e CUDA_MODULE_LOADING=LAZY \
   -v "${VLLM_SRC}:/vllm-src" \
@@ -92,8 +94,8 @@ mkdir -p /tmp/spark-sitecustomize
 cp /workspace/dgx-spark-hijinks/scripts/flashinfer_source_sitecustomize.py /tmp/spark-sitecustomize/sitecustomize.py
 export PYTHONPATH="/tmp/spark-sitecustomize:${PYTHONPATH:-}"
 if [[ "${FLASHINFER_CLEAR_PREFILL_CACHE:-0}" == "1" ]]; then
-  rm -rf /root/.cache/flashinfer/0.6.13/121a/cached_ops/batch_prefill_with_kv_cache_*
-  rm -rf /root/.cache/flashinfer/0.6.13/121a/generated/batch_prefill_with_kv_cache_*
+  find /root/.cache/flashinfer -path "*/cached_ops/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
+  find /root/.cache/flashinfer -path "*/generated/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
 fi
 python3 -m pip install -q setuptools-rust > /results/'"${RUN}"'_pip_bootstrap.log 2>&1
 cd /vllm-src
@@ -103,6 +105,7 @@ cp /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so /vllm-src/vllm/vllm
 python3 - <<'"'"'PY'"'"' > /results/'"${RUN}"'_import_probe.txt 2>&1
 import json, torch, transformers, vllm, flashinfer
 import flashinfer.jit.attention.modules as flashinfer_attention_modules
+import flashinfer.jit as flashinfer_jit
 import flashinfer.jit.utils as flashinfer_jit_utils
 import vllm.vllm_flash_attn._vllm_fa2_C as fa2_ext
 print(json.dumps({
@@ -114,6 +117,8 @@ print(json.dumps({
   "flashinfer_dtype_map_kv_uint8": flashinfer_jit_utils.dtype_map_kv.get(torch.uint8),
   "flashinfer_attention_dtype_map_kv_uint8": flashinfer_attention_modules.dtype_map_kv.get(torch.uint8),
   "flashinfer_filename_safe_dtype_map_kv_uint8": flashinfer_jit_utils.filename_safe_dtype_map_kv(torch.uint8),
+  "flashinfer_attention_gen_batch_prefill_module": getattr(flashinfer_attention_modules.gen_batch_prefill_module, "__module__", None),
+  "flashinfer_jit_gen_batch_prefill_module": getattr(flashinfer_jit.gen_batch_prefill_module, "__module__", None),
   "transformers": getattr(transformers, "__version__", None),
   "torch": torch.__version__,
   "torch_cuda": torch.version.cuda,

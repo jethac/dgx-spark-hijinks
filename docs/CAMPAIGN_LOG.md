@@ -1078,6 +1078,14 @@
   - red result: serving output remains corrupt (` Reigns`, Gujarati token, `ioane`), and the worker-side paged-prefill debug lines still show `dtype_kv=uint8_t`, `fp4_kv=0`, `require_fp4_kv=0`, empty `module_uri`, and no scale tensors.
   - interpretation: the import path can be patched, but the actual EngineCore paged-prefill binding path still resolves a stale/raw-byte generator or cached module. The next fix must instrument/force the worker-side FlashInfer binding path before returning to FA2 math, SWA reuse, or quality-gate work.
 
+- Ran the vLLM Gemma 3 FlashInfer worker-binding probe that rebinds the standard batch-prefill generator path.
+  - artifact: `results/vllm_gemma3_flashinfer_worker_bind_20260609T1552JST_summary.md`
+  - patch under test: `sitecustomize.py` now rebinds `flashinfer.jit.gen_batch_prefill_module` and `flashinfer.prefill.gen_batch_prefill_module` to the local patched FlashInfer source, in addition to the customize generator; the runner clears all cached/generated batch-prefill modules across FlashInfer versions.
+  - safety: single reduced Gemma 3 server, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=1024`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - positive: the pre-serve probe confirms both dtype maps and both standard generator bindings point at the patched FlashInfer path.
+  - result: the server fails during FlashInfer warmup with `TypeError: Mismatched number of arguments ... Expected 29 but got 27 arguments`.
+  - interpretation: the failure mode moved forward. FlashInfer now generates an FP4-KV-aware paged-prefill module that expects scale-factor tensor arguments, but vLLM still calls it with the old raw-KV argument list. Next vLLM work is to pass `maybe_k_cache_sf` / `maybe_v_cache_sf` from the split NVFP4 KV views into `prefill_wrapper.run(...)`, then rerun the Gemma quality gate.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

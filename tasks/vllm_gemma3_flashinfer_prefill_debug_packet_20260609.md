@@ -59,8 +59,8 @@ Clear only the relevant generated prefill modules before the rerun so the copied
 `batch_prefill.cu` and rendered config are rebuilt:
 
 ```bash
-rm -rf /root/.cache/flashinfer/0.6.13/121a/cached_ops/batch_prefill_with_kv_cache_*
-rm -rf /root/.cache/flashinfer/0.6.13/121a/generated/batch_prefill_with_kv_cache_*
+find /root/.cache/flashinfer -path "*/cached_ops/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
+find /root/.cache/flashinfer -path "*/generated/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
 ```
 
 Then rerun the Gemma 3 NVFP4 first-token diagnostic from
@@ -135,3 +135,11 @@ as `dtype_kv=uint8_t`, `require_fp4_kv=0`, `is_kv_fp4x2=0`, with empty
 
 Next action: fix the vLLM/FlashInfer Python-JIT binding path that decides FP4 KV
 specialization and scale-tensor metadata for Gemma 3 paged prefill, then rerun this packet.
+
+Follow-up run: `results/vllm_gemma3_flashinfer_worker_bind_20260609T1552JST_summary.md`.
+
+The worker-side binding patch changed the failure mode: FlashInfer now generates a
+scale-aware FP4-KV paged-prefill signature, but vLLM still calls it with the 27-argument
+raw-KV call shape. The next packet must patch the vLLM prefill call site to pass the split
+`maybe_k_cache_sf` and `maybe_v_cache_sf` tensors into `prefill_wrapper.run(...)`; after
+that, this debug packet can resume checking bound tensor identity and Gemma quality.

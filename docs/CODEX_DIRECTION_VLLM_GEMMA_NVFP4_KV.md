@@ -584,6 +584,27 @@ path is still using a stale/raw-byte generator or cached module path. The next f
 instrument/force the worker-side FlashInfer binding path and prove the server log flips to
 `require_fp4_kv=1` before returning to SWA/cache-reuse or FA2 kernel math.
 
+Follow-up stop point - 2026-06-09T1552JST:
+`results/vllm_gemma3_flashinfer_worker_bind_20260609T1552JST_summary.md`.
+
+The worker-side binding patch now rebinds FlashInfer's standard `gen_batch_prefill_module`
+path in both `flashinfer.jit` and `flashinfer.prefill`, and clears generated batch-prefill
+caches across installed FlashInfer versions. The pre-serve probe confirms both the dtype map
+and the standard generator binding are pointed at the local patched FlashInfer source.
+
+The live Gemma 3 server now fails during FlashInfer attention warmup with:
+
+- `TypeError: Mismatched number of arguments when calling: paged_run(...)`
+- `Expected 29 but got 27 arguments`
+
+Interpretation: this is progress. The generated paged-prefill module is now the FP4-KV-aware
+variant that expects scale-factor tensor arguments, but vLLM still calls it with the old
+raw-KV argument list. The next fix is vLLM prefill call-site plumbing: pass the split
+`maybe_k_cache_sf` and `maybe_v_cache_sf` tensors into `prefill_wrapper.run(...)`, then rerun
+until the server reaches first-token generation and the Gemma quality gate passes. Do not
+reopen page-byte pairing or low-level FA2 math until that 29-argument FP4 prefill call is
+actually supplied.
+
 ## Guardrails
 - **Validate on `sm_121a` only.** This campaign's validation hardware is GB10. SM120 is a compiled-but-unclaimed build
   target; never put a correctness/capacity claim on hardware we can't run. See the

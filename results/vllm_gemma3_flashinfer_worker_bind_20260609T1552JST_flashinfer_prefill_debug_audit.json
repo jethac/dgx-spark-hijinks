@@ -1,0 +1,30 @@
+{
+  "counts": {
+    "identity_lines": 0,
+    "paged_identity_lines": 0,
+    "paged_tensor_lines": 0,
+    "ragged_identity_lines": 0,
+    "tensor_lines": 0
+  },
+  "expectations": {
+    "head_dim": 128,
+    "kv_heads": 16,
+    "page_size": 16,
+    "q_heads": 32,
+    "require_bound_call": true,
+    "require_paged": true,
+    "require_tensor_dump": true
+  },
+  "findings": [
+    "no paged prefill debug identity line found",
+    "no paged tensor dump line found"
+  ],
+  "ok": false,
+  "paged_bound_groups": [],
+  "paged_identities": [],
+  "paged_tensor_checks": [],
+  "paged_tensor_lines": [],
+  "ragged_identities": [],
+  "schema": "flashinfer-prefill-debug-log-audit/v1",
+  "server_log": "results/vllm_gemma3_flashinfer_worker_bind_20260609T1552JST_server.log"
+}

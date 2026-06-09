@@ -11,6 +11,7 @@ import importlib.util
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 
 def _load_local_module(module_name: str, module_path: Path):
@@ -140,14 +141,38 @@ def _patch_flashinfer(source_root: Path) -> None:
     attention_modules.filename_safe_dtype_map_kv = filename_safe_dtype_map_kv
     attention_modules.get_batch_prefill_uri = get_batch_prefill_uri
     if local_attention_modules is not None:
+        jit.gen_batch_prefill_module = attention_modules.gen_batch_prefill_module
         jit.gen_customize_batch_prefill_module = (
             attention_modules.gen_customize_batch_prefill_module
         )
+        prefill.gen_batch_prefill_module = attention_modules.gen_batch_prefill_module
         prefill.gen_customize_batch_prefill_module = (
             attention_modules.gen_customize_batch_prefill_module
         )
     jit.get_batch_prefill_uri = get_batch_prefill_uri
     prefill.get_batch_prefill_uri = get_batch_prefill_uri
+    if hasattr(prefill.get_batch_prefill_module, "cache_clear"):
+        prefill.get_batch_prefill_module.cache_clear()
+
+    if os.environ.get("SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG") == "1":
+        debug: dict[str, Any] = {
+            "pid": os.getpid(),
+            "source_root": str(source_root),
+            "jit_utils_file": getattr(jit_utils, "__file__", None),
+            "attention_modules_file": getattr(attention_modules, "__file__", None),
+            "prefill_file": getattr(prefill, "__file__", None),
+            "dtype_map_kv_uint8": jit_utils.dtype_map_kv.get(torch.uint8),
+            "attention_dtype_map_kv_uint8": attention_modules.dtype_map_kv.get(
+                torch.uint8
+            ),
+            "prefill_gen_batch_prefill_module": getattr(
+                prefill.gen_batch_prefill_module, "__module__", None
+            ),
+            "jit_gen_batch_prefill_module": getattr(
+                jit.gen_batch_prefill_module, "__module__", None
+            ),
+        }
+        print(f"[spark-sitecustomize] {debug}", file=sys.stderr, flush=True)
 
 
 source = os.environ.get("SPARK_FLASHINFER_SOURCE_ROOT")

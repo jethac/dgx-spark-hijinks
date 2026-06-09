@@ -1,0 +1,20 @@
+{
+  "capability": [
+    12,
+    1
+  ],
+  "device": "NVIDIA GB10",
+  "flashinfer": "0.6.9rc1",
+  "flashinfer_attention_dtype_map_kv_uint8": "__nv_fp4x2_e2m1",
+  "flashinfer_attention_gen_batch_prefill_module": "flashinfer.jit.attention.modules",
+  "flashinfer_dtype_map_kv_uint8": "__nv_fp4x2_e2m1",
+  "flashinfer_file": "/usr/local/lib/python3.12/dist-packages/flashinfer/__init__.py",
+  "flashinfer_filename_safe_dtype_map_kv_uint8": "fp4x2_e2m1",
+  "flashinfer_jit_gen_batch_prefill_module": "flashinfer.jit.attention.modules",
+  "torch": "2.12.0.dev20260408+cu130",
+  "torch_cuda": "13.0",
+  "transformers": "5.6.2",
+  "vllm": "0.1.dev1+gcontigout",
+  "vllm_fa2": "/vllm-src/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so",
+  "vllm_file": "/vllm-src/vllm/__init__.py"
+}
