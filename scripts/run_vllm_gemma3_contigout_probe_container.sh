@@ -16,6 +16,9 @@ GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.85}
 MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS:-4096}
 VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-4dcd10eb0d223a3ec4b2c96deaf3a48a96c8dcaa}
 VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE:-0.1.dev1+gcontigout}
+FLASHINFER_PREFILL_DEBUG_ONCE=${FLASHINFER_PREFILL_DEBUG_ONCE:-0}
+FLASHINFER_EXTRA_CUDAFLAGS=${FLASHINFER_EXTRA_CUDAFLAGS:-"-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1 -gencode=arch=compute_121a,code=sm_121a"}
+FLASHINFER_CLEAR_PREFILL_CACHE=${FLASHINFER_CLEAR_PREFILL_CACHE:-1}
 
 mkdir -p "${RESULTS_DIR}/${RUN}_active_page_dump"
 if [[ -z "${HF_TOKEN:-}" && -f "${HF_CACHE}/token" ]]; then
@@ -66,7 +69,9 @@ docker run -d --gpus all --ipc=host --network=host \
   -e VLLM_SPARK_ACTIVE_PAGE_DUMP_LIMIT=1 \
   -e VLLM_SPARK_ACTIVE_PAGE_DUMP_PAGES=4 \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
-  -e FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1 \
+  -e FLASHINFER_PREFILL_DEBUG_ONCE \
+  -e FLASHINFER_EXTRA_CUDAFLAGS \
+  -e FLASHINFER_CLEAR_PREFILL_CACHE \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e CUDA_MODULE_LOADING=LAZY \
   -v "${VLLM_SRC}:/vllm-src" \
@@ -82,6 +87,10 @@ git config --global --add safe.directory /vllm-src
 mkdir -p /tmp/spark-sitecustomize
 cp /workspace/dgx-spark-hijinks/scripts/flashinfer_source_sitecustomize.py /tmp/spark-sitecustomize/sitecustomize.py
 export PYTHONPATH="/tmp/spark-sitecustomize:${PYTHONPATH:-}"
+if [[ "${FLASHINFER_CLEAR_PREFILL_CACHE:-0}" == "1" ]]; then
+  rm -rf /root/.cache/flashinfer/0.6.13/121a/cached_ops/batch_prefill_with_kv_cache_*
+  rm -rf /root/.cache/flashinfer/0.6.13/121a/generated/batch_prefill_with_kv_cache_*
+fi
 python3 -m pip install -q setuptools-rust > /results/'"${RUN}"'_pip_bootstrap.log 2>&1
 cd /vllm-src
 VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT='"${VLLM_PRECOMPILED_WHEEL_COMMIT}"' VLLM_PRECOMPILED_SKIP_FLASH_ATTN=1 VLLM_VERSION_OVERRIDE='"${VLLM_VERSION_OVERRIDE}"' \
