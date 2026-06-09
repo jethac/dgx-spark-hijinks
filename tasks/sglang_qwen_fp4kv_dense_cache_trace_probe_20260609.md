@@ -172,11 +172,15 @@ Acceptance:
   rows by `rid` and phase. The runner writes
   `results/${RUN_ID}_${case}_dense_cache_compare.json` via
   `scripts/sglang_dense_cache_trace_compare.py`.
+- The run summary must pass `scripts/sglang_dense_cache_trace_summary_audit.py`; a missing,
+  unparsable, or red comparison artifact is a red run, not an inconclusive green.
 - Do not bless `--disable-radix-cache` or selective no-reuse as the FP4-KV capacity path.
   It remains a diagnostic/emergency workaround only.
 
 Expected queue artifacts:
 
 - `results/${RUN_ID}_summary.json`
+- `results/${RUN_ID}_${case}.json`
 - `results/${RUN_ID}_${case}_server.log`
 - `results/${RUN_ID}_${case}_dense_cache_compare.json`
+- `results/${RUN_ID}_dense_cache_trace_summary_audit.json`

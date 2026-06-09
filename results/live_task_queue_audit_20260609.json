@@ -91,7 +91,7 @@
       "task_packet_artifact_mentions_checked": true
     },
     {
-      "expected_artifact_count": 3,
+      "expected_artifact_count": 5,
       "findings": [],
       "id": "sglang_qwen_fp4kv_dense_cache_trace",
       "line": 3,

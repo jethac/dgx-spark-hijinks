@@ -230,16 +230,23 @@ for name in case_names:
             )
         rows.append(row_summary)
     summary["cases"][name] = {
-        "ok": trace_compare_ok is not False,
+        "ok": trace_compare_ok is True,
+        "request_json": str(path),
         "server_log": str(server_log),
         "trace_compare": str(trace_compare),
         "trace_compare_ok": trace_compare_ok,
         "token_summary": obj.get("token_summary"),
         "rows": rows,
     }
+    if trace_compare_ok is not True:
+        summary["cases"][name]["finding"] = "dense-cache trace comparison missing, unparsable, or red"
 out = base / f"{run}_summary.json"
 out.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
 print(json.dumps(summary, indent=2, sort_keys=True))
 PY
+
+python3 "${REPO_ROOT}/scripts/sglang_dense_cache_trace_summary_audit.py" \
+  --summary-json "${RESULTS_DIR}/${RUN_ID}_summary.json" \
+  --output "${RESULTS_DIR}/${RUN_ID}_dense_cache_trace_summary_audit.json" || status=1
 
 exit "${status}"
