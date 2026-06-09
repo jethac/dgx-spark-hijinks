@@ -98,10 +98,19 @@ Green for this diagnostic is not model quality. Green means the log proves one o
 - the live generated module/tensor identity is wrong, giving a concrete binding/JIT fix
   before touching kernel math.
 
+The audit is intentionally strict. It requires the paged module to compile as
+`__nv_fp4x2_e2m1` with `require_fp4_kv=1`, `is_kv_fp4x2=1`, both K/V scale-factor
+additional tensors present, and paged K/V tensor views whose byte-carrier layout matches
+the runtime NHD/HND page-size and KV-head geometry. A raw `uint8_t` compiled module is red
+even though the Python-facing cache tensors are byte carriers.
+
 ## Expected Red Flags
 
 - `REQUIRE_FP4_KV_CACHE=0` or `is_kv_fp4x2=0` on the failing NVFP4 paged path.
+- `dtype_kv=uint8_t` in the compiled identity instead of `__nv_fp4x2_e2m1`.
 - missing `maybe_k_cache_sf,maybe_v_cache_sf` in `additional_tensors`.
 - `paged_v_cache` pointer/shape/stride matching the packed carrier but `dtype_kv` not
   reporting the packed FP4x2 carrier.
+- paged K/V byte-carrier tensor dimensions that disagree with runtime layout, page size,
+  or KV-head count.
 - live runtime layout/head/page values diverging from the offline replay payload.

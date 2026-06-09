@@ -22,6 +22,13 @@ IDENTITY_RE = re.compile(
 )
 TENSOR_RE = re.compile(r"\[flashinfer\]\[prefill-debug\] tensors (?P<body>.*)")
 PAIR_RE = re.compile(r"(?P<key>\w+)=(?P<value>.*?)(?=,\w+=|$)")
+TENSOR_VIEW_RE = re.compile(
+    r"(?P<name>\w+)=\{ptr=(?P<ptr>[^,]+),device=(?P<device>-?\d+),"
+    r"ndim=(?P<ndim>\d+),shape=\[(?P<shape>[^\]]*)\],"
+    r"stride=\[(?P<stride>[^\]]*)\],_dtype=\{code=(?P<dtype_code>\d+),"
+    r"bits=(?P<dtype_bits>\d+),lanes=(?P<dtype_lanes>\d+)\}\}"
+)
+NULL_TENSOR_RE = re.compile(r"(?P<name>\w+)=null")
 
 
 def parse_pairs(raw: str) -> dict[str, str]:
@@ -36,6 +43,39 @@ def parse_int(value: Any) -> int | None:
         return int(str(value))
     except (TypeError, ValueError):
         return None
+
+
+def parse_int_list(raw: str) -> list[int]:
+    if not raw.strip():
+        return []
+    values: list[int] = []
+    for item in raw.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        values.append(int(item))
+    return values
+
+
+def parse_tensor_views(raw: str) -> dict[str, dict[str, Any]]:
+    tensors: dict[str, dict[str, Any]] = {}
+    for match in TENSOR_VIEW_RE.finditer(raw):
+        name = match.group("name")
+        tensors[name] = {
+            "ptr": match.group("ptr"),
+            "device": int(match.group("device")),
+            "ndim": int(match.group("ndim")),
+            "shape": parse_int_list(match.group("shape")),
+            "stride": parse_int_list(match.group("stride")),
+            "dtype": {
+                "code": int(match.group("dtype_code")),
+                "bits": int(match.group("dtype_bits")),
+                "lanes": int(match.group("dtype_lanes")),
+            },
+        }
+    for match in NULL_TENSOR_RE.finditer(raw):
+        tensors.setdefault(match.group("name"), {"is_null": True})
+    return tensors
 
 
 def parse_log(path: Path) -> dict[str, list[dict[str, Any]]]:
@@ -57,9 +97,11 @@ def parse_log(path: Path) -> dict[str, list[dict[str, Any]]]:
         tensor_match = TENSOR_RE.search(line)
         if tensor_match:
             body = tensor_match.group("body")
+            tensors = parse_tensor_views(body)
             tensor_lines.append(
                 {
                     "line": lineno,
+                    "tensors": tensors,
                     "has_paged_k_cache": "paged_k_cache=" in body,
                     "has_paged_v_cache": "paged_v_cache=" in body,
                     "has_ragged_k": " k=" in f" {body}",
@@ -77,6 +119,29 @@ def contains_csv_value(raw: str | None, needle: str) -> bool:
     return needle in {item.strip() for item in raw.split(",")}
 
 
+def check_tensor(
+    tensor: dict[str, Any] | None,
+    *,
+    name: str,
+    expected_ndim: int | None = None,
+    expected_dtype_bits: int | None = None,
+    expected_dtype_lanes: int | None = None,
+) -> list[str]:
+    findings: list[str] = []
+    if tensor is None:
+        return [f"paged tensor dump missing {name}"]
+    if tensor.get("is_null"):
+        return [f"paged tensor dump has {name}=null"]
+    if expected_ndim is not None and tensor.get("ndim") != expected_ndim:
+        findings.append(f"{name} ndim={tensor.get('ndim')}, expected {expected_ndim}")
+    dtype = tensor.get("dtype") if isinstance(tensor.get("dtype"), dict) else {}
+    if expected_dtype_bits is not None and dtype.get("bits") != expected_dtype_bits:
+        findings.append(f"{name} dtype bits={dtype.get('bits')}, expected {expected_dtype_bits}")
+    if expected_dtype_lanes is not None and dtype.get("lanes") != expected_dtype_lanes:
+        findings.append(f"{name} dtype lanes={dtype.get('lanes')}, expected {expected_dtype_lanes}")
+    return findings
+
+
 def check_paged_identity(
     identity: dict[str, Any],
     *,
@@ -92,11 +157,20 @@ def check_paged_identity(
         findings.append("paged identity require_fp4_kv is not 1")
     if compiled.get("is_kv_fp4x2") != "1":
         findings.append("paged identity is_kv_fp4x2 is not 1")
-    if compiled.get("dtype_kv") not in {"__nv_fp4x2_e2m1", "uint8_t"}:
-        findings.append(f"paged identity dtype_kv is unexpected: {compiled.get('dtype_kv')!r}")
+    if compiled.get("dtype_kv") != "__nv_fp4x2_e2m1":
+        findings.append(f"paged identity dtype_kv is not __nv_fp4x2_e2m1: {compiled.get('dtype_kv')!r}")
+    if parse_int(compiled.get("sizeof_kv")) != 1:
+        findings.append(f"paged identity sizeof_kv={compiled.get('sizeof_kv')!r}, expected 1")
     for name in ("maybe_k_cache_sf", "maybe_v_cache_sf"):
         if not contains_csv_value(compiled.get("additional_tensors"), name):
             findings.append(f"paged identity missing additional tensor {name}")
+    for dtype in ("float_e4m3_t", "uint8_t"):
+        if dtype in str(compiled.get("additional_tensor_dtypes", "")):
+            break
+    else:
+        findings.append(
+            "paged identity additional_tensor_dtypes does not show FP8 scale buffer dtype"
+        )
     for key in ("head_dim_qk", "head_dim_vo"):
         actual = parse_int(compiled.get(key))
         if expected_head_dim is not None and actual != expected_head_dim:
@@ -113,6 +187,87 @@ def check_paged_identity(
         actual = parse_int(runtime.get("page_size"))
         if actual != expected_page_size:
             findings.append(f"paged runtime page_size={actual}, expected {expected_page_size}")
+    return findings
+
+
+def check_paged_tensor_line(
+    tensor_line: dict[str, Any],
+    *,
+    identity: dict[str, Any] | None,
+    expected_head_dim: int | None,
+    expected_kv_heads: int | None,
+    expected_q_heads: int | None,
+    expected_page_size: int | None,
+) -> list[str]:
+    findings: list[str] = []
+    tensors = tensor_line.get("tensors") if isinstance(tensor_line.get("tensors"), dict) else {}
+    required = (
+        "float_workspace",
+        "int_workspace",
+        "q",
+        "paged_k_cache",
+        "paged_v_cache",
+        "qo_indptr",
+        "paged_kv_indptr",
+        "paged_kv_indices",
+        "paged_kv_last_page_len",
+        "o",
+    )
+    for name in required:
+        findings.extend(check_tensor(tensors.get(name), name=name))
+
+    q = tensors.get("q")
+    o = tensors.get("o")
+    for name, tensor in (("q", q), ("o", o)):
+        findings.extend(check_tensor(tensor, name=name, expected_ndim=3))
+        if isinstance(tensor, dict) and not tensor.get("is_null"):
+            shape = tensor.get("shape") if isinstance(tensor.get("shape"), list) else []
+            if expected_q_heads is not None and len(shape) >= 2 and shape[1] != expected_q_heads:
+                findings.append(f"{name} shape[1]={shape[1]}, expected q_heads {expected_q_heads}")
+            if expected_head_dim is not None and len(shape) >= 3 and shape[2] != expected_head_dim:
+                findings.append(f"{name} shape[2]={shape[2]}, expected head_dim {expected_head_dim}")
+
+    layout = parse_int((identity or {}).get("runtime", {}).get("layout"))
+    runtime_page_size = parse_int((identity or {}).get("runtime", {}).get("page_size"))
+    runtime_kv_heads = parse_int((identity or {}).get("runtime", {}).get("num_kv_heads"))
+    page_size = expected_page_size if expected_page_size is not None else runtime_page_size
+    kv_heads = expected_kv_heads if expected_kv_heads is not None else runtime_kv_heads
+
+    for name in ("paged_k_cache", "paged_v_cache"):
+        tensor = tensors.get(name)
+        findings.extend(
+            check_tensor(
+                tensor,
+                name=name,
+                expected_dtype_bits=8,
+                expected_dtype_lanes=1,
+            )
+        )
+        if not isinstance(tensor, dict) or tensor.get("is_null"):
+            continue
+        shape = tensor.get("shape") if isinstance(tensor.get("shape"), list) else []
+        if len(shape) < 4:
+            findings.append(f"{name} shape rank too small for paged KV: {shape}")
+            continue
+        if layout == 0:
+            if page_size is not None and shape[1] != page_size:
+                findings.append(f"{name} NHD page dimension shape[1]={shape[1]}, expected {page_size}")
+            if kv_heads is not None and shape[2] != kv_heads:
+                findings.append(f"{name} NHD kv-head dimension shape[2]={shape[2]}, expected {kv_heads}")
+        elif layout == 1:
+            if kv_heads is not None and shape[1] != kv_heads:
+                findings.append(f"{name} HND kv-head dimension shape[1]={shape[1]}, expected {kv_heads}")
+            if page_size is not None and shape[2] != page_size:
+                findings.append(f"{name} HND page dimension shape[2]={shape[2]}, expected {page_size}")
+        elif layout is None:
+            findings.append(f"{name} cannot validate layout-specific dimensions; runtime layout missing")
+        else:
+            findings.append(f"{name} runtime layout is unexpected: {layout}")
+
+    for name in ("qo_indptr", "paged_kv_indptr", "paged_kv_indices", "paged_kv_last_page_len"):
+        tensor = tensors.get(name)
+        if tensor is not None:
+            findings.extend(check_tensor(tensor, name=name, expected_ndim=1))
     return findings
 
 
@@ -158,6 +313,26 @@ def main() -> int:
                 expected_page_size=args.expected_page_size,
             )
         )
+    representative_identity = paged[0] if paged else None
+    paged_tensor_checks: list[dict[str, Any]] = []
+    for tensor_line in paged_tensor_lines:
+        line_findings = check_paged_tensor_line(
+            tensor_line,
+            identity=representative_identity,
+            expected_head_dim=args.expected_head_dim,
+            expected_kv_heads=args.expected_kv_heads,
+            expected_q_heads=args.expected_q_heads,
+            expected_page_size=args.expected_page_size,
+        )
+        findings.extend(f"tensor line {tensor_line['line']}: {finding}" for finding in line_findings)
+        paged_tensor_checks.append(
+            {
+                "line": tensor_line["line"],
+                "ok": not line_findings,
+                "findings": line_findings,
+                "tensors": tensor_line.get("tensors", {}),
+            }
+        )
 
     report = {
         "schema": "flashinfer-prefill-debug-log-audit/v1",
@@ -180,6 +355,7 @@ def main() -> int:
         "paged_identities": paged,
         "ragged_identities": ragged,
         "paged_tensor_lines": paged_tensor_lines,
+        "paged_tensor_checks": paged_tensor_checks,
         "ok": not findings,
         "findings": findings,
     }
