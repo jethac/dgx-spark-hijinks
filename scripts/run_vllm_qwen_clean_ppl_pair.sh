@@ -11,6 +11,9 @@ IMAGE=${IMAGE:-jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4
 MODEL=${MODEL:-/home/jethac/models/aeon/qwen36-nvfp4}
 SERVED=${SERVED:-qwen36-fast}
 REPO=${REPO:-/home/jethac/dgx-spark-hijinks}
+GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.72}
+GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
+GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
 
 mkdir -p "${ROOT}/scripts" "${ROOT}/docs" "${ROOT}/results"
 cp "${REPO}/scripts/vllm_prompt_ppl_sweep.py" "${ROOT}/scripts/"
@@ -38,6 +41,7 @@ run_one() {
   local name=${RUN}_${kv}
   docker rm -f "${name}" >/dev/null 2>&1 || true
   docker run -d --name "${name}" --gpus all --net host --ipc host \
+    --memory "${GB10_DOCKER_MEMORY}" --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
     -e VLLM_TEST_FORCE_FP8_MARLIN=1 \
     -v "${MODEL}:/models/target:ro" \
     -v "${ROOT}:/work" -w /work \
@@ -48,7 +52,7 @@ run_one() {
       --trust-remote-code --max-model-len 262144 \
       --quantization compressed-tensors --load-format safetensors \
       --attention-backend flashinfer --kv-cache-dtype "${kv}" \
-      --gpu-memory-utilization 0.85 --max-num-batched-tokens 65536 --max-num-seqs 128 \
+      --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}" --max-num-batched-tokens 65536 --max-num-seqs 128 \
       --enable-chunked-prefill --no-enable-prefix-caching \
       --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3 >/dev/null
   if ! wait_ready "${name}"; then

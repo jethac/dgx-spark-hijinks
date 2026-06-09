@@ -54,6 +54,7 @@ Start the fp8 server:
 
 ```bash
 docker run -d --name ${RUN}_fp8 --gpus all --net host --ipc host \
+  --memory 100g --memory-swap 100g \
   -e VLLM_TEST_FORCE_FP8_MARLIN=1 \
   -v /home/jethac/models/aeon/qwen36-nvfp4:/models/target:ro \
   -v ${ROOT}:/work -w /work \
@@ -64,7 +65,7 @@ docker run -d --name ${RUN}_fp8 --gpus all --net host --ipc host \
     --trust-remote-code --max-model-len 262144 \
     --quantization compressed-tensors --load-format safetensors \
     --attention-backend flashinfer --kv-cache-dtype fp8 \
-    --gpu-memory-utilization 0.85 --max-num-batched-tokens 65536 --max-num-seqs 128 \
+    --gpu-memory-utilization 0.72 --max-num-batched-tokens 65536 --max-num-seqs 128 \
     --enable-chunked-prefill --no-enable-prefix-caching \
     --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3
 ```
@@ -91,6 +92,7 @@ Repeat with `--kv-cache-dtype nvfp4`:
 
 ```bash
 docker run -d --name ${RUN}_nvfp4 --gpus all --net host --ipc host \
+  --memory 100g --memory-swap 100g \
   -e VLLM_TEST_FORCE_FP8_MARLIN=1 \
   -v /home/jethac/models/aeon/qwen36-nvfp4:/models/target:ro \
   -v ${ROOT}:/work -w /work \
@@ -101,7 +103,7 @@ docker run -d --name ${RUN}_nvfp4 --gpus all --net host --ipc host \
     --trust-remote-code --max-model-len 262144 \
     --quantization compressed-tensors --load-format safetensors \
     --attention-backend flashinfer --kv-cache-dtype nvfp4 \
-    --gpu-memory-utilization 0.85 --max-num-batched-tokens 65536 --max-num-seqs 128 \
+    --gpu-memory-utilization 0.72 --max-num-batched-tokens 65536 --max-num-seqs 128 \
     --enable-chunked-prefill --no-enable-prefix-caching \
     --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser qwen3
 

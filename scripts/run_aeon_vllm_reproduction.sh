@@ -57,6 +57,9 @@ KV_CACHE_DTYPE=${KV_CACHE_DTYPE:-auto}
 ENABLE_DFLASH=${ENABLE_DFLASH:-1}
 SERVE_ATTENTION_BACKEND=${SERVE_ATTENTION_BACKEND:-}
 STOP_AFTER_RECORD=${STOP_AFTER_RECORD:-0}
+GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.72}
+GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
+GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
 
 if [[ "${ENABLE_DFLASH}" != "0" && "${ENABLE_DFLASH}" != "1" ]]; then
   echo "ENABLE_DFLASH must be 0 or 1" >&2
@@ -99,7 +102,7 @@ case "${TARGET}" in
       --max-model-len 262144
       --max-num-seqs 64
       --max-num-batched-tokens 32768
-      --gpu-memory-utilization 0.80
+      --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
       --enable-chunked-prefill
       --enable-prefix-caching
       --trust-remote-code
@@ -135,7 +138,7 @@ case "${TARGET}" in
       --max-model-len 262144
       --max-num-seqs 128
       --max-num-batched-tokens 65536
-      --gpu-memory-utilization 0.85
+      --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
       --enable-chunked-prefill
       --enable-prefix-caching
       --load-format safetensors
@@ -216,6 +219,8 @@ fi
 
 docker run -d --gpus all --ipc=host --network=host \
   --name "${RUN_ID}" \
+  --memory "${GB10_DOCKER_MEMORY}" \
+  --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
   "${COMMON_ENV[@]}" \
   "${EXTRA_ENV[@]}" \
   "${VOLUME_ARGS[@]}" \

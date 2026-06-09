@@ -539,6 +539,25 @@ B200 = CC 10.0 = 228 KB/SM, 227 KB/block.
 - Capacity/concurrency numbers vs an fp8 comparator at matched settings.
 - Explicit scope labels for what's untested (MLA, attention sinks, TP>1, page sizes).
 
+## Current vLLM Gemma 3 stop point - 2026-06-09T143948JST
+Artifact: `results/vllm_gemma3_flashinfer_prefill_debug_20260609T143948JST_summary.md`.
+
+The latest live debug packet reproduced Gemma 3 NVFP4-KV first-token corruption and captured
+bound FlashInfer generated-module evidence. The important new finding is that the live
+generated paged-prefill modules are not FP4-specialized at all:
+
+- `dtype_kv=uint8_t`
+- `require_fp4_kv=0`
+- `is_kv_fp4x2=0`
+- `additional_tensors=` empty
+- no `maybe_k_cache_sf` / `maybe_v_cache_sf` tensors
+
+This holds for both SWA (`window_left=1023`) and global (`window_left=-1`) Gemma 3 layers.
+Treat the next fix as a vLLM/FlashInfer Python/JIT binding bug: trace where Gemma 3 paged
+prefill loses FP4 KV specialization and scale-tensor metadata before the generated module
+is built. Do not spend the next step on low-level FA2 fragment math until a re-run proves
+`require_fp4_kv=1`, `is_kv_fp4x2=1`, and the scale tensors are present.
+
 ## Guardrails
 - **Validate on `sm_121a` only.** This campaign's validation hardware is GB10. SM120 is a compiled-but-unclaimed build
   target; never put a correctness/capacity claim on hardware we can't run. See the

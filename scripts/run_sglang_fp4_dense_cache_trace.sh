@@ -18,6 +18,8 @@ TRACE_LAYERS=${TRACE_LAYERS:-0,1,7,13,20,27}
 TRACE_VALUES=${TRACE_VALUES:-64}
 TRACE_LOC_LIMIT=${TRACE_LOC_LIMIT:-128}
 READY_TIMEOUT_S=${READY_TIMEOUT_S:-360}
+GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
+GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
 
 mkdir -p "${RESULTS_DIR}"
 
@@ -112,6 +114,7 @@ run_case() {
   local cid
   cid=$(
     docker run -d --name "${container}" --gpus all --ipc=host --network=host \
+      --memory "${GB10_DOCKER_MEMORY}" --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
       -v "${REPO_ROOT}:/work" \
       -v "${HF_CACHE}:/root/.cache/huggingface" \
       -w /work \

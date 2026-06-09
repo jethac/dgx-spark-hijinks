@@ -1,0 +1,1862 @@
+{
+  "counts": {
+    "identity_lines": 4,
+    "paged_identity_lines": 4,
+    "paged_tensor_lines": 4,
+    "ragged_identity_lines": 0,
+    "tensor_lines": 4
+  },
+  "expectations": {
+    "head_dim": 128,
+    "kv_heads": 16,
+    "page_size": 16,
+    "q_heads": 32,
+    "require_bound_call": true,
+    "require_paged": true,
+    "require_tensor_dump": true
+  },
+  "findings": [
+    "one or more paged identity lines are missing call_id/module_uri/module_key/path",
+    "one or more paged tensor dump lines are missing call_id/module_uri/module_key/path",
+    "paged identity missing module_uri",
+    "paged identity require_fp4_kv is not 1",
+    "paged identity is_kv_fp4x2 is not 1",
+    "paged identity dtype_kv is not __nv_fp4x2_e2m1: 'uint8_t'",
+    "paged identity missing additional tensor maybe_k_cache_sf",
+    "paged identity missing additional tensor maybe_v_cache_sf",
+    "paged identity additional_tensor_dtypes does not show FP8 scale buffer dtype",
+    "paged identity missing module_uri",
+    "paged identity require_fp4_kv is not 1",
+    "paged identity is_kv_fp4x2 is not 1",
+    "paged identity dtype_kv is not __nv_fp4x2_e2m1: 'uint8_t'",
+    "paged identity missing additional tensor maybe_k_cache_sf",
+    "paged identity missing additional tensor maybe_v_cache_sf",
+    "paged identity additional_tensor_dtypes does not show FP8 scale buffer dtype",
+    "paged identity missing module_uri",
+    "paged identity require_fp4_kv is not 1",
+    "paged identity is_kv_fp4x2 is not 1",
+    "paged identity dtype_kv is not __nv_fp4x2_e2m1: 'uint8_t'",
+    "paged identity missing additional tensor maybe_k_cache_sf",
+    "paged identity missing additional tensor maybe_v_cache_sf",
+    "paged identity additional_tensor_dtypes does not show FP8 scale buffer dtype",
+    "paged identity missing module_uri",
+    "paged identity require_fp4_kv is not 1",
+    "paged identity is_kv_fp4x2 is not 1",
+    "paged identity dtype_kv is not __nv_fp4x2_e2m1: 'uint8_t'",
+    "paged identity missing additional tensor maybe_k_cache_sf",
+    "paged identity missing additional tensor maybe_v_cache_sf",
+    "paged identity additional_tensor_dtypes does not show FP8 scale buffer dtype",
+    "tensor line 1106: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1106: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1106: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1106: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1140: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1140: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1140: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1140: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_v_cache_sf"
+  ],
+  "ok": false,
+  "paged_bound_groups": [
+    {
+      "call_id": 1,
+      "identity_line": 1105,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "tensor_lines": [
+        1106
+      ]
+    },
+    {
+      "call_id": 2,
+      "identity_line": 1107,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "tensor_lines": [
+        1108
+      ]
+    },
+    {
+      "call_id": 1,
+      "identity_line": 1139,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "tensor_lines": [
+        1140
+      ]
+    },
+    {
+      "call_id": 2,
+      "identity_line": 1141,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "tensor_lines": [
+        1142
+      ]
+    }
+  ],
+  "paged_identities": [
+    {
+      "call_id": 1,
+      "compiled": {
+        "additional_scalar_dtypes": "",
+        "additional_scalars": "",
+        "additional_tensor_dtypes": "",
+        "additional_tensors": "",
+        "dtype_kv": "uint8_t",
+        "dtype_o": "nv_bfloat16",
+        "dtype_q": "nv_bfloat16",
+        "head_dim_qk": "128",
+        "head_dim_vo": "128",
+        "idtype": "int32_t",
+        "is_kv_fp4x2": "0",
+        "posenc": "0",
+        "require_fp4_kv": "0",
+        "sizeof_id": "4",
+        "sizeof_kv": "1",
+        "sizeof_o": "2",
+        "sizeof_q": "2",
+        "use_fp16_qk_reduction": "0",
+        "use_logits_cap": "0",
+        "use_swa": "1"
+      },
+      "line": 1105,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=uint8_t,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=128,head_dim_vo=128,require_fp4_kv=0,use_swa=1,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=1,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=1023,batch_size=1,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=1,total_num_rows=8}",
+      "runtime": {
+        "batch_size": "1",
+        "cta_tile_q": "16",
+        "enable_cuda_graph": "0",
+        "layout": "0",
+        "num_kv_heads": "16",
+        "num_qo_heads": "32",
+        "padded_batch_size": "1",
+        "page_size": "16",
+        "split_kv": "0",
+        "total_num_rows": "8",
+        "window_left": "1023"
+      }
+    },
+    {
+      "call_id": 2,
+      "compiled": {
+        "additional_scalar_dtypes": "",
+        "additional_scalars": "",
+        "additional_tensor_dtypes": "",
+        "additional_tensors": "",
+        "dtype_kv": "uint8_t",
+        "dtype_o": "nv_bfloat16",
+        "dtype_q": "nv_bfloat16",
+        "head_dim_qk": "128",
+        "head_dim_vo": "128",
+        "idtype": "int32_t",
+        "is_kv_fp4x2": "0",
+        "posenc": "0",
+        "require_fp4_kv": "0",
+        "sizeof_id": "4",
+        "sizeof_kv": "1",
+        "sizeof_o": "2",
+        "sizeof_q": "2",
+        "use_fp16_qk_reduction": "0",
+        "use_logits_cap": "0",
+        "use_swa": "1"
+      },
+      "line": 1107,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=uint8_t,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=128,head_dim_vo=128,require_fp4_kv=0,use_swa=1,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=1,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=1023,batch_size=8,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=8,total_num_rows=8}",
+      "runtime": {
+        "batch_size": "8",
+        "cta_tile_q": "16",
+        "enable_cuda_graph": "0",
+        "layout": "0",
+        "num_kv_heads": "16",
+        "num_qo_heads": "32",
+        "padded_batch_size": "8",
+        "page_size": "16",
+        "split_kv": "0",
+        "total_num_rows": "8",
+        "window_left": "1023"
+      }
+    },
+    {
+      "call_id": 1,
+      "compiled": {
+        "additional_scalar_dtypes": "",
+        "additional_scalars": "",
+        "additional_tensor_dtypes": "",
+        "additional_tensors": "",
+        "dtype_kv": "uint8_t",
+        "dtype_o": "nv_bfloat16",
+        "dtype_q": "nv_bfloat16",
+        "head_dim_qk": "128",
+        "head_dim_vo": "128",
+        "idtype": "int32_t",
+        "is_kv_fp4x2": "0",
+        "posenc": "0",
+        "require_fp4_kv": "0",
+        "sizeof_id": "4",
+        "sizeof_kv": "1",
+        "sizeof_o": "2",
+        "sizeof_q": "2",
+        "use_fp16_qk_reduction": "0",
+        "use_logits_cap": "0",
+        "use_swa": "0"
+      },
+      "line": 1139,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=uint8_t,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=128,head_dim_vo=128,require_fp4_kv=0,use_swa=0,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=1,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=-1,batch_size=1,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=1,total_num_rows=8}",
+      "runtime": {
+        "batch_size": "1",
+        "cta_tile_q": "16",
+        "enable_cuda_graph": "0",
+        "layout": "0",
+        "num_kv_heads": "16",
+        "num_qo_heads": "32",
+        "padded_batch_size": "1",
+        "page_size": "16",
+        "split_kv": "0",
+        "total_num_rows": "8",
+        "window_left": "-1"
+      }
+    },
+    {
+      "call_id": 2,
+      "compiled": {
+        "additional_scalar_dtypes": "",
+        "additional_scalars": "",
+        "additional_tensor_dtypes": "",
+        "additional_tensors": "",
+        "dtype_kv": "uint8_t",
+        "dtype_o": "nv_bfloat16",
+        "dtype_q": "nv_bfloat16",
+        "head_dim_qk": "128",
+        "head_dim_vo": "128",
+        "idtype": "int32_t",
+        "is_kv_fp4x2": "0",
+        "posenc": "0",
+        "require_fp4_kv": "0",
+        "sizeof_id": "4",
+        "sizeof_kv": "1",
+        "sizeof_o": "2",
+        "sizeof_q": "2",
+        "use_fp16_qk_reduction": "0",
+        "use_logits_cap": "0",
+        "use_swa": "0"
+      },
+      "line": 1141,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=uint8_t,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=128,head_dim_vo=128,require_fp4_kv=0,use_swa=0,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=1,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=-1,batch_size=8,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=8,total_num_rows=8}",
+      "runtime": {
+        "batch_size": "8",
+        "cta_tile_q": "16",
+        "enable_cuda_graph": "0",
+        "layout": "0",
+        "num_kv_heads": "16",
+        "num_qo_heads": "32",
+        "padded_batch_size": "8",
+        "page_size": "16",
+        "split_kv": "0",
+        "total_num_rows": "8",
+        "window_left": "-1"
+      }
+    }
+  ],
+  "paged_tensor_checks": [
+    {
+      "findings": [
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1106,
+      "ok": false,
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffaee0000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32fa00000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd440000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffbfb2175000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef31800",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef48c00",
+          "shape": [
+            1
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4ce000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef1a400",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1108,
+      "ok": false,
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffaee0000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade0000000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd47e000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffbfb2175000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef54600",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef60000",
+          "shape": [
+            8
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4be000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef77400",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1140,
+      "ok": false,
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffa260000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade5800000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd508000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffafdb403000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de54000",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de54200",
+          "shape": [
+            1
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd538000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de53e00",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1142,
+      "ok": false,
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffa260000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade6000000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4e8000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffafdb403000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5f800",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5fa00",
+          "shape": [
+            8
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd528000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5fc00",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    }
+  ],
+  "paged_tensor_lines": [
+    {
+      "call_id": 1,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1106,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xffaee0000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0x32fa00000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xffa3bd4ce000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xffacc0000000,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xffacc0004800,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0x32ef1a400,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32ef31800,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xffbfb2175000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32ef48c00,device=0,ndim=1,shape=[1],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xffa3bd440000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffaee0000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32fa00000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd440000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffbfb2175000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef31800",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef48c00",
+          "shape": [
+            1
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4ce000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef1a400",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "call_id": 2,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1108,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xffaee0000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xffade0000000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xffa3bd4be000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xffacc0000000,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xffacc0004800,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0x32ef77400,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32ef54600,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xffbfb2175000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32ef60000,device=0,ndim=1,shape=[8],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xffa3bd47e000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffaee0000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade0000000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd47e000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffbfb2175000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef54600",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef60000",
+          "shape": [
+            8
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4be000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0x32ef77400",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "call_id": 1,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1140,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xffa260000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xffade5800000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xffa3bd538000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xffacc0000000,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xffacc0004800,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0xffb90de53e00,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0xffb90de54000,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xffafdb403000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0xffb90de54200,device=0,ndim=1,shape=[1],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xffa3bd508000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffa260000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade5800000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd508000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffafdb403000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de54000",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de54200",
+          "shape": [
+            1
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd538000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de53e00",
+          "shape": [
+            2
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "call_id": 2,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1142,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": "",
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xffa260000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xffade6000000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xffa3bd528000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xffacc0000000,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xffacc0004800,device=0,ndim=4,shape=[129777,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0xffb90de5fc00,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0xffb90de5f800,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xffafdb403000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0xffb90de5fa00,device=0,ndim=1,shape=[8],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xffa3bd4e8000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "float_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffa260000000",
+          "shape": [
+            413138944
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "int_workspace": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffade6000000",
+          "shape": [
+            8388608
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "maybe_lse": {
+          "is_null": true
+        },
+        "o": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd4e8000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "paged_k_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0000000",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "paged_kv_indices": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffafdb403000",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5f800",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_kv_last_page_len": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5fa00",
+          "shape": [
+            8
+          ],
+          "stride": [
+            1
+          ]
+        },
+        "paged_v_cache": {
+          "device": 0,
+          "dtype": {
+            "bits": 8,
+            "code": 1,
+            "lanes": 1
+          },
+          "ndim": 4,
+          "ptr": "0xffacc0004800",
+          "shape": [
+            129777,
+            16,
+            16,
+            64
+          ],
+          "stride": [
+            36864,
+            1024,
+            64,
+            1
+          ]
+        },
+        "q": {
+          "device": 0,
+          "dtype": {
+            "bits": 16,
+            "code": 4,
+            "lanes": 1
+          },
+          "ndim": 3,
+          "ptr": "0xffa3bd528000",
+          "shape": [
+            8,
+            32,
+            128
+          ],
+          "stride": [
+            4096,
+            128,
+            1
+          ]
+        },
+        "qo_indptr": {
+          "device": 0,
+          "dtype": {
+            "bits": 32,
+            "code": 0,
+            "lanes": 1
+          },
+          "ndim": 1,
+          "ptr": "0xffb90de5fc00",
+          "shape": [
+            9
+          ],
+          "stride": [
+            1
+          ]
+        }
+      }
+    }
+  ],
+  "ragged_identities": [],
+  "schema": "flashinfer-prefill-debug-log-audit/v1",
+  "server_log": "results\\vllm_gemma3_flashinfer_prefill_debug_20260609T143948JST_nvfp4_kv_flashinfer_eager_server.log"
+}

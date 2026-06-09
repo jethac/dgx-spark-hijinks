@@ -15,7 +15,7 @@
       "count_phrases": [
         {
           "parsed_count": 9,
-          "phrase": "live queue audit is green with nine queued items"
+          "phrase": "live queue audit is green with nine items"
         }
       ],
       "findings": [],

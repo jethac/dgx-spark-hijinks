@@ -13,6 +13,8 @@ RUN_ID=${RUN_ID:-sglang_qwen_fp4kv_matrix_$(date -u +%Y%m%dT%H%M%SZ)}
 REPO_ROOT=${REPO_ROOT:-$(pwd)}
 RESULTS_DIR=${RESULTS_DIR:-${REPO_ROOT}/results}
 HF_CACHE=${HF_CACHE:-${HOME}/.cache/huggingface}
+GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
+GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
 
 mkdir -p "${RESULTS_DIR}"
 
@@ -88,6 +90,7 @@ run_case() {
   local cid
   cid=$(
     docker run -d --name "${container}" --gpus all --ipc=host --network=host \
+      --memory "${GB10_DOCKER_MEMORY}" --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
       -v "${REPO_ROOT}:/work" \
       -v "${HF_CACHE}:/root/.cache/huggingface" \
       -w /work \

@@ -17,24 +17,24 @@ from typing import Any
 
 
 IDENTITY_RE = re.compile(
-    r"\[flashinfer\]\[prefill-debug\] "
-    r"(?:call_id=(?P<call_id>\d+) )?"
-    r"(?:module_uri=(?P<module_uri>\S+) )?"
-    r"(?:module_key=(?P<module_key>\S+) )?"
-    r"path=(?P<path>\w+) "
-    r"compiled=\{(?P<compiled>[^}]*)\} runtime=\{(?P<runtime>[^}]*)\}"
+    r"\[flashinfer\]\[prefill-debug\]\s+"
+    r"(?:call_id=(?P<call_id>\d+)\s+)?"
+    r"(?:module_uri=(?P<module_uri>.*?)\s+module_key=)?"
+    r"(?:(?P<module_key>.*?)\s+path=)?"
+    r"(?P<path>\w+)\s+"
+    r"compiled=\{(?P<compiled>[^}]*)\}\s+runtime=\{(?P<runtime>[^}]*)\}"
 )
 TENSOR_RE = re.compile(r"\[flashinfer\]\[prefill-debug\] tensors (?P<body>.*)")
 CALL_ID_RE = re.compile(r"(?:^|\s)call_id=(?P<call_id>\d+)(?:\s|$)")
-MODULE_URI_RE = re.compile(r"(?:^|\s)module_uri=(?P<module_uri>\S+)(?:\s|$)")
-MODULE_KEY_RE = re.compile(r"(?:^|\s)module_key=(?P<module_key>\S+)(?:\s|$)")
+MODULE_URI_RE = re.compile(r"(?:^|\s)module_uri=(?P<module_uri>.*?)\s+module_key=")
+MODULE_KEY_RE = re.compile(r"(?:^|\s)module_key=(?P<module_key>.*?)\s+path=")
 PATH_RE = re.compile(r"(?:^|\s)path=(?P<path>\w+)(?:\s|$)")
 PAIR_RE = re.compile(r"(?P<key>\w+)=(?P<value>.*?)(?=,\w+=|$)")
 TENSOR_VIEW_RE = re.compile(
     r"(?P<name>\w+)=\{ptr=(?P<ptr>[^,]+),device=(?P<device>-?\d+),"
     r"ndim=(?P<ndim>\d+),shape=\[(?P<shape>[^\]]*)\],"
     r"stride=\[(?P<stride>[^\]]*)\],_dtype=\{code=(?P<dtype_code>\d+),"
-    r"bits=(?P<dtype_bits>\d+),lanes=(?P<dtype_lanes>\d+)\}\}"
+    r"bits=(?P<dtype_bits>\d+),lanes=(?P<dtype_lanes>\d+)\}\s*\}"
 )
 NULL_TENSOR_RE = re.compile(r"(?P<name>\w+)=null")
 
@@ -424,7 +424,7 @@ def main() -> int:
     identities_by_bound_key = {
         (identity.get("path"), identity.get("call_id"), identity.get("module_uri"), identity.get("module_key")): identity
         for identity in paged
-        if identity.get("call_id") is not None and identity.get("module_uri") and identity.get("module_key")
+        if identity.get("call_id") is not None and identity.get("module_uri") is not None and identity.get("module_key")
     }
     representative_identity = paged[0] if paged else None
     paged_tensor_checks: list[dict[str, Any]] = []
@@ -433,7 +433,7 @@ def main() -> int:
         bound_keys = {
             (identity.get("path"), identity.get("call_id"), identity.get("module_uri"), identity.get("module_key"))
             for identity in paged
-            if identity.get("call_id") is not None and identity.get("module_uri") and identity.get("module_key")
+            if identity.get("call_id") is not None and identity.get("module_uri") is not None and identity.get("module_key")
         }
         tensor_lines_to_check = [
             line

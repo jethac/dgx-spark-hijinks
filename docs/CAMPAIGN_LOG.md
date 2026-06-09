@@ -1055,6 +1055,20 @@
   - root cause: GB10 unified memory — `--gpu-memory-utilization` is a fraction of the *shared* 119 GiB pool, not separate VRAM. Big model + NVFP4 KV pool (especially the matched fp8-vs-nvfp4 comparator running two servers at once) exceeds the pool; global OOM + driver-held mmap_lock deadlocks the kernel (vs a clean CUDA-process kill on a discrete-VRAM box).
   - standing mitigations: leave ≥15–20 GiB OS headroom (don't run 0.85+ mem-fraction); never run the fp8+nvfp4 comparators concurrently at high mem-fraction (sequential, or cap so the sum < ~100 GiB); cgroup-limit the container (`--memory`) so a runaway is killed in-cgroup instead of wedging the kernel; optionally `kernel.hung_task_panic=1`+`kernel.panic=30` so a headless hang auto-reboots. Linked from README Start Here.
 
+- Recovered the live GB10 host over Tailnet and completed the vLLM Gemma 3 FlashInfer prefill debug packet.
+  - host access: Tailscale ping, TCP/22, and key-based SSH worked through `thinkstationpgx-00b4` / `100.113.98.11`.
+  - artifact: `results/vllm_gemma3_flashinfer_prefill_debug_20260609T143948JST_summary.md`
+  - run checkout: campaign `0713537`, `jethac/vllm@1fabc6649`, `jethac/flashinfer@96be2fa8`
+  - image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+  - result: Gemma 3 NVFP4-KV first-token corruption reproduced (` Reigns`, Gujarati text, `ioane`).
+  - FlashInfer audit: the corrected parser now sees `4` paged-prefill identity lines and `4` bound tensor lines across SWA (`window_left=1023`) and global (`window_left=-1`) calls. Every live generated module is compiled as `dtype_kv=uint8_t`, `require_fp4_kv=0`, `is_kv_fp4x2=0`, with empty `additional_tensors` and no `maybe_k_cache_sf` / `maybe_v_cache_sf`.
+  - interpretation: this stop point moves the vLLM Gemma 3 failure from "mysterious byte-like FA2 output" to a concrete vLLM/FlashInfer Python/JIT binding bug: the paged-prefill module is not being specialized as FP4 KV and is not receiving scale tensors. Do not chase lower FA2 prefill math until that binding path is fixed and re-run.
+
+- Applied GB10 memory guardrails to active serving runners after the OOM-deadlock incident.
+  - lowered vLLM runner defaults from `--gpu-memory-utilization 0.85` to `0.72` for the Gemma 3 debug runner, Qwen PPL pair, and AEON vLLM reproduction runner.
+  - added Docker cgroup caps (`GB10_DOCKER_MEMORY=100g`, `GB10_DOCKER_MEMORY_SWAP=100g`) to active vLLM and SGLang serving/debug runners.
+  - kept matched comparator runs sequential where the runner already does that; future packets must not run two large fp8/nvfp4 servers concurrently on the shared memory pool.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

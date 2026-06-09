@@ -1,6 +1,6 @@
 # vLLM Gemma 3 FlashInfer Paged-Prefill Debug Packet
 
-Status: staged; host access recovered; live GB10 run pending.
+Status: completed red on 2026-06-09 JST.
 
 Goal: distinguish a live generated-module / C++ binding mismatch from an FP4 V-fragment
 kernel bug in the vLLM Gemma 3 NVFP4-KV failure.
@@ -52,7 +52,7 @@ FlashInfer source and set:
 
 ```bash
 export FLASHINFER_PREFILL_DEBUG_ONCE=1
-export FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a"
+export FLASHINFER_EXTRA_CUDAFLAGS="-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1 -gencode=arch=compute_121a,code=sm_121a"
 ```
 
 Clear only the relevant generated prefill modules before the rerun so the copied
@@ -119,7 +119,19 @@ compiled module is red even though the Python-facing cache tensors are byte carr
 - missing `maybe_k_cache_sf,maybe_v_cache_sf` in `additional_tensors`.
 - missing runtime `maybe_k_cache_sf` or `maybe_v_cache_sf` tensor views.
 - `paged_v_cache` pointer/shape/stride matching the packed carrier but `dtype_kv` not
-  reporting the packed FP4x2 carrier.
+reporting the packed FP4x2 carrier.
 - paged K/V byte-carrier tensor dimensions that disagree with runtime layout, page size,
   KV-head count, or `head_dim / 2` carrier width.
 - live runtime layout/head/page values diverging from the offline replay payload.
+
+## Completed Red Result
+
+Run artifact: `results/vllm_gemma3_flashinfer_prefill_debug_20260609T143948JST_summary.md`.
+
+The live run reproduced first-token corruption and the audit parsed `4` paged-prefill
+identity lines plus `4` bound tensor lines. Both SWA and global generated modules compiled
+as `dtype_kv=uint8_t`, `require_fp4_kv=0`, `is_kv_fp4x2=0`, with empty
+`additional_tensors` and no runtime `maybe_k_cache_sf` / `maybe_v_cache_sf` views.
+
+Next action: fix the vLLM/FlashInfer Python-JIT binding path that decides FP4 KV
+specialization and scale-tensor metadata for Gemma 3 paged prefill, then rerun this packet.
