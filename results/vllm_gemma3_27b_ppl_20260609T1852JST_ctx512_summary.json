@@ -1,0 +1,86 @@
+{
+  "artifacts": {
+    "fp8": {
+      "error": null,
+      "ok": true,
+      "ppl": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512/results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_fp8_ppl.json",
+      "scores": [
+        {
+          "ctx": 512,
+          "score": {
+            "mean_logprob": -4.7489098469549855,
+            "mean_nll_nats": 4.7489098469549855,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 512,
+            "num_scored_tokens": 511,
+            "ok": true,
+            "ppl": 115.45834862463056,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 512,
+              "prompt_tokens_details": null,
+              "total_tokens": 513
+            }
+          }
+        }
+      ],
+      "server_log": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512/results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_fp8_server_after.log"
+    },
+    "nvfp4": {
+      "error": null,
+      "ok": true,
+      "ppl": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512/results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_nvfp4_ppl.json",
+      "scores": [
+        {
+          "ctx": 512,
+          "score": {
+            "mean_logprob": -4.786306190165268,
+            "mean_nll_nats": 4.786306190165268,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 512,
+            "num_scored_tokens": 511,
+            "ok": true,
+            "ppl": 119.85781798477025,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 512,
+              "prompt_tokens_details": null,
+              "total_tokens": 513
+            }
+          }
+        }
+      ],
+      "server_log": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512/results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_nvfp4_server_after.log"
+    }
+  },
+  "compare": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512/results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_compare.json",
+  "compare_ok": true,
+  "contexts": [
+    512
+  ],
+  "docker_memory": "100g",
+  "gpu_memory_utilization": 0.72,
+  "image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+  "max_model_len": 4096,
+  "model": "google/gemma-3-27b-it",
+  "ok": true,
+  "rows": [
+    {
+      "ctx": 512,
+      "delta_nats_per_token": 0.03739634321028262,
+      "delta_ppl": 4.39946936013969,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 4.7489098469549855,
+      "nats_per_token_nvfp4": 4.786306190165268,
+      "nvfp4_ok": true,
+      "ppl_fp8": 115.45834862463056,
+      "ppl_nvfp4": 119.85781798477025
+    }
+  ],
+  "run_id": "vllm_gemma3_27b_ppl_20260609T1852JST_ctx512",
+  "run_root": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512",
+  "schema": "vllm-gemma3-ppl-pair-summary/v1",
+  "served_model": "gemma3-27b-it"
+}

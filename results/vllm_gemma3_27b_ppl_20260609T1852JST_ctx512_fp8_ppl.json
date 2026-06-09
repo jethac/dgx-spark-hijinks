@@ -1,0 +1,76 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 85843,
+  "container_image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+  "contexts": [
+    {
+      "ctx": 512,
+      "elapsed_s": 11.009978376001527,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma3-27b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 512,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -4.7489098469549855,
+        "mean_nll_nats": 4.7489098469549855,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 512,
+        "num_scored_tokens": 511,
+        "ok": true,
+        "ppl": 115.45834862463056,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 512,
+          "prompt_tokens_details": null,
+          "total_tokens": 513
+        }
+      }
+    }
+  ],
+  "elapsed_s": 15.276,
+  "finished_utc": "2026-06-09T10:03:03Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "fp8",
+  "model": "gemma3-27b-it",
+  "ok": true,
+  "run_id": "vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_fp8",
+  "runtime_ref": "jethac/vllm source overlay + jethac/flashinfer source overlay; sequential Gemma 3 PPL gate",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "Gemma 3 text-only prompt-logprob PPL; sequential fp8-vs-NVFP4; prefix caching disabled by fresh single request; short-context gate",
+  "started_utc": "2026-06-09T10:02:52Z",
+  "text_chars": 249998,
+  "text_files": [
+    "docs/ppl_corpus.md"
+  ],
+  "tokenizer": "google/gemma-3-27b-it",
+  "url": "http://127.0.0.1:8000"
+}

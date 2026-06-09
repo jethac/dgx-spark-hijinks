@@ -5,7 +5,7 @@
 > proved the packaging/native-FA2 machinery; Gemma is the destination and is where the
 > remaining hard problems live.
 
-## 2026-06-09 update — Gemma 3 short first-token gate is green
+## 2026-06-09 update — Gemma 3 short quality gates are green
 
 The FlashInfer paged-prefill hole is fixed in the fork through
 `jethac/flashinfer@c3dae30f`:
@@ -23,10 +23,16 @@ Live Gemma 3 result:
 - verdict: **green for short first-token/logprob correctness** against the prior fp8
   baseline; first tokens are now `spark`, `4`, `A`, with minimum top-logprob overlap
   ratio `0.772727`.
-- scope: this is not yet long-context PPL, throughput, or a full Gemma 3 serving blessing.
+- short PPL artifact: `results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_summary.md`
+- PPL verdict: **green for 512-token supplied-token prompt-logprob PPL**; fp8 PPL
+  `115.4583`, NVFP4 PPL `119.8578`, delta `+0.0374` nats/token, with `0` missing
+  supplied-token logprobs in both rows.
+- scope: this is still not a long-context/SWA-window stress test, throughput row, or full
+  Gemma 3 serving blessing.
 
-Next vLLM gate: run the queued sequential PPL/long-context comparator under the GB10 memory
-rules. Do not run fp8 and NVFP4 servers concurrently.
+Next vLLM gate: repeat the sequential PPL comparator at larger contexts that approach or
+cross Gemma 3's SWA window behavior, then add capacity/concurrency and throughput under the
+GB10 memory rules. Do not run fp8 and NVFP4 servers concurrently.
 
 ## Why this, why now
 NVFP4 KV cache on GB10 is the founding goal of this whole campaign — it targets Spark's

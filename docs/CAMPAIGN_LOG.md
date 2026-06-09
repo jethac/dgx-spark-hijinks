@@ -1109,6 +1109,16 @@
   - interpretation: this does not test or falsify the cross-lane FlashInfer hypothesis. Next SGLang work should prepare a reusable source-stack image or narrower kernel build target, then rerun the default radix row from that prepared stack.
   - build warning to track: SGLang `sglang-kernel` emits repeated `ptxas` warnings for `compute_120a`/`compute_121a` about `.multicast::cluster` on `cp.async.bulk{.tensor}` being intended for datacenter targets, plus `setmaxnreg` compatibility warnings.
 
+- Ran the first vLLM Gemma 3 sequential prompt-logprob PPL gate after the FlashInfer prefill fix.
+  - artifact: `results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_summary.md`
+  - runner: `scripts/run_vllm_gemma3_ppl_pair.sh`
+  - checkout: campaign `dad4468`, `jethac/vllm@0c278200e`, `jethac/flashinfer@c3dae30f`
+  - safety: fresh checkout, sequential fp8 then NVFP4 servers, `CTXS=512`, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=1024`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - fp8: PPL `115.4583`, mean NLL `4.7489` nats/token, `511 / 511` supplied prompt tokens scored.
+  - NVFP4: PPL `119.8578`, mean NLL `4.7863` nats/token, `511 / 511` supplied prompt tokens scored.
+  - delta: `+4.3995` PPL, `+0.0374` nats/token.
+  - interpretation: this is the first Gemma 3 supplied-token PPL evidence that the fixed NVFP4-KV path is quality-sane on short text-only prompts. It strengthens the first-token green gate, but it is not yet a long-context/SWA-window stress test, throughput row, or full Gemma 3 blessing.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
