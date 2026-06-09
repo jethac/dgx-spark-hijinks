@@ -60,38 +60,42 @@ Every live run should record:
 
 ## Current Queue
 
-The queue currently contains eight items:
+The queue currently contains nine items:
 
 1. `vllm_gemma3_flashinfer_prefill_debug`
    - packet: `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`
    - issue: `#6/#7`
    - why: Gemma 3 NVFP4-KV corruption is below the Python-visible FlashInfer wrapper.
-2. `sglang_qwen_fp4kv_dense_cache_trace`
+2. `vllm_gemma_nvfp4_kv_quality_gate`
+   - packet: `tasks/vllm_gemma_nvfp4_kv_quality_gate_20260609.md`
+   - issue: `#6/#7`
+   - why: Gemma NVFP4-KV needs Gemma-specific quality evidence before the ladder climbs.
+3. `sglang_qwen_fp4kv_dense_cache_trace`
    - packet: `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
    - issue: `#18/#20`
    - why: SGLang Qwen FP4-KV is red only when cached FP4 prefix reuse is involved.
-3. `vllm_qwen_clean_ppl_32k_128k`
+4. `vllm_qwen_clean_ppl_32k_128k`
    - packet: `tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md`
    - issue: `#7/#20`
    - why: the 8k clean-path PPL row is accepted; 32k/128k quality cost remains missing.
-4. `llamacpp_native_fp4_correctness_speed`
+5. `llamacpp_native_fp4_correctness_speed`
    - packet: `tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md`
    - issue: `#17/#20`
    - why: sm_121a native FP4 build proof exists, but runtime correctness/speed does not.
-5. `flashinfer_fp4_gemm_tile_smem`
+6. `flashinfer_fp4_gemm_tile_smem`
    - packet: `tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md`
    - issue: `#7/#13`
    - why: b12x dispatch is not tile/shared-memory viability.
-6. `llamacpp_newer_echo_logprobs_probe`
+7. `llamacpp_newer_echo_logprobs_probe`
    - task ref: `tasks/counterpart_evidence_tasks.jsonl#llamacpp_newer_echo_logprobs`
    - issue: `#8`
    - why: a newer llama.cpp pin may expose supplied-token logprobs, but must pass the
      contract audit.
-7. `llamacpp_larger_qwen3_gguf`
+8. `llamacpp_larger_qwen3_gguf`
    - task ref: `tasks/counterpart_evidence_tasks.jsonl#llamacpp_larger_qwen_gguf`
    - issue: `#17/#20`
    - why: the current llama.cpp Qwen speed row is only Qwen2.5 1.5B.
-8. `qwen_speed_lane_shared_manifest`
+9. `qwen_speed_lane_shared_manifest`
    - packet: `tasks/qwen_speed_lane_sample.jsonl`
    - issue: `#20`
    - why: record already-running Qwen servers in one shared manifest shape.

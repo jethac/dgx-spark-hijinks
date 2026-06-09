@@ -79,6 +79,12 @@ and proves NVFP4 corruption is present on the first generated token. The fp8 row
 top-logprob overlap for every probe case. So this is not late decode compounding or
 sampling noise; attention/KV state or logits are already wrong before sampling.
 
+Quality-gate update (2026-06-09): `scripts/gemma_nvfp4_kv_quality_gate.py` is now the
+mandatory Gemma NVFP4-KV promotion gate. It rejects the current known-bad Gemma 3 row in
+`results/gemma3_nvfp4_kv_quality_gate_current_red_20260609.json`, even though routing and
+capacity evidence exist. Future Gemma rows need a passing first-token/logprob comparator
+or supplied-token PPL comparator, preferably both, before the rung is green.
+
 Audit caveat: those first-token prompts are only `18`, `23`, and `24` tokens, far below
 Gemma 3's `sliding_window=1024`. They therefore do not require SWA eviction or window
 rotation to fail. SWA/hybrid metadata is still the only new model-family variable versus
