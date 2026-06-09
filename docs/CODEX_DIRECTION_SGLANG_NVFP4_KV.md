@@ -29,13 +29,14 @@ cached-prefix reuse, independent of endpoint order.
 
 Trace status: post-hoc parser repair made this a clean request-bound localization artifact.
 The comparator now treats warmup/health-check forwards as ignored provenance and validates
-the `432` request-bound events strictly: `324` dense, `108` cached, `0` unknown, `576`
+the `432` request-bound events strictly: `324` dense, `108` cached, `0` unknown, `648`
 matched tensor comparisons, `0` metricless comparisons, and no schema findings. The first
-localized request-bound divergence is layer-0 Qwen2 `decoder_after_self_attn`
-`hidden_rows` (`cosine=0.6753943297351783`, `max_abs=0.6484375`,
-`rms=0.16307947834888886`) between dense `openai-first` and cached `native-second`.
+localized request-bound divergence is layer-0 attention output equivalence: dense
+full-prefill `o_rows` versus cached-prefix merged `merged_rows`
+(`cosine=0.006467887232207366`, `max_abs=0.318359375`,
+`rms=0.13599727805129772`) between dense `openai-first` and cached `native-second`.
 So the artifact quality is green; the remaining red state is real FP4 cached-prefix
-behavior, not missing trace request IDs.
+attention behavior, not missing trace request IDs or a later Qwen2/logits path.
 
 SM12x build note: the source build succeeds, but the build log contains repeated
 performance warnings: `242` `.multicast::cluster` / `cp.async.bulk{.tensor}` advisories,

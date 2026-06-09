@@ -189,22 +189,24 @@
         "first_divergence": {
           "cached_rid": "native-second",
           "comparison": {
-            "field": "hidden_rows",
+            "cached_field": "merged_rows",
+            "dense_field": "o_rows",
+            "field": "attention_output_rows",
             "vector": {
-              "cosine": 0.6753943297351783,
+              "cosine": 0.006467887232207366,
               "count": 64,
-              "max_abs": 0.6484375,
-              "rms": 0.16307947834888886
+              "max_abs": 0.318359375,
+              "rms": 0.13599727805129772
             }
           },
           "dense_rid": "openai-first",
-          "field": "hidden_rows",
-          "kind": "qwen2",
-          "label": "decoder_after_self_attn",
+          "field": "attention_output_rows",
+          "kind": "attention",
+          "label": "attention_output",
           "layer": 0
         },
         "ignored_trace_count": 301,
-        "metric_comparison_count": 576,
+        "metric_comparison_count": 648,
         "metricless_comparison_count": 0,
         "ok": true,
         "trace_count": 733

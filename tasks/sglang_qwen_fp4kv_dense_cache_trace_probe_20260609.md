@@ -91,6 +91,15 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   `git diff --check` both passed in the Windows workspace.
 - Scope: inactive unless `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1` is set.
 
+2026-06-09 comparator refinement:
+
+- `scripts/sglang_dense_cache_trace_compare.py` canonicalizes the equivalent attention
+  output labels (`forward_extend_ragged_no_prefix`, `forward_extend_merge_paged`,
+  `forward_extend_paged`) as `attention_output`.
+- Dense no-prefix `o_rows` are compared directly against cached-prefix merged
+  `merged_rows`. The current-head artifact now localizes the first request-bound
+  divergence to layer-0 attention output itself, before the Qwen2 residual/norm/MLP path.
+
 Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`

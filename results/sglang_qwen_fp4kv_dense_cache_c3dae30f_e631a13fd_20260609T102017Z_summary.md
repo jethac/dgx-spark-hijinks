@@ -40,26 +40,30 @@ belong to the request-order probe, while keeping request-bound trace schema chec
 - `compare_trace_count`: `432`
 - `ignored_trace_count`: `301`
 - request-bound event counts: `324` dense, `108` cached, `0` unknown
-- matched tensor comparisons: `576`
+- matched tensor comparisons: `648`
 - matched comparisons with `metric_ok=false`: `0`
 - event schema issues: `0`
 - comparator findings: none
 
 First localized request-bound divergence:
 
-- kind: `qwen2`
-- label: `decoder_after_self_attn`
+- kind: `attention`
+- label: `attention_output`
 - layer: `0`
-- field: `hidden_rows`
+- field: `attention_output_rows`
+- dense field: `o_rows`
+- cached field: `merged_rows`
 - dense rid: `openai-first`
 - cached rid: `native-second`
-- cosine: `0.6753943297351783`
-- max abs: `0.6484375`
-- rms: `0.16307947834888886`
+- cosine: `0.006467887232207366`
+- max abs: `0.318359375`
+- rms: `0.13599727805129772`
 
 Interpretation: the artifact quality is green, but behavior is still red. The same current-head
 stack still diverges on FP4 cached-prefix reuse after the FlashInfer paged-prefill fix that
-closed the vLLM Gemma 3 short gate.
+closed the vLLM Gemma 3 short gate. The failure is now localized to attention output
+equivalence itself: dense full-prefill `o_rows` and cached-prefix merged `merged_rows`
+already disagree before the Qwen2 residual/norm/MLP path.
 
 ## SM12x Build Notes
 

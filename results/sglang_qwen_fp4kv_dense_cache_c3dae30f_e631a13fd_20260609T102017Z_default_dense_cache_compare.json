@@ -3,6 +3,1878 @@
   "comparisons": [
     {
       "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 419,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 419,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 569,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 569,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 691,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 691,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 753,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 753,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 815,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 815,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 480,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 875,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 629,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.006467887232207366,
+          "count": 64,
+          "max_abs": 0.318359375,
+          "rms": 0.13599727805129772
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 875,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 0,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 423,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 423,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 573,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 573,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 695,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 695,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 757,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 757,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 819,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 819,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 485,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 879,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 633,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.4617465969707452,
+          "count": 64,
+          "max_abs": 0.904296875,
+          "rms": 0.18122085186157585
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 879,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 1,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 431,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 431,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 581,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 581,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 703,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 703,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 765,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 765,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 827,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 827,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 505,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 887,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 641,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.7358741848947526,
+          "count": 64,
+          "max_abs": 1.486328125,
+          "rms": 0.42697961734680084
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 887,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 13,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 435,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 435,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 585,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 585,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 707,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 707,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 769,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 769,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 831,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 831,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 516,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 891,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 645,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.5359779516109943,
+          "count": 64,
+          "max_abs": 0.7890625,
+          "rms": 0.27239777992666614
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 891,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 20,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 439,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 439,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 589,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 589,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 711,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 711,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 773,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 773,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 835,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 835,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 527,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 895,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 649,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9360813210572452,
+          "count": 64,
+          "max_abs": 1.09375,
+          "rms": 0.37065296025766836
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 895,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 27,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 427,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 12,
+      "dense_line": 427,
+      "dense_rid": "openai-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 577,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 16,
+      "dense_line": 577,
+      "dense_rid": "native-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 699,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 20,
+      "dense_line": 699,
+      "dense_rid": "openai-flush-first",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 761,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 22,
+      "dense_line": 761,
+      "dense_rid": "native-after-flush",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 823,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 24,
+      "dense_line": 823,
+      "dense_rid": "openai-namespace-a",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 14,
+      "cached_line": 495,
+      "cached_rid": "native-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 883,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
+      "cached_forward_pass_id": 18,
+      "cached_line": 637,
+      "cached_rid": "openai-second",
+      "comparison": {
+        "cached_field": "merged_rows",
+        "dense_field": "o_rows",
+        "field": "attention_output_rows",
+        "vector": {
+          "cosine": 0.9066004637627425,
+          "count": 64,
+          "max_abs": 0.27734375,
+          "rms": 0.10954157774708133
+        }
+      },
+      "dense_count": 6,
+      "dense_forward_pass_id": 26,
+      "dense_line": 883,
+      "dense_rid": "native-namespace-b",
+      "kind": "attention",
+      "label": "attention_output",
+      "layer": 7,
+      "metric_ok": true,
+      "mode": "<ForwardMode.EXTEND: 1>"
+    },
+    {
+      "cached_count": 2,
       "cached_forward_pass_id": 15,
       "cached_line": 556,
       "cached_rid": "native-second",
@@ -13836,22 +15708,24 @@
   "first_divergence": {
     "cached_rid": "native-second",
     "comparison": {
-      "field": "hidden_rows",
+      "cached_field": "merged_rows",
+      "dense_field": "o_rows",
+      "field": "attention_output_rows",
       "vector": {
-        "cosine": 0.6753943297351783,
+        "cosine": 0.006467887232207366,
         "count": 64,
-        "max_abs": 0.6484375,
-        "rms": 0.16307947834888886
+        "max_abs": 0.318359375,
+        "rms": 0.13599727805129772
       }
     },
     "dense_rid": "openai-first",
-    "field": "hidden_rows",
-    "kind": "qwen2",
-    "label": "decoder_after_self_attn",
+    "field": "attention_output_rows",
+    "kind": "attention",
+    "label": "attention_output",
     "layer": 0
   },
   "ignored_trace_count": 301,
-  "metric_comparison_count": 576,
+  "metric_comparison_count": 648,
   "metricless_comparison_count": 0,
   "ok": true,
   "parse_errors": [],

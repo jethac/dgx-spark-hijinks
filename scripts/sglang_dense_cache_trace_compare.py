@@ -28,6 +28,11 @@ TRACE_PATTERNS = {
 
 REQUIRED_EVENT_KEYS = ("kind", "label", "layer", "forward_pass_id", "rids", "mode")
 ROW_SAMPLE_KINDS = {"attention", "qwen2", "logits", "sampler"}
+ATTENTION_OUTPUT_LABELS = {
+    "forward_extend_ragged_no_prefix",
+    "forward_extend_merge_paged",
+    "forward_extend_paged",
+}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -179,11 +184,15 @@ def topk_overlap(a: dict[str, Any] | None, b: dict[str, Any] | None) -> dict[str
 def compare_events(dense: dict[str, Any], cached: dict[str, Any]) -> dict[str, Any]:
     kind = dense.get("_kind")
     if kind == "attention":
-        for field in ("merged_rows", "o_rows", "o2_rows", "o1_rows"):
-            dense_rows = first_rows(dense, field)
-            cached_rows = first_rows(cached, field)
-            if dense_rows and cached_rows:
-                return {"field": field, "vector": vector_compare(sample_vector(dense_rows[0]), sample_vector(cached_rows[0]))}
+        dense_rows = attention_output_rows(dense)
+        cached_rows = attention_output_rows(cached)
+        if dense_rows and cached_rows:
+            return {
+                "field": "attention_output_rows",
+                "dense_field": attention_output_field(dense),
+                "cached_field": attention_output_field(cached),
+                "vector": vector_compare(sample_vector(dense_rows[0]), sample_vector(cached_rows[0])),
+            }
     if kind == "qwen2":
         dense_rows = first_rows(dense, "hidden_rows")
         cached_rows = first_rows(cached, "hidden_rows")
@@ -192,6 +201,18 @@ def compare_events(dense: dict[str, Any], cached: dict[str, Any]) -> dict[str, A
     if kind in {"logits", "sampler"}:
         return {"field": "topk", "topk": topk_overlap(dense.get("topk"), cached.get("topk"))}
     return {"field": None}
+
+
+def attention_output_field(event: dict[str, Any]) -> str | None:
+    for field in ("merged_rows", "o_rows"):
+        if first_rows(event, field):
+            return field
+    return None
+
+
+def attention_output_rows(event: dict[str, Any]) -> list[dict[str, Any]]:
+    field = attention_output_field(event)
+    return first_rows(event, field) if field else []
 
 
 def comparison_has_metric(comparison: dict[str, Any] | None) -> bool:
@@ -244,10 +265,16 @@ def is_warmup_or_external_event(event: dict[str, Any], requests: dict[str, dict[
 def event_key(event: dict[str, Any]) -> tuple[Any, ...]:
     return (
         event.get("_kind"),
-        event.get("label"),
+        canonical_event_label(event),
         event.get("layer"),
         event.get("mode"),
     )
+
+
+def canonical_event_label(event: dict[str, Any]) -> Any:
+    if event.get("_kind") == "attention" and event.get("label") in ATTENTION_OUTPUT_LABELS:
+        return "attention_output"
+    return event.get("label")
 
 
 def event_sort_key(event: dict[str, Any]) -> tuple[Any, ...]:
@@ -462,17 +489,17 @@ def run_self_test() -> int:
     }
     dense_trace = {
         "kind": "attention",
-        "label": "extend_merge_paged",
+        "label": "forward_extend_ragged_no_prefix",
         "mode": "ForwardMode.EXTEND",
         "forward_pass_id": 1,
         "rids": ["dense-rid"],
         "layer": 0,
         "sample_rows": [0],
-        "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.0, 3.0]}}]},
+        "o_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.0, 3.0]}}]},
     }
     cached_trace = {
         "kind": "attention",
-        "label": "extend_merge_paged",
+        "label": "forward_extend_merge_paged",
         "mode": "ForwardMode.EXTEND",
         "forward_pass_id": 2,
         "rids": ["cached-rid"],
