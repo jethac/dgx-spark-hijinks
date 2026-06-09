@@ -74,6 +74,26 @@ runtime run already failed real radix-on serving. Do not implement per-head serv
 policy as the next fix unless new evidence appears; it is currently a trace-only
 falsifier for "head granularity is enough."
 
+Dense-reference partial-state probe, 2026-06-09: `jethac/sglang@5b71bef3c` adds the
+decisive reuse-vs-dense comparison. Result:
+
+- cached Q versus dense no-prefix Q for the same logical token: `cosine=0.999993`
+- suffix partial (`o1/s1`) versus dense suffix recompute: output `cosine=0.999994`
+- merge math versus its own inputs: `cosine=0.99999988`
+- cached-prefix partial (`o2/s2`) versus the FP4-dequant cached-page reference: output
+  `cosine=0.999997`, LSE max abs `0.001953`
+- cached-prefix partial versus the BF16 dense-prefix recompute: output
+  `cosine=0.851723`, LSE max abs `484.75`
+- full dense recompute versus cached merged output: `cosine=0.721851`
+
+This corrects the previous framing. The no-prefix "dense" request serves over BF16 K/V
+and only writes FP4 KV after attention; it does **not** prove that dense FP4 K is
+quality-equivalent. The reuse path is internally consistent with the FP4 cache, but the
+FP4 cached-prefix state is not close enough to the BF16 dense-prefix state. The remaining
+SGLang bug is therefore not radix page pairing, stale scales, suffix attention, or
+`_safe_merge_state`; it is the quality/semantics gap introduced when a later request
+reuses the FP4-compressed prefix that the first request never had to attend through.
+
 Next target: K-side policy/quality. Investigate calibrated K scale quality, per-head or
 per-group K scales only if they are tied to a stronger quality objective than amax,
 FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not spend more time on

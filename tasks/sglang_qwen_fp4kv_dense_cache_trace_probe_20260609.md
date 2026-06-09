@@ -182,6 +182,30 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   NVFP4 V. Capacity warning: naive FP8 K + NVFP4 V gives about `1.28x` fp8 KV capacity,
   versus about `1.78x` for NVFP4 K+V.
 
+2026-06-09 dense-reference partial-state probe:
+
+- Fork commit: `jethac/sglang@5b71bef3c` added a dense no-prefix BF16 Q/K/V reference
+  cache and compares the failing cached-prefix request against it inside the
+  `FP4 KV prefix-reference trace`.
+- Parent commit: `9f1bb94` points the submodule at that trace.
+- Run id: `sglang_qwen_fp4kv_dense_ref_c3dae30f_5b71bef3c_20260609T1455Z`
+- Result: default radix row remains red (`**` dense/no-prefix, `ark` on 55-token prefix
+  reuse), but the partial-state comparison is decisive:
+  - cached Q vs dense Q: `cosine=0.9999930262565613`
+  - suffix partial `o1` vs dense suffix recompute: `cosine=0.9999936819076538`
+  - cached-prefix `o2` vs FP4-dequant cached-page reference:
+    `cosine=0.9999971985816956`; `s2` max abs vs FP4 reference `0.001953125`
+  - cached-prefix `o2` vs BF16 dense-prefix recompute:
+    `cosine=0.8517225384712219`; `s2` max abs vs BF16 dense-prefix LSE `484.75`
+  - `_safe_merge_state` manual compare: `cosine=0.9999998807907104`
+  - full BF16 dense recompute vs cached merged output: `cosine=0.7218508720397949`
+- Decision: the reuse path is internally consistent with the FP4 cache; the problem is
+  that no-prefix requests compute attention over BF16 K/V, while cached-prefix requests
+  later compute over the FP4-compressed prefix. Stop chasing page pairing, stale scales,
+  suffix attention, and merge math for this row. The next fix must either make the FP4
+  prefix state close enough to the BF16 dense state, or choose a mixed/policy fallback
+  with an explicit capacity cost.
+
 Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`
