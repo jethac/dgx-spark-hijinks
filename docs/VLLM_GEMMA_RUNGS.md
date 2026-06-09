@@ -1,7 +1,33 @@
 # vLLM Gemma 4 Rungs — Modification Plan (Rungs 2–4)
 
-Status: PLAN ONLY — no code written yet. Code anchors below were read from the actual fork
-checkout `third_party/vllm @ 0c278200e` (v0.13.0rc1-5263), not assumed. This extends the
+Status: **Phase 0 IMPLEMENTED + GB10 probes answered (2026-06-10).** Branch
+`jethac/vllm@spark/hijinks-022-gemma4-mixed-kv` (worktree lane, Codex's checkout
+untouched), commits `b815a882b..cbfe86bd5`:
+
+- **M2** `b815a882b` — `"full_attention"` skip literal in `attention.py`.
+- **M4** `bcfe2d445` — `unify_kv_cache_spec_page_size` scale-then-pad fallback for
+  non-divisible mixed page sizes (+ waste logging); fail-fast guard when the hybrid KV
+  manager is disabled for mixed-dtype specs.
+- **M3+M5** `0f03d4f12` — `cache_dtype_str` on the base `AttentionSpec` (resolves the MLA
+  "less hacky" TODO), populated per layer (incl. TQ spec); FlashInfer builder + reshape
+  paths derive per-group dtype strings (tri-state); `kv_cache_dtype_skip_layers` accepts
+  `"<matcher>=<dtype>"` overrides (fp8-global). `use_uniform_kv_cache` + the runner's
+  global dtype verified no-change-needed by construction.
+- **M6** `b91a444c1` + `cbfe86bd5` — Gemma4Config force relaxed under mixed-KV; global
+  D>256 layers **explicitly pinned to TRITON_ATTN** via the `Attention(attn_backend=...)`
+  override (see probe results below — automatic fallback was falsified on hardware).
+
+**Probe results** (`results/vllm_gemma4_mixed_kv_probes_20260610_summary.md`): open
+question **#2 answered — FA2 bf16-D=512 fails the identical, dtype-independent trait
+guard** (`prefill.cuh:2615`, `NUM_MMA_D_VO=32`) on GB10, so Triton-global is mandatory.
+Open question **#1 split**: two-backend worker machinery is real (per-layer
+AttentionGroups; TurboQuant skip-layers is prior art), **but** the selector's
+`validate_configuration` over-promises head-512 for FlashInfer, so the fallback had to be
+an explicit pin, not automatic (upstream-worthy FlashInfer/vLLM bug, noted).
+
+Not yet run: M1 arch smoke (`gemma4_unified` load), live two-builder coexistence, and the
+rungs themselves. Code anchors below were read from the actual fork checkout
+`third_party/vllm @ 0c278200e` (v0.13.0rc1-5263), not assumed. This extends the
 green Rung 1 result to the Gemma 4 server variants per `docs/GEMMA_COMPATIBILITY_PLAN.md`:
 
 - **Rung 2 — Gemma 4 31B (dense, encoder-based text+vision, D=512)** — text-only, then vision rows

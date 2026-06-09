@@ -1,0 +1,17 @@
+{
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "FA2 rejects/fails head_dim=512 with bf16 KV: Gemma 4 global layers need a non-FlashInfer backend (expected outcome; matches the head-dim-driven trait guard).",
+  "device": "NVIDIA GB10",
+  "error": "RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /usr/local/lib/python3.12/dist-packages/flashinfer/data/include/flashinfer/attention/prefill.cuh:2615: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.",
+  "error_traceback_tail": "Traceback (most recent call last):\n  File \"/probe.py\", line 143, in probe_fa2_bf16_d512\n    out = wrapper.run(q, kv)\n          ^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/flashinfer/prefill.py\", line 2443, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/usr/local/lib/python3.12/dist-packages/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /usr/local/lib/python3.12/dist-packages/flashinfer/data/include/flashinfer/attention/prefill.cuh:2615: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=32 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n",
+  "finished_utc": "2026-06-09T19:38:48.363017+00:00",
+  "flashinfer": "0.6.9rc1",
+  "ok": false,
+  "probe": "fa2-bf16-d512",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-09T19:38:29.955531+00:00",
+  "torch": "2.12.0.dev20260408+cu130"
+}

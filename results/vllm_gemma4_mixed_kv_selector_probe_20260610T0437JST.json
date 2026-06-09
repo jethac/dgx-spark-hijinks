@@ -1,0 +1,35 @@
+{
+  "both_resolvable": true,
+  "capability": [
+    12,
+    1
+  ],
+  "cases": {
+    "global_full_auto_d512": {
+      "backend": [
+        "vllm.v1.attention.backends.flashinfer",
+        "FlashInferBackend"
+      ],
+      "head_size": 512,
+      "kv_cache_dtype": null,
+      "ok": true
+    },
+    "local_sliding_nvfp4_d256": {
+      "backend": [
+        "vllm.v1.attention.backends.flashinfer",
+        "FlashInferBackend"
+      ],
+      "head_size": 256,
+      "kv_cache_dtype": "nvfp4",
+      "ok": true
+    }
+  },
+  "device": "NVIDIA GB10",
+  "distinct_backends": false,
+  "finished_utc": "2026-06-09T19:37:07.015287+00:00",
+  "ok": true,
+  "probe": "selector",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-09T19:37:02.047431+00:00",
+  "torch": "2.12.0.dev20260408+cu130"
+}
