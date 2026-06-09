@@ -114,6 +114,7 @@ run_one() {
     -lc '
 set -euo pipefail
 mkdir -p /tmp/spark-sitecustomize
+mkdir -p /work/scripts /work/results
 cp /workspace/dgx-spark-hijinks/scripts/flashinfer_source_sitecustomize.py /tmp/spark-sitecustomize/sitecustomize.py
 export PYTHONPATH="/tmp/spark-sitecustomize:${PYTHONPATH:-}"
 if [[ "${FLASHINFER_CLEAR_PREFILL_CACHE:-0}" == "1" ]]; then
@@ -260,10 +261,10 @@ out = results_dir / f"{run}_summary.json"
 out.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
 (results_dir / f"{run}_summary.md").write_text(
     "# vLLM Gemma 3 NVFP4-KV PPL Pair\\n\\n"
-    f"Run: `{run}`\\n\\n"
+    f"Run: {run}\\n\\n"
     f"Status: {'green' if summary['ok'] else 'red/incomplete'}\\n\\n"
-    f"Run root: `{root}`\\n\\n"
-    f"Compare artifact: `{compare}`\\n\\n"
+    f"Run root: {root}\\n\\n"
+    f"Compare artifact: {compare}\\n\\n"
     "This is a sequential fp8-vs-NVFP4 prompt-logprob PPL gate under the GB10 memory rules.\\n",
     encoding="utf-8",
 )
