@@ -136,13 +136,13 @@
       "task_packet_artifact_mentions_checked": true
     },
     {
-      "expected_artifact_count": 0,
+      "expected_artifact_count": 6,
       "findings": [],
       "id": "llamacpp_larger_qwen3_gguf",
       "line": 8,
       "ok": true,
       "priority": 70,
-      "task_packet_artifact_mentions_checked": false
+      "task_packet_artifact_mentions_checked": true
     },
     {
       "expected_artifact_count": 0,

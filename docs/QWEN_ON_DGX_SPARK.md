@@ -106,6 +106,9 @@ Next llama.cpp Qwen proof:
 - Run a Qwen3/Qwen3.6-class instruct GGUF row with the same `b9536` llama.cpp build, not another Qwen2.5 1.5B row.
 - Start with a normal practical-serving quant such as Q4_K_M or Q4_0 to fill the larger-Qwen GGUF gap.
 - Keep native FP4 separate: `BLACKWELL_NATIVE_FP4=1` in the build log is not proof unless the model artifact is NVFP4/MXFP4 GGUF and runtime/build audits show the native FP4 path.
+- Live packet: `tasks/llamacpp_larger_qwen3_gguf_packet_20260609.md` records server log,
+  row manifest, compact OpenAI benchmark, `llama-bench`, GGUF logprobs probe, and serving
+  manifest audit artifacts for this row.
 
 ## Required Artifacts
 

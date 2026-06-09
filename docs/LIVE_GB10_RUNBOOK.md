@@ -92,6 +92,7 @@ The queue currently contains nine items:
    - why: a newer llama.cpp pin may expose supplied-token logprobs, but must pass the
      contract audit.
 8. `llamacpp_larger_qwen3_gguf`
+   - packet: `tasks/llamacpp_larger_qwen3_gguf_packet_20260609.md`
    - task ref: `tasks/counterpart_evidence_tasks.jsonl#llamacpp_larger_qwen_gguf`
    - issue: `#17/#20`
    - why: the current llama.cpp Qwen speed row is only Qwen2.5 1.5B.
