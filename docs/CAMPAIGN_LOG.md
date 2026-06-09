@@ -1119,6 +1119,17 @@
   - delta: `+4.3995` PPL, `+0.0374` nats/token.
   - interpretation: this is the first Gemma 3 supplied-token PPL evidence that the fixed NVFP4-KV path is quality-sane on short text-only prompts. It strengthens the first-token green gate, but it is not yet a long-context/SWA-window stress test, throughput row, or full Gemma 3 blessing.
 
+- Ran the larger vLLM Gemma 3 sequential prompt-logprob PPL gate.
+  - artifact: `results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_summary.md`
+  - runner: `scripts/run_vllm_gemma3_ppl_pair.sh`
+  - safety: sequential fp8 then NVFP4 servers, `CTXS="1024 2048"`, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=4096`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - fp8 1024: PPL `35.0895`, mean NLL `3.5579` nats/token, `1023 / 1023` supplied prompt tokens scored.
+  - NVFP4 1024: PPL `35.2563`, mean NLL `3.5626` nats/token, `1023 / 1023` supplied prompt tokens scored.
+  - fp8 2048: PPL `20.5861`, mean NLL `3.0246` nats/token, `2047 / 2047` supplied prompt tokens scored.
+  - NVFP4 2048: PPL `20.4757`, mean NLL `3.0192` nats/token, `2047 / 2047` supplied prompt tokens scored.
+  - delta: `+0.0047` nats/token at 1024, `-0.0054` nats/token at 2048.
+  - interpretation: Gemma 3 NVFP4-KV stays quality-sane through 2048 supplied-token PPL on this corpus slice, including a row that crosses the 1024-token SWA window. The next vLLM Gemma 3 gate is capacity/concurrency and throughput, not another short quality smoke.
+
 - Ran the current-head SGLang Qwen FP4-KV dense-vs-cached trace from a reusable source-stack image.
   - artifact: `results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_summary.md`
   - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`

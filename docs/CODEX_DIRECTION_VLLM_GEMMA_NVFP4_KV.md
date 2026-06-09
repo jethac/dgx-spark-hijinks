@@ -27,12 +27,19 @@ Live Gemma 3 result:
 - PPL verdict: **green for 512-token supplied-token prompt-logprob PPL**; fp8 PPL
   `115.4583`, NVFP4 PPL `119.8578`, delta `+0.0374` nats/token, with `0` missing
   supplied-token logprobs in both rows.
+- larger PPL artifact:
+  `results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_summary.md`
+- larger PPL verdict: **green for 1024-token and 2048-token supplied-token PPL** under
+  the same sequential memory guardrails. At 1024 tokens, fp8 PPL `35.0895` versus NVFP4
+  `35.2563` (`+0.0047` nats/token). At 2048 tokens, fp8 PPL `20.5861` versus NVFP4
+  `20.4757` (`-0.0054` nats/token). All supplied prompt tokens were scored in both rows.
 - scope: this is still not a long-context/SWA-window stress test, throughput row, or full
-  Gemma 3 serving blessing.
+  Gemma 3 serving blessing, but the 2048-token row crosses the 1024-token SWA window and
+  does not show quality-cost compounding on this corpus slice.
 
-Next vLLM gate: repeat the sequential PPL comparator at larger contexts that approach or
-cross Gemma 3's SWA window behavior, then add capacity/concurrency and throughput under the
-GB10 memory rules. Do not run fp8 and NVFP4 servers concurrently.
+Next vLLM gate: add capacity/concurrency and throughput under the GB10 memory rules, and
+only then decide whether a larger Gemma 3 PPL row is needed. Do not run fp8 and NVFP4
+servers concurrently.
 
 ## Why this, why now
 NVFP4 KV cache on GB10 is the founding goal of this whole campaign — it targets Spark's

@@ -1,0 +1,31 @@
+{
+  "elapsed_s": 0.0,
+  "fp8_report": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_fp8_ppl.json",
+  "nvfp4_report": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_nvfp4_ppl.json",
+  "ok": true,
+  "rows": [
+    {
+      "ctx": 1024,
+      "delta_nats_per_token": 0.004740681633573995,
+      "delta_ppl": 0.16674319698226725,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 3.557902679100503,
+      "nats_per_token_nvfp4": 3.562643360734077,
+      "nvfp4_ok": true,
+      "ppl_fp8": 35.08952591994629,
+      "ppl_nvfp4": 35.25626911692856
+    },
+    {
+      "ctx": 2048,
+      "delta_nats_per_token": -0.005378728140173816,
+      "delta_ppl": -0.11042984697514413,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 3.024616667910347,
+      "nats_per_token_nvfp4": 3.019237939770173,
+      "nvfp4_ok": true,
+      "ppl_fp8": 20.586111881219917,
+      "ppl_nvfp4": 20.475682034244773
+    }
+  ],
+  "schema": "vllm-prompt-ppl-comparison/v1"
+}

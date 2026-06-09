@@ -1,0 +1,136 @@
+{
+  "artifacts": {
+    "fp8": {
+      "error": null,
+      "ok": true,
+      "ppl": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_fp8_ppl.json",
+      "scores": [
+        {
+          "ctx": 1024,
+          "score": {
+            "mean_logprob": -3.557902679100503,
+            "mean_nll_nats": 3.557902679100503,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 1024,
+            "num_scored_tokens": 1023,
+            "ok": true,
+            "ppl": 35.08952591994629,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 1024,
+              "prompt_tokens_details": null,
+              "total_tokens": 1025
+            }
+          }
+        },
+        {
+          "ctx": 2048,
+          "score": {
+            "mean_logprob": -3.024616667910347,
+            "mean_nll_nats": 3.024616667910347,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 2048,
+            "num_scored_tokens": 2047,
+            "ok": true,
+            "ppl": 20.586111881219917,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 2048,
+              "prompt_tokens_details": null,
+              "total_tokens": 2049
+            }
+          }
+        }
+      ],
+      "server_log": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_fp8_server_after.log"
+    },
+    "nvfp4": {
+      "error": null,
+      "ok": true,
+      "ppl": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_nvfp4_ppl.json",
+      "scores": [
+        {
+          "ctx": 1024,
+          "score": {
+            "mean_logprob": -3.562643360734077,
+            "mean_nll_nats": 3.562643360734077,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 1024,
+            "num_scored_tokens": 1023,
+            "ok": true,
+            "ppl": 35.25626911692856,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 1024,
+              "prompt_tokens_details": null,
+              "total_tokens": 1025
+            }
+          }
+        },
+        {
+          "ctx": 2048,
+          "score": {
+            "mean_logprob": -3.019237939770173,
+            "mean_nll_nats": 3.019237939770173,
+            "missing_positions_preview": [],
+            "num_missing_tokens": 0,
+            "num_prompt_tokens": 2048,
+            "num_scored_tokens": 2047,
+            "ok": true,
+            "ppl": 20.475682034244773,
+            "usage": {
+              "completion_tokens": 1,
+              "prompt_tokens": 2048,
+              "prompt_tokens_details": null,
+              "total_tokens": 2049
+            }
+          }
+        }
+      ],
+      "server_log": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_nvfp4_server_after.log"
+    }
+  },
+  "compare": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048/results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_compare.json",
+  "compare_ok": true,
+  "contexts": [
+    1024,
+    2048
+  ],
+  "docker_memory": "100g",
+  "gpu_memory_utilization": 0.72,
+  "image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+  "max_model_len": 4096,
+  "model": "google/gemma-3-27b-it",
+  "ok": true,
+  "rows": [
+    {
+      "ctx": 1024,
+      "delta_nats_per_token": 0.004740681633573995,
+      "delta_ppl": 0.16674319698226725,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 3.557902679100503,
+      "nats_per_token_nvfp4": 3.562643360734077,
+      "nvfp4_ok": true,
+      "ppl_fp8": 35.08952591994629,
+      "ppl_nvfp4": 35.25626911692856
+    },
+    {
+      "ctx": 2048,
+      "delta_nats_per_token": -0.005378728140173816,
+      "delta_ppl": -0.11042984697514413,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 3.024616667910347,
+      "nats_per_token_nvfp4": 3.019237939770173,
+      "nvfp4_ok": true,
+      "ppl_fp8": 20.586111881219917,
+      "ppl_nvfp4": 20.475682034244773
+    }
+  ],
+  "run_id": "vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048",
+  "run_root": "/home/jethac/spark_tmp/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048",
+  "schema": "vllm-gemma3-ppl-pair-summary/v1",
+  "served_model": "gemma3-27b-it"
+}

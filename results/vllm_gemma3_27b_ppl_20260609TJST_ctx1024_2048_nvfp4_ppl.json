@@ -1,0 +1,107 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 86157,
+  "container_image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass",
+  "contexts": [
+    {
+      "ctx": 1024,
+      "elapsed_s": 11.558166364997305,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma3-27b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 1024,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -3.562643360734077,
+        "mean_nll_nats": 3.562643360734077,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 1024,
+        "num_scored_tokens": 1023,
+        "ok": true,
+        "ppl": 35.25626911692856,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 1024,
+          "prompt_tokens_details": null,
+          "total_tokens": 1025
+        }
+      }
+    },
+    {
+      "ctx": 2048,
+      "elapsed_s": 12.053165678000369,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma3-27b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 2048,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -3.019237939770173,
+        "mean_nll_nats": 3.019237939770173,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 2048,
+        "num_scored_tokens": 2047,
+        "ok": true,
+        "ppl": 20.475682034244773,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 2048,
+          "prompt_tokens_details": null,
+          "total_tokens": 2049
+        }
+      }
+    }
+  ],
+  "elapsed_s": 28.13,
+  "finished_utc": "2026-06-09T14:27:09Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "nvfp4",
+  "model": "gemma3-27b-it",
+  "ok": true,
+  "run_id": "vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_nvfp4",
+  "runtime_ref": "jethac/vllm source overlay + jethac/flashinfer source overlay; sequential Gemma 3 PPL gate",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "Gemma 3 text-only prompt-logprob PPL; sequential fp8-vs-NVFP4; prefix caching disabled by fresh single request; short-context gate",
+  "started_utc": "2026-06-09T14:26:45Z",
+  "text_chars": 249998,
+  "text_files": [
+    "docs/ppl_corpus.md"
+  ],
+  "tokenizer": "google/gemma-3-27b-it",
+  "url": "http://127.0.0.1:8000"
+}
