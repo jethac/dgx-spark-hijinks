@@ -32,15 +32,34 @@ Interpretation: the failure still follows FP4 cached-prefix reuse, independent o
 
 ## Trace Status
 
-The dense-cache trace comparator is not yet a clean localization oracle for this run:
+Post-hoc parser update: the dense-cache trace comparator is now a clean request-bound
+localization artifact for this run. It ignores warmup and health-check forwards that do not
+belong to the request-order probe, while keeping request-bound trace schema checks strict:
 
 - `trace_count`: `733`
+- `compare_trace_count`: `432`
+- `ignored_trace_count`: `301`
+- request-bound event counts: `324` dense, `108` cached, `0` unknown
 - matched tensor comparisons: `576`
 - matched comparisons with `metric_ok=false`: `0`
-- event schema issues: `20`
-- comparator findings: `25 trace event(s) failed schema checks`; `301 trace event(s) could not be matched to request rids`
+- event schema issues: `0`
+- comparator findings: none
 
-The schema failures are missing `forward_pass_id` and `rids` on prefill/no-prefix trace events. Update the trace schema or attach request IDs to those events before using this artifact to claim a layer-local tensor divergence.
+First localized request-bound divergence:
+
+- kind: `qwen2`
+- label: `decoder_after_self_attn`
+- layer: `0`
+- field: `hidden_rows`
+- dense rid: `openai-first`
+- cached rid: `native-second`
+- cosine: `0.6753943297351783`
+- max abs: `0.6484375`
+- rms: `0.16307947834888886`
+
+Interpretation: the artifact quality is green, but behavior is still red. The same current-head
+stack still diverges on FP4 cached-prefix reuse after the FlashInfer paged-prefill fix that
+closed the vLLM Gemma 3 short gate.
 
 ## SM12x Build Notes
 

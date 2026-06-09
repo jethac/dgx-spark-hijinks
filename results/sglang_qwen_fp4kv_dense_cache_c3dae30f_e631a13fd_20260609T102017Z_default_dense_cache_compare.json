@@ -1,4 +1,5 @@
 {
+  "compare_trace_count": 432,
   "comparisons": [
     {
       "cached_count": 2,
@@ -13828,234 +13829,31 @@
   "event_counts": {
     "cached": 108,
     "dense": 324,
-    "unknown": 301
+    "unknown": 0
   },
-  "event_schema_issues": [
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "attention",
-      "label": "forward_extend_ragged_no_prefix",
-      "layer": 0,
-      "line": 59
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_self_attn",
-      "layer": 0,
-      "line": 60
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_post_attention_norm",
-      "layer": 0,
-      "line": 61
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_mlp",
-      "layer": 0,
-      "line": 62
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "attention",
-      "label": "forward_extend_ragged_no_prefix",
-      "layer": 1,
-      "line": 63
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_self_attn",
-      "layer": 1,
-      "line": 64
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_post_attention_norm",
-      "layer": 1,
-      "line": 65
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_mlp",
-      "layer": 1,
-      "line": 66
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "attention",
-      "label": "forward_extend_ragged_no_prefix",
-      "layer": 7,
-      "line": 67
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_self_attn",
-      "layer": 7,
-      "line": 68
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_post_attention_norm",
-      "layer": 7,
-      "line": 69
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_mlp",
-      "layer": 7,
-      "line": 70
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "attention",
-      "label": "forward_extend_ragged_no_prefix",
-      "layer": 13,
-      "line": 71
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_self_attn",
-      "layer": 13,
-      "line": 72
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_post_attention_norm",
-      "layer": 13,
-      "line": 73
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_mlp",
-      "layer": 13,
-      "line": 74
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "attention",
-      "label": "forward_extend_ragged_no_prefix",
-      "layer": 20,
-      "line": 75
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_self_attn",
-      "layer": 20,
-      "line": 76
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_post_attention_norm",
-      "layer": 20,
-      "line": 77
-    },
-    {
-      "issues": [
-        "forward_pass_id is null",
-        "rids is not a non-empty string list: None"
-      ],
-      "kind": "qwen2",
-      "label": "decoder_after_mlp",
-      "layer": 20,
-      "line": 78
-    }
-  ],
-  "findings": [
-    "25 trace event(s) failed schema checks",
-    "301 trace event(s) could not be matched to request rids"
-  ],
+  "event_schema_issues": [],
+  "findings": [],
   "first_divergence": {
     "cached_rid": "native-second",
     "comparison": {
-      "field": "topk",
-      "topk": {
-        "a_count": 64,
-        "b_count": 64,
-        "overlap": 15,
-        "overlap_ratio": 0.234375
+      "field": "hidden_rows",
+      "vector": {
+        "cosine": 0.6753943297351783,
+        "count": 64,
+        "max_abs": 0.6484375,
+        "rms": 0.16307947834888886
       }
     },
     "dense_rid": "openai-first",
-    "field": "topk",
-    "kind": "logits",
-    "label": "pruned_states",
-    "layer": null
+    "field": "hidden_rows",
+    "kind": "qwen2",
+    "label": "decoder_after_self_attn",
+    "layer": 0
   },
+  "ignored_trace_count": 301,
   "metric_comparison_count": 576,
   "metricless_comparison_count": 0,
-  "ok": false,
+  "ok": true,
   "parse_errors": [],
   "per_rid": {
     "native-after-flush": {
@@ -14180,8 +13978,8 @@
     }
   },
   "request_count": 8,
-  "request_json": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
+  "request_json": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
   "schema": "sglang-dense-cache-trace-compare/v1",
-  "server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
+  "server_log": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
   "trace_count": 733
 }

@@ -2,25 +2,15 @@
   "case_count": 1,
   "cases": {
     "default": {
-      "findings": [
-        "case ok is not true: False",
-        "trace_compare_ok is not true: False",
-        "trace_compare artifact ok is not true: False",
-        "trace_compare has event_schema_issues: 20"
-      ],
-      "ok": false,
-      "request_json": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
-      "server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
-      "trace_compare": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_dense_cache_compare.json"
+      "findings": [],
+      "ok": true,
+      "request_json": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
+      "server_log": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
+      "trace_compare": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_dense_cache_compare.json"
     }
   },
-  "findings": [
-    "default: case ok is not true: False",
-    "default: trace_compare_ok is not true: False",
-    "default: trace_compare artifact ok is not true: False",
-    "default: trace_compare has event_schema_issues: 20"
-  ],
-  "ok": false,
+  "findings": [],
+  "ok": true,
   "schema": "sglang-dense-cache-trace-summary-audit/v1",
-  "summary_json": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_summary.json"
+  "summary_json": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_summary.json"
 }

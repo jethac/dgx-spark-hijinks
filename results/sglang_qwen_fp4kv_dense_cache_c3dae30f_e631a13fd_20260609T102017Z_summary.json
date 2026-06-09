@@ -1,9 +1,8 @@
 {
   "cases": {
     "default": {
-      "finding": "dense-cache trace comparison missing, unparsable, or red",
-      "ok": false,
-      "request_json": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
+      "ok": true,
+      "request_json": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default.json",
       "rows": [
         {
           "name": "baseline_openai_then_native",
@@ -90,7 +89,7 @@
           ]
         }
       ],
-      "server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
+      "server_log": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_server.log",
       "token_summary": [
         {
           "name": "baseline_openai_then_native",
@@ -177,8 +176,39 @@
           }
         }
       ],
-      "trace_compare": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_dense_cache_compare.json",
-      "trace_compare_ok": false
+      "trace_compare": "results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_default_dense_cache_compare.json",
+      "trace_compare_ok": true,
+      "trace_compare_summary": {
+        "compare_trace_count": 432,
+        "event_counts": {
+          "cached": 108,
+          "dense": 324,
+          "unknown": 0
+        },
+        "findings": [],
+        "first_divergence": {
+          "cached_rid": "native-second",
+          "comparison": {
+            "field": "hidden_rows",
+            "vector": {
+              "cosine": 0.6753943297351783,
+              "count": 64,
+              "max_abs": 0.6484375,
+              "rms": 0.16307947834888886
+            }
+          },
+          "dense_rid": "openai-first",
+          "field": "hidden_rows",
+          "kind": "qwen2",
+          "label": "decoder_after_self_attn",
+          "layer": 0
+        },
+        "ignored_trace_count": 301,
+        "metric_comparison_count": 576,
+        "metricless_comparison_count": 0,
+        "ok": true,
+        "trace_count": 733
+      }
     }
   },
   "run_id": "sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z",

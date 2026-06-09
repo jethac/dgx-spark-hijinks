@@ -27,6 +27,10 @@ def resolve_artifact(path_text: str | None, *, summary_path: Path) -> Path | Non
     return path
 
 
+def artifact_path_text(path: Path | None) -> str | None:
+    return path.as_posix() if path is not None else None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--summary-json", required=True)
@@ -117,15 +121,15 @@ def main() -> int:
             findings.append(f"{name}: {finding}")
         case_reports[name] = {
             "ok": not case_findings,
-            "request_json": str(request_json) if request_json else None,
-            "server_log": str(server_log) if server_log else None,
-            "trace_compare": str(trace_compare) if trace_compare else None,
+            "request_json": artifact_path_text(request_json),
+            "server_log": artifact_path_text(server_log),
+            "trace_compare": artifact_path_text(trace_compare),
             "findings": case_findings,
         }
 
     report = {
         "schema": "sglang-dense-cache-trace-summary-audit/v1",
-        "summary_json": str(summary_path),
+        "summary_json": summary_path.as_posix(),
         "case_count": len(cases),
         "cases": case_reports,
         "ok": not findings,

@@ -228,6 +228,19 @@ def validate_event(event: dict[str, Any]) -> list[str]:
     return issues
 
 
+def is_warmup_or_external_event(event: dict[str, Any], requests: dict[str, dict[str, Any]]) -> bool:
+    """Return true for trace events that cannot belong to the probe request rows.
+
+    SGLang emits warmup and health-check forwards in the same server log as the
+    request-order probe. Those events are useful provenance, but they are not part
+    of the dense-vs-cached comparison and should not make the artifact schema-red.
+    """
+    if event.get("forward_pass_id") is None and not event_rids(event):
+        return True
+    rids = event_rids(event)
+    return bool(rids) and not any(rid in requests for rid in rids)
+
+
 def event_key(event: dict[str, Any]) -> tuple[Any, ...]:
     return (
         event.get("_kind"),
@@ -268,10 +281,18 @@ def build_report(
     if parse_errors:
         findings.append(f"{len(parse_errors)} trace line(s) failed to parse")
 
+    compare_traces = [
+        trace
+        for trace in traces
+        if not trace.get("parse_error") and not is_warmup_or_external_event(trace, requests)
+    ]
+    compare_trace_ids = {id(trace) for trace in compare_traces}
+    ignored_events = [
+        trace for trace in traces if not trace.get("parse_error") and id(trace) not in compare_trace_ids
+    ]
+
     event_schema_issues: list[dict[str, Any]] = []
-    for trace in traces:
-        if trace.get("parse_error"):
-            continue
+    for trace in compare_traces:
         issues = validate_event(trace)
         if issues:
             event_schema_issues.append(
@@ -288,9 +309,7 @@ def build_report(
 
     events_by_class: dict[str, list[dict[str, Any]]] = {"dense": [], "cached": [], "unknown": []}
     per_rid: dict[str, dict[str, Any]] = {}
-    for event in traces:
-        if event.get("parse_error"):
-            continue
+    for event in compare_traces:
         rids = event_rids(event)
         if not rids:
             events_by_class["unknown"].append(event)
@@ -362,7 +381,7 @@ def build_report(
         findings.append(f"{len(metricless_comparisons)} dense/cached comparison row(s) had no usable metric")
 
     first_divergence = None
-    for item in metric_comparisons:
+    for item in sorted(metric_comparisons, key=lambda row: (row.get("cached_line") or 0, row.get("dense_line") or 0)):
         comparison = item.get("comparison") if isinstance(item.get("comparison"), dict) else {}
         vector = comparison.get("vector") if isinstance(comparison.get("vector"), dict) else None
         topk = comparison.get("topk") if isinstance(comparison.get("topk"), dict) else None
@@ -396,6 +415,8 @@ def build_report(
         "server_log": server_log,
         "request_count": len(requests),
         "trace_count": len(traces),
+        "compare_trace_count": len(compare_traces),
+        "ignored_trace_count": len(ignored_events),
         "event_counts": {
             "dense": len(events_by_class["dense"]),
             "cached": len(events_by_class["cached"]),
@@ -459,6 +480,24 @@ def run_self_test() -> int:
         "sample_rows": [0],
         "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.5, 3.0]}}]},
     }
+    warmup_trace = {
+        "kind": "attention",
+        "label": "forward_extend_ragged_no_prefix",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": None,
+        "rids": None,
+        "layer": 0,
+        "sample_rows": [0],
+    }
+    health_check_trace = {
+        "kind": "attention",
+        "label": "forward_extend_ragged_no_prefix",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": 5,
+        "rids": ["HEALTH_CHECK"],
+        "layer": 0,
+        "sample_rows": [0],
+    }
     bad_dense = {
         "kind": "attention",
         "label": "bad",
@@ -485,8 +524,10 @@ def run_self_test() -> int:
         log_path.write_text(
             "\n".join(
                 [
+                    f"INFO FP4 KV dense-cache attention trace {warmup_trace!r}",
                     f"INFO FP4 KV dense-cache attention trace {dense_trace!r}",
                     f"INFO FP4 KV dense-cache attention trace {cached_trace!r}",
+                    f"INFO FP4 KV dense-cache attention trace {health_check_trace!r}",
                 ]
             )
             + "\n",
@@ -499,6 +540,10 @@ def run_self_test() -> int:
             raise AssertionError("expected exactly one metric comparison")
         if not isinstance(report.get("first_divergence"), dict):
             raise AssertionError("expected first_divergence for changed synthetic vector")
+        if report.get("compare_trace_count") != 2 or report.get("ignored_trace_count") != 2:
+            raise AssertionError(
+                "expected warmup/external traces to be ignored while comparing request-bound events"
+            )
 
         log_path.write_text(
             "\n".join(

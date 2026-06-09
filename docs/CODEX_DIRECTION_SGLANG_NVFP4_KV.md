@@ -27,12 +27,15 @@ Interpretation: the FlashInfer paged-prefill struct/plumbing fix that unblocked 
 does **not** by itself close SGLang Qwen FP4-KV radix reuse. The failure still follows
 cached-prefix reuse, independent of endpoint order.
 
-Trace caveat: the dense-cache trace comparator is red for instrumentation reasons as well
-as behavior. It saw `733` trace events and `576` matched tensor comparisons, with
-`0 / 576` matched comparisons marked bad, but `20` schema issues and `301` events that
-could not be matched to request IDs. The next SGLang task is to fix/extend the trace schema
-or attach request IDs to prefill/no-prefix events, then rerun the dense-vs-cached trace so
-we can claim a layer-local tensor divergence rather than only the request-level cache bug.
+Trace status: post-hoc parser repair made this a clean request-bound localization artifact.
+The comparator now treats warmup/health-check forwards as ignored provenance and validates
+the `432` request-bound events strictly: `324` dense, `108` cached, `0` unknown, `576`
+matched tensor comparisons, `0` metricless comparisons, and no schema findings. The first
+localized request-bound divergence is layer-0 Qwen2 `decoder_after_self_attn`
+`hidden_rows` (`cosine=0.6753943297351783`, `max_abs=0.6484375`,
+`rms=0.16307947834888886`) between dense `openai-first` and cached `native-second`.
+So the artifact quality is green; the remaining red state is real FP4 cached-prefix
+behavior, not missing trace request IDs.
 
 SM12x build note: the source build succeeds, but the build log contains repeated
 performance warnings: `242` `.multicast::cluster` / `cp.async.bulk{.tensor}` advisories,
