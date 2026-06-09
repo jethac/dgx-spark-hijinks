@@ -6,10 +6,42 @@
 > being the headline capacity win, and that bug is the highest-leverage thing in the
 > whole NVFP4-KV effort.
 
-## 2026-06-09 update — retest after FlashInfer prefill fix did not reach serving
+## 2026-06-09 update — current-head source-stack retest still red
 
 After vLLM Gemma 3 passed the short first-token gate with `jethac/flashinfer@c3dae30f`, we
-attempted the immediate cross-lane SGLang radix/default retest:
+rebuilt the SGLang lane as a reusable current-head source-stack image and reran the
+Qwen FP4-KV cached-prefix/default row:
+
+- artifact: `results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_summary.md`
+- image: `sglang-source-stack-c3dae30f-e631a13fd`
+- runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
+- stack: editable `jethac/flashinfer@c3dae30f`, editable `jethac/sglang@e631a13fd`,
+  source-built `sglang-kernel 0.4.3`
+- case: `default`
+- result: **red**. Current-head SGLang still emits the cached-prefix token flip:
+  no-cache rows emit `**` (`-0.7235294580459595`), while 55-token radix-hit rows emit
+  `ark` / `838` (`-0.5874708890914917`). Flush-between and namespace-isolated rows keep
+  `cached_tokens=0` and stay clean.
+
+Interpretation: the FlashInfer paged-prefill struct/plumbing fix that unblocked vLLM Gemma
+does **not** by itself close SGLang Qwen FP4-KV radix reuse. The failure still follows
+cached-prefix reuse, independent of endpoint order.
+
+Trace caveat: the dense-cache trace comparator is red for instrumentation reasons as well
+as behavior. It saw `733` trace events and `576` matched tensor comparisons, with
+`0 / 576` matched comparisons marked bad, but `20` schema issues and `301` events that
+could not be matched to request IDs. The next SGLang task is to fix/extend the trace schema
+or attach request IDs to prefill/no-prefix events, then rerun the dense-vs-cached trace so
+we can claim a layer-local tensor divergence rather than only the request-level cache bug.
+
+SM12x build note: the source build succeeds, but the build log contains repeated
+performance warnings: `242` `.multicast::cluster` / `cp.async.bulk{.tensor}` advisories,
+`109` references each to `compute_120a` and `compute_121a`, and `74` `setmaxnreg`
+compatibility warnings. The warnings affect FP8 blockwise, int8/FP8 GEMM, W4A8 grouped
+MoE, and FP8 blockwise MoE kernels. This is not the FP4-KV correctness bug, but it is a
+separate SGLang SM12x performance-portability issue.
+
+Previous attempt after the FlashInfer prefill fix:
 
 - artifact: `results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_summary.md`
 - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
@@ -23,10 +55,6 @@ JSON or dense-cache comparison was produced. This does not falsify the FlashInfe
 hypothesis. It means the next SGLang step is packaging/build-loop work: prepare a reusable
 source-stack image or narrow `sglang-kernel` build target first, then rerun the default
 radix row from that prepared stack.
-
-Also record the build warnings: several `compute_120a`/`compute_121a` SGLang kernel builds
-emit `ptxas` warnings about `.multicast::cluster` on `cp.async.bulk{.tensor}` being intended
-for datacenter targets (`sm_90a/sm_100a/...`), plus `setmaxnreg` compatibility warnings.
 
 ## ROOT CAUSE LOCALIZED — the radix/prefix cache (2026-06-08) — NEXT FOCUS
 The first-token divergence test cornered it

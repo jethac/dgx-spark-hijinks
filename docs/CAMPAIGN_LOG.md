@@ -1119,6 +1119,17 @@
   - delta: `+4.3995` PPL, `+0.0374` nats/token.
   - interpretation: this is the first Gemma 3 supplied-token PPL evidence that the fixed NVFP4-KV path is quality-sane on short text-only prompts. It strengthens the first-token green gate, but it is not yet a long-context/SWA-window stress test, throughput row, or full Gemma 3 blessing.
 
+- Ran the current-head SGLang Qwen FP4-KV dense-vs-cached trace from a reusable source-stack image.
+  - artifact: `results/sglang_qwen_fp4kv_dense_cache_c3dae30f_e631a13fd_20260609T102017Z_summary.md`
+  - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
+  - checkout: campaign `2c0a475`, `jethac/flashinfer@c3dae30f`, `jethac/sglang@e631a13fd`
+  - image: `sglang-source-stack-c3dae30f-e631a13fd`
+  - stack: editable FlashInfer `0.6.13`, editable SGLang `0.5.12.post2.dev1022+ge631a13fd`, source-built `sglang-kernel 0.4.3`, Torch `2.12.0a0+5aff3928d8.nv26.05`, CUDA `13.2`
+  - result: red. Default FP4 cached-prefix reuse still flips the first token: no-cache rows emit `**` at logprob `-0.7235294580459595`; 55-token radix-hit rows emit `ark` / `838` at logprob `-0.5874708890914917`.
+  - controls: flush-between and namespace-isolated rows keep `cached_tokens=0` and remain clean (`**` at the same no-cache logprob).
+  - trace status: `733` trace events, `576` matched tensor comparisons, `0 / 576` matched comparisons marked bad; comparator still red because `20` events fail schema checks and `301` events lack request-ID matching. The next SGLang step is trace-schema/request-ID repair, then rerun dense-vs-cached to localize the tensor layer.
+  - build/perf note: the source build succeeds but emits repeated SM12x warnings (`242` `.multicast::cluster` advisories, `109` `compute_120a` refs, `109` `compute_121a` refs, `74` `setmaxnreg` compatibility warnings). This is separate from FP4-KV correctness and should be tracked as an SGLang SM12x performance-portability issue.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
