@@ -1,6 +1,6 @@
 # vLLM Gemma 3 FlashInfer Paged-Prefill Debug Packet
 
-Status: staged; waiting for host-access probe `usable_for_live_work=true`.
+Status: staged; host access recovered; live GB10 run pending.
 
 Goal: distinguish a live generated-module / C++ binding mismatch from an FP4 V-fragment
 kernel bug in the vLLM Gemma 3 NVFP4-KV failure.
@@ -9,10 +9,11 @@ kernel bug in the vLLM Gemma 3 NVFP4-KV failure.
 
 - FlashInfer fork: `jethac/flashinfer`
 - Branch: `spark/hijinks-021-prefill-debug`
-- Required commit: `1230341d` (`Add paged prefill JIT debug logging`)
+- Required commit: `96be2fa8` (`Bind prefill debug tensor logs to module calls`)
 - Changed files:
   - `csrc/batch_prefill.cu`
   - `csrc/batch_prefill_customize_config.jinja`
+  - `flashinfer/jit/attention/modules.py`
 
 The patch is inactive unless `FLASHINFER_PREFILL_DEBUG_ONCE=1` is set. When enabled, each
 generated FA2 batch-prefill module prints one C++ host-side diagnostic line for the first
@@ -22,6 +23,8 @@ ragged call and one for the first paged call in that module:
 - `HEAD_DIM_QK`, `HEAD_DIM_VO`, `REQUIRE_FP4_KV_CACHE`, `USE_SLIDING_WINDOW`
 - whether the compiled `DTypeKV` is the FP4x2 packed carrier type
 - additional tensor/scalar names and dtypes from the JIT template
+- `call_id`, `module_uri`, `module_key`, and `path`, shared by the identity and tensor
+  lines from the same generated module call
 - runtime plan flags: layout, window, batch, heads, page size, split-KV, graph state
 - tensor pointers, shapes, strides, DLPack dtype, and device id for `q`, `paged_k_cache`,
   `paged_v_cache`, `o`, index tensors, and optional LSE
@@ -98,25 +101,20 @@ Green for this diagnostic is not model quality. Green means the log proves one o
 - the live generated module/tensor identity is wrong, giving a concrete binding/JIT fix
   before touching kernel math.
 
-The audit is intentionally strict. It requires the paged module to compile as
-`__nv_fp4x2_e2m1` with `require_fp4_kv=1`, `is_kv_fp4x2=1`, both K/V scale-factor
-additional tensors present, runtime `maybe_k_cache_sf` and `maybe_v_cache_sf` tensor views
-present, non-null paged tensor pointers, same-device Q/K/V/scale/output tensors, and paged
-K/V tensor views whose byte-carrier layout matches the runtime NHD/HND page-size, KV-head
-geometry, and `head_dim / 2` packed-FP4x2 carrier width. A raw `uint8_t` compiled module is
-red even though the Python-facing cache tensors are byte carriers.
-
-Known audit limitation: the current FlashInfer debug log format does not yet emit a shared
-`debug_call_id`, generated-module URI/source path, object/cache path, or compile-flag stamp
-on both identity and tensor lines. The audit cannot fully prove identity and tensor-view
-evidence came from the same C++ `paged_run` call until the FlashInfer debug patch emits
-those fields. If this stricter audit passes but quality remains corrupt, the next
-FlashInfer patch should bind identity and tensor dumps with a shared call/module key before
-deeper fragment instrumentation.
+The audit is intentionally strict. It requires a paged identity line and paged tensor dump
+bound by the same `(path, call_id, module_uri, module_key)`. The bound paged module must
+compile as `__nv_fp4x2_e2m1` with `require_fp4_kv=1`, `is_kv_fp4x2=1`, both K/V
+scale-factor additional tensors present, runtime `maybe_k_cache_sf` and `maybe_v_cache_sf`
+tensor views present, non-null paged tensor pointers, same-device Q/K/V/scale/output
+tensors, and paged K/V tensor views whose byte-carrier layout matches the runtime NHD/HND
+page-size, KV-head geometry, and `head_dim / 2` packed-FP4x2 carrier width. A raw `uint8_t`
+compiled module is red even though the Python-facing cache tensors are byte carriers.
 
 ## Expected Red Flags
 
 - `REQUIRE_FP4_KV_CACHE=0` or `is_kv_fp4x2=0` on the failing NVFP4 paged path.
+- missing or mismatched `call_id`, `module_uri`, `module_key`, or `path` between the paged
+  identity line and paged tensor dump.
 - `dtype_kv=uint8_t` in the compiled identity instead of `__nv_fp4x2_e2m1`.
 - missing `maybe_k_cache_sf,maybe_v_cache_sf` in `additional_tensors`.
 - missing runtime `maybe_k_cache_sf` or `maybe_v_cache_sf` tensor views.

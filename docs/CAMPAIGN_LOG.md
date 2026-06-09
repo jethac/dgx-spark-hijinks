@@ -949,13 +949,16 @@
 
 - Staged the next vLLM Gemma 3 FlashInfer paged-prefill diagnostic.
   - FlashInfer fork branch: `jethac/flashinfer@spark/hijinks-021-prefill-debug`
-  - commit: `1230341d`
+  - commit: `96be2fa8`
   - parent campaign commit: `4598919`
   - run packet: `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`
   - env gate: `FLASHINFER_PREFILL_DEBUG_ONCE=1`
   - purpose: print generated dtype identity, `REQUIRE_FP4_KV_CACHE`, FP4x2 carrier status,
     additional scale-factor tensor metadata, runtime page/head/window fields, and TensorView
     shape/stride/dtype from the generated C++ paged-prefill module.
+  - hardening: identity and tensor lines now share `(path, call_id, module_uri, module_key)`,
+    so the audit can prove the tensor dump came from the same generated module call as the
+    identity line.
   - interpretation: this is the next live check before kernel-side fragment dumps. It tests
     whether the live generated module/C++ binding is the one the Python wrapper thinks it is.
 

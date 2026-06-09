@@ -39,11 +39,12 @@ Summary:
 - live doctor result: Linux `aarch64`, `NVIDIA GB10`, compute capability `12.1`, driver `580.159.03`, CUDA `13.0`
 - caveat: the reconnect doctor used system Python, where Torch is unavailable, so that artifact does not record SM count
 
-2026-06-09 control-path note:
+2026-06-09 control-path recovery:
 
-- the same Tailscale IP is visible in the control plane, but live work is not currently usable from this workspace
-- `results/gb10_host_access_probe_20260609.json` records `usable_for_live_work=false`
-- Tailscale ping, TCP/22, and SSH time out; the peer is active via relay `tok` with `rx_bytes=0`
+- the same Tailscale IP is reachable from this workspace
+- `results/gb10_host_access_tailnet_recovered_20260609.md` records that Tailscale ping,
+  TCP/22, and key-based SSH succeed
+- live work can proceed through the ordered queue, subject to each task's own blocker
 
 Docker images currently present include:
 

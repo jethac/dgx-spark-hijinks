@@ -74,7 +74,7 @@
       "plan_ids": [
         "13"
       ],
-      "status": "`spark_doctor` plus sanitized Tailscale/TCP/SSH host-access probe are in place; current tailnet artifact records the node visible but not usable for live work"
+      "status": "`spark_doctor` plus sanitized Tailscale/TCP/SSH host-access probe are in place; current tailnet recovery artifact records usable live work over Tailscale SSH"
     },
     {
       "area": "vLLM Spark runtime path",
@@ -82,7 +82,7 @@
       "plan_ids": [
         "5"
       ],
-      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration; clean `jethac/vllm@a919d635d` plus `jethac/flash-attention@7d53245` serves Qwen36 at 61.07/56.97/60.10 tok/s with separate `sm_121a` FA2 cubin proof; Qwen NVFP4-KV now records `1.751x` fp8 KV pool/concurrency with decode parity; Gemma 3 NVFP4-KV is localized below the Python-visible FlashInfer wrapper signature, `jethac/flashinfer@1230341d` stages the next generated-module/C++ identity diagnostic, `scripts/flashinfer_prefill_debug_log_audit.py` now rejects raw-`uint8_t` compiled paged modules and tensor-geometry mismatches, and `scripts/gemma_nvfp4_kv_quality_gate.py` rejects the known-bad Gemma 3 NVFP4 row until stricter first-token or PPL evidence passes; remaining vLLM gaps are official packaging, Gemma NVFP4-KV quality, native FP4 weight/MoE proof, and accuracy"
+      "status": "AEON Gemma 4 26B NVFP4+DFlash serves locally at about 48-54 tok/s short/medium and 98 tok/s long-prefill; SM12x NVFP4 KV routing/deswizzle probe passed; AEON Qwen36 now passes with API-level thinking disabled; `jethac/vllm@6804e1b` derived AEON Qwen row also passes after dependency alignment and AEON FA2 binary restoration; clean `jethac/vllm@a919d635d` plus `jethac/flash-attention@7d53245` serves Qwen36 at 61.07/56.97/60.10 tok/s with separate `sm_121a` FA2 cubin proof; Qwen NVFP4-KV now records `1.751x` fp8 KV pool/concurrency with decode parity; Gemma 3 NVFP4-KV is localized below the Python-visible FlashInfer wrapper signature, `jethac/flashinfer@96be2fa8` stages the next generated-module/C++ identity and tensor diagnostic bound by `(path, call_id, module_uri, module_key)`, `scripts/flashinfer_prefill_debug_log_audit.py` now rejects raw-`uint8_t` compiled paged modules, unbound tensor dumps, and tensor-geometry mismatches, and `scripts/gemma_nvfp4_kv_quality_gate.py` rejects the known-bad Gemma 3 NVFP4 row until stricter first-token or PPL evidence passes; remaining vLLM gaps are official packaging, Gemma NVFP4-KV quality, native FP4 weight/MoE proof, and accuracy"
     },
     {
       "area": "NVFP4 on Spark",
@@ -158,7 +158,7 @@
         "14",
         "14a"
       ],
-      "status": "FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; FlashInfer debug branch `spark/hijinks-021-prefill-debug` is pushed at `1230341d`; SGLang source-stack runner now installs editable patched FlashInfer and source-builds `sgl-kernel`; SGLang dense-cache trace head `e631a13fd` is pushed for the next Qwen FP4-KV reuse diagnostic; llama.cpp supplied-token endpoint branch `spark/hijinks-008-supplied-loglikelihood` is pushed at `aa6a5961977139f23ae54dc8279fdac3d1494a77`; counterpart task matrix has nine task contracts and no missing contracts for the six still-partial counterpart lanes; `tasks/live_gb10_queue.jsonl` orders the next cross-lane live packets for future sessions/subagents"
+      "status": "FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; FlashInfer debug branch `spark/hijinks-021-prefill-debug` is pushed at `96be2fa8`; SGLang source-stack runner now installs editable patched FlashInfer and source-builds `sgl-kernel`; SGLang dense-cache trace head `e631a13fd` is pushed for the next Qwen FP4-KV reuse diagnostic; llama.cpp supplied-token endpoint branch `spark/hijinks-008-supplied-loglikelihood` is pushed at `aa6a5961977139f23ae54dc8279fdac3d1494a77`; counterpart task matrix has nine task contracts and no missing contracts for the six still-partial counterpart lanes; `tasks/live_gb10_queue.jsonl` orders the next cross-lane live packets for future sessions/subagents"
     },
     {
       "area": "LiteRT-LM on Spark",

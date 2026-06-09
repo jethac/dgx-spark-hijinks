@@ -3,7 +3,7 @@
 Date: 2026-06-09 JST
 
 Purpose: the single human-facing stop/start page for live work on the Spark-class GB10
-host. The machine is intermittently unreachable, so live sessions should start from the
+host. Live sessions should start from the
 ordered queue instead of re-reading the long status docs.
 
 Machine scope: one Spark-class GB10 system, compute capability `12.1` / `sm_121`.
@@ -11,9 +11,9 @@ Machine scope: one Spark-class GB10 system, compute capability `12.1` / `sm_121`
 Current control-plane state from this workspace:
 
 - Tailnet IP: `100.113.98.11`
-- Latest observed state: listed as active via relay, but `tailscale ping`, TCP/22, and
-  SSH time out with `rx 0`.
-- Latest probe artifact: `results/gb10_host_access_probe_20260609.md`.
+- Latest observed state: Tailscale ping succeeds, TCP/22 succeeds over the Tailscale
+  interface, and key-based SSH works for both `jethac` and `root`.
+- Latest probe artifact: `results/gb10_host_access_tailnet_recovered_20260609.md`.
 
 ## Preflight
 
