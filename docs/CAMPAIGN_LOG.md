@@ -1010,6 +1010,16 @@
     continuation token is present; the `" zebra"` smoke row must score before GGUF
     lm-eval accuracy can leave blocked.
 
+- Added the llama.cpp loglikelihood contract auditor.
+  - script: `scripts/llamacpp_loglikelihood_contract_audit.py`
+  - red artifacts:
+    `results/llamacpp_native_loglikelihood_20260608T1331JST_contract_audit.json`,
+    `results/llamacpp_native_loglikelihood_task_dryrun_contract_audit_20260609.json`
+  - result: the live top-512 artifact is rejected because token id `1147` from
+    `" zebra"` was not scored; the dry-run artifact is rejected because it has no token
+    logprobs. A synthetic direct supplied-token artifact passes, proving the audit can
+    accept the intended future endpoint shape.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

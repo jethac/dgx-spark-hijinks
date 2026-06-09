@@ -1,0 +1,53 @@
+{
+  "artifact_schema": "llamacpp-native-loglikelihood-task/v1",
+  "case_count": 3,
+  "cases": [
+    {
+      "all_tokens_greedy": null,
+      "continuation_token_ids": [],
+      "findings": [
+        "no continuation_token_logprobs or scored_tokens present",
+        "target_logprob_sum is missing or non-finite",
+        "all_tokens_greedy is missing or not boolean",
+        "lm_eval_loglikelihood_tuple is not [finite_number, bool]",
+        "all_tokens_greedy does not match expected_greedy (None != True)"
+      ],
+      "id": "tokyo_likely",
+      "ok": false,
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": null,
+      "continuation_token_ids": [],
+      "findings": [
+        "no continuation_token_logprobs or scored_tokens present",
+        "target_logprob_sum is missing or non-finite",
+        "all_tokens_greedy is missing or not boolean",
+        "lm_eval_loglikelihood_tuple is not [finite_number, bool]",
+        "all_tokens_greedy does not match expected_greedy (None != False)"
+      ],
+      "id": "zebra_unlikely",
+      "ok": false,
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": null,
+      "continuation_token_ids": [],
+      "findings": [
+        "no continuation_token_logprobs or scored_tokens present",
+        "target_logprob_sum is missing or non-finite",
+        "all_tokens_greedy is missing or not boolean",
+        "lm_eval_loglikelihood_tuple is not [finite_number, bool]"
+      ],
+      "id": "qwen_name",
+      "ok": false,
+      "target_logprob_sum": null
+    }
+  ],
+  "notes": [
+    "A green audit requires every supplied continuation token to have a finite logprob.",
+    "Top-N artifacts are accepted only when every requested continuation token was scored."
+  ],
+  "ok": false,
+  "schema": "llamacpp-loglikelihood-contract-audit/v1"
+}

@@ -104,3 +104,19 @@ python3 scripts/llamacpp_native_loglikelihood_task.py \
 
 If this still uses top-N, the artifact must remain red when `" zebra"` is missing. A green
 artifact requires direct supplied-token logprobs or a proven full-vocabulary equivalent.
+
+Audit command:
+
+```bash
+python3 scripts/llamacpp_loglikelihood_contract_audit.py \
+  --artifact results/llamacpp_supplied_token_loglikelihood_YYYYMMDDTHHMMJST.json \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/llamacpp_supplied_token_loglikelihood_YYYYMMDDTHHMMJST_contract_audit.json
+```
+
+Known-red checks:
+
+- `results/llamacpp_native_loglikelihood_20260608T1331JST_contract_audit.json`
+  rejects the live top-512 artifact because token id `1147` from `" zebra"` was not scored.
+- `results/llamacpp_native_loglikelihood_task_dryrun_contract_audit_20260609.json`
+  rejects the dry-run artifact because it has no actual token logprobs.

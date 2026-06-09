@@ -97,6 +97,10 @@ Contract packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.
 This is the row-8 acceptance shape: context plus continuation in, continuation token ids,
 exact per-token logprobs, summed logprob, and greedy-match boolean out. A green artifact
 must score the unlikely `" zebra"` continuation; top-N membership alone remains red.
+Use `scripts/llamacpp_loglikelihood_contract_audit.py` to enforce the contract. It
+rejects the existing live top-512 artifact in
+`results/llamacpp_native_loglikelihood_20260608T1331JST_contract_audit.json` because
+token id `1147` from `" zebra"` was not scored.
 
 ## Historical Native Top-N Probe
 

@@ -70,3 +70,14 @@ python3 scripts/llamacpp_native_loglikelihood_task.py \
 ```
 
 The harness scores each `context`/`continuation` pair through the same native `/tokenize` plus `/completion` path and emits `target_logprob_sum`, `all_tokens_greedy`, and an `lm_eval_loglikelihood_tuple` per row. The smoke task intentionally includes one likely continuation and one unlikely continuation. `results/llamacpp_native_loglikelihood_task_dryrun_20260608.json` proves the task file and command shape locally, but it is not live server proof.
+
+Then audit the artifact against the supplied-token contract:
+
+```bash
+python3 scripts/llamacpp_loglikelihood_contract_audit.py \
+  --artifact results/llamacpp_native_loglikelihood_task.json \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/llamacpp_native_loglikelihood_task_contract_audit.json
+```
+
+The audit must pass before using the GGUF row as lm-eval accuracy evidence.

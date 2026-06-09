@@ -1,0 +1,48 @@
+{
+  "artifact_schema": "llamacpp-native-loglikelihood-task/v1",
+  "case_count": 3,
+  "cases": [
+    {
+      "all_tokens_greedy": true,
+      "continuation_token_ids": [
+        26194
+      ],
+      "findings": [],
+      "id": "tokyo_likely",
+      "ok": true,
+      "target_logprob_sum": -1.7286205291748047
+    },
+    {
+      "all_tokens_greedy": false,
+      "continuation_token_ids": [
+        1147,
+        50213
+      ],
+      "findings": [
+        "target token 1147 was not scored",
+        "target token 1147 has non-finite logprob",
+        "target_logprob_sum is missing or non-finite",
+        "lm_eval_loglikelihood_tuple is not [finite_number, bool]"
+      ],
+      "id": "zebra_unlikely",
+      "ok": false,
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": true,
+      "continuation_token_ids": [
+        54364
+      ],
+      "findings": [],
+      "id": "qwen_name",
+      "ok": true,
+      "target_logprob_sum": -0.6194323301315308
+    }
+  ],
+  "notes": [
+    "A green audit requires every supplied continuation token to have a finite logprob.",
+    "Top-N artifacts are accepted only when every requested continuation token was scored."
+  ],
+  "ok": false,
+  "schema": "llamacpp-loglikelihood-contract-audit/v1"
+}
