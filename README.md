@@ -21,6 +21,7 @@ Next vLLM proof lane: AEON Gemma and AEON Qwen3.6 NVFP4+DFlash are now locally r
 - Live GB10 runbook: [docs/LIVE_GB10_RUNBOOK.md](docs/LIVE_GB10_RUNBOOK.md)
 - Incident 2026-06-09 (vLLM OOM deadlock; memory mitigations): [docs/INCIDENT_20260609_OOM_DEADLOCK.md](docs/INCIDENT_20260609_OOM_DEADLOCK.md)
 - Gemma compatibility plan (3 → 3n → 4 ladder): [docs/GEMMA_COMPATIBILITY_PLAN.md](docs/GEMMA_COMPATIBILITY_PLAN.md)
+- vLLM Gemma 4 rungs modification plan: [docs/VLLM_GEMMA_RUNGS.md](docs/VLLM_GEMMA_RUNGS.md)
 - Wheel/container matrix: [docs/WHEEL_CONTAINER_MATRIX.md](docs/WHEEL_CONTAINER_MATRIX.md)
 - Initial benchmark report: [docs/BENCHMARKING_REPORT.md](docs/BENCHMARKING_REPORT.md)
 - Problems encountered: [docs/GEMMA4_ON_DGX_SPARK.md](docs/GEMMA4_ON_DGX_SPARK.md)
