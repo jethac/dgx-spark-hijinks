@@ -1,0 +1,23 @@
+{
+  "artifacts": {
+    "first_token": "results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_first_token.json",
+    "first_token_compare": "results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_first_token_compare.json",
+    "flashinfer_prefill_debug_audit": "results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_flashinfer_prefill_debug_audit.json",
+    "server_log": "results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_server.log"
+  },
+  "backend": "vllm",
+  "metadata": {
+    "flashinfer_overlay": "jethac/flashinfer@0919cdda1725e0ed77c792c69cfaa879689db6a8 plus local prefill scalar-arg patch",
+    "gpu_memory_utilization": 0.72,
+    "kv_cache_dtype": "nvfp4",
+    "max_model_len": 4096,
+    "max_num_batched_tokens": 1024,
+    "model_source": "google/gemma-3-27b-it",
+    "runtime_gate": "first-token/logprob comparator"
+  },
+  "model": "gemma3-27b-it",
+  "ok": true,
+  "phase": "after",
+  "run_id": "vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_nvfp4_kv",
+  "schema": "openai-serving-row-manifest/v1"
+}

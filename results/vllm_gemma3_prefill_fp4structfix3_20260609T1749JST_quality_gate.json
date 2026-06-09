@@ -1,0 +1,40 @@
+{
+  "baseline": {
+    "kv_cache_dtype": "fp8",
+    "model": "gemma3-27b-it",
+    "ok": true,
+    "present": true,
+    "run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer",
+    "schema": "openai-serving-row-manifest/v1"
+  },
+  "baseline_manifest": "results\\vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_row_manifest.json",
+  "candidate": {
+    "kv_cache_dtype": "nvfp4",
+    "model": "gemma3-27b-it",
+    "ok": true,
+    "present": true,
+    "run_id": "vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_nvfp4_kv",
+    "schema": "openai-serving-row-manifest/v1"
+  },
+  "candidate_manifest": "results\\vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_nvfp4_kv_first_token_row_manifest.json",
+  "findings": [],
+  "first_token": {
+    "comparison_count": 3,
+    "min_top_logprob_overlap_ratio": 0.7727272727272727,
+    "ok": true,
+    "present": true,
+    "schema": "openai-first-token-compare/v1"
+  },
+  "first_token_compare": "results\\vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_first_token_compare.json",
+  "ok": true,
+  "ppl": {
+    "present": false
+  },
+  "ppl_compare": null,
+  "schema": "gemma-nvfp4-kv-quality-gate/v1",
+  "thresholds": {
+    "max_delta_nats_per_token": 0.05,
+    "min_first_token_overlap_ratio": 0.2,
+    "min_ppl_contexts": 1
+  }
+}

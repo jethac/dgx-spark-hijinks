@@ -1086,6 +1086,29 @@
   - result: the server fails during FlashInfer warmup with `TypeError: Mismatched number of arguments ... Expected 29 but got 27 arguments`.
   - interpretation: the failure mode moved forward. FlashInfer now generates an FP4-KV-aware paged-prefill module that expects scale-factor tensor arguments, but vLLM still calls it with the old raw-KV argument list. Next vLLM work is to pass `maybe_k_cache_sf` / `maybe_v_cache_sf` from the split NVFP4 KV views into `prefill_wrapper.run(...)`, then rerun the Gemma quality gate.
 
+- Ran the vLLM Gemma 3 no-force prefill call-site probe.
+  - artifact: `results/vllm_gemma3_prefill_callsite_noforce_20260609T1622JST_summary.md`
+  - patch under test: external FlashInfer prefill generator forcing disabled (`SPARK_FLASHINFER_FORCE_PREFILL_MODULE=0`); vLLM prefill metadata appends `maybe_k_cache_sf` / `maybe_v_cache_sf`; the FlashInfer prefill wrapper includes K/V scale tensors in JIT optional-argument preparation.
+  - safety: single reduced Gemma 3 server, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=1024`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - positive: the server reaches readiness and the worker-bind `Expected 29 but got 27 arguments` warmup mismatch is gone.
+  - red result: first-token output remains corrupt (` Reigns`, a Gujarati token, `ioane`), and the live C++ prefill debug lines still select the raw-byte module for both SWA and global prefill (`dtype_kv=uint8_t`, `require_fp4_kv=0`, `is_kv_fp4x2=0`, empty `additional_tensors`).
+  - interpretation: scale-argument plumbing is necessary but not sufficient on this installed FlashInfer stack. The next fix is FlashInfer prefill module-selection/metadata/generator plumbing so the natural path selects the FP4-KV module and then receives the scale tensors; do not reopen page-byte pairing or generic FA2 math.
+
+- Completed the vLLM Gemma 3 FP4 paged-prefill struct/scalar fix and cleared the short first-token gate.
+  - artifact: `results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_summary.md`
+  - FlashInfer fork: `jethac/flashinfer@0919cdda` fixed the FP4 SWA paged-prefill `PagedParams` scale-stride compile hole; `jethac/flashinfer@c3dae30f` completes the Python wrapper plumbing for JIT internal tensors and scalar args.
+  - safety: single reduced Gemma 3 server, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=1024`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - result: server reaches readiness; the previous `Expected 29 but got 24/26 arguments` warmup failures are gone; runtime debug shows FP4 modules for both SWA (`window_left=1023`) and global (`window_left=-1`) prefill.
+  - quality: `scripts/gemma_nvfp4_kv_quality_gate.py` passes against the prior fp8 first-token baseline. Candidate first tokens are `spark`, `4`, `A`; minimum top-logprob overlap ratio is `0.772727`.
+  - caveat: this is a short first-token/logprob gate, not a long-context PPL or throughput blessing. The debug audit script is stale for the current raw line format and fails despite visible raw evidence.
+
+- Attempted the immediate SGLang cross-lane retest after the FlashInfer prefill fix.
+  - artifact: `results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_summary.md`
+  - intended test: default Qwen FP4-KV cached-prefix/radix row using editable FlashInfer with the new prefill wrapper fix.
+  - outcome: inconclusive before serving. The runner was still rebuilding `sglang-kernel` after ~26 minutes (`82/127` build targets) and had not launched SGLang; no request JSON or dense-cache comparison was produced.
+  - interpretation: this does not test or falsify the cross-lane FlashInfer hypothesis. Next SGLang work should prepare a reusable source-stack image or narrower kernel build target, then rerun the default radix row from that prepared stack.
+  - build warning to track: SGLang `sglang-kernel` emits repeated `ptxas` warnings for `compute_120a`/`compute_121a` about `.multicast::cluster` on `cp.async.bulk{.tensor}` being intended for datacenter targets, plus `setmaxnreg` compatibility warnings.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

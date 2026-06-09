@@ -5,6 +5,29 @@
 > proved the packaging/native-FA2 machinery; Gemma is the destination and is where the
 > remaining hard problems live.
 
+## 2026-06-09 update — Gemma 3 short first-token gate is green
+
+The FlashInfer paged-prefill hole is fixed in the fork through
+`jethac/flashinfer@c3dae30f`:
+
+- `0919cdda` added the missing FP4 paged-prefill scale-factor stride fields so the SWA
+  FP4 prefill module compiles.
+- `c3dae30f` completes the Python wrapper side: JIT prefill now supplies the internal
+  prefix/multi-item pointers, FP4 K/V scale tensors, and the five additional scalar args
+  expected by the generated FA2 paged-prefill module.
+
+Live Gemma 3 result:
+
+- artifact: `results/vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_summary.md`
+- gate: `scripts/gemma_nvfp4_kv_quality_gate.py`
+- verdict: **green for short first-token/logprob correctness** against the prior fp8
+  baseline; first tokens are now `spark`, `4`, `A`, with minimum top-logprob overlap
+  ratio `0.772727`.
+- scope: this is not yet long-context PPL, throughput, or a full Gemma 3 serving blessing.
+
+Next vLLM gate: run the queued sequential PPL/long-context comparator under the GB10 memory
+rules. Do not run fp8 and NVFP4 servers concurrently.
+
 ## Why this, why now
 NVFP4 KV cache on GB10 is the founding goal of this whole campaign — it targets Spark's
 actual bottleneck (memory / context length / concurrency), not decode FLOPs. Reorient

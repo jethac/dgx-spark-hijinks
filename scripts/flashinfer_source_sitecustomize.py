@@ -8,8 +8,11 @@ files need to be replaced by a mounted source checkout for an experiment.
 from __future__ import annotations
 
 import importlib.util
+import inspect
+import math
 import os
 import sys
+import textwrap
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +39,113 @@ def _load_local_module(module_name: str, module_path: Path):
     return module
 
 
+def _patch_prefill_run_scale_args(prefill) -> bool:
+    """Patch installed paged-prefill wrapper to pass NVFP4 scale tensors.
+
+    The source checkout's newer ``prefill.py`` may not be import-compatible with
+    the container's installed FlashInfer package, but the installed wrapper has
+    the same bug: its JIT path prepares mask/alibi optional tensors and omits the
+    FP4 scale tensors required by patched generated modules.
+    """
+
+    wrapper_cls = prefill.BatchPrefillWithPagedKVCacheWrapper
+    run_src = textwrap.dedent(inspect.getsource(wrapper_cls.run))
+    patched = False
+
+    if (
+        '"maybe_k_cache_sf": key_block_scales' not in run_src
+        or '"maybe_prefix_len_ptr": self._prefix_len_ptr' not in run_src
+    ):
+        needle = (
+            '                        "maybe_alibi_slopes": lambda: '
+            "_get_cache_alibi_slopes_buf(\n"
+            "                            q.shape[1], q.device\n"
+            "                        ),"
+        )
+        replacement = (
+            needle
+            + '\n                        "maybe_prefix_len_ptr": self._prefix_len_ptr,'
+            + '\n                        "maybe_token_pos_in_items_ptr": self._token_pos_in_items_ptr,'
+            + '\n                        "maybe_max_item_len_ptr": self._max_item_len_ptr,'
+            + '\n                        "maybe_k_cache_sf": key_block_scales,'
+            + '\n                        "maybe_v_cache_sf": value_block_scales,'
+        )
+        if needle not in run_src:
+            needle = (
+                '                            "maybe_alibi_slopes": lambda: '
+                "_get_cache_alibi_slopes_buf(\n"
+                "                                q.shape[1], q.device\n"
+                "                            ),"
+            )
+            replacement = (
+                needle
+                + '\n                            "maybe_prefix_len_ptr": self._prefix_len_ptr,'
+                + '\n                            "maybe_token_pos_in_items_ptr": self._token_pos_in_items_ptr,'
+                + '\n                            "maybe_max_item_len_ptr": self._max_item_len_ptr,'
+                + '\n                            "maybe_k_cache_sf": key_block_scales,'
+                + '\n                            "maybe_v_cache_sf": value_block_scales,'
+            )
+        if needle not in run_src:
+            return False
+
+        patched_src = run_src.replace(needle, replacement, 1)
+        namespace: dict[str, Any] = {}
+        exec(
+            compile(patched_src, "flashinfer_prefill_run_scale_args_patch", "exec"),
+            prefill.__dict__,
+            namespace,
+        )
+        wrapper_cls.run = namespace["run"]
+        patched = True
+
+    run_func = wrapper_cls.run
+    if not getattr(run_func, "_spark_prefill_scalar_arg_patch", False):
+
+        def run_with_jit_scalars(self, q, paged_kv_cache, *args, **kwargs):
+            additional_tensor_names = getattr(
+                self, "_jit_additional_tensor_names", []
+            )
+            if (
+                getattr(self, "_jit_module", None) is not None
+                and "maybe_k_cache_sf" in additional_tensor_names
+                and len(args) < 5
+            ):
+                logits_soft_cap = getattr(self, "_logits_soft_cap", None)
+                sm_scale = getattr(self, "_sm_scale", None)
+                rope_scale = getattr(self, "_rope_scale", None)
+                rope_theta = getattr(self, "_rope_theta", None)
+                if logits_soft_cap is None:
+                    logits_soft_cap = 0.0
+                if sm_scale is None:
+                    sm_scale = 1.0 / math.sqrt(q.size(-1))
+                q_scale = kwargs.get("q_scale")
+                k_scale = kwargs.get("k_scale")
+                if getattr(self, "_backend", None) != "cudnn":
+                    if q_scale is not None:
+                        sm_scale *= q_scale
+                    if k_scale is not None:
+                        sm_scale *= k_scale
+                if rope_scale is None:
+                    rope_scale = 1.0
+                if rope_theta is None:
+                    rope_theta = 1e4
+                args = args + (
+                    logits_soft_cap,
+                    sm_scale,
+                    1.0 / rope_scale,
+                    1.0 / rope_theta,
+                    getattr(self, "_token_pos_in_items_len", 0),
+                )
+            return run_func(self, q, paged_kv_cache, *args, **kwargs)
+
+        wrapper_cls.run = run_with_jit_scalars
+        setattr(wrapper_cls.run, "_spark_prefill_scalar_arg_patch", True)
+        patched = True
+
+    setattr(wrapper_cls.run, "_spark_prefill_scale_arg_patch", True)
+    return patched or True
+
+
 def _patch_flashinfer(source_root: Path) -> None:
     import torch  # type: ignore
 
@@ -56,7 +166,6 @@ def _patch_flashinfer(source_root: Path) -> None:
     jit_env.SPDLOG_INCLUDE_DIR = source_root / "3rdparty" / "spdlog" / "include"
 
     import flashinfer.jit as jit  # type: ignore
-    import flashinfer.prefill as prefill  # type: ignore
 
     _load_local_module(
         "flashinfer.jit.utils",
@@ -139,28 +248,57 @@ def _patch_flashinfer(source_root: Path) -> None:
 
     jit_utils.filename_safe_dtype_map_kv = filename_safe_dtype_map_kv
     attention_modules.filename_safe_dtype_map_kv = filename_safe_dtype_map_kv
-    attention_modules.get_batch_prefill_uri = get_batch_prefill_uri
-    if local_attention_modules is not None:
+    force_prefill_module = os.environ.get("SPARK_FLASHINFER_FORCE_PREFILL_MODULE") == "1"
+    patch_prefill_run_scale_args = (
+        os.environ.get("SPARK_FLASHINFER_PATCH_PREFILL_RUN_SCALE_ARGS", "1") == "1"
+    )
+    prefill_run_scale_arg_patch = False
+    if force_prefill_module:
+        attention_modules.get_batch_prefill_uri = get_batch_prefill_uri
+    if force_prefill_module and local_attention_modules is not None:
         jit.gen_batch_prefill_module = attention_modules.gen_batch_prefill_module
         jit.gen_customize_batch_prefill_module = (
             attention_modules.gen_customize_batch_prefill_module
         )
-        prefill.gen_batch_prefill_module = attention_modules.gen_batch_prefill_module
+    if force_prefill_module:
+        jit.get_batch_prefill_uri = get_batch_prefill_uri
+
+    import flashinfer.prefill as prefill  # type: ignore
+
+    if local_attention_modules is not None:
+        # Keep explicit wrapper-level JIT modules source-compatible with the
+        # mounted FlashInfer checkout. This is narrower than forcing the default
+        # batch-prefill module path: vLLM still has to request a custom module
+        # through jit_args, but the generated params/template must come from the
+        # same source tree as prefill.cuh.
         prefill.gen_customize_batch_prefill_module = (
             attention_modules.gen_customize_batch_prefill_module
         )
-    jit.get_batch_prefill_uri = get_batch_prefill_uri
-    prefill.get_batch_prefill_uri = get_batch_prefill_uri
-    if hasattr(prefill.get_batch_prefill_module, "cache_clear"):
-        prefill.get_batch_prefill_module.cache_clear()
+
+    if force_prefill_module and local_attention_modules is not None:
+        prefill.gen_batch_prefill_module = attention_modules.gen_batch_prefill_module
+    if force_prefill_module:
+        prefill.get_batch_prefill_uri = get_batch_prefill_uri
+        if hasattr(prefill.get_batch_prefill_module, "cache_clear"):
+            prefill.get_batch_prefill_module.cache_clear()
+    if patch_prefill_run_scale_args:
+        prefill_run_scale_arg_patch = _patch_prefill_run_scale_args(prefill)
 
     if os.environ.get("SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG") == "1":
+        try:
+            run_src = inspect.getsource(
+                prefill.BatchPrefillWithPagedKVCacheWrapper.run
+            )
+        except OSError:
+            run_src = ""
         debug: dict[str, Any] = {
             "pid": os.getpid(),
             "source_root": str(source_root),
             "jit_utils_file": getattr(jit_utils, "__file__", None),
             "attention_modules_file": getattr(attention_modules, "__file__", None),
             "prefill_file": getattr(prefill, "__file__", None),
+            "force_prefill_module": force_prefill_module,
+            "patch_prefill_run_scale_args": patch_prefill_run_scale_args,
             "dtype_map_kv_uint8": jit_utils.dtype_map_kv.get(torch.uint8),
             "attention_dtype_map_kv_uint8": attention_modules.dtype_map_kv.get(
                 torch.uint8
@@ -171,6 +309,18 @@ def _patch_flashinfer(source_root: Path) -> None:
             "jit_gen_batch_prefill_module": getattr(
                 jit.gen_batch_prefill_module, "__module__", None
             ),
+            "prefill_run_scale_arg_patch": prefill_run_scale_arg_patch,
+            "prefill_run_marker": bool(
+                getattr(
+                    prefill.BatchPrefillWithPagedKVCacheWrapper.run,
+                    "_spark_prefill_scale_arg_patch",
+                    False,
+                )
+            ),
+            "prefill_run_has_k_sf_source": "maybe_k_cache_sf" in run_src
+            and "key_block_scales" in run_src,
+            "prefill_run_has_v_sf_source": "maybe_v_cache_sf" in run_src
+            and "value_block_scales" in run_src,
         }
         print(f"[spark-sitecustomize] {debug}", file=sys.stderr, flush=True)
 

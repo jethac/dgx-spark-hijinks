@@ -20,7 +20,9 @@ VLLM_PRECOMPILED_WHEEL_COMMIT=${VLLM_PRECOMPILED_WHEEL_COMMIT:-4dcd10eb0d223a3ec
 VLLM_VERSION_OVERRIDE=${VLLM_VERSION_OVERRIDE:-0.1.dev1+gcontigout}
 FLASHINFER_PREFILL_DEBUG_ONCE=${FLASHINFER_PREFILL_DEBUG_ONCE:-0}
 FLASHINFER_EXTRA_CUDAFLAGS=${FLASHINFER_EXTRA_CUDAFLAGS:-"-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1 -gencode=arch=compute_121a,code=sm_121a"}
-FLASHINFER_CLEAR_PREFILL_CACHE=${FLASHINFER_CLEAR_PREFILL_CACHE:-1}
+SPARK_FLASHINFER_FORCE_PREFILL_MODULE=${SPARK_FLASHINFER_FORCE_PREFILL_MODULE:-0}
+SPARK_FLASHINFER_PATCH_PREFILL_RUN_SCALE_ARGS=${SPARK_FLASHINFER_PATCH_PREFILL_RUN_SCALE_ARGS:-1}
+FLASHINFER_CLEAR_PREFILL_CACHE=${FLASHINFER_CLEAR_PREFILL_CACHE:-${SPARK_FLASHINFER_FORCE_PREFILL_MODULE}}
 SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=${SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG:-1}
 
 mkdir -p "${RESULTS_DIR}/${RUN}_active_page_dump"
@@ -76,6 +78,8 @@ docker run -d --gpus all --ipc=host --network=host \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
   -e FLASHINFER_PREFILL_DEBUG_ONCE \
   -e FLASHINFER_EXTRA_CUDAFLAGS \
+  -e SPARK_FLASHINFER_FORCE_PREFILL_MODULE \
+  -e SPARK_FLASHINFER_PATCH_PREFILL_RUN_SCALE_ARGS \
   -e FLASHINFER_CLEAR_PREFILL_CACHE \
   -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
@@ -96,6 +100,8 @@ export PYTHONPATH="/tmp/spark-sitecustomize:${PYTHONPATH:-}"
 if [[ "${FLASHINFER_CLEAR_PREFILL_CACHE:-0}" == "1" ]]; then
   find /root/.cache/flashinfer -path "*/cached_ops/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
   find /root/.cache/flashinfer -path "*/generated/batch_prefill_with_kv_cache_*" -prune -exec rm -rf {} + 2>/dev/null || true
+  find /root/.cache/flashinfer -path "*/cached_ops/vllm_batch_prefill_nvfp4_kv_*" -prune -exec rm -rf {} + 2>/dev/null || true
+  find /root/.cache/flashinfer -path "*/generated/vllm_batch_prefill_nvfp4_kv_*" -prune -exec rm -rf {} + 2>/dev/null || true
 fi
 python3 -m pip install -q setuptools-rust > /results/'"${RUN}"'_pip_bootstrap.log 2>&1
 cd /vllm-src
@@ -117,6 +123,9 @@ print(json.dumps({
   "flashinfer_dtype_map_kv_uint8": flashinfer_jit_utils.dtype_map_kv.get(torch.uint8),
   "flashinfer_attention_dtype_map_kv_uint8": flashinfer_attention_modules.dtype_map_kv.get(torch.uint8),
   "flashinfer_filename_safe_dtype_map_kv_uint8": flashinfer_jit_utils.filename_safe_dtype_map_kv(torch.uint8),
+  "spark_flashinfer_force_prefill_module": __import__("os").environ.get("SPARK_FLASHINFER_FORCE_PREFILL_MODULE"),
+  "spark_flashinfer_patch_prefill_run_scale_args": __import__("os").environ.get("SPARK_FLASHINFER_PATCH_PREFILL_RUN_SCALE_ARGS"),
+  "flashinfer_prefill_run_marker": bool(getattr(__import__("flashinfer.prefill", fromlist=["BatchPrefillWithPagedKVCacheWrapper"]).BatchPrefillWithPagedKVCacheWrapper.run, "_spark_prefill_scale_arg_patch", False)),
   "flashinfer_attention_gen_batch_prefill_module": getattr(flashinfer_attention_modules.gen_batch_prefill_module, "__module__", None),
   "flashinfer_jit_gen_batch_prefill_module": getattr(flashinfer_jit.gen_batch_prefill_module, "__module__", None),
   "transformers": getattr(transformers, "__version__", None),

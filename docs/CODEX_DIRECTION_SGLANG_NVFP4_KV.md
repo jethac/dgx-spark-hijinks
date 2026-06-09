@@ -6,6 +6,28 @@
 > being the headline capacity win, and that bug is the highest-leverage thing in the
 > whole NVFP4-KV effort.
 
+## 2026-06-09 update — retest after FlashInfer prefill fix did not reach serving
+
+After vLLM Gemma 3 passed the short first-token gate with `jethac/flashinfer@c3dae30f`, we
+attempted the immediate cross-lane SGLang radix/default retest:
+
+- artifact: `results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_summary.md`
+- runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
+- case: `default`
+- intended test: whether the same FlashInfer FP4 paged-prefill wrapper fix closes the
+  Qwen FP4-KV cached-prefix failure.
+
+Result: **inconclusive before serving**. The source-stack runner spent about 26 minutes
+rebuilding `sglang-kernel` and was still at `82/127` build targets when stopped; no request
+JSON or dense-cache comparison was produced. This does not falsify the FlashInfer cross-lane
+hypothesis. It means the next SGLang step is packaging/build-loop work: prepare a reusable
+source-stack image or narrow `sglang-kernel` build target first, then rerun the default
+radix row from that prepared stack.
+
+Also record the build warnings: several `compute_120a`/`compute_121a` SGLang kernel builds
+emit `ptxas` warnings about `.multicast::cluster` on `cp.async.bulk{.tensor}` being intended
+for datacenter targets (`sm_90a/sm_100a/...`), plus `setmaxnreg` compatibility warnings.
+
 ## ROOT CAUSE LOCALIZED — the radix/prefix cache (2026-06-08) — NEXT FOCUS
 The first-token divergence test cornered it
 (`results/sglang_qwen_fp4kv_radix_isolation_20260608T2038JST_summary.md`):

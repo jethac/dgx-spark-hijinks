@@ -1,0 +1,26 @@
+{
+  "case_count": 1,
+  "cases": {
+    "default": {
+      "findings": [
+        "case ok is not true: False",
+        "trace_compare_ok is not true: None",
+        "request_json path missing from summary",
+        "trace_compare does not exist: /home/jethac/spark_tmp/vllm_gemma3_prefill_debug_20260609T143439JST/results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_default_dense_cache_compare.json"
+      ],
+      "ok": false,
+      "request_json": null,
+      "server_log": "/home/jethac/spark_tmp/vllm_gemma3_prefill_debug_20260609T143439JST/results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_default_server.log",
+      "trace_compare": "/home/jethac/spark_tmp/vllm_gemma3_prefill_debug_20260609T143439JST/results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_default_dense_cache_compare.json"
+    }
+  },
+  "findings": [
+    "default: case ok is not true: False",
+    "default: trace_compare_ok is not true: None",
+    "default: request_json path missing from summary",
+    "default: trace_compare does not exist: /home/jethac/spark_tmp/vllm_gemma3_prefill_debug_20260609T143439JST/results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_default_dense_cache_compare.json"
+  ],
+  "ok": false,
+  "schema": "sglang-dense-cache-trace-summary-audit/v1",
+  "summary_json": "/home/jethac/spark_tmp/vllm_gemma3_prefill_debug_20260609T143439JST/results/sglang_qwen_fp4kv_after_fi0919_default2_20260609T1818JST_summary.json"
+}

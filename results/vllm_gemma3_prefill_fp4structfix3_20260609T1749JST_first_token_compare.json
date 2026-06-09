@@ -1,0 +1,150 @@
+{
+  "baseline_run_id": "vllm_gemma3_27b_rung1_20260608T205432JST_fp8_flashinfer_first_token",
+  "candidate_run_id": "vllm_gemma3_prefill_fp4structfix3_20260609T1749JST_first_token_compare",
+  "comparisons": [
+    {
+      "baseline_first_token": "spark",
+      "baseline_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "baseline_text": "spark",
+      "candidate_first_token": "spark",
+      "candidate_script_summary": {
+        "chars": 5,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 5
+        }
+      },
+      "candidate_text": "spark",
+      "case": "exact_spark_ok",
+      "ok": true,
+      "top_logprob_overlap": [
+        " spark",
+        "**",
+        "<",
+        "Okay",
+        "Spark",
+        "```",
+        "ok",
+        "okay",
+        "park",
+        "sp",
+        "spa",
+        "spam",
+        "span",
+        "spar",
+        "spark",
+        "sparse",
+        "spawn",
+        "spot",
+        "spur"
+      ],
+      "top_logprob_overlap_ratio": 0.9047619047619048
+    },
+    {
+      "baseline_first_token": "4",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "DIGIT": 1
+        }
+      },
+      "baseline_text": "4",
+      "candidate_first_token": "4",
+      "candidate_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "DIGIT": 1
+        }
+      },
+      "candidate_text": "4",
+      "case": "simple_math",
+      "ok": true,
+      "top_logprob_overlap": [
+        "",
+        " ",
+        "(",
+        "**",
+        "0",
+        "2",
+        "4",
+        "5",
+        "6",
+        "Four",
+        "\u0664",
+        "\u06f4",
+        "\u096a",
+        "\u09ea",
+        "\u2074",
+        "\u2084",
+        "\uff14"
+      ],
+      "top_logprob_overlap_ratio": 0.7727272727272727
+    },
+    {
+      "baseline_first_token": "A",
+      "baseline_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 1
+        }
+      },
+      "baseline_text": "A",
+      "candidate_first_token": "A",
+      "candidate_script_summary": {
+        "chars": 1,
+        "control_chars": 0,
+        "non_ascii_chars": 0,
+        "replacement_chars": 0,
+        "script_counts": {
+          "LATIN": 1
+        }
+      },
+      "candidate_text": "A",
+      "case": "short_decode",
+      "ok": true,
+      "top_logprob_overlap": [
+        " A",
+        "##",
+        "A",
+        "AI",
+        "An",
+        "Because",
+        "Fast",
+        "Faster",
+        "For",
+        "Having",
+        "In",
+        "Large",
+        "Loc",
+        "Local",
+        "Rapid",
+        "Running",
+        "Using",
+        "When",
+        "While"
+      ],
+      "top_logprob_overlap_ratio": 0.9047619047619048
+    }
+  ],
+  "ok": true,
+  "schema": "openai-first-token-compare/v1"
+}
