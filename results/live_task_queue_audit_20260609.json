@@ -1,0 +1,110 @@
+{
+  "duplicate_ids": [],
+  "live_gb10_required_count": 8,
+  "next_live_tasks": [
+    {
+      "id": "vllm_gemma3_flashinfer_prefill_debug",
+      "issue": "#6/#7",
+      "lane": "vllm-gemma-nvfp4-kv",
+      "priority": 10,
+      "task_packet": "tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "sglang_qwen_fp4kv_dense_cache_trace",
+      "issue": "#18/#20",
+      "lane": "sglang-qwen-fp4-kv",
+      "priority": 20,
+      "task_packet": "tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "vllm_qwen_clean_ppl_32k_128k",
+      "issue": "#7/#20",
+      "lane": "vllm-qwen-nvfp4-kv-quality",
+      "priority": 30,
+      "task_packet": "tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "llamacpp_native_fp4_correctness_speed",
+      "issue": "#17/#20",
+      "lane": "llamacpp-native-fp4",
+      "priority": 40,
+      "task_packet": "tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md",
+      "task_ref": "tasks/counterpart_evidence_tasks.jsonl#llamacpp_native_fp4_gguf"
+    },
+    {
+      "id": "flashinfer_fp4_gemm_tile_smem",
+      "issue": "#7/#13",
+      "lane": "flashinfer-fp4-gemm",
+      "priority": 50,
+      "task_packet": "tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md",
+      "task_ref": null
+    }
+  ],
+  "offline_or_non_gb10_count": 0,
+  "ok": true,
+  "priority_order_ok": true,
+  "queue": "tasks/live_gb10_queue.jsonl",
+  "row_checks": [
+    {
+      "findings": [],
+      "id": "vllm_gemma3_flashinfer_prefill_debug",
+      "line": 1,
+      "ok": true,
+      "priority": 10
+    },
+    {
+      "findings": [],
+      "id": "sglang_qwen_fp4kv_dense_cache_trace",
+      "line": 2,
+      "ok": true,
+      "priority": 20
+    },
+    {
+      "findings": [],
+      "id": "vllm_qwen_clean_ppl_32k_128k",
+      "line": 3,
+      "ok": true,
+      "priority": 30
+    },
+    {
+      "findings": [],
+      "id": "llamacpp_native_fp4_correctness_speed",
+      "line": 4,
+      "ok": true,
+      "priority": 40
+    },
+    {
+      "findings": [],
+      "id": "flashinfer_fp4_gemm_tile_smem",
+      "line": 5,
+      "ok": true,
+      "priority": 50
+    },
+    {
+      "findings": [],
+      "id": "llamacpp_newer_echo_logprobs_probe",
+      "line": 6,
+      "ok": true,
+      "priority": 60
+    },
+    {
+      "findings": [],
+      "id": "llamacpp_larger_qwen3_gguf",
+      "line": 7,
+      "ok": true,
+      "priority": 70
+    },
+    {
+      "findings": [],
+      "id": "qwen_speed_lane_shared_manifest",
+      "line": 8,
+      "ok": true,
+      "priority": 80
+    }
+  ],
+  "schema": "live-task-queue-audit/v1",
+  "task_count": 8
+}

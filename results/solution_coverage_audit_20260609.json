@@ -81,7 +81,7 @@
       "plan_ids": [
         "12"
       ],
-      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, MTP/spec-decode wrapping, and counterpart task matrix exist"
+      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, MTP/spec-decode wrapping, counterpart task matrix, and ordered live GB10 task queue exist"
     },
     {
       "area": "public recipes and blessed stack docs",
@@ -124,7 +124,7 @@
         "14",
         "14a"
       ],
-      "status": "FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; FlashInfer debug branch `spark/hijinks-021-prefill-debug` is pushed at `1230341d`; SGLang source-stack runner now installs editable patched FlashInfer and source-builds `sgl-kernel`; SGLang dense-cache trace head `795f087ca` is pushed for the next Qwen FP4-KV reuse diagnostic; counterpart task matrix has nine task contracts and no missing contracts for the six still-partial counterpart lanes"
+      "status": "FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; FlashInfer debug branch `spark/hijinks-021-prefill-debug` is pushed at `1230341d`; SGLang source-stack runner now installs editable patched FlashInfer and source-builds `sgl-kernel`; SGLang dense-cache trace head `795f087ca` is pushed for the next Qwen FP4-KV reuse diagnostic; counterpart task matrix has nine task contracts and no missing contracts for the six still-partial counterpart lanes; `tasks/live_gb10_queue.jsonl` orders the next cross-lane live packets for future sessions/subagents"
     },
     {
       "area": "LiteRT-LM on Spark",
