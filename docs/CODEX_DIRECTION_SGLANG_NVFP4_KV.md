@@ -38,6 +38,12 @@ full-prefill `o_rows` versus cached-prefix merged `merged_rows`
 So the artifact quality is green; the remaining red state is real FP4 cached-prefix
 attention behavior, not missing trace request IDs or a later Qwen2/logits path.
 
+Next diagnostic is implemented but not yet run: `jethac/sglang@a8ad6a3ac` adds inactive
+`SGLANG_FP4_KV_TRACE_DENSE_QUANT_ATTENTION=1`. On the dense no-prefix path it recomputes
+the sampled attention row with BF16 K/V and with SGLang's own FP4 quantize/dequantize pair
+after cache global-scale calibration. This separates "FP4 KV quantization alone moves the
+attention output" from "radix/paged reuse moves it beyond the FP4 quantization loss."
+
 SM12x build note: the source build succeeds, but the build log contains repeated
 performance warnings: `242` `.multicast::cluster` / `cp.async.bulk{.tensor}` advisories,
 `109` references each to `compute_120a` and `compute_121a`, and `74` `setmaxnreg`

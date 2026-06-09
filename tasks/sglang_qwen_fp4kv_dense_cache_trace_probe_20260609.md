@@ -79,6 +79,7 @@ Instrumentation gate:
 
 ```bash
 SGLANG_FP4_KV_TRACE_DENSE_CACHE=1
+SGLANG_FP4_KV_TRACE_DENSE_QUANT_ATTENTION=1
 SGLANG_FP4_KV_TRACE_LAYERS=0,1,7,13,20,27
 SGLANG_FP4_KV_TRACE_VALUES=64
 ```
@@ -99,6 +100,24 @@ SGLANG_FP4_KV_TRACE_VALUES=64
 - Dense no-prefix `o_rows` are compared directly against cached-prefix merged
   `merged_rows`. The current-head artifact now localizes the first request-bound
   divergence to layer-0 attention output itself, before the Qwen2 residual/norm/MLP path.
+
+2026-06-09 next diagnostic implementation:
+
+- Fork commit: `jethac/sglang@a8ad6a3ac`.
+- Change: `third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py`
+  adds inactive `SGLANG_FP4_KV_TRACE_DENSE_QUANT_ATTENTION=1`.
+- On the dense no-prefix path, after `set_kv_buffer()` calibrates and writes FP4 KV, the
+  trace re-quantizes/dequantizes the same BF16 K/V with `NVFP4KVQuantizeUtil` and computes
+  a torch attention reference for the sampled last-token row.
+- Logged comparisons:
+  - actual ragged FlashInfer output vs BF16 torch reference
+  - actual ragged FlashInfer output vs FP4-dequant torch reference
+  - FP4-dequant torch reference vs BF16 torch reference
+- Decision:
+  - If FP4-dequant reference already diverges from BF16 similarly to cached-prefix output,
+    the layer-0 split is mostly FP4 KV quantization/scale quality, not radix reuse.
+  - If FP4-dequant reference stays close to BF16 while cached-prefix `merged_rows` diverge,
+    the bug remains in cached-prefix paged/reuse integration.
 
 Implemented insertion points:
 
