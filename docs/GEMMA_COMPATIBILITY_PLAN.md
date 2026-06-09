@@ -111,6 +111,32 @@ is PLE / audio / elastic, validated on the practical/GGUF rails.
 - Native-target / dispatch evidence where a native-FP4 claim is made.
 - Explicit scope labels for what's untested on that rung.
 
+## Risk note — Gemma attention is outlier-sensitive (2026-06; affects what "green" means)
+Checkpoints are NOT a blocker: NVFP4 weight releases exist for the server variants —
+official NVIDIA `nvidia/Gemma-4-31B-IT-NVFP4` and `nvidia/Gemma-4-26B-A4B-NVFP4`, plus
+`RedHatAI/gemma-4-31B-it-NVFP4` and community 12B quants. (And the KV-cache work needs no
+NVFP4 checkpoint at all — KV dtype is a runtime knob; Rung 1 ran stock `gemma-3-27b-it`.)
+
+But the *way* those releases are built is a warning for our KV work: **"NVFP4 Gemma 4" is
+NVFP4 FFN/experts + BF16 attention.** NVIDIA and RedHat both deliberately keep self-attention
+(q/k/v/o) in BF16 because Gemma's residual stream carries persistent per-channel activation
+outliers far larger than ±6×block-scale, which 4-bit cannot represent. The KV cache *is*
+4-bit attention state — so the same outlier sensitivity that forced attention weights to
+stay BF16 may make NVFP4-KV **quality-lossier on Gemma than on Qwen**, even after the
+kernel page-pairing bug is fixed. (Not certain — K/V are post-projection / post-QK-norm, and
+NVFP4's two-level scaling targets outliers — but do not assume Qwen's PPL transfers.)
+
+Consequence for the gate: on every Gemma rung, "correct output" must include a **PPL/quality
+comparator measured on Gemma specifically** (vs fp8/bf16 KV), not a smoke pass and not
+Qwen's number. If the Gemma KV PPL delta is large, the honest result may be "NVFP4-KV is a
+capacity win on Qwen-class attention but lossy on Gemma's outlier-heavy attention" — which is
+a finding, not a failure, and must be reported as such.
+
+Speed context: NVFP4 *weights* already make Gemma 4 fast on the Spark (26B-A4B MoE ≈ 52 tok/s,
+dense 31B ≈ 7–11 tok/s) — that's the existing weight-bandwidth win, not ours. Our
+differentiated layer is NVFP4-KV *capacity* on top, so frame rung results as
+"capacity added," not "speed."
+
 ## First moves
 1. **Rung 1: Gemma 3 27B on vLLM** — the SWA-isolation rung and first big Gemma capacity
    win. Climb only after it's green.

@@ -26,6 +26,9 @@ queued, but SSH is not currently a usable control path from this workspace.
   gate. The current Gemma 3 NVFP4 candidate is machine-rejected in
   `results/gemma3_nvfp4_kv_quality_gate_current_red_20260609.json`, so capacity/routing
   evidence cannot accidentally promote the known-corrupt row.
+- `results/gemma_compatibility_plan_audit_20260609.json` verifies that
+  `docs/GEMMA_COMPATIBILITY_PLAN.md` still records the Gemma-specific PPL/quality rule, the
+  outlier-risk caveat, the audited rung order, and capacity-not-speed framing.
 - `scripts/install_sglang_source_stack.sh` now installs patched editable FlashInfer and
   source-builds `sgl-kernel` from `third_party/sglang`, so the SGLang matrix runner no
   longer depends on stale PyPI `flashinfer-cubin`, `flashinfer-jit-cache`, or
@@ -60,7 +63,7 @@ queued, but SSH is not currently a usable control path from this workspace.
 |---|---|---|---|
 | Gemma 4 26B | `partial` | fast local vLLM NVFP4+DFlash row exists through AEON image; llama.cpp Q4_0 is practical and fast | accuracy checks, fork parity, and native/forked vLLM path |
 | Gemma 4 12B | `partial` | source/precompiled vLLM probe serves at about `7.7 tok/s`; ladder now treats it as the final encoder-free multimodal-KV rung, not the next/simple rung | clean release/nightly container plus one zero-shot task after text-only 31B/26B rungs are green |
-| Gemma ladder | `config-audited` | Rung -1 artifact shows Gemma 3 27B is uniform `D=128`; Gemma 4 12B/31B/26B-A4B all carry full-attention `D=512`; operator architecture reorders the climb as Gemma 3 27B -> 31B text-only dense D=512 -> 26B-A4B text-only MoE -> 12B encoder-free multimodal-KV | running-model geometry and encoder/modality confirmation per runtime/rung |
+| Gemma ladder | `config-audited` | Rung -1 artifact shows Gemma 3 27B is uniform `D=128`; Gemma 4 12B/31B/26B-A4B all carry full-attention `D=512`; operator architecture reorders the climb as Gemma 3 27B -> 31B text-only dense D=512 -> 26B-A4B text-only MoE -> 12B encoder-free multimodal-KV; plan audit confirms the Gemma-specific quality/PPL and capacity-not-speed gates | running-model geometry and encoder/modality confirmation per runtime/rung |
 | Qwen speed | `partial` | SGLang small Qwen rows, SGLang FP4 KV capacity-only row plus OpenAI/native logprob and prompt-reconciliation quality-localization rows, llama.cpp Qwen2.5 row, passing AEON vLLM Qwen36 NVFP4+DFlash row, passing derived `jethac/vllm` Qwen36 row, passing clean-FA2 `jethac/vllm` Qwen36 row, matched vLLM Qwen fp8-vs-NVFP4 KV capacity row, and llama.cpp Qwen3.6 NVFP4 GGUF runtime smoke exist | larger llama.cpp Qwen3/Qwen3.6 GGUF benchmarks, llama.cpp NVFP4 GGUF accuracy/speed, SGLang FP4-KV quality, SGLang DFlash/EAGLE, native FP4 weight/MoE proof |
 | NVFP4 weights | `partial` | AEON Gemma, AEON Qwen36, derived `jethac/vllm` Qwen36, and clean-FA2 `jethac/vllm` Qwen36 prove compressed-tensors NVFP4 weight serving on GB10 | native FP4 weight/MoE compute proof; current clean Qwen row still selects Marlin weight-only FP4 |
 | NVFP4 / FP4 KV | `partial` | standalone probes prove the FA2 tuple-KV signature; vLLM Qwen NVFP4-KV records `1.751x` fp8 KV pool/concurrency with normal content and decode parity; SGLang FP4 KV records a matched `1.779x` fp8 capacity gain under auto-safe no-graph policy but fails quality | Gemma NVFP4-KV, SGLang quality-passing FP4 KV serving, graph-safe serving, and claimable throughput |

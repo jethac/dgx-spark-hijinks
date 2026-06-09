@@ -1,0 +1,58 @@
+{
+  "expected_server_rung_order": [
+    "Gemma 3 27B",
+    "Gemma 4 31B",
+    "Gemma 4 26B-A4B",
+    "Gemma 4 12B"
+  ],
+  "findings": [],
+  "ok": true,
+  "plan": "docs/GEMMA_COMPATIBILITY_PLAN.md",
+  "required_phrase_checks": [
+    {
+      "name": "running_model_geometry",
+      "ok": true,
+      "phrase": "Every rung re-measures geometry from the running model"
+    },
+    {
+      "name": "gemma_specific_quality",
+      "ok": true,
+      "phrase": "PPL/quality comparator measured on Gemma specifically"
+    },
+    {
+      "name": "do_not_transfer_qwen_ppl",
+      "ok": true,
+      "phrase": "do not assume Qwen's PPL transfers"
+    },
+    {
+      "name": "capacity_not_speed",
+      "ok": true,
+      "phrase": "frame rung results as"
+    },
+    {
+      "name": "attention_outlier_risk",
+      "ok": true,
+      "phrase": "Gemma attention is outlier-sensitive"
+    },
+    {
+      "name": "quality_gate_task",
+      "ok": true,
+      "phrase": "correct output"
+    }
+  ],
+  "schema": "gemma-compatibility-plan-audit/v1",
+  "server_rung_order": [
+    "Gemma 3 27B",
+    "Gemma 4 31B",
+    "Gemma 4 26B-A4B",
+    "Gemma 4 12B"
+  ],
+  "strict_artifact": "results/gemma_rung_minus1_config_audit_strict_20260608.json",
+  "strict_artifact_recommended_ladder": [
+    "rung_0_qwen_standard_attention_done",
+    "rung_1_gemma3_27b_swa_uniform_d128_no_d512",
+    "rung_2_gemma4_31b_dense_d512_text_only",
+    "rung_3_gemma4_26b_a4b_moe_text_only",
+    "rung_4_gemma4_12b_encoder_free_multimodal_kv"
+  ]
+}
