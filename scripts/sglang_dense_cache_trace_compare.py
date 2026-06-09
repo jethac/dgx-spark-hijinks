@@ -13,6 +13,7 @@ import ast
 import json
 import math
 import re
+import tempfile
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -111,6 +112,10 @@ def sample_vector(row: dict[str, Any] | None) -> list[float] | None:
         return None
     sample = row.get("sample")
     if not isinstance(sample, list):
+        value = row.get("value")
+        if isinstance(value, dict):
+            sample = value.get("sample")
+    if not isinstance(sample, list):
         return None
     values: list[float] = []
     for value in sample:
@@ -185,30 +190,51 @@ def compare_events(dense: dict[str, Any], cached: dict[str, Any]) -> dict[str, A
     return {"field": None}
 
 
+def comparison_has_metric(comparison: dict[str, Any] | None) -> bool:
+    if not isinstance(comparison, dict):
+        return False
+    vector = comparison.get("vector")
+    if isinstance(vector, dict) and isinstance(vector.get("count"), int) and vector["count"] > 0:
+        return True
+    topk = comparison.get("topk")
+    if isinstance(topk, dict) and isinstance(topk.get("overlap"), int):
+        return True
+    return False
+
+
 def event_key(event: dict[str, Any]) -> tuple[Any, ...]:
     return (
         event.get("_kind"),
         event.get("label"),
         event.get("layer"),
+        event.get("mode"),
     )
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--request-json", required=True)
-    parser.add_argument("--server-log", required=True)
-    parser.add_argument("--output")
-    parser.add_argument("--require-cached", action="store_true", default=True)
-    parser.add_argument("--require-dense", action="store_true", default=True)
-    args = parser.parse_args()
+def event_sort_key(event: dict[str, Any]) -> tuple[Any, ...]:
+    request = event.get("_request") if isinstance(event.get("_request"), dict) else {}
+    return (
+        event.get("_line", 0),
+        event.get("forward_pass_id") if event.get("forward_pass_id") is not None else -1,
+        request.get("row") or "",
+        event.get("_rid") or "",
+    )
 
+
+def build_report(
+    *,
+    request_json: str,
+    server_log: str,
+    require_cached: bool = True,
+    require_dense: bool = True,
+) -> dict[str, Any]:
     findings: list[str] = []
-    request_path = Path(args.request_json)
-    log_path = Path(args.server_log)
+    request_path = Path(request_json)
+    log_path = Path(server_log)
     if not request_path.exists():
-        raise SystemExit(f"request JSON does not exist: {args.request_json}")
+        raise SystemExit(f"request JSON does not exist: {request_json}")
     if not log_path.exists():
-        raise SystemExit(f"server log does not exist: {args.server_log}")
+        raise SystemExit(f"server log does not exist: {server_log}")
 
     requests = request_map(load_json(request_path))
     traces = parse_traces(log_path)
@@ -243,9 +269,9 @@ def main() -> int:
             )
             rid_entry["event_counts"][event_copy["_kind"]] += 1
 
-    if args.require_dense and not events_by_class["dense"]:
+    if require_dense and not events_by_class["dense"]:
         findings.append("no dense/no-cache trace events matched request rids")
-    if args.require_cached and not events_by_class["cached"]:
+    if require_cached and not events_by_class["cached"]:
         findings.append("no cached-prefix trace events matched request rids")
 
     dense_by_key: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
@@ -257,27 +283,68 @@ def main() -> int:
 
     comparisons: list[dict[str, Any]] = []
     for key in sorted(set(dense_by_key) & set(cached_by_key), key=repr):
-        dense_event = dense_by_key[key][0]
-        cached_event = cached_by_key[key][0]
-        comparisons.append(
-            {
-                "kind": key[0],
-                "label": key[1],
-                "layer": key[2],
-                "dense_rid": dense_event.get("_rid"),
-                "cached_rid": cached_event.get("_rid"),
-                "dense_count": len(dense_by_key[key]),
-                "cached_count": len(cached_by_key[key]),
-                "comparison": compare_events(dense_event, cached_event),
-            }
-        )
+        dense_events = sorted(dense_by_key[key], key=event_sort_key)
+        cached_events = sorted(cached_by_key[key], key=event_sort_key)
+        for dense_event in dense_events:
+            for cached_event in cached_events:
+                comparison = compare_events(dense_event, cached_event)
+                comparisons.append(
+                    {
+                        "kind": key[0],
+                        "label": key[1],
+                        "layer": key[2],
+                        "mode": key[3],
+                        "dense_rid": dense_event.get("_rid"),
+                        "cached_rid": cached_event.get("_rid"),
+                        "dense_line": dense_event.get("_line"),
+                        "cached_line": cached_event.get("_line"),
+                        "dense_forward_pass_id": dense_event.get("forward_pass_id"),
+                        "cached_forward_pass_id": cached_event.get("forward_pass_id"),
+                        "dense_count": len(dense_by_key[key]),
+                        "cached_count": len(cached_by_key[key]),
+                        "comparison": comparison,
+                        "metric_ok": comparison_has_metric(comparison),
+                    }
+                )
     if not comparisons:
         findings.append("no comparable dense/cached trace event keys found")
+    metric_comparisons = [item for item in comparisons if item.get("metric_ok") is True]
+    if comparisons and not metric_comparisons:
+        findings.append("dense/cached trace event keys matched, but no vector or top-k metric was comparable")
 
-    report = {
+    first_divergence = None
+    for item in metric_comparisons:
+        comparison = item.get("comparison") if isinstance(item.get("comparison"), dict) else {}
+        vector = comparison.get("vector") if isinstance(comparison.get("vector"), dict) else None
+        topk = comparison.get("topk") if isinstance(comparison.get("topk"), dict) else None
+        diverged = False
+        if vector is not None:
+            diverged = (
+                (isinstance(vector.get("max_abs"), (int, float)) and float(vector["max_abs"]) > 1e-6)
+                or (
+                    isinstance(vector.get("cosine"), (int, float))
+                    and math.isfinite(float(vector["cosine"]))
+                    and float(vector["cosine"]) < 0.999999
+                )
+            )
+        if topk is not None:
+            diverged = isinstance(topk.get("overlap_ratio"), (int, float)) and float(topk["overlap_ratio"]) < 1.0
+        if diverged:
+            first_divergence = {
+                "kind": item.get("kind"),
+                "label": item.get("label"),
+                "layer": item.get("layer"),
+                "field": comparison.get("field"),
+                "dense_rid": item.get("dense_rid"),
+                "cached_rid": item.get("cached_rid"),
+                "comparison": comparison,
+            }
+            break
+
+    return {
         "schema": "sglang-dense-cache-trace-compare/v1",
-        "request_json": args.request_json,
-        "server_log": args.server_log,
+        "request_json": request_json,
+        "server_log": server_log,
         "request_count": len(requests),
         "trace_count": len(traces),
         "event_counts": {
@@ -293,10 +360,109 @@ def main() -> int:
             for rid, entry in sorted(per_rid.items())
         },
         "comparisons": comparisons,
+        "metric_comparison_count": len(metric_comparisons),
+        "first_divergence": first_divergence,
         "parse_errors": parse_errors[:10],
         "ok": not findings,
         "findings": findings,
     }
+
+
+def run_self_test() -> int:
+    request = {
+        "rows": [
+            {
+                "name": "synthetic",
+                "requests": [
+                    {
+                        "rid": "dense-rid",
+                        "endpoint": "openai_chat",
+                        "summary": {"meta_info": {"cached_tokens": 0}},
+                    },
+                    {
+                        "rid": "cached-rid",
+                        "endpoint": "openai_chat",
+                        "summary": {"meta_info": {"cached_tokens": 55}},
+                    },
+                ],
+            }
+        ]
+    }
+    dense_trace = {
+        "label": "extend_merge_paged",
+        "rids": ["dense-rid"],
+        "layer": 0,
+        "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.0, 3.0]}}]},
+    }
+    cached_trace = {
+        "label": "extend_merge_paged",
+        "rids": ["cached-rid"],
+        "layer": 0,
+        "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.5, 3.0]}}]},
+    }
+    bad_dense = {"label": "bad", "rids": ["dense-rid"], "layer": 1}
+    bad_cached = {"label": "bad", "rids": ["cached-rid"], "layer": 1}
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        request_path = tmp_path / "request.json"
+        log_path = tmp_path / "server.log"
+        request_path.write_text(json.dumps(request), encoding="utf-8")
+        log_path.write_text(
+            "\n".join(
+                [
+                    f"INFO FP4 KV dense-cache attention trace {dense_trace!r}",
+                    f"INFO FP4 KV dense-cache attention trace {cached_trace!r}",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        report = build_report(request_json=str(request_path), server_log=str(log_path))
+        if report.get("ok") is not True:
+            raise AssertionError(f"expected synthetic good report to be ok: {report.get('findings')}")
+        if report.get("metric_comparison_count") != 1:
+            raise AssertionError("expected exactly one metric comparison")
+        if not isinstance(report.get("first_divergence"), dict):
+            raise AssertionError("expected first_divergence for changed synthetic vector")
+
+        log_path.write_text(
+            "\n".join(
+                [
+                    f"INFO FP4 KV dense-cache attention trace {bad_dense!r}",
+                    f"INFO FP4 KV dense-cache attention trace {bad_cached!r}",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        red = build_report(request_json=str(request_path), server_log=str(log_path))
+        if red.get("ok") is True:
+            raise AssertionError("expected metricless dense/cached comparison to be red")
+    print("sglang dense-cache trace compare self-test passed")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--request-json")
+    parser.add_argument("--server-log")
+    parser.add_argument("--output")
+    parser.add_argument("--require-cached", action="store_true", default=True)
+    parser.add_argument("--require-dense", action="store_true", default=True)
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+
+    if args.self_test:
+        return run_self_test()
+    if not args.request_json or not args.server_log:
+        parser.error("--request-json and --server-log are required unless --self-test is set")
+
+    report = build_report(
+        request_json=args.request_json,
+        server_log=args.server_log,
+        require_cached=args.require_cached,
+        require_dense=args.require_dense,
+    )
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         Path(args.output).write_text(text, encoding="utf-8")

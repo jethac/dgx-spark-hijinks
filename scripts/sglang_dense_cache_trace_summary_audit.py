@@ -93,6 +93,15 @@ def main() -> int:
             comparisons = compare_obj.get("comparisons")
             if not isinstance(comparisons, list) or not comparisons:
                 case_findings.append("trace_compare has no dense/cached comparisons")
+            metric_count = compare_obj.get("metric_comparison_count")
+            if not isinstance(metric_count, int) or metric_count <= 0:
+                case_findings.append(
+                    f"trace_compare metric_comparison_count is not positive: {metric_count!r}"
+                )
+            if isinstance(comparisons, list) and comparisons:
+                metric_rows = [item for item in comparisons if isinstance(item, dict) and item.get("metric_ok") is True]
+                if not metric_rows:
+                    case_findings.append("trace_compare has no metric_ok dense/cached comparison rows")
 
         for finding in case_findings:
             findings.append(f"{name}: {finding}")

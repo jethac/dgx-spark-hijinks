@@ -10,7 +10,7 @@ Live execution runbook: `docs/LIVE_GB10_RUNBOOK.md`.
 Machine-readable queue: `tasks/live_gb10_queue.jsonl`.
 Queue audit: `results/live_task_queue_audit_20260609.json`.
 
-Latest reachability evidence: `results/gb10_host_access_probe_20260609.md`.
+Latest reachability evidence: `results/gb10_host_access_probe_tailnet_retry_20260609.md`.
 The GB10 node is visible in the Tailscale control plane at `100.113.98.11`, but the
 sanitized probe records `usable_for_live_work=false`: Tailscale ping times out, TCP/22
 times out, SSH times out, and the peer reports relay traffic with `rx 0`. Live validation is
@@ -214,7 +214,9 @@ Queued dense-cache trace command: `scripts/run_sglang_fp4_dense_cache_trace.sh` 
 same source-built stack plus `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1` and
 `scripts/sglang_fp4_request_order_probe.py`. Default `CASES=default` runs the known failing
 cached-prefix row; use `CASES=full_paged` only as the follow-up comparator after the default
-row localizes the first divergence.
+row localizes the first divergence. The comparator now requires at least one metric-bearing
+dense/cached vector or top-k comparison and records `first_divergence`; structural trace-key
+matches without comparable metrics are red.
 
 ## Update Cadence
 

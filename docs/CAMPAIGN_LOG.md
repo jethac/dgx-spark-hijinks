@@ -989,18 +989,23 @@
 
 - Added the SGLang dense-vs-cached FP4 KV trace head.
   - SGLang fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
-  - commit: `795f087ca`
+  - commit: `43f3123f9`
   - task packet: `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
   - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
   - env gate: `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1`
   - purpose: compare full-prefill and cached-prefix Qwen FP4-KV tensors at FlashInfer
     attention, Qwen2 hidden states, raw/sampled logits, and sampler preprocessing.
+  - follow-up hardening: the same branch now stamps `forward_pass_id`, `kind`, and request
+    ids into trace payloads and the campaign comparator rejects metricless structural
+    matches.
   - local verification: `python -m py_compile` for touched files and `git diff --check`
     passed for the fork; `bash -n scripts/run_sglang_fp4_dense_cache_trace.sh` and
     `git diff --check` passed for the campaign runner.
   - live status: queued. Later host-access probes show the node visible in the Tailscale
     control plane, but Tailscale ping, TCP/22, and SSH time out from this workspace, so no
     live trace row was run in this stop point.
+  - tailnet retry artifact: `results/gb10_host_access_probe_tailnet_retry_20260609.md`;
+    hostname and raw `100.113.98.11` SSH probes both timed out.
 
 - Added the llama.cpp supplied-token loglikelihood contract.
   - task packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`

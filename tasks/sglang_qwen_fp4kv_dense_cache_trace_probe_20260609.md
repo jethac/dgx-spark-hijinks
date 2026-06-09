@@ -85,22 +85,23 @@ SGLANG_FP4_KV_TRACE_VALUES=64
 
 2026-06-09 instrumentation implementation:
 
-- Fork commit: `jethac/sglang@795f087ca`.
+- Fork commit: `jethac/sglang@43f3123f9`.
 - Branch: `spark/hijinks-018-fp4-e2m1-kv-sm121-serving`.
-- Local validation: `python -m py_compile` for the four touched Python files and
+- Local validation: `python -m py_compile` for the five touched Python files and
   `git diff --check` both passed in the Windows workspace.
 - Scope: inactive unless `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1` is set.
 
 Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`
-  - Not changed in `795f087ca`; existing radix/ForwardBatch traces remain available under
-    `SGLANG_FP4_KV_TRACE_RADIX=1`.
+  - Carries `forward_pass_id` on `ForwardBatch` so attention, Qwen2, logits, and sampler
+    trace records can be tied back to the same model forward.
 - `third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py`
   - Dumps sampled last-token rows for `forward_extend_ragged_no_prefix`,
     `forward_extend_merge_paged`, and forced full-paged `forward_extend_paged`.
   - Captures `q`, dense/ragged output, `o1/s1`, `o2/s2`, merged output, request ids,
-    prefix/extend lengths, sequence lengths, cache locations, and K/V scale values.
+    `kind`, `forward_pass_id`, prefix/extend lengths, sequence lengths, cache locations,
+    and K/V scale values.
 - `third_party/sglang/python/sglang/srt/models/qwen2.py`
   - Dumps selected-layer sampled rows after self-attention, after post-attention norm,
     after MLP, and after final model norm.
@@ -108,10 +109,12 @@ Implemented insertion points:
 - `third_party/sglang/python/sglang/srt/layers/logits_processor.py`
   - Dumps `pruned_states`, `sample_indices`, raw logits, and sampled logits before sampler
     preprocessing. Mirror the same capture for the `extend_return_logprob` path.
+  - Propagates request ids, `forward_pass_id`, and prefix/extend lengths through
+    `LogitsMetadata` so logits traces no longer fall into the comparator's unknown bucket.
 - `third_party/sglang/python/sglang/srt/model_executor/model_runner.py`
   - Dumps `next_token_logits` immediately before and after `_preprocess_logits`.
-  - The existing patch target in `scripts/sglang_fp4_first_token_dump_patch.yaml` proves
-    this location is sufficient for the sampler boundary.
+  - Stamps `ForwardBatch.forward_pass_id` at the start of `ModelRunner.forward` and emits
+    sampler traces with normalized CPU-list metadata.
 
 Runner:
 
@@ -140,12 +143,9 @@ bash scripts/run_sglang_fp4_dense_cache_trace.sh
 Capture key:
 
 ```text
-rid, forward_mode, layer_id, phase, extend_prefix_len, extend_seq_len, sample_row
+forward_pass_id, kind, rid/rids, label, layer, mode, extend_prefix_len,
+extend_seq_len, sample_rows
 ```
-
-Note: SGLang has a `forward_pass_id` counter, but commit `795f087ca` does not propagate it
-into the dense-cache trace payload. Treat `forward_pass_id` as a future nicety, not an
-acceptance blocker for this packet.
 
 Capture values:
 
@@ -172,10 +172,20 @@ Acceptance:
   rows by `rid` and phase. The runner writes
   `results/${RUN_ID}_${case}_dense_cache_compare.json` via
   `scripts/sglang_dense_cache_trace_compare.py`.
+- The comparison artifact must include at least one `metric_ok=true` dense/cached row and
+  positive `metric_comparison_count`; structural event-key matches without vector/top-k
+  metrics are red. The comparator records `first_divergence` when the sampled vector or
+  top-k rows differ.
 - The run summary must pass `scripts/sglang_dense_cache_trace_summary_audit.py`; a missing,
   unparsable, or red comparison artifact is a red run, not an inconclusive green.
 - Do not bless `--disable-radix-cache` or selective no-reuse as the FP4-KV capacity path.
   It remains a diagnostic/emergency workaround only.
+
+Offline verifier:
+
+```bash
+python3 scripts/sglang_dense_cache_trace_compare.py --self-test
+```
 
 Expected queue artifacts:
 
