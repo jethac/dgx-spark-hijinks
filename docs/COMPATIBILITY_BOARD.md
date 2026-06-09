@@ -136,6 +136,17 @@ python3 scripts/counterpart_task_matrix.py \
 
 The first live task is recorded in `results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md` and failed because the unlikely continuation was not present in top-512 probabilities. The follow-up OpenAI echo probe is recorded in `results/llamacpp_gguf_echo_logprobs_probe_20260608_summary.json` and also failed because pinned `b9536` exposes generated-token `logprobs.content`, not prompt `tokens`/`token_logprobs`. The next experiment should change the scoring implementation or server pin, not merely rerun the same command.
 
+The current acceptance contract is `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`. A green row must score each supplied continuation token by token id, including the unlikely `" zebra"` token, and then pass:
+
+```bash
+python3 scripts/llamacpp_loglikelihood_contract_audit.py \
+  --artifact results/llamacpp_native_loglikelihood_task_YYYYMMDDTHHMMJST.json \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/llamacpp_native_loglikelihood_task_YYYYMMDDTHHMMJST_contract_audit.json
+```
+
+Top-N output is acceptable only if every supplied continuation token is present. The known top-512 and dry-run artifacts are red under this auditor, so do not use them as row-8 evidence.
+
 Historical command shape:
 
 ```bash
