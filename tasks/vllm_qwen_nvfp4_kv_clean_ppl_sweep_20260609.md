@@ -1,7 +1,7 @@
 # vLLM Qwen Clean-Path NVFP4-KV PPL Sweep
 
-Status: partial; 8k clean full-attention row accepted on 2026-06-09 JST. 32k and 128k
-remain pending.
+Status: partial; 8k clean full-attention row accepted on 2026-06-09 JST. A 32k attempt
+was run but is not accepted as a PPL row; 32k and 128k remain pending.
 
 Goal: measure the quality cost of Qwen3.6 NVFP4 KV versus fp8 KV on the clean full-attention path, excluding the known broken reuse paths (Gemma/SWA and SGLang radix/prefix-cache reuse).
 
@@ -170,3 +170,24 @@ Acceptance notes:
 - NVFP4 selected FlashInfer FA2 NVFP4 KV with vLLM V-scale-factor deswizzle enabled.
 - KV pool increased from `6,675,527` fp8 tokens to `11,456,401` NVFP4 tokens (`1.716x`) in
   this no-prefix-cache launch.
+
+## 2026-06-09 32k Attempt
+
+Artifact:
+
+- `results/vllm_qwen_clean_ppl_20260609T0926JST_ctx32768_stop_point.md`
+
+Result: no accepted PPL row.
+
+Findings:
+
+- `scripts/build_ppl_corpus.py` generated a deterministic long markdown corpus from
+  existing campaign docs/tasks/results. The Qwen tokenizer counted `316301` tokens, enough
+  for 32k and 128k.
+- The first 32k runner attempt exposed a readiness bug: `docker exec` without `-i` made the
+  probe pass before the API was serving. `scripts/run_vllm_qwen_clean_ppl_pair.sh` now uses
+  `docker exec -i`.
+- After the readiness fix, the fp8 server reached model load, FlashInfer JIT, warmup, and
+  graph profiling, but the actual 32k supplied-token logprob request did not return before
+  SSH access to the host timed out.
+- Treat this as a runner/operational stop point, not an fp8-vs-NVFP4 quality result.
