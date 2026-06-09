@@ -434,6 +434,127 @@ def _run_prefill(torch: Any, flashinfer: Any, args: argparse.Namespace, layout: 
     return metrics
 
 
+def _torch_prefill_reference(
+    torch: Any, q: Any, k_seq: Any, v_seq: Any, causal: bool
+) -> Any:
+    """fp32 paged-prefill reference with FlashInfer's end-aligned causal mask.
+
+    Used by the VO-split probe because the single_prefill reference kernel
+    rejects head_dim_vo=512 at the same trait guard as the path under test.
+    """
+    qo_len, num_qo_heads, _ = q.shape
+    kv_len, num_kv_heads, _ = k_seq.shape
+    group = num_qo_heads // num_kv_heads
+    kf = k_seq.float().repeat_interleave(group, dim=1)
+    vf = v_seq.float().repeat_interleave(group, dim=1)
+    qf = q.float()
+    scores = torch.einsum("qhd,khd->hqk", qf, kf) / (q.shape[-1] ** 0.5)
+    if causal:
+        qpos = torch.arange(qo_len, device=q.device)[:, None]
+        kpos = torch.arange(kv_len, device=q.device)[None, :]
+        mask = kpos <= (kv_len - qo_len + qpos)
+        scores = scores.masked_fill(~mask[None], float("-inf"))
+    return torch.einsum("hqk,khd->qhd", torch.softmax(scores, dim=-1), vf)
+
+
+def _run_prefill_vo_split(
+    torch: Any, flashinfer: Any, args: argparse.Namespace, layout: str, dtype: Any
+):
+    if args.kv_container != "tuple":
+        raise ValueError("--vo-split requires --kv-container tuple (separate K/V)")
+    if args.head_dim % args.vo_split:
+        raise ValueError("--vo-split must divide --head-dim")
+    head_dim_vo = args.head_dim // args.vo_split
+    if head_dim_vo % 16:
+        raise ValueError("head_dim_vo must be a multiple of 16 (FP4 SF blocks)")
+
+    case = _make_case(torch, args, layout, dtype)
+    k_packed, v_packed = case["kv_cache"]
+    k_sf, v_sf = case["kv_cache_sf"]
+    q = torch.randn(
+        args.batch_size * args.qo_len,
+        args.num_qo_heads,
+        args.head_dim,
+        device="cuda:0",
+        dtype=dtype,
+    )
+    qo_indptr = (
+        torch.arange(args.batch_size + 1, device="cuda:0", dtype=torch.int32)
+        * args.qo_len
+    )
+
+    packed_step = head_dim_vo // 2  # packed bytes per VO slice
+    sf_step = head_dim_vo // 16  # FP8 block scales per VO slice
+    outs = []
+    split_stats = []
+    for split in range(args.vo_split):
+        workspace = torch.empty(256 * 1024 * 1024, dtype=torch.int8, device="cuda:0")
+        workspace.fill_(0x7F)
+        wrapper = flashinfer.prefill.BatchPrefillWithPagedKVCacheWrapper(
+            workspace, layout, backend="fa2"
+        )
+        wrapper.plan(
+            qo_indptr,
+            case["kv_indptr"],
+            case["kv_indices"],
+            case["last_page_len"],
+            args.num_qo_heads,
+            args.num_kv_heads,
+            args.head_dim,
+            args.page_size,
+            head_dim_vo=head_dim_vo,
+            causal=args.causal,
+            pos_encoding_mode="NONE",
+            logits_soft_cap=0.0,
+            kv_data_type=torch.uint8,
+            q_data_type=dtype,
+        )
+        # Deliberately non-contiguous VIEWS: identical strides to the full
+        # tensors (the wrapper asserts K/V stride equality); the slice is
+        # selected purely by base-pointer offset. Zero-copy. The SF slice
+        # commutes with the vLLM 4-block swizzle because sf_step is a
+        # multiple of 4 for head_dim_vo >= 64.
+        v_packed_half = v_packed[..., split * packed_step : (split + 1) * packed_step]
+        v_sf_half = v_sf[..., split * sf_step : (split + 1) * sf_step]
+        out = wrapper.run(
+            q,
+            (k_packed, v_packed_half),
+            k_scale=case["k_scale"].item(),
+            v_scale=case["v_scale"].item(),
+            kv_cache_sf=(k_sf, v_sf_half),
+        )
+        outs.append(out)
+        split_stats.append(_tensor_stats(torch, out))
+    actual = torch.cat(outs, dim=-1)
+
+    refs = []
+    indptr = case["kv_indptr"].cpu()
+    last_lens = case["last_page_len"].cpu()
+    qo_cpu = qo_indptr.cpu()
+    for i in range(args.batch_size):
+        qi = q[int(qo_cpu[i]) : int(qo_cpu[i + 1])]
+        start = int(indptr[i])
+        stop = int(indptr[i + 1])
+        last_len = int(last_lens[i])
+        ki = _gather_sequence(torch, case["k_dq"], layout, start, stop, last_len)
+        vi = _gather_sequence(torch, case["v_dq"], layout, start, stop, last_len)
+        refs.append(_torch_prefill_reference(torch, qi, ki, vi, args.causal))
+    expected = torch.cat(refs, dim=0)
+    metrics = _metrics(torch, actual, expected)
+    metrics.update(
+        {
+            "vo_split": args.vo_split,
+            "head_dim_vo": head_dim_vo,
+            "split_output_stats": split_stats,
+            "actual_stats": _tensor_stats(torch, actual),
+            "expected_stats": _tensor_stats(torch, expected),
+            "k_scale": float(case["k_scale"].item()),
+            "v_scale": float(case["v_scale"].item()),
+        }
+    )
+    return metrics
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     _ensure_deswizzle_flag(args.v_scale_layout == "swizzled" and not args.no_deswizzle_flag)
     _add_local_imports()
@@ -452,9 +573,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is required for the FlashInfer NVFP4 KV probe.")
 
+    if args.vo_split > 1:
+        operations = (("prefill_vo_split", _run_prefill_vo_split),)
+    else:
+        operations = (("decode", _run_decode), ("prefill", _run_prefill))
+
     results = []
     for layout in args.layouts:
-        for op_name, op in (("decode", _run_decode), ("prefill", _run_prefill)):
+        for op_name, op in operations:
             started = time.perf_counter()
             item = {
                 "operation": op_name,
@@ -550,6 +676,18 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--max-abs-threshold", type=float, default=0.25)
     parser.add_argument("--no-deswizzle-flag", action="store_true")
+    parser.add_argument(
+        "--vo-split",
+        type=int,
+        default=1,
+        help=(
+            "Run paged prefill as N passes with head_dim_vo = head_dim / N "
+            "(asymmetric QK/VO pair), concatenating outputs. Exercises the "
+            "D=512 VO-split plan (K1) under NVFP4 KV. Uses a pure-torch "
+            "reference because the single_prefill reference kernel hits the "
+            "same head-dim trait guard. Skips the decode operation."
+        ),
+    )
     return parser.parse_args()
 
 
