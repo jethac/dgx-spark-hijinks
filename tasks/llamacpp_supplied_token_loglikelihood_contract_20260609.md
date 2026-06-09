@@ -78,9 +78,10 @@ The `zebra_unlikely` row is the guard against silently shipping a top-N adapter.
 ## Allowed Implementation Routes
 
 1. Newer stock llama.cpp pin:
-   - run `scripts/gguf_logprobs_probe.py` against `/v1/completions`;
-   - convert the max0/max1 probe artifacts with
-     `scripts/llamacpp_echo_logprobs_to_contract.py`;
+   - run `scripts/llamacpp_echo_logprobs_contract_runner.py` against `/v1/completions`;
+   - it probes every row in `tasks/llamacpp_loglikelihood_smoke.jsonl` with both
+     `max_tokens=0` and `max_tokens=1`;
+   - it converts the probe artifacts with `scripts/llamacpp_echo_logprobs_to_contract.py`;
    - pass only if echoed prompt `tokens` and `token_logprobs` cover the continuation span
      and the converted artifact passes `scripts/llamacpp_loglikelihood_contract_audit.py`.
 2. Bounded full-vocabulary practicality probe:
@@ -129,22 +130,19 @@ Known-red checks:
 
 Expected queue artifacts for the newer-stock echo probe:
 
-- `results/${RUN_ID}_max0.json`
-- `results/${RUN_ID}_max1.json`
+- `results/${RUN_ID}_echo_probe_manifest.json`
+- `results/${RUN_ID}_${case}_max0.json`
+- `results/${RUN_ID}_${case}_max1.json`
 - `results/${RUN_ID}_contract_artifact.json`
 - `results/${RUN_ID}_contract_audit.json`
 
-Bridge the newer-stock max0/max1 probes into the contract artifact:
+Run and bridge all newer-stock echo probes into the contract artifact:
 
 ```bash
-python3 scripts/llamacpp_echo_logprobs_to_contract.py \
+python3 scripts/llamacpp_echo_logprobs_contract_runner.py \
+  --url http://127.0.0.1:18085 \
+  --model qwen25-logprob-newer \
+  --run-id ${RUN_ID} \
   --input tasks/llamacpp_loglikelihood_smoke.jsonl \
-  --probe results/${RUN_ID}_max0.json \
-  --probe results/${RUN_ID}_max1.json \
-  --output results/${RUN_ID}_contract_artifact.json
-
-python3 scripts/llamacpp_loglikelihood_contract_audit.py \
-  --artifact results/${RUN_ID}_contract_artifact.json \
-  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
-  --output results/${RUN_ID}_contract_audit.json
+  --results-dir results
 ```

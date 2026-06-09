@@ -355,6 +355,6 @@ Result:
 
 Next decision:
 
-- Try one newer llama.cpp server pin with the same `scripts/gguf_logprobs_probe.py` echo-span check.
-- Pass condition: returned prompt-token logprobs cover the supplied continuation tokens `[1147, 50213]`.
+- Try one newer llama.cpp server pin with `scripts/llamacpp_echo_logprobs_contract_runner.py`, which probes every smoke row at both `max_tokens=0` and `max_tokens=1`.
+- Pass condition: the bridged contract artifact returns prompt-token logprobs for every supplied continuation token, including `[1147, 50213]` for the zebra row, and passes `scripts/llamacpp_loglikelihood_contract_audit.py`.
 - If the newest pin still exposes generated-token `logprobs.content` only, stop probing stock endpoints and use a `jethac/llama.cpp` endpoint fork for direct supplied-token loglikelihood.

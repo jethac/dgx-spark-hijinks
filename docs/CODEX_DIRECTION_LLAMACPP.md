@@ -211,38 +211,32 @@ artifact directory before accepting the row.
 **Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
 endpoint, use `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md` as the
-acceptance contract and run **one newer-pin echo-span probe** with
-`scripts/gguf_logprobs_probe.py`:
-start a newer `llama-server` manually, then probe:
+acceptance contract and run the full newer-pin echo-span smoke with
+`scripts/llamacpp_echo_logprobs_contract_runner.py`:
+start a newer `llama-server` manually, then probe every smoke row:
 
 ```bash
-python3 scripts/gguf_logprobs_probe.py \
+RUN_ID=llamacpp_newer_echo_logprobs_$(date +%Y%m%dT%H%MJST)
+python3 scripts/llamacpp_echo_logprobs_contract_runner.py \
   --url http://127.0.0.1:18085 \
   --model qwen25-logprob-newer \
-  --context "The capital of Japan is" \
-  --continuation " zebra" \
-  --max-tokens 0 \
-  --output results/llamacpp_newer_echo_logprobs_max0.json
-
-python3 scripts/gguf_logprobs_probe.py \
-  --url http://127.0.0.1:18085 \
-  --model qwen25-logprob-newer \
-  --context "The capital of Japan is" \
-  --continuation " zebra" \
-  --max-tokens 1 \
-  --output results/llamacpp_newer_echo_logprobs_max1.json
+  --run-id "${RUN_ID}" \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --results-dir results
 ```
 
-Pass condition: prompt `tokens` and `token_logprobs` cover continuation token ids
-`[1147, 50213]`. Bridge the max0/max1 artifacts with
-`scripts/llamacpp_echo_logprobs_to_contract.py`, then audit the converted artifact with
-`scripts/llamacpp_loglikelihood_contract_audit.py`. The pinned `b9536` artifacts are
-known-red through this path because they return generated-token `logprobs.content`, not
-prompt `tokens` / `token_logprobs`. If the newer pin still returns only generated-token
-`choices[0].logprobs.content`, do not keep tuning top-N. Either run one bounded
-full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or move
-directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named worktree
-for a direct supplied-token loglikelihood endpoint.
+Pass condition: the generated contract audit is green for all rows in
+`tasks/llamacpp_loglikelihood_smoke.jsonl`, including continuation token ids `[1147, 50213]`
+for the zebra case. The runner writes per-case max0/max1 probes, bridges them with
+`scripts/llamacpp_echo_logprobs_to_contract.py`, and audits the converted artifact with
+`scripts/llamacpp_loglikelihood_contract_audit.py`. The bridge now prefers whichever
+duplicate max0/max1 probe actually exposes prompt-token logprobs. The pinned `b9536`
+artifacts are known-red through this path because they return generated-token
+`logprobs.content`, not prompt `tokens` / `token_logprobs`. If the newer pin still returns
+only generated-token `choices[0].logprobs.content`, do not keep tuning top-N. Either run
+one bounded full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or
+move directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named
+worktree for a direct supplied-token loglikelihood endpoint.
 
 Native FP4 can run in parallel as a separate lane after this docs stop point: set up
 `jethac/llama.cpp` off a recent master ref, build on GB10, and use cuobjdump/runtime

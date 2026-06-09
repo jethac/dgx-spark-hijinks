@@ -13,7 +13,7 @@ python3 scripts/counterpart_task_matrix.py \
   --output results/counterpart_task_matrix_20260608.json
 ```
 
-Current validation artifact: `results/counterpart_task_matrix_20260608.json`.
+Current validation artifact: `results/counterpart_task_matrix_20260609.json`.
 
 ## Rules
 
@@ -35,5 +35,6 @@ Current validation artifact: `results/counterpart_task_matrix_20260608.json`.
 | `llamacpp_larger_qwen_gguf` | llama.cpp | Qwen3/Qwen3.6 GGUF practical serving row |
 | `llamacpp_native_fp4_gguf` | llama.cpp | NVFP4/MXFP4 GGUF row with native FP4 dispatch evidence |
 | `llamacpp_live_loglikelihood` | llama.cpp | direct/full-vocabulary native logprob path after both the live top-512 task and pinned-b9536 OpenAI echo probe failed to expose supplied-token logprobs |
+| `llamacpp_newer_echo_logprobs` | llama.cpp | newer-stock `llama-server` echo probe over every smoke row via `scripts/llamacpp_echo_logprobs_contract_runner.py` before accepting or forking a native endpoint |
 
 The source of truth for commands is `tasks/counterpart_evidence_tasks.jsonl`.

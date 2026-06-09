@@ -40,6 +40,10 @@ def is_number(value: Any) -> bool:
     return isinstance(value, (int, float)) and math.isfinite(float(value))
 
 
+def numbers_close(left: Any, right: Any, *, atol: float = 1e-5) -> bool:
+    return is_number(left) and is_number(right) and abs(float(left) - float(right)) <= atol
+
+
 def case_id(case: dict[str, Any]) -> str | None:
     for key in ("id", "case"):
         value = case.get(key)
@@ -75,6 +79,8 @@ def audit_case(case: dict[str, Any], expected: dict[str, Any] | None) -> dict[st
     continuation_ids = token_ids(
         case.get("continuation_token_ids", case.get("continuation_tokens"))
     )
+    expected_sum: float | None = None
+    expected_all_greedy: bool | None = None
 
     direct_entries = direct_logprob_entries(case)
     if direct_entries:
@@ -83,9 +89,20 @@ def audit_case(case: dict[str, Any], expected: dict[str, Any] | None) -> dict[st
             for entry in direct_entries
             if isinstance(entry.get("token_id"), int)
         ]
+        if len(direct_entries) != len(continuation_ids):
+            findings.append(
+                "direct logprob entry count does not match continuation token count "
+                f"({len(direct_entries)} != {len(continuation_ids)})"
+            )
+        if continuation_ids and entry_ids[: len(continuation_ids)] != continuation_ids:
+            findings.append(
+                f"direct logprob token ids are not in continuation order: {entry_ids}"
+            )
         missing_ids = [token_id for token_id in continuation_ids if token_id not in entry_ids]
         if missing_ids:
             findings.append(f"missing direct logprob entries for token ids {missing_ids}")
+        direct_logprobs: list[float] = []
+        direct_greedy: list[bool] = []
         for entry in direct_entries:
             if not isinstance(entry.get("token_id"), int):
                 findings.append("direct logprob entry missing token_id")
@@ -93,30 +110,75 @@ def audit_case(case: dict[str, Any], expected: dict[str, Any] | None) -> dict[st
                 findings.append(
                     f"token {entry.get('token_id', '<unknown>')} has non-finite logprob"
                 )
+            else:
+                direct_logprobs.append(float(entry["logprob"]))
             if not isinstance(entry.get("is_greedy"), bool):
                 findings.append(
                     f"token {entry.get('token_id', '<unknown>')} missing boolean is_greedy"
                 )
+            else:
+                direct_greedy.append(bool(entry["is_greedy"]))
+        if len(direct_logprobs) == len(direct_entries):
+            expected_sum = sum(direct_logprobs)
+        if len(direct_greedy) == len(direct_entries) and direct_entries:
+            expected_all_greedy = all(direct_greedy)
     else:
         scored = case.get("scored_tokens")
         if not isinstance(scored, list) or not scored:
             findings.append("no continuation_token_logprobs or scored_tokens present")
         else:
+            scored_ids: list[int] = []
+            scored_logprobs: list[float] = []
+            scored_greedy: list[bool] = []
             for item in scored:
                 if not isinstance(item, dict):
                     findings.append("scored_tokens contains a non-object entry")
                     continue
+                if isinstance(item.get("target_id"), int):
+                    scored_ids.append(int(item["target_id"]))
                 if item.get("target_found") is not True:
                     findings.append(f"target token {item.get('target_id')} was not scored")
                 if not is_number(item.get("target_logprob")):
                     findings.append(
                         f"target token {item.get('target_id')} has non-finite logprob"
                     )
+                else:
+                    scored_logprobs.append(float(item["target_logprob"]))
+                if not isinstance(item.get("target_is_greedy"), bool):
+                    findings.append(
+                        f"target token {item.get('target_id')} missing boolean target_is_greedy"
+                    )
+                else:
+                    scored_greedy.append(bool(item["target_is_greedy"]))
+            if len(scored) != len(continuation_ids):
+                findings.append(
+                    "scored_tokens count does not match continuation token count "
+                    f"({len(scored)} != {len(continuation_ids)})"
+                )
+            if continuation_ids and scored_ids[: len(continuation_ids)] != continuation_ids:
+                findings.append(f"scored token ids are not in continuation order: {scored_ids}")
+            missing_ids = [token_id for token_id in continuation_ids if token_id not in scored_ids]
+            if missing_ids:
+                findings.append(f"missing scored_tokens entries for token ids {missing_ids}")
+            if len(scored_logprobs) == len(scored):
+                expected_sum = sum(scored_logprobs)
+            if len(scored_greedy) == len(scored) and scored:
+                expected_all_greedy = all(scored_greedy)
 
     if not is_number(case.get("target_logprob_sum")):
         findings.append("target_logprob_sum is missing or non-finite")
+    elif expected_sum is not None and not numbers_close(case.get("target_logprob_sum"), expected_sum):
+        findings.append(
+            "target_logprob_sum does not equal sum of continuation token logprobs "
+            f"({case.get('target_logprob_sum')} != {expected_sum})"
+        )
     if not isinstance(case.get("all_tokens_greedy"), bool):
         findings.append("all_tokens_greedy is missing or not boolean")
+    elif expected_all_greedy is not None and case.get("all_tokens_greedy") != expected_all_greedy:
+        findings.append(
+            "all_tokens_greedy does not equal per-token greedy conjunction "
+            f"({case.get('all_tokens_greedy')} != {expected_all_greedy})"
+        )
 
     tuple_value = case.get("lm_eval_loglikelihood_tuple")
     if (
@@ -126,6 +188,11 @@ def audit_case(case: dict[str, Any], expected: dict[str, Any] | None) -> dict[st
         or not isinstance(tuple_value[1], bool)
     ):
         findings.append("lm_eval_loglikelihood_tuple is not [finite_number, bool]")
+    else:
+        if is_number(case.get("target_logprob_sum")) and not numbers_close(tuple_value[0], case["target_logprob_sum"]):
+            findings.append("lm_eval tuple logprob does not match target_logprob_sum")
+        if isinstance(case.get("all_tokens_greedy"), bool) and tuple_value[1] != case["all_tokens_greedy"]:
+            findings.append("lm_eval tuple greedy flag does not match all_tokens_greedy")
 
     if expected is not None:
         expected_greedy = expected.get("expected_greedy")

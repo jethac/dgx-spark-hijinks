@@ -187,7 +187,10 @@ def build_report(task_rows: list[dict[str, Any]], probe_paths: list[Path]) -> di
     probes = [(path, read_json(path)) for path in probe_paths]
     probes_by_key: dict[tuple[str, str], tuple[Path, dict[str, Any]]] = {}
     for path, probe in probes:
-        probes_by_key.setdefault(probe_key(probe), (path, probe))
+        key = probe_key(probe)
+        existing = probes_by_key.get(key)
+        if existing is None or probe_contract_score(probe) > probe_contract_score(existing[1]):
+            probes_by_key[key] = (path, probe)
 
     cases: list[dict[str, Any]] = []
     for task in task_rows:
@@ -228,6 +231,25 @@ def build_report(task_rows: list[dict[str, Any]], probe_paths: list[Path]) -> di
         },
         "ok": ok,
     }
+
+
+def probe_contract_score(probe: dict[str, Any]) -> tuple[int, int, int, int]:
+    classification = probe.get("classification") if isinstance(probe.get("classification"), dict) else {}
+    logprobs = extract_logprobs(probe.get("response") if isinstance(probe.get("response"), dict) else {})
+    token_logprobs = logprobs.get("token_logprobs")
+    tokens = logprobs.get("tokens")
+    tokenization = probe.get("tokenization") if isinstance(probe.get("tokenization"), dict) else {}
+    expected_prompt_tokens = tokenization.get("expected_prompt_tokens")
+    if not isinstance(expected_prompt_tokens, int):
+        expected_prompt_tokens = 0
+    token_count = len(token_logprobs) if isinstance(token_logprobs, list) else 0
+    has_prompt_logprobs = isinstance(tokens, list) and isinstance(token_logprobs, list)
+    return (
+        1 if has_prompt_logprobs else 0,
+        1 if token_count >= expected_prompt_tokens > 0 else 0,
+        1 if classification.get("looks_lm_eval_compatible") is True else 0,
+        token_count,
+    )
 
 
 def main() -> int:
