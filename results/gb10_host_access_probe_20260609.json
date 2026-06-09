@@ -1,0 +1,107 @@
+{
+  "commands": {
+    "ssh_probe": {
+      "cmd": [
+        "C:\\WINDOWS\\System32\\OpenSSH\\ssh.EXE",
+        "-o",
+        "ConnectTimeout=8",
+        "-o",
+        "BatchMode=yes",
+        "-p",
+        "22",
+        "jethac@100.113.98.11",
+        "hostname && date"
+      ],
+      "elapsed_s": 8.038233599974774,
+      "returncode": 255,
+      "stderr": "ssh: connect to host 100.113.98.11 port 22: Connection timed out",
+      "stdout": ""
+    },
+    "tailscale_ping": {
+      "cmd": [
+        "C:\\Program Files\\Tailscale\\tailscale.EXE",
+        "ping",
+        "--c",
+        "1",
+        "--timeout=5s",
+        "100.113.98.11"
+      ],
+      "elapsed_s": 5.0224649999290705,
+      "returncode": 1,
+      "stderr": "no reply",
+      "stdout": "ping \"100.113.98.11\" timed out"
+    },
+    "tailscale_status_json": {
+      "cmd": [
+        "C:\\Program Files\\Tailscale\\tailscale.EXE",
+        "status",
+        "--json"
+      ],
+      "elapsed_s": 0.02438979991711676,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "<redacted; target peer summary recorded separately>"
+    },
+    "tailscale_status_text": {
+      "cmd": [
+        "C:\\Program Files\\Tailscale\\tailscale.EXE",
+        "status"
+      ],
+      "elapsed_s": 0.02300190005917102,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "<redacted; target peer summary recorded separately>"
+    }
+  },
+  "findings": [
+    "INFO: Tailscale control plane lists target thinkstationpgx-00b4 online=True active=True relay=tok tx=93288 rx=0.",
+    "WARN: Tailscale peer rx_bytes is 0; this looks like one-way reachability.",
+    "WARN: tailscale ping did not reach the target.",
+    "WARN: TCP/22 is not reachable."
+  ],
+  "finished_utc": "2026-06-09T02:19:14Z",
+  "peer": {
+    "active": true,
+    "cur_addr": "",
+    "dns_name": "thinkstationpgx-00b4.tail740c8d.ts.net.",
+    "host_name": "thinkstationpgx-00b4",
+    "last_seen": "2026-06-08T20:20:47.1Z",
+    "online": true,
+    "os": "linux",
+    "relay": "tok",
+    "rx_bytes": 0,
+    "tailscale_ips": [
+      "100.113.98.11",
+      "fd7a:115c:a1e0::1638:620c"
+    ],
+    "tx_bytes": 93288
+  },
+  "platform": {
+    "executable": "C:\\Program Files\\Python311\\python.exe",
+    "machine": "AMD64",
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "system": "Windows"
+  },
+  "schema": "gb10-host-access-probe/v1",
+  "started_utc": "2026-06-09T02:18:53Z",
+  "tailscale": {
+    "available": true,
+    "path": "C:\\Program Files\\Tailscale\\tailscale.EXE"
+  },
+  "target": {
+    "host": "100.113.98.11",
+    "name": "",
+    "ssh_port": 22,
+    "ssh_user": "jethac"
+  },
+  "tcp": {
+    "ssh": {
+      "elapsed_s": 8.019485999946482,
+      "error": "TimeoutError('timed out')",
+      "host": "100.113.98.11",
+      "ok": false,
+      "port": 22
+    }
+  },
+  "usable_for_live_work": false
+}

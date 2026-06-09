@@ -77,6 +77,19 @@ python3 scripts/live_task_queue_audit.py \
   --output results/live_task_queue_audit_20260609.json
 ```
 
+Run this from the Windows workspace before any live task to prove the control path is usable:
+
+```powershell
+python scripts\gb10_host_access_probe.py `
+  --host 100.113.98.11 `
+  --ssh-user jethac `
+  --output-json results\gb10_host_access_probe_RUN_ID.json `
+  --output-md results\gb10_host_access_probe_RUN_ID.md
+```
+
+The current checked-in probe is `results/gb10_host_access_probe_20260609.md`; it records
+`usable_for_live_work=false`.
+
 ## Highest-Leverage Next Proofs
 
 Live GB10 required:

@@ -11,21 +11,24 @@ Machine scope: one Spark-class GB10 system, compute capability `12.1` / `sm_121`
 Current control-plane state from this workspace:
 
 - Tailnet IP: `100.113.98.11`
-- Tailnet name: `thinkstationpgx-00b4`
-- Latest observed state: listed as active via relay, but `tailscale ping` and TCP/22 time
-  out with `rx 0`.
+- Latest observed state: listed as active via relay, but `tailscale ping`, TCP/22, and
+  SSH time out with `rx 0`.
+- Latest probe artifact: `results/gb10_host_access_probe_20260609.md`.
 
 ## Preflight
 
 Run from the Windows workspace before attempting live work:
 
 ```powershell
-tailscale status | Select-String "100.113.98.11|thinkstation"
-tailscale ping --c 1 --timeout=5s 100.113.98.11
-Test-NetConnection 100.113.98.11 -Port 22 -InformationLevel Detailed
+python scripts\gb10_host_access_probe.py `
+  --host 100.113.98.11 `
+  --ssh-user jethac `
+  --output-json results\gb10_host_access_probe_RUN_ID.json `
+  --output-md results\gb10_host_access_probe_RUN_ID.md
 ```
 
-If ping or TCP/22 fails, do not start a live run. Continue offline repo work instead.
+Proceed only when `usable_for_live_work` is `true`. If Tailscale ping, TCP/22, or SSH
+fails, do not start a live run. Continue offline repo work instead.
 
 When SSH is reachable, run the queue audit before picking work:
 

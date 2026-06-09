@@ -40,7 +40,7 @@
       "plan_ids": [
         "13"
       ],
-      "status": "in progress"
+      "status": "`spark_doctor` plus sanitized Tailscale/TCP/SSH host-access probe are in place; current tailnet artifact records the node visible but not usable for live work"
     },
     {
       "area": "vLLM Spark runtime path",

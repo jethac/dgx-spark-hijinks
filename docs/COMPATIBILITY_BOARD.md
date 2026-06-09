@@ -10,11 +10,11 @@ Live execution runbook: `docs/LIVE_GB10_RUNBOOK.md`.
 Machine-readable queue: `tasks/live_gb10_queue.jsonl`.
 Queue audit: `results/live_task_queue_audit_20260609.json`.
 
-Latest reachability evidence: `results/gb10_host_access_20260609_tailnet_stop_point.md`.
-The GB10 node resolved to `100.113.98.11`; it briefly answered Tailscale ping during the
-session, then the final check timed out on Tailscale ping and TCP/22 returned `False`.
-Live validation is queued, but SSH is not currently a usable control path from this
-workspace.
+Latest reachability evidence: `results/gb10_host_access_probe_20260609.md`.
+The GB10 node is visible in the Tailscale control plane at `100.113.98.11`, but the
+sanitized probe records `usable_for_live_work=false`: Tailscale ping times out, TCP/22
+times out, SSH times out, and the peer reports relay traffic with `rx 0`. Live validation is
+queued, but SSH is not currently a usable control path from this workspace.
 
 ## Latest Deltas
 

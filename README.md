@@ -48,6 +48,19 @@ Next vLLM proof lane: AEON Gemma and AEON Qwen3.6 NVFP4+DFlash are now locally r
 
 ## First Commands
 
+Before starting live work from this Windows workspace, check that the GB10 host is actually
+usable over Tailscale and SSH:
+
+```powershell
+python scripts\gb10_host_access_probe.py `
+  --host 100.113.98.11 `
+  --ssh-user jethac `
+  --output-json results\gb10_host_access_probe_RUN_ID.json `
+  --output-md results\gb10_host_access_probe_RUN_ID.md
+```
+
+Proceed with live tasks only when `usable_for_live_work` is `true`.
+
 Run these on the Spark-class GB10 host:
 
 ```bash
