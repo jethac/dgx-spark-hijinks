@@ -18,6 +18,7 @@ Next vLLM proof lane: AEON Gemma and AEON Qwen3.6 NVFP4+DFlash are now locally r
 - Full solution plan: [docs/DGX_SPARK_SOLUTIONS.md](docs/DGX_SPARK_SOLUTIONS.md)
 - Solution status: [docs/SOLUTIONS_STATUS.md](docs/SOLUTIONS_STATUS.md)
 - Compatibility board: [docs/COMPATIBILITY_BOARD.md](docs/COMPATIBILITY_BOARD.md)
+- Live GB10 runbook: [docs/LIVE_GB10_RUNBOOK.md](docs/LIVE_GB10_RUNBOOK.md)
 - Gemma compatibility plan (3 → 3n → 4 ladder): [docs/GEMMA_COMPATIBILITY_PLAN.md](docs/GEMMA_COMPATIBILITY_PLAN.md)
 - Wheel/container matrix: [docs/WHEEL_CONTAINER_MATRIX.md](docs/WHEEL_CONTAINER_MATRIX.md)
 - Initial benchmark report: [docs/BENCHMARKING_REPORT.md](docs/BENCHMARKING_REPORT.md)
@@ -181,6 +182,14 @@ python3 scripts/counterpart_task_matrix.py \
   --tasks tasks/counterpart_evidence_tasks.jsonl \
   --audit results/counterpart_evidence_audit_RUN_ID.json \
   --output results/counterpart_task_matrix_RUN_ID.json
+```
+
+To verify the ordered live queue before using the GB10 host:
+
+```bash
+python3 scripts/live_task_queue_audit.py \
+  --queue tasks/live_gb10_queue.jsonl \
+  --output results/live_task_queue_audit_RUN_ID.json
 ```
 
 To reproduce AEON-7's vLLM NVFP4+DFlash rows:

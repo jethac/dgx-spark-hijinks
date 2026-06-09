@@ -6,6 +6,10 @@ Purpose: one public, recurring status view for the Spark-class GB10 local-AI sta
 
 Hardware scope: single Spark-class GB10 system, compute capability `12.1` / `sm_121`. Multi-Spark and TP>1 remain unvalidated.
 
+Live execution runbook: `docs/LIVE_GB10_RUNBOOK.md`.
+Machine-readable queue: `tasks/live_gb10_queue.jsonl`.
+Queue audit: `results/live_task_queue_audit_20260609.json`.
+
 Latest reachability evidence: `results/gb10_host_access_20260609_tailnet_stop_point.md`.
 The GB10 node resolved to `100.113.98.11`; it briefly answered Tailscale ping during the
 session, then the final check timed out on Tailscale ping and TCP/22 returned `False`.
@@ -61,7 +65,17 @@ workspace.
 
 ## Live Proof Queue
 
-Run these when the GB10 host is reachable.
+Run these when the GB10 host is reachable. The ordered source of truth is now
+`tasks/live_gb10_queue.jsonl`; validate it with:
+
+```bash
+python3 scripts/live_task_queue_audit.py \
+  --queue tasks/live_gb10_queue.jsonl \
+  --output results/live_task_queue_audit_YYYYMMDDTHHMMJST.json
+```
+
+The human runbook is `docs/LIVE_GB10_RUNBOOK.md`. The older subsections below remain as
+context for specific rows, not as an override for queue priority.
 
 ### vLLM Qwen36 NVFP4+DFlash
 

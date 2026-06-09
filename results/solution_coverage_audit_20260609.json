@@ -81,7 +81,7 @@
       "plan_ids": [
         "12"
       ],
-      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, MTP/spec-decode wrapping, counterpart task matrix, and ordered live GB10 task queue exist"
+      "status": "smoke-suite orchestrator, Qwen speed lane, HF telemetry, MTP/spec-decode wrapping, counterpart task matrix, ordered live GB10 task queue, and live runbook exist"
     },
     {
       "area": "public recipes and blessed stack docs",
