@@ -20,7 +20,14 @@ from typing import Any
 from spark_hardware import collect_cuda_hardware
 
 
-def post_json(url: str, payload: dict[str, Any], timeout: int) -> dict[str, Any]:
+def post_json(
+    url: str,
+    payload: dict[str, Any],
+    timeout: int,
+    *,
+    attempts: int,
+    retry_sleep_s: float,
+) -> dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url,
@@ -28,8 +35,17 @@ def post_json(url: str, payload: dict[str, Any], timeout: int) -> dict[str, Any]
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    errors = []
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except (TimeoutError, urllib.error.URLError) as exc:
+            errors.append(f"attempt {attempt}/{attempts}: {exc!r}")
+            if attempt == attempts:
+                break
+            time.sleep(retry_sleep_s)
+    raise TimeoutError("; ".join(errors))
 
 
 def key_matches_token_id(key: Any, token_id: int) -> bool:
@@ -171,7 +187,13 @@ def run_context(args: argparse.Namespace, token_ids: list[int], ctx: int) -> dic
         prompt_logprobs=args.prompt_logprobs,
     )
     started = time.perf_counter()
-    response = post_json(endpoint, payload, args.timeout)
+    response = post_json(
+        endpoint,
+        payload,
+        args.timeout,
+        attempts=args.request_attempts,
+        retry_sleep_s=args.retry_sleep_s,
+    )
     elapsed_s = time.perf_counter() - started
     score = score_response(response, ctx_tokens)
     return {
@@ -311,6 +333,8 @@ def main() -> int:
     parser.add_argument("--max-tokens", type=int, default=1)
     parser.add_argument("--prompt-logprobs", type=int, default=1)
     parser.add_argument("--timeout", type=int, default=3600)
+    parser.add_argument("--request-attempts", type=int, default=3)
+    parser.add_argument("--retry-sleep-s", type=float, default=10.0)
     parser.add_argument("--add-special-tokens", action="store_true")
     parser.add_argument("--output")
     parser.add_argument("--compare-fp8")
