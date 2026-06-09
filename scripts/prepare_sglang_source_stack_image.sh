@@ -61,26 +61,7 @@ pathlib.Path("/work/'"${summary#${REPO_ROOT}/}"'").write_text(json.dumps(out, in
 print(json.dumps(out, indent=2, sort_keys=True))
 PY
 
-python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache sglang-kernel || true
-rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer \
-       /usr/local/lib/python3.12/dist-packages/flashinfer_python-*.dist-info \
-       /usr/local/lib/python3.12/dist-packages/flashinfer_cubin* \
-       /usr/local/lib/python3.12/dist-packages/flashinfer_jit_cache* \
-       /usr/local/lib/python3.12/dist-packages/sgl_kernel \
-       /usr/local/lib/python3.12/dist-packages/sglang_kernel-*.dist-info \
-       /root/.cache/flashinfer || true
-
-python3 -m pip install --upgrade --no-deps "nvidia-cutlass-dsl[cu13]>=4.5.0" scikit-build-core ninja cmake wheel
-python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/flashinfer
-
-cd /work/third_party/sglang/sgl-kernel
-CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}" \
-MAX_JOBS="${MAX_JOBS:-2}" \
-CMAKE_ARGS="${CMAKE_ARGS:--DSGL_KERNEL_COMPILE_THREADS=1 -DENABLE_BELOW_SM90=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSGL_KERNEL_BUILD_SM90=OFF -DSGL_KERNEL_BUILD_SM100=ON -DSGL_KERNEL_ENABLE_FA3=OFF -DSGL_KERNEL_ENABLE_FLASHMLA=OFF -DSGL_KERNEL_ENABLE_SPATIAL=OFF}" \
-python3 -m pip install --no-deps --no-build-isolation -v .
-
-cd /work
-python3 -m pip install --no-deps --no-build-isolation -e /work/third_party/sglang/python
+REPO_ROOT=/work bash /work/scripts/install_sglang_source_stack.sh
 
 python3 - <<PY
 import glob, importlib.metadata as md, json, pathlib, sgl_kernel, torch
