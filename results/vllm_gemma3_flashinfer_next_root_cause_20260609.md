@@ -64,3 +64,9 @@ Recommended next patch points:
 Useful isolation patch: a debug-only paged-prefill mode that forces FP4 V through a simple
 dequant-to-BF16 staging path before `compute_sfm_v`. If live output becomes sane, the bug
 is in the direct FP4 V fragment path rather than vLLM metadata or wrapper planning.
+
+Follow-up patch staged in `jethac/flashinfer` branch `spark/hijinks-021-prefill-debug`
+commit `1230341d`: `FLASHINFER_PREFILL_DEBUG_ONCE=1` now adds one-shot C++ host-side
+identity logging in `batch_prefill.cu` plus generated JIT metadata stamps in
+`batch_prefill_customize_config.jinja`. Run packet:
+`tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`.
