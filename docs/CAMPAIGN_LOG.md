@@ -1069,6 +1069,15 @@
   - added Docker cgroup caps (`GB10_DOCKER_MEMORY=100g`, `GB10_DOCKER_MEMORY_SWAP=100g`) to active vLLM and SGLang serving/debug runners.
   - kept matched comparator runs sequential where the runner already does that; future packets must not run two large fp8/nvfp4 servers concurrently on the shared memory pool.
 
+- Ran the follow-up vLLM Gemma 3 FlashInfer binding-fix probe under the new memory rules.
+  - artifact: `results/vllm_gemma3_flashinfer_binding_fix_20260609T1518JST_summary.md`
+  - run checkout: temp Spark checkout with `jethac/vllm@1fabc6649` and `jethac/flashinfer@96be2fa8`
+  - image: `jethac-vllm-aeon-q36:a919d635d-cleanfa2-patchedfa2-cutlass`
+  - safety: single server, `MAX_MODEL_LEN=4096`, `MAX_NUM_BATCHED_TOKENS=1024`, vLLM memory fraction `0.72`, Docker `100g` cgroup cap; host returned to ~115 GiB available after teardown.
+  - positive: the pre-serve import probe now maps `torch.uint8` KV to `__nv_fp4x2_e2m1` in both FlashInfer JIT dtype tables and names the safe URI component `fp4x2_e2m1`.
+  - red result: serving output remains corrupt (` Reigns`, Gujarati token, `ioane`), and the worker-side paged-prefill debug lines still show `dtype_kv=uint8_t`, `fp4_kv=0`, `require_fp4_kv=0`, empty `module_uri`, and no scale tensors.
+  - interpretation: the import path can be patched, but the actual EngineCore paged-prefill binding path still resolves a stale/raw-byte generator or cached module. The next fix must instrument/force the worker-side FlashInfer binding path before returning to FA2 math, SWA reuse, or quality-gate work.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

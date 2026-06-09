@@ -102,6 +102,8 @@ VLLM_USE_PRECOMPILED=1 VLLM_MAIN_CUDA_VERSION=13.0 VLLM_PRECOMPILED_WHEEL_COMMIT
 cp /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so /vllm-src/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so
 python3 - <<'"'"'PY'"'"' > /results/'"${RUN}"'_import_probe.txt 2>&1
 import json, torch, transformers, vllm, flashinfer
+import flashinfer.jit.attention.modules as flashinfer_attention_modules
+import flashinfer.jit.utils as flashinfer_jit_utils
 import vllm.vllm_flash_attn._vllm_fa2_C as fa2_ext
 print(json.dumps({
   "vllm": getattr(vllm, "__version__", None),
@@ -109,6 +111,9 @@ print(json.dumps({
   "vllm_fa2": getattr(fa2_ext, "__file__", None),
   "flashinfer": getattr(flashinfer, "__version__", None),
   "flashinfer_file": getattr(flashinfer, "__file__", None),
+  "flashinfer_dtype_map_kv_uint8": flashinfer_jit_utils.dtype_map_kv.get(torch.uint8),
+  "flashinfer_attention_dtype_map_kv_uint8": flashinfer_attention_modules.dtype_map_kv.get(torch.uint8),
+  "flashinfer_filename_safe_dtype_map_kv_uint8": flashinfer_jit_utils.filename_safe_dtype_map_kv(torch.uint8),
   "transformers": getattr(transformers, "__version__", None),
   "torch": torch.__version__,
   "torch_cuda": torch.version.cuda,

@@ -558,6 +558,32 @@ prefill loses FP4 KV specialization and scale-tensor metadata before the generat
 is built. Do not spend the next step on low-level FA2 fragment math until a re-run proves
 `require_fp4_kv=1`, `is_kv_fp4x2=1`, and the scale tensors are present.
 
+Follow-up stop point - 2026-06-09T1518JST:
+`results/vllm_gemma3_flashinfer_binding_fix_20260609T1518JST_summary.md`.
+
+The source-overlay `sitecustomize.py` now patches/reloads FlashInfer JIT dtype tables so a
+pre-serve import probe reports:
+
+- `flashinfer_dtype_map_kv_uint8="__nv_fp4x2_e2m1"`
+- `flashinfer_attention_dtype_map_kv_uint8="__nv_fp4x2_e2m1"`
+- `flashinfer_filename_safe_dtype_map_kv_uint8="fp4x2_e2m1"`
+
+That is not enough. A reduced-context live Gemma 3 run (`MAX_MODEL_LEN=4096`,
+`MAX_NUM_BATCHED_TOKENS=1024`) still emits the same corrupt first tokens (`" Reigns"`,
+Gujarati, `"ioane"`), and the worker-side FlashInfer debug lines still show raw-byte paged
+prefill:
+
+- `dtype_kv=uint8_t`
+- `fp4_kv=0`
+- `require_fp4_kv=0`
+- no `maybe_k_cache_sf` / `maybe_v_cache_sf`
+- empty `module_uri`
+
+Interpretation: the import probe is green, but the actual EngineCore paged-prefill binding
+path is still using a stale/raw-byte generator or cached module path. The next fix must
+instrument/force the worker-side FlashInfer binding path and prove the server log flips to
+`require_fp4_kv=1` before returning to SWA/cache-reuse or FA2 kernel math.
+
 ## Guardrails
 - **Validate on `sm_121a` only.** This campaign's validation hardware is GB10. SM120 is a compiled-but-unclaimed build
   target; never put a correctness/capacity claim on hardware we can't run. See the

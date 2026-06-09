@@ -1,0 +1,291 @@
+{
+  "counts": {
+    "identity_lines": 0,
+    "paged_identity_lines": 0,
+    "paged_tensor_lines": 4,
+    "ragged_identity_lines": 0,
+    "tensor_lines": 4
+  },
+  "expectations": {
+    "head_dim": 128,
+    "kv_heads": 16,
+    "page_size": 16,
+    "q_heads": 32,
+    "require_bound_call": true,
+    "require_paged": true,
+    "require_tensor_dump": true
+  },
+  "findings": [
+    "no paged prefill debug identity line found",
+    "tensor line 1108: paged tensor dump missing float_workspace",
+    "tensor line 1108: paged tensor dump missing int_workspace",
+    "tensor line 1108: paged tensor dump missing q",
+    "tensor line 1108: paged tensor dump missing paged_k_cache",
+    "tensor line 1108: paged tensor dump missing paged_v_cache",
+    "tensor line 1108: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1108: paged tensor dump missing qo_indptr",
+    "tensor line 1108: paged tensor dump missing paged_kv_indptr",
+    "tensor line 1108: paged tensor dump missing paged_kv_indices",
+    "tensor line 1108: paged tensor dump missing paged_kv_last_page_len",
+    "tensor line 1108: paged tensor dump missing o",
+    "tensor line 1108: paged tensor dump missing q",
+    "tensor line 1108: paged tensor dump missing o",
+    "tensor line 1108: paged tensor dump missing paged_k_cache",
+    "tensor line 1108: paged tensor dump missing paged_v_cache",
+    "tensor line 1108: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1108: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1110: paged tensor dump missing float_workspace",
+    "tensor line 1110: paged tensor dump missing int_workspace",
+    "tensor line 1110: paged tensor dump missing q",
+    "tensor line 1110: paged tensor dump missing paged_k_cache",
+    "tensor line 1110: paged tensor dump missing paged_v_cache",
+    "tensor line 1110: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1110: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1110: paged tensor dump missing qo_indptr",
+    "tensor line 1110: paged tensor dump missing paged_kv_indptr",
+    "tensor line 1110: paged tensor dump missing paged_kv_indices",
+    "tensor line 1110: paged tensor dump missing paged_kv_last_page_len",
+    "tensor line 1110: paged tensor dump missing o",
+    "tensor line 1110: paged tensor dump missing q",
+    "tensor line 1110: paged tensor dump missing o",
+    "tensor line 1110: paged tensor dump missing paged_k_cache",
+    "tensor line 1110: paged tensor dump missing paged_v_cache",
+    "tensor line 1110: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1110: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1142: paged tensor dump missing float_workspace",
+    "tensor line 1142: paged tensor dump missing int_workspace",
+    "tensor line 1142: paged tensor dump missing q",
+    "tensor line 1142: paged tensor dump missing paged_k_cache",
+    "tensor line 1142: paged tensor dump missing paged_v_cache",
+    "tensor line 1142: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1142: paged tensor dump missing qo_indptr",
+    "tensor line 1142: paged tensor dump missing paged_kv_indptr",
+    "tensor line 1142: paged tensor dump missing paged_kv_indices",
+    "tensor line 1142: paged tensor dump missing paged_kv_last_page_len",
+    "tensor line 1142: paged tensor dump missing o",
+    "tensor line 1142: paged tensor dump missing q",
+    "tensor line 1142: paged tensor dump missing o",
+    "tensor line 1142: paged tensor dump missing paged_k_cache",
+    "tensor line 1142: paged tensor dump missing paged_v_cache",
+    "tensor line 1142: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1142: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1144: paged tensor dump missing float_workspace",
+    "tensor line 1144: paged tensor dump missing int_workspace",
+    "tensor line 1144: paged tensor dump missing q",
+    "tensor line 1144: paged tensor dump missing paged_k_cache",
+    "tensor line 1144: paged tensor dump missing paged_v_cache",
+    "tensor line 1144: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1144: paged tensor dump missing maybe_v_cache_sf",
+    "tensor line 1144: paged tensor dump missing qo_indptr",
+    "tensor line 1144: paged tensor dump missing paged_kv_indptr",
+    "tensor line 1144: paged tensor dump missing paged_kv_indices",
+    "tensor line 1144: paged tensor dump missing paged_kv_last_page_len",
+    "tensor line 1144: paged tensor dump missing o",
+    "tensor line 1144: paged tensor dump missing q",
+    "tensor line 1144: paged tensor dump missing o",
+    "tensor line 1144: paged tensor dump missing paged_k_cache",
+    "tensor line 1144: paged tensor dump missing paged_v_cache",
+    "tensor line 1144: paged tensor dump missing maybe_k_cache_sf",
+    "tensor line 1144: paged tensor dump missing maybe_v_cache_sf"
+  ],
+  "ok": false,
+  "paged_bound_groups": [],
+  "paged_identities": [],
+  "paged_tensor_checks": [
+    {
+      "findings": [
+        "paged tensor dump missing float_workspace",
+        "paged tensor dump missing int_workspace",
+        "paged tensor dump missing q",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing qo_indptr",
+        "paged tensor dump missing paged_kv_indptr",
+        "paged tensor dump missing paged_kv_indices",
+        "paged tensor dump missing paged_kv_last_page_len",
+        "paged tensor dump missing o",
+        "paged tensor dump missing q",
+        "paged tensor dump missing o",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1108,
+      "ok": false,
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing float_workspace",
+        "paged tensor dump missing int_workspace",
+        "paged tensor dump missing q",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing qo_indptr",
+        "paged tensor dump missing paged_kv_indptr",
+        "paged tensor dump missing paged_kv_indices",
+        "paged tensor dump missing paged_kv_last_page_len",
+        "paged tensor dump missing o",
+        "paged tensor dump missing q",
+        "paged tensor dump missing o",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1110,
+      "ok": false,
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing float_workspace",
+        "paged tensor dump missing int_workspace",
+        "paged tensor dump missing q",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing qo_indptr",
+        "paged tensor dump missing paged_kv_indptr",
+        "paged tensor dump missing paged_kv_indices",
+        "paged tensor dump missing paged_kv_last_page_len",
+        "paged tensor dump missing o",
+        "paged tensor dump missing q",
+        "paged tensor dump missing o",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1142,
+      "ok": false,
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "findings": [
+        "paged tensor dump missing float_workspace",
+        "paged tensor dump missing int_workspace",
+        "paged tensor dump missing q",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf",
+        "paged tensor dump missing qo_indptr",
+        "paged tensor dump missing paged_kv_indptr",
+        "paged tensor dump missing paged_kv_indices",
+        "paged tensor dump missing paged_kv_last_page_len",
+        "paged tensor dump missing o",
+        "paged tensor dump missing q",
+        "paged tensor dump missing o",
+        "paged tensor dump missing paged_k_cache",
+        "paged tensor dump missing paged_v_cache",
+        "paged tensor dump missing maybe_k_cache_sf",
+        "paged tensor dump missing maybe_v_cache_sf"
+      ],
+      "line": 1144,
+      "ok": false,
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    }
+  ],
+  "paged_tensor_lines": [
+    {
+      "call_id": 1,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1108,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": null,
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xf90680600000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xf905a1c00000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xf905b5a10000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xf90cc0000000,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xf90cc0004800,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0x32ef3e800,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32ef55c00,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xf90e99d00000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32ef6d000,device=0,ndim=1,shape=[1],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xf90e5a160000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "call_id": 2,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1110,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": null,
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xf90680600000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xf905a2400000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xf905b5a00000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xf90cc0000000,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xf90cc0004800,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0x32ef9b800,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32ef78a00,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xf90e99d00000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32ef84400,device=0,ndim=1,shape=[8],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xf90e5a140000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "call_id": 1,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1142,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": null,
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xf90bc0600000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xf905ac800000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xf905b5aa4000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xf90cc0000000,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xf90cc0004800,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0xf9194de6ca00,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0xf9194de6cc00,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xf90e59c80000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0xf9194de78200,device=0,ndim=1,shape=[1],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xf90e59de8000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    },
+    {
+      "call_id": 2,
+      "has_output": true,
+      "has_paged_k_cache": true,
+      "has_paged_v_cache": true,
+      "has_ragged_k": false,
+      "has_ragged_v": false,
+      "line": 1144,
+      "module_key": "backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes=",
+      "module_uri": null,
+      "path": "paged",
+      "raw": "[flashinfer][prefill-debug] tensors call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=uint8_t;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=128;head_dim_vo=128;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xf90bc0600000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xf905ad000000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xf905b5a94000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xf90cc0000000,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0xf90cc0004800,device=0,ndim=4,shape=[87504,16,16,64],stride=[36864,1024,64,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0xf9194de83c00,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0xf9194de78400,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xf90e59c80000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0xf9194de78600,device=0,ndim=1,shape=[8],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xf905b5a54000,device=0,ndim=3,shape=[8,32,128],stride=[4096,128,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null",
+      "tensors": {
+        "maybe_lse": {
+          "is_null": true
+        }
+      }
+    }
+  ],
+  "ragged_identities": [],
+  "schema": "flashinfer-prefill-debug-log-audit/v1",
+  "server_log": "results/vllm_gemma3_flashinfer_binding_fix_20260609T1518JST_server.log"
+}
