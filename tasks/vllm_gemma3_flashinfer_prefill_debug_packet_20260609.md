@@ -85,6 +85,12 @@ python3 scripts/flashinfer_prefill_debug_log_audit.py \
 - generated source path and cache directory from the server log if present;
 - first-token output comparison against the fp8 row.
 
+Expected queue artifacts:
+
+- `results/${RUN_ID}_summary.md`
+- `results/${RUN_ID}_nvfp4_kv_flashinfer_eager_server.log`
+- `results/${RUN_ID}_flashinfer_prefill_debug_audit.json`
+
 Green for this diagnostic is not model quality. Green means the log proves one of:
 
 - live C++ identity and tensor identities match the expected FP4 paged-prefill module,

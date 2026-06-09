@@ -94,6 +94,30 @@ def validate_string_list(
             findings.append(f"{field} entries must be non-empty strings")
 
 
+def validate_expected_artifact_mentions(
+    root: Path,
+    row: dict[str, Any],
+    findings: list[str],
+) -> None:
+    artifacts = row.get("expected_artifacts")
+    task_packet = row.get("task_packet")
+    if not artifacts or not task_packet or not isinstance(task_packet, str):
+        return
+    packet_path = root / task_packet
+    if not packet_path.exists() or not isinstance(artifacts, list):
+        return
+    text = packet_path.read_text(encoding="utf-8", errors="replace")
+    missing = [
+        artifact
+        for artifact in artifacts
+        if isinstance(artifact, str) and artifact not in text
+    ]
+    if missing:
+        findings.append(
+            "expected_artifacts not mentioned in task_packet: " + ", ".join(missing)
+        )
+
+
 def task_ref_exists(root: Path, raw_ref: str) -> bool:
     path_text, _, requirement = raw_ref.partition("#")
     path = root / path_text
@@ -140,10 +164,18 @@ def validate_row(root: Path, row: dict[str, Any]) -> dict[str, Any]:
     validate_string_list(row, "blocked_by", findings)
     validate_string_list(row, "acceptance", findings, required=True)
     validate_string_list(row, "expected_artifacts", findings)
+    validate_expected_artifact_mentions(root, row, findings)
+    expected_artifacts = row.get("expected_artifacts")
     return {
         "id": row.get("id"),
         "line": row.get("_line"),
         "priority": row.get("priority"),
+        "expected_artifact_count": (
+            len(expected_artifacts) if isinstance(expected_artifacts, list) else 0
+        ),
+        "task_packet_artifact_mentions_checked": bool(
+            task_packet and expected_artifacts
+        ),
         "ok": not findings,
         "findings": findings,
     }

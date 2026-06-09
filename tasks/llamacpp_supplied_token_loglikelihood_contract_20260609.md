@@ -120,3 +120,8 @@ Known-red checks:
   rejects the live top-512 artifact because token id `1147` from `" zebra"` was not scored.
 - `results/llamacpp_native_loglikelihood_task_dryrun_contract_audit_20260609.json`
   rejects the dry-run artifact because it has no actual token logprobs.
+
+Expected queue artifacts for the newer-stock echo probe:
+
+- `results/${RUN_ID}_max0.json`
+- `results/${RUN_ID}_max1.json`

@@ -229,3 +229,10 @@ EOF
 
 Then copy only compact artifacts into the repo. Keep large GGUF/logprob binaries under
 `/home/jethac/spark_tmp`.
+
+Expected queue artifacts:
+
+- `results/${RUN_ID}/run_info.txt`
+- `results/${RUN_ID}/ref_perplexity.stdout`
+- `results/${RUN_ID}/nvfp4_kld.stdout`
+- `results/${RUN_ID}/summary.md`

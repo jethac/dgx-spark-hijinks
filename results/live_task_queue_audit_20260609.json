@@ -73,67 +73,85 @@
   "queue": "tasks/live_gb10_queue.jsonl",
   "row_checks": [
     {
+      "expected_artifact_count": 3,
       "findings": [],
       "id": "vllm_gemma3_flashinfer_prefill_debug",
       "line": 1,
       "ok": true,
-      "priority": 10
+      "priority": 10,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 3,
       "findings": [],
       "id": "vllm_gemma_nvfp4_kv_quality_gate",
       "line": 2,
       "ok": true,
-      "priority": 15
+      "priority": 15,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 3,
       "findings": [],
       "id": "sglang_qwen_fp4kv_dense_cache_trace",
       "line": 3,
       "ok": true,
-      "priority": 20
+      "priority": 20,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 5,
       "findings": [],
       "id": "vllm_qwen_clean_ppl_32k_128k",
       "line": 4,
       "ok": true,
-      "priority": 30
+      "priority": 30,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 4,
       "findings": [],
       "id": "llamacpp_native_fp4_correctness_speed",
       "line": 5,
       "ok": true,
-      "priority": 40
+      "priority": 40,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 2,
       "findings": [],
       "id": "flashinfer_fp4_gemm_tile_smem",
       "line": 6,
       "ok": true,
-      "priority": 50
+      "priority": 50,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 2,
       "findings": [],
       "id": "llamacpp_newer_echo_logprobs_probe",
       "line": 7,
       "ok": true,
-      "priority": 60
+      "priority": 60,
+      "task_packet_artifact_mentions_checked": true
     },
     {
+      "expected_artifact_count": 0,
       "findings": [],
       "id": "llamacpp_larger_qwen3_gguf",
       "line": 8,
       "ok": true,
-      "priority": 70
+      "priority": 70,
+      "task_packet_artifact_mentions_checked": false
     },
     {
+      "expected_artifact_count": 0,
       "findings": [],
       "id": "qwen_speed_lane_shared_manifest",
       "line": 9,
       "ok": true,
-      "priority": 80
+      "priority": 80,
+      "task_packet_artifact_mentions_checked": false
     }
   ],
   "schema": "live-task-queue-audit/v1",

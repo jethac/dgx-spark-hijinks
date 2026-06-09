@@ -59,3 +59,9 @@ the fast regression check that catches the current failure mode.
 - The summary names the model rung, KV dtype selected per layer where relevant, capacity
   delta, and quality delta.
 - Do not climb from Gemma 3 to Gemma 4 31B until this gate is green for Rung 1.
+
+Expected queue artifacts:
+
+- `results/${RUN_ID}_gemma_nvfp4_kv_quality_gate.json`
+- `results/${RUN_ID}_first_token_compare.json`
+- `results/${RUN_ID}_ppl_compare.json`

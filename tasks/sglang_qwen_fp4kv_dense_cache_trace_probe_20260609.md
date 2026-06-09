@@ -174,3 +174,9 @@ Acceptance:
   `scripts/sglang_dense_cache_trace_compare.py`.
 - Do not bless `--disable-radix-cache` or selective no-reuse as the FP4-KV capacity path.
   It remains a diagnostic/emergency workaround only.
+
+Expected queue artifacts:
+
+- `results/${RUN_ID}_summary.json`
+- `results/${RUN_ID}_${case}_server.log`
+- `results/${RUN_ID}_${case}_dense_cache_compare.json`
