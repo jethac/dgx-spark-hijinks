@@ -79,7 +79,10 @@ The `zebra_unlikely` row is the guard against silently shipping a top-N adapter.
 
 1. Newer stock llama.cpp pin:
    - run `scripts/gguf_logprobs_probe.py` against `/v1/completions`;
-   - pass only if echoed prompt `tokens` and `token_logprobs` cover the continuation span.
+   - convert the max0/max1 probe artifacts with
+     `scripts/llamacpp_echo_logprobs_to_contract.py`;
+   - pass only if echoed prompt `tokens` and `token_logprobs` cover the continuation span
+     and the converted artifact passes `scripts/llamacpp_loglikelihood_contract_audit.py`.
 2. Bounded full-vocabulary practicality probe:
    - use native endpoints only if they can return the target token's logprob for every
      supplied token, including `" zebra"`;
@@ -120,8 +123,28 @@ Known-red checks:
   rejects the live top-512 artifact because token id `1147` from `" zebra"` was not scored.
 - `results/llamacpp_native_loglikelihood_task_dryrun_contract_audit_20260609.json`
   rejects the dry-run artifact because it has no actual token logprobs.
+- `results/llamacpp_gguf_echo_logprobs_probe_20260608_contract_audit.json`
+  rejects the pinned `b9536` echo artifacts because they expose generated-token
+  `logprobs.content`, not prompt `tokens` / `token_logprobs`.
 
 Expected queue artifacts for the newer-stock echo probe:
 
 - `results/${RUN_ID}_max0.json`
 - `results/${RUN_ID}_max1.json`
+- `results/${RUN_ID}_contract_artifact.json`
+- `results/${RUN_ID}_contract_audit.json`
+
+Bridge the newer-stock max0/max1 probes into the contract artifact:
+
+```bash
+python3 scripts/llamacpp_echo_logprobs_to_contract.py \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --probe results/${RUN_ID}_max0.json \
+  --probe results/${RUN_ID}_max1.json \
+  --output results/${RUN_ID}_contract_artifact.json
+
+python3 scripts/llamacpp_loglikelihood_contract_audit.py \
+  --artifact results/${RUN_ID}_contract_artifact.json \
+  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
+  --output results/${RUN_ID}_contract_audit.json
+```

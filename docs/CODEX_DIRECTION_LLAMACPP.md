@@ -234,7 +234,11 @@ python3 scripts/gguf_logprobs_probe.py \
 ```
 
 Pass condition: prompt `tokens` and `token_logprobs` cover continuation token ids
-`[1147, 50213]`. If the newer pin still returns only generated-token
+`[1147, 50213]`. Bridge the max0/max1 artifacts with
+`scripts/llamacpp_echo_logprobs_to_contract.py`, then audit the converted artifact with
+`scripts/llamacpp_loglikelihood_contract_audit.py`. The pinned `b9536` artifacts are
+known-red through this path because they return generated-token `logprobs.content`, not
+prompt `tokens` / `token_logprobs`. If the newer pin still returns only generated-token
 `choices[0].logprobs.content`, do not keep tuning top-N. Either run one bounded
 full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or move
 directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named worktree

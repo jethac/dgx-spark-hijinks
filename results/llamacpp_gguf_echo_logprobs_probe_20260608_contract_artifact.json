@@ -1,0 +1,75 @@
+{
+  "cases": [
+    {
+      "all_tokens_greedy": false,
+      "context": "The capital of Japan is",
+      "continuation": " Tokyo",
+      "continuation_token_ids": [],
+      "continuation_token_logprobs": [],
+      "findings": [
+        "no matching probe artifact"
+      ],
+      "id": "tokyo_likely",
+      "lm_eval_loglikelihood_tuple": [
+        null,
+        false
+      ],
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": false,
+      "context": "The capital of Japan is",
+      "context_token_ids": [
+        785,
+        6722,
+        315,
+        6323,
+        374
+      ],
+      "continuation": " zebra",
+      "continuation_token_ids": [
+        1147,
+        50213
+      ],
+      "continuation_token_logprobs": [],
+      "expected_greedy": false,
+      "findings": [
+        "probe response has no prompt tokens/token_logprobs arrays"
+      ],
+      "id": "zebra_unlikely",
+      "lm_eval_loglikelihood_tuple": [
+        null,
+        false
+      ],
+      "source_artifact": "results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json",
+      "target_logprob_sum": null
+    },
+    {
+      "all_tokens_greedy": false,
+      "context": "The model family Qwen was developed by",
+      "continuation": " Alibaba",
+      "continuation_token_ids": [],
+      "continuation_token_logprobs": [],
+      "findings": [
+        "no matching probe artifact"
+      ],
+      "id": "qwen_name",
+      "lm_eval_loglikelihood_tuple": [
+        null,
+        false
+      ],
+      "target_logprob_sum": null
+    }
+  ],
+  "ok": false,
+  "probe_artifacts": [
+    "results/llamacpp_gguf_echo_logprobs_probe_20260608_max0.json",
+    "results/llamacpp_gguf_echo_logprobs_probe_20260608_max1.json"
+  ],
+  "schema": "llamacpp-echo-logprobs-contract-artifact/v1",
+  "summary": {
+    "case_count": 3,
+    "ok": false,
+    "target_found": 0
+  }
+}
