@@ -206,6 +206,18 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   prefix state close enough to the BF16 dense state, or choose a mixed/policy fallback
   with an explicit capacity cost.
 
+2026-06-09 mixed-K/V ABI review:
+
+- Summary: `results/sglang_qwen_fp4kv_mixed_kv_abi_20260609_summary.md`
+- Finding: the current FlashInfer FA2 paged-attention ABI has one KV dtype, not
+  independent K and V dtypes. `paged_kv_t<DType, IdType>` carries separate K/V pointers and
+  strides, but both are `DType*`, and the generated prefill params consume
+  `paged_kv_t<DTypeKV, IdType>`.
+- Decision: FP8/BF16 K + NVFP4 V remains a plausible quality/capacity mitigation, but it
+  is a FlashInfer mixed-KV kernel/API task, not a small SGLang-only switch. Do not present
+  it as an available serving workaround until that surface exists and the capacity cost is
+  measured.
+
 Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`

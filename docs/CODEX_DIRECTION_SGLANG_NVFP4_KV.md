@@ -102,6 +102,16 @@ the K-only split. A K-not-FP4 fallback must be reported with its capacity cost b
 can be considered a blessed serving result: naive FP8 K + NVFP4 V gives about
 `16 / (8 + 4.5) = 1.28x` the fp8 KV pool, versus about `1.78x` for NVFP4 K+V.
 
+Mixed-K/V ABI review, 2026-06-09:
+`results/sglang_qwen_fp4kv_mixed_kv_abi_20260609_summary.md` records the stop-point
+finding. The current FlashInfer FA2 paged-attention surface binds K and V to a single
+`DTypeKV`: Python plan/run cache one `kv_data_type`, the JIT template emits one
+`DTypeKV`, `paged_kv_t<DType, IdType>` has separate K/V pointers but one element type, and
+prefill consumes `paged_kv_t<DTypeKV, IdType>`. Therefore FP8/BF16 K + NVFP4 V is not a
+small SGLang memory-pool switch; it needs a FlashInfer mixed-KV attention API/kernel plus
+SGLang integration. Keep the capacity estimate above, but treat mixed-K/V as a kernel/API
+task until that surface exists.
+
 ## 2026-06-09 update — current-head source-stack retest still red
 
 After vLLM Gemma 3 passed the short first-token gate with `jethac/flashinfer@c3dae30f`, we
