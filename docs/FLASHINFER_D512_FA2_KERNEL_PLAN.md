@@ -1,6 +1,20 @@
 # FlashInfer FA2 D=512 Plan — Full NVFP4 K+V for Gemma 4 Global Layers
 
-Status: PLAN (promoted off the back-burner, 2026-06-10). Owner: Claude lane
+Status: **P0 GREEN (2026-06-10) — K1 confirmed on GB10, no kernel surgery needed.**
+The (512,256) two-pass VO split compiles, runs, and matches a torch fp32 reference at
+**cosine 0.9999978** (max_abs 0.0037, bf16 rounding):
+`results/flashinfer_fa2_vo_split_d512_vo256_probe_20260610T0520JST.json` (on branch
+`spark/hijinks-022-gemma4-mixed-kv`). Two findings beyond the plan:
+- The wrapper's `paged_k_cache.stride(i) == paged_v_cache.stride(i)` check is the only
+  asymmetric-pair blocker hit so far, and it is dodged **zero-copy**: pass V halves as
+  strided VIEWS of the full V (identical strides to K; the half is selected by base
+  pointer offset). Zero FlashInfer changes for bf16. P2 may still relax the check
+  properly for robustness.
+- The feared q-register bust at D_QK=512 did not materialize (bf16, NUM_WARPS defaults).
+Next gates: **P0b** — the same probe with NVFP4 KV (packed data + SF views sliced along
+the head dim; 256-elem half = 128 packed bytes + 16 SF blocks, both aligned); then P3
+vLLM orchestration. Codex: the probe + result live on the 022 branch; the same VO-split
+pattern applies to SGLang's Gemma rungs when they arrive. Owner: Claude lane
 (`spark/hijinks-022-*` branches; worktrees — Codex's checkouts untouched). Goal: upgrade
 the Gemma 4 mixed-KV **global D=512 layers** from bf16/Triton fallback to **NVFP4 on
 FlashInfer**, completing full NVFP4 K+V on Gemma 4 (the 1.78×-class capacity claim instead
