@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+import traceback
 from typing import Any
 
 import torch
@@ -133,12 +134,64 @@ def bench_case(
         "n": n,
         "k": k,
         "backend": backend,
+        "ok": True,
         "iterations": iterations,
         "warmup": warmup,
         "elapsed_s": elapsed_s,
         "mean_ms": elapsed_s * 1000 / iterations,
+        "approx_tflops": (2 * m * n * k * iterations) / elapsed_s / 1e12,
         "finite": bool(torch.isfinite(output).all().item()),
         "cosine_similarity_vs_bf16_torch_mm": cosine,
+    }
+
+
+def bench_case_record(
+    m: int,
+    n: int,
+    k: int,
+    *,
+    backend: str,
+    iterations: int,
+    warmup: int,
+    seed: int,
+) -> dict[str, Any]:
+    try:
+        return bench_case(
+            m,
+            n,
+            k,
+            backend=backend,
+            iterations=iterations,
+            warmup=warmup,
+            seed=seed,
+        )
+    except Exception as exc:  # pragma: no cover - live CUDA failure path.
+        return {
+            "m": m,
+            "n": n,
+            "k": k,
+            "backend": backend,
+            "ok": False,
+            "error_type": type(exc).__name__,
+            "error": str(exc),
+            "traceback_tail": traceback.format_exc().splitlines()[-8:],
+        }
+
+
+def device_report() -> dict[str, Any]:
+    props = torch.cuda.get_device_properties(0)
+    return {
+        "name": torch.cuda.get_device_name(0),
+        "compute_capability": list(torch.cuda.get_device_capability(0)),
+        "multi_processor_count": props.multi_processor_count,
+        "shared_memory_per_block": props.shared_memory_per_block,
+        "shared_memory_per_block_optin": getattr(
+            props, "shared_memory_per_block_optin", None
+        ),
+        "shared_memory_per_multiprocessor": getattr(
+            props, "shared_memory_per_multiprocessor", None
+        ),
+        "total_memory": props.total_memory,
     }
 
 
@@ -147,7 +200,11 @@ def main() -> int:
     parser.add_argument("--phase", required=True)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--container", default="unknown")
-    parser.add_argument("--backend", default="auto")
+    parser.add_argument(
+        "--backend",
+        action="append",
+        help="Backend to run. May be repeated. Defaults to auto.",
+    )
     parser.add_argument(
         "--preset",
         action="append",
@@ -170,33 +227,42 @@ def main() -> int:
             for raw_case in CASE_PRESETS[preset_name]
         ]
     cases = [parse_case(raw) for raw in raw_cases]
+    backends = args.backend or ["auto"]
+    device = device_report()
     report: dict[str, Any] = {
-        "schema": "flashinfer-mm-fp4-microbench/v1",
+        "schema": "flashinfer-mm-fp4-microbench/v2",
         "phase": args.phase,
         "run_id": args.run_id,
         "container": args.container,
         "presets": args.preset or (["smoke"] if not args.case else []),
         "raw_cases": raw_cases,
+        "backends": backends,
         "flashinfer_file": gemm_base.__file__,
         "flashinfer_version": __import__("flashinfer").__version__,
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
-        "gpu": torch.cuda.get_device_name(0),
-        "compute_capability": list(torch.cuda.get_device_capability(0)),
+        "device": device,
+        "gpu": device["name"],
+        "compute_capability": device["compute_capability"],
+        "multi_processor_count": device["multi_processor_count"],
+        "shared_memory_per_block_optin": device[
+            "shared_memory_per_block_optin"
+        ],
         "heuristic": heuristic_order(),
         "cases": [],
     }
 
     for case in cases:
-        report["cases"].append(
-            bench_case(
-                *case,
-                backend=args.backend,
-                iterations=args.iterations,
-                warmup=args.warmup,
-                seed=args.seed,
+        for backend in backends:
+            report["cases"].append(
+                bench_case_record(
+                    *case,
+                    backend=backend,
+                    iterations=args.iterations,
+                    warmup=args.warmup,
+                    seed=args.seed,
+                )
             )
-        )
 
     text = json.dumps(report, indent=2)
     if args.output:

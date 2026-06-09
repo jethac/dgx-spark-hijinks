@@ -38,6 +38,11 @@ Model-shaped proxy result:
 - patched artifact, dense: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_dense_decode.json`
 - patched artifact, MoE: `results/flashinfer_mm_fp4_sglang_patched_modelshape_20260607T162000Z_moe_expert.json`
 - result: patched `b12x` auto-dispatch was mixed-to-slower on dense decode proxies and slower on every MoE-shaped proxy case.
+- related follow-up: `tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md` is the queued
+  live packet for the TensorRT-LLM #11368 class. It records device shared-memory limits and
+  compares `auto`, `b12x`, `cutlass`, and `cudnn` on model-shaped cases so we can separate
+  "SM121 dispatch/JIT target is correct" from "the selected tile fits and performs on the
+  CC-12.x shared-memory ceiling."
 
 ## Where Speedups Are Plausible
 
@@ -105,6 +110,10 @@ Shapes to test first:
 Expected outcome:
 
 - first proxy result was negative: patched `b12x` auto-dispatch was slower on all six tested MoE-shaped cases.
+- this may reflect more than a dispatch predicate. TensorRT-LLM #11368 shows that an SM12x
+  FP4 GEMM path can be routed correctly but still choose tiles that exceed the CC-12.x
+  per-block shared-memory ceiling. The next probe must record live shared-memory limits and
+  backend-specific failures instead of treating all slow/failing `b12x` rows as one class.
 - still only a proxy for real fused MoE kernels; serving benchmarks on an actually quantized MoE model remain required before closing the NVFP4 question.
 
 ### 3. Packaging And JIT-Cache Correctness
@@ -207,6 +216,7 @@ python3 scripts/flashinfer_mm_fp4_microbench.py \
   --run-id flashinfer-mm-fp4-dense-decode-before \
   --container CONTAINER_TAG \
   --preset dense_decode \
+  --backend auto \
   --iterations 100 \
   --output results/flashinfer_mm_fp4_dense_decode_before.json
 ```
@@ -218,4 +228,7 @@ Rules:
 - compare only warmed timings, not first-run JIT compile time.
 - keep source/JIT package versions consistent; do not overlay patched Python on stale FlashInfer binaries.
 - record the heuristic order, FlashInfer file path, version, CUDA version, and compute capability.
+- record `multi_processor_count` and per-block/shared-memory limits for every live run.
+- for the tile/SMEM question, use `tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md`
+  and compare `auto`, `b12x`, `cutlass`, and `cudnn` in the same source-built stack.
 - treat microbenchmarks as diagnostic. Serving benchmark rows are still required before claiming user-visible speedup.

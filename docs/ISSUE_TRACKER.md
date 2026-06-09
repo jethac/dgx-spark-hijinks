@@ -35,7 +35,7 @@ our issues; they record where the upstream fix or demand lives.
 |---|---|
 | [vllm-project/vllm #31085](https://github.com/vllm-project/vllm/issues/31085) | Add SM120 (RTX 6000/5000 Blackwell) native NVFP4 MoE kernels — concrete upstream demand for the SM12x-family-shaped NVFP4 work; the RTX PRO 6000 audience that makes our hikari-derived patches mergeable beyond Spark |
 | [vllm-project/vllm #31128](https://github.com/vllm-project/vllm/issues/31128) | vLLM SM121 support tracking |
-| [TensorRT-LLM #11368](https://github.com/NVIDIA/TensorRT-LLM/issues/11368) | SM120 CUTLASS FP4 GEMM tiles exceed the CC-12.x 99 KB/block shared-memory limit; confirmed family-wide (RTX PRO 6000 sm_120 and GB10 sm_121 share it), so a 99 KB-fitting tile fix serves both |
+| [TensorRT-LLM #11368](https://github.com/NVIDIA/TensorRT-LLM/issues/11368) | SM120 CUTLASS FP4 GEMM tiles exceed the CC-12.x 99 KB/block shared-memory limit; confirmed family-wide (RTX PRO 6000 sm_120 and GB10 sm_121 share it), so a 99 KB-fitting tile fix serves both. The queued campaign probe is `tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md`. |
 
 Native-FP4 target note: RTX PRO 6000 = `sm_120` (CC 12.0); GB10 = `sm_121` (CC 12.1).
 Both need arch-specific (`a`) cubins for native block-scaled FP4 MMA — `120f`/`121f`
