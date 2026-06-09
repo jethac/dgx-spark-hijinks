@@ -102,6 +102,22 @@ rejects the existing live top-512 artifact in
 `results/llamacpp_native_loglikelihood_20260608T1331JST_contract_audit.json` because
 token id `1147` from `" zebra"` was not scored.
 
+Source audit:
+
+- script: `scripts/llamacpp_source_loglikelihood_audit.py`
+- artifact: `results/llamacpp_source_loglikelihood_audit_20260609.md`
+- checkout: `jethac/llama.cpp@19bba67c1`
+- result: `stock_server_contract_capable=false`
+
+The audit found no server-source evidence of prompt-token `token_logprobs` arrays or a
+supplied-token loglikelihood endpoint. The server-side logprob path is generated-token /
+top-N oriented through `n_probs`, `top_logprobs`, `probs_output`, and
+`completion_probabilities`; OpenAI `echo` is explicitly rejected, and server prompt
+processing extracts logits only for the last prompt token. The reusable primitive is in
+`tools/perplexity/perplexity.cpp`, where logits plus target token ids are scored through
+`log_softmax` / `compute_logprobs`, including multiple-choice and HellaSwag-style paths.
+That makes the next fork endpoint a contained server API task, not a search problem.
+
 ## Historical Native Top-N Probe
 
 The older candidate was llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.

@@ -238,6 +238,16 @@ one bounded full-vocab-practicality probe with `llamacpp_native_loglikelihood_pr
 move directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named
 worktree for a direct supplied-token loglikelihood endpoint.
 
+Offline source checkpoint: `scripts/llamacpp_source_loglikelihood_audit.py` now records
+that `jethac/llama.cpp@19bba67c1` has no server-source evidence of prompt-token
+`token_logprobs` arrays or a supplied-token endpoint. Its server logprob path is generated
+token/top-N oriented (`n_probs`, `top_logprobs`, `probs_output`), OpenAI `echo` is
+rejected, and prompt processing extracts logits only for the last prompt token. The audit
+points at `tools/perplexity/perplexity.cpp` for the reusable logits+target-token scoring
+primitive. If the newer stock pin is red too, the next implementation should be an
+issue-named `jethac/llama.cpp` server endpoint that mirrors that primitive and returns the
+contract shape audited by `scripts/llamacpp_loglikelihood_contract_audit.py`.
+
 Native FP4 can run in parallel as a separate lane after this docs stop point: set up
 `jethac/llama.cpp` off a recent master ref, build on GB10, and use cuobjdump/runtime
 dispatch evidence plus an actual NVFP4/MXFP4 GGUF to prove or deny the native FP4 path.

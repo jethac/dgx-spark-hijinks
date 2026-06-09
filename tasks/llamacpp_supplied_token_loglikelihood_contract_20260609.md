@@ -127,6 +127,20 @@ Known-red checks:
 - `results/llamacpp_gguf_echo_logprobs_probe_20260608_contract_audit.json`
   rejects the pinned `b9536` echo artifacts because they expose generated-token
   `logprobs.content`, not prompt `tokens` / `token_logprobs`.
+- `results/llamacpp_source_loglikelihood_audit_20260609.md` records the source-level
+  blocker for `jethac/llama.cpp@19bba67c1`: stock server source has no prompt-token
+  logprob endpoint evidence, rejects OpenAI `echo`, extracts only last-prompt-token logits,
+  and points at `tools/perplexity/perplexity.cpp` as the logits+target-token scoring
+  primitive that a fork endpoint should mirror.
+
+Offline source audit:
+
+```bash
+python3 scripts/llamacpp_source_loglikelihood_audit.py \
+  --llama-src third_party/llama.cpp \
+  --output-json results/llamacpp_source_loglikelihood_audit_YYYYMMDD.json \
+  --output-md results/llamacpp_source_loglikelihood_audit_YYYYMMDD.md
+```
 
 Expected queue artifacts for the newer-stock echo probe:
 

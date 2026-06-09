@@ -1026,6 +1026,15 @@
     logprobs. A synthetic direct supplied-token artifact passes, proving the audit can
     accept the intended future endpoint shape.
 
+- Added a llama.cpp source-level loglikelihood audit.
+  - script: `scripts/llamacpp_source_loglikelihood_audit.py`
+  - artifact: `results/llamacpp_source_loglikelihood_audit_20260609.md`
+  - checkout: `jethac/llama.cpp@19bba67c1`
+  - result: `stock_server_contract_capable=false`; server logprobs are generated-token /
+    top-N oriented, OpenAI `echo` is rejected, prompt processing extracts only the last
+    prompt token's logits, and `tools/perplexity/perplexity.cpp` contains the reusable
+    logits+target-token scoring primitive for a future supplied-token endpoint.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.
