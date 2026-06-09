@@ -156,6 +156,73 @@ def qwen_lane_checks(root: Path) -> list[dict[str, Any]]:
     return checks
 
 
+def load_json(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def gemma_plan_checks(root: Path) -> list[dict[str, Any]]:
+    artifact = root / "results" / "gemma_compatibility_plan_audit_20260609.json"
+    artifact_data = load_json(artifact)
+    checks = [
+        {
+            "name": "gemma_compatibility_plan_exists",
+            "path": "docs/GEMMA_COMPATIBILITY_PLAN.md",
+            "ok": (root / "docs" / "GEMMA_COMPATIBILITY_PLAN.md").exists(),
+        },
+        {
+            "name": "gemma_plan_audit_script_exists",
+            "path": "scripts/gemma_compatibility_plan_audit.py",
+            "ok": (root / "scripts" / "gemma_compatibility_plan_audit.py").exists(),
+        },
+        {
+            "name": "gemma_plan_audit_artifact_ok",
+            "path": "results/gemma_compatibility_plan_audit_20260609.json",
+            "ok": bool(
+                artifact_data
+                and artifact_data.get("schema")
+                == "gemma-compatibility-plan-audit/v1"
+                and artifact_data.get("ok") is True
+            ),
+        },
+        {
+            "name": "gemma_plan_records_outlier_quality_policy",
+            "path": "docs/GEMMA_COMPATIBILITY_PLAN.md",
+            "ok": contains_all(
+                root / "docs" / "GEMMA_COMPATIBILITY_PLAN.md",
+                (
+                    "Gemma attention is outlier-sensitive",
+                    "PPL/quality",
+                    "do not assume Qwen's PPL transfers",
+                    "capacity added",
+                ),
+            ),
+        },
+        {
+            "name": "solution_status_mentions_gemma_plan_audit",
+            "path": "docs/SOLUTIONS_STATUS.md",
+            "ok": contains_all(
+                root / "docs" / "SOLUTIONS_STATUS.md",
+                ("gemma_compatibility_plan_audit_20260609.json",),
+            ),
+        },
+        {
+            "name": "compatibility_board_mentions_gemma_plan_audit",
+            "path": "docs/COMPATIBILITY_BOARD.md",
+            "ok": contains_all(
+                root / "docs" / "COMPATIBILITY_BOARD.md",
+                ("gemma_compatibility_plan_audit_20260609.json",),
+            ),
+        },
+    ]
+    return checks
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="results/solution_coverage_audit.json")
@@ -170,6 +237,7 @@ def main() -> int:
     status_ids = [row["id"] for row in status_rows]
     issue_ids = sorted({plan_id for row in issue_rows for plan_id in row["plan_ids"]})
     qwen_checks = qwen_lane_checks(root)
+    gemma_checks = gemma_plan_checks(root)
     qwen_issue_ok = any("qwen-speed" in row["plan_ids"] for row in issue_rows)
 
     summary: dict[str, Any] = {
@@ -184,6 +252,9 @@ def main() -> int:
             "issue_row_ok": qwen_issue_ok,
             "checks": qwen_checks,
         },
+        "gemma_compatibility_plan": {
+            "checks": gemma_checks,
+        },
     }
     summary["ok"] = (
         not summary["missing_status_ids"]
@@ -191,6 +262,7 @@ def main() -> int:
         and not summary["missing_issue_plan_ids"]
         and qwen_issue_ok
         and all(check["ok"] for check in qwen_checks)
+        and all(check["ok"] for check in gemma_checks)
     )
 
     output = Path(args.output)

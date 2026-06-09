@@ -1,5 +1,39 @@
 {
   "extra_status_ids": [],
+  "gemma_compatibility_plan": {
+    "checks": [
+      {
+        "name": "gemma_compatibility_plan_exists",
+        "ok": true,
+        "path": "docs/GEMMA_COMPATIBILITY_PLAN.md"
+      },
+      {
+        "name": "gemma_plan_audit_script_exists",
+        "ok": true,
+        "path": "scripts/gemma_compatibility_plan_audit.py"
+      },
+      {
+        "name": "gemma_plan_audit_artifact_ok",
+        "ok": true,
+        "path": "results/gemma_compatibility_plan_audit_20260609.json"
+      },
+      {
+        "name": "gemma_plan_records_outlier_quality_policy",
+        "ok": true,
+        "path": "docs/GEMMA_COMPATIBILITY_PLAN.md"
+      },
+      {
+        "name": "solution_status_mentions_gemma_plan_audit",
+        "ok": true,
+        "path": "docs/SOLUTIONS_STATUS.md"
+      },
+      {
+        "name": "compatibility_board_mentions_gemma_plan_audit",
+        "ok": true,
+        "path": "docs/COMPATIBILITY_BOARD.md"
+      }
+    ]
+  },
   "issue_rows": [
     {
       "area": "sm_121 target naming and build flags",
