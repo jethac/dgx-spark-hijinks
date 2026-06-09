@@ -94,6 +94,7 @@ run_case() {
   local container="${RUN_ID}_${name}"
   local out="results/${RUN_ID}_${name}.json"
   local server_log="results/${RUN_ID}_${name}_server.log"
+  local trace_compare="results/${RUN_ID}_${name}_dense_cache_compare.json"
   local inspect="results/${RUN_ID}_${name}_container_inspect.json"
   local flashinfer_install_log="results/${RUN_ID}_${name}_flashinfer_editable_install.log"
   local install_log="results/${RUN_ID}_${name}_editable_install.log"
@@ -160,6 +161,13 @@ run_case() {
   docker logs "${container}" >"${REPO_ROOT}/${server_log}" 2>&1 || true
   docker inspect "${container}" >"${REPO_ROOT}/${inspect}" 2>/dev/null || true
   docker rm -f "${container}" >/dev/null 2>&1 || true
+
+  if [[ -f "${REPO_ROOT}/${out}" && -f "${REPO_ROOT}/${server_log}" ]]; then
+    python3 "${REPO_ROOT}/scripts/sglang_dense_cache_trace_compare.py" \
+      --request-json "${REPO_ROOT}/${out}" \
+      --server-log "${REPO_ROOT}/${server_log}" \
+      --output "${REPO_ROOT}/${trace_compare}" || rc=1
+  fi
   return "${rc}"
 }
 
@@ -184,14 +192,22 @@ summary = {
 for name in case_names:
     path = base / f"{run}_{name}.json"
     server_log = base / f"{run}_{name}_server.log"
+    trace_compare = base / f"{run}_{name}_dense_cache_compare.json"
     if not path.exists():
         summary["cases"][name] = {
             "ok": False,
             "missing": str(path),
             "server_log": str(server_log),
+            "trace_compare": str(trace_compare),
         }
         continue
     obj = json.loads(path.read_text())
+    trace_compare_ok = None
+    if trace_compare.exists():
+        try:
+            trace_compare_ok = json.loads(trace_compare.read_text()).get("ok")
+        except Exception as exc:
+            trace_compare_ok = f"error: {exc!r}"
     rows = []
     for row in obj.get("rows", []):
         row_summary = {"name": row.get("name"), "requests": []}
@@ -214,8 +230,10 @@ for name in case_names:
             )
         rows.append(row_summary)
     summary["cases"][name] = {
-        "ok": True,
+        "ok": trace_compare_ok is not False,
         "server_log": str(server_log),
+        "trace_compare": str(trace_compare),
+        "trace_compare_ok": trace_compare_ok,
         "token_summary": obj.get("token_summary"),
         "rows": rows,
     }

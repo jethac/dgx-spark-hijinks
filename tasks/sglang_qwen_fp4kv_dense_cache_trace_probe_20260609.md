@@ -140,9 +140,12 @@ bash scripts/run_sglang_fp4_dense_cache_trace.sh
 Capture key:
 
 ```text
-rid, forward_pass_id, forward_mode, layer_id, phase,
-extend_prefix_len, extend_seq_len, sample_row
+rid, forward_mode, layer_id, phase, extend_prefix_len, extend_seq_len, sample_row
 ```
+
+Note: SGLang has a `forward_pass_id` counter, but commit `795f087ca` does not propagate it
+into the dense-cache trace payload. Treat `forward_pass_id` as a future nicety, not an
+acceptance blocker for this packet.
 
 Capture values:
 
@@ -166,6 +169,8 @@ Decision rule:
 Acceptance:
 
 - The probe must produce one artifact comparing dense no-cache rows against cached-prefix
-  rows by `rid` and phase.
+  rows by `rid` and phase. The runner writes
+  `results/${RUN_ID}_${case}_dense_cache_compare.json` via
+  `scripts/sglang_dense_cache_trace_compare.py`.
 - Do not bless `--disable-radix-cache` or selective no-reuse as the FP4-KV capacity path.
   It remains a diagnostic/emergency workaround only.

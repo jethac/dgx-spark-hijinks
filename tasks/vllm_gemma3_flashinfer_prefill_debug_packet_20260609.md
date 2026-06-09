@@ -69,6 +69,18 @@ source-overlay packet.
 Capture:
 
 - full server log with `[flashinfer][prefill-debug]` lines;
+- machine audit of the debug lines:
+
+```bash
+python3 scripts/flashinfer_prefill_debug_log_audit.py \
+  --server-log results/${RUN_ID}_nvfp4_kv_flashinfer_eager_server.log \
+  --output results/${RUN_ID}_flashinfer_prefill_debug_audit.json \
+  --expected-head-dim 128 \
+  --expected-kv-heads 16 \
+  --expected-q-heads 32 \
+  --expected-page-size 16
+```
+
 - the existing wrapper-boundary / active-page trace artifacts;
 - generated source path and cache directory from the server log if present;
 - first-token output comparison against the fp8 row.
