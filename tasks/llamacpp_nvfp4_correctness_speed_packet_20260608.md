@@ -230,9 +230,21 @@ EOF
 Then copy only compact artifacts into the repo. Keep large GGUF/logprob binaries under
 `/home/jethac/spark_tmp`.
 
+Audit the compact artifacts before treating this row as accepted:
+
+```bash
+python3 /home/jethac/dgx-spark-hijinks/scripts/llamacpp_nvfp4_correctness_speed_audit.py \
+  --run-dir "$REPO_RESULTS" \
+  --require-speed \
+  --output "$REPO_RESULTS/correctness_speed_audit.json"
+```
+
+The audit must be green before this packet supports a native FP4 correctness/speed claim.
+
 Expected queue artifacts:
 
 - `results/${RUN_ID}/run_info.txt`
 - `results/${RUN_ID}/ref_perplexity.stdout`
 - `results/${RUN_ID}/nvfp4_kld.stdout`
 - `results/${RUN_ID}/summary.md`
+- `results/${RUN_ID}/correctness_speed_audit.json`

@@ -109,7 +109,7 @@
       "task_packet_artifact_mentions_checked": true
     },
     {
-      "expected_artifact_count": 4,
+      "expected_artifact_count": 5,
       "findings": [],
       "id": "llamacpp_native_fp4_correctness_speed",
       "line": 5,

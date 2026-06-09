@@ -204,7 +204,9 @@ thinking-disabled finding visible (it's the difference between empty and useful 
 build and compare it to a BF16/Q8 reference. The arch-build row is complete and the first
 runtime-dispatch smoke is recorded; do not spend more cycles on compile-flag archaeology
 until runtime correctness/speed is tested. Use
-`tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md` as the next Linux-host packet.
+`tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md` as the next Linux-host packet,
+then run `scripts/llamacpp_nvfp4_correctness_speed_audit.py --require-speed` on the compact
+artifact directory before accepting the row.
 
 **Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
