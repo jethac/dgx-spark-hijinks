@@ -143,3 +143,31 @@ scale-aware FP4-KV paged-prefill signature, but vLLM still calls it with the 27-
 raw-KV call shape. The next packet must patch the vLLM prefill call site to pass the split
 `maybe_k_cache_sf` and `maybe_v_cache_sf` tensors into `prefill_wrapper.run(...)`; after
 that, this debug packet can resume checking bound tensor identity and Gemma quality.
+
+No-force call-site run:
+`results/vllm_gemma3_prefill_callsite_noforce_20260609T1622JST_summary.md`.
+
+This run disables external FlashInfer generator forcing and tests the call-site/wrapper
+scale-argument plumbing directly. The server reaches readiness and avoids the
+`Expected 29 but got 27 arguments` warmup mismatch, but output is still corrupt and the
+live prefill debug lines still show raw-byte modules for both SWA and global prefill:
+`dtype_kv=uint8_t`, `require_fp4_kv=0`, `is_kv_fp4x2=0`, empty `additional_tensors`, and
+no `maybe_k_cache_sf` / `maybe_v_cache_sf` tensor views. Therefore the scale-argument
+plumbing is not enough to make the installed FlashInfer stack naturally select the FP4-KV
+prefill module. The next packet should fix FlashInfer's prefill module-selection metadata
+so `require_fp4_kv=1` appears without external generator forcing, then rerun this debug
+packet and the Gemma quality gate.
+
+FlashInfer root cause and patch:
+the wrapper-JIT run moved the failure from corrupt tokens to a concrete FlashInfer compile
+error: the FP4 SWA paged-prefill kernel referenced `maybe_k_cache_sf_stride_page/_h/_n`
+and `maybe_v_cache_sf_stride_page/_h/_n`, but the generated `PagedParams` struct lacked
+those fields. This makes the active fix FlashInfer-side, not more vLLM wrapper forcing.
+
+Patch artifact:
+`results/flashinfer_nvfp4_swa_prefill_codegen_compile_20260609T1712JST_summary.md`.
+
+Status: FlashInfer source generation now emits the SF stride fields for FA2 + NVFP4 KV +
+SWA paged prefill, rejects missing scale tensors early, and the generated module
+compiles/loads on GB10. Next packet step: rebuild/reload vLLM against this FlashInfer
+patch, clear the failed cached module, and rerun the Gemma quality gate.

@@ -322,6 +322,49 @@ identity, and final C++ `paged_run` argument interpretation in both the live ser
 and offline replay process. The likely remaining gap is module cache / generated source /
 compiled object identity or C++ argument interpretation, not vLLM's Python plan fields.
 
+Prefill binding stop point (2026-06-09):
+`results/vllm_gemma3_flashinfer_prefill_debug_20260609T143948JST_summary.md` proves the
+natural live Gemma 3 paged-prefill modules are raw-byte modules: `dtype_kv=uint8_t`,
+`require_fp4_kv=0`, `is_kv_fp4x2=0`, empty `additional_tensors`, and no
+`maybe_k_cache_sf` / `maybe_v_cache_sf`, for both SWA (`window_left=1023`) and global
+(`window_left=-1`) prefill. The follow-up worker-bind probe
+(`results/vllm_gemma3_flashinfer_worker_bind_20260609T1552JST_summary.md`) forced the
+standard generator path and moved the failure to warmup: FlashInfer generated an
+FP4-aware 29-argument prefill module, but vLLM still called it with the 27-argument
+raw-KV call shape.
+
+Call-site no-force stop point (2026-06-09):
+`results/vllm_gemma3_prefill_callsite_noforce_20260609T1622JST_summary.md` tests the next
+candidate without external generator forcing. The run keeps
+`SPARK_FLASHINFER_FORCE_PREFILL_MODULE=0`, leaves the runtime prefill scale-argument patch
+on, and adds vLLM prefill metadata for `maybe_k_cache_sf` / `maybe_v_cache_sf`. The server
+reaches readiness and the 29-vs-27 warmup mismatch is gone, but first-token quality remains
+red (` Reigns`, a Gujarati token, `ioane`). The C++ prefill debug lines still show raw-byte
+modules for both SWA and global prefill (`dtype_kv=uint8_t`, `require_fp4_kv=0`,
+`is_kv_fp4x2=0`, empty `additional_tensors`). This falsifies the narrow assumption that
+scale-argument plumbing alone makes the installed FlashInfer stack naturally select the
+FP4-KV prefill module. The remaining fix belongs in FlashInfer prefill
+module-selection/metadata/generator plumbing, then vLLM's scale-argument plumbing becomes
+the required call shape for that module. Do not return to page-byte pairing or generic FA2
+math until natural module selection shows `require_fp4_kv=1` and both scale tensors.
+
+FlashInfer root-cause stop point (2026-06-09):
+The wrapper-JIT run forced the FP4 paged-prefill module and exposed the real compile
+failure in FlashInfer: the SWA FP4 `PagedParams` struct referenced
+`maybe_k_cache_sf_stride_page/_h/_n` and `maybe_v_cache_sf_stride_page/_h/_n`, but the
+generated prefill params did not declare those members. This closes the vLLM-side
+call-site/page-pairing investigation for now. The fix belongs in `jethac/flashinfer`:
+complete the FP4 paged-prefill additional tensor/stride generation and pass the scale
+tensors through JIT additional args.
+
+Patch status:
+`results/flashinfer_nvfp4_swa_prefill_codegen_compile_20260609T1712JST_summary.md`
+records the FlashInfer patch and verification. The concrete FA2 + NVFP4 KV + SWA
+batch-prefill module now generates both scale pointers and all six SF stride fields, and
+the module compiles/loads on GB10. Next vLLM action is not more wrapper forcing; rebuild
+against this FlashInfer patch, clear the failed cached prefill module, and rerun
+`scripts/gemma_nvfp4_kv_quality_gate.py` under the GB10 memory rules.
+
 Sharpened correctness check (2026-06-09): do not let replay-vs-replay agreement masquerade
 as correctness. The fresh-wrapper result rules out long-lived wrapper state, but both live
 and fresh wrappers can still faithfully read the same wrong bytes. The next vLLM probe must
