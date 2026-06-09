@@ -6,6 +6,43 @@
 > being the headline capacity win, and that bug is the highest-leverage thing in the
 > whole NVFP4-KV effort.
 
+## 2026-06-09 update — K-side FP4 quantization is the current blocker
+
+The dense-quant split is now run and changes the diagnosis:
+
+- summary: `results/sglang_qwen_fp4kv_kvsplit_trace_20260609_summary.md`
+- run id: `sglang_qwen_fp4kv_kvsplit_trace_c3dae30f_8b95253af_20260609T1335Z`
+- source overlay: `jethac/sglang@8b95253af`, `jethac/flashinfer@c3dae30f`
+- runtime image: `sglang-source-stack-c3dae30f-a8ad6a3ac`
+
+The default radix row is still red (`**` dense/no-prefix versus `ark` on a 55-token
+cached-prefix hit), and the first request-bound divergence is still layer-0 attention
+output (`cosine=0.006467887232207366` on the sampled first head). But the split clears
+the merge path as the primary suspect: previous prefix-reference tracing showed the
+paged prefix contribution and base-2 LSE match a manual FP4 dequant reference, and the
+final `_safe_merge_state` result matches the same online-softmax formula exactly.
+
+The new K/V split shows the real sensitivity:
+
+- actual dense FlashInfer output vs BF16 reference: `cosine=0.9999995231628418`
+- FP4 K+V reference vs BF16: `cosine=0.7876883745193481`
+- FP4 K-only reference vs BF16: `cosine=0.7893718481063843`
+- FP4 V-only reference vs BF16: `cosine=0.996927797794342`
+
+Interpretation: the row is K-side attention-logit sensitivity, not V reconstruction,
+not page/scale pairing, and not merge math. Direct K reconstruction still has high raw
+cosine (`~0.9967`) but large absolute error (`max_abs ~41-42`, RMS `~6`) on layer-0 K,
+which is enough to move the softmax winner. The simple scale-convention suspicion was
+also falsified: `scripts/sglang_fp4_quant_scale_probe.py` shows SGLang's current
+scale convention and FlashInfer's helper convention both reconstruct a synthetic KV
+tensor around `cosine ~0.9955`.
+
+Next target: K-side policy/quality. Investigate calibrated K scale quality, per-head or
+per-group K scales, FP8/BF16 K with FP4 V, or model-specific gating for Qwen. Do not
+spend more time on radix page pairing or `_safe_merge_state` for this row unless new
+evidence contradicts the K-only split. A K-not-FP4 fallback must be reported with its
+capacity cost before it can be considered a blessed serving result.
+
 ## 2026-06-09 update — current-head source-stack retest still red
 
 After vLLM Gemma 3 passed the short first-token gate with `jethac/flashinfer@c3dae30f`, we

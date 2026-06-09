@@ -119,6 +119,27 @@ SGLANG_FP4_KV_TRACE_VALUES=64
   - If FP4-dequant reference stays close to BF16 while cached-prefix `merged_rows` diverge,
     the bug remains in cached-prefix paged/reuse integration.
 
+2026-06-09 dense-quant and K/V split result:
+
+- Summary: `results/sglang_qwen_fp4kv_kvsplit_trace_20260609_summary.md`
+- Fork commits: `jethac/sglang@a8ad6a3ac` added the dense FP4 quant attention split;
+  `jethac/sglang@8b95253af` added K-only and V-only references.
+- Runner update: `scripts/run_sglang_fp4_dense_cache_trace.sh` now uses
+  `PYTHONPATH=/work/third_party/sglang/python:...`, allowing Python-only SGLang
+  diagnostics to run from the mounted fork against the prepared source-stack image
+  without rebuilding `sglang-kernel`.
+- Result: default radix row remains red (`**` dense/no-prefix, `ark` on 55-token prefix
+  reuse), but the split moves the diagnosis away from `_safe_merge_state`.
+- Main layer-0 row (`row=55`): actual dense FlashInfer vs BF16 reference
+  `cosine=0.9999995231628418`; FP4 K+V vs BF16 `0.7876883745193481`; FP4 K-only
+  vs BF16 `0.7893718481063843`; FP4 V-only vs BF16 `0.996927797794342`.
+- Interpretation: the blocker is K-side attention-logit sensitivity. The paged prefix
+  read/LSE and merge are internally correct relative to FP4; the K quantization error is
+  enough to move the softmax winner even though direct K reconstruction cosine is high.
+- Next: investigate K scale quality/policy, including per-head/per-group K scales or
+  FP8/BF16 K with FP4 V. Quantify capacity loss before considering a K-not-FP4 fallback
+  blessed.
+
 Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`
