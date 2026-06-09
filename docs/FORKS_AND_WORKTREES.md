@@ -137,6 +137,7 @@ Active submodules:
 | `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `25ab073ef` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; clean packaging skips bundled FA2/FA3 and preserves explicit `12.1a` targets; native FA2 proof now depends on patched vLLM FlashAttention; Gemma geometry logging was cherry-picked onto the CUDA-13-proven lane; Gemma 3 27B fp8 comparator serves with measured SWA geometry and `882,851` KV tokens; Gemma 3 NVFP4 routes through FA2 and gives `1.777x` KV capacity but corrupts output |
 | `third_party/vllm-flash-attention` | `vllm-project/flash-attention@dd62dac` | `jethac/flash-attention@spark/hijinks-021-fa2-sm121a` at `7d53245` | submodule checkout | vLLM-pinned FA2 CMake now admits SM121/SM121a for CUDA 13 and FA2 arch selection; build/import/cuobjdump proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` at `d4fe78078` | submodule checkout | SM12x FP4 KV compatibility gates, historical alias fix, pre-capture calibration, SM120-family writer fallback, radix/page/merge/write-read traces, cached-prefix reference comparator, and quant-error trace are under test. Clean source overlay reaches FP4 KV capacity proof, but quality is still corrupted unless radix cache is disabled. |
+| `third_party/llama.cpp` | `ggml-org/llama.cpp@19bba67c` | `jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood` at `aa6a5961` | `B:/workshop/worktrees/llama.cpp/spark-hijinks-008-supplied-loglikelihood` | queued `/loglikelihood` and `/v1/loglikelihood` supplied-token scoring endpoint implemented; `git diff --check` and CPU-only WSL `llama-server` build passed; GB10 live smoke and contract audit pending |
 
 FlashInfer patch:
 
@@ -237,3 +238,20 @@ SGLang SM12x FP4 KV gate and alias patch:
   comparison
 
 Other forks should still be created only when the corresponding issue is ready to carry code.
+
+llama.cpp supplied-token loglikelihood endpoint:
+
+- commit: `aa6a5961977139f23ae54dc8279fdac3d1494a77`
+- branch URL: https://github.com/jethac/llama.cpp/tree/spark/hijinks-008-supplied-loglikelihood
+- issue: https://github.com/jethac/dgx-spark-hijinks/issues/8
+- purpose: add a server-side scoring primitive for GGUF lm-eval accuracy by returning exact
+  supplied continuation-token logprobs, summed logprob, and greedy-match boolean without
+  relying on generated-token or top-N sampling responses
+- touched files: `tools/server/server.cpp`, `tools/server/server-context.cpp`,
+  `tools/server/server-context.h`, `tools/server/server-task.cpp`,
+  `tools/server/server-task.h`
+- local verification: `git diff --check` passed in the fork worktree; CPU-only WSL
+  `cmake --build /tmp/llama-loglikelihood-build --target llama-server -j 4` passed
+- missing verification: Linux GB10 CUDA build, live `/loglikelihood` smoke over
+  `tasks/llamacpp_loglikelihood_smoke.jsonl`, and
+  `scripts/llamacpp_loglikelihood_contract_audit.py` green artifact

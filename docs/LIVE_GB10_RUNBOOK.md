@@ -87,11 +87,11 @@ The queue currently contains nine items:
    - packet: `tasks/flashinfer_fp4_gemm_tile_smem_probe_20260609.md`
    - issue: `#7/#13`
    - why: b12x dispatch is not tile/shared-memory viability.
-7. `llamacpp_newer_echo_logprobs_probe`
-   - task ref: `tasks/counterpart_evidence_tasks.jsonl#llamacpp_newer_echo_logprobs`
+7. `llamacpp_supplied_loglikelihood_endpoint_smoke`
+   - packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`
    - issue: `#8`
-   - why: a newer llama.cpp pin may expose supplied-token logprobs, but must pass the
-     contract audit.
+   - why: the fork endpoint is implemented and compile-checked; it must score the
+     unlikely `" zebra"` continuation on a live GB10 llama-server before row 8 moves.
 8. `llamacpp_larger_qwen3_gguf`
    - packet: `tasks/llamacpp_larger_qwen3_gguf_packet_20260609.md`
    - task ref: `tasks/counterpart_evidence_tasks.jsonl#llamacpp_larger_qwen_gguf`

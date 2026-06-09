@@ -208,35 +208,20 @@ until runtime correctness/speed is tested. Use
 then run `scripts/llamacpp_nvfp4_correctness_speed_audit.py --require-speed` on the compact
 artifact directory before accepting the row.
 
-**Accuracy stop point:** the pinned `b9536` server already
-failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
-endpoint, use `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md` as the
-acceptance contract and run the full newer-pin echo-span smoke with
-`scripts/llamacpp_echo_logprobs_contract_runner.py`:
-start a newer `llama-server` manually, then probe every smoke row:
+**Accuracy stop point:** the pinned `b9536` server already failed both native top-N and
+OpenAI `echo=true` supplied-token probes. The direct endpoint branch now exists:
+`jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood` at
+`aa6a5961977139f23ae54dc8279fdac3d1494a77`, recorded in
+`results/llamacpp_supplied_loglikelihood_endpoint_patch_20260609.md`. The next accuracy
+step is no longer another top-N or stock-echo probe; build that fork on GB10, serve a
+small GGUF, run every row in `tasks/llamacpp_loglikelihood_smoke.jsonl` through
+`POST /loglikelihood`, and audit the produced contract artifact with
+`scripts/llamacpp_loglikelihood_contract_audit.py`.
 
-```bash
-RUN_ID=llamacpp_newer_echo_logprobs_$(date +%Y%m%dT%H%MJST)
-python3 scripts/llamacpp_echo_logprobs_contract_runner.py \
-  --url http://127.0.0.1:18085 \
-  --model qwen25-logprob-newer \
-  --run-id "${RUN_ID}" \
-  --input tasks/llamacpp_loglikelihood_smoke.jsonl \
-  --results-dir results
-```
-
-Pass condition: the generated contract audit is green for all rows in
-`tasks/llamacpp_loglikelihood_smoke.jsonl`, including continuation token ids `[1147, 50213]`
-for the zebra case. The runner writes per-case max0/max1 probes, bridges them with
-`scripts/llamacpp_echo_logprobs_to_contract.py`, and audits the converted artifact with
-`scripts/llamacpp_loglikelihood_contract_audit.py`. The bridge now prefers whichever
-duplicate max0/max1 probe actually exposes prompt-token logprobs. The pinned `b9536`
-artifacts are known-red through this path because they return generated-token
-`logprobs.content`, not prompt `tokens` / `token_logprobs`. If the newer pin still returns
-only generated-token `choices[0].logprobs.content`, do not keep tuning top-N. Either run
-one bounded full-vocab-practicality probe with `llamacpp_native_loglikelihood_probe.py`, or
-move directly to `jethac/llama.cpp` with `third_party/llama.cpp` and an issue-named
-worktree for a direct supplied-token loglikelihood endpoint.
+Pass condition: the contract audit is green for all rows, including continuation token ids
+`[1147, 50213]` for the zebra case. A CPU-only WSL build has already proven the endpoint
+compiles through `llama-server`; what remains is GB10 build/runtime proof and the live
+smoke artifact.
 
 Offline source checkpoint: `scripts/llamacpp_source_loglikelihood_audit.py` now records
 that `jethac/llama.cpp@19bba67c1` has no server-source evidence of prompt-token
@@ -244,9 +229,8 @@ that `jethac/llama.cpp@19bba67c1` has no server-source evidence of prompt-token
 token/top-N oriented (`n_probs`, `top_logprobs`, `probs_output`), OpenAI `echo` is
 rejected, and prompt processing extracts logits only for the last prompt token. The audit
 points at `tools/perplexity/perplexity.cpp` for the reusable logits+target-token scoring
-primitive. If the newer stock pin is red too, the next implementation should be an
-issue-named `jethac/llama.cpp` server endpoint that mirrors that primitive and returns the
-contract shape audited by `scripts/llamacpp_loglikelihood_contract_audit.py`.
+primitive. The `spark/hijinks-008-supplied-loglikelihood` endpoint branch is the current
+implementation of that route; keep it red until the live contract artifact passes.
 
 Native FP4 can run in parallel as a separate lane after this docs stop point: set up
 `jethac/llama.cpp` off a recent master ref, build on GB10, and use cuobjdump/runtime

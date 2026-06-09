@@ -127,9 +127,9 @@
       "task_packet_artifact_mentions_checked": true
     },
     {
-      "expected_artifact_count": 5,
+      "expected_artifact_count": 4,
       "findings": [],
-      "id": "llamacpp_newer_echo_logprobs_probe",
+      "id": "llamacpp_supplied_loglikelihood_endpoint_smoke",
       "line": 7,
       "ok": true,
       "priority": 60,

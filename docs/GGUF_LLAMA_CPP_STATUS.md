@@ -1,8 +1,9 @@
 # GGUF llama.cpp Status
 
-Status: practical serving works; paper-comparable lm-eval accuracy is blocked; native
-NVFP4 build/emission and first runtime dispatch are proven, but correctness and matched
-speed are untested.
+Status: practical serving works; paper-comparable lm-eval accuracy is still blocked;
+a `jethac/llama.cpp` supplied-token loglikelihood endpoint is implemented and
+compile-checked, but not yet live-tested on GB10; native NVFP4 build/emission and first
+runtime dispatch are proven, but correctness and matched speed are untested.
 
 Tracked by:
 
@@ -117,6 +118,17 @@ processing extracts logits only for the last prompt token. The reusable primitiv
 `tools/perplexity/perplexity.cpp`, where logits plus target token ids are scored through
 `log_softmax` / `compute_logprobs`, including multiple-choice and HellaSwag-style paths.
 That makes the next fork endpoint a contained server API task, not a search problem.
+
+Fork endpoint patch:
+
+- branch: `jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood`
+- commit: `aa6a5961977139f23ae54dc8279fdac3d1494a77`
+- artifact: `results/llamacpp_supplied_loglikelihood_endpoint_patch_20260609.md`
+- result: adds queued `POST /loglikelihood` and `POST /v1/loglikelihood` server tasks
+  that score supplied continuation-token logprobs directly from logits.
+- local validation: `git diff --check` passed; CPU-only WSL `llama-server` build passed.
+- missing validation: GB10 CUDA build, live smoke task, contract audit, and lm-eval adapter
+  wiring.
 
 ## Historical Native Top-N Probe
 

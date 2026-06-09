@@ -1035,6 +1035,18 @@
     prompt token's logits, and `tools/perplexity/perplexity.cpp` contains the reusable
     logits+target-token scoring primitive for a future supplied-token endpoint.
 
+- Implemented the llama.cpp supplied-token loglikelihood endpoint branch.
+  - fork branch: `jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood`
+  - commit: `aa6a5961977139f23ae54dc8279fdac3d1494a77`
+  - artifact: `results/llamacpp_supplied_loglikelihood_endpoint_patch_20260609.md`
+  - endpoints: `POST /loglikelihood`, `POST /v1/loglikelihood`
+  - implementation: queued server task, direct target-token log-softmax from logits,
+    summed continuation logprob, and lm-eval-style greedy boolean.
+  - local verification: `git diff --check` passed; CPU-only WSL `llama-server` build
+    passed through `server-context.cpp`, `server-task.cpp`, `server.cpp`, and final link.
+  - live status: GB10 runtime validation remains pending because the Tailnet host is
+    visible but not reachable over Tailscale ping, TCP/22, or SSH from this workspace.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

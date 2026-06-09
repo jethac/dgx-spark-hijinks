@@ -1,6 +1,6 @@
 # llama.cpp Supplied-Token Loglikelihood Contract, 2026-06-09
 
-Status: offline contract packet; live server/fork work still required.
+Status: fork endpoint implemented and compile-checked; live GB10 server proof still required.
 
 Purpose: define the exact GGUF scoring primitive needed before llama.cpp can be used as
 the campaign's paper-comparable lm-eval accuracy path. The current failure is API
@@ -89,10 +89,14 @@ The `zebra_unlikely` row is the guard against silently shipping a top-N adapter.
      supplied token, including `" zebra"`;
    - record latency/payload cost before treating it as a real adapter path.
 3. `jethac/llama.cpp` endpoint:
-   - add an issue-named worktree if stock endpoints still cannot expose supplied-token
-     logprobs;
-   - lift the supplied-token scoring logic from llama.cpp's multiple-choice /
-     perplexity path instead of relying on sampling top-N output.
+   - branch: `jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood`;
+   - commit: `aa6a5961977139f23ae54dc8279fdac3d1494a77`;
+   - worktree:
+     `B:/workshop/worktrees/llama.cpp/spark-hijinks-008-supplied-loglikelihood`;
+   - result: queued llama-server task behind `POST /loglikelihood` and
+     `POST /v1/loglikelihood`, scoring supplied continuation tokens directly from logits;
+   - validation so far: `git diff --check` and CPU-only WSL `llama-server` build pass;
+   - remaining gate: build/run on GB10 and pass this contract's smoke audit.
 
 ## Deliverable
 
@@ -108,6 +112,14 @@ python3 scripts/llamacpp_native_loglikelihood_task.py \
 
 If this still uses top-N, the artifact must remain red when `" zebra"` is missing. A green
 artifact requires direct supplied-token logprobs or a proven full-vocabulary equivalent.
+
+For the `jethac/llama.cpp@spark/hijinks-008-supplied-loglikelihood` endpoint smoke, preserve
+at least:
+
+- `results/${RUN_ID}_server.log`
+- `results/${RUN_ID}_build_target_audit.json`
+- `results/${RUN_ID}_contract_artifact.json`
+- `results/${RUN_ID}_contract_audit.json`
 
 Audit command:
 
