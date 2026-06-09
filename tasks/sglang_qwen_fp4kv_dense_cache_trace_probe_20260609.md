@@ -80,31 +80,36 @@ Instrumentation gate:
 ```bash
 SGLANG_FP4_KV_TRACE_DENSE_CACHE=1
 SGLANG_FP4_KV_TRACE_LAYERS=0,1,7,13,20,27
-SGLANG_FP4_KV_TRACE_VALUES=full
+SGLANG_FP4_KV_TRACE_VALUES=64
 ```
 
-Initial insertion points:
+2026-06-09 instrumentation implementation:
+
+- Fork commit: `jethac/sglang@795f087ca`.
+- Branch: `spark/hijinks-018-fp4-e2m1-kv-sm121-serving`.
+- Local validation: `python -m py_compile` for the four touched Python files and
+  `git diff --check` both passed in the Windows workspace.
+- Scope: inactive unless `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1` is set.
+
+Implemented insertion points:
 
 - `third_party/sglang/python/sglang/srt/model_executor/forward_batch_info.py`
-  - Extend the existing ForwardBatch/radix trace to emit `rid`, `forward_mode`,
-    `extend_prefix_lens_cpu`, `extend_seq_lens_cpu`, `positions`, `seq_lens`,
-    `out_cache_loc`, and `sample_row = cumsum(extend_seq_lens) - 1`.
-  - This maps the full dense row's final prompt token to the cached-prefix suffix row.
+  - Not changed in `795f087ca`; existing radix/ForwardBatch traces remain available under
+    `SGLANG_FP4_KV_TRACE_RADIX=1`.
 - `third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py`
-  - In `forward_extend_ragged_no_prefix`, after ragged attention returns, dump the
-    last-token attention output for the dense reference row.
-  - In `forward_extend_merge_paged`, after `o2/s2` and `_safe_merge_state`, dump `o1`,
-    `s1`, `o2`, `s2`, and merged `o` for the cached-prefix row.
+  - Dumps sampled last-token rows for `forward_extend_ragged_no_prefix`,
+    `forward_extend_merge_paged`, and forced full-paged `forward_extend_paged`.
+  - Captures `q`, dense/ragged output, `o1/s1`, `o2/s2`, merged output, request ids,
+    prefix/extend lengths, sequence lengths, cache locations, and K/V scale values.
 - `third_party/sglang/python/sglang/srt/models/qwen2.py`
-  - In `Qwen2DecoderLayer.forward`, dump selected-layer last-token vectors after
-    self-attention, after post-attention norm, after MLP, and at the residual boundary.
+  - Dumps selected-layer sampled rows after self-attention, after post-attention norm,
+    after MLP, and after final model norm.
   - Start with layers `0,1,7,13,20,27`; expand to all 28 layers only if needed.
-  - Also dump the final normalized last-token hidden state before logits.
 - `third_party/sglang/python/sglang/srt/layers/logits_processor.py`
-  - Dump `pruned_states`, `sample_indices`, raw logits, and sampled logits before sampler
+  - Dumps `pruned_states`, `sample_indices`, raw logits, and sampled logits before sampler
     preprocessing. Mirror the same capture for the `extend_return_logprob` path.
 - `third_party/sglang/python/sglang/srt/model_executor/model_runner.py`
-  - Dump `next_token_logits` immediately before and after `_preprocess_logits`.
+  - Dumps `next_token_logits` immediately before and after `_preprocess_logits`.
   - The existing patch target in `scripts/sglang_fp4_first_token_dump_patch.yaml` proves
     this location is sufficient for the sampler boundary.
 

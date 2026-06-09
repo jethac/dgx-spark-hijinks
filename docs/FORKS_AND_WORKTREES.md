@@ -214,7 +214,8 @@ vLLM Qwen/DFlash SM12x stability patch:
 
 SGLang SM12x FP4 KV gate and alias patch:
 
-- commit: `98ad46961`
+- current commit: `795f087ca`
+- first gate/alias commit: `98ad46961`
 - branch URL: https://github.com/jethac/sglang/tree/spark/hijinks-018-fp4-e2m1-kv-sm121-serving
 - purpose: remove first compatibility blockers for SM12x `fp4_e2m1` KV with FlashInfer MHA and restore the historical `KVFP4QuantizeUtil` import alias without claiming the native pool/backend path is complete
 - touched files: `python/sglang/srt/server_args.py`, `python/sglang/srt/layers/quantization/kvfp4_tensor.py`, `test/registered/unit/server_args/test_server_args.py`
@@ -224,6 +225,13 @@ SGLang SM12x FP4 KV gate and alias patch:
 - Linux verification: `results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md` confirms branch checkout and `python3 -m py_compile` for touched files
 - targeted pytest: `results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md` confirms `KV4Compatibility` passes on Linux `aarch64`
 - overlay verification: `results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md` records that the patched overlay reaches FP4 KV allocation and can serve only with graph paths disabled at unusable speed
-- missing verification: clean native FP4 KV pool/backend wrapper build, graph-compatible GB10 `fp4_e2m1` serving proof, and quality comparison
+- dense-cache diagnostic head: `795f087ca` adds inactive `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1`
+  hooks in FlashInfer attention, Qwen2 hidden states, logits processing, and sampler
+  preprocessing for `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
+- local verification for `795f087ca`: `python -m py_compile` for touched files and
+  `git diff --check` passed
+- missing verification: run the dense-vs-cached Qwen trace on GB10, clean native FP4 KV
+  pool/backend wrapper build, graph-compatible `fp4_e2m1` serving proof, and quality
+  comparison
 
 Other forks should still be created only when the corresponding issue is ready to carry code.
