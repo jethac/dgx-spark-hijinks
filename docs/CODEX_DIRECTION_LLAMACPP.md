@@ -208,7 +208,9 @@ until runtime correctness/speed is tested. Use
 
 **Accuracy stop point:** the pinned `b9536` server already
 failed both native top-N and OpenAI `echo=true` supplied-token probes. Before *writing* an
-endpoint, run **one newer-pin echo-span probe** with `scripts/gguf_logprobs_probe.py`:
+endpoint, use `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md` as the
+acceptance contract and run **one newer-pin echo-span probe** with
+`scripts/gguf_logprobs_probe.py`:
 start a newer `llama-server` manually, then probe:
 
 ```bash

@@ -43,6 +43,11 @@ the supplied continuation token ids, including the unlikely `zebra` case. If a n
 still returns only generated-token `choices[0].logprobs.content`, move to a bounded
 full-vocabulary practicality probe or a `jethac/llama.cpp` endpoint fork.
 
+Acceptance contract: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`.
+The required primitive is exact logprob for each supplied continuation token by token id,
+plus summed logprob and greedy-match boolean. Top-N output is acceptable only when every
+requested continuation token is present; the `" zebra"` smoke row must score.
+
 Historical native top-N probe, now negative at `n_probs=512`:
 
 ```bash

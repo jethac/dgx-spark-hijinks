@@ -1001,6 +1001,15 @@
   - live status: queued. The host answers Tailscale ping, but TCP/22 and `tailscale ssh`
     fail from this workspace, so no live trace row was run in this stop point.
 
+- Added the llama.cpp supplied-token loglikelihood contract.
+  - task packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`
+  - purpose: pin the row-8 acceptance primitive after the negative `b9536` OpenAI echo
+    and native top-N rows: context plus continuation in, continuation token ids and exact
+    per-token logprobs out, with summed logprob and greedy-match boolean.
+  - interpretation: top-N `/completion` output is not a fix unless every supplied
+    continuation token is present; the `" zebra"` smoke row must score before GGUF
+    lm-eval accuracy can leave blocked.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

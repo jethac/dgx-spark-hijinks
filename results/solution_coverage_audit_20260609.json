@@ -65,7 +65,7 @@
       "plan_ids": [
         "8"
       ],
-      "status": "native loglikelihood adapter prototype and tiny JSONL task harness ran against live llama-server; top-512 native probabilities scored likely continuations but missed the unlikely continuation; OpenAI echo on pinned `b9536` also returns generated-token `logprobs.content`, not prompt `tokens`/`token_logprobs`, so arbitrary continuation scoring remains blocked"
+      "status": "native loglikelihood adapter prototype and tiny JSONL task harness ran against live llama-server; top-512 native probabilities scored likely continuations but missed the unlikely continuation; OpenAI echo on pinned `b9536` also returns generated-token `logprobs.content`, not prompt `tokens`/`token_logprobs`; `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md` now defines the exact supplied-token acceptance contract, so arbitrary continuation scoring remains blocked until a newer pin, full-vocab path, or fork endpoint satisfies it"
     },
     {
       "area": "HF fallback telemetry and containment",

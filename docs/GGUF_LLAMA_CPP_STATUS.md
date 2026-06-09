@@ -93,6 +93,11 @@ for the `zebra` case. If the newer pin still returns only generated-token
 `choices[0].logprobs.content`, stop tuning top-N and move to full-vocabulary practicality
 or a `jethac/llama.cpp` supplied-token loglikelihood endpoint.
 
+Contract packet: `tasks/llamacpp_supplied_token_loglikelihood_contract_20260609.md`.
+This is the row-8 acceptance shape: context plus continuation in, continuation token ids,
+exact per-token logprobs, summed logprob, and greedy-match boolean out. A green artifact
+must score the unlikely `" zebra"` continuation; top-N membership alone remains red.
+
 ## Historical Native Top-N Probe
 
 The older candidate was llama.cpp's native non-OpenAI `/completion` API plus `/tokenize`, not reshaping the observed `/v1/completions` response.
