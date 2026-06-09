@@ -100,17 +100,28 @@ Green for this diagnostic is not model quality. Green means the log proves one o
 
 The audit is intentionally strict. It requires the paged module to compile as
 `__nv_fp4x2_e2m1` with `require_fp4_kv=1`, `is_kv_fp4x2=1`, both K/V scale-factor
-additional tensors present, and paged K/V tensor views whose byte-carrier layout matches
-the runtime NHD/HND page-size and KV-head geometry. A raw `uint8_t` compiled module is red
-even though the Python-facing cache tensors are byte carriers.
+additional tensors present, runtime `maybe_k_cache_sf` and `maybe_v_cache_sf` tensor views
+present, non-null paged tensor pointers, same-device Q/K/V/scale/output tensors, and paged
+K/V tensor views whose byte-carrier layout matches the runtime NHD/HND page-size, KV-head
+geometry, and `head_dim / 2` packed-FP4x2 carrier width. A raw `uint8_t` compiled module is
+red even though the Python-facing cache tensors are byte carriers.
+
+Known audit limitation: the current FlashInfer debug log format does not yet emit a shared
+`debug_call_id`, generated-module URI/source path, object/cache path, or compile-flag stamp
+on both identity and tensor lines. The audit cannot fully prove identity and tensor-view
+evidence came from the same C++ `paged_run` call until the FlashInfer debug patch emits
+those fields. If this stricter audit passes but quality remains corrupt, the next
+FlashInfer patch should bind identity and tensor dumps with a shared call/module key before
+deeper fragment instrumentation.
 
 ## Expected Red Flags
 
 - `REQUIRE_FP4_KV_CACHE=0` or `is_kv_fp4x2=0` on the failing NVFP4 paged path.
 - `dtype_kv=uint8_t` in the compiled identity instead of `__nv_fp4x2_e2m1`.
 - missing `maybe_k_cache_sf,maybe_v_cache_sf` in `additional_tensors`.
+- missing runtime `maybe_k_cache_sf` or `maybe_v_cache_sf` tensor views.
 - `paged_v_cache` pointer/shape/stride matching the packed carrier but `dtype_kv` not
   reporting the packed FP4x2 carrier.
 - paged K/V byte-carrier tensor dimensions that disagree with runtime layout, page size,
-  or KV-head count.
+  KV-head count, or `head_dim / 2` carrier width.
 - live runtime layout/head/page values diverging from the offline replay payload.

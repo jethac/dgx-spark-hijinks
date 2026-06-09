@@ -98,6 +98,16 @@ def main() -> int:
                 case_findings.append(
                     f"trace_compare metric_comparison_count is not positive: {metric_count!r}"
                 )
+            metricless_count = compare_obj.get("metricless_comparison_count")
+            if metricless_count not in (0, None):
+                case_findings.append(
+                    f"trace_compare metricless_comparison_count is not zero: {metricless_count!r}"
+                )
+            schema_issues = compare_obj.get("event_schema_issues")
+            if isinstance(schema_issues, list) and schema_issues:
+                case_findings.append(
+                    f"trace_compare has event_schema_issues: {len(schema_issues)}"
+                )
             if isinstance(comparisons, list) and comparisons:
                 metric_rows = [item for item in comparisons if isinstance(item, dict) and item.get("metric_ok") is True]
                 if not metric_rows:

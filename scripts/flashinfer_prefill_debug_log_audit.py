@@ -132,6 +132,11 @@ def check_tensor(
         return [f"paged tensor dump missing {name}"]
     if tensor.get("is_null"):
         return [f"paged tensor dump has {name}=null"]
+    ptr = str(tensor.get("ptr", ""))
+    if ptr in ("", "0", "0x0", "nullptr", "NULL", "null"):
+        findings.append(f"{name} ptr is null or empty: {ptr!r}")
+    if parse_int(tensor.get("device")) is None:
+        findings.append(f"{name} device is not an integer: {tensor.get('device')!r}")
     if expected_ndim is not None and tensor.get("ndim") != expected_ndim:
         findings.append(f"{name} ndim={tensor.get('ndim')}, expected {expected_ndim}")
     dtype = tensor.get("dtype") if isinstance(tensor.get("dtype"), dict) else {}
@@ -207,6 +212,8 @@ def check_paged_tensor_line(
         "q",
         "paged_k_cache",
         "paged_v_cache",
+        "maybe_k_cache_sf",
+        "maybe_v_cache_sf",
         "qo_indptr",
         "paged_kv_indptr",
         "paged_kv_indices",
@@ -249,6 +256,10 @@ def check_paged_tensor_line(
         if len(shape) < 4:
             findings.append(f"{name} shape rank too small for paged KV: {shape}")
             continue
+        if expected_head_dim is not None and shape[-1] != expected_head_dim // 2:
+            findings.append(
+                f"{name} FP4x2 carrier last dim shape[-1]={shape[-1]}, expected head_dim/2={expected_head_dim // 2}"
+            )
         if layout == 0:
             if page_size is not None and shape[1] != page_size:
                 findings.append(f"{name} NHD page dimension shape[1]={shape[1]}, expected {page_size}")
@@ -264,10 +275,37 @@ def check_paged_tensor_line(
         else:
             findings.append(f"{name} runtime layout is unexpected: {layout}")
 
+    for name in ("maybe_k_cache_sf", "maybe_v_cache_sf"):
+        findings.extend(
+            check_tensor(
+                tensors.get(name),
+                name=name,
+                expected_dtype_bits=8,
+                expected_dtype_lanes=1,
+            )
+        )
+
     for name in ("qo_indptr", "paged_kv_indptr", "paged_kv_indices", "paged_kv_last_page_len"):
         tensor = tensors.get(name)
         if tensor is not None:
             findings.extend(check_tensor(tensor, name=name, expected_ndim=1))
+
+    device_names = (
+        "q",
+        "paged_k_cache",
+        "paged_v_cache",
+        "maybe_k_cache_sf",
+        "maybe_v_cache_sf",
+        "o",
+    )
+    devices = {
+        name: tensors[name].get("device")
+        for name in device_names
+        if isinstance(tensors.get(name), dict) and not tensors[name].get("is_null")
+    }
+    unique_devices = {device for device in devices.values() if isinstance(device, int)}
+    if len(unique_devices) > 1:
+        findings.append(f"paged tensors are not on one device: {devices}")
     return findings
 
 

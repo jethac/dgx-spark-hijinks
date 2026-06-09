@@ -85,7 +85,7 @@ SGLANG_FP4_KV_TRACE_VALUES=64
 
 2026-06-09 instrumentation implementation:
 
-- Fork commit: `jethac/sglang@43f3123f9`.
+- Fork commit: `jethac/sglang@e631a13fd`.
 - Branch: `spark/hijinks-018-fp4-e2m1-kv-sm121-serving`.
 - Local validation: `python -m py_compile` for the five touched Python files and
   `git diff --check` both passed in the Windows workspace.
@@ -174,8 +174,10 @@ Acceptance:
   `scripts/sglang_dense_cache_trace_compare.py`.
 - The comparison artifact must include at least one `metric_ok=true` dense/cached row and
   positive `metric_comparison_count`; structural event-key matches without vector/top-k
-  metrics are red. The comparator records `first_divergence` when the sampled vector or
-  top-k rows differ.
+  metrics are red. `event_schema_issues`, unknown request/rid binding, or non-zero
+  `metricless_comparison_count` are also red, because they mean the trace did not bind
+  tensor/logit evidence to the intended dense and cached request rows tightly enough. The
+  comparator records `first_divergence` when the sampled vector or top-k rows differ.
 - The run summary must pass `scripts/sglang_dense_cache_trace_summary_audit.py`; a missing,
   unparsable, or red comparison artifact is a red run, not an inconclusive green.
 - Do not bless `--disable-radix-cache` or selective no-reuse as the FP4-KV capacity path.

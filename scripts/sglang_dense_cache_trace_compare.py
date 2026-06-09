@@ -26,6 +26,9 @@ TRACE_PATTERNS = {
     "sampler": re.compile(r"FP4 KV dense-cache sampler trace (?P<payload>\{.*\})"),
 }
 
+REQUIRED_EVENT_KEYS = ("kind", "label", "layer", "forward_pass_id", "rids", "mode")
+ROW_SAMPLE_KINDS = {"attention", "qwen2", "logits", "sampler"}
+
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -93,7 +96,8 @@ def parse_traces(server_log: Path) -> list[dict[str, Any]]:
                     }
                 )
                 break
-            payload["_kind"] = kind
+            payload["_log_kind"] = kind
+            payload["_kind"] = payload.get("kind") if isinstance(payload.get("kind"), str) else kind
             payload["_line"] = lineno
             traces.append(payload)
             break
@@ -202,6 +206,28 @@ def comparison_has_metric(comparison: dict[str, Any] | None) -> bool:
     return False
 
 
+def validate_event(event: dict[str, Any]) -> list[str]:
+    issues: list[str] = []
+    kind = event.get("_kind")
+    declared_kind = event.get("kind")
+    log_kind = event.get("_log_kind")
+    if declared_kind != log_kind:
+        issues.append(f"declared kind {declared_kind!r} does not match log kind {log_kind!r}")
+    for key in REQUIRED_EVENT_KEYS:
+        if key not in event:
+            issues.append(f"missing required key {key!r}")
+    if event.get("forward_pass_id") is None:
+        issues.append("forward_pass_id is null")
+    rids = event.get("rids")
+    if not isinstance(rids, list) or not rids or not all(isinstance(rid, str) and rid for rid in rids):
+        issues.append(f"rids is not a non-empty string list: {rids!r}")
+    if kind in ROW_SAMPLE_KINDS and not isinstance(event.get("sample_rows"), list):
+        issues.append(f"sample_rows is missing or not a list: {event.get('sample_rows')!r}")
+    if kind in {"logits", "sampler"} and not isinstance(event.get("topk"), dict):
+        issues.append("topk is missing or not an object")
+    return issues
+
+
 def event_key(event: dict[str, Any]) -> tuple[Any, ...]:
     return (
         event.get("_kind"),
@@ -242,6 +268,24 @@ def build_report(
     if parse_errors:
         findings.append(f"{len(parse_errors)} trace line(s) failed to parse")
 
+    event_schema_issues: list[dict[str, Any]] = []
+    for trace in traces:
+        if trace.get("parse_error"):
+            continue
+        issues = validate_event(trace)
+        if issues:
+            event_schema_issues.append(
+                {
+                    "line": trace.get("_line"),
+                    "kind": trace.get("_kind"),
+                    "label": trace.get("label"),
+                    "layer": trace.get("layer"),
+                    "issues": issues,
+                }
+            )
+    if event_schema_issues:
+        findings.append(f"{len(event_schema_issues)} trace event(s) failed schema checks")
+
     events_by_class: dict[str, list[dict[str, Any]]] = {"dense": [], "cached": [], "unknown": []}
     per_rid: dict[str, dict[str, Any]] = {}
     for event in traces:
@@ -273,6 +317,8 @@ def build_report(
         findings.append("no dense/no-cache trace events matched request rids")
     if require_cached and not events_by_class["cached"]:
         findings.append("no cached-prefix trace events matched request rids")
+    if events_by_class["unknown"]:
+        findings.append(f"{len(events_by_class['unknown'])} trace event(s) could not be matched to request rids")
 
     dense_by_key: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
     cached_by_key: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
@@ -309,8 +355,11 @@ def build_report(
     if not comparisons:
         findings.append("no comparable dense/cached trace event keys found")
     metric_comparisons = [item for item in comparisons if item.get("metric_ok") is True]
+    metricless_comparisons = [item for item in comparisons if item.get("metric_ok") is not True]
     if comparisons and not metric_comparisons:
         findings.append("dense/cached trace event keys matched, but no vector or top-k metric was comparable")
+    if metricless_comparisons:
+        findings.append(f"{len(metricless_comparisons)} dense/cached comparison row(s) had no usable metric")
 
     first_divergence = None
     for item in metric_comparisons:
@@ -361,8 +410,10 @@ def build_report(
         },
         "comparisons": comparisons,
         "metric_comparison_count": len(metric_comparisons),
+        "metricless_comparison_count": len(metricless_comparisons),
         "first_divergence": first_divergence,
         "parse_errors": parse_errors[:10],
+        "event_schema_issues": event_schema_issues[:20],
         "ok": not findings,
         "findings": findings,
     }
@@ -389,19 +440,43 @@ def run_self_test() -> int:
         ]
     }
     dense_trace = {
+        "kind": "attention",
         "label": "extend_merge_paged",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": 1,
         "rids": ["dense-rid"],
         "layer": 0,
+        "sample_rows": [0],
         "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.0, 3.0]}}]},
     }
     cached_trace = {
+        "kind": "attention",
         "label": "extend_merge_paged",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": 2,
         "rids": ["cached-rid"],
         "layer": 0,
+        "sample_rows": [0],
         "merged_rows": {"rows": [{"row": 0, "value": {"sample": [1.0, 2.5, 3.0]}}]},
     }
-    bad_dense = {"label": "bad", "rids": ["dense-rid"], "layer": 1}
-    bad_cached = {"label": "bad", "rids": ["cached-rid"], "layer": 1}
+    bad_dense = {
+        "kind": "attention",
+        "label": "bad",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": 3,
+        "rids": ["dense-rid"],
+        "layer": 1,
+        "sample_rows": [0],
+    }
+    bad_cached = {
+        "kind": "attention",
+        "label": "bad",
+        "mode": "ForwardMode.EXTEND",
+        "forward_pass_id": 4,
+        "rids": ["cached-rid"],
+        "layer": 1,
+        "sample_rows": [0],
+    }
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
         request_path = tmp_path / "request.json"

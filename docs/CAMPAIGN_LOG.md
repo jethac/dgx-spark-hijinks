@@ -989,15 +989,15 @@
 
 - Added the SGLang dense-vs-cached FP4 KV trace head.
   - SGLang fork branch: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`
-  - commit: `43f3123f9`
+  - commit: `e631a13fd`
   - task packet: `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
   - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh`
   - env gate: `SGLANG_FP4_KV_TRACE_DENSE_CACHE=1`
   - purpose: compare full-prefill and cached-prefix Qwen FP4-KV tensors at FlashInfer
     attention, Qwen2 hidden states, raw/sampled logits, and sampler preprocessing.
-  - follow-up hardening: the same branch now stamps `forward_pass_id`, `kind`, and request
-    ids into trace payloads and the campaign comparator rejects metricless structural
-    matches.
+  - follow-up hardening: the same branch now stamps `forward_pass_id`, `kind`, request ids,
+    and logits/sampler `sample_rows` into trace payloads. The campaign comparator rejects
+    missing schema fields, unknown rid/request binding, and metricless structural matches.
   - local verification: `python -m py_compile` for touched files and `git diff --check`
     passed for the fork; `bash -n scripts/run_sglang_fp4_dense_cache_trace.sh` and
     `git diff --check` passed for the campaign runner.
