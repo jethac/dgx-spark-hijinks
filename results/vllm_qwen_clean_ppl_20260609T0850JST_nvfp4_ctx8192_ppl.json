@@ -1,0 +1,76 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 30437,
+  "container_image": "jethac-vllm-aeon-q36:a919d635d-cleanfa2-flashinfer-e152cf4d-nvfp4kv",
+  "contexts": [
+    {
+      "ctx": 8192,
+      "elapsed_s": 9.918477503000759,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "qwen36-fast",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8192,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -1.9637313152980593,
+        "mean_nll_nats": 1.9637313152980593,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8192,
+        "num_scored_tokens": 8191,
+        "ok": true,
+        "ppl": 7.125866375316183,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8192,
+          "prompt_tokens_details": null,
+          "total_tokens": 8193
+        }
+      }
+    }
+  ],
+  "elapsed_s": 14.397,
+  "finished_utc": "2026-06-09T00:17:15Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452014080
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "nvfp4",
+  "model": "qwen36-fast",
+  "ok": true,
+  "run_id": "vllm_qwen_clean_ppl_20260609T0850JST_nvfp4_ctx8192",
+  "runtime_ref": "jethac/vllm@a919d635d + jethac/flashinfer@e152cf4d clean full-attention PPL; VLLM_TEST_FORCE_FP8_MARLIN=1",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-09T00:17:05Z",
+  "text_chars": 92110,
+  "text_files": [
+    "docs/CAMPAIGN_LOG.md"
+  ],
+  "tokenizer": "/models/target",
+  "url": "http://127.0.0.1:8000"
+}

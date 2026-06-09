@@ -1,6 +1,7 @@
 # vLLM Qwen Clean-Path NVFP4-KV PPL Sweep
 
-Status: staged; 8k live smoke attempted on 2026-06-09 JST but not accepted as a PPL row.
+Status: partial; 8k clean full-attention row accepted on 2026-06-09 JST. 32k and 128k
+remain pending.
 
 Goal: measure the quality cost of Qwen3.6 NVFP4 KV versus fp8 KV on the clean full-attention path, excluding the known broken reuse paths (Gemma/SWA and SGLang radix/prefix-cache reuse).
 
@@ -143,3 +144,29 @@ Findings:
 - The first fp8 launch reached `GPU KV cache size: 6,076,050 tokens`, but startup took about `466.81 s` through profile/KV/cache/warmup and the readiness wait missed the API becoming healthy.
 - The follow-up backend probe with `VLLM_TEST_FORCE_FP8_MARLIN=1` selected `MARLIN` under the same no-prefix-cache launch skeleton and was killed before full model load.
 - GPU was returned idle and no PPL containers were left running.
+
+## 2026-06-09 Accepted 8k Row
+
+Artifacts:
+
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_summary.md`
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_fp8_ctx8192_ppl.json`
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_nvfp4_ctx8192_ppl.json`
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_compare.json`
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_fp8_server_before_ppl.log`
+- `results/vllm_qwen_clean_ppl_20260609T0850JST_nvfp4_server_before_ppl.log`
+
+Result:
+
+| ctx | PPL fp8 | PPL NVFP4 | delta PPL | nats/token fp8 | nats/token NVFP4 | delta nats/token |
+|---:|---:|---:|---:|---:|---:|---:|
+| 8192 | 7.089731808 | 7.125866375 | +0.036134567 | 1.958647513 | 1.963731315 | +0.005083802 |
+
+Acceptance notes:
+
+- Both rows used `VLLM_TEST_FORCE_FP8_MARLIN=1` and selected `MARLIN` NvFp4 MoE.
+- Prefix caching was disabled in both rows, so this measures the clean full-attention path
+  and excludes the known Gemma/SWA and SGLang radix/prefix-cache reuse failures.
+- NVFP4 selected FlashInfer FA2 NVFP4 KV with vLLM V-scale-factor deswizzle enabled.
+- KV pool increased from `6,675,527` fp8 tokens to `11,456,401` NVFP4 tokens (`1.716x`) in
+  this no-prefix-cache launch.

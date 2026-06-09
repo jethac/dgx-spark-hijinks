@@ -1,0 +1,20 @@
+{
+  "elapsed_s": 0.0,
+  "fp8_report": "results/vllm_qwen_clean_ppl_20260609T0850JST_fp8_ctx8192_ppl.json",
+  "nvfp4_report": "results/vllm_qwen_clean_ppl_20260609T0850JST_nvfp4_ctx8192_ppl.json",
+  "ok": true,
+  "rows": [
+    {
+      "ctx": 8192,
+      "delta_nats_per_token": 0.0050838022334114275,
+      "delta_ppl": 0.036134567072504176,
+      "fp8_ok": true,
+      "nats_per_token_fp8": 1.958647513064648,
+      "nats_per_token_nvfp4": 1.9637313152980593,
+      "nvfp4_ok": true,
+      "ppl_fp8": 7.089731808243679,
+      "ppl_nvfp4": 7.125866375316183
+    }
+  ],
+  "schema": "vllm-prompt-ppl-comparison/v1"
+}
