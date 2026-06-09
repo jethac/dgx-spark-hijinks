@@ -1,0 +1,73 @@
+{
+  "audit": "results/counterpart_evidence_audit_20260609.json",
+  "audit_missing_or_partial_count": 6,
+  "duplicate_requirements": [],
+  "missing_tasks_for_audit": [],
+  "ok": true,
+  "row_checks": [
+    {
+      "findings": [],
+      "line": 1,
+      "ok": true,
+      "requirement": "sglang_gemma_nvfp4_ordinary_kv"
+    },
+    {
+      "findings": [],
+      "line": 2,
+      "ok": true,
+      "requirement": "sglang_clean_fp4_kv_after_row"
+    },
+    {
+      "findings": [],
+      "line": 3,
+      "ok": true,
+      "requirement": "sglang_dflash_or_eagle_qwen"
+    },
+    {
+      "findings": [],
+      "line": 4,
+      "ok": true,
+      "requirement": "vllm_qwen36_nvfp4_dflash"
+    },
+    {
+      "findings": [],
+      "line": 5,
+      "ok": true,
+      "requirement": "vllm_qwen_nvfp4_kv_capacity"
+    },
+    {
+      "findings": [],
+      "line": 6,
+      "ok": true,
+      "requirement": "llamacpp_larger_qwen_gguf"
+    },
+    {
+      "findings": [],
+      "line": 7,
+      "ok": true,
+      "requirement": "llamacpp_native_fp4_gguf"
+    },
+    {
+      "findings": [],
+      "line": 8,
+      "ok": true,
+      "requirement": "llamacpp_live_loglikelihood"
+    },
+    {
+      "findings": [],
+      "line": 9,
+      "ok": true,
+      "requirement": "llamacpp_newer_echo_logprobs"
+    }
+  ],
+  "schema": "counterpart-task-matrix/v1",
+  "task_already_claim_ready": [
+    "vllm_qwen36_nvfp4_dflash",
+    "vllm_qwen_nvfp4_kv_capacity"
+  ],
+  "task_count": 9,
+  "task_without_audit_requirement": [
+    "llamacpp_newer_echo_logprobs"
+  ],
+  "tasks": "tasks/counterpart_evidence_tasks.jsonl"
+}

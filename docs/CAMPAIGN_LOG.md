@@ -947,6 +947,46 @@
     reuse. The next fix/probe is dense full-prefill versus FP4 cached-prefix quality,
     better calibration, or a selective no-reuse policy.
 
+- Staged the next vLLM Gemma 3 FlashInfer paged-prefill diagnostic.
+  - FlashInfer fork branch: `jethac/flashinfer@spark/hijinks-021-prefill-debug`
+  - commit: `1230341d`
+  - parent campaign commit: `4598919`
+  - run packet: `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`
+  - env gate: `FLASHINFER_PREFILL_DEBUG_ONCE=1`
+  - purpose: print generated dtype identity, `REQUIRE_FP4_KV_CACHE`, FP4x2 carrier status,
+    additional scale-factor tensor metadata, runtime page/head/window fields, and TensorView
+    shape/stride/dtype from the generated C++ paged-prefill module.
+  - interpretation: this is the next live check before kernel-side fragment dumps. It tests
+    whether the live generated module/C++ binding is the one the Python wrapper thinks it is.
+
+- Rewired the SGLang FP4-KV matrix to use a source-built stack.
+  - commit: `a4ff319`
+  - script: `scripts/install_sglang_source_stack.sh`
+  - callers: `scripts/prepare_sglang_source_stack_image.sh`,
+    `scripts/run_sglang_fp4_request_order_matrix.sh`
+  - result: the next SGLang matrix run installs editable patched FlashInfer and source-builds
+    `sgl-kernel` from the `jethac/sglang` submodule, instead of using stale PyPI
+    `flashinfer-cubin`, `flashinfer-jit-cache`, or `sglang-kernel` wheels.
+
+- Recorded the GB10 host access stop point.
+  - commit: `f120023`
+  - artifact: `results/gb10_host_access_20260609_tailnet_stop_point.md`
+  - result: the tailnet name resolves to `100.113.98.11`; the host briefly answered
+    Tailscale ping earlier in the session, but the final check timed out on Tailscale ping
+    and TCP/22 returned `False`.
+  - interpretation: live vLLM/SGLang validation is queued, but this workspace cannot drive
+    it until SSH/TCP 22 is reachable again.
+
+- Refreshed offline status audits for 2026-06-09.
+  - artifacts:
+    `results/solution_coverage_audit_20260609.json`,
+    `results/serving_manifest_audit_20260609.json`,
+    `results/counterpart_evidence_audit_20260609.json`,
+    `results/counterpart_task_matrix_20260609.json`
+  - result: solution coverage is structurally OK; serving strictness is still false; the
+    counterpart audit still has six missing/partial rows; the task matrix has no missing
+    task contracts for those rows.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

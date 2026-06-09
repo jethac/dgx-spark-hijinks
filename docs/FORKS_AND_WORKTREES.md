@@ -133,6 +133,7 @@ Active submodules:
 |---|---|---|---|---|
 | `third_party/flashinfer` | `flashinfer-ai/flashinfer@a2870343` | `jethac/flashinfer@spark/hijinks-004-sm121-flashinfer` | `B:/workshop/worktrees/flashinfer/spark-hijinks-sm121-flashinfer` | patch branch pushed |
 | `third_party/flashinfer` | `jethac/flashinfer@a42c8f07` | `jethac/flashinfer@spark/hijinks-007-fa2-nvfp4-kv-sm121` at `e152cf4d` | `B:/workshop/worktrees/flashinfer/spark-hijinks-007-fa2-nvfp4-kv-sm121` | FA2 explicit scale-factor stride/page patch pushed; inherits SM121 `mm_fp4` patch; GB10 build/runtime proof pending |
+| `third_party/flashinfer` | `jethac/flashinfer@4c3c0d99` | `jethac/flashinfer@spark/hijinks-021-prefill-debug` at `1230341d` | submodule checkout | one-shot generated-module/C++ identity logging staged for the vLLM Gemma 3 NVFP4-KV paged-prefill failure; live GB10 run pending |
 | `third_party/vllm` | `vllm-project/vllm@4dcd10e` | `jethac/vllm@spark/hijinks-020-aeon-qwen-dflash-sm121a` at `25ab073ef` | submodule checkout | SM12x NVFP4 KV routing retained; AEON Qwen/DFlash source patches ported; derived AEON GB10 serving row passes at `6804e1b`; clean packaging skips bundled FA2/FA3 and preserves explicit `12.1a` targets; native FA2 proof now depends on patched vLLM FlashAttention; Gemma geometry logging was cherry-picked onto the CUDA-13-proven lane; Gemma 3 27B fp8 comparator serves with measured SWA geometry and `882,851` KV tokens; Gemma 3 NVFP4 routes through FA2 and gives `1.777x` KV capacity but corrupts output |
 | `third_party/vllm-flash-attention` | `vllm-project/flash-attention@dd62dac` | `jethac/flash-attention@spark/hijinks-021-fa2-sm121a` at `7d53245` | submodule checkout | vLLM-pinned FA2 CMake now admits SM121/SM121a for CUDA 13 and FA2 arch selection; build/import/cuobjdump proof pending |
 | `third_party/sglang` | `sgl-project/sglang@02be2e7` | `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving` at `d4fe78078` | submodule checkout | SM12x FP4 KV compatibility gates, historical alias fix, pre-capture calibration, SM120-family writer fallback, radix/page/merge/write-read traces, cached-prefix reference comparator, and quant-error trace are under test. Clean source overlay reaches FP4 KV capacity proof, but quality is still corrupted unless radix cache is disabled. |
@@ -166,6 +167,21 @@ FlashInfer FA2 NVFP4 KV patch:
 - local verification: `python -m py_compile flashinfer/jit/attention/utils.py flashinfer/jit/attention/modules.py tests/jit/test_attention_utils.py` and `git diff --check` passed
 - local pytest limitation: `python -m pytest tests/jit/test_attention_utils.py` fails to collect in this Windows workspace because `tvm_ffi` is not installed
 - missing verification: clean FlashInfer GB10 build, harness proof, and vLLM/SGLang serving proof
+
+FlashInfer Gemma 3 paged-prefill debug patch:
+
+- commit: `1230341d`
+- branch URL: https://github.com/jethac/flashinfer/tree/spark/hijinks-021-prefill-debug
+- ancestry: based on `4c3c0d99`, so it includes the `spark/hijinks-020-nvfp4-jit-uri`
+  follow-up work and prior SM121/NVFP4 KV enablement ancestry
+- purpose: add inactive `FLASHINFER_PREFILL_DEBUG_ONCE=1` host-side C++ identity logging
+  in `csrc/batch_prefill.cu` plus generated JIT metadata stamps in
+  `csrc/batch_prefill_customize_config.jinja`
+- run packet: `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`
+- local verification: `git diff --check` and shell-side source/API greps passed before
+  pushing
+- missing verification: live GB10 rebuild of the generated paged-prefill module and capture
+  of `[flashinfer][prefill-debug]` server-log lines
 
 vLLM SM12x NVFP4 KV routing patch:
 

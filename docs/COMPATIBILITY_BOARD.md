@@ -1,12 +1,29 @@
 # DGX Spark Compatibility Board
 
-Date: 2026-06-08 JST
+Date: 2026-06-09 JST
 
 Purpose: one public, recurring status view for the Spark-class GB10 local-AI stack. This board does not replace the detailed reports; it tells a reader what is usable today, what is only a proof, and what exact artifact is missing next.
 
 Hardware scope: single Spark-class GB10 system, compute capability `12.1` / `sm_121`. Multi-Spark and TP>1 remain unvalidated.
 
-Latest reachability evidence: `results/spark_doctor_tailnet_reconnect_20260608T074035JST.json` from `thinkstationpgx-00b4.tail740c8d.ts.net` / `100.113.98.11`. The old `192.168.68.112` LAN address was not reachable from the Windows client at that time.
+Latest reachability evidence: `results/gb10_host_access_20260609_tailnet_stop_point.md`.
+The GB10 node resolved to `100.113.98.11`; it briefly answered Tailscale ping during the
+session, then the final check timed out on Tailscale ping and TCP/22 returned `False`.
+Live validation is queued, but SSH is not currently a usable control path from this
+workspace.
+
+## Latest Deltas
+
+- `jethac/flashinfer@spark/hijinks-021-prefill-debug` commit `1230341d` adds inactive
+  `FLASHINFER_PREFILL_DEBUG_ONCE=1` C++/JIT identity logging for the Gemma 3 NVFP4-KV
+  FlashInfer paged-prefill failure. Run packet:
+  `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`.
+- `scripts/install_sglang_source_stack.sh` now installs patched editable FlashInfer and
+  source-builds `sgl-kernel` from `third_party/sglang`, so the SGLang matrix runner no
+  longer depends on stale PyPI `flashinfer-cubin`, `flashinfer-jit-cache`, or
+  `sglang-kernel` wheels.
+- Fresh mechanical audits are recorded under `results/*_20260609.json`; counterpart task
+  coverage remains complete for the six missing/partial non-vLLM rows.
 
 ## Status Legend
 
@@ -25,7 +42,7 @@ Latest reachability evidence: `results/spark_doctor_tailnet_reconnect_20260608T0
 | vLLM | `partial` | AEON Gemma 4 26B A4B NVFP4+DFlash serves locally at about `48-54 tok/s` short/medium decode and `98 tok/s` long-prefill; Gemma 12B unified serves through a source/precompiled path; AEON Qwen3.6 NVFP4+DFlash passes compact serving at about `50-56 tok/s` when Qwen thinking is disabled through `chat_template_kwargs`; `jethac/vllm` derived AEON Qwen row passes at `47.22`, `58.88`, and `61.62 tok/s`; clean `jethac/vllm@a919d635d` + `jethac/flash-attention@7d53245` Qwen row passes at `61.07`, `56.97`, and `60.10 tok/s` with separate `sm_121a` FA2 cubin proof; Qwen NVFP4-KV through FlashInfer FA2 records `1.751x` fp8 KV pool/concurrency with decode parity; Gemma Rung -1 config audit and Gemma 3 live preflight are complete; `jethac/vllm@25ab073ef` adds the runtime geometry hook on top of the CUDA-13-proven `a919d635d` lane; HF access for gated Gemma 3 is cleared; Gemma 3 27B Rung 1 fp8 comparator serves with FlashInfer attention, measured `62`-layer SWA geometry, `882,851` KV tokens, `6.74x` concurrency, and unflagged benchmark output; the matching Gemma 3 NVFP4 row routes through FlashInfer FA2 and records `1.77x` KV capacity at decode parity, but output is corrupted; the refreshed first-token diagnostic proves the NVFP4 corruption is already present on the first generated token with `0.0` top-logprob overlap versus fp8; `jethac/vllm@e2a8197a9` adds env-gated trace events for metadata, KV writes, NVFP4 split views, and SWA skip state; `tasks/vllm_gemma3_nvfp4_trace_packet_20260608.md` records the next exact run packet | official general Spark container, accuracy check, native FP4 weight/MoE proof, quality-correct Gemma NVFP4-KV, upstreamable packaging beyond the AEON Qwen recipe | run the Gemma 3 27B fp8/NVFP4 first-token trace packet and compare slot/page metadata, split-view offsets, sampled bytes, and `swa_skip` before climbing to Gemma 4 31B text-only dense D=512 mixed-KV | [#6](https://github.com/jethac/dgx-spark-hijinks/issues/6), [#20](https://github.com/jethac/dgx-spark-hijinks/issues/20) |
 | SGLang | `partial` | NVIDIA 26.05 serves Qwen2.5 1.5B BF16/auto and fp8 at about `58-59 tok/s`; fp8 doubles KV pool versus BF16/auto; clean `jethac/sglang` FP4-KV source overlay records `1.779x` fp8 KV capacity under an auto-safe no-graph policy; standalone convention bridge clears raw FA2 reader math for viable scale pairs; prompt reconciliation proves OpenAI prompt IDs match local Qwen rendering, so serialization is not the quality bug; endpoint metadata localization records the OpenAI/native FP4 first-token split; the paired FP4 dump shows same-hash 56-token OpenAI/native requests diverge already at prefill logits (`334` vs `838`), while the paired fp8 control returns `**` on both endpoints and both prefill candidates argmax `334`; radix isolation shows `--disable-radix-cache` fixes the FP4 first-token split and `--skip-server-warmup` alone does not; `jethac/sglang@ce1b6d15e` traces the default failure to 55 cached prefix tokens routed through `forward_extend_merge_paged`; `jethac/sglang@839cb7457` shows those same 55 page IDs and matching K/V data plus scale first dimensions; `jethac/sglang@991ac1e63` samples readable packed K/V bytes, FP8 scale bytes, and finite `o1/s1/o2/s2` plus merged output for layer 0; `jethac/sglang@f76f80484` shows sampled cached pages `4113..4116` match write input bytes = stored bytes = read bytes for K/V data and scale buffers; `jethac/sglang@2a228949a` shows cached paged-prefix `o2`, FlashInfer-base `s2`, and merge match a dequantized reference | Gemma serving, FP4 KV output quality, graph-safe FP4 KV, explicit `sm_121` build-target proof | trace calibration/quantization-error impact and request sequencing/state above attention | [#14](https://github.com/jethac/dgx-spark-hijinks/issues/14), [#18](https://github.com/jethac/dgx-spark-hijinks/issues/18) |
 | llama.cpp | `blessed` for practical serving | Gemma 4 26B Q4_0 serves around `76 tok/s`; Qwen2.5 1.5B Q4_K_M serves around `167-175 tok/s`; logs include `CUDA : ARCHS = 1210` and CUDA graphs; `jethac/llama.cpp@19bba67c1` builds/emits native `mxf4nvf4.block_scale` PTX for `sm_121a`; converted AEON Qwen3.6 NVFP4 GGUF loads and returns a correct short smoke with Nsight `GGML_TYPE_NVFP4` matmul evidence | paper-comparable GGUF lm-eval accuracy; NVFP4 accuracy/speed versus BF16/Q8/Q4_K_M; full no-fallback native FP4 proof; larger repeatable Qwen3/Qwen3.6 rows | run matched PP/TG and correctness comparisons for the NVFP4 GGUF; separately try a newer pin or native endpoint after both top-512 and OpenAI echo probes failed to expose supplied-token logprobs | [#17](https://github.com/jethac/dgx-spark-hijinks/issues/17), [#8](https://github.com/jethac/dgx-spark-hijinks/issues/8) |
-| FlashInfer | `partial` | SM121 `mm_fp4` dispatch patch enables `b12x`; FA2 NVFP4 KV standalone probes pass small and Gemma sliding/local shapes | serving speedup, Gemma global `D=512` path, end-to-end vLLM/SGLang NVFP4 KV, clean wheel/container proof | run clean forked FlashInfer with vLLM/SGLang after-row; keep `b12x` as enablement until serving rows prove speed | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
+| FlashInfer | `partial` | SM121 `mm_fp4` dispatch patch enables `b12x`; FA2 NVFP4 KV standalone probes pass small and Gemma sliding/local shapes; `jethac/flashinfer@1230341d` stages one-shot generated-module/C++ identity logging for the Gemma 3 paged-prefill failure | serving speedup, Gemma global `D=512` path, end-to-end vLLM/SGLang NVFP4 KV, clean wheel/container proof, live run of the new prefill debug packet | run the Gemma 3 FlashInfer prefill debug packet first when host access returns; keep `b12x` as enablement until serving rows prove speed | [#7](https://github.com/jethac/dgx-spark-hijinks/issues/7) |
 | LiteRT-LM | `side-runtime` | CPU generation works; GPU benchmark runs for small Gemma row | GPU chat exits `-11`; not a throughput path | decide CPU/complement recommendation or isolate GPU chat crash | [#16](https://github.com/jethac/dgx-spark-hijinks/issues/16) |
 | HF fallback | `partial` | telemetry and failure annotation scripts exist | several fallback rows die with `returncode=-9`; resource cause not always proven | add stronger OOM/resource evidence before using HF fallback in comparisons | [#9](https://github.com/jethac/dgx-spark-hijinks/issues/9) |
 
@@ -88,6 +105,13 @@ The fp8 comparator is captured in
 `results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md`: FlashInfer FA2 routing and
 `1.777x` capacity are proven, but output is corrupted, so Gemma NVFP4-KV is not green.
 
+Current live packet: `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`.
+It uses `jethac/flashinfer@spark/hijinks-021-prefill-debug` commit `1230341d` and
+`FLASHINFER_PREFILL_DEBUG_ONCE=1` to print generated dtype identity, FP4 requirement,
+additional scale-factor tensors, runtime page/head/window fields, and TensorView
+shape/stride/dtype for the first generated paged-prefill module. Run this before adding
+kernel-side fragment dumps.
+
 ### Qwen Speed Lane
 
 After the target Qwen servers are already running:
@@ -104,7 +128,7 @@ Before starting the seven AEON-derived counterpart rows, validate the live task 
 ```bash
 python3 scripts/counterpart_task_matrix.py \
   --tasks tasks/counterpart_evidence_tasks.jsonl \
-  --audit results/counterpart_evidence_audit_20260608.json \
+  --audit results/counterpart_evidence_audit_20260609.json \
   --output results/counterpart_task_matrix_YYYYMMDDTHHMMJST.json
 ```
 
@@ -145,6 +169,10 @@ Use the clean `jethac/sglang` fork/container, not a site-package overlay, and re
 - quality comparator before any speed/capacity claim
 
 Current safe policy: the fork disables CUDA graph capture for native FP4 KV unless `SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1` is set. The matched `d7d931f` row proves capacity/backend routing but still corrupts standardized Qwen output. OpenAI and native logprob probes localize this to prompt/path-sensitive generation drift; prompt reconciliation proves OpenAI prompt IDs match local Qwen rendering, so the remaining bug is endpoint/path-specific FP4 KV numerics or metadata. The paired first-token dump row moves this earlier than `_preprocess_logits()`: same-hash OpenAI/native prompts already have different prefill argmaxes, and the fp8 control proves the endpoint sequence itself can agree. Radix isolation shows disabling radix cache fixes the FP4 first-token split; the `ce1b6d15e` trace shows the failing default native request reuses 55 cached prefix tokens and enters `forward_extend_merge_paged`, while radix-off recomputes the full prompt and passes. The request-order post-analysis shows cached-prefix rows have `0 / 20` first-token top-logprob overlap with the full-prefill distribution, while no-reuse rows have `20 / 20`. This is diagnostic, not a serving blessing. FP4 KV is not a blessed SGLang serving path yet, and no-reuse rows must not be counted as the capacity path.
+
+Packaging note: use `scripts/prepare_sglang_source_stack_image.sh` or the per-case
+installer `scripts/install_sglang_source_stack.sh`. The current runner source-builds the
+patched stack instead of installing the PyPI `sglang-kernel` wheel.
 
 ## Update Cadence
 

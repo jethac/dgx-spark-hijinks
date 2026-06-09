@@ -25,7 +25,7 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 | 12. Improve benchmark design | partial | `scripts/spark_smoke_suite.py`, `scripts/openai_serving_benchmark.py`, telemetry wrapping, failure annotation, `scripts/qwen_speed_lane.py`, `scripts/serving_manifest_audit.py`, `scripts/counterpart_task_matrix.py`, and the tightened Gemma 3 vLLM packet split smoke, serving, Qwen speed/capacity, fragile fallback, claim-readiness, missing-counterpart task contracts, readiness waits, and server-log capture into narrower phases. | Live rows still need consistent phase completion, size-aware timeout policy, row-level failure explanations, and matched before/after manifests for every claimed runtime path. |
 | 13. Observability | partial | `spark_doctor`, `cuda_so_audit`, `cuda_build_target_audit`, `container_target_audit`, runtime process probes, SM-count-aware hardware keys, server-log artifact capture, and serving-manifest audits exist. The Tailscale reconnect artifact proves the host is reachable at `100.113.98.11` and still reports GB10 / compute capability `12.1`; it also shows system Python has no Torch, so Torch-backed SM count needs an environment-specific doctor run. | Each blessed runtime still needs a no-silent-fallback artifact proving selected attention, quantization, KV, CUDA graph, and build/JIT targets before and after benchmarks; current AEON Gemma vLLM manifest has family/PTX container evidence but still lacks accepted native build-target evidence. |
 | 14. Coordinate upstream ownership | partial | GitHub issues track the layer split; `docs/COMPATIBILITY_BOARD.md`, `docs/WHEEL_CONTAINER_MATRIX.md`, and `docs/AEON_PRIOR_ART_PORT_MAP.md` give maintainers a public status board, install matrix, and prior-art map. | Need recurring blessed-stack updates, public reproduction bundles, and upstream issue/PR taxonomy once matched GB10 before/after evidence exists. |
-| 14a. Forks, submodules, worktrees, and subagents | partial | `jethac` FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `jethac/llama.cpp@spark/native-fp4-sm121-20260608` is pinned for native FP4 arch testing; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work; `scripts/counterpart_evidence_audit.py` tracks whether those counterpart rows have live artifacts; `tasks/counterpart_evidence_tasks.jsonl` defines the eight live task contracts. | No upstream PRs until matched before/after GB10 story is proven; every future fork change still needs issue branch, worktree path, commit SHA, and reproduction command. |
+| 14a. Forks, submodules, worktrees, and subagents | partial | `jethac` FlashInfer, vLLM, SGLang, and llama.cpp forks/submodules/worktrees exist; patch branches are documented; the vLLM Qwen branch now includes AEON-derived Qwen/DFlash runtime fixes; `jethac/llama.cpp@spark/native-fp4-sm121-20260608` is pinned for native FP4 arch testing; `docs/AEON_PRIOR_ART_PORT_MAP.md` separates direct vLLM ports from SGLang/llama.cpp counterpart work; `scripts/counterpart_evidence_audit.py` tracks whether those counterpart rows have live artifacts; `tasks/counterpart_evidence_tasks.jsonl` defines nine live task contracts, and `results/counterpart_task_matrix_20260609.json` confirms no missing task contracts for the six still-partial counterpart lanes. | No upstream PRs until matched before/after GB10 story is proven; every future fork change still needs issue branch, worktree path, commit SHA, and reproduction command. |
 | 15. Publish honest recipes | partial | Runtime recipes, compatibility board, wheel/container matrix, blessed-stack notes, and Qwen/Gemma docs now record what works, what is slow, what is broken, and what remains untested. | A clean-unit reproduction for the blessed vLLM/SGLang/llama.cpp stack is still missing, and the recipes must stay tied to exact commands, versions, artifacts, and go/no-go decisions. |
 
 ## Cross-Cutting Required Lanes
@@ -42,21 +42,21 @@ Run this after changing the solution plan, status table, issue tracker, or Qwen 
 
 ```bash
 python3 scripts/solution_coverage_audit.py \
-  --output results/solution_coverage_audit_20260608.json
+  --output results/solution_coverage_audit_20260609.json
 ```
 
 Run this before using serving rows as runtime-claim evidence:
 
 ```bash
 python3 scripts/serving_manifest_audit.py \
-  --output results/serving_manifest_audit_20260608.json
+  --output results/serving_manifest_audit_20260609.json
 ```
 
 Run this before saying AEON prior art has been covered outside vLLM:
 
 ```bash
 python3 scripts/counterpart_evidence_audit.py \
-  --output results/counterpart_evidence_audit_20260608.json
+  --output results/counterpart_evidence_audit_20260609.json
 ```
 
 Run this before the next live GB10 session to confirm every missing counterpart row has a task contract:
@@ -64,16 +64,16 @@ Run this before the next live GB10 session to confirm every missing counterpart 
 ```bash
 python3 scripts/counterpart_task_matrix.py \
   --tasks tasks/counterpart_evidence_tasks.jsonl \
-  --audit results/counterpart_evidence_audit_20260608.json \
-  --output results/counterpart_task_matrix_20260608.json
+  --audit results/counterpart_evidence_audit_20260609.json \
+  --output results/counterpart_task_matrix_20260609.json
 ```
 
 ## Highest-Leverage Next Proofs
 
 Live GB10 required:
 
-1. Follow `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`: Gemma 3 27B NVFP4 page/scale byte-pairing is sampled clean (`195 / 195`), the failing first-token prompts do not skip SWA blocks, tensor tracing localizes corruption to FlashInfer attention output, and the standalone signed Gemma-shaped FA2 output probe passes. The wrapper-boundary dump and active-page dump prove the real FlashInfer FA2 paged prefill wrapper returns byte-like BF16 output aligned with packed active-page V data. The active-page replay dequantizes the exact pages and produces sane signed causal-attention reference output with near-zero cosine versus the real wrapper output; `jethac/flashinfer@3db181f4` plus the live JIT-URI rerun prove an NVFP4-specific `fp4x2_e2m1` paged-prefill namespace does not fix quality; `jethac/vllm@4a6e4b537` plus the fresh-wrapper replay prove long-lived wrapper state/reuse is not the cause; `jethac/vllm@1fabc6649` plus the plan-signature trace prove the Python-visible live wrapper plan/run fields match the offline replay shape. Next live step: compare dequantized on-page FP4 data/scales against BF16 KV reference for a failing Gemma position, audit intra-page offsets for the expected `[K_data 1024 | K_scale 128 | V_data 1024 | V_scale 128]` layout, and instrument FlashInfer's generated module/JIT/cache identity plus C++ `paged_run` argument interpretation before climbing to Gemma 4 31B text-only.
-2. Follow `docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md`: the cached FP4 paged-prefix reader, merge, sampled quant/dequant error, endpoint ordering, source-stack build, and four-row no-code matrix are now localized. The remaining SGLang blocker is FP4 cached-prefix quality/reuse itself: default reuse fails, force-miss rows pass, and full-paged-with-reuse still changes cached logprob versus fresh output. Next compare dense full-prefill versus FP4 cached-prefix attention/logits. Do not climb to Gemma until Qwen quality is green.
+1. Follow `docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md`: Gemma 3 27B NVFP4 page/scale byte-pairing is sampled clean (`195 / 195`), the failing first-token prompts do not skip SWA blocks, tensor tracing localizes corruption to FlashInfer attention output, and the standalone signed Gemma-shaped FA2 output probe passes. The wrapper-boundary dump and active-page dump prove the real FlashInfer FA2 paged prefill wrapper returns byte-like BF16 output aligned with packed active-page V data. The active-page replay dequantizes the exact pages and produces sane signed causal-attention reference output with near-zero cosine versus the real wrapper output; `jethac/flashinfer@3db181f4` plus the live JIT-URI rerun prove an NVFP4-specific `fp4x2_e2m1` paged-prefill namespace does not fix quality; `jethac/vllm@4a6e4b537` plus the fresh-wrapper replay prove long-lived wrapper state/reuse is not the cause; `jethac/vllm@1fabc6649` plus the plan-signature trace prove the Python-visible live wrapper plan/run fields match the offline replay shape. `jethac/flashinfer@1230341d` now stages inactive `FLASHINFER_PREFILL_DEBUG_ONCE=1` generated-module/C++ identity logging, with the run packet in `tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md`. Next live step: run that packet, then compare dequantized on-page FP4 data/scales against BF16 KV reference for a failing Gemma position and audit intra-page offsets for the expected `[K_data 1024 | K_scale 128 | V_data 1024 | V_scale 128]` layout before climbing to Gemma 4 31B text-only.
+2. Follow `docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md`: the cached FP4 paged-prefix reader, merge, sampled quant/dequant error, endpoint ordering, source-stack build, and four-row no-code matrix are now localized. Commit `a4ff319` adds `scripts/install_sglang_source_stack.sh`, and both the prepared-image and per-case matrix paths now use editable patched FlashInfer plus source-built `sgl-kernel` instead of stale PyPI kernel/cubin packages. The remaining SGLang blocker is FP4 cached-prefix quality/reuse itself: default reuse fails, force-miss rows pass, and full-paged-with-reuse still changes cached logprob versus fresh output. Next compare dense full-prefill versus FP4 cached-prefix attention/logits. Do not climb to Gemma until Qwen quality is green.
 3. Keep native FP4 weight/MoE proof separate from FA2 `sm_121a` proof; the passing clean Qwen row still selects Marlin weight-only FP4.
 4. Run `scripts/qwen_speed_lane.py --input tasks/qwen_speed_lane_sample.jsonl ...` against the live Qwen servers so vLLM, SGLang, and llama.cpp rows share one manifest shape.
 
@@ -81,6 +81,6 @@ Offline or low-GPU work:
 
 1. Continue the llama.cpp lane from the live negative rows and the native-FP4 arch probe: test whether full-vocabulary scoring is practical, try a newer llama.cpp pin, or add a native endpoint that returns logprobs for supplied continuation tokens; separately run an actual NVFP4 GGUF on `jethac/llama.cpp@19bba67c1` to prove runtime dispatch/correctness.
 2. Keep the acceptance table above current as each artifact lands.
-3. Keep `tasks/counterpart_evidence_tasks.jsonl` aligned with `results/counterpart_evidence_audit_20260608.json` as rows move from missing to live evidence.
+3. Keep `tasks/counterpart_evidence_tasks.jsonl` aligned with `results/counterpart_evidence_audit_20260609.json` as rows move from missing to live evidence.
 4. Continue porting AEON/hikarioyama-compatible changes only when local evidence shows the corresponding blocker.
 5. Add a focused FP4 GEMM note/test for the TensorRT-LLM #11368 class: GB10 may need separate tile configs even when SM12x dispatch and `121a` JIT targeting are correct.
