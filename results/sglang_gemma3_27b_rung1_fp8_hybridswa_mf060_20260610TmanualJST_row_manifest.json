@@ -1,0 +1,82 @@
+{
+  "artifacts": {
+    "container_inspect": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST_container_inspect.json",
+    "editable_install_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST_editable_install.log",
+    "openai_benchmark": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST_openai_benchmark.json",
+    "server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST_server.log"
+  },
+  "benchmark_cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "completion_tok_s_total": 3.338595393343823,
+      "content_chars": 335,
+      "content_preview": "A local AI workstation thrives on fast memory (RAM) because AI tasks, particularly those involving large language models and image/video processing, are incredibly memory-intensive. These models and the datasets they operate on often don't fit entirely within the GPU's limited VRAM, requiring frequent data transfer to and from system",
+      "decode_s": 15.359559411008377,
+      "decode_tok_s": 4.166786187508116,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781057877,
+        "id": "1505fada30064ddbbf2dc7a4f5e40ddf",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 24,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 88
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 335,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 19.169738305994542,
+      "ttft_s": 3.8101788949861657,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 88
+      }
+    }
+  ],
+  "benchmark_ok": true,
+  "docker_memory": "100g",
+  "docker_memory_swap": "100g",
+  "enable_fp4_cuda_graph": false,
+  "extra_server_envs": [
+    "SGLANG_GEMMA_KV_GEOMETRY=1",
+    "SGLANG_GEMMA3_ENABLE_HYBRID_SWA=1"
+  ],
+  "graphs_disabled": true,
+  "k_size_gb": 1.46,
+  "kv_cache_dtype": "fp8_e4m3",
+  "kv_line": "[2026-06-10 02:16:40] KV Cache is allocated. dtype: torch.float8_e4m3fn, #tokens: 76384, K size: 1.46 GB, V size: 1.46 GB",
+  "kv_tokens": 76384,
+  "max_total_num_tokens": 76384,
+  "mem_fraction_static": 0.6,
+  "mixed_kv": false,
+  "model": "google/gemma-3-27b-it",
+  "page_size": 1,
+  "radix_cache_disabled": false,
+  "ready": true,
+  "run_id": "sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST",
+  "runner_status": 0,
+  "runtime_image": "sglang-source-stack-c3dae30f-e631a13fd",
+  "schema": "sglang-qwen-kv-serving-row/v1",
+  "served_model_name": "gemma3-27b-it",
+  "v_size_gb": 1.46
+}

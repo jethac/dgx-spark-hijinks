@@ -1,0 +1,20 @@
+{
+  "candidate_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_mixed_ppl.json",
+  "elapsed_s": 0.0,
+  "fp8_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_fp8_ppl.json",
+  "ok": true,
+  "rows": [
+    {
+      "candidate_ok": true,
+      "ctx": 512,
+      "delta_nats_per_token": 0.0006903285818635752,
+      "delta_ppl": 0.039801941275747765,
+      "fp8_ok": true,
+      "nats_per_token_candidate": 4.054848420449479,
+      "nats_per_token_fp8": 4.054158091867615,
+      "ppl_candidate": 57.67641976774841,
+      "ppl_fp8": 57.636617826472666
+    }
+  ],
+  "schema": "sglang-prompt-ppl-comparison/v1"
+}

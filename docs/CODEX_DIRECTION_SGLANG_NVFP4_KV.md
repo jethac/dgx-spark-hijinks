@@ -1,10 +1,339 @@
 # Direction: SGLang → NVFP4 KV on Spark (convert proven capacity into blessed quality)
 
-> Standing direction for the SGLang lane. SGLang is the lane where NVFP4-KV **capacity**
-> is already proven on GB10 (1.779× fp8 pool) — the closest result to the campaign's
-> founding goal (memory / context / concurrency). It is **one correctness bug away** from
-> being the headline capacity win, and that bug is the highest-leverage thing in the
-> whole NVFP4-KV effort.
+> Standing direction for the SGLang lane. The current claim-ready SGLang row is mixed
+> FP8-K + NVFP4-V: about `1.28x` fp8 KV capacity at a matched physical K+V byte budget,
+> with radix-cache quality green under the prefix-cache graph guard. Full NVFP4 K+V
+> remains the parked stretch route.
+
+## 2026-06-10 update — deswizzle leak is falsified for the live SGLang failure
+
+Artifacts:
+
+- `results/flashinfer_nvfp4_page_deswizzle_matrix_20260610TmanualJST.md`
+- `results/sglang_deswizzle_flag_check_20260610TmanualJST.md`
+- `results/sglang_qwen_fp4kv_moduleproof_fast_20260610TmanualJST.md`
+
+The standalone FlashInfer matrix proves an important negative-control mechanism:
+SGLang-style linear V scale factors are correct with deswizzle off, but corrupt when
+`FLASHINFER_PAGED_V_SF_DESWIZZLE=1` is applied. This is true for both page size 1 and
+page size 16, and for both decode and paged prefill.
+
+However, the live SGLang Qwen cached-prefix failure was rerun with module/env proof, and
+the failing `extend_merge_paged` path had:
+
+- `extra_cuda_flags=''`
+- `deswizzle_macro_active=False`
+- `BatchPrefillWithPagedKVCacheWrapper`
+- FA2 backend, NHD layout, `torch.uint8` K/V carriers, `torch.float8_e4m3fn` K/V scales
+- cached-prefix paged wrapper max KV length `55`
+
+So do not continue chasing a vLLM deswizzle macro leak as the current root cause. It remains
+a real corruption mechanism and a runbook guardrail, but it is not active in the reproduced
+SGLang cached-prefix failure.
+
+The active SGLang bug remains in the cached-prefix paged read / scale-feed convention handed
+to FlashInfer, or in the FP4-K attention behavior reached by that path.
+
+## 2026-06-10 update — vLLM proves FP4-K reuse; keep full-NVFP4 open
+
+Artifact: `results/sglang_vs_vllm_fp4_k_reuse_diff_20260610T0255JST.md`.
+
+The vLLM cross-check is now locked: full NVFP4 K+V with prefix caching ON produced a real
+local cache hit (`vllm:prefix_cache_hits_total 3728.0`) and preserved the first token on the
+Qwen smoke gate. This means FP4-K reuse is not categorically broken across runtimes.
+
+Reframe the SGLang task accordingly:
+
+- full NVFP4 K+V under SGLang radix remains red;
+- mixed FP8-K / NVFP4-V remains the green fallback and capacity-insurance path;
+- but the full-NVFP4 goal is still live. The next bug hunt should diff SGLang's FP4-K feed
+  into FlashInfer attention against vLLM's working packed-cache path, especially
+  `forward_extend_merge_paged`'s ragged suffix partial versus paged cached-prefix partial.
+
+Do not spend more time on `_safe_merge_state` arithmetic or byte/page pairing unless new
+evidence contradicts the existing traces. Both have already been cleared for the observed
+row.
+
+## 2026-06-10 update — mixed-KV fresh comparator is green
+
+Artifacts:
+
+- `results/sglang_mixed_kv_pool_probe_20260610T0036JST.md`
+- `results/sglang_qwen_mixedkv_default_20260610T0042JST_summary.md`
+- `results/sglang_qwen_fp8_vs_mixedkv_fresh_comparator_20260610TmanualJST.md`
+- `results/sglang_qwen_mixedkv_quality3_20260610TmanualJST.md`
+- `results/sglang_qwen_mixedkv_natural_longprefill_20260610TmanualJST.md`
+- `results/sglang_qwen_mixedkv_graph_safety_20260610TmanualJST.md`
+
+Fresh sequential comparator result, same model/runtime/page size/mem fraction:
+
+| KV mode | allocatable tokens | K size | V size | short decode tok/s |
+|---|---:|---:|---:|---:|
+| fp8 K + fp8 V | 3,119,168 | 20.82 GB | 20.82 GB | 57.594 |
+| fp8 K + NVFP4 V | 5,537,968 | 36.97 GB | 20.80 GB | 57.804 |
+
+Observed allocator-token ratio: `1.775x`. Short-decode speed ratio: `1.004x`.
+
+Important interpretation: the normalized bytes-per-token improvement is still the expected
+mixed-path claim, about `1.28x`, because K remains fp8 while V is packed NVFP4 plus scale
+factors. The `1.775x` number is the observed SGLang allocator token count under the same
+launch settings, not a pure per-token storage-ratio claim.
+
+The current repair direction is mixed KV, not more FP4-K scale tuning:
+
+- K cache stays FP8 e4m3 to protect QK logits and prefix-only LSE.
+- V cache stays packed NVFP4 plus FP8 scale factors to preserve a meaningful capacity win.
+- Expected capacity claim is the mixed-path claim, about `16/(8+4.5) ~= 1.28x` over fp8,
+  not the full `~1.78x` full-FP4 K+V claim.
+
+The small GB10 page-size-1 probes now pass:
+
+- FlashInfer split-K/V page-size-1 isolation with SGLang macro policy:
+  - `fp8_k_bf16_v`: cosine `0.9999990463256836`
+  - `bf16_k_nvfp4_v`: cosine `1.0`
+  - `fp8_k_nvfp4_v`: cosine `1.0000001192092896`
+- SGLang pool integration:
+  - K buffer dtype `torch.float8_e4m3fn`
+  - V buffer dtype `torch.uint8`
+  - no K scale buffer
+  - cosine versus pool reference `0.999995231628418`
+  - max abs diff `0.0078125`
+
+Important macro policy: do **not** compile SGLang's FlashInfer JIT modules with
+`-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`. That macro is vLLM-specific. Under that wrong
+macro, the same page-size-1 NVFP4-V isolation drops to cosine around `0.88-0.90`; without
+it, the isolation is exact. This explains the temporary red probe and should stay in the
+runbook because accidental vLLM/SGLang macro sharing is easy.
+
+Current status: mixed-KV is the practical SGLang route for Qwen2.5, but not fully blessed.
+The default radix first-token gate is green and the fresh fp8 comparator shows decode
+parity with larger allocatable KV capacity. The original repeated-sentence `long_prefill`
+prompt is now demoted: fresh-server controls show fp8 and mixed-KV both trip repetition
+flags on that prompt, so it is not a clean mixed-KV quality discriminator. A new
+non-repetitive `natural_long_prefill` case passes for both fp8 and mixed-KV with speed
+parity and no heuristic repetition flags.
+
+Graph safety was initially tested with a narrow guarded path. With
+`SGLANG_FP4_KV_ENABLE_CUDA_GRAPH=1`, the unguarded run captures both full and piecewise
+CUDA graphs and serves short/medium requests with `cuda graph: True`; however, the same
+`natural_long_prefill` case stops after four completion tokens (`1 .`,
+`matched_stop=151645`) and the quality probe flags `too_short_for_requested_decode`.
+The failure is isolated to graph mode plus radix reuse: a graph-enabled
+`natural_long_prefill` run with `#cached-token: 0` passes, and the full graph-enabled
+three-case sequence passes when rerun with `--disable-radix-cache` / `ChunkCache`
+(`natural_long_prefill`: 128 completion tokens, no quality flags).
+
+The first SGLang guard only covered the then-known unsafe shape: when
+`SGLANG_FP4_KV_MIXED_KV=1` and an EXTEND batch has a nonzero cached prefix, piecewise CUDA
+graph replay is disabled for that prefill. Decode graphs and no-prefix prefill graphs
+remain enabled. The guarded default
+radix row passes all three cases with graph capture enabled and radix cache on:
+`short_decode` 64 tokens at `58.142 tok/s`, `medium_decode` 192 tokens at
+`57.634 tok/s`, and `natural_long_prefill` 128 tokens at `57.723 tok/s`, all with no
+quality flags. The server log proves cached-prefix prefills use `cuda graph: False` while
+decode remains `cuda graph: True`. Artifact:
+`results/sglang_qwen_mixedkv_graph_safety_20260610TmanualJST.md`.
+
+Superseding policy: that guard is insufficient for blessable quality. The later
+prefix-4096 control shows the graph-sensitive operation is also the cache-populating
+prefill: graph-written prefix cache entries shift fp8 and mixed-KV PPL, while eager-written
+prefix cache entries make the same row essentially equal. Until the graph-write path is
+repaired, Qwen mixed-KV quality rows must disable graph capture for cache-populating
+prefills as well as cached-prefix prefills. `--disable-radix-cache` remains diagnostic only.
+
+The supplied-token PPL gate below was the interim guarded-graph result. Artifact:
+`results/sglang_qwen_mixedkv_reuse_ppl_20260610TmanualJST.md`. A no-reuse 512-token
+smoke row passed with fp8 and mixed-KV exactly equal, but that row had `cached_tokens=0`
+and is only a harness smoke. The accepted rows warm a prefix and score the remaining
+continuation through a real radix hit:
+
+| ctx | reused prefix | scored tokens | PPL fp8 | PPL mixed | delta nats/token |
+|---:|---:|---:|---:|---:|---:|
+| 512 | 256 | 255 | 18.453757 | 18.431295 | -0.001218 |
+| 2048 | 1024 | 1023 | 28.140193 | 28.392845 | 0.008938 |
+| 8192 | 4096 | 4095 | 7.238053 | 8.056450 | 0.107121 |
+
+Both fp8 and mixed-KV responses report the expected `cached_tokens`, with
+`num_missing_tokens=0`, `num_mismatched_tokens=0`, and one explicitly skipped SGLang
+logprob-span boundary placeholder. Server logs confirm the scored cached-prefix prefill
+used `#cached-token: 256`, `#cached-token: 1024`, and `#cached-token: 4096`; for mixed-KV
+these scored prefills ran under the guard (`cuda graph: False`) while the warmup/no-prefix
+prefills still used graph replay. Capacity for the 512 launch was `3,116,067` fp8 tokens
+versus `5,552,677` mixed-KV tokens (`1.782x` observed allocator ratio); the 2048 launch was
+`3,117,451` fp8 tokens versus `5,560,832` mixed-KV tokens (`1.784x` observed allocator
+ratio); the 8192 launch was `3,119,879` fp8 tokens versus `5,551,389` mixed-KV tokens
+(`1.779x` observed allocator ratio).
+
+Updated interpretation: mixed-KV remains the practical SGLang capacity route, but this
+guarded-graph PPL table is no longer a clean quality baseline. The 8192 row's material PPL
+cost (`+0.107121` nats/token) is now treated as a graph-written-prefix-cache failure
+detector. The graph-safe baseline is the later all-eager prefix-4096 control, which shows
+fp8 and mixed-KV effectively equal on the same corpus path. Full NVFP4 K+V remains a
+separate red/open track.
+
+That localization is now done. Artifact:
+`results/sglang_qwen_mixedkv_8k_token_logprob_diagnostic_20260610TmanualJST.md`. The
+detailed graph-enabled 8k rerun reproduces the loss at `+0.106689` nats/token and shows the first 1024
+scored tokens after the 4096-token cached prefix account for about `55.9%` of the total
+delta nats. The median token delta is near zero (`0.002143`), but the positive tail is
+larger than the negative tail (`861.844` positive delta nats versus `-424.951` negative).
+The 8k no-reuse control then isolates the issue to cached-prefix reuse: with
+`reuse_prefix_len=0`, fp8 and mixed-KV are exactly equal at 8192 tokens (PPL `7.195014`
+versus `7.195014`, `delta_nats_per_token=0.0`) while preserving the same mixed-KV
+allocation (`5,542,470` tokens versus `3,116,223` fp8, `1.779x` observed). Server logs
+confirm both scored requests used `#cached-token: 0`. Conclusion: do not blindly scale this
+to 32k yet. The later graph-vs-eager control changes the repair target from "cached
+NVFP4-V quality over long reused prefixes" to "graph-written prefix cache state"; a broad
+mixed-KV long-prefill penalty remains falsified for the 8k no-reuse row.
+
+The fixed-8k reuse-prefix sweep is now run. Artifact:
+`results/sglang_qwen_mixedkv_reuse_prefix_sweep_ctx8192_20260610TmanualJST.md`. At fixed
+`ctx=8192`, the PPL delta grows with reused-prefix length:
+
+| reused prefix | delta nats/token |
+|---:|---:|
+| 0 | 0.000000 |
+| 1024 | 0.003079 |
+| 2048 | 0.026555 |
+| 4096 | 0.106689 |
+| 6144 | 0.114980 |
+
+This initially looked like a cached NVFP4-V quality surface, but a later control supersedes
+that interpretation. Artifact:
+`results/sglang_qwen_mixedkv_prefix4096_graph_vs_eager_20260610TmanualJST.md`. On the same
+4096-prefix / 8192-context corpus path, disabling all CUDA graph capture changes the row
+from fp8 `7.238053` versus mixed `8.052973` (`+0.106689` nats/token) to fp8 `5.176347`
+versus mixed `5.169650` (`-0.001295` nats/token). The scored cached-prefix request was
+eager in both runs; the difference is that the graph-enabled sweep populated the prefix
+cache with `cuda graph: True`, while the eager control populated it with `cuda graph:
+False`.
+
+Current interpretation: the active SGLang correctness bug is CUDA-graph cache-writing
+state, not `_safe_merge_state`, radix page pairing, or an inherent NVFP4-V cached-prefix
+quality limit. The practical policy is to disable graph capture for cache-populating
+prefills as well as cached-prefix prefills until the graph-write path is repaired. Treat
+the graph-enabled reuse-prefix sweep as a failure detector, not a blessable quality curve.
+
+The prefix-cache graph-write guard is now implemented and validated. Artifact:
+`results/sglang_qwen_mixedkv_prefix4096_prefixcacheguard_sweepcorpus_20260610TmanualJST.md`.
+The guard lives in
+`third_party/sglang/python/sglang/srt/model_executor/piecewise_cuda_graph_runner.py`:
+with radix cache enabled, `PiecewiseCudaGraphRunner.can_run()` returns `False` for
+EXTEND/prefill batches unless `SGLANG_ALLOW_PREFIX_CACHE_PREFILL_CUDA_GRAPH=1` is set for
+experiments. This routes both cache-populating prefills and cached-prefix prefills through
+eager while preserving regular decode CUDA graphs.
+
+Validation on the same 8192-context / 4096-prefix corpus path, with graph capture enabled
+globally, now gives fp8 PPL `5.176347` versus mixed-KV PPL `5.169650`
+(`delta_nats_per_token=-0.001295`). Server logs prove both fp8 and mixed-KV used
+`cuda graph: False` for the 4096-token cache write and the 4096-token cached read. The
+mixed-KV allocation remains `5,552,890` tokens versus `3,116,450` fp8 tokens (`1.782x`).
+This is the current SGLang Qwen mixed-KV quality baseline for prefix reuse on GB10.
+
+The broader graph-safe fixed-8k sweep is now complete. Artifact:
+`results/sglang_qwen_mixedkv_prefixcacheguard_reuse_prefix_sweep_ctx8192_20260610TmanualJST.md`.
+It reruns reused prefixes `0, 1024, 2048, 4096, 6144` with graph capture enabled globally
+but prefix-cache-writing and cached-prefix prefills forced eager by the guard:
+
+| reused prefix | delta nats/token | allocator ratio |
+|---:|---:|---:|
+| 0 | 0.000000 | 1.776x |
+| 1024 | -0.000267 | 1.779x |
+| 2048 | 0.000436 | 1.778x |
+| 4096 | -0.001295 | 1.769x |
+| 6144 | -0.066981 | 1.779x |
+
+Server logs prove the intended policy for every reused-prefix row: the cache-populating
+prefill and the cached-prefix scoring prefill both report `cuda graph: False`, while mixed
+rows still log `SGLang FP4 KV mixed mode enabled: K cache uses FP8 e4m3, V cache uses
+packed NVFP4`. This promotes Qwen mixed-KV radix reuse from a single 4096-prefix control
+to a graph-safe 8k prefix-ladder baseline. Full NVFP4 K+V remains separate and red/open.
+
+The deep-prefix continuation is also complete. Artifact:
+`results/sglang_qwen_mixedkv_prefixcacheguard_deep_prefix_sweep_ctx8192_20260610TmanualJST.md`.
+It extends the same fixed-8k corpus path through reused prefixes `4096, 6144, 7168, 7680`.
+All rows are `ok=true`; the deepest rows score only `1023` and `511` continuation tokens,
+so their small positive deltas (`+0.008188` and `+0.010784` nats/token) are short-span
+checks, not a stable quality trend. The run completes the requested prefix-depth curve for
+the mixed-KV row.
+
+Capacity denominator audit is now explicit. Artifact:
+`results/sglang_qwen_mixedkv_capacity_denominator_audit_20260610TmanualJST.md`.
+The `~1.78x` figure in the old SGLang mixed-KV rows was a pre-fix allocator-token ratio,
+not the raw FP8-K + NVFP4-V storage ratio. The normalized mixed-KV storage gain is about
+`16/(8+4.5) ~= 1.28x` versus fp8 at equal KV byte budget. The old `~1.78x` happened because
+the mixed runs also allocated about `1.39x` more total log-reported K+V GB than fp8; the
+allocator sized the pool from the logical full-FP4 dtype estimate while the experimental
+pool physically stored FP8 K plus NVFP4 V.
+
+The claim manifest for the current SGLang fallback row is
+`results/sglang_qwen_mixedkv_claim_manifest_20260610TmanualJST.md`. Status:
+claim-ready for Qwen mixed FP8-K + NVFP4-V on GB10 with radix cache ON and the prefix-cache
+graph guard active. This is not a full NVFP4 K+V claim.
+
+The pool-configurator denominator fix is now implemented and live-verified. Artifact:
+`results/sglang_mixedkv_poolconfigfix_20260610TmanualJST.md`. The fixed mixed-KV row now
+allocates `3,990,192` tokens versus fp8 `3,119,614` at the same `--mem-fraction-static
+0.40`, with physical K+V bytes essentially equal (`41.62 GB` versus `41.66 GB`). The
+current mixed-KV capacity claim is therefore the normalized `~1.28x` ratio. The older
+`~1.78x` mixed-KV allocator ratio is a pre-fix overcommit artifact and should not be
+quoted as current.
+
+Gemma 3 27B Rung 1 has a first SGLang mixed-KV checkpoint:
+`results/sglang_gemma3_27b_rung1_mixedkv_20260610TmanualJST.md`. Text-only Gemma 3 now
+serves with experimental hybrid-SWA memory enabled, measured runtime geometry is uniform
+`D=128` with 52 local and 10 global layers, and mixed FP8-K + NVFP4-V passes a short
+sequential PPL comparator at `ctx=512`, `reuse_prefix_len=256`
+(`delta_nats_per_token=+0.000690`). The SWA wrapper needed to select
+`MHATokenToKVPoolFP4` for float4 KV; otherwise mixed-KV failed at allocation with
+`fill_cuda` unsupported for `Float4_e2m1fn_x2`. This is a checkpoint, not a full Gemma
+claim: long-context/deep-prefix Gemma 3, CUDA graphs, and full NVFP4 K+V remain pending.
+
+Two upstream draft issues are banked for later filing:
+
+- `results/upstream_draft_issue_sglang_prefix_cache_graph_write_20260610TmanualJST.md`
+  covers the piecewise CUDA graph prefix-cache write corruption that affects fp8 as well
+  as mixed-KV.
+- `results/upstream_draft_issue_flashinfer_head512_selector_overpromise_20260610TmanualJST.md`
+  covers the FlashInfer/vLLM `head_dim=512` selector-vs-kernel mismatch relevant to the
+  future Gemma 4 rungs.
+
+Stretch readiness is recorded in
+`results/sglang_full_nvfp4_structural_route_readiness_20260610TmanualJST.md`. The full
+NVFP4 K+V radix route should start as a separate issue-named implementation branch, not as
+part of the mixed-KV claim packet.
+
+## 2026-06-10 update — mixed-KV default radix first-token gate is green
+
+Artifact: `results/sglang_qwen_mixedkv_default_20260610T0042JST_summary.md`.
+
+The default Qwen radix-cache row was rerun with `SGLANG_FP4_KV_MIXED_KV=1`, radix cache
+ON, page size 1, FlashInfer attention, CUDA graph disabled, and the existing source-stack
+image. This directly targets the old failure where the second request reused a 55-token
+FP4 cached prefix and flipped the first token from `**` to `ark`.
+
+Result: green for the targeted first-token gate. Both request orders now return `**` on
+the cached-prefix second request:
+
+- OpenAI first then native second: native cached tokens `55`, first token `**`,
+  logprob `-0.7601577043533325`.
+- Native first then OpenAI second: OpenAI cached tokens `55`, first token `**`,
+  logprob `-0.7601577043533325`.
+- Fresh/no-reuse controls stay at `**`, logprob `-0.7235294580459595`.
+
+The dense-cache summary audit passes with `ok: true`, `733` trace events, `648`
+metric-bearing comparisons, and no findings.
+
+Important caveat: this fixes the observed first-token radix failure; it does not prove
+exact dense-vs-cached tensor equality. The first request-bound tensor difference remains
+layer-0 attention output with cosine `0.4661444810372346`, `max_abs=0.2578125`, and
+`rms=0.11784679304779001`. The difference no longer flips the tested first token, but
+long-form quality still needs a real gate.
+
+Capacity log: the mixed first-token gate reports `#tokens: 5573469`, `K size: 37.21 GB`,
+`V size: 20.93 GB`, and `max_total_num_tokens=5573469`. The fresh sequential comparator
+then reports `5,537,968` mixed-KV tokens versus `3,119,168` fp8 tokens, with short-decode
+parity (`57.804` versus `57.594 tok/s`).
 
 ## 2026-06-09 update — K-side FP4 quantization is the current blocker
 
@@ -643,13 +972,14 @@ the decoder/KV path; it is the destination, not the stepping stone.
 - `cuobjdump`/JIT-cache proof the running FP4 KV decode kernel matches the claimed path.
 - Server log proving native FlashInfer FP4 KV selection (not fallback).
 - Deterministic sanity (raw `2+2` = `4`) AND a quality comparator vs fp8/bf16/dequant.
-- Capacity/concurrency vs an fp8 comparator at matched settings (already have 1.779×).
+- Capacity/concurrency vs an fp8 comparator at matched settings.
 - CUDA-graph-replay coverage once graphs are re-enabled.
 - Explicit scope labels: SWA/Gemma, page-size variants, TP>1, MTP/spec-decode untested.
 
 ## Guardrails
-- **Keep capacity and quality claims separate.** Capacity (1.779×) is proven; quality is
-  not. Never let the proven capacity number imply a usable serving row.
+- **Keep capacity and quality claims separate.** The current mixed-KV capacity claim is
+  `~1.28x` at matched physical K+V byte budget. Historical `~1.78x` mixed-KV rows were
+  pre-fix allocator overcommit artifacts; full NVFP4 K+V `~1.78x` remains red/open.
 - **Convention discipline (the turn-1 lesson).** Document the matched quantize↔consumer
   pair explicitly: which global-scale convention (multiply vs divide) and which V-scale
   layout (SGLang symmetric-linear, NOT vLLM B2 swizzle). Most of this lane's risk is a

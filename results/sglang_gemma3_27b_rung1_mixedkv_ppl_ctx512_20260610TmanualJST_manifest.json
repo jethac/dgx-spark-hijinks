@@ -1,0 +1,49 @@
+{
+  "artifacts": {
+    "compare": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_compare.json",
+    "fp8_ppl": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_fp8_ppl.json",
+    "fp8_server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_fp8_server.log",
+    "mixed_ppl": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_mixed_ppl.json",
+    "mixed_server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_mixed_server.log"
+  },
+  "compare_ok": true,
+  "corpus": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_corpus.md",
+  "corpus_manifest": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_corpus_manifest.json",
+  "ctx_list": [
+    512
+  ],
+  "docker_memory": "100g",
+  "docker_memory_swap": "100g",
+  "enable_fp4_cuda_graph": false,
+  "extra_server_envs": [
+    "SGLANG_GEMMA_KV_GEOMETRY=1",
+    "SGLANG_GEMMA3_ENABLE_HYBRID_SWA=1"
+  ],
+  "fp8_kv_line": "[2026-06-10 02:43:38] KV Cache is allocated. dtype: torch.float8_e4m3fn, #tokens: 75193, K size: 1.43 GB, V size: 1.43 GB",
+  "fp8_kv_tokens": 75193,
+  "graphs_disabled": true,
+  "include_token_logprobs": false,
+  "logprob_start_len": 256,
+  "mem_fraction_static": 0.6,
+  "mixed_kv_line": "[2026-06-10 02:51:24] KV Cache is allocated. dtype: torch.float4_e2m1fn_x2, #tokens: 96638, K size: 1.84 GB, V size: 1.04 GB",
+  "mixed_kv_tokens": 96638,
+  "model": "google/gemma-3-27b-it",
+  "page_size": 1,
+  "reuse_prefix_len": 256,
+  "rows": [
+    {
+      "candidate_ok": true,
+      "ctx": 512,
+      "delta_nats_per_token": 0.0006903285818635752,
+      "delta_ppl": 0.039801941275747765,
+      "fp8_ok": true,
+      "nats_per_token_candidate": 4.054848420449479,
+      "nats_per_token_fp8": 4.054158091867615,
+      "ppl_candidate": 57.67641976774841,
+      "ppl_fp8": 57.636617826472666
+    }
+  ],
+  "run_id": "sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST",
+  "runtime_image": "sglang-source-stack-c3dae30f-e631a13fd",
+  "schema": "sglang-qwen-ppl-pair/v1"
+}

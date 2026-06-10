@@ -1,0 +1,82 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "completion_tok_s_total": 3.338595393343823,
+      "content_chars": 335,
+      "content_preview": "A local AI workstation thrives on fast memory (RAM) because AI tasks, particularly those involving large language models and image/video processing, are incredibly memory-intensive. These models and the datasets they operate on often don't fit entirely within the GPU's limited VRAM, requiring frequent data transfer to and from system",
+      "decode_s": 15.359559411008377,
+      "decode_tok_s": 4.166786187508116,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781057877,
+        "id": "1505fada30064ddbbf2dc7a4f5e40ddf",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 24,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 88
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 335,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 19.169738305994542,
+      "ttft_s": 3.8101788949861657,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 88
+      }
+    }
+  ],
+  "finished_utc": "2026-06-10T02:17:57Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.2",
+    "torch_version": "2.12.0a0+5aff3928d8.nv26.05",
+    "warnings": []
+  },
+  "model": "gemma3-27b-it",
+  "models_response": null,
+  "ok": true,
+  "phase": "exploratory",
+  "run_id": "sglang_gemma3_27b_rung1_fp8_hybridswa_mf060_20260610TmanualJST",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-10T02:17:38Z",
+  "url": "http://127.0.0.1:30000"
+}

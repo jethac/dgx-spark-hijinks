@@ -1,0 +1,66 @@
+{
+  "schema": "ppl-corpus-manifest/v1",
+  "output": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_ppl_ctx512_20260610TmanualJST_corpus.md",
+  "max_chars": 250000,
+  "actual_chars": 249998,
+  "globs": [
+    "docs/*.md",
+    "tasks/*.md",
+    "results/*.md"
+  ],
+  "exclude_substrings": [
+    "vllm_qwen_clean_ppl_",
+    "_server",
+    "_trace"
+  ],
+  "sources": [
+    {
+      "path": "docs/AEON_PRIOR_ART_PORT_MAP.md",
+      "chars_used": 9662,
+      "chars_total": 9662,
+      "truncated": false
+    },
+    {
+      "path": "docs/BASELINE_RESULTS.md",
+      "chars_used": 38299,
+      "chars_total": 38299,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARKING_REPORT.md",
+      "chars_used": 12524,
+      "chars_total": 12524,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARK_PROTOCOL.md",
+      "chars_used": 8144,
+      "chars_total": 8144,
+      "truncated": false
+    },
+    {
+      "path": "docs/BLESSED_STACK.md",
+      "chars_used": 7667,
+      "chars_total": 7667,
+      "truncated": false
+    },
+    {
+      "path": "docs/CAMPAIGN_LOG.md",
+      "chars_used": 112312,
+      "chars_total": 112312,
+      "truncated": false
+    },
+    {
+      "path": "docs/CODEX_DIRECTION_LLAMACPP.md",
+      "chars_used": 16176,
+      "chars_total": 16176,
+      "truncated": false
+    },
+    {
+      "path": "docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md",
+      "chars_used": 44828,
+      "chars_total": 59720,
+      "truncated": true
+    }
+  ]
+}

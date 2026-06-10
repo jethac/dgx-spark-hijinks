@@ -1,0 +1,6 @@
+flashinfer 0.6.13 /work/third_party/flashinfer/flashinfer/__init__.py
+flashinfer_python 0.6.13
+sglang_kernel 0.4.3
+sglang 0.5.12.post2.dev1022+ge631a13fd
+sgl_kernel /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py
+common_ops /usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so
