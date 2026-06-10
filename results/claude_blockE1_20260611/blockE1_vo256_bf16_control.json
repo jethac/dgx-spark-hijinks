@@ -1,0 +1,30 @@
+{
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "K1 viable: (qk=512, vo=256, bf16 KV) compiles+runs; 2-pass VO-split matches dequantized fp32 reference (cosine=0.999998). Gemma 4 global layers can use FlashInfer via VO split.",
+  "cosine_gate": 0.99,
+  "cosine_vs_fp32_ref": 0.9999977946281433,
+  "device": "NVIDIA GB10",
+  "finished_utc": "2026-06-10T03:24:10.738207+00:00",
+  "flashinfer": "0.6.13",
+  "flashinfer_source_paths": {
+    "csrc": "/fisrc/csrc",
+    "include": "/fisrc/include",
+    "source_root": "/fisrc"
+  },
+  "kv_dtype": "bf16",
+  "max_abs_diff": 0.0036705732345581055,
+  "num_passes": 2,
+  "ok": true,
+  "output_shape": [
+    16,
+    8,
+    512
+  ],
+  "probe": "fa2-vo-split-d512-vo256",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-10T03:23:37.363427+00:00",
+  "torch": "2.12.0.dev20260408+cu130"
+}

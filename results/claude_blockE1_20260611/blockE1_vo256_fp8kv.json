@@ -1,0 +1,24 @@
+{
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "(qk=512, vo=256) with fp8_e4m3 KV failed - likely the FA2 trait guard's extra term for 1-byte KV dtypes rejecting the pair at JIT time. The verbatim error above is the result; try the smaller VO split once.",
+  "device": "NVIDIA GB10",
+  "error": "RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /fisrc/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.",
+  "error_traceback_tail": "Traceback (most recent call last):\n  File \"/work/vllm_gemma4_mixed_kv_probes.py\", line 305, in probe_fa2_vo_split_d512\n    outs.append(wrapper.run(q, (k_paged, v_half), **run_kwargs))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/fisrc/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/fisrc/flashinfer/prefill.py\", line 2602, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/fisrc/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /fisrc/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n",
+  "finished_utc": "2026-06-10T03:21:15.784232+00:00",
+  "flashinfer": "0.6.13",
+  "flashinfer_source_paths": {
+    "csrc": "/fisrc/csrc",
+    "include": "/fisrc/include",
+    "source_root": "/fisrc"
+  },
+  "kv_dtype": "fp8_e4m3",
+  "ok": false,
+  "probe": "fa2-vo-split-d512-vo256-fp8kv",
+  "run_scales_passed": true,
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-10T03:20:39.694182+00:00",
+  "torch": "2.12.0.dev20260408+cu130"
+}
