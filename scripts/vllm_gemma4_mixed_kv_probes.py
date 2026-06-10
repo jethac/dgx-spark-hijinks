@@ -202,6 +202,12 @@ def probe_fa2_vo_split_d512(
     kv_fp8: bool = False,
     num_qo_heads: int = 8,
     num_kv_heads: int = 4,
+    qo_len: int = 16,
+    kv_len: int = 64,
+    batch_size: int = 1,
+    plan_parity: bool = False,
+    skip_reference: bool = False,
+    sm_scale: float | None = None,
 ) -> dict:
     """P0 for the D=512 plan: asymmetric (QK=512, VO=half) two-pass VO split.
 
@@ -240,14 +246,23 @@ def probe_fa2_vo_split_d512(
     record["num_kv_heads"] = num_kv_heads
     record["gqa_group"] = num_qo_heads // num_kv_heads
     head_dim_qk, page_size = 512, 16
-    kv_len, qo_len = 64, 16
-    num_pages = (kv_len + page_size - 1) // page_size
+    num_pages_per_req = (kv_len + page_size - 1) // page_size
+    num_pages = num_pages_per_req * batch_size
+    total_qo = qo_len * batch_size
     num_splits = head_dim_qk // head_dim_vo
+    if batch_size > 1:
+        # The fp32 reference below is single-request only; multi-request
+        # runs are workload-regime / crash-repro probes (finiteness check).
+        skip_reference = True
+    record["qo_len"] = qo_len
+    record["kv_len"] = kv_len
+    record["batch_size"] = batch_size
+    record["plan_parity"] = plan_parity
 
     try:
         torch.manual_seed(0)
         q = torch.randn(
-            qo_len, num_qo_heads, head_dim_qk, dtype=torch.bfloat16, device=device
+            total_qo, num_qo_heads, head_dim_qk, dtype=torch.bfloat16, device=device
         )
         k_cache = torch.randn(
             num_pages, page_size, num_kv_heads, head_dim_qk,
@@ -274,11 +289,18 @@ def probe_fa2_vo_split_d512(
             k_ref_src = k_cache.float()
             v_ref_src = v_full.float()
 
-        qo_indptr = torch.tensor([0, qo_len], dtype=torch.int32, device=device)
-        kv_indptr = torch.tensor([0, num_pages], dtype=torch.int32, device=device)
+        qo_indptr = torch.arange(
+            0, total_qo + 1, qo_len, dtype=torch.int32, device=device
+        )
+        kv_indptr = torch.arange(
+            0, num_pages + 1, num_pages_per_req, dtype=torch.int32, device=device
+        )
         kv_indices = torch.arange(num_pages, dtype=torch.int32, device=device)
-        last_len = torch.tensor(
-            [kv_len - (num_pages - 1) * page_size], dtype=torch.int32, device=device
+        last_len = torch.full(
+            (batch_size,),
+            kv_len - (num_pages_per_req - 1) * page_size,
+            dtype=torch.int32,
+            device=device,
         )
 
         outs = []
@@ -289,6 +311,36 @@ def probe_fa2_vo_split_d512(
             wrapper = flashinfer.BatchPrefillWithPagedKVCacheWrapper(
                 workspace, kv_layout="NHD", backend="fa2"
             )
+            plan_kwargs = dict(
+                head_dim_vo=head_dim_vo,
+                q_data_type=torch.bfloat16,
+                kv_data_type=kv_data_type,
+                causal=True,
+            )
+            if plan_parity:
+                # vLLM-serving plan() parity: kwargs the builder passes
+                # that the lean probe omits - one may select the dispatch
+                # path that crashes serving (max_mma_kv=0,
+                # prefill.cuh:2964). Filtered to this FlashInfer's
+                # signature.
+                parity = dict(
+                    sm_scale=(
+                        sm_scale if sm_scale is not None
+                        else head_dim_qk ** -0.5
+                    ),
+                    window_left=-1,
+                    logits_soft_cap=0.0,
+                    o_data_type=torch.bfloat16,
+                    fixed_split_size=-1,
+                    disable_split_kv=False,
+                )
+                plan_params = inspect.signature(wrapper.plan).parameters
+                plan_kwargs.update(
+                    {k: v for k, v in parity.items() if k in plan_params}
+                )
+                record["plan_parity_kwargs"] = sorted(
+                    k for k in parity if k in plan_params
+                )
             wrapper.plan(
                 qo_indptr,
                 kv_indptr,
@@ -298,10 +350,7 @@ def probe_fa2_vo_split_d512(
                 num_kv_heads,
                 head_dim_qk,
                 page_size,
-                head_dim_vo=head_dim_vo,
-                q_data_type=torch.bfloat16,
-                kv_data_type=kv_data_type,
-                causal=True,
+                **plan_kwargs,
             )
             run_kwargs = {}
             if kv_fp8:
@@ -315,6 +364,18 @@ def probe_fa2_vo_split_d512(
             v_half = v_paged[..., split * head_dim_vo : (split + 1) * head_dim_vo]
             outs.append(wrapper.run(q, (k_paged, v_half), **run_kwargs))
         out = torch.cat(outs, dim=-1)
+
+        if skip_reference:
+            record["ok"] = bool(torch.isfinite(out).all().item())
+            record["output_shape"] = list(out.shape)
+            record["reference"] = "skipped"
+            record["conclusion"] = (
+                "ran to completion with finite output (workload-regime / "
+                "crash-repro mode; fp32 reference skipped)"
+                if record["ok"]
+                else "non-finite output in workload-regime mode"
+            )
+            return record
 
         # fp32 reference over the flattened sequence with end-aligned causal
         # masking (token i of the query attends kv positions
@@ -406,6 +467,21 @@ def main() -> int:
             "(group 2)."
         ),
     )
+    parser.add_argument("--qo-len", type=int, default=16)
+    parser.add_argument("--kv-len", type=int, default=64)
+    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument(
+        "--plan-parity",
+        action="store_true",
+        help="Pass vLLM-serving plan() kwargs (sm_scale, window_left, "
+        "soft-cap, o_data_type, split-kv flags) instead of the lean set.",
+    )
+    parser.add_argument(
+        "--skip-reference",
+        action="store_true",
+        help="Skip the fp32 reference; finiteness-only (crash repro).",
+    )
+    parser.add_argument("--sm-scale", type=float, default=None)
     parser.add_argument("--output", required=True)
     parser.add_argument(
         "--flashinfer-source-root",
@@ -427,17 +503,25 @@ def main() -> int:
             "31b": (32, 16),
         }
         qo_heads, kv_heads = geometry_heads[args.geometry]
+        vo_workload_kwargs = dict(
+            qo_len=args.qo_len,
+            kv_len=args.kv_len,
+            batch_size=args.batch_size,
+            plan_parity=args.plan_parity,
+            skip_reference=args.skip_reference,
+            sm_scale=args.sm_scale,
+        )
         record["geometry"] = args.geometry
         if args.probe == "selector":
             record = probe_selector(record)
         elif args.probe == "fa2-vo-split-d512-vo256":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, num_qo_heads=qo_heads, num_kv_heads=kv_heads, **vo_workload_kwargs)
         elif args.probe == "fa2-vo-split-d512-vo128":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, num_qo_heads=qo_heads, num_kv_heads=kv_heads, **vo_workload_kwargs)
         elif args.probe == "fa2-vo-split-d512-vo256-fp8kv":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads, **vo_workload_kwargs)
         elif args.probe == "fa2-vo-split-d512-vo128-fp8kv":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads, **vo_workload_kwargs)
         else:
             record = probe_fa2_bf16_d512(record)
     except Exception as exc:  # noqa: BLE001 - record harness-level failures too
