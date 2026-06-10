@@ -1,0 +1,148 @@
+{
+  "all_ok": false,
+  "created_unix": 1781054965.7025557,
+  "environment": {
+    "flashinfer_extra_cudaflags": "-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1",
+    "flashinfer_file": "/fisrc/flashinfer/__init__.py",
+    "flashinfer_source_paths": {
+      "attention_jit_utils": "/fisrc/flashinfer/jit/attention/utils.py",
+      "cccl": "/fisrc/3rdparty/cccl",
+      "csrc": "/fisrc/csrc",
+      "cutlass": "/fisrc/3rdparty/cutlass",
+      "include": "/fisrc/include",
+      "source_root": "/fisrc",
+      "spdlog": "/fisrc/3rdparty/spdlog"
+    },
+    "flashinfer_version": "0.6.13",
+    "python": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]",
+    "torch_version": "2.12.0.dev20260408+cu130"
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 2,
+    "causal": true,
+    "cosine_threshold": 0.995,
+    "deswizzle_flag_requested": true,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": "/fisrc",
+    "head_dim": 512,
+    "k_global_scale": 1.0,
+    "kv_container": "tuple",
+    "kv_len": 64,
+    "layouts": [
+      "NHD"
+    ],
+    "max_abs_threshold": 0.25,
+    "num_kv_heads": 2,
+    "num_qo_heads": 4,
+    "page_size": 16,
+    "qo_len": 16,
+    "signed_values": false,
+    "v_global_scale": 1.0,
+    "v_scale_layout": "swizzled"
+  },
+  "results": [
+    {
+      "actual_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.bfloat16",
+        "finite": 65536,
+        "max": 4.4375,
+        "max_abs": 4.4375,
+        "mean": 1.0509893894195557,
+        "min": 0.19921875,
+        "numel": 65536,
+        "rms": 1.110489845275879,
+        "shape": [
+          32,
+          4,
+          512
+        ]
+      },
+      "cosine": 0.9581719636917114,
+      "elapsed_sec": 45.369246610003756,
+      "expected_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.float32",
+        "finite": 65536,
+        "max": 4.44638204574585,
+        "max_abs": 4.44638204574585,
+        "mean": 1.0531271696090698,
+        "min": 0.18095402419567108,
+        "numel": 65536,
+        "rms": 1.1119616031646729,
+        "shape": [
+          32,
+          4,
+          512
+        ]
+      },
+      "head_dim_vo": 256,
+      "k_scale": 1.0,
+      "layout": "NHD",
+      "max_abs": 3.3203697204589844,
+      "mean_abs": 0.20200535655021667,
+      "operation": "prefill_vo_split",
+      "passed": false,
+      "split_output_stats": [
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 32768,
+          "max": 4.4375,
+          "max_abs": 4.4375,
+          "mean": 1.0616374015808105,
+          "min": 0.2353515625,
+          "numel": 32768,
+          "rms": 1.121046543121338,
+          "shape": [
+            32,
+            4,
+            256
+          ]
+        },
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 32768,
+          "max": 4.28125,
+          "max_abs": 4.28125,
+          "mean": 1.0403414964675903,
+          "min": 0.19921875,
+          "numel": 32768,
+          "rms": 1.0998318195343018,
+          "shape": [
+            32,
+            4,
+            256
+          ]
+        }
+      ],
+      "v_scale": 1.0,
+      "vo_split": 2
+    }
+  ],
+  "schema": "flashinfer-nvfp4-kv-probe/v1"
+}
