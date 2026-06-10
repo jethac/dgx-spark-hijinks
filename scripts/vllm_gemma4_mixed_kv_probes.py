@@ -197,7 +197,11 @@ def probe_fa2_bf16_d512(record: dict) -> dict:
 
 
 def probe_fa2_vo_split_d512(
-    record: dict, head_dim_vo: int, kv_fp8: bool = False
+    record: dict,
+    head_dim_vo: int,
+    kv_fp8: bool = False,
+    num_qo_heads: int = 8,
+    num_kv_heads: int = 4,
 ) -> dict:
     """P0 for the D=512 plan: asymmetric (QK=512, VO=half) two-pass VO split.
 
@@ -227,7 +231,14 @@ def probe_fa2_vo_split_d512(
     record["kv_dtype"] = "fp8_e4m3" if kv_fp8 else "bf16"
 
     device = "cuda"
-    num_qo_heads, num_kv_heads = 8, 4
+    # GQA group size (qo/kv) drives the dispatcher's q-tile smem budget:
+    # the default group 2 was GREEN while E4B serving (group 4: 8 qo /
+    # 2 kv global heads) hit "Unsupported max_mma_kv: 0" at
+    # prefill.cuh:2964 - probe at the model's MEASURED geometry.
+    # Gemma 4 globals: E4B 8/2 (group 4), 31B 32/16 (group 2).
+    record["num_qo_heads"] = num_qo_heads
+    record["num_kv_heads"] = num_kv_heads
+    record["gqa_group"] = num_qo_heads // num_kv_heads
     head_dim_qk, page_size = 512, 16
     kv_len, qo_len = 64, 16
     num_pages = (kv_len + page_size - 1) // page_size
@@ -383,6 +394,18 @@ def main() -> int:
             "fa2-vo-split-d512-vo128-fp8kv",
         ],
     )
+    parser.add_argument(
+        "--geometry",
+        choices=["default", "e4b", "31b"],
+        default="default",
+        help=(
+            "Attention-head geometry for the vo-split probes. 'default' is "
+            "the legacy 8/4 (GQA group 2); 'e4b' is Gemma 4 E4B global "
+            "layers 8/2 (group 4 - the geometry that crashed serving with "
+            "max_mma_kv=0); '31b' is Gemma 4 31B global layers 32/16 "
+            "(group 2)."
+        ),
+    )
     parser.add_argument("--output", required=True)
     parser.add_argument(
         "--flashinfer-source-root",
@@ -398,16 +421,23 @@ def main() -> int:
             record["flashinfer_source_paths"] = _configure_flashinfer_source_tree(
                 args.flashinfer_source_root
             )
+        geometry_heads = {
+            "default": (8, 4),
+            "e4b": (8, 2),
+            "31b": (32, 16),
+        }
+        qo_heads, kv_heads = geometry_heads[args.geometry]
+        record["geometry"] = args.geometry
         if args.probe == "selector":
             record = probe_selector(record)
         elif args.probe == "fa2-vo-split-d512-vo256":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=256)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
         elif args.probe == "fa2-vo-split-d512-vo128":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=128)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
         elif args.probe == "fa2-vo-split-d512-vo256-fp8kv":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, kv_fp8=True)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=256, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
         elif args.probe == "fa2-vo-split-d512-vo128-fp8kv":
-            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, kv_fp8=True)
+            record = probe_fa2_vo_split_d512(record, head_dim_vo=128, kv_fp8=True, num_qo_heads=qo_heads, num_kv_heads=kv_heads)
         else:
             record = probe_fa2_bf16_d512(record)
     except Exception as exc:  # noqa: BLE001 - record harness-level failures too
