@@ -41,6 +41,19 @@ Next vLLM gate: add capacity/concurrency and throughput under the GB10 memory ru
 only then decide whether a larger Gemma 3 PPL row is needed. Do not run fp8 and NVFP4
 servers concurrently.
 
+## 2026-06-10 update — Qwen prefix-cache hit proof is green
+
+Artifact: `results/vllm_qwen_nvfp4_prefixcache_hitproof_20260610TmanualJST_summary.md`.
+
+The vLLM Qwen cross-check now proves full NVFP4 K+V with prefix caching ON actually reused
+cached K and served the smoke gate correctly. The second request hit one full local cache
+block (`vllm:prefix_cache_hits_total 3728.0`, `prompt_tokens_cached_total 3728.0`) and
+returned the same first token as the fresh request.
+
+This is not a full PPL/long-form quality claim, but it is the missing reuse proof. It keeps
+the 1.75x NVFP4-KV capacity story credible for vLLM and makes SGLang's radix failure a
+runtime-specific FP4-K feed-path bug until proven otherwise.
+
 ## Why this, why now
 NVFP4 KV cache on GB10 is the founding goal of this whole campaign — it targets Spark's
 actual bottleneck (memory / context length / concurrency), not decode FLOPs. Reorient

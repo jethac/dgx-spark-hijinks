@@ -1,0 +1,37 @@
+# Results Ledger
+
+Date: 2026-06-10 JST
+
+Purpose: blog/Colab source ledger for green or checkpoint rows. Capacity, speed, and quality are separate claims; do not collapse them into one headline.
+
+| Runtime | Model | Row / scope | Config | Capacity ratio | Quality delta | Artifact |
+|---|---|---|---|---:|---:|---|
+| vLLM | Qwen3.6 35B-A3B NVFP4 | NVFP4-KV capacity, prefix cache off | FlashInfer FA2, fp8 KV vs NVFP4 KV, `--max-model-len 262144` | `1.751x` KV tokens | smoke only | `results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md` |
+| vLLM | Qwen3.6 35B-A3B NVFP4 | clean-path PPL | prefix cache off, ctx 8192, supplied prompt logprobs | `1.716x` KV tokens in this launch | `+0.005083802` nats/token | `results/vllm_qwen_clean_ppl_20260609T0850JST_summary.md` |
+| vLLM | Qwen3.6 35B-A3B NVFP4 | prefix-cache hit proof | full NVFP4 K+V, prefix cache ON, proven local cache hit | not a capacity row | first-token/logprob stable on hit | `results/vllm_qwen_nvfp4_prefixcache_hitproof_20260610TmanualJST_summary.md` |
+| vLLM | Gemma 3 27B IT | Rung 1 PPL checkpoint | text-only, FlashInfer NVFP4 KV, prefix cache off, ctx 512 | pending | `+0.0374` nats/token | `results/vllm_gemma3_27b_ppl_20260609T1852JST_ctx512_summary.md` |
+| vLLM | Gemma 3 27B IT | Rung 1 PPL checkpoint | text-only, FlashInfer NVFP4 KV, prefix cache off, ctx 1024/2048 | pending | `+0.0047` / `-0.0054` nats/token | `results/vllm_gemma3_27b_ppl_20260609TJST_ctx1024_2048_summary.md` |
+| vLLM | Gemma 4 26B-A4B | AEON serving proof | NVFP4+DFlash container, Triton attention fallback | KV pool `519,920` tokens at 262k, not a comparator | smoke only | `results/aeon_gemma26_dflash_20260608T0436JST_summary.md` |
+| SGLang | Qwen2.5 1.5B Instruct | mixed-KV claim row | radix ON, FP8-K + NVFP4-V, FlashInfer, prefix-cache graph guard | `~1.28x` audited at equal K+V byte budget | fixed 8k sweep: `0.000000`, `-0.000267`, `+0.000436`, `-0.001295`, `-0.066981` nats/token | `results/sglang_qwen_mixedkv_claim_manifest_20260610TmanualJST.md` |
+| SGLang | Qwen2.5 1.5B Instruct | deep-prefix continuation | radix ON, FP8-K + NVFP4-V, prefixes 4096/6144/7168/7680 | historical allocator ratio `~1.78x`; audited current claim remains `~1.28x` | `-0.001295`, `-0.066797`, `+0.008188`, `+0.010784` nats/token | `results/sglang_qwen_mixedkv_prefixcacheguard_deep_prefix_sweep_ctx8192_20260610TmanualJST.md` |
+| SGLang | Qwen2.5 1.5B Instruct | mixed-KV allocator fix | pool configurator denominator fixed for FP8-K + NVFP4-V | `1.279x` live Qwen verification | decode parity: `58.308` vs `57.438` tok/s | `results/sglang_mixedkv_poolconfigfix_20260610TmanualJST.md` |
+| SGLang | Gemma 3 27B IT | Rung 1 mixed-KV checkpoint | text-only, hybrid SWA, FP8-K + NVFP4-V, graphs disabled | `1.2604x` serving row, `1.2852x` PPL row | `+0.0006903286` nats/token at ctx 512 / prefix 256 | `results/sglang_gemma3_27b_rung1_mixedkv_20260610TmanualJST.md` |
+| llama.cpp | Gemma 4 26B-A4B Q4_0 | practical serving row | b9536 llama-server, Q4_0 GGUF, CUDA `ARCHS=1210` | not a KV-capacity row | smoke/serving only | `results/llamacpp_gemma4_26b_q4_0_bench_20260607T135911Z.txt` |
+| llama.cpp | Qwen2.5 1.5B Q4_K_M | practical serving row | b9536 llama-server, Q4_K_M GGUF | not a KV-capacity row | smoke/serving only | `docs/CAMPAIGN_LOG.md` |
+| llama.cpp | Qwen3.6 NVFP4 GGUF | native FP4 runtime gate | `jethac/llama.cpp@19bba67c1`, `sm_121a`, converted NVFP4 GGUF | not a capacity row | short chat smoke only | `results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md` |
+
+## Kernel And Build Receipts
+
+| Area | Receipt | Result | Artifact |
+|---|---|---|---|
+| llama.cpp native FP4 build | `121a` and `121` builds emit `sm_121a`; `120f` is rejected by this CMake/toolchain spelling | build/emission green, runtime accuracy still separate | `results/llamacpp_native_fp4_arch_20260608T164917JST_summary.md` |
+| FlashInfer mixed-KV ABI | independent K/V dtype JIT smoke | green: generated module accepts split K/V dtypes and SF tensors | `results/flashinfer_mixed_kv_jit_smoke_20260609T2359JST.md` |
+| FlashInfer mixed-KV paged prefill | standalone FP8-K + NVFP4-V prefill | green enough for SGLang wiring; cosine `0.98156` versus reference | `results/flashinfer_mixed_kv_paged_prefill_probe_20260609T2359JST.md` |
+| vLLM rebuilt Gemma 4 image | rebuilt `_C` extension with vLLM `ad2337814` and FlashInfer `fb7d62ea` | imports and `sm_121a` cubins verified | `results/vllm_gemma4_rebuiltc_image_import_probe_20260610T1545JST.md` |
+
+## Notes
+
+- The SGLang mixed-KV capacity number to quote is `~1.28x`, not the old pre-fix `~1.78x` allocator-token artifact.
+- vLLM full NVFP4 K+V has a proven prefix-cache hit smoke row; SGLang full NVFP4 K+V remains red/open until the structural route avoids the ragged-suffix/paged-prefix partial-state merge.
+- Gemma 3 absolute PPL values use deterministic repository markdown corpus slices, not cleaned benchmark corpora. The matched fp8-vs-FP4 delta is the claim.
+- llama.cpp Q4 rows prove practical serving, not native NVFP4 tensor-core dispatch. The native NVFP4 GGUF row proves runtime dispatch smoke, not eval-quality parity.
