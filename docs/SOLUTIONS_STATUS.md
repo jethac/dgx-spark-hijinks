@@ -4,6 +4,13 @@ Date: 2026-06-09
 
 This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentionally conservative: a row is `strong` only when artifacts prove the relevant acceptance test, not merely when a runtime once started.
 
+## 2026-06-10 Delta
+
+- SGLang Qwen mixed FP8-K / NVFP4-V now passes the targeted default-radix first-token gate with radix cache ON. Artifact: `results/sglang_qwen_mixedkv_default_20260610T0042JST_summary.md`.
+- The graph-safe fixed-8k prefix-depth sweep is green for reused prefixes `0, 1024, 2048, 4096, 6144, 7168, 7680`; prefix-cache population/scoring prefills are forced eager while decode graphs remain available.
+- The capacity denominator audit corrects the mixed-KV claim: current equal-budget capacity is about `1.28x` versus fp8 KV. The earlier `~1.78x` mixed-KV token count was an allocator-overbudget artifact and is not the current claim.
+- This promotes SGLang Qwen mixed-KV to a scoped radix-cache capacity/quality row, not a broad SGLang FP4 KV blessing. Full NVFP4 K+V, Gemma serving, and final throughput rows remain open.
+
 ## Status Map
 
 | solution area | status | current evidence | missing proof |

@@ -46,6 +46,76 @@ PROMPTS = {
             }
         ],
     },
+    "natural_long_prefill": {
+        "max_tokens": 128,
+        "messages": [
+            {
+                "role": "user",
+                "content": (
+                    "You are reviewing notes from a local AI infrastructure test. "
+                    "Write six concise bullets that identify the operational risks, "
+                    "the measurements still needed, and the next engineering actions.\n\n"
+                    "Field notes:\n"
+                    "A single workstation is being used to validate local inference "
+                    "stacks before broader deployment. The machine has a unified memory "
+                    "pool, so CPU and GPU allocations compete for the same physical "
+                    "capacity. During earlier tests, two large serving containers were "
+                    "started together for a matched comparison. The combined allocation "
+                    "left too little room for the operating system, and the host stopped "
+                    "responding until it was power-cycled. Future comparisons must run "
+                    "sequentially, keep a visible memory margin, and place each container "
+                    "inside a cgroup limit so a runaway process is killed without wedging "
+                    "the driver.\n\n"
+                    "The software stack under test includes several runtimes. One path "
+                    "uses a general-purpose server with continuous batching. Another path "
+                    "uses a lightweight implementation that is excellent for practical "
+                    "quantized serving. A third runtime has strong scheduling machinery "
+                    "but still needs custom attention-cache support for the local hardware. "
+                    "The same model family should be measured across these runtimes, but "
+                    "claims must stay scoped: a small text-only model does not prove a "
+                    "large multimodal mixture-of-experts model, and a capacity result does "
+                    "not prove output quality.\n\n"
+                    "Kernel selection has been a recurring source of false confidence. "
+                    "Some builds report a broad architecture family while the actual "
+                    "native instructions require an architecture-specific target. Other "
+                    "paths compile but silently use a generic fallback, producing correct "
+                    "results at disappointing speed. Every run should record the compute "
+                    "capability, the number of streaming multiprocessors, the selected "
+                    "attention backend, the cache element type, and the generated module "
+                    "flags. A useful benchmark artifact should include enough information "
+                    "for a second engineer to tell whether the intended kernels actually "
+                    "ran.\n\n"
+                    "The key optimization under evaluation is a smaller key-value cache. "
+                    "A full four-bit cache creates the largest theoretical capacity gain, "
+                    "but the key side influences attention logits and can destabilize "
+                    "prefix reuse if the runtime feeds the kernel inconsistent scale "
+                    "information. A mixed design keeps keys in eight-bit format and stores "
+                    "values in packed four-bit format. This gives up some theoretical "
+                    "capacity, but it protects the most sensitive part of attention while "
+                    "still reducing memory pressure. The mixed design must be tested with "
+                    "radix or prefix caching enabled, because disabling cache reuse hides "
+                    "the behavior that production serving depends on.\n\n"
+                    "Quality measurement is as important as throughput. A server can "
+                    "return non-empty text while still producing repetitive or incoherent "
+                    "answers. First-token checks are useful for localizing a regression, "
+                    "but they do not establish long-form correctness. The next quality "
+                    "gate should compare matched prompts under the same graph policy and "
+                    "memory fraction, inspect repetition metrics, and eventually compute "
+                    "supplied-token log likelihood on a natural document. Any public "
+                    "summary should separate capacity, speed, first-token stability, and "
+                    "long-context quality as distinct claims.\n\n"
+                    "The immediate engineering plan is conservative. Keep the host safe, "
+                    "run one server at a time, document every artifact, and avoid broad "
+                    "upstream changes until a reproducible before-and-after story exists. "
+                    "When a workaround is used, label it clearly. When a hypothesis fails, "
+                    "record the negative result instead of retuning the benchmark around "
+                    "it. The goal is not to make a single row look impressive; the goal is "
+                    "to make the workstation perform as well as the silicon allows while "
+                    "leaving a public trail that other owners can reproduce."
+                ),
+            }
+        ],
+    },
 }
 
 

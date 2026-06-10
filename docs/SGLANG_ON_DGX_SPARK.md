@@ -1,6 +1,6 @@
 # SGLang On DGX Spark
 
-Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container; stock `fp4_e2m1` Qwen fails before serving; the current `jethac/sglang` FP4-KV branch proves the expected FP4 KV capacity gain under an auto-safe no-graph policy. The matched `d7d931f` row records `1.7769x` fp8 KV capacity and backend traces for decode plus `extend_merge_paged`, with raw/chat smoke passing. Do not bless SGLang FP4 KV for serving quality or speed because the standardized FP4 benchmark content still degrades.
+Status: BF16/auto and fp8 Qwen rows pass in NVIDIA 26.05 container. The current `jethac/sglang` branch has a claim-ready Qwen mixed-KV path under radix cache: K is stored as FP8 e4m3, V is stored as packed NVFP4, prefix-cache population/scoring prefills are guarded to eager, and fp8-vs-mixed PPL sweeps stay green through deep prefix reuse. The capacity claim is the corrected equal-budget number, about `1.28x` versus fp8 KV. Full NVFP4 K+V remains red/open for SGLang radix reuse.
 
 Target: DGX Spark-class GB10 = compute capability 12.1 = `sm_121`.
 
@@ -31,7 +31,66 @@ Keep these separate in reports:
 - jethac FlashInfer FA2 NVFP4 KV SGLang-layout evidence: `results/flashinfer_sglang_linear_nvfp4_kv_probe_genpatch_20260608.json` passes a standalone FlashInfer FA2 paged NVFP4 KV probe on GB10 `sm_121` with tuple-packed `uint8` K/V, SGLang-style linear V scale factors, NHD/HND layouts, and prefill/decode cosine near `0.999999`. This proves the synthetic kernel/scale-buffer signature, not SGLang serving, graph replay, model output quality, KV capacity, or throughput.
 - AEON vLLM evidence: useful recipe evidence for NVFP4 weights and DFlash on GB10, not evidence that Gemma 4 works with FP4 KV in SGLang.
 
-Do not merge those into "SGLang NVFP4 works on Spark" until the GB10 `fp4_e2m1` serving row exists.
+Do not merge those into broad "SGLang NVFP4 works on Spark" language. The GB10 mixed-KV Qwen radix row is now a scoped serving/capacity result, not proof of full NVFP4 K+V or Gemma-family behavior.
+
+## 2026-06-10 Mixed-KV Qwen Radix Gate
+
+Artifact: `results/sglang_qwen_mixedkv_default_20260610T0042JST_summary.md`.
+
+The previous default-radix failure was a 55-token cached-prefix reuse row where the second
+request flipped the first token from `**` to `ark`. The mixed-KV path changes storage to:
+
+- K cache: FP8 e4m3
+- V cache: packed NVFP4 with FP8 scale factors
+
+The row used FlashInfer attention, `--kv-cache-dtype fp4_e2m1`, page size 1,
+`mem_fraction_static=0.40`, CUDA graph disabled, and `SGLANG_FP4_KV_MIXED_KV=1`.
+
+Result: green for the targeted first-token gate. Both cached-prefix second requests return
+`**`:
+
+- OpenAI first then native second: native cached tokens `55`, token `**`, logprob `-0.7601577043533325`.
+- Native first then OpenAI second: OpenAI cached tokens `55`, token `**`, logprob `-0.7601577043533325`.
+
+The dense-cache summary audit passes with `ok: true`, `733` trace events, `648` metric-bearing
+comparisons, and no findings. The server log records `#tokens: 5573469`, `K size: 37.21 GB`,
+`V size: 20.93 GB`, and `max_total_num_tokens=5573469`.
+
+Caveat: this is not exact dense-vs-cached tensor equality. The first request-bound tensor
+difference remains layer-0 attention output (`cosine=0.4661444810372346`). It no longer flips
+the tested first token, and later PPL sweeps are green under the graph-write guard.
+
+## 2026-06-10 Mixed-KV Prefix-Depth And Capacity Audit
+
+Artifacts:
+
+- `results/sglang_qwen_mixedkv_prefixcacheguard_reuse_prefix_sweep_ctx8192_20260610TmanualJST.md`
+- `results/sglang_qwen_mixedkv_prefixcacheguard_deep_prefix_sweep_ctx8192_20260610TmanualJST.md`
+- `results/sglang_qwen_mixedkv_capacity_denominator_audit_20260610TmanualJST.md`
+- `results/sglang_mixedkv_poolconfigfix_20260610TmanualJST.md`
+
+The graph-safe prefix-depth sweep is green at fixed context `8192` for reused prefixes
+`0, 1024, 2048, 4096, 6144, 7168, 7680`. All rows report `ok=true` for fp8 and mixed-KV,
+with matching cached-token counts. Prefix-cache-writing and cached-prefix prefills are
+forced eager by the SGLang guard; decode CUDA graphs remain available.
+
+The corrected capacity denominator is:
+
+```text
+fp8 K/V token units      = 8 + 8       = 16
+mixed K/V token units    = 8 + 4.5     = 12.5
+normalized storage gain  = 16 / 12.5   = 1.28x
+```
+
+Earlier mixed rows showed about `1.78x` allocator tokens because the allocator still used
+the full-FP4 logical cell-size estimate and realized a larger physical K+V byte budget. The
+pool-configurator fix makes `max_total_num_tokens` and allocation logs share one denominator.
+Post-fix Qwen verification at `--mem-fraction-static 0.40` records `3,119,614` fp8 tokens
+versus `3,990,192` mixed tokens, or `1.279x`.
+
+Claim policy: quote `~1.28x` as the current SGLang mixed-KV capacity result. Quote the old
+`~1.78x` only as a historical allocator-overbudget artifact, not as a current capacity claim.
+Full NVFP4 K+V `~1.78x` remains a separate red/open SGLang track.
 
 For Gemma 4, first prove SGLang with NVFP4 weights and BF16/fp8 KV. Test `fp4_e2m1` KV only after that baseline works.
 

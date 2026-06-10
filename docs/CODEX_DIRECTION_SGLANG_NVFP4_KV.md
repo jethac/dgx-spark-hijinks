@@ -288,6 +288,8 @@ sequential PPL comparator at `ctx=512`, `reuse_prefix_len=256`
 `MHATokenToKVPoolFP4` for float4 KV; otherwise mixed-KV failed at allocation with
 `fill_cuda` unsupported for `Float4_e2m1fn_x2`. This is a checkpoint, not a full Gemma
 claim: long-context/deep-prefix Gemma 3, CUDA graphs, and full NVFP4 K+V remain pending.
+The absolute PPL is high because the eval text is a deterministic repository markdown
+corpus slice, not a cleaned benchmark corpus; the claim is the matched fp8-vs-mixed delta.
 
 Two upstream draft issues are banked for later filing:
 
