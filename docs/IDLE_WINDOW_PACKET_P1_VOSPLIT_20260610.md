@@ -88,6 +88,26 @@ Proof lines to capture from the server log:
 Then short generation sanity (first-token gate) only — full P4 rung row (capacity
 comparator + PPL) is its own window.
 
+## Block E — all-dtype VO split (Triton retirement; Python-only, NO rebuild needed)
+
+Code: `jethac/vllm@ad2337814` (`VLLM_FLASHINFER_VOSPLIT=1`). A vLLM **source overlay
+suffices** — no `_C` extension rebuild (unlike blocks C/D).
+
+```bash
+# E1: fp8-KV (512,256) trait-pair probe — fp8 is NOT yet probed (bf16 is P0-green).
+# vllm_gemma4_mixed_kv_probes.py fa2 probe pattern with kv dtype fp8_e4m3,
+# head 512, vo-split 2. Gate: JIT compiles, runs, cosine >= 0.9999.
+# E2: Gemma 4 E4B bf16 serving smoke, VLLM_FLASHINFER_VOSPLIT=1 (no kv-cache-dtype
+# flags). Proof lines: "Forcing FLASHINFER with the FA2 VO split", per-pass log
+# "FA2 VO split (auto KV): head_size 512 runs as 2 passes".
+# E3: the vllm#38887 repro benchmark — E4B tok/s, VLLM_FLASHINFER_VOSPLIT=1 vs
+# default TRITON_ATTN force, same prompts/lengths, sequential servers (guardrails).
+# This is the headline speed number; record both prefill and decode tok/s.
+```
+
+If E3 disappoints vs Triton, the NVFP4 capacity story is unaffected — but do not
+claim the #38887 answer without this number.
+
 ## Evidence
 
 Copy `/work/*.json` back into `results/` on this branch (`git add -f results/...`),
