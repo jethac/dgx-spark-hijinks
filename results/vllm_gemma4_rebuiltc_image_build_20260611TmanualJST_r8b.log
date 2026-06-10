@@ -1,0 +1,131 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from tmp.x2H5184SZF
+#1 transferring dockerfile: 4.14kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [ 1/14] FROM ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 654.21MB 1.6s done
+#5 DONE 1.6s
+
+#6 [ 4/14] RUN python3 -m pip install --no-cache-dir       'cmake>=3.26.1' ninja 'packaging>=24.2'       'setuptools>=77.0.3,<81.0.0' 'setuptools-scm>=8.0'       'setuptools-rust>=1.9.0' wheel jinja2 pyelftools       'apache-tvm-ffi>=0.1.6,!=0.1.8,!=0.1.8.post0,<0.2'       'nvidia-cutlass-dsl[cu13]>=4.5.2'
+#6 CACHED
+
+#7 [ 6/14] COPY vllm-src/ /opt/jethac-vllm/
+#7 CACHED
+
+#8 [11/14] RUN git clone "https://github.com/jethac/flashinfer.git" /opt/jethac-flashinfer  && cd /opt/jethac-flashinfer  && git checkout "fb7d62ea45f19cb61f19057a93519c17b6e257f3"  && git submodule update --init 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+#8 CACHED
+
+#9 [ 5/14] RUN python3 -m pip install --no-cache-dir --no-deps       'humming-kernels[cu13]==0.1.4'
+#9 CACHED
+
+#10 [ 8/14] WORKDIR /opt/jethac-vllm
+#10 CACHED
+
+#11 [ 9/14] RUN python3 -m pip uninstall -y vllm || true
+#11 CACHED
+
+#12 [ 2/14] RUN test -x /usr/local/cuda/bin/nvcc
+#12 CACHED
+
+#13 [ 3/14] RUN apt-get update && apt-get install -y --no-install-recommends       git ca-certificates cuda-nvrtc-dev-13-0 libcusparse-dev-13-0       libcublas-dev-13-0 libcusolver-dev-13-0  && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [ 7/14] RUN test "$(cat /opt/jethac-vllm/.spark_build_source_rev)" = "e08a6f3ae7557d87553f1892d2ecc822f2187957"
+#14 CACHED
+
+#15 [10/14] RUN unset VLLM_USE_PRECOMPILED VLLM_PRECOMPILED_SKIP_FLASH_ATTN VLLM_PRECOMPILED_WHEEL_COMMIT VLLM_PRECOMPILED_WHEEL_LOCATION  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#15 CACHED
+
+#16 [12/14] RUN python3 -m pip uninstall -y flashinfer-python flashinfer-jit-cache flashinfer-cubin || true  && { test ! -d /usr/local/lib/python3.12/dist-packages || find /usr/local/lib/python3.12/dist-packages -maxdepth 1        ( -name 'flashinfer' -o -name 'flashinfer-*.dist-info'          -o -name 'flashinfer_python-*.dist-info'          -o -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info'          -o -name 'flashinfer_cubin' -o -name 'flashinfer_cubin-*.dist-info' )       -print -exec rm -rf {} +; }   && cd /opt/jethac-flashinfer  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#16 CACHED
+
+#17 [13/14] RUN python3 - <<'PY'
+#17 3.015 W0610 11:44:11.717000 7 site-packages/torch/utils/cpp_extension.py:140] No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+#17 3.029 vllm 0.1.dev1+ge08a6f3ae /opt/jethac-vllm/vllm/__init__.py
+#17 3.029 flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+#17 3.029 torch 2.11.0+cu130 13.0
+#17 3.029 humming /usr/local/lib/python3.12/site-packages/humming/__init__.py 0.1.4
+#17 3.029 arch_list []
+#17 3.029 _C.abi3.so /opt/jethac-vllm/vllm/_C.abi3.so exists= True size= 88005848
+#17 3.029 _C_stable_libtorch.abi3.so /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so exists= True size= 159411304
+#17 3.029 _moe_C.abi3.so /opt/jethac-vllm/vllm/_moe_C.abi3.so exists= True size= 78096104
+#17 3.029 vllm_flash_attn/_vllm_fa2_C.abi3.so /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so exists= True size= 229156064
+#17 DONE 3.9s
+
+#18 [14/14] RUN VLLM_C="$(python3 -c 'from pathlib import Path; import vllm; print(Path(vllm.__file__).resolve().parent / "_C.abi3.so")')"  && /usr/local/cuda/bin/cuobjdump -lelf "$VLLM_C" | tee /tmp/vllm_C_cuobjdump.txt  && grep -E 'sm_121|sm_120|compute_121|compute_120' /tmp/vllm_C_cuobjdump.txt || true
+#18 1.826 ELF file    1: _C.abi3.1.sm_121a.cubin
+#18 1.827 ELF file    2: _C.abi3.2.sm_121a.cubin
+#18 1.828 ELF file    3: _C.abi3.3.sm_121a.cubin
+#18 1.832 ELF file    4: _C.abi3.4.sm_121a.cubin
+#18 1.835 ELF file    5: _C.abi3.5.sm_121a.cubin
+#18 1.839 ELF file    6: _C.abi3.6.sm_121a.cubin
+#18 1.842 ELF file    7: _C.abi3.7.sm_121a.cubin
+#18 1.844 ELF file    8: _C.abi3.8.sm_121a.cubin
+#18 1.845 ELF file    9: _C.abi3.9.sm_121a.cubin
+#18 1.847 ELF file   10: _C.abi3.10.sm_121a.cubin
+#18 1.851 ELF file   11: _C.abi3.11.sm_121a.cubin
+#18 1.855 ELF file   12: _C.abi3.12.sm_121a.cubin
+#18 1.858 ELF file   13: _C.abi3.13.sm_121a.cubin
+#18 1.861 ELF file   14: _C.abi3.14.sm_121a.cubin
+#18 1.863 ELF file   15: _C.abi3.15.sm_121a.cubin
+#18 1.864 ELF file   16: _C.abi3.16.sm_121a.cubin
+#18 1.867 ELF file   17: _C.abi3.17.sm_121a.cubin
+#18 1.869 ELF file   18: _C.abi3.18.sm_121a.cubin
+#18 1.871 ELF file   19: _C.abi3.19.sm_121a.cubin
+#18 1.874 ELF file   20: _C.abi3.20.sm_121a.cubin
+#18 1.874 ELF file   21: _C.abi3.21.sm_80.cubin
+#18 1.874 ELF file   22: _C.abi3.22.sm_80.cubin
+#18 1.874 ELF file   23: _C.abi3.23.sm_80.cubin
+#18 1.874 ELF file   24: _C.abi3.24.sm_80.cubin
+#18 1.874 ELF file   25: _C.abi3.25.sm_121a.cubin
+#18 1.874 ELF file   26: _C.abi3.26.sm_121a.cubin
+#18 1.874 ELF file   27: _C.abi3.27.sm_121a.cubin
+#18 1.874 ELF file   28: _C.abi3.28.sm_121a.cubin
+#18 1.874 ELF file   29: _C.abi3.29.sm_121a.cubin
+#18 1.875 ELF file   30: _C.abi3.30.sm_121a.cubin
+#18 1.889 ELF file    1: _C.abi3.1.sm_121a.cubin
+#18 1.889 ELF file    2: _C.abi3.2.sm_121a.cubin
+#18 1.889 ELF file    3: _C.abi3.3.sm_121a.cubin
+#18 1.889 ELF file    4: _C.abi3.4.sm_121a.cubin
+#18 1.889 ELF file    5: _C.abi3.5.sm_121a.cubin
+#18 1.889 ELF file    6: _C.abi3.6.sm_121a.cubin
+#18 1.889 ELF file    7: _C.abi3.7.sm_121a.cubin
+#18 1.889 ELF file    8: _C.abi3.8.sm_121a.cubin
+#18 1.889 ELF file    9: _C.abi3.9.sm_121a.cubin
+#18 1.889 ELF file   10: _C.abi3.10.sm_121a.cubin
+#18 1.889 ELF file   11: _C.abi3.11.sm_121a.cubin
+#18 1.889 ELF file   12: _C.abi3.12.sm_121a.cubin
+#18 1.889 ELF file   13: _C.abi3.13.sm_121a.cubin
+#18 1.889 ELF file   14: _C.abi3.14.sm_121a.cubin
+#18 1.889 ELF file   15: _C.abi3.15.sm_121a.cubin
+#18 1.889 ELF file   16: _C.abi3.16.sm_121a.cubin
+#18 1.889 ELF file   17: _C.abi3.17.sm_121a.cubin
+#18 1.889 ELF file   18: _C.abi3.18.sm_121a.cubin
+#18 1.889 ELF file   19: _C.abi3.19.sm_121a.cubin
+#18 1.889 ELF file   20: _C.abi3.20.sm_121a.cubin
+#18 1.889 ELF file   25: _C.abi3.25.sm_121a.cubin
+#18 1.889 ELF file   26: _C.abi3.26.sm_121a.cubin
+#18 1.889 ELF file   27: _C.abi3.27.sm_121a.cubin
+#18 1.889 ELF file   28: _C.abi3.28.sm_121a.cubin
+#18 1.889 ELF file   29: _C.abi3.29.sm_121a.cubin
+#18 1.889 ELF file   30: _C.abi3.30.sm_121a.cubin
+#18 DONE 1.9s
+
+#19 exporting to image
+#19 exporting layers
+#19 exporting layers 9.7s done
+#19 writing image sha256:856b4a87826b08d061a90160529bc8d68caeffa7244d2218cb0551ebf25f2309 done
+#19 naming to docker.io/library/jethac-vllm-aeon-gemma4:e08a6f3ae-rebuiltc-fb7d62ea-sm121a-r8 done
+#19 DONE 9.7s
