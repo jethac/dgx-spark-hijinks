@@ -514,8 +514,10 @@ def _run_prefill_vo_split(
         # selected purely by base-pointer offset. Zero-copy. The SF slice
         # commutes with the vLLM 4-block swizzle because sf_step is a
         # multiple of 4 for head_dim_vo >= 64.
-        v_packed_half = v_packed[..., split * packed_step : (split + 1) * packed_step]
-        v_sf_half = v_sf[..., split * sf_step : (split + 1) * sf_step]
+        v_packed_half = v_packed[
+            ..., split * packed_step : (split + 1) * packed_step
+        ].contiguous()
+        v_sf_half = v_sf[..., split * sf_step : (split + 1) * sf_step].contiguous()
         out = wrapper.run(
             q,
             (k_packed, v_packed_half),
@@ -523,8 +525,32 @@ def _run_prefill_vo_split(
             v_scale=case["v_scale"].item(),
             kv_cache_sf=(k_sf, v_sf_half),
         )
+        if out.shape[-1] != head_dim_vo:
+            # Diagnostic: the FP4 path sized the output from something other
+            # than the planned head_dim_vo (suspect: the view's strides).
+            # Record everything needed to localize, then trim if the leading
+            # head_dim_vo lanes are the real ones, else fail with shapes.
+            split_stats.append(
+                {
+                    "unexpected_out_shape": list(out.shape),
+                    "v_half_shape": list(v_packed_half.shape),
+                    "v_half_stride": list(v_packed_half.stride()),
+                    "v_sf_half_shape": list(v_sf_half.shape),
+                    "v_sf_half_stride": list(v_sf_half.stride()),
+                    "out_tail_max_abs": float(
+                        out[..., head_dim_vo:].detach().float().abs().max().item()
+                    )
+                    if out.shape[-1] > head_dim_vo
+                    else None,
+                    "out_head_stats": _tensor_stats(
+                        torch, out[..., :head_dim_vo]
+                    ),
+                }
+            )
+            out = out[..., :head_dim_vo]
+        else:
+            split_stats.append(_tensor_stats(torch, out))
         outs.append(out)
-        split_stats.append(_tensor_stats(torch, out))
     actual = torch.cat(outs, dim=-1)
 
     refs = []
