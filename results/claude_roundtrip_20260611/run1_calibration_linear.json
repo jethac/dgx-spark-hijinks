@@ -1,0 +1,409 @@
+{
+  "all_ok": false,
+  "created_unix": 1781085449.1089938,
+  "environment": {
+    "flashinfer_extra_cudaflags": "",
+    "flashinfer_file": "/opt/jethac-flashinfer/flashinfer/__init__.py",
+    "flashinfer_source_paths": {},
+    "flashinfer_version": "0.6.13",
+    "python": "3.12.13 (main, May  4 2026, 09:05:48) [GCC 11.4.0]",
+    "torch_version": "2.11.0+cu130",
+    "writer_v_sf_env": {
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    }
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 2,
+    "calibrate": true,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": null,
+    "head_dim": 128,
+    "k_global_scale": 1.0,
+    "kv_layouts": [
+      "NHD",
+      "HND"
+    ],
+    "kv_len": 96,
+    "num_kv_heads": 4,
+    "num_qo_heads": 8,
+    "page_size": 16,
+    "qo_len": 16,
+    "reader_cosine_threshold": 0.9999,
+    "reader_max_abs_threshold": 0.25,
+    "v_global_scale": 1.0,
+    "v_scale_layout": "linear",
+    "window_left": -1,
+    "write_chunk_tokens": 32,
+    "writer_cosine_threshold": 0.99,
+    "writer_max_abs_threshold": 1.0,
+    "writer_op": "torch.ops._C_cache_ops.reshape_and_cache_flash(kv_cache_dtype='nvfp4')"
+  },
+  "results": [
+    {
+      "cosine": 0.9456176161766052,
+      "elapsed_sec": 0.18321328700403683,
+      "k": {
+        "cosine": 0.9954854846000671,
+        "max_abs": 0.59375,
+        "mean_abs": 0.07160116732120514
+      },
+      "k_dq_stats": {
+        "dtype": "torch.float32",
+        "finite": 98304,
+        "max": 4.125,
+        "max_abs": 4.125,
+        "mean": 0.0005560716381296515,
+        "min": -4.125,
+        "numel": 98304,
+        "rms": 1.0037306547164917,
+        "shape": [
+          192,
+          4,
+          128
+        ]
+      },
+      "layout": "NHD",
+      "max_abs": 3.1328125,
+      "passed": false,
+      "shapes": {
+        "k_data_view": [
+          13,
+          16,
+          4,
+          64
+        ],
+        "k_dq_stream": [
+          192,
+          4,
+          128
+        ],
+        "k_sf_view": [
+          13,
+          16,
+          4,
+          8
+        ],
+        "key": [
+          192,
+          4,
+          128
+        ],
+        "v_data_view": [
+          13,
+          16,
+          4,
+          64
+        ],
+        "v_sf_view": [
+          13,
+          16,
+          4,
+          8
+        ]
+      },
+      "spare_page_nonzero_bytes": 0,
+      "stage": "writer_dequant",
+      "v": {
+        "cosine": 0.9456176161766052,
+        "max_abs": 3.1328125,
+        "mean_abs": 0.2169138640165329
+      },
+      "v_dq_stats": {
+        "dtype": "torch.float32",
+        "finite": 98304,
+        "max": 4.875,
+        "max_abs": 4.875,
+        "mean": 0.004270633216947317,
+        "min": -4.5,
+        "numel": 98304,
+        "rms": 1.03943932056427,
+        "shape": [
+          192,
+          4,
+          128
+        ]
+      },
+      "writer_call_info": {
+        "chunk_tokens": 32,
+        "num_tokens": 192,
+        "writer_calls": 6
+      }
+    },
+    {
+      "actual_stats": {
+        "dtype": "torch.bfloat16",
+        "finite": 32768,
+        "max": 0.87890625,
+        "max_abs": 1.015625,
+        "mean": 0.004279934801161289,
+        "min": -1.015625,
+        "numel": 32768,
+        "rms": 0.17746594548225403,
+        "shape": [
+          32,
+          8,
+          128
+        ]
+      },
+      "cosine": 0.9999978542327881,
+      "elapsed_sec": 30.734919820999494,
+      "expected_stats": {
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "max": 0.8777836561203003,
+        "max_abs": 1.0179945230484009,
+        "mean": 0.0042772963643074036,
+        "min": -1.0179945230484009,
+        "numel": 32768,
+        "rms": 0.17746497690677643,
+        "shape": [
+          32,
+          8,
+          128
+        ]
+      },
+      "layout": "NHD",
+      "max_abs": 0.002369523048400879,
+      "mean_abs": 0.0002824353869073093,
+      "passed": true,
+      "shapes": {
+        "actual": [
+          32,
+          8,
+          128
+        ],
+        "expected": [
+          32,
+          8,
+          128
+        ],
+        "k_data_view": [
+          13,
+          16,
+          4,
+          64
+        ],
+        "k_sf_view": [
+          13,
+          16,
+          4,
+          8
+        ],
+        "q": [
+          32,
+          8,
+          128
+        ],
+        "v_data_view": [
+          13,
+          16,
+          4,
+          64
+        ],
+        "v_sf_view": [
+          13,
+          16,
+          4,
+          8
+        ]
+      },
+      "stage": "fa2_prefill",
+      "window_left": -1
+    },
+    {
+      "cosine": 0.9456176161766052,
+      "elapsed_sec": 0.0013694549998035654,
+      "k": {
+        "cosine": 0.9954854846000671,
+        "max_abs": 0.59375,
+        "mean_abs": 0.07160116732120514
+      },
+      "k_dq_stats": {
+        "dtype": "torch.float32",
+        "finite": 98304,
+        "max": 4.125,
+        "max_abs": 4.125,
+        "mean": 0.0005560716381296515,
+        "min": -4.125,
+        "numel": 98304,
+        "rms": 1.0037306547164917,
+        "shape": [
+          192,
+          4,
+          128
+        ]
+      },
+      "layout": "HND",
+      "max_abs": 3.1328125,
+      "passed": false,
+      "shapes": {
+        "k_data_view": [
+          13,
+          4,
+          16,
+          64
+        ],
+        "k_dq_stream": [
+          192,
+          4,
+          128
+        ],
+        "k_sf_view": [
+          13,
+          4,
+          16,
+          8
+        ],
+        "key": [
+          192,
+          4,
+          128
+        ],
+        "v_data_view": [
+          13,
+          4,
+          16,
+          64
+        ],
+        "v_sf_view": [
+          13,
+          4,
+          16,
+          8
+        ]
+      },
+      "spare_page_nonzero_bytes": 0,
+      "stage": "writer_dequant",
+      "v": {
+        "cosine": 0.9456176161766052,
+        "max_abs": 3.1328125,
+        "mean_abs": 0.2169138640165329
+      },
+      "v_dq_stats": {
+        "dtype": "torch.float32",
+        "finite": 98304,
+        "max": 4.875,
+        "max_abs": 4.875,
+        "mean": 0.004270633216947317,
+        "min": -4.5,
+        "numel": 98304,
+        "rms": 1.03943932056427,
+        "shape": [
+          192,
+          4,
+          128
+        ]
+      },
+      "writer_call_info": {
+        "chunk_tokens": 32,
+        "num_tokens": 192,
+        "writer_calls": 6
+      }
+    },
+    {
+      "actual_stats": {
+        "dtype": "torch.bfloat16",
+        "finite": 32768,
+        "max": 0.87890625,
+        "max_abs": 1.015625,
+        "mean": 0.004279934801161289,
+        "min": -1.015625,
+        "numel": 32768,
+        "rms": 0.17746594548225403,
+        "shape": [
+          32,
+          8,
+          128
+        ]
+      },
+      "cosine": 0.9999978542327881,
+      "elapsed_sec": 0.002373567011090927,
+      "expected_stats": {
+        "dtype": "torch.float32",
+        "finite": 32768,
+        "max": 0.8777836561203003,
+        "max_abs": 1.0179945230484009,
+        "mean": 0.0042772963643074036,
+        "min": -1.0179945230484009,
+        "numel": 32768,
+        "rms": 0.17746497690677643,
+        "shape": [
+          32,
+          8,
+          128
+        ]
+      },
+      "layout": "HND",
+      "max_abs": 0.002369523048400879,
+      "mean_abs": 0.0002824353869073093,
+      "passed": true,
+      "shapes": {
+        "actual": [
+          32,
+          8,
+          128
+        ],
+        "expected": [
+          32,
+          8,
+          128
+        ],
+        "k_data_view": [
+          13,
+          4,
+          16,
+          64
+        ],
+        "k_sf_view": [
+          13,
+          4,
+          16,
+          8
+        ],
+        "q": [
+          32,
+          8,
+          128
+        ],
+        "v_data_view": [
+          13,
+          4,
+          16,
+          64
+        ],
+        "v_sf_view": [
+          13,
+          4,
+          16,
+          8
+        ]
+      },
+      "stage": "fa2_prefill",
+      "window_left": -1
+    }
+  ],
+  "schema": "nvfp4-writer-roundtrip-probe/v1"
+}
