@@ -33,6 +33,23 @@ smoke, and the **E4B tok/s benchmark vs TRITON_ATTN on GB10** — the speed pitc
 be measured, not asserted. Python-only: validates via source overlay, no extension
 rebuild.
 
+**Coherence-hunt verdict (2026-06-11, heads a612230/e7893f5):** the 31B full-NVFP4
+gibberish was NOT attention math. Chain: VO-split serving crash fixed (`e08a6f3ae`,
+ctor jit_args pinned symmetric vo); rerun served but emitted deterministic garbage;
+config bisects + the two-runtime writer-roundtrip pincer (SGLang green at
+head-256/SWA/linear; vLLM stage-A red at head-128 calibration) convicted the **r7
+image's compiled writer: it swizzles V-SF unconditionally, ignoring
+VLLM_NVFP4_KV_LINEAR_V_SF** (source correct; stale csrc in the image build). The
+Block C paradox (knob-on green on the same image) is explained by **FlashInfer module
+-cache unsoundness**: AOT modules shadow JIT rebuilds and EXTRA_CUDAFLAGS is not in
+the module key, so deswizzle-built head-128 readers accidentally re-paired with the
+swizzling writer (`results/jit_cache_mode_unsoundness_analysis_20260611.md` —
+upstream candidate; campaign rule: clear module caches when toggling SF mode;
+long-term fix: SF mode as a jit-arg in the module name). Gate sequence on r8:
+latch diag -> AOT-dir proof -> calibration -> head-256/SWA matrix -> Block C re-run
+-> 31B smoke. Kernel-side K1 remains fully validated; everything outstanding is
+binary/build hygiene.
+
 Two findings beyond the plan (from P0):
 - The wrapper's `paged_k_cache.stride(i) == paged_v_cache.stride(i)` check is the only
   asymmetric-pair blocker hit so far, and it is dodged **zero-copy**: pass V halves as
