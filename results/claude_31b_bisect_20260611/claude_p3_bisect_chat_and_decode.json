@@ -1,0 +1,25 @@
+{
+  "schema": "claude-window2-part3-mixedkv-bisect/v1",
+  "smoke_chat": {
+    "wall_s": 73.07126453099772,
+    "text": " ana simplified version of the same, a generic version of theL laner, a\u2019, an an, a G a G.\n lan an an, a G S l a n a G.\n// an an, a G S G S H G S S S\n I'll be a G S S G S S\n S S S S\n S S S S S\n S S S S\n S S S\n S S S\n S S S\n S S S\n S S S\n S S\n S S S\n S S S\n S S S\n S S S\n S",
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 157,
+      "completion_tokens": 128,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "length"
+  },
+  "decode_reps": [
+    {
+      "rep": 1,
+      "wall_s": 68.00973310199333,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7641671026127987,
+      "finish_reason": "length",
+      "text_head": "nesses l// que the les lness\u2019s the a a a an.\na head, a\u2019 lang,a\u2019 lan.\n//\na s lan.\n//\na s, a.\n//\na\n//\n.\n//\n.\n.\n.\n.\n.\n.\n.\n/"
+    }
+  ]
+}
