@@ -1,0 +1,43 @@
+{
+  "schema": "claude-window2-part3-smoke-rerun/v1",
+  "smoke_chat": {
+    "wall_s": 34.336477599004866,
+    "text": "TT\u4e0d\u592aLL\ub9cc_setCyinLle.L(LI\u0637\u0629gi\u1eddBabaSTBCTBSLKTLychILK evenT deTHTBIKLTLL\u00e4LLKKleTLjos1LLand\u0131rLLTLLTTLLenTKIHB mesmaLTH-THTBTTLCLTL deLCLKahTLerH deTBLizin.LI deL-TLa-TI.TLI_L",
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 157,
+      "completion_tokens": 128,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "length"
+  },
+  "decode_reps": [
+    {
+      "rep": 1,
+      "wall_s": 68.34094776198617,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7459240526131086,
+      "finish_reason": "length",
+      "text_head": "LmxBTTeHTK\ub9ccsoresTHL\u0131SLidyByLabinK evenTLK_TTKHLTLTteT\u0c28\u0c4d\u0c28\u0c3fLLHsetL evenTHIha\u0629LLT\u0259BLyL evenKLhum laTon_\ub9ccTLTTLTTLLT NimHHTon"
+    },
+    {
+      "rep": 2,
+      "wall_s": 68.33630253499723,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7461786854636174,
+      "finish_reason": "length",
+      "text_head": "ahBBBTeTL evenT_TaTT\u0131 evene \ud55c\ubc88eTT evenL evenK\u1ea1nhLT\u00f6KaLieTT evenTKL evenKoraTaeTTSL-SLyTleTL\ub294LTB\u0301TL_erCLTKTLHsetBaL KotaT"
+    },
+    {
+      "rep": 3,
+      "wall_s": 68.37463009699422,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.744078756065605,
+      "finish_reason": "length",
+      "text_head": "ahBBBTeTL evenT_TaTT\u0131 evene \ud55c\ubc88eTT evenL evenK\u1ea1nhLT\u00f6KaLieTT evenTKL evenKoraTaeTTSL-SLyTleTL\ub294LTB\u0301TL_erCLTKTLHsetBaL KotaT"
+    }
+  ]
+}
