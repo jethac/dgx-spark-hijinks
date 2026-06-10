@@ -1,0 +1,1 @@
+{"VLLM_FLASHINFER_VOSPLIT": null, "compute_capability": [12, 1], "cuda": "13.0", "gpu": "NVIDIA GB10", "has_gemma4_cond_gen": true, "torch": "2.11.0+cu130", "transformers": "5.10.0.dev0", "vllm_file": "/vllm-src/vllm/__init__.py", "vllm_version": "0.22.1rc1.dev281+gad2337814"}
