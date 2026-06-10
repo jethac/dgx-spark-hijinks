@@ -19,6 +19,20 @@ Status: **P0 + P0b GREEN, P3 AUTHORED (2026-06-10) — K1 confirmed end to end o
   resolution under the knob instead of forcing TRITON_ATTN. GPU validation (P1 gates +
   serving smoke) rides the next idle window.
 
+**Scope expansion (2026-06-11, Jetha: "do all of it"):** the VO split is now also the
+**wholesale TRITON_ATTN retirement** for Gemma 4 — `VLLM_FLASHINFER_VOSPLIT=1` extends
+the two-pass split to **all KV dtypes** (bf16/fp16/fp8, not just NVFP4) and makes
+`Gemma4Config` force FLASHINFER for the whole model instead of TRITON_ATTN (single
+backend, so upstream's mixed-backend divergence concern does not apply). Authored and
+pushed: `jethac/vllm@ad2337814`. Receipts this answers: vllm#38887 (E4B ~9 tok/s on
+RTX 4090 under the Triton force; upstream PR #38891 incomplete), vllm#40677 (RTX PRO
+6000 + Gemma 4 NVFP4, FLASHINFER rejected), vllm#42068, #39133, #39965 — see
+`docs/ISSUE_TRACKER.md` upstream table. Gates before any claim: fp8 (512,256)
+trait-pair probe (bf16 is already P0-green; fp8 is NOT yet probed), bf16 serving
+smoke, and the **E4B tok/s benchmark vs TRITON_ATTN on GB10** — the speed pitch must
+be measured, not asserted. Python-only: validates via source overlay, no extension
+rebuild.
+
 Two findings beyond the plan (from P0):
 - The wrapper's `paged_k_cache.stride(i) == paged_v_cache.stride(i)` check is the only
   asymmetric-pair blocker hit so far, and it is dodged **zero-copy**: pass V halves as
