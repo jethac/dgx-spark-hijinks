@@ -1,0 +1,12 @@
+{
+  "schema": "claude-r8-gates-part4-sanity/v1",
+  "wall_s": 12.20390017000318,
+  "text": "The NVIDIA GB200 Grace Blackwell Superchip is a high-performance computing module that integrates one Grace CPU and two Blackwell GPUs via a high-speed interconnect to accelerate massive AI training and inference workloads.",
+  "usage": {
+    "prompt_tokens": 29,
+    "total_tokens": 71,
+    "completion_tokens": 42,
+    "prompt_tokens_details": null
+  },
+  "finish_reason": "stop"
+}

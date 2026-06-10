@@ -1,0 +1,63 @@
+{
+  "schema": "claude-r8-gates-part3-smoke/v1",
+  "smoke_chat": {
+    "wall_s": 10.68024369100749,
+    "text": "The NVIDIA GB200 Grace Blackwell Superchip is a high-performance computing module that integrates a Grace CPU and two Blackwell GPUs to accelerate the training and deployment of massive generative AI models.",
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 68,
+      "completion_tokens": 39,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop"
+  },
+  "decode_reps": [
+    {
+      "rep": 1,
+      "wall_s": 68.91428015899146,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7147598351079765,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. At the highest reaches of the valley, the dawn arrive"
+    },
+    {
+      "rep": 2,
+      "wall_s": 68.70309634800651,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7261784927896935,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. At the highest reaches of the valley, the dawn arrive"
+    },
+    {
+      "rep": 3,
+      "wall_s": 68.72876948800695,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.724786605479261,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. At the highest reaches of the valley, the dawn arrive"
+    }
+  ],
+  "varied_prompts": [
+    {
+      "prompt": "Explain the difference between FP8 and NVFP4 number formats in two or three sentences.",
+      "wall_s": 24.68465544200444,
+      "text": "**FP8** is a 8-bit floating-point format (typically using E4M3 or E5M2 configurations) designed to accelerate training and inference by reducing memory bandwidth and compute requirements compared to FP16. **NVFP4** is a specialized 4-bit floating-point format introduced with NVIDIA's Blackwell architecture, further compressing weights and activations to double the throughput of FP8 for large-scale LLM inference.",
+      "finish_reason": "stop"
+    },
+    {
+      "prompt": "List three capital cities in Europe and one famous landmark in each.",
+      "wall_s": 13.149756733997492,
+      "text": "Here are three capital cities in Europe and a famous landmark in each:\n\n1. **Paris**, France \u2013 The Eiffel Tower\n2. **Rome**, Italy \u2013 The Colosseum\n3. **London**, United Kingdom \u2013 Big Ben",
+      "finish_reason": "stop"
+    },
+    {
+      "prompt": "Write a haiku about a GPU finishing a long computation.",
+      "wall_s": 5.915554913997767,
+      "text": "Fans spin down to hush,\nGlowing cores now cool their heat,\nThe answer is found.",
+      "finish_reason": "stop"
+    }
+  ]
+}
