@@ -76,7 +76,9 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="/tmp/flashinfer-cache-$RUN" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
-  -e PYTHONPATH=/work/third_party/sglang/python:/tmp/flashinfer-python-path \
+  -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
+  -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
+  -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
   sglang-source-stack-c3dae30f-e631a13fd:latest \
   bash -lc '
     set -euo pipefail
@@ -86,11 +88,18 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
     python -m py_compile /work/third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py
     python - <<PY
 import flashinfer, os, sglang
+from flashinfer.jit import env as jit_env
 from sglang.srt.layers.attention import flashinfer_backend as fb
 print("flashinfer", getattr(flashinfer, "__file__", None))
 print("sglang", getattr(sglang, "__file__", None))
 print("vosplit_enabled_default", fb._flashinfer_vo_split_enabled())
 print("extra_flags", os.environ.get("FLASHINFER_EXTRA_CUDAFLAGS", ""))
+print("flashinfer_data", jit_env.FLASHINFER_DATA)
+print("flashinfer_csrc", jit_env.FLASHINFER_CSRC_DIR)
+print("flashinfer_include", jit_env.FLASHINFER_INCLUDE_DIR)
+print("flashinfer_cutlass", jit_env.CUTLASS_INCLUDE_DIRS)
+print("flashinfer_cccl", jit_env.CCCL_INCLUDE_DIRS)
+print("flashinfer_spdlog", jit_env.SPDLOG_INCLUDE_DIR)
 assert "FLASHINFER_PAGED_V_SF_DESWIZZLE" not in os.environ.get("FLASHINFER_EXTRA_CUDAFLAGS", "")
 PY
   ' | tee "$OUT/import_probe.log"
@@ -101,6 +110,8 @@ Gate:
 - `py_compile` passes.
 - `flashinfer` path resolves to `/flashinfer-src/flashinfer`.
 - `sglang` path resolves to `/work/third_party/sglang/python/...`.
+- FlashInfer JIT paths resolve to `/flashinfer-src/csrc`, `/flashinfer-src/include`,
+  and `/flashinfer-src/3rdparty/...` rather than stale installed package data.
 - `FLASHINFER_PAGED_V_SF_DESWIZZLE` is absent.
 
 ## Block B — head-256 writer/reader regression
@@ -157,7 +168,9 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="$CACHE" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
-  -e PYTHONPATH=/work/third_party/sglang/python:/tmp/flashinfer-python-path \
+  -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
+  -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
+  -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
   -e SGLANG_FLASHINFER_VOSPLIT=1 \
   sglang-source-stack-c3dae30f-e631a13fd:latest \
   bash -lc '
@@ -168,6 +181,7 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
 import hashlib
 import importlib
 import pathlib
+from flashinfer.jit import env as jit_env
 
 modules = [
     "sgl_kernel",
@@ -181,6 +195,12 @@ for name in modules:
     path = pathlib.Path(path).resolve()
     digest = hashlib.md5(path.read_bytes()).hexdigest()
     print(f"binary_md5 {name} {path} {digest}")
+print("flashinfer_data", jit_env.FLASHINFER_DATA)
+print("flashinfer_csrc", jit_env.FLASHINFER_CSRC_DIR)
+print("flashinfer_include", jit_env.FLASHINFER_INCLUDE_DIR)
+print("flashinfer_cutlass", jit_env.CUTLASS_INCLUDE_DIRS)
+print("flashinfer_cccl", jit_env.CCCL_INCLUDE_DIRS)
+print("flashinfer_spdlog", jit_env.SPDLOG_INCLUDE_DIR)
 PY
     python /work/scripts/sglang_fp4_kv_writer_roundtrip_probe.py \
       --head-dim 512 \
@@ -200,6 +220,10 @@ Gate:
   binaries before the JSON result. If a loaded `.so` is not the image-installed copy
   expected for the current blessed stack, stop and fix provenance before trusting
   any cosine.
+- `container.stdout` includes FlashInfer JIT source proof lines resolving csrc,
+  include, CUTLASS, CCCL, and spdlog paths to `/flashinfer-src`. If they resolve
+  to installed package data while a source overlay is under test, stop and fix
+  provenance before trusting any JIT result.
 - FlashInfer generated module proves `head_dim_qk=512;head_dim_vo=256`.
 - Cosine versus dequantized-pool reference is at least `0.9999`.
 - Kernel-side comparison target from Claude Block A is `>=0.9999983` for pure probe
@@ -236,7 +260,9 @@ docker run --rm --gpus all --memory=100g --memory-swap=100g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="/tmp/flashinfer-cache-$RUN" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
-  -e PYTHONPATH=/work/third_party/sglang/python:/tmp/flashinfer-python-path \
+  -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
+  -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
+  -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
   -e SGLANG_FLASHINFER_VOSPLIT=1 \
   -e SGLANG_FP4_KV_TRACE_MODULE=1 \
   -e SGLANG_FP4_KV_TRACE_RADIX=1 \
