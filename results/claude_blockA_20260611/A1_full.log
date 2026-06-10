@@ -1,0 +1,245 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=__nv_fp4x2_e2m1;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=1;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=__nv_fp4x2_e2m1,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=512,head_dim_vo=256,require_fp4_kv=1,use_swa=0,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=1,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=1,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=-1,batch_size=4,num_qo_heads=4,num_kv_heads=2,page_size=16,split_kv=0,cta_tile_q=64,enable_cuda_graph=0,padded_batch_size=4,total_num_rows=64}
+[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=__nv_fp4x2_e2m1;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=1;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xeb3820000000,device=0,ndim=1,shape=[268435456],stride=[1],_dtype={code=0,bits=8,lanes=1} } int_workspace={ptr=0x328600000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0x32ef56800,device=0,ndim=3,shape=[64,4,512],stride=[2048,512,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0x32ee00600,device=0,ndim=4,shape=[24,16,2,256],stride=[8192,512,256,1],_dtype={code=1,bits=8,lanes=1} } paged_v_cache={ptr=0x32ef96800,device=0,ndim=4,shape=[24,16,2,128],stride=[4096,256,128,1],_dtype={code=1,bits=8,lanes=1} } qo_indptr={ptr=0x32ee36c00,device=0,ndim=1,shape=[5],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32ee00200,device=0,ndim=1,shape=[5],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0x32ee00000,device=0,ndim=1,shape=[24],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32ee00400,device=0,ndim=1,shape=[4],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0x32efae800,device=0,ndim=3,shape=[64,4,256],stride=[1024,256,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null 
+{
+  "all_ok": true,
+  "created_unix": 1781060629.0059118,
+  "environment": {
+    "flashinfer_extra_cudaflags": "",
+    "flashinfer_file": "/fisrc/flashinfer/__init__.py",
+    "flashinfer_source_paths": {
+      "attention_jit_utils": "/fisrc/flashinfer/jit/attention/utils.py",
+      "cccl": "/fisrc/3rdparty/cccl",
+      "csrc": "/fisrc/csrc",
+      "cutlass": "/fisrc/3rdparty/cutlass",
+      "include": "/fisrc/include",
+      "source_root": "/fisrc",
+      "spdlog": "/fisrc/3rdparty/spdlog"
+    },
+    "flashinfer_version": "0.6.13",
+    "python": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]",
+    "torch_version": "2.12.0.dev20260408+cu130"
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 4,
+    "causal": true,
+    "cosine_threshold": 0.9999,
+    "deswizzle_flag_requested": false,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": "/fisrc",
+    "head_dim": 512,
+    "k_global_scale": 1.0,
+    "kv_container": "tuple",
+    "kv_len": 96,
+    "layouts": [
+      "NHD",
+      "HND"
+    ],
+    "max_abs_threshold": 0.25,
+    "num_kv_heads": 2,
+    "num_qo_heads": 4,
+    "page_size": 16,
+    "qo_len": 16,
+    "signed_values": false,
+    "v_global_scale": 1.0,
+    "v_scale_layout": "linear"
+  },
+  "results": [
+    {
+      "actual_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.bfloat16",
+        "finite": 131072,
+        "max": 4.40625,
+        "max_abs": 4.40625,
+        "mean": 1.0538328886032104,
+        "min": 0.255859375,
+        "numel": 131072,
+        "rms": 1.0943983793258667,
+        "shape": [
+          64,
+          4,
+          512
+        ]
+      },
+      "cosine": 0.9999985694885254,
+      "elapsed_sec": 45.532148625003174,
+      "expected_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.float32",
+        "finite": 131072,
+        "max": 4.418042182922363,
+        "max_abs": 4.418042182922363,
+        "mean": 1.0538372993469238,
+        "min": 0.2558797299861908,
+        "numel": 131072,
+        "rms": 1.0944020748138428,
+        "shape": [
+          64,
+          4,
+          512
+        ]
+      },
+      "head_dim_vo": 256,
+      "k_scale": 1.0,
+      "layout": "NHD",
+      "max_abs": 0.011792182922363281,
+      "mean_abs": 0.0015121666947379708,
+      "operation": "prefill_vo_split",
+      "passed": true,
+      "split_output_stats": [
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 65536,
+          "max": 4.40625,
+          "max_abs": 4.40625,
+          "mean": 1.065887451171875,
+          "min": 0.267578125,
+          "numel": 65536,
+          "rms": 1.1058748960494995,
+          "shape": [
+            64,
+            4,
+            256
+          ]
+        },
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 65536,
+          "max": 3.828125,
+          "max_abs": 3.828125,
+          "mean": 1.041778326034546,
+          "min": 0.255859375,
+          "numel": 65536,
+          "rms": 1.0828005075454712,
+          "shape": [
+            64,
+            4,
+            256
+          ]
+        }
+      ],
+      "v_scale": 1.0,
+      "vo_split": 2
+    },
+    {
+      "actual_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.bfloat16",
+        "finite": 131072,
+        "max": 4.0,
+        "max_abs": 4.0,
+        "mean": 1.0606369972229004,
+        "min": 0.28515625,
+        "numel": 131072,
+        "rms": 1.1016788482666016,
+        "shape": [
+          64,
+          4,
+          512
+        ]
+      },
+      "cosine": 0.9999985098838806,
+      "elapsed_sec": 0.017223356990143657,
+      "expected_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.float32",
+        "finite": 131072,
+        "max": 4.01318883895874,
+        "max_abs": 4.01318883895874,
+        "mean": 1.0606403350830078,
+        "min": 0.28569263219833374,
+        "numel": 131072,
+        "rms": 1.1016807556152344,
+        "shape": [
+          64,
+          4,
+          512
+        ]
+      },
+      "head_dim_vo": 256,
+      "k_scale": 1.0,
+      "layout": "HND",
+      "max_abs": 0.013188838958740234,
+      "mean_abs": 0.0015285687986761332,
+      "operation": "prefill_vo_split",
+      "passed": true,
+      "split_output_stats": [
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 65536,
+          "max": 4.0,
+          "max_abs": 4.0,
+          "mean": 1.0596404075622559,
+          "min": 0.28515625,
+          "numel": 65536,
+          "rms": 1.1012463569641113,
+          "shape": [
+            64,
+            4,
+            256
+          ]
+        },
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 65536,
+          "max": 3.875,
+          "max_abs": 3.875,
+          "mean": 1.0616337060928345,
+          "min": 0.29296875,
+          "numel": 65536,
+          "rms": 1.1021112203598022,
+          "shape": [
+            64,
+            4,
+            256
+          ]
+        }
+      ],
+      "v_scale": 1.0,
+      "vo_split": 2
+    }
+  ],
+  "schema": "flashinfer-nvfp4-kv-probe/v1"
+}

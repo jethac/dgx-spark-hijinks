@@ -1,0 +1,243 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+{
+  "all_ok": true,
+  "created_unix": 1781060786.4603608,
+  "environment": {
+    "flashinfer_extra_cudaflags": "",
+    "flashinfer_file": "/fisrc/flashinfer/__init__.py",
+    "flashinfer_source_paths": {
+      "attention_jit_utils": "/fisrc/flashinfer/jit/attention/utils.py",
+      "cccl": "/fisrc/3rdparty/cccl",
+      "csrc": "/fisrc/csrc",
+      "cutlass": "/fisrc/3rdparty/cutlass",
+      "include": "/fisrc/include",
+      "source_root": "/fisrc",
+      "spdlog": "/fisrc/3rdparty/spdlog"
+    },
+    "flashinfer_version": "0.6.13",
+    "python": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]",
+    "torch_version": "2.12.0.dev20260408+cu130"
+  },
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0.dev20260408+cu130",
+    "warnings": []
+  },
+  "metadata": {
+    "backend": "fa2",
+    "batch_size": 4,
+    "causal": true,
+    "cosine_threshold": 0.9999,
+    "deswizzle_flag_requested": false,
+    "dtype": "bfloat16",
+    "flashinfer_source_root": "/fisrc",
+    "head_dim": 512,
+    "k_global_scale": 1.0,
+    "kv_container": "tuple",
+    "kv_len": 96,
+    "layouts": [
+      "NHD",
+      "HND"
+    ],
+    "max_abs_threshold": 0.25,
+    "num_kv_heads": 2,
+    "num_qo_heads": 4,
+    "page_size": 16,
+    "qo_len": 1,
+    "signed_values": false,
+    "v_global_scale": 1.0,
+    "v_scale_layout": "linear"
+  },
+  "results": [
+    {
+      "actual_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.bfloat16",
+        "finite": 8192,
+        "max": 3.40625,
+        "max_abs": 3.40625,
+        "mean": 1.0539448261260986,
+        "min": 0.37109375,
+        "numel": 8192,
+        "rms": 1.0906422138214111,
+        "shape": [
+          4,
+          4,
+          512
+        ]
+      },
+      "cosine": 0.9999984502792358,
+      "elapsed_sec": 43.707376188001945,
+      "expected_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.float32",
+        "finite": 8192,
+        "max": 3.4006295204162598,
+        "max_abs": 3.4006295204162598,
+        "mean": 1.053961992263794,
+        "min": 0.3716907203197479,
+        "numel": 8192,
+        "rms": 1.0906609296798706,
+        "shape": [
+          4,
+          4,
+          512
+        ]
+      },
+      "head_dim_vo": 256,
+      "k_scale": 1.0,
+      "layout": "NHD",
+      "max_abs": 0.008392810821533203,
+      "mean_abs": 0.0015104778576642275,
+      "operation": "prefill_vo_split",
+      "passed": true,
+      "split_output_stats": [
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 4096,
+          "max": 2.984375,
+          "max_abs": 2.984375,
+          "mean": 1.0533161163330078,
+          "min": 0.45703125,
+          "numel": 4096,
+          "rms": 1.0887281894683838,
+          "shape": [
+            4,
+            4,
+            256
+          ]
+        },
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 4096,
+          "max": 3.40625,
+          "max_abs": 3.40625,
+          "mean": 1.0545735359191895,
+          "min": 0.37109375,
+          "numel": 4096,
+          "rms": 1.092552900314331,
+          "shape": [
+            4,
+            4,
+            256
+          ]
+        }
+      ],
+      "v_scale": 1.0,
+      "vo_split": 2
+    },
+    {
+      "actual_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.bfloat16",
+        "finite": 8192,
+        "max": 2.625,
+        "max_abs": 2.625,
+        "mean": 1.0550427436828613,
+        "min": 0.3828125,
+        "numel": 8192,
+        "rms": 1.0877273082733154,
+        "shape": [
+          4,
+          4,
+          512
+        ]
+      },
+      "cosine": 0.9999986886978149,
+      "elapsed_sec": 0.015589331000228412,
+      "expected_stats": {
+        "byte_like_nonnegative": true,
+        "dtype": "torch.float32",
+        "finite": 8192,
+        "max": 2.623654842376709,
+        "max_abs": 2.623654842376709,
+        "mean": 1.0550155639648438,
+        "min": 0.382144033908844,
+        "numel": 8192,
+        "rms": 1.087679147720337,
+        "shape": [
+          4,
+          4,
+          512
+        ]
+      },
+      "head_dim_vo": 256,
+      "k_scale": 1.0,
+      "layout": "HND",
+      "max_abs": 0.008010387420654297,
+      "mean_abs": 0.001494992757216096,
+      "operation": "prefill_vo_split",
+      "passed": true,
+      "split_output_stats": [
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 4096,
+          "max": 2.625,
+          "max_abs": 2.625,
+          "mean": 1.067805290222168,
+          "min": 0.439453125,
+          "numel": 4096,
+          "rms": 1.101853609085083,
+          "shape": [
+            4,
+            4,
+            256
+          ]
+        },
+        {
+          "byte_like_nonnegative": true,
+          "dtype": "torch.bfloat16",
+          "finite": 4096,
+          "max": 2.3125,
+          "max_abs": 2.3125,
+          "mean": 1.0422801971435547,
+          "min": 0.3828125,
+          "numel": 4096,
+          "rms": 1.0734151601791382,
+          "shape": [
+            4,
+            4,
+            256
+          ]
+        }
+      ],
+      "v_scale": 1.0,
+      "vo_split": 2
+    }
+  ],
+  "schema": "flashinfer-nvfp4-kv-probe/v1"
+}
