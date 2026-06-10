@@ -1,0 +1,43 @@
+{
+  "schema": "claude-31b-ppl-pair-gates/v1",
+  "first_token_gate": {
+    "wall_s": 34.26819267400424,
+    "text": "B-TL de\ub9cc\uc73c\ub85citt\u00e4ctH \u062b\u0627\u0646\u0648\u064aB la\u00ebL*l vets laTBLyzKKHLTKT}'] R\u00f6LL \ud1b5\ud574KLTK evenTKH\u0259LLL$\\SKT \u0d09\u0d23\u0d4d\u0d1f\u0d3e\u0d2f\u0d3fSTLLL ownBKHama-KLTameBBKT-TKKTBiekamaniKLBTK deKKabinLama OHKTukILKL evenerfir\ub9cc OKKK\ub9ccLTK FiftyLanchesLKahT-\ub9ccLP\ub294\ub370\uc694TTKleB",
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 157,
+      "completion_tokens": 128,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "length"
+  },
+  "decode_reps": [
+    {
+      "rep": 1,
+      "wall_s": 68.67175427699112,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.727879135975041,
+      "finish_reason": "length",
+      "text_head": "LLL-LLLeykeahSL deLLLon-ey LimaLTamaT evenL-zanTLLHBLT GKLHy-LLLBLLH\u120cLLT deLkS de deL deTyLLLTLLyLTL\ub9cc deLamuB dey_haally"
+    },
+    {
+      "rep": 2,
+      "wall_s": 68.61805251700571,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.730796643296677,
+      "finish_reason": "length",
+      "text_head": "TLing-y\u00ecyTahK-TLK yerdenLTKTalTan deLlTTBiyTLKLLCykaLLLis de de deLLSLHkeLL-LL de-yL deL even de \ud568\uaed8 laLLLHH deTK-Te queL"
+    },
+    {
+      "rep": 3,
+      "wall_s": 68.63492607101216,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7298794455629367,
+      "finish_reason": "length",
+      "text_head": "TLing-y\u00ecyTahK-TLK yerdenLTKTalTan deLlTTBiyTLKLLCykaLLLis de de deLLSLHkeLL-LL de-yL deL even de \ud568\uaed8 laLLLHH deTK-Te queL"
+    }
+  ]
+}

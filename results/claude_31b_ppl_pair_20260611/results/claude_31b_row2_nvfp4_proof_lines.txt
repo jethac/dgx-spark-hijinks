@@ -1,0 +1,10 @@
+1:OVERLAY_CHECK vllm.__file__= /opt/vllm_overlay/vllm/__init__.py
+2:OVERLAY_CHECK flashinfer= /opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py
+9:(APIServer pid=1) INFO 06-10 22:41:08 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'gpu_memory_utilization': 0.72, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}
+10:(APIServer pid=1) WARNING 06-10 22:41:08 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+14:(APIServer pid=1) INFO 06-10 22:41:13 [config.py:159] Gemma4 has heterogeneous head dimensions (head_dim=256, global_head_dim=512) and VLLM_NVFP4_KV_VOSPLIT is set: keeping per-layer attention backend resolution so the global layers run FlashInfer's NVFP4 VO split.
+26:(EngineCore pid=174) INFO 06-10 22:41:27 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].
+27:(EngineCore pid=174) INFO 06-10 22:41:27 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.
+46:(EngineCore pid=174) INFO 06-10 22:48:41 [flashinfer.py:1394] Using FlashInfer FA2 backend for NVFP4 KV cache on SM12x (V-scale-factor mode: linear, in-kernel deswizzle disabled).
+47:(EngineCore pid=174) INFO 06-10 22:48:41 [flashinfer.py:1411] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+52:(EngineCore pid=174) INFO 06-10 22:48:43 [kv_cache_utils.py:1790] GPU KV cache size: 221,754 tokens

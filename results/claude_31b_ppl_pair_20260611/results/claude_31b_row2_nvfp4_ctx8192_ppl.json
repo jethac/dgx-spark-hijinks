@@ -1,0 +1,7 @@
+{
+  "elapsed_s": 5.205,
+  "error": "<HTTPError 400: 'Bad Request'>",
+  "ok": false,
+  "run_id": "claude_31b_row2_nvfp4_ctx8192",
+  "schema": "vllm-prompt-ppl-sweep/v1"
+}

@@ -1,0 +1,42 @@
+31B flagship quality-gate window — PPL pair (fp8 comparator vs full NVFP4)
+Date: 2026-06-11 JST. Host: thinkstationpgx-00b4 (NVIDIA GB10, sm_121, 48 SMs).
+Packet: docs/WINDOW_PACKET_31B_PPL_PAIR.md @ spark/hijinks-022-gemma4-mixed-kv (8a70e19b7e4d12eda33524876f4f19c556e41a36)
+Image: jethac-vllm-aeon-gemma4:e08a6f3ae-rebuiltc-fb7d62ea-sm121a-r8
+Overlay: jethac/vllm@9759e3b06baa85db93e10ecc0a8afdc4199f449b mounted ro at /opt/vllm_overlay, PYTHONPATH=/opt/vllm_overlay, -w /work
+  OVERLAY_CHECK confirmed for both rows (vllm.__init__ and flashinfer backend resolved from /opt/vllm_overlay).
+No convertor patch mount. No CLAUDE_DISABLE_GEMMA4_MM_PREFIX. Both rows served with --language-model-only.
+Serve args (both rows): vllm serve google/gemma-4-31B-it --served-model-name gemma4-31b-it
+  --host 0.0.0.0 --port 8000 --kv-cache-dtype <row> --gpu-memory-utilization 0.72
+  --max-model-len 8192 --language-model-only
+Container: docker run --rm --memory 100g --memory-swap 100g --gpus all --net host --ipc host; one at a time, sequential.
+PPL harness: Block C pattern (scripts/vllm_prompt_ppl_sweep.py + spark_hardware.py), corpus docs/ppl_corpus.md
+  (md5 abb63f0e65247a25f870d3f2d57563ff, identical to claude_r8_gates_results/part2 copy), add_special_tokens=false.
+
+DEVIATION: ctx 8192 rejected by server with HTTP 400 (prompt 8192 + max_tokens 1 > max-model-len 8192).
+  Scripted fallback ctx 8191 used for BOTH rows (matched pair; deltas comparable within the pair).
+  The part2 Block C runs used ctx 8192 against max-model-len 262144, so no conflict arose there.
+
+Row 1 (fp8_e4m3 comparator, no knobs): TRITON_ATTN forced as expected.
+  READY_WALL=618s, ROW_WALL=858s. GPU KV cache size: 127,120 tokens.
+  PPL(ctx8191)=87.70206, mean_nll=4.473945386 nats/tok, 8190/8190 scored, ok=true.
+  Decode (256 tok, ignore_eos, incl prefill): 3.726 / 3.741 / 3.738 tok/s. First-token gate text coherent.
+
+Row 2 (nvfp4 + VLLM_NVFP4_KV_VOSPLIT=1 + VLLM_NVFP4_KV_LINEAR_V_SF=1): FLASHINFER selected, no mm-prefix
+  rejection, no unknown-env warnings for the two knobs (only pre-existing VLLM_VERSION_OVERRIDE warning),
+  new V-SF wording present, VO-split line present.
+  READY_WALL=624s, ROW_WALL=886s. GPU KV cache size: 221,754 tokens.
+  PPL(ctx8191)=439112.77258, mean_nll=12.992511544 nats/tok, 8190/8190 scored, ok(no missing)=true.
+  Decode: 3.728 / 3.731 / 3.730 tok/s. First-token gate text GIBBERISH.
+
+PAIR RESULT:
+  delta nats/token = +8.518566158  (quality gate FAIL — gibberish-scale blowup; campaign band was ~+0.005..+0.014)
+  KV capacity ratio = 221,754 / 127,120 = 1.7444x (reproduces ~1.70x claim)
+  decode parity: NVFP4/FlashInfer ~= Triton (3.73 vs 3.73 tok/s)
+  TOTAL_WALL=1744s
+
+TRACE POINTER (no extra runs performed, per packet "stop and trace"):
+  The prior claude_window2_part3_rerun (ad2337814 image + e08a6f3ae overlay + convertor patch +
+  CLAUDE_DISABLE_GEMMA4_MM_PREFIX, same nvfp4+VOSPLIT+LINEAR_V_SF knobs) shows the SAME gibberish pattern in
+  its recorded smoke text (claude_p3_rerun_chat_and_decode.json). The blowup therefore predates this window's
+  changes (r8 image, knob registration, --language-model-only waiver); the "COHERENT" prior must come from a
+  different configuration than that rerun artifact.
