@@ -58,12 +58,15 @@ SGLang's FlashInfer backend is `third_party/sglang/python/sglang/srt/layers/atte
 - Paged prefill wrappers are created at lines 833-848; decode wrappers are created at lines 849-855.
 - `FlashInferIndicesUpdaterDecode` currently reads `model_runner.model_config.head_dim` once into `self.head_dim` at lines 2919-2936, then passes that same value into `begin_forward()` at lines 3150-3184.
 - `FlashInferIndicesUpdaterPrefill` does the same at lines 3199-3216 and passes the same value to ragged and paged wrappers at lines 3521-3529 and 3570-3583.
+- Search result as of 2026-06-10: this SGLang tree does not pass an explicit `jit_args` keyword into FlashInfer wrapper constructors on the FP4 path. Constructor calls pass workspace/layout/backend/use-tensor-core knobs only. That means the exact vLLM bug fixed in `jethac/vllm@e08a6f3ae` is not currently present as a literal `jit_args` override in SGLang, but the same failure class can appear if SGLang adds ctor-level VO-split args or lets cached module state pin symmetric head dims ahead of plan-time `head_dim_vo`.
 
 This is the main Gemma 4 risk. A single `model_config.head_dim` cannot describe both sliding D=256 and global D=512 layers if the wrappers are shared only by window/full wrapper id. The SGLang rung needs per-wrapper or per-layer plan metadata that can express:
 
 - sliding wrapper: local layer geometry, local window, local head dim;
 - full wrapper: global layer geometry, `head_dim_qk=512`, and VO-split `head_dim_vo=256`;
 - mixed-KV or full NVFP4 K/V dtypes independently.
+
+Do not let constructor/module-cache state override plan-time VO-split. The vLLM 31B crash was fingerprinted to constructor `jit_args` pinning symmetric head dims and defeating the plan-time VO-split. SGLang's current risk is the single `self.head_dim` threaded through `begin_forward()`: the Gemma 4 implementation must make the full-attention wrapper's plan declare `head_dim_qk=512` and `head_dim_vo=256` at the same altitude where FlashInfer chooses/loads the module.
 
 ### Extend And Decode Slots
 
@@ -101,7 +104,8 @@ Decode insertion point: SGLang currently plans decode through `BatchDecodeWithPa
 1. Static config audit and running-model geometry dump: layer id, layer type, heads, KV heads, `head_dim`, `v_head_dim`, window, page layout, bytes/token.
 2. Pool allocation audit: full and SWA subpool classes, token capacities, K/V GB, mixed/full denominator, and scalar scale transfer.
 3. FlashInfer plan audit: wrapper id, `qo_len`, `kv_len`, batch, page size, window, softcap, `head_dim_qk`, `head_dim_vo`, `k_data_type`, `v_data_type`, `kv_cache_sf` layout.
-4. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
-5. fp8 comparator row.
-6. mixed-KV serving row first.
-7. full NVFP4 K+V only after the structural route avoids the partial-state merge failure.
+4. Wrapper-construction audit: prove no ctor `jit_args`, cached module, `fast_decode_plan`, or wrapper-local `self.head_dim` value pins symmetric dims and overrides the plan-time VO-split.
+5. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
+6. fp8 comparator row.
+7. mixed-KV serving row first.
+8. full NVFP4 K+V only after the structural route avoids the partial-state merge failure.
