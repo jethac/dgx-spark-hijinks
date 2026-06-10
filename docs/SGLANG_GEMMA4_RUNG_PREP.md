@@ -105,7 +105,8 @@ Decode insertion point: SGLang currently plans decode through `BatchDecodeWithPa
 2. Pool allocation audit: full and SWA subpool classes, token capacities, K/V GB, mixed/full denominator, and scalar scale transfer.
 3. FlashInfer plan audit: wrapper id, `qo_len`, `kv_len`, batch, page size, window, softcap, `head_dim_qk`, `head_dim_vo`, `k_data_type`, `v_data_type`, `kv_cache_sf` layout.
 4. Wrapper-construction audit: prove no ctor `jit_args`, cached module, `fast_decode_plan`, or wrapper-local `self.head_dim` value pins symmetric dims and overrides the plan-time VO-split.
-5. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
-6. fp8 comparator row.
-7. mixed-KV serving row first.
-8. full NVFP4 K+V only after the structural route avoids the partial-state merge failure.
+5. Writer-roundtrip gate at head 512: write via SGLang's real cache writer, read via the real FlashInfer kernel, and compare against dequant/reference output. Probes that fabricate the cache can miss writer/reader disagreements; the new vLLM 31B coherence bug is exactly "writer and reader meet at D=512 for the first time."
+6. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
+7. fp8 comparator row.
+8. mixed-KV serving row first.
+9. full NVFP4 K+V only after the structural route avoids the partial-state merge failure.
