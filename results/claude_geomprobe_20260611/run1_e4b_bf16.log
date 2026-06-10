@@ -1,0 +1,49 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+{
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "K1 viable: (qk=512, vo=256, bf16 KV) compiles+runs; 2-pass VO-split matches dequantized fp32 reference (cosine=0.999998). Gemma 4 global layers can use FlashInfer via VO split.",
+  "cosine_gate": 0.99,
+  "cosine_vs_fp32_ref": 0.9999979138374329,
+  "device": "NVIDIA GB10",
+  "finished_utc": "2026-06-10T04:34:20.320184+00:00",
+  "flashinfer": "0.6.13",
+  "flashinfer_source_paths": {
+    "csrc": "/fisrc/csrc",
+    "include": "/fisrc/include",
+    "source_root": "/fisrc"
+  },
+  "geometry": "e4b",
+  "gqa_group": 4,
+  "kv_dtype": "bf16",
+  "max_abs_diff": 0.0036580562591552734,
+  "num_kv_heads": 2,
+  "num_passes": 2,
+  "num_qo_heads": 8,
+  "ok": true,
+  "output_shape": [
+    16,
+    8,
+    512
+  ],
+  "probe": "fa2-vo-split-d512-vo256",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-10T04:33:46.956085+00:00",
+  "torch": "2.12.0.dev20260408+cu130"
+}

@@ -1,0 +1,4 @@
+RUN=claude_geom_1 EXIT=0 WALL_SECONDS=36
+RUN=claude_geom_2 EXIT=0 WALL_SECONDS=35
+RUN=claude_geom_3 EXIT=0 WALL_SECONDS=46
+RUN=claude_geom_4 EXIT=0 WALL_SECONDS=47
