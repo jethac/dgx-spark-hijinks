@@ -164,6 +164,24 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
     set -euo pipefail
     mkdir -p /tmp/flashinfer-python-path
     ln -sfn /flashinfer-src/flashinfer /tmp/flashinfer-python-path/flashinfer
+    python - <<PY
+import hashlib
+import importlib
+import pathlib
+
+modules = [
+    "sgl_kernel",
+    "sgl_kernel.common_ops",
+]
+for name in modules:
+    mod = importlib.import_module(name)
+    path = getattr(mod, "__file__", None)
+    if not path:
+        continue
+    path = pathlib.Path(path).resolve()
+    digest = hashlib.md5(path.read_bytes()).hexdigest()
+    print(f"binary_md5 {name} {path} {digest}")
+PY
     python /work/scripts/sglang_fp4_kv_writer_roundtrip_probe.py \
       --head-dim 512 \
       --num-qo-heads 32 \
@@ -178,6 +196,10 @@ awk 'found || /^\{/ { found = 1; print }' "$OUT/container.stdout" > "$OUT/output
 
 Gate:
 
+- `container.stdout` includes `binary_md5` proof lines for loaded native SGLang
+  binaries before the JSON result. If a loaded `.so` is not the image-installed copy
+  expected for the current blessed stack, stop and fix provenance before trusting
+  any cosine.
 - FlashInfer generated module proves `head_dim_qk=512;head_dim_vo=256`.
 - Cosine versus dequantized-pool reference is at least `0.9999`.
 - Kernel-side comparison target from Claude Block A is `>=0.9999983` for pure probe
