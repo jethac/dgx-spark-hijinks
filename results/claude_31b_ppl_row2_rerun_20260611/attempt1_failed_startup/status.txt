@@ -1,0 +1,6 @@
+RUN_START 2026-06-11T08:08:30+09:00 OVERLAY_HEAD=9759e3b06baa85db93e10ecc0a8afdc4199f449b IMAGE=jethac-vllm-aeon-gemma4:e08a6f3ae-rebuiltc-fb7d62ea-sm121a-r8
+OVERLAY_SO_COUNT=0
+ROW=row2_nvfp4 EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row2_nvfp4 READY_RC=3 READY_WALL=22
+ROW=row2_nvfp4 SERVER_DID_NOT_BECOME_READY
+RERUN_DONE TOTAL_WALL=22

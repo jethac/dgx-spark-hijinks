@@ -1,0 +1,67 @@
+1:OVERLAY_CHECK vllm.__file__= /opt/vllm_overlay/vllm/__init__.py
+2:OVERLAY_CHECK flashinfer= /opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py
+3:EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+10:(APIServer pid=1) INFO 06-10 23:08:41 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'gpu_memory_utilization': 0.72, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}
+11:(APIServer pid=1) WARNING 06-10 23:08:41 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+12:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] Error in inspecting model architecture 'Gemma4ForConditionalGeneration'
+13:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] Traceback (most recent call last):
+14:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 1398, in _run_in_subprocess
+15:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     returned.check_returncode()
+16:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/usr/local/lib/python3.12/subprocess.py", line 502, in check_returncode
+17:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     raise CalledProcessError(self.returncode, self.args, self.stdout,
+18:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] subprocess.CalledProcessError: Command '['/usr/local/bin/python3', '-m', 'vllm.model_executor.models.registry']' returned non-zero exit status 1.
+19:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] 
+20:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] The above exception was the direct cause of the following exception:
+21:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] 
+22:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] Traceback (most recent call last):
+23:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 961, in _try_inspect_model_cls
+24:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     return model.inspect_model_cls()
+25:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+26:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/logging_utils/log_time.py", line 21, in _wrapper
+27:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     result = func(*args, **kwargs)
+28:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]              ^^^^^^^^^^^^^^^^^^^^^
+29:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 922, in inspect_model_cls
+30:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     mi = _run_in_subprocess(
+31:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]          ^^^^^^^^^^^^^^^^^^^
+32:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 1401, in _run_in_subprocess
+33:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     raise RuntimeError(
+34:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] RuntimeError: Error raised in subprocess:
+35:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] <frozen runpy>:128: RuntimeWarning: 'vllm.model_executor.models.registry' found in sys.modules after import of package 'vllm.model_executor.models', but prior to execution of 'vllm.model_executor.models.registry'; this may result in unpredictable behaviour
+36:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] Traceback (most recent call last):
+37:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen runpy>", line 198, in _run_module_as_main
+38:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen runpy>", line 88, in _run_code
+39:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 1424, in <module>
+40:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     _run()
+41:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 1417, in _run
+42:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     result = fn()
+43:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]              ^^^^
+44:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 923, in <lambda>
+45:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     lambda: _ModelInfo.from_model_cls(self.load_model_cls())
+46:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]                                       ^^^^^^^^^^^^^^^^^^^^^
+47:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/registry.py", line 936, in load_model_cls
+48:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     mod = importlib.import_module(self.module_name)
+49:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+51:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     return _bootstrap._gcd_import(name[level:], package, level)
+52:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+53:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+54:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+55:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+56:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+57:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap_external>", line 999, in exec_module
+58:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+59:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 42, in <module>
+60:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     from vllm.model_executor.models.gemma4 import Gemma4ForCausalLM
+61:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4.py", line 39, in <module>
+62:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     from vllm.model_executor.layers.attention import Attention
+63:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/__init__.py", line 13, in <module>
+64:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     from vllm.model_executor.layers.attention.mm_encoder_attention import MMEncoderAttention
+65:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/mm_encoder_attention.py", line 31, in <module>
+66:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     from vllm.v1.attention.backends.fa_utils import get_flash_attn_version
+67:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/v1/attention/backends/fa_utils.py", line 20, in <module>
+68:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     from vllm.vllm_flash_attn import (  # type: ignore[attr-defined]
+69:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]   File "/opt/vllm_overlay/vllm/vllm_flash_attn/__init__.py", line 33, in <module>
+70:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963]     raise ImportError(
+71:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] ImportError: vllm.vllm_flash_attn requires the CUDA flash attention extensions (_vllm_fa2_C or _vllm_fa3_C). On ROCm, use upstream flash_attn.
+72:(APIServer pid=1) ERROR 06-10 23:08:47 [registry.py:963] 
+73:(APIServer pid=1) Traceback (most recent call last):
