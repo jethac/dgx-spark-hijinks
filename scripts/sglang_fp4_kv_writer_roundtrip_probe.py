@@ -25,6 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-qo-heads", type=int, default=32)
     parser.add_argument("--num-kv-heads", type=int, default=16)
     parser.add_argument("--head-dim", type=int, default=256)
+    parser.add_argument("--vo-split", type=int, default=1, choices=(1, 2))
     parser.add_argument("--window-left", type=int, default=255)
     parser.add_argument("--seed", type=int, default=20260611)
     parser.add_argument("--rtol-cosine", type=float, default=0.999)
@@ -77,6 +78,7 @@ def run_case(
     num_qo_heads: int,
     num_kv_heads: int,
     head_dim: int,
+    vo_split: int,
     page_size: int,
     window_left: int,
     dtype,
@@ -100,37 +102,75 @@ def run_case(
     v_sf_paged = v_sf.unsqueeze(1)
     k_global, v_global = pool.get_kv_global_scale(0)
 
-    workspace = torch.empty(256 * 1024 * 1024, dtype=torch.uint8, device=q.device)
-    wrapper = BatchPrefillWithPagedKVCacheWrapper(workspace, "NHD", backend="fa2")
     sm_scale = 1.0 / math.sqrt(head_dim)
-    wrapper.plan(
-        q_indptr,
-        kv_indptr,
-        kv_indices,
-        kv_last_page_len,
-        num_qo_heads,
-        num_kv_heads,
-        head_dim,
-        page_size,
-        causal=False,
-        pos_encoding_mode="NONE",
-        sm_scale=sm_scale,
-        window_left=window_left,
-        logits_soft_cap=0.0,
-        q_data_type=dtype,
-        kv_data_type=torch.uint8,
-        k_data_type=torch.uint8,
-        v_data_type=torch.uint8,
-        o_data_type=dtype,
-    )
-    out, lse = wrapper.run(
-        q_case,
-        (k_cache, v_cache),
-        k_scale=float(k_global),
-        v_scale=float(v_global),
-        kv_cache_sf=(k_sf_paged, v_sf_paged),
-        return_lse=True,
-    )
+
+    def run_paged(v_cache_part, v_sf_part, head_dim_vo: int):
+        workspace = torch.empty(256 * 1024 * 1024, dtype=torch.uint8, device=q.device)
+        wrapper = BatchPrefillWithPagedKVCacheWrapper(workspace, "NHD", backend="fa2")
+        wrapper.plan(
+            q_indptr,
+            kv_indptr,
+            kv_indices,
+            kv_last_page_len,
+            num_qo_heads,
+            num_kv_heads,
+            head_dim,
+            page_size,
+            head_dim_vo=head_dim_vo,
+            causal=False,
+            pos_encoding_mode="NONE",
+            sm_scale=sm_scale,
+            window_left=window_left,
+            logits_soft_cap=0.0,
+            q_data_type=dtype,
+            kv_data_type=torch.uint8,
+            k_data_type=torch.uint8,
+            v_data_type=torch.uint8,
+            o_data_type=dtype,
+        )
+        return wrapper.run(
+            q_case,
+            (k_cache, v_cache_part),
+            k_scale=float(k_global),
+            v_scale=float(v_global),
+            kv_cache_sf=(k_sf_paged, v_sf_part),
+            return_lse=True,
+        )
+
+    if vo_split == 1:
+        out, lse = run_paged(v_cache, v_sf_paged, head_dim)
+        head_dim_vo = head_dim
+    else:
+        if head_dim % vo_split != 0:
+            raise ValueError(f"head_dim={head_dim} is not divisible by vo_split={vo_split}")
+        head_dim_vo = head_dim // vo_split
+        v_packed_width = v_cache.shape[-1]
+        v_sf_width = v_sf_paged.shape[-1]
+        if v_packed_width % vo_split != 0 or v_sf_width % vo_split != 0:
+            raise ValueError(
+                "V cache and scale-factor widths must be divisible by vo_split: "
+                f"v_cache_width={v_packed_width}, v_sf_width={v_sf_width}, "
+                f"vo_split={vo_split}"
+            )
+        packed_step = v_packed_width // vo_split
+        sf_step = v_sf_width // vo_split
+        outs = []
+        lses = []
+        for split_idx in range(vo_split):
+            packed_slice = slice(split_idx * packed_step, (split_idx + 1) * packed_step)
+            sf_slice = slice(split_idx * sf_step, (split_idx + 1) * sf_step)
+            out_part, lse_part = run_paged(
+                v_cache[..., packed_slice],
+                v_sf_paged[..., sf_slice],
+                head_dim_vo,
+            )
+            outs.append(out_part)
+            lses.append(lse_part)
+        out = torch.cat(outs, dim=-1)
+        lse = lses[0]
+        for lse_part in lses[1:]:
+            if not torch.allclose(lse, lse_part, rtol=1e-5, atol=1e-5):
+                raise RuntimeError("VO-split LSE differed across V-output passes")
 
     ref_k = dequant_pool_tensor(
         pool,
@@ -172,6 +212,8 @@ def run_case(
         "num_qo_heads": num_qo_heads,
         "num_kv_heads": num_kv_heads,
         "head_dim": head_dim,
+        "head_dim_vo": head_dim_vo,
+        "vo_split": vo_split,
         "page_size": page_size,
         "window_left": window_left,
         "k_global": float(k_global),
@@ -275,6 +317,7 @@ def main() -> None:
             num_qo_heads=args.num_qo_heads,
             num_kv_heads=args.num_kv_heads,
             head_dim=args.head_dim,
+            vo_split=args.vo_split,
             page_size=page_size,
             window_left=-1,
             dtype=dtype,
@@ -289,6 +332,7 @@ def main() -> None:
             num_qo_heads=args.num_qo_heads,
             num_kv_heads=args.num_kv_heads,
             head_dim=args.head_dim,
+            vo_split=args.vo_split,
             page_size=page_size,
             window_left=args.window_left,
             dtype=dtype,
@@ -303,6 +347,7 @@ def main() -> None:
             num_qo_heads=args.num_qo_heads,
             num_kv_heads=args.num_kv_heads,
             head_dim=args.head_dim,
+            vo_split=args.vo_split,
             page_size=page_size,
             window_left=args.window_left,
             dtype=dtype,
@@ -325,6 +370,7 @@ def main() -> None:
         "cuda_capability": list(torch.cuda.get_device_capability(0)),
         "flashinfer_extra_cudaflags": extra_cudaflags,
         "mixed_fp8_k_nvfp4_v": bool(pool.mixed_fp8_k_nvfp4_v),
+        "vo_split": args.vo_split,
         "k_size_bytes": int(k_size),
         "v_size_bytes": int(v_size),
         "cases": cases,
