@@ -1,0 +1,241 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from tmp.mnBTiHuP1G
+#1 transferring dockerfile: 3.91kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [ 1/12] FROM ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
+#4 DONE 0.0s
+
+#5 [ 6/12] WORKDIR /opt/jethac-vllm
+#5 CACHED
+
+#6 [ 8/12] RUN unset VLLM_USE_PRECOMPILED VLLM_PRECOMPILED_SKIP_FLASH_ATTN VLLM_PRECOMPILED_WHEEL_COMMIT VLLM_PRECOMPILED_WHEEL_LOCATION  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#6 CACHED
+
+#7 [ 3/12] RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates cuda-nvrtc-dev-13-0 libcusparse-dev-13-0 libcublas-dev-13-0 libcusolver-dev-13-0 && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [ 4/12] RUN python3 -m pip install --no-cache-dir       'cmake>=3.26.1' ninja 'packaging>=24.2'       'setuptools>=77.0.3,<81.0.0' 'setuptools-scm>=8.0'       'setuptools-rust>=1.9.0' wheel jinja2 pyelftools       'apache-tvm-ffi>=0.1.6,!=0.1.8,!=0.1.8.post0,<0.2'       'nvidia-cutlass-dsl[cu13]>=4.5.2'
+#8 CACHED
+
+#9 [ 5/12] RUN git clone "https://github.com/jethac/vllm.git" /opt/jethac-vllm  && cd /opt/jethac-vllm  && git checkout "ad233781492ca1d4eaa8c1dd0d80777933163d54"  && git submodule update --init --recursive
+#9 CACHED
+
+#10 [ 7/12] RUN python3 -m pip uninstall -y vllm || true
+#10 CACHED
+
+#11 [ 2/12] RUN test -x /usr/local/cuda/bin/nvcc
+#11 CACHED
+
+#12 [ 9/12] RUN git clone "https://github.com/jethac/flashinfer.git" /opt/jethac-flashinfer  && cd /opt/jethac-flashinfer  && git checkout "fb7d62ea45f19cb61f19057a93519c17b6e257f3"  && git submodule update --init 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+#12 CACHED
+
+#13 [10/12] RUN python3 -m pip uninstall -y flashinfer-python flashinfer-jit-cache flashinfer-cubin || true  && { test ! -d /usr/local/lib/python3.12/dist-packages || find /usr/local/lib/python3.12/dist-packages -maxdepth 1        ( -name 'flashinfer' -o -name 'flashinfer-*.dist-info'          -o -name 'flashinfer_python-*.dist-info'          -o -name 'flashinfer_jit_cache' -o -name 'flashinfer_jit_cache-*.dist-info'          -o -name 'flashinfer_cubin' -o -name 'flashinfer_cubin-*.dist-info' )       -print -exec rm -rf {} +; }   && cd /opt/jethac-flashinfer  && python3 -m pip install --no-cache-dir --no-build-isolation --no-deps -e . -v
+#13 0.298 Found existing installation: flashinfer-python 0.6.8.post1
+#13 0.334 Uninstalling flashinfer-python-0.6.8.post1:
+#13 0.785   Successfully uninstalled flashinfer-python-0.6.8.post1
+#13 0.825 Found existing installation: flashinfer-jit-cache 0.6.8.post1+cu130
+#13 0.852 Uninstalling flashinfer-jit-cache-0.6.8.post1+cu130:
+#13 3.004   Successfully uninstalled flashinfer-jit-cache-0.6.8.post1+cu130
+#13 3.502 Found existing installation: flashinfer-cubin 0.6.8.post1
+#13 3.617 Uninstalling flashinfer-cubin-0.6.8.post1:
+#13 4.590   Successfully uninstalled flashinfer-cubin-0.6.8.post1
+#13 4.763 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#13 4.942 Using pip 25.0.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)
+#13 5.002 Obtaining file:///opt/jethac-flashinfer
+#13 5.003   Checking if build backend supports build_editable: started
+#13 5.003   Running command Checking if build backend supports build_editable
+#13 5.082   Created build metadata file with version 0.6.13
+#13 5.094   Checking if build backend supports build_editable: finished with status 'done'
+#13 5.095   Preparing editable metadata (pyproject.toml): started
+#13 5.095   Running command Preparing editable metadata (pyproject.toml)
+#13 5.209   [06/10/26 06:42:49] WARNING  toml section missing      _pyproject_reading.py:235
+#13 5.209                                PosixPath('pyproject.toml
+#13 5.209                                ') does not contain any
+#13 5.209                                of the tool sections:
+#13 5.209                                ['setuptools_scm',
+#13 5.209                                'vcs-versioning']
+#13 5.265   /usr/local/lib/python3.12/site-packages/setuptools/dist.py:483: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#13 5.265   !!
+#13 5.265 
+#13 5.265           ********************************************************************************
+#13 5.265           Pattern 'LICENSE*.txt' did not match any files.
+#13 5.265 
+#13 5.265           By 2027-Feb-18, you need to update your project and remove deprecated calls
+#13 5.265           or your builds will no longer be supported.
+#13 5.265           ********************************************************************************
+#13 5.265 
+#13 5.265   !!
+#13 5.265     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#13 5.269   Created build metadata file with version 0.6.13
+#13 5.269   running dist_info
+#13 5.278   creating /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info
+#13 5.278   writing /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/PKG-INFO
+#13 5.278   writing dependency_links to /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/dependency_links.txt
+#13 5.278   writing entry points to /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/entry_points.txt
+#13 5.278   writing requirements to /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/requires.txt
+#13 5.278   writing top-level names to /tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/top_level.txt
+#13 5.278   writing manifest file '/tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/SOURCES.txt'
+#13 5.423   /usr/local/lib/python3.12/site-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#13 5.423     return get_active_overrides().subprocess_timeout
+#13 5.599   adding license file 'LICENSE'
+#13 5.625   writing manifest file '/tmp/pip-modern-metadata-qyorw4ih/flashinfer_python.egg-info/SOURCES.txt'
+#13 5.625   creating '/tmp/pip-modern-metadata-qyorw4ih/flashinfer_python-0.6.13.dist-info'
+#13 5.654   Preparing editable metadata (pyproject.toml): finished with status 'done'
+#13 5.659 Building wheels for collected packages: flashinfer-python
+#13 5.659   Building editable for flashinfer-python (pyproject.toml): started
+#13 5.659   Running command Building editable for flashinfer-python (pyproject.toml)
+#13 5.768   [06/10/26 06:42:49] WARNING  toml section missing      _pyproject_reading.py:235
+#13 5.768                                PosixPath('pyproject.toml
+#13 5.768                                ') does not contain any
+#13 5.768                                of the tool sections:
+#13 5.768                                ['setuptools_scm',
+#13 5.768                                'vcs-versioning']
+#13 5.819   /usr/local/lib/python3.12/site-packages/setuptools/dist.py:483: SetuptoolsDeprecationWarning: Cannot find any files for the given pattern.
+#13 5.819   !!
+#13 5.819 
+#13 5.819           ********************************************************************************
+#13 5.819           Pattern 'LICENSE*.txt' did not match any files.
+#13 5.819 
+#13 5.819           By 2027-Feb-18, you need to update your project and remove deprecated calls
+#13 5.819           or your builds will no longer be supported.
+#13 5.819           ********************************************************************************
+#13 5.819 
+#13 5.819   !!
+#13 5.819     for path in sorted(cls._find_pattern(pattern, enforce_match))
+#13 5.823   Created build metadata file with version 0.6.13
+#13 5.823   running editable_wheel
+#13 5.836   creating /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info
+#13 5.836   writing /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/PKG-INFO
+#13 5.836   writing dependency_links to /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/dependency_links.txt
+#13 5.836   writing entry points to /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/entry_points.txt
+#13 5.836   writing requirements to /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/requires.txt
+#13 5.837   writing top-level names to /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/top_level.txt
+#13 5.837   writing manifest file '/tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/SOURCES.txt'
+#13 5.968   /usr/local/lib/python3.12/site-packages/vcs_versioning/overrides.py:609: UserWarning: No GlobalOverrides context is active. Auto-creating one with SETUPTOOLS_SCM prefix for backwards compatibility. Consider using 'with GlobalOverrides.from_env("YOUR_TOOL"):' explicitly.
+#13 5.968     return get_active_overrides().subprocess_timeout
+#13 6.086   adding license file 'LICENSE'
+#13 6.112   writing manifest file '/tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python.egg-info/SOURCES.txt'
+#13 6.112   creating '/tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python-0.6.13.dist-info'
+#13 6.118   creating /tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python-0.6.13.dist-info/WHEEL
+#13 6.134   running build_py
+#13 6.269   Editable install will be performed using a meta path finder.
+#13 6.269 
+#13 6.269   Options like `package-data`, `include/exclude-package-data` or
+#13 6.270   `packages.find.exclude/include` may have no effect.
+#13 6.270 
+#13 6.424   adding '__editable___flashinfer_python_0_6_13_finder.py'
+#13 6.424   adding '__editable__.flashinfer_python-0.6.13.pth'
+#13 6.424   creating '/tmp/pip-wheel-60c7b6ia/.tmp-1wr0uz8u/flashinfer_python-0.6.13-0.editable-py3-none-any.whl' and adding '/tmp/tmpry78sykmflashinfer_python-0.6.13-0.editable-py3-none-any.whl' to it
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/licenses/LICENSE'
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/METADATA'
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/WHEEL'
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/entry_points.txt'
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/top_level.txt'
+#13 6.424   adding 'flashinfer_python-0.6.13.dist-info/RECORD'
+#13 6.424   /usr/local/lib/python3.12/site-packages/setuptools/command/editable_wheel.py:352: InformationOnly: Editable installation.
+#13 6.424   !!
+#13 6.424 
+#13 6.424           ********************************************************************************
+#13 6.424           Please be careful with folders in your working directory with the same
+#13 6.424           name as your package as they may take precedence during imports.
+#13 6.424           ********************************************************************************
+#13 6.424 
+#13 6.424   !!
+#13 6.425     with strategy, WheelFile(wheel_path, "w") as wheel_obj:
+#13 6.448   Building editable for flashinfer-python (pyproject.toml): finished with status 'done'
+#13 6.449   Created wheel for flashinfer-python: filename=flashinfer_python-0.6.13-0.editable-py3-none-any.whl size=13097 sha256=12df6427cf4b144b0924ba40712fc596bbb29930efbdad5c4c182eb484106f91
+#13 6.449   Stored in directory: /tmp/pip-ephem-wheel-cache-rwqynus6/wheels/3f/04/c6/c320b36ea96f37e54e4c8a7a7a8e93fa3ceef624246c2a2969
+#13 6.450 Successfully built flashinfer-python
+#13 6.450 Installing collected packages: flashinfer-python
+#13 6.456   changing mode of /usr/local/bin/flashinfer to 755
+#13 6.465 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#13 6.465 Successfully installed flashinfer-python-0.6.13
+#13 6.518 
+#13 6.518 [notice] A new release of pip is available: 25.0.1 -> 26.1.2
+#13 6.518 [notice] To update, run: pip3 install --upgrade pip
+#13 DONE 6.6s
+
+#14 [11/12] RUN python3 - <<'PY'
+#14 3.555 vllm 0.1.dev1+gad2337814 /opt/jethac-vllm/vllm/__init__.py
+#14 3.555 flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+#14 3.555 torch 2.11.0+cu130 13.0
+#14 3.555 arch_list []
+#14 3.555 _C.abi3.so /opt/jethac-vllm/vllm/_C.abi3.so exists= True size= 88005848
+#14 3.555 _moe_C.abi3.so /opt/jethac-vllm/vllm/_moe_C.abi3.so exists= True size= 78096104
+#14 3.555 vllm_flash_attn/_vllm_fa2_C.abi3.so /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so exists= True size= 229156064
+#14 DONE 4.2s
+
+#15 [12/12] RUN VLLM_C="$(python3 -c 'from pathlib import Path; import vllm; print(Path(vllm.__file__).resolve().parent / "_C.abi3.so")')"  && /usr/local/cuda/bin/cuobjdump -lelf "$VLLM_C" | tee /tmp/vllm_C_cuobjdump.txt  && grep -E 'sm_121|sm_120|compute_121|compute_120' /tmp/vllm_C_cuobjdump.txt || true
+#15 1.986 ELF file    1: _C.abi3.1.sm_121a.cubin
+#15 1.987 ELF file    2: _C.abi3.2.sm_121a.cubin
+#15 1.989 ELF file    3: _C.abi3.3.sm_121a.cubin
+#15 1.992 ELF file    4: _C.abi3.4.sm_121a.cubin
+#15 1.995 ELF file    5: _C.abi3.5.sm_121a.cubin
+#15 1.999 ELF file    6: _C.abi3.6.sm_121a.cubin
+#15 2.001 ELF file    7: _C.abi3.7.sm_121a.cubin
+#15 2.004 ELF file    8: _C.abi3.8.sm_121a.cubin
+#15 2.005 ELF file    9: _C.abi3.9.sm_121a.cubin
+#15 2.007 ELF file   10: _C.abi3.10.sm_121a.cubin
+#15 2.010 ELF file   11: _C.abi3.11.sm_121a.cubin
+#15 2.014 ELF file   12: _C.abi3.12.sm_121a.cubin
+#15 2.018 ELF file   13: _C.abi3.13.sm_121a.cubin
+#15 2.020 ELF file   14: _C.abi3.14.sm_121a.cubin
+#15 2.022 ELF file   15: _C.abi3.15.sm_121a.cubin
+#15 2.023 ELF file   16: _C.abi3.16.sm_121a.cubin
+#15 2.026 ELF file   17: _C.abi3.17.sm_121a.cubin
+#15 2.029 ELF file   18: _C.abi3.18.sm_121a.cubin
+#15 2.031 ELF file   19: _C.abi3.19.sm_121a.cubin
+#15 2.033 ELF file   20: _C.abi3.20.sm_121a.cubin
+#15 2.033 ELF file   21: _C.abi3.21.sm_80.cubin
+#15 2.033 ELF file   22: _C.abi3.22.sm_80.cubin
+#15 2.033 ELF file   23: _C.abi3.23.sm_80.cubin
+#15 2.033 ELF file   24: _C.abi3.24.sm_80.cubin
+#15 2.033 ELF file   25: _C.abi3.25.sm_121a.cubin
+#15 2.033 ELF file   26: _C.abi3.26.sm_121a.cubin
+#15 2.034 ELF file   27: _C.abi3.27.sm_121a.cubin
+#15 2.034 ELF file   28: _C.abi3.28.sm_121a.cubin
+#15 2.034 ELF file   29: _C.abi3.29.sm_121a.cubin
+#15 2.034 ELF file   30: _C.abi3.30.sm_121a.cubin
+#15 2.055 ELF file    1: _C.abi3.1.sm_121a.cubin
+#15 2.055 ELF file    2: _C.abi3.2.sm_121a.cubin
+#15 2.055 ELF file    3: _C.abi3.3.sm_121a.cubin
+#15 2.055 ELF file    4: _C.abi3.4.sm_121a.cubin
+#15 2.055 ELF file    5: _C.abi3.5.sm_121a.cubin
+#15 2.055 ELF file    6: _C.abi3.6.sm_121a.cubin
+#15 2.055 ELF file    7: _C.abi3.7.sm_121a.cubin
+#15 2.055 ELF file    8: _C.abi3.8.sm_121a.cubin
+#15 2.055 ELF file    9: _C.abi3.9.sm_121a.cubin
+#15 2.055 ELF file   10: _C.abi3.10.sm_121a.cubin
+#15 2.055 ELF file   11: _C.abi3.11.sm_121a.cubin
+#15 2.055 ELF file   12: _C.abi3.12.sm_121a.cubin
+#15 2.055 ELF file   13: _C.abi3.13.sm_121a.cubin
+#15 2.055 ELF file   14: _C.abi3.14.sm_121a.cubin
+#15 2.055 ELF file   15: _C.abi3.15.sm_121a.cubin
+#15 2.055 ELF file   16: _C.abi3.16.sm_121a.cubin
+#15 2.055 ELF file   17: _C.abi3.17.sm_121a.cubin
+#15 2.055 ELF file   18: _C.abi3.18.sm_121a.cubin
+#15 2.055 ELF file   19: _C.abi3.19.sm_121a.cubin
+#15 2.055 ELF file   20: _C.abi3.20.sm_121a.cubin
+#15 2.055 ELF file   25: _C.abi3.25.sm_121a.cubin
+#15 2.055 ELF file   26: _C.abi3.26.sm_121a.cubin
+#15 2.055 ELF file   27: _C.abi3.27.sm_121a.cubin
+#15 2.055 ELF file   28: _C.abi3.28.sm_121a.cubin
+#15 2.055 ELF file   29: _C.abi3.29.sm_121a.cubin
+#15 2.055 ELF file   30: _C.abi3.30.sm_121a.cubin
+#15 DONE 2.1s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 10.2s done
+#16 writing image sha256:750ce7b9c59befe4426b484be24a1f58f585a5e13b7ebe13179a16f4feb4d051 done
+#16 naming to docker.io/library/jethac-vllm-aeon-gemma4:ad2337814-rebuiltc-fb7d62ea-sm121a done
+#16 DONE 10.2s
