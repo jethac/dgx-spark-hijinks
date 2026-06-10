@@ -1,20 +1,36 @@
 # FlashInfer FA2 D=512 Plan — Full NVFP4 K+V for Gemma 4 Global Layers
 
-Status: **P0 GREEN (2026-06-10) — K1 confirmed on GB10, no kernel surgery needed.**
-The (512,256) two-pass VO split compiles, runs, and matches a torch fp32 reference at
-**cosine 0.9999978** (max_abs 0.0037, bf16 rounding):
-`results/flashinfer_fa2_vo_split_d512_vo256_probe_20260610T0520JST.json` (on branch
-`spark/hijinks-022-gemma4-mixed-kv`). Two findings beyond the plan:
+Status: **P0 + P0b GREEN, P3 AUTHORED (2026-06-10) — K1 confirmed end to end on GB10.**
+- P0 (bf16): (512,256) two-pass VO split matches torch fp32 at **cosine 0.9999978**
+  (`results/flashinfer_fa2_vo_split_d512_vo256_probe_20260610T0520JST.json`).
+- P0b (NVFP4 KV): green at **cosine 0.9999986** with linear V-SF
+  (`results/flashinfer_vosplit_p0b_fp4_green_linear_20260610_summary.md`). Root cause of
+  the first red: FlashInfer's Python sized O from Q width under FP4 — fixed on
+  `jethac/flashinfer@spark/hijinks-022-fa2-d512` (out width from V, 4 sites; head
+  `fb7d62ea`). Swizzled V-SF does NOT slice along the head dim (token-quads spread across
+  the full SF row) — sidestepped via `VLLM_NVFP4_KV_LINEAR_V_SF=1`
+  (`results/d512_vosplit_sf_layout_decision_20260610.md`).
+- P3 (vLLM orchestration): authored and pushed,
+  `jethac/vllm@spark/hijinks-022-gemma4-mixed-kv` head `f9159f41b`. Opt-in via
+  `VLLM_NVFP4_KV_VOSPLIT=1` + `VLLM_NVFP4_KV_LINEAR_V_SF=1`: builder plans
+  (qk=512, vo=256), all requests route through the prefill wrapper
+  (`reorder_batch_threshold=0`; the decode wrapper has no `head_dim_vo`), impl runs two
+  zero-copy V-half passes and concatenates. Gemma4Config keeps per-layer backend
+  resolution under the knob instead of forcing TRITON_ATTN. GPU validation (P1 gates +
+  serving smoke) rides the next idle window.
+
+Two findings beyond the plan (from P0):
 - The wrapper's `paged_k_cache.stride(i) == paged_v_cache.stride(i)` check is the only
   asymmetric-pair blocker hit so far, and it is dodged **zero-copy**: pass V halves as
   strided VIEWS of the full V (identical strides to K; the half is selected by base
   pointer offset). Zero FlashInfer changes for bf16. P2 may still relax the check
   properly for robustness.
 - The feared q-register bust at D_QK=512 did not materialize (bf16, NUM_WARPS defaults).
-Next gates: **P0b** — the same probe with NVFP4 KV (packed data + SF views sliced along
-the head dim; 256-elem half = 128 packed bytes + 16 SF blocks, both aligned); then P3
-vLLM orchestration. Codex: the probe + result live on the 022 branch; the same VO-split
-pattern applies to SGLang's Gemma rungs when they arrive. Owner: Claude lane
+Next gates: **P1 correctness sweep** (HND layout, batch>1, qo_len=1-as-decode) + linear
+V-SF writer regression on the existing Qwen/Gemma 3 rows, then **P4** (Gemma 4 full-NVFP4
+serving rung). Codex: the probes + results live on the 022 branch; the same VO-split
+pattern + the out-width fix on `spark/hijinks-022-fa2-d512` apply to SGLang's Gemma
+rungs when they arrive (SGLang's linear SFs slice trivially). Owner: Claude lane
 (`spark/hijinks-022-*` branches; worktrees — Codex's checkouts untouched). Goal: upgrade
 the Gemma 4 mixed-KV **global D=512 layers** from bf16/Triton fallback to **NVFP4 on
 FlashInfer**, completing full NVFP4 K+V on Gemma 4 (the 1.78×-class capacity claim instead
