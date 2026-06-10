@@ -119,6 +119,34 @@ PPL-row capacity ratio:
 - fp8 total logged K+V: `14.80 GB`
 - mixed total logged K+V: `14.86 GB`
 
+## Deep-prefix quality gate
+
+Run: `sglang_gemma3_27b_mixedkv_ppl_ctx8192_prefix4096_20260611TmanualJST`
+
+Sequential comparator, one server at a time, CUDA graphs disabled for both:
+
+- Context: `8192`
+- Reused prefix: `4096`
+- Logprob start: `4096`
+- fp8: `--kv-cache-dtype fp8_e4m3`
+- mixed: `--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=1`
+- Hybrid SWA enabled for both.
+
+Result:
+
+| ctx | reused prefix | PPL fp8 | PPL mixed | delta PPL | delta nats/token |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 8192 | 4096 | 4.1805119853 | 4.1769609268 | -0.0035510585 | -0.0008497925 |
+
+Server logs prove the scored requests used real radix prefix reuse with
+`#cached-token: 4096` and `cuda graph: False` on both sides. Capacity at this launch is
+consistent with the corrected mixed-KV denominator:
+
+- SWA/local tokens: `76870 / 60355 = 1.2736x`
+- Full/global tokens: `96088 / 75444 = 1.2736x`
+- artifact directory:
+  `results/sglang_gemma3_27b_mixedkv_ppl_ctx8192_prefix4096_20260611TmanualJST/`
+
 ## Status
 
 Green at this checkpoint:
@@ -128,11 +156,12 @@ Green at this checkpoint:
 - fp8 comparator serves.
 - mixed FP8-K + NVFP4-V serves after selecting the FP4 pool class inside SWA.
 - Short PPL comparator with prefix reuse is quality-green at `ctx=512`, `reuse_prefix_len=256`.
+- Deep-prefix PPL comparator with prefix reuse is quality-green at `ctx=8192`, `reuse_prefix_len=4096`.
 - Capacity is consistent with the corrected mixed-KV denominator: about `1.26x` to `1.29x`, not the old pre-fix `~1.78x` artifact.
 
 Still pending:
 
-- Long-context/deep-prefix Gemma 3 sweep.
+- Broader long-context/deeper-prefix sweep beyond the single `ctx=8192`, `reuse_prefix_len=4096` row.
 - CUDA graph re-enable gate.
 - Full NVFP4 K+V. The full-NVFP4 structural route remains parked; this row is the mixed-KV fallback path.
 - Gemma 4 rungs.
