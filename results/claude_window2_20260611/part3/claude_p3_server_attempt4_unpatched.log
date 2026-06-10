@@ -1,0 +1,10 @@
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339] 
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.1.dev1+gad2337814
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339]   █▄█▀ █     █     █     █  model   google/gemma-4-31B-it
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:339] 
+(APIServer pid=9) INFO 06-10 07:33:18 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'gpu_memory_utilization': 0.72, 'kv_cache_dtype': 'nvfp4'}
+(APIServer pid=9) WARNING 06-10 07:33:18 [envs.py:2094] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+(APIServer pid=9) WARNING 06-10 07:33:18 [envs.py:2094] Unknown vLLM environment variable detected: VLLM_NVFP4_KV_VOSPLIT
+(APIServer pid=9) WARNING 06-10 07:33:18 [envs.py:2094] Unknown vLLM environment variable detected: VLLM_NVFP4_KV_LINEAR_V_SF

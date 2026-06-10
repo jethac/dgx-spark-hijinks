@@ -1,0 +1,750 @@
+{
+  "schema": "ppl-corpus-manifest/v1",
+  "output": "results/vllm_qwen_clean_ppl_20260609T0850JST_corpus.md",
+  "max_chars": 1500000,
+  "actual_chars": 934744,
+  "globs": [
+    "docs/*.md",
+    "tasks/*.md",
+    "results/*.md"
+  ],
+  "exclude_substrings": [
+    "vllm_qwen_clean_ppl_",
+    "_server",
+    "_trace"
+  ],
+  "sources": [
+    {
+      "path": "docs/AEON_PRIOR_ART_PORT_MAP.md",
+      "chars_used": 9662,
+      "chars_total": 9662,
+      "truncated": false
+    },
+    {
+      "path": "docs/BASELINE_RESULTS.md",
+      "chars_used": 38299,
+      "chars_total": 38299,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARK_PROTOCOL.md",
+      "chars_used": 8144,
+      "chars_total": 8144,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARKING_REPORT.md",
+      "chars_used": 12524,
+      "chars_total": 12524,
+      "truncated": false
+    },
+    {
+      "path": "docs/BLESSED_STACK.md",
+      "chars_used": 7667,
+      "chars_total": 7667,
+      "truncated": false
+    },
+    {
+      "path": "docs/CAMPAIGN_LOG.md",
+      "chars_used": 92109,
+      "chars_total": 92109,
+      "truncated": false
+    },
+    {
+      "path": "docs/CODEX_DIRECTION_LLAMACPP.md",
+      "chars_used": 15661,
+      "chars_total": 15661,
+      "truncated": false
+    },
+    {
+      "path": "docs/CODEX_DIRECTION_SGLANG_NVFP4_KV.md",
+      "chars_used": 35093,
+      "chars_total": 35093,
+      "truncated": false
+    },
+    {
+      "path": "docs/CODEX_DIRECTION_VLLM_GEMMA_NVFP4_KV.md",
+      "chars_used": 38729,
+      "chars_total": 38729,
+      "truncated": false
+    },
+    {
+      "path": "docs/COMPATIBILITY_BOARD.md",
+      "chars_used": 16711,
+      "chars_total": 16711,
+      "truncated": false
+    },
+    {
+      "path": "docs/COUNTERPART_TASK_MATRIX.md",
+      "chars_used": 2679,
+      "chars_total": 2679,
+      "truncated": false
+    },
+    {
+      "path": "docs/CUDA_SO_AUDIT.md",
+      "chars_used": 3328,
+      "chars_total": 3328,
+      "truncated": false
+    },
+    {
+      "path": "docs/DGX_SPARK_DIAGNOSIS.md",
+      "chars_used": 4227,
+      "chars_total": 4227,
+      "truncated": false
+    },
+    {
+      "path": "docs/DGX_SPARK_SOLUTIONS.md",
+      "chars_used": 19685,
+      "chars_total": 19685,
+      "truncated": false
+    },
+    {
+      "path": "docs/FAILURE_ANNOTATIONS.md",
+      "chars_used": 14540,
+      "chars_total": 14540,
+      "truncated": false
+    },
+    {
+      "path": "docs/FLASHINFER_PERFORMANCE_HYPOTHESES.md",
+      "chars_used": 10260,
+      "chars_total": 10260,
+      "truncated": false
+    },
+    {
+      "path": "docs/FORKS_AND_WORKTREES.md",
+      "chars_used": 16532,
+      "chars_total": 16532,
+      "truncated": false
+    },
+    {
+      "path": "docs/GEMMA4_ON_DGX_SPARK.md",
+      "chars_used": 19615,
+      "chars_total": 19615,
+      "truncated": false
+    },
+    {
+      "path": "docs/GEMMA_COMPATIBILITY_PLAN.md",
+      "chars_used": 10150,
+      "chars_total": 10150,
+      "truncated": false
+    },
+    {
+      "path": "docs/GEMMA_RUNG_MINUS1_CONFIG_AUDIT.md",
+      "chars_used": 5464,
+      "chars_total": 5464,
+      "truncated": false
+    },
+    {
+      "path": "docs/GGUF_LLAMA_CPP_STATUS.md",
+      "chars_used": 15663,
+      "chars_total": 15663,
+      "truncated": false
+    },
+    {
+      "path": "docs/HF_FALLBACK_TELEMETRY.md",
+      "chars_used": 2356,
+      "chars_total": 2356,
+      "truncated": false
+    },
+    {
+      "path": "docs/ISSUE_TRACKER.md",
+      "chars_used": 9824,
+      "chars_total": 9824,
+      "truncated": false
+    },
+    {
+      "path": "docs/NVFP4_DEPENDENCY_MAP.md",
+      "chars_used": 14543,
+      "chars_total": 14543,
+      "truncated": false
+    },
+    {
+      "path": "docs/NVFP4_KV_PORTING_MAP.md",
+      "chars_used": 23190,
+      "chars_total": 23190,
+      "truncated": false
+    },
+    {
+      "path": "docs/PYTORCH_SM121_SUPPORT.md",
+      "chars_used": 3488,
+      "chars_total": 3488,
+      "truncated": false
+    },
+    {
+      "path": "docs/QWEN_ON_DGX_SPARK.md",
+      "chars_used": 13792,
+      "chars_total": 13792,
+      "truncated": false
+    },
+    {
+      "path": "docs/REMEDIATION_MATRIX.md",
+      "chars_used": 8935,
+      "chars_total": 8935,
+      "truncated": false
+    },
+    {
+      "path": "docs/RUNTIME_AVAILABILITY.md",
+      "chars_used": 2447,
+      "chars_total": 2447,
+      "truncated": false
+    },
+    {
+      "path": "docs/SGLANG_ON_DGX_SPARK.md",
+      "chars_used": 29161,
+      "chars_total": 29161,
+      "truncated": false
+    },
+    {
+      "path": "docs/SGLANG_QWEN_FP4KV_QUALITY_LOCALIZATION_PREP_20260608.md",
+      "chars_used": 7006,
+      "chars_total": 7006,
+      "truncated": false
+    },
+    {
+      "path": "docs/SM_COUNT_AWARENESS.md",
+      "chars_used": 2849,
+      "chars_total": 2849,
+      "truncated": false
+    },
+    {
+      "path": "docs/SOLUTIONS_STATUS.md",
+      "chars_used": 25500,
+      "chars_total": 25500,
+      "truncated": false
+    },
+    {
+      "path": "docs/SPARK_SMOKE_SUITE.md",
+      "chars_used": 4666,
+      "chars_total": 4666,
+      "truncated": false
+    },
+    {
+      "path": "docs/UPSTREAM_LATEST_RELEASE_AUDIT.md",
+      "chars_used": 9103,
+      "chars_total": 9103,
+      "truncated": false
+    },
+    {
+      "path": "docs/VLLM_AEON_REPRODUCTION.md",
+      "chars_used": 24968,
+      "chars_total": 24968,
+      "truncated": false
+    },
+    {
+      "path": "docs/VLLM_GEMMA3_27B_RUNG1_PREP_20260608.md",
+      "chars_used": 15939,
+      "chars_total": 15939,
+      "truncated": false
+    },
+    {
+      "path": "docs/WHEEL_CONTAINER_MATRIX.md",
+      "chars_used": 12769,
+      "chars_total": 12769,
+      "truncated": false
+    },
+    {
+      "path": "tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md",
+      "chars_used": 6914,
+      "chars_total": 6914,
+      "truncated": false
+    },
+    {
+      "path": "tasks/sglang_qwen_fp4kv_request_order_probe_20260608.md",
+      "chars_used": 2492,
+      "chars_total": 2492,
+      "truncated": false
+    },
+    {
+      "path": "tasks/vllm_flashinfer_gemma3_attention_output_probe_20260609.md",
+      "chars_used": 5817,
+      "chars_total": 5817,
+      "truncated": false
+    },
+    {
+      "path": "tasks/vllm_gemma3_flashinfer_nvfp4_jit_uri_rerun_packet_20260609.md",
+      "chars_used": 3449,
+      "chars_total": 3449,
+      "truncated": false
+    },
+    {
+      "path": "tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md",
+      "chars_used": 7792,
+      "chars_total": 7792,
+      "truncated": false
+    },
+    {
+      "path": "results/20260606_BENCHMARKING.md",
+      "chars_used": 19516,
+      "chars_total": 19516,
+      "truncated": false
+    },
+    {
+      "path": "results/aeon_gemma26_dflash_20260608T0436JST_summary.md",
+      "chars_used": 3919,
+      "chars_total": 3919,
+      "truncated": false
+    },
+    {
+      "path": "results/aeon_qwen36_dflash_20260608T0501JST_summary.md",
+      "chars_used": 4251,
+      "chars_total": 4251,
+      "truncated": false
+    },
+    {
+      "path": "results/aeon_qwen36_dflash_v2_20260608T0555JST_stop_point.md",
+      "chars_used": 2201,
+      "chars_total": 2201,
+      "truncated": false
+    },
+    {
+      "path": "results/aeon_vllm_reproduction_preflight_20260608T0430JST.md",
+      "chars_used": 1842,
+      "chars_total": 1842,
+      "truncated": false
+    },
+    {
+      "path": "results/gemma_rung_minus1_audit_sidecar_20260608.md",
+      "chars_used": 7736,
+      "chars_total": 7736,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_qwen36_dflash_aeonfa2_incontainer_target_audit_20260608.md",
+      "chars_used": 1549,
+      "chars_total": 1549,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_qwen36_dflash_aeonfa2_nothink_20260608T0908JST_summary.md",
+      "chars_used": 3535,
+      "chars_total": 3535,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_qwen36_dflash_cleanfa2_sm121a_nothink_record2_20260608T2359JST_summary.md",
+      "chars_used": 3835,
+      "chars_total": 3835,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_qwen36_dflash_depstop_20260608T0850JST_summary.md",
+      "chars_used": 2230,
+      "chars_total": 2230,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_vllm_qwen_cleanfa2_build_20260608Tfixversion_summary.md",
+      "chars_used": 1650,
+      "chars_total": 1650,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_cutlass_summary.md",
+      "chars_used": 2214,
+      "chars_total": 2214,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_vllm_qwen_cleanfa2_build_20260608Tpatchedfa2_summary.md",
+      "chars_used": 1543,
+      "chars_total": 1543,
+      "truncated": false
+    },
+    {
+      "path": "results/jethac_vllm_qwen_cleanfa2_patchedfa2_cutlass_audit_20260608T2355JST_incontainer_target_audit.md",
+      "chars_used": 1946,
+      "chars_total": 1946,
+      "truncated": false
+    },
+    {
+      "path": "results/llamacpp_native_fp4_arch_20260608T164917JST_summary.md",
+      "chars_used": 5124,
+      "chars_total": 5124,
+      "truncated": false
+    },
+    {
+      "path": "results/llamacpp_native_loglikelihood_20260608T1331JST_summary.md",
+      "chars_used": 2304,
+      "chars_total": 2304,
+      "truncated": false
+    },
+    {
+      "path": "results/llamacpp_nvfp4_runtime_gate_20260608T1748JST_summary.md",
+      "chars_used": 5160,
+      "chars_total": 5160,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_fp4_kv_sm121_cpu_docker_verify_20260608T0243JST.md",
+      "chars_used": 1891,
+      "chars_total": 1891,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_fp4_kv_sm121_pgx_verify_20260608T0205JST.md",
+      "chars_used": 7482,
+      "chars_total": 7482,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_fp4_kv_sm121_pytest_20260608T0320JST.md",
+      "chars_used": 2293,
+      "chars_total": 2293,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_fp4kv_radix_cache_reuse_code_audit_20260609.md",
+      "chars_used": 3046,
+      "chars_total": 3046,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_kernel_source_build_20260609Tprobe3jst.md",
+      "chars_used": 2724,
+      "chars_total": 2724,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen25_1_5b_fp8_vs_fp4kv_20260608T0332JST_summary.md",
+      "chars_used": 6892,
+      "chars_total": 6892,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_autosafe_20260608T1315JST_summary.md",
+      "chars_used": 3198,
+      "chars_total": 3198,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_cached_prefix_toplogprob_postanalysis_20260608T2346JST.md",
+      "chars_used": 1972,
+      "chars_total": 1972,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_d7d931f_logprob_quality_20260608T1609JST_summary.md",
+      "chars_used": 2599,
+      "chars_total": 2599,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_d7d931f_matched_20260608T1548JST_summary.md",
+      "chars_used": 3686,
+      "chars_total": 3686,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_d7d931f_native_divergence_20260608T1626JST_summary.md",
+      "chars_used": 2749,
+      "chars_total": 2749,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_endpoint_metadata_20260608T1819JST_summary.md",
+      "chars_used": 4012,
+      "chars_total": 4012,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_logits_20260608T2008JST_cleanup0_dump_summary.md",
+      "chars_used": 3568,
+      "chars_total": 3568,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_logits_20260608T2008JST_summary.md",
+      "chars_used": 2679,
+      "chars_total": 2679,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_logits_plan_20260608T1900JST.md",
+      "chars_used": 10052,
+      "chars_total": 10052,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_noradix_20260608T2033JST_dump_summary.md",
+      "chars_used": 2061,
+      "chars_total": 2061,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_dump_summary.md",
+      "chars_used": 4800,
+      "chars_total": 4800,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_pair_20260608T2021JST_summary.md",
+      "chars_used": 4115,
+      "chars_total": 4115,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_radixoff_20260608T2038JST_dump_summary.md",
+      "chars_used": 4810,
+      "chars_total": 4810,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_first_token_skipwarmup_20260608T2036JST_dump_summary.md",
+      "chars_used": 2056,
+      "chars_total": 2056,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_matrix_20260609tmatrix10jst.md",
+      "chars_used": 3621,
+      "chars_total": 3621,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_matrix_20260609tmatrix6jst.md",
+      "chars_used": 2412,
+      "chars_total": 2412,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_matrix_20260609tprep1jst.md",
+      "chars_used": 2706,
+      "chars_total": 2706,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_prompt_path_reconcile_20260608T173754JST_summary.md",
+      "chars_used": 4420,
+      "chars_total": 4420,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_radix_isolation_20260608T2038JST_summary.md",
+      "chars_used": 4178,
+      "chars_total": 4178,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp4kv_request_order_20260608T2340JST_summary.md",
+      "chars_used": 3347,
+      "chars_total": 3347,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_dump_summary.md",
+      "chars_used": 4821,
+      "chars_total": 4821,
+      "truncated": false
+    },
+    {
+      "path": "results/sglang_qwen_fp8_first_token_pair_20260608T2027JST_summary.md",
+      "chars_used": 3357,
+      "chars_total": 3357,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_20260607T110629Z.md",
+      "chars_used": 2962,
+      "chars_total": 2962,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_20260607T110833Z.md",
+      "chars_used": 3452,
+      "chars_total": 3452,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_aeon_gemma26_dflash_20260608T0436JST.md",
+      "chars_used": 3591,
+      "chars_total": 3591,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_before_sglang_20260607T115213Z.md",
+      "chars_used": 3452,
+      "chars_total": 3452,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_before_vllm_gemma4_e4b_w4a16_20260607T1126Z.md",
+      "chars_used": 3452,
+      "chars_total": 3452,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_llamacpp_gemma4_26b_q4_0_20260607T135911Z.md",
+      "chars_used": 3302,
+      "chars_total": 3302,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_llamacpp_qwen25_1_5b_q4_k_m_20260608T0420JST.md",
+      "chars_used": 3591,
+      "chars_total": 3591,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_smcount_20260607T172142Z.md",
+      "chars_used": 3506,
+      "chars_total": 3506,
+      "truncated": false
+    },
+    {
+      "path": "results/spark_doctor_tailnet_reconnect_20260608T074035JST.md",
+      "chars_used": 3354,
+      "chars_total": 3354,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_aeon_qwen_patch_port_20260608T0619JST.md",
+      "chars_used": 3146,
+      "chars_total": 3146,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_flashinfer_gemma3_attention_output_probe_20260609T0134JST_summary.md",
+      "chars_used": 3410,
+      "chars_total": 3410,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_dump_summary.md",
+      "chars_used": 2451,
+      "chars_total": 2451,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_dump_20260609T0216JST_summary.md",
+      "chars_used": 4524,
+      "chars_total": 4524,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_deswizzle_no_softcap.md",
+      "chars_used": 2652,
+      "chars_total": 2652,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_deswizzle_softcap50.md",
+      "chars_used": 2655,
+      "chars_total": 2655,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_no_softcap.md",
+      "chars_used": 2587,
+      "chars_total": 2587,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_active_page_replay_20260609T0216JST_summary.md",
+      "chars_used": 3807,
+      "chars_total": 3807,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_contigout_and_sparse_replay_20260609.md",
+      "chars_used": 4497,
+      "chars_total": 4497,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_first_token_probe_plan_20260608.md",
+      "chars_used": 3189,
+      "chars_total": 3189,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_flashinfer_nvfp4_jit_uri_patch_20260609.md",
+      "chars_used": 4504,
+      "chars_total": 4504,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_flashinfer_paged_prefill_audit_20260609.md",
+      "chars_used": 7662,
+      "chars_total": 7662,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_fresh_wrapper_replay_20260609.md",
+      "chars_used": 2943,
+      "chars_total": 2943,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_hf_access_probe_20260608T1832JST.md",
+      "chars_used": 2239,
+      "chars_total": 2239,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_jituri_20260609T0319JST_summary.md",
+      "chars_used": 4018,
+      "chars_total": 4018,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_auth_recheck_20260608T181438JST.md",
+      "chars_used": 4279,
+      "chars_total": 4279,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_checkout_setup_20260608.md",
+      "chars_used": 2718,
+      "chars_total": 2718,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_first_token_20260608T205432JST.md",
+      "chars_used": 2923,
+      "chars_total": 2923,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_fp8_20260608T1924JST.md",
+      "chars_used": 3380,
+      "chars_total": 3380,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_nvfp4_20260608T1924JST.md",
+      "chars_used": 3976,
+      "chars_total": 3976,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_preflight_20260608.md",
+      "chars_used": 2218,
+      "chars_total": 2218,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_gemma3_27b_rung1_setup_only_20260608T1855JST.md",
+      "chars_used": 3191,
+      "chars_total": 3191,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_qwen_dflash_sm121a_patch_verify_20260608T0330JST.md",
+      "chars_used": 1680,
+      "chars_total": 1680,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_qwen_nvfp4_kv_capacity_20260608T1455JST_summary.md",
+      "chars_used": 3852,
+      "chars_total": 3852,
+      "truncated": false
+    },
+    {
+      "path": "results/vllm_qwen_ppl_smoke_20260609Tlocal_summary.md",
+      "chars_used": 2607,
+      "chars_total": 2607,
+      "truncated": false
+    }
+  ]
+}

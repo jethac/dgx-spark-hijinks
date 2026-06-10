@@ -1,0 +1,76 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 316301,
+  "container_image": "jethac-vllm-aeon-gemma4:ad2337814-rebuiltc-fb7d62ea-sm121a",
+  "contexts": [
+    {
+      "ctx": 8192,
+      "elapsed_s": 42.395663133997004,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "qwen36-fast",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8192,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -1.7308543096803333,
+        "mean_nll_nats": 1.7308543096803333,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8192,
+        "num_scored_tokens": 8191,
+        "ok": true,
+        "ppl": 5.6454748326536075,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8192,
+          "prompt_tokens_details": null,
+          "total_tokens": 8193
+        }
+      }
+    }
+  ],
+  "elapsed_s": 46.064,
+  "finished_utc": "2026-06-10T07:23:52Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "nvfp4",
+  "model": "qwen36-fast",
+  "ok": true,
+  "run_id": "claude_p2_on_ctx8192",
+  "runtime_ref": "jethac/vllm@ad2337814 + jethac/flashinfer@fb7d62ea rebuilt-C image; VLLM_TEST_FORCE_FP8_MARLIN=1; VLLM_NVFP4_KV_LINEAR_V_SF=on",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-10T07:23:09Z",
+  "text_chars": 934744,
+  "text_files": [
+    "docs/ppl_corpus.md"
+  ],
+  "tokenizer": "/models/target",
+  "url": "http://127.0.0.1:8000"
+}

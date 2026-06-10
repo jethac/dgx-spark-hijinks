@@ -1,0 +1,60 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+{
+  "batch_size": 1,
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "ran to completion with finite output (workload-regime / crash-repro mode; fp32 reference skipped)",
+  "device": "NVIDIA GB10",
+  "finished_utc": "2026-06-10T06:52:45.804665+00:00",
+  "flashinfer": "0.6.13",
+  "flashinfer_source_paths": {
+    "csrc": "/fisrc/csrc",
+    "include": "/fisrc/include",
+    "source_root": "/fisrc"
+  },
+  "geometry": "e4b",
+  "gqa_group": 4,
+  "kv_dtype": "bf16",
+  "kv_len": 8192,
+  "num_kv_heads": 2,
+  "num_qo_heads": 8,
+  "ok": true,
+  "output_shape": [
+    8192,
+    8,
+    512
+  ],
+  "plan_parity": true,
+  "plan_parity_kwargs": [
+    "disable_split_kv",
+    "fixed_split_size",
+    "logits_soft_cap",
+    "o_data_type",
+    "sm_scale",
+    "window_left"
+  ],
+  "probe": "fa2-vo-split-d512-vo256",
+  "qo_len": 8192,
+  "reference": "skipped",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-10T06:52:12.734291+00:00",
+  "torch": "2.12.0.dev20260408+cu130",
+  "workspace_mb": 128,
+  "wrapper_backend": "auto"
+}
