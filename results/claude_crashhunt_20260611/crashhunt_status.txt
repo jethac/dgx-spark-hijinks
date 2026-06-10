@@ -1,0 +1,7 @@
+RUN=claude_hunt1_parity_lean EXIT=0 WALL_SECONDS=36
+RUN=claude_hunt2_warmup_many EXIT=0 WALL_SECONDS=33
+RUN=claude_hunt3_long_prefill EXIT=0 WALL_SECONDS=34
+RUN=claude_hunt4_mid EXIT=0 WALL_SECONDS=33
+RUN=claude_hunt5_smscale EXIT=0 WALL_SECONDS=33
+RUN=claude_hunt6_warmup_noparity EXIT=0 WALL_SECONDS=34
+RUN=claude_hunt7_long_noparity EXIT=0 WALL_SECONDS=34

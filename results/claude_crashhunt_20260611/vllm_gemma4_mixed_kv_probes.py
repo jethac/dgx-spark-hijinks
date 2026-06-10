@@ -208,8 +208,6 @@ def probe_fa2_vo_split_d512(
     plan_parity: bool = False,
     skip_reference: bool = False,
     sm_scale: float | None = None,
-    wrapper_backend: str = "fa2",
-    workspace_mb: int = 128,
 ) -> dict:
     """P0 for the D=512 plan: asymmetric (QK=512, VO=half) two-pass VO split.
 
@@ -260,12 +258,6 @@ def probe_fa2_vo_split_d512(
     record["kv_len"] = kv_len
     record["batch_size"] = batch_size
     record["plan_parity"] = plan_parity
-    # vLLM's bf16 serving path constructs the wrapper with backend="auto"
-    # (only the NVFP4 path pins "fa2" + jit_args). Backend selection
-    # changes plan-time scheduling - the last untested probe-vs-serving
-    # delta for the max_mma_kv=0 crash.
-    record["wrapper_backend"] = wrapper_backend
-    record["workspace_mb"] = workspace_mb
 
     try:
         torch.manual_seed(0)
@@ -314,10 +306,10 @@ def probe_fa2_vo_split_d512(
         outs = []
         for split in range(num_splits):
             workspace = torch.empty(
-                workspace_mb * 1024 * 1024, dtype=torch.uint8, device=device
+                128 * 1024 * 1024, dtype=torch.uint8, device=device
             )
             wrapper = flashinfer.BatchPrefillWithPagedKVCacheWrapper(
-                workspace, kv_layout="NHD", backend=wrapper_backend
+                workspace, kv_layout="NHD", backend="fa2"
             )
             plan_kwargs = dict(
                 head_dim_vo=head_dim_vo,
@@ -490,14 +482,6 @@ def main() -> int:
         help="Skip the fp32 reference; finiteness-only (crash repro).",
     )
     parser.add_argument("--sm-scale", type=float, default=None)
-    parser.add_argument(
-        "--wrapper-backend",
-        choices=["fa2", "auto"],
-        default="fa2",
-        help="Wrapper ctor backend. vLLM bf16 serving uses 'auto'; the "
-        "probe historically pinned 'fa2'.",
-    )
-    parser.add_argument("--workspace-mb", type=int, default=128)
     parser.add_argument("--output", required=True)
     parser.add_argument(
         "--flashinfer-source-root",
@@ -520,8 +504,6 @@ def main() -> int:
         }
         qo_heads, kv_heads = geometry_heads[args.geometry]
         vo_workload_kwargs = dict(
-            wrapper_backend=args.wrapper_backend,
-            workspace_mb=args.workspace_mb,
             qo_len=args.qo_len,
             kv_len=args.kv_len,
             batch_size=args.batch_size,
