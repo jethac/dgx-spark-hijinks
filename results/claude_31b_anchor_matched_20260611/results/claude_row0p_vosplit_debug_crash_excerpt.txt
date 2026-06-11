@@ -1,0 +1,191 @@
+[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=nv_bfloat16,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=512,head_dim_vo=256,require_fp4_kv=0,use_swa=0,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=2,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=-1,batch_size=9,num_qo_heads=32,num_kv_heads=4,page_size=32,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=12,total_num_rows=16}
+[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xeb11e0000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xeb1334e00000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xeb11f9200000,device=0,ndim=3,shape=[16,32,512],stride=[16384,512,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xeb1840000000,device=0,ndim=4,shape=[9364,32,4,512],stride=[131072,2048,512,1],_dtype={code=4,bits=16,lanes=1} } paged_v_cache={ptr=0xeb1840020000,device=0,ndim=4,shape=[9364,32,4,256],stride=[131072,2048,512,1],_dtype={code=4,bits=16,lanes=1} } qo_indptr={ptr=0x32efc2800,device=0,ndim=1,shape=[10],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32efc2a00,device=0,ndim=1,shape=[10],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xeb18ea080000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32efce400,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xeb1218abe000,device=0,ndim=3,shape=[16,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null 
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199] EngineCore failed to start.
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199] Traceback (most recent call last):
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     super().__init__(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 132, in __init__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 294, in _initialize_kv_caches
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     self.model_executor.initialize_from_config(kv_cache_configs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/abstract.py", line 124, in initialize_from_config
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     compilation_times: list[CompilationTimes] = self.collective_rpc(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]                                                 ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/uniproc_executor.py", line 92, in collective_rpc
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_worker.py", line 626, in compile_or_warm_up_model
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     kernel_warmup(self)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/warmup/kernel_warmup.py", line 100, in kernel_warmup
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     worker.model_runner._dummy_run(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_model_runner.py", line 5897, in _dummy_run
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     outputs = self.model(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]               ^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/cuda_graph.py", line 254, in __call__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return self.runnable(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return forward_call(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 1590, in forward
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     hidden_states = self.language_model.model(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/decorators.py", line 520, in __call__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return self.aot_compiled_fn(self, *args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 224, in __call__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     return self.fn(*args, **kwargs)
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4.py", line 1311, in forward
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     def forward(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/caching.py", line 217, in __call__
+--
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]     paged_run_func(
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199]   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+(EngineCore pid=189) ERROR 06-11 01:37:55 [core.py:1199] RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+(EngineCore pid=189) Process EngineCore:
+(EngineCore pid=189) Traceback (most recent call last):
+(EngineCore pid=189)   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=189)     self.run()
+(EngineCore pid=189)   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=189)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1203, in run_engine_core
+(EngineCore pid=189)     raise e
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=189)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=189)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189)     return func(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=189)     super().__init__(
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 132, in __init__
+(EngineCore pid=189)     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=189)                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189)     return func(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 294, in _initialize_kv_caches
+(EngineCore pid=189)     self.model_executor.initialize_from_config(kv_cache_configs)
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/executor/abstract.py", line 124, in initialize_from_config
+(EngineCore pid=189)     compilation_times: list[CompilationTimes] = self.collective_rpc(
+(EngineCore pid=189)                                                 ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/executor/uniproc_executor.py", line 92, in collective_rpc
+(EngineCore pid=189)     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=189)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=189)     return func(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=189)     return func(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/worker/gpu_worker.py", line 626, in compile_or_warm_up_model
+(EngineCore pid=189)     kernel_warmup(self)
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/model_executor/warmup/kernel_warmup.py", line 100, in kernel_warmup
+(EngineCore pid=189)     worker.model_runner._dummy_run(
+(EngineCore pid=189)   File "/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=189)     return func(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/v1/worker/gpu_model_runner.py", line 5897, in _dummy_run
+(EngineCore pid=189)     outputs = self.model(
+(EngineCore pid=189)               ^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/compilation/cuda_graph.py", line 254, in __call__
+(EngineCore pid=189)     return self.runnable(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+(EngineCore pid=189)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+(EngineCore pid=189)     return forward_call(*args, **kwargs)
+(EngineCore pid=189)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 1590, in forward
+(EngineCore pid=189)     hidden_states = self.language_model.model(
+(EngineCore pid=189)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=189)   File "/opt/vllm_overlay/vllm/compilation/decorators.py", line 520, in __call__
+(EngineCore pid=189)     return self.aot_compiled_fn(self, *args, **kwargs)
+--
+(EngineCore pid=189)     paged_run_func(
+(EngineCore pid=189)   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+(EngineCore pid=189) RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+[rank0]:[W611 01:37:56.163103749 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+(APIServer pid=1) Traceback (most recent call last):
+(APIServer pid=1)   File "/usr/local/bin/vllm", line 8, in <module>
+(APIServer pid=1)     sys.exit(main())
+(APIServer pid=1)              ^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/cli/main.py", line 95, in main
+(APIServer pid=1)     args.dispatch_function(args)
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/cli/serve.py", line 148, in cmd
+(APIServer pid=1)     uvloop.run(run_server(args))
+(APIServer pid=1)   File "/usr/local/lib/python3.12/site-packages/uvloop/__init__.py", line 96, in run
+(APIServer pid=1)     return __asyncio.run(
+(APIServer pid=1)            ^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/asyncio/runners.py", line 195, in run
+(APIServer pid=1)     return runner.run(main)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=1)     return self._loop.run_until_complete(task)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=1)   File "/usr/local/lib/python3.12/site-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=1)     return await main
+(APIServer pid=1)            ^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 665, in run_server
+(APIServer pid=1)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 679, in run_server_worker
+(APIServer pid=1)     async with build_async_engine_client(
+(APIServer pid=1)                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 99, in build_async_engine_client
+(APIServer pid=1)     async with build_async_engine_client_from_engine_args(
+(APIServer pid=1)                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 135, in build_async_engine_client_from_engine_args
+(APIServer pid=1)     async_llm = AsyncLLM.from_vllm_config(
+(APIServer pid=1)                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/async_llm.py", line 217, in from_vllm_config
+(APIServer pid=1)     return cls(
+(APIServer pid=1)            ^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/async_llm.py", line 146, in __init__
+(APIServer pid=1)     self.engine_core = EngineCoreClient.make_async_mp_client(
+(APIServer pid=1)                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=1)     return func(*args, **kwargs)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 131, in make_async_mp_client
+(APIServer pid=1)     return AsyncMPClient(*client_args)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=1)     return func(*args, **kwargs)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 948, in __init__
+(APIServer pid=1)     super().__init__(
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 570, in __init__
+(APIServer pid=1)     with launch_core_engines(
+(APIServer pid=1)          ^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 144, in __exit__

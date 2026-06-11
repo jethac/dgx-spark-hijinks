@@ -1,0 +1,20 @@
+RUN_START 2026-06-11T10:19:48+09:00 OVERLAY_HEAD=9759e3b06baa85db93e10ecc0a8afdc4199f449b IMAGE=jethac-vllm-aeon-gemma4:e08a6f3ae-rebuiltc-fb7d62ea-sm121a-r8
+OVERLAY_SO_COUNT=2 OVERLAY_REAL_SO=0
+CORPUS_MD5=abb63f0e65247a25f870d3f2d57563ff
+ROW=row0p_bf16_vosplit EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row0p_bf16_vosplit READY_RC=3 READY_WALL=558
+ROW=row0p_bf16_vosplit SERVER_DID_NOT_BECOME_READY
+ROW=row0p_bf16_vosplit FINAL_RC=2
+ROW=row0p_bf16_vosplit CRASHED -> DEBUG_RERUN_ONCE with FLASHINFER_PREFILL_DEBUG_ONCE=1
+ROW=row0p_vosplit_debug EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row0p_vosplit_debug READY_RC=3 READY_WALL=537
+ROW=row0p_vosplit_debug SERVER_DID_NOT_BECOME_READY
+ROW=row0p_vosplit_debug FINAL_RC=2
+ROW=row1pp_fp8 EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row1pp_fp8 READY_RC=0 READY_WALL=558
+ROW=row1pp_fp8 VERDICT=SERVED
+ROW=row1pp_fp8 PPL_RC=0 CTX=8191 PPL_WALL=574
+ROW=row1pp_fp8 GATES_RC=0 GATES_WALL=792
+ROW=row1pp_fp8 DONE ROW_WALL=794
+ROW=row1pp_fp8 FINAL_RC=0
+MATCHED_DONE TOTAL_WALL=1889
