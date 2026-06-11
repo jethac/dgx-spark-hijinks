@@ -1,0 +1,5 @@
+parent_commit=403f85a44594e553b7764e80f015fa75685854b0
+sglang_commit=651d55cd2e6a3d90de0eb65af643d0aa4ee7fca2
+flashinfer_commit=f99323bd7d1cc88d9445202c12934070be754e2d
+?? results/sglang_gemma4_e4b_fp8_diag2_20260612T030647JST/
+?? results/sglang_gemma4_e4b_fp8_diag_20260612T030028JST/

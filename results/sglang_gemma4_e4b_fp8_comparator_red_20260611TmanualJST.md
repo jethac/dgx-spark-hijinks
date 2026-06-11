@@ -2,7 +2,8 @@
 
 Date: 2026-06-11 JST
 
-Status: RED, formally documented; not root-caused.
+Status: RED, formally documented; now root-caused by
+`results/sglang_gemma4_e4b_fp8_diag2_20260612T030647JST/DIAGNOSIS.md`.
 
 Scope: this is the fp8 KV comparator path for the SGLang Gemma 4 E4B rung. It is
 separate from the full-NVFP4 K+V short-green row and from the allocator capacity
@@ -52,13 +53,25 @@ fp8 scale provenance, or a later decode-side wrapper problem.
 
 ## Current Interpretation
 
-The row is not failing at the old FlashInfer D=512 dispatcher wall: both summaries record
-`Unsupported max_mma_kv: False`, and global D=512 prefill reaches the VO-split route.
+Updated 2026-06-12: the current epoch2 diagnostic reproduces the E4B fp8
+failure with full logs. The server reaches readiness, allocates the fp8 hybrid
+SWA KV pool, and enters the intended global D=512 VO-split paged-prefill route.
+It then crashes inside FlashInfer:
 
-The row is also not a valid fp8 quality comparator: it never returns a parseable model
-response, and it never records D=512 decode-side routing. The full-NVFP4 rung can quote
-its allocator ratio versus the fp8 allocator row, but its quality comparison should remain
-against the working bf16/auto row until this fp8 path is repaired.
+```text
+BatchPrefillWithPagedKVCacheDispatched ... prefill.cuh:3215:
+Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1
+```
+
+The failing module is fp8 KV with `head_dim_qk=512`, `head_dim_vo=256`,
+`num_qo_heads=8`, `num_kv_heads=2`, `page_size=1`, `split_kv=1`, and
+`window_left=-1`.
+
+The row is still not a valid fp8 quality comparator: it never returns a parseable
+model response, and it never records D=512 decode-side routing because it dies in
+prefill. The full-NVFP4 rung can quote allocator/capacity observations separately,
+but quality comparison should remain against the working bf16/auto row until this
+fp8 FlashInfer/SGLang selector path is repaired.
 
 ## Next Repro Requirements
 
