@@ -1,0 +1,439 @@
+{
+  "baseline": "claude_bf16_vosplit_c1_ctx8191",
+  "comparator": "claude_fp8_c1_ctx8191",
+  "kv_cache_dtypes": {
+    "baseline": "bf16",
+    "comparator": "fp8_e4m3"
+  },
+  "label": "strata_fp8_vs_bf16_c1",
+  "schema": "anomaly-token-strata/v1",
+  "strata": {
+    "mean_delta_nats": -0.1392172975824429,
+    "num_scored": 8190,
+    "position_buckets": [
+      {
+        "count": 1022,
+        "mean_delta": -0.37012547509723465,
+        "positions": "0-1022",
+        "share_of_total_delta": 0.3317590453860456
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.051760568049183824,
+        "positions": "1023-2045",
+        "share_of_total_delta": 0.046440572685015676
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.08104786574344068,
+        "positions": "2046-3068",
+        "share_of_total_delta": 0.07271769692417429
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.2840337246394465,
+        "positions": "3069-4091",
+        "share_of_total_delta": 0.2548404959848955
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.04924105472830515,
+        "positions": "4092-5114",
+        "share_of_total_delta": 0.04418001709377973
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.07003446439772844,
+        "positions": "5115-6137",
+        "share_of_total_delta": 0.06283626236922907
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.1630670040894043,
+        "positions": "6138-7160",
+        "share_of_total_delta": 0.14630683822375748
+      },
+      {
+        "count": 1030,
+        "mean_delta": -0.04529660419944826,
+        "positions": "7161-8190",
+        "share_of_total_delta": 0.04091907133310253
+      }
+    ],
+    "sign": {
+      "improved": 4449,
+      "improved_frac": 0.5432234432234432,
+      "mean_abs_delta": 0.7938770983736486,
+      "tied": 30,
+      "worsened": 3711,
+      "worsened_frac": 0.4531135531135531
+    },
+    "surprisal_bands": [
+      {
+        "band_nats": "[0,0.5)",
+        "count": 3923,
+        "mean_base_nll": 0.04252491274914781,
+        "mean_delta": 0.11736094191039097,
+        "share_of_total_delta": -0.4037985857607499
+      },
+      {
+        "band_nats": "[0.5,1)",
+        "count": 261,
+        "mean_base_nll": 0.7369099072112891,
+        "mean_delta": 0.28508214003901533,
+        "share_of_total_delta": -0.06525794847175885
+      },
+      {
+        "band_nats": "[1,2)",
+        "count": 322,
+        "mean_base_nll": 1.4988575388926157,
+        "mean_delta": 0.33603134468687346,
+        "share_of_total_delta": -0.09489832797280905
+      },
+      {
+        "band_nats": "[2,4)",
+        "count": 568,
+        "mean_base_nll": 2.9836527201491343,
+        "mean_delta": 0.0015432803028821761,
+        "share_of_total_delta": -0.0007688047324526015
+      },
+      {
+        "band_nats": "[4,8)",
+        "count": 1024,
+        "mean_base_nll": 6.020042831078172,
+        "mean_delta": -0.31146586546745425,
+        "share_of_total_delta": 0.27972630818682026
+      },
+      {
+        "band_nats": ">=8",
+        "count": 2092,
+        "mean_base_nll": 13.900943081419966,
+        "mean_delta": -0.7003540682731315,
+        "share_of_total_delta": 1.2849973587509502
+      }
+    ],
+    "top_abs_delta_tokens": [
+      {
+        "base_nll": 0.007730093784630299,
+        "comp_nll": 22.12895393371582,
+        "context": "` | ported in `j[eth]ac/vllm@",
+        "delta": 22.12122383993119,
+        "position": 1309,
+        "token": "eth"
+      },
+      {
+        "base_nll": 21.273975372314453,
+        "comp_nll": 0.02334607206285,
+        "context": " `spark_doctor`: `[results]/spark_doctor_ae",
+        "delta": -21.250629300251603,
+        "position": 3514,
+        "token": "results"
+      },
+      {
+        "base_nll": 19.497886657714844,
+        "comp_nll": 8.225102646974847e-05,
+        "context": " tok/s |\\n|[---|]---:|---:|---:|",
+        "delta": -19.497804406688374,
+        "position": 6272,
+        "token": "---|"
+      },
+      {
+        "base_nll": 6.045797824859619,
+        "comp_nll": 24.341447830200195,
+        "context": " output sanity in Gemma SGL[ang] row | include chat smoke and",
+        "delta": 18.295650005340576,
+        "position": 1939,
+        "token": "ang"
+      },
+      {
+        "base_nll": 1.0245543718338013,
+        "comp_nll": 18.13658332824707,
+        "context": ": `results/sgl[ang]_20260",
+        "delta": 17.11202895641327,
+        "position": 4877,
+        "token": "ang"
+      },
+      {
+        "base_nll": 16.026168823242188,
+        "comp_nll": 0.8843459486961365,
+        "context": "gemma26_d[flash]_20260",
+        "delta": -15.141822874546051,
+        "position": 3482,
+        "token": "flash"
+      },
+      {
+        "base_nll": 14.886641502380371,
+        "comp_nll": 0.016188250854611397,
+        "context": "04e1b`;[ evidence]: `third_party/",
+        "delta": -14.87045325152576,
+        "position": 1324,
+        "token": " evidence"
+      },
+      {
+        "base_nll": 0.03844918683171272,
+        "comp_nll": 14.265416145324707,
+        "context": "/vllm/v[ll]m/config/compilation",
+        "delta": 14.226966958492994,
+        "position": 1458,
+        "token": "ll"
+      },
+      {
+        "base_nll": 4.511092185974121,
+        "comp_nll": 18.591495513916016,
+        "context": "_1_5b_[fp]8kv_202",
+        "delta": 14.080403327941895,
+        "position": 5868,
+        "token": "fp"
+      },
+      {
+        "base_nll": 25.12554359436035,
+        "comp_nll": 11.598895072937012,
+        "context": "315JST_[fp]8_raw_2plus",
+        "delta": -13.52664852142334,
+        "position": 6888,
+        "token": "fp"
+      },
+      {
+        "base_nll": 13.472532272338867,
+        "comp_nll": 0.0019953595474362373,
+        "context": ": `results/aeon[_]gemma26_d",
+        "delta": -13.470536912791431,
+        "position": 3432,
+        "token": "_"
+      },
+      {
+        "base_nll": 0.1879728138446808,
+        "comp_nll": 13.61881160736084,
+        "context": "_smoke.json`\\n[-] fp8 benchmark: `results",
+        "delta": 13.430838793516159,
+        "position": 5796,
+        "token": "-"
+      },
+      {
+        "base_nll": 4.333785057067871,
+        "comp_nll": 17.487133026123047,
+        "context": "fter/model pair exists |[\\n\\n]## Still Needed Counterparts\\n\\n",
+        "delta": 13.153347969055176,
+        "position": 2287,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 1.0155484676361084,
+        "comp_nll": 13.992980003356934,
+        "context": "| `medium_decode`[ |] 36 | 1",
+        "delta": 12.977431535720825,
+        "position": 4295,
+        "token": " |"
+      },
+      {
+        "base_nll": 15.93895149230957,
+        "comp_nll": 3.052212715148926,
+        "context": "abi3.so`, and[ `]_vllm_fa",
+        "delta": -12.886738777160645,
+        "position": 4546,
+        "token": " `"
+      },
+      {
+        "base_nll": 18.7313175201416,
+        "comp_nll": 5.896301746368408,
+        "context": "_startup.log`\\n[-] patched fp4 FlashInfer startup",
+        "delta": -12.835015773773193,
+        "position": 5995,
+        "token": "-"
+      },
+      {
+        "base_nll": 0.001513170194812119,
+        "comp_nll": 12.790085792541504,
+        "context": "results/aeon_g[emma]26_dflash_",
+        "delta": 12.788572622346692,
+        "position": 3477,
+        "token": "emma"
+      },
+      {
+        "base_nll": 17.53994369506836,
+        "comp_nll": 4.780043601989746,
+        "context": "5`\\n\\nArtifacts:[\\n\\n]- summary: `results/",
+        "delta": -12.759900093078613,
+        "position": 7443,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 12.718474388122559,
+        "comp_nll": 0.06141574680805206,
+        "context": " seconds | decode tok/s[ |]\\n|---|---:|---",
+        "delta": -12.657058641314507,
+        "position": 4237,
+        "token": " |"
+      },
+      {
+        "base_nll": 12.574898719787598,
+        "comp_nll": 0.002834590384736657,
+        "context": "- `results/sgl[ang]_qwen_fp4",
+        "delta": -12.572064129402861,
+        "position": 6859,
+        "token": "ang"
+      },
+      {
+        "base_nll": 24.96988296508789,
+        "comp_nll": 12.55991268157959,
+        "context": "results/sglang_[q]wen_fp4kv_",
+        "delta": -12.4099702835083,
+        "position": 6861,
+        "token": "q"
+      },
+      {
+        "base_nll": 12.462464332580566,
+        "comp_nll": 0.11952801048755646,
+        "context": "manifest.json`\\n-[ `]results/sglang_",
+        "delta": -12.34293632209301,
+        "position": 6809,
+        "token": " `"
+      },
+      {
+        "base_nll": 2.5740878582000732,
+        "comp_nll": 14.635505676269531,
+        "context": " `results/sglang[_]qwen_fp4kv",
+        "delta": 12.061417818069458,
+        "position": 6907,
+        "token": "_"
+      },
+      {
+        "base_nll": 9.281441688537598,
+        "comp_nll": 21.20396614074707,
+        "context": "glang_qwen_[fp]4kv_autosafe",
+        "delta": 11.922524452209473,
+        "position": 6995,
+        "token": "fp"
+      },
+      {
+        "base_nll": 1.0406562089920044,
+        "comp_nll": 12.859060287475586,
+        "context": "/sglang_q[wen]25_1_5",
+        "delta": 11.818404078483582,
+        "position": 5859,
+        "token": "wen"
+      },
+      {
+        "base_nll": 12.075767517089844,
+        "comp_nll": 0.28555724024772644,
+        "context": " settings, and server API.[\\n\\n]## 2026",
+        "delta": -11.790210276842117,
+        "position": 4609,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 15.315966606140137,
+        "comp_nll": 3.599091053009033,
+        "context": "B-A4B-[it]-Uncensored-NV",
+        "delta": -11.716875553131104,
+        "position": 3103,
+        "token": "it"
+      },
+      {
+        "base_nll": 1.6689350605010986,
+        "comp_nll": 13.377095222473145,
+        "context": " in audited SGLang/[Flash]Infer objects.\\n- The",
+        "delta": 11.708160161972046,
+        "position": 5410,
+        "token": "Flash"
+      },
+      {
+        "base_nll": 2.6599810123443604,
+        "comp_nll": 14.155572891235352,
+        "context": "benchmark.json`\\n-[ `]results/sglang_",
+        "delta": 11.495591878890991,
+        "position": 6985,
+        "token": " `"
+      },
+      {
+        "base_nll": 11.367962837219238,
+        "comp_nll": 5.125986263010418e-06,
+        "context": "08T145[5]JST_nvfp4",
+        "delta": -11.367957711232975,
+        "position": 7740,
+        "token": "5"
+      },
+      {
+        "base_nll": 2.539963722229004,
+        "comp_nll": 13.892465591430664,
+        "context": "026060[8]T1315J",
+        "delta": 11.35250186920166,
+        "position": 7010,
+        "token": "8"
+      },
+      {
+        "base_nll": 11.516364097595215,
+        "comp_nll": 22.84377670288086,
+        "context": "kv_autosafe_[2]026060",
+        "delta": 11.327412605285645,
+        "position": 6872,
+        "token": "2"
+      },
+      {
+        "base_nll": 11.35130500793457,
+        "comp_nll": 0.04454407840967178,
+        "context": " DFlash literally; evaluate llama[.]cpp-native speculative/draft",
+        "delta": -11.306760929524899,
+        "position": 2264,
+        "token": "."
+      },
+      {
+        "base_nll": 1.1073169708251953,
+        "comp_nll": 12.28736400604248,
+        "context": "nvfp4_kv_[flash]infer_server.log`",
+        "delta": 11.180047035217285,
+        "position": 7809,
+        "token": "flash"
+      },
+      {
+        "base_nll": 11.593311309814453,
+        "comp_nll": 0.44047895073890686,
+        "context": "T0436J[ST]_container_versions.json",
+        "delta": -11.152832359075546,
+        "position": 3498,
+        "token": "ST"
+      },
+      {
+        "base_nll": 11.062992095947266,
+        "comp_nll": 0.0007482351502403617,
+        "context": "_040mem_[2]026060",
+        "delta": -11.062243860797025,
+        "position": 5726,
+        "token": "2"
+      },
+      {
+        "base_nll": 0.03488686680793762,
+        "comp_nll": 11.002542495727539,
+        "context": " log: `results/ae[on]_gemma26_",
+        "delta": 10.967655628919601,
+        "position": 3391,
+        "token": "on"
+      },
+      {
+        "base_nll": 0.00011657988943625242,
+        "comp_nll": 10.950126647949219,
+        "context": "1_5b_fp[8]kv_2026",
+        "delta": 10.950010068059782,
+        "position": 5869,
+        "token": "8"
+      },
+      {
+        "base_nll": 0.0008442413527518511,
+        "comp_nll": 10.925779342651367,
+        "context": "\\n```\\n\\nArtifacts:[\\n\\n]- environment: `results/",
+        "delta": 10.924935101298615,
+        "position": 4069,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 13.910955429077148,
+        "comp_nll": 2.9903879165649414,
+        "context": " log lines: `results/[ae]on_gemma26",
+        "delta": -10.920567512512207,
+        "position": 3430,
+        "token": "ae"
+      }
+    ],
+    "total_delta_nats": -1140.1896672002072
+  }
+}

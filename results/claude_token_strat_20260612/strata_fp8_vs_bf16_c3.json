@@ -1,0 +1,439 @@
+{
+  "baseline": "claude_bf16_vosplit_c3_ctx8191",
+  "comparator": "claude_fp8_c3_ctx8191",
+  "kv_cache_dtypes": {
+    "baseline": "bf16",
+    "comparator": "fp8_e4m3"
+  },
+  "label": "strata_fp8_vs_bf16_c3",
+  "schema": "anomaly-token-strata/v1",
+  "strata": {
+    "mean_delta_nats": -0.018448417640115445,
+    "num_scored": 8190,
+    "position_buckets": [
+      {
+        "count": 1022,
+        "mean_delta": -0.09874170954344293,
+        "positions": "0-1022",
+        "share_of_total_delta": 0.6678954952890968
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.007122236637434073,
+        "positions": "1023-2045",
+        "share_of_total_delta": -0.048222420890586454
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.13622944495982564,
+        "positions": "2046-3068",
+        "share_of_total_delta": -0.9223666619016492
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.19918102263641527,
+        "positions": "3069-4091",
+        "share_of_total_delta": -1.3485919656905745
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.03164867716811361,
+        "positions": "4092-5114",
+        "share_of_total_delta": 0.21428322431882907
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.17005977345661522,
+        "positions": "5115-6137",
+        "share_of_total_delta": 1.1514211601844704
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.0053382941238498864,
+        "positions": "6138-7160",
+        "share_of_total_delta": -0.03614390804217596
+      },
+      {
+        "count": 1030,
+        "mean_delta": -0.19388621325223018,
+        "positions": "7161-8190",
+        "share_of_total_delta": 1.3217250767325897
+      }
+    ],
+    "sign": {
+      "improved": 4083,
+      "improved_frac": 0.49853479853479854,
+      "mean_abs_delta": 0.6157455251011406,
+      "tied": 112,
+      "worsened": 3995,
+      "worsened_frac": 0.4877899877899878
+    },
+    "surprisal_bands": [
+      {
+        "band_nats": "[0,0.5)",
+        "count": 5291,
+        "mean_base_nll": 0.03297332637777315,
+        "mean_delta": 0.12256053344485447,
+        "share_of_total_delta": -4.291858356664244
+      },
+      {
+        "band_nats": "[0.5,1)",
+        "count": 230,
+        "mean_base_nll": 0.7402384016824806,
+        "mean_delta": 0.30774506041322053,
+        "share_of_total_delta": -0.46846365594006384
+      },
+      {
+        "band_nats": "[1,2)",
+        "count": 279,
+        "mean_base_nll": 1.4769108919259895,
+        "mean_delta": 0.1851624956249767,
+        "share_of_total_delta": -0.34191189133361294
+      },
+      {
+        "band_nats": "[2,4)",
+        "count": 429,
+        "mean_base_nll": 2.985126560384577,
+        "mean_delta": 0.0482726298295557,
+        "share_of_total_delta": -0.13706142031970364
+      },
+      {
+        "band_nats": "[4,8)",
+        "count": 616,
+        "mean_base_nll": 5.897324900348465,
+        "mean_delta": -0.4101434708196377,
+        "share_of_total_delta": 1.6721432920164891
+      },
+      {
+        "band_nats": ">=8",
+        "count": 1345,
+        "mean_base_nll": 14.202820295028971,
+        "mean_delta": -0.5130576976027229,
+        "share_of_total_delta": 4.567152032241136
+      }
+    ],
+    "top_abs_delta_tokens": [
+      {
+        "base_nll": 18.694801330566406,
+        "comp_nll": 0.6393812298774719,
+        "context": "results/llamacpp*[m]xfp4*row_",
+        "delta": -18.055420100688934,
+        "position": 8042,
+        "token": "m"
+      },
+      {
+        "base_nll": 16.244718551635742,
+        "comp_nll": 0.03380966559052467,
+        "context": "log\",\\n            \"results[/]sglang_qwen",
+        "delta": -16.210908886045218,
+        "position": 6098,
+        "token": "/"
+      },
+      {
+        "base_nll": 16.078763961791992,
+        "comp_nll": 8.21318244561553e-05,
+        "context": "            \"results/sgl[ang]_qwen_fp4",
+        "delta": -16.078681829967536,
+        "position": 6185,
+        "token": "ang"
+      },
+      {
+        "base_nll": 0.0004949536523781717,
+        "comp_nll": 15.107802391052246,
+        "context": "_has_sm12[1])\\n                else \"family",
+        "delta": 15.107307437399868,
+        "position": 5013,
+        "token": "1"
+      },
+      {
+        "base_nll": 4.77423620223999,
+        "comp_nll": 19.349437713623047,
+        "context": "log\",\\n            \"results[/]aeon_qwen3",
+        "delta": 14.575201511383057,
+        "position": 7028,
+        "token": "/"
+      },
+      {
+        "base_nll": 14.09027099609375,
+        "comp_nll": 0.3378257751464844,
+        "context": "                \"results/sgl[ang]*fp4_e2",
+        "delta": -13.752445220947266,
+        "position": 5812,
+        "token": "ang"
+      },
+      {
+        "base_nll": 4.768370445162873e-07,
+        "comp_nll": 13.655475616455078,
+        "context": "/sglang_q[wen]_fp4kv_prompt",
+        "delta": 13.655475139618034,
+        "position": 6302,
+        "token": "wen"
+      },
+      {
+        "base_nll": 27.77231788635254,
+        "comp_nll": 14.458166122436523,
+        "context": "log\",\\n            \"results[/]sglang_qwen",
+        "delta": -13.314151763916016,
+        "position": 6054,
+        "token": "/"
+      },
+      {
+        "base_nll": 13.312643051147461,
+        "comp_nll": 0.008607903495430946,
+        "context": "ile*.md\",\\n            [\"]results/sglang_",
+        "delta": -13.30403514765203,
+        "position": 6294,
+        "token": "\""
+      },
+      {
+        "base_nll": 15.899953842163086,
+        "comp_nll": 3.130105495452881,
+        "context": " data[0]\\n        [architecture] = first.get(\"Architecture",
+        "delta": -12.769848346710205,
+        "position": 3682,
+        "token": "architecture"
+      },
+      {
+        "base_nll": 0.6700292229652405,
+        "comp_nll": 13.375693321228027,
+        "context": " image_digests,\\n[        ]\"evidence\": evidence,\\n",
+        "delta": 12.705664098262787,
+        "position": 3780,
+        "token": "        "
+      },
+      {
+        "base_nll": 2.0189061164855957,
+        "comp_nll": 14.670283317565918,
+        "context": "_qwen_fp4[kv]_d7d93",
+        "delta": 12.651377201080322,
+        "position": 6223,
+        "token": "kv"
+      },
+      {
+        "base_nll": 0.5703241229057312,
+        "comp_nll": 12.77642822265625,
+        "context": "log\",\\n            \"results[/]sglang_nvfp",
+        "delta": 12.206104099750519,
+        "position": 6322,
+        "token": "/"
+      },
+      {
+        "base_nll": 14.153807640075684,
+        "comp_nll": 2.369762420654297,
+        "context": "json\",\\n                \"results[/*]qwen3.6*",
+        "delta": -11.784045219421387,
+        "position": 6906,
+        "token": "/*"
+      },
+      {
+        "base_nll": 23.84386444091797,
+        "comp_nll": 12.218810081481934,
+        "context": "*.log\",\\n            \"[results]/sglang_q",
+        "delta": -11.625054359436035,
+        "position": 6097,
+        "token": "results"
+      },
+      {
+        "base_nll": 0.021099278703331947,
+        "comp_nll": 11.634414672851562,
+        "context": "\\n        list(DEFAULT_[EX]CLUDE_SUBSTRINGS)",
+        "delta": 11.61331539414823,
+        "position": 2433,
+        "token": "EX"
+      },
+      {
+        "base_nll": 15.815468788146973,
+        "comp_nll": 4.2028703689575195,
+        "context": "\",\\n                \"results/[ll]amacpp*qwen3",
+        "delta": -11.612598419189453,
+        "position": 7748,
+        "token": "ll"
+      },
+      {
+        "base_nll": 0.1517229825258255,
+        "comp_nll": 11.518750190734863,
+        "context": "    return json.loads([path].read_text(encoding",
+        "delta": 11.367027208209038,
+        "position": 3289,
+        "token": "path"
+      },
+      {
+        "base_nll": 8.492347717285156,
+        "comp_nll": 19.628671646118164,
+        "context": ",\\n        \"image_[dig]ests\": image_digests",
+        "delta": 11.136323928833008,
+        "position": 3771,
+        "token": "dig"
+      },
+      {
+        "base_nll": 0.062045034021139145,
+        "comp_nll": 11.132484436035156,
+        "context": " []\\n    if isinstance([data], list) and data and",
+        "delta": 11.070439402014017,
+        "position": 3657,
+        "token": "data"
+      },
+      {
+        "base_nll": 16.265413284301758,
+        "comp_nll": 5.419204235076904,
+        "context": "results/sglang*[eagle]*.md\",\\n            \"",
+        "delta": -10.846209049224854,
+        "position": 6684,
+        "token": "eagle"
+      },
+      {
+        "base_nll": 12.09378719329834,
+        "comp_nll": 1.5019755363464355,
+        "context": "keys=True) + \"\\[n]\", encoding=\"utf-8",
+        "delta": -10.591811656951904,
+        "position": 5132,
+        "token": "n"
+      },
+      {
+        "base_nll": 0.10728324949741364,
+        "comp_nll": 10.627549171447754,
+        "context": "ZY\", \"_C_stable[_]libtorch\", \"import_",
+        "delta": 10.52026592195034,
+        "position": 179,
+        "token": "_"
+      },
+      {
+        "base_nll": 0.08738309144973755,
+        "comp_nll": 10.495238304138184,
+        "context": "stop_point.md\",[\\n]            \"results/aeon",
+        "delta": 10.407855212688446,
+        "position": 6976,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 3.8846476078033447,
+        "comp_nll": 14.242130279541016,
+        "context": "\\n            \"results/s[gl]ang_qwen_fp",
+        "delta": 10.357482671737671,
+        "position": 5966,
+        "token": "gl"
+      },
+      {
+        "base_nll": 0.281179279088974,
+        "comp_nll": 10.62506103515625,
+        "context": "total_chars += len([header]) + len(used_",
+        "delta": 10.343881756067276,
+        "position": 2623,
+        "token": "header"
+      },
+      {
+        "base_nll": 0.4742906093597412,
+        "comp_nll": 10.813182830810547,
+        "context": "\",\\n            \"results/[ae]on_qwen36",
+        "delta": 10.338892221450806,
+        "position": 7111,
+        "token": "ae"
+      },
+      {
+        "base_nll": 0.15976402163505554,
+        "comp_nll": 10.43921947479248,
+        "context": "        partial_patterns=(\\n[            ]\"results/flashinfer_",
+        "delta": 10.279455453157425,
+        "position": 5841,
+        "token": "            "
+      },
+      {
+        "base_nll": 0.07354886084794998,
+        "comp_nll": 10.340035438537598,
+        "context": "claim_groups=(\\n            [(]\\n                \"results/s",
+        "delta": 10.266486577689648,
+        "position": 6572,
+        "token": "("
+      },
+      {
+        "base_nll": 12.550848007202148,
+        "comp_nll": 2.5580897331237793,
+        "context": "audit.json\",),\\n[        ]),\\n        partial_patterns",
+        "delta": -9.99275827407837,
+        "position": 5545,
+        "token": "        "
+      },
+      {
+        "base_nll": 0.1069425642490387,
+        "comp_nll": 10.063666343688965,
+        "context": "ArgumentParser()\\n    parser.[add]_argument(\"--image-inspect",
+        "delta": 9.956723779439926,
+        "position": 4053,
+        "token": "add"
+      },
+      {
+        "base_nll": 11.067768096923828,
+        "comp_nll": 1.4477804899215698,
+        "context": "manifest.json\",\\n            [),]\\n            (\\n                \"",
+        "delta": -9.619987607002258,
+        "position": 8075,
+        "token": "),"
+      },
+      {
+        "base_nll": 0.1603187471628189,
+        "comp_nll": 9.312844276428223,
+        "context": "        \"exists\": path.[exists](),\\n        \"arch_",
+        "delta": 9.152525529265404,
+        "position": 3949,
+        "token": "exists"
+      },
+      {
+        "base_nll": 0.057976409792900085,
+        "comp_nll": 9.176090240478516,
+        "context": "reconcile*.json\",[\\n]            \"results/sgl",
+        "delta": 9.118113830685616,
+        "position": 6266,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 0.3138439953327179,
+        "comp_nll": 9.428123474121094,
+        "context": "_benchmark.json\",\\n[            ]),\\n        ),\\n        ",
+        "delta": 9.114279478788376,
+        "position": 6923,
+        "token": "            "
+      },
+      {
+        "base_nll": 13.309272766113281,
+        "comp_nll": 4.255197048187256,
+        "context": "\\n            \"results/s[gl]ang_qwen_fp",
+        "delta": -9.054075717926025,
+        "position": 6078,
+        "token": "gl"
+      },
+      {
+        "base_nll": 17.531253814697266,
+        "comp_nll": 8.500210762023926,
+        "context": "*.json\",\\n            \"[results]/sglang_q",
+        "delta": -9.03104305267334,
+        "position": 5943,
+        "token": "results"
+      },
+      {
+        "base_nll": 0.3105074465274811,
+        "comp_nll": 9.325435638427734,
+        "context": " is not None:\\n            [inspect]_records.append(collect",
+        "delta": 9.014928191900253,
+        "position": 4180,
+        "token": "inspect"
+      },
+      {
+        "base_nll": 17.978269577026367,
+        "comp_nll": 9.015267372131348,
+        "context": "groups=(\\n            (\\n[                ]\"results/sglang",
+        "delta": -8.96300220489502,
+        "position": 5475,
+        "token": "                "
+      },
+      {
+        "base_nll": 14.185203552246094,
+        "comp_nll": 22.8438663482666,
+        "context": ":\\n        return path.[as]_posix()\\n\\n\\ndef",
+        "delta": 8.658662796020508,
+        "position": 3264,
+        "token": "as"
+      }
+    ],
+    "total_delta_nats": -151.0925404725455
+  }
+}

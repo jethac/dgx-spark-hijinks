@@ -1,0 +1,439 @@
+{
+  "baseline": "claude_bf16_vosplit_c3_ctx8191",
+  "comparator": "claude_nvfp4_c3_ctx8191",
+  "kv_cache_dtypes": {
+    "baseline": "bf16",
+    "comparator": "nvfp4"
+  },
+  "label": "strata_nvfp4_vs_bf16_c3",
+  "schema": "anomaly-token-strata/v1",
+  "strata": {
+    "mean_delta_nats": -0.04678128675757472,
+    "num_scored": 8190,
+    "position_buckets": [
+      {
+        "count": 1022,
+        "mean_delta": -0.1339894650254429,
+        "positions": "0-1022",
+        "share_of_total_delta": 0.3574089996125118
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.05317867506309998,
+        "positions": "1023-2045",
+        "share_of_total_delta": -0.14198977841867977
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.0906752982851731,
+        "positions": "2046-3068",
+        "share_of_total_delta": -0.24210767749069398
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.09403585177150013,
+        "positions": "3069-4091",
+        "share_of_total_delta": -0.25108052693309757
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.15050367390764044,
+        "positions": "4092-5114",
+        "share_of_total_delta": 0.40185249602375794
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.29494230037084185,
+        "positions": "5115-6137",
+        "share_of_total_delta": 0.787511005610042
+      },
+      {
+        "count": 1023,
+        "mean_delta": 0.07794494926536132,
+        "positions": "6138-7160",
+        "share_of_total_delta": -0.20811699542930906
+      },
+      {
+        "count": 1030,
+        "mean_delta": -0.11030024058023243,
+        "positions": "7161-8190",
+        "share_of_total_delta": 0.2965224770254684
+      }
+    ],
+    "sign": {
+      "improved": 3822,
+      "improved_frac": 0.4666666666666667,
+      "mean_abs_delta": 0.8410403290276333,
+      "tied": 73,
+      "worsened": 4295,
+      "worsened_frac": 0.5244200244200244
+    },
+    "surprisal_bands": [
+      {
+        "band_nats": "[0,0.5)",
+        "count": 5291,
+        "mean_base_nll": 0.03297332637777315,
+        "mean_delta": 0.17017851548554405,
+        "share_of_total_delta": -2.3501004593127233
+      },
+      {
+        "band_nats": "[0.5,1)",
+        "count": 230,
+        "mean_base_nll": 0.7402384016824806,
+        "mean_delta": 0.5403285733014281,
+        "share_of_total_delta": -0.32436180254553504
+      },
+      {
+        "band_nats": "[1,2)",
+        "count": 279,
+        "mean_base_nll": 1.4769108919259895,
+        "mean_delta": 0.4744476794146432,
+        "share_of_total_delta": -0.34549078242397135
+      },
+      {
+        "band_nats": "[2,4)",
+        "count": 429,
+        "mean_base_nll": 2.985126560384577,
+        "mean_delta": 0.1019288277721169,
+        "share_of_total_delta": -0.11412958992439542
+      },
+      {
+        "band_nats": "[4,8)",
+        "count": 616,
+        "mean_base_nll": 5.897324900348465,
+        "mean_delta": -0.381891954988835,
+        "share_of_total_delta": 0.6139954554498197
+      },
+      {
+        "band_nats": ">=8",
+        "count": 1345,
+        "mean_base_nll": 14.202820295028971,
+        "mean_delta": -1.0027373689484609,
+        "share_of_total_delta": 3.5200871787568047
+      }
+    ],
+    "top_abs_delta_tokens": [
+      {
+        "base_nll": 0.00014423283573705703,
+        "comp_nll": 24.632444381713867,
+        "context": "ang_qwen_fp[4]kv_clean*.log\",",
+        "delta": 24.63230014887813,
+        "position": 5953,
+        "token": "4"
+      },
+      {
+        "base_nll": 25.944307327270508,
+        "comp_nll": 2.2663302421569824,
+        "context": "\\n            \"results/s[gl]ang_qwen_fp",
+        "delta": -23.677977085113525,
+        "position": 6056,
+        "token": "gl"
+      },
+      {
+        "base_nll": 0.0002146728802472353,
+        "comp_nll": 20.9381046295166,
+        "context": "json\",\\n            \"results[/]sglang_qwen",
+        "delta": 20.937889956636354,
+        "position": 5944,
+        "token": "/"
+      },
+      {
+        "base_nll": 21.89069366455078,
+        "comp_nll": 2.065765142440796,
+        "context": " serves, \"\\n            \"[records] backend/DFlash evidence,",
+        "delta": -19.824928522109985,
+        "position": 6813,
+        "token": "records"
+      },
+      {
+        "base_nll": 20.440656661987305,
+        "comp_nll": 1.636742115020752,
+        "context": "\\n            \"results/ll[amac]pp_nvfp4_",
+        "delta": -18.803914546966553,
+        "position": 7845,
+        "token": "amac"
+      },
+      {
+        "base_nll": 0.31347253918647766,
+        "comp_nll": 18.46266746520996,
+        "context": "\"architecture\": architecture,\\n[        ]\"image_tags\": image",
+        "delta": 18.149194926023483,
+        "position": 3756,
+        "token": "        "
+      },
+      {
+        "base_nll": 18.694801330566406,
+        "comp_nll": 0.5496322512626648,
+        "context": "results/llamacpp*[m]xfp4*row_",
+        "delta": -18.14516907930374,
+        "position": 8042,
+        "token": "m"
+      },
+      {
+        "base_nll": 0.04311364144086838,
+        "comp_nll": 17.00007438659668,
+        "context": "results/sglang_[q]wen25_1_",
+        "delta": 16.95696074515581,
+        "position": 5900,
+        "token": "q"
+      },
+      {
+        "base_nll": 16.078763961791992,
+        "comp_nll": 1.0967194612021558e-05,
+        "context": "            \"results/sgl[ang]_qwen_fp4",
+        "delta": -16.07875299459738,
+        "position": 6185,
+        "token": "ang"
+      },
+      {
+        "base_nll": 16.330291748046875,
+        "comp_nll": 0.5420740842819214,
+        "context": "autosafe*.json\",[\\n]            \"results/sgl",
+        "delta": -15.788217663764954,
+        "position": 6072,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 15.781310081481934,
+        "comp_nll": 0.000284154579276219,
+        "context": "text(encoding=\"utf-[8]\", errors=\"replace\").strip",
+        "delta": -15.781025926902657,
+        "position": 2521,
+        "token": "8"
+      },
+      {
+        "base_nll": 15.532865524291992,
+        "comp_nll": 0.04134447127580643,
+        "context": "json\",\\n            \"results[/]sglang_qwen",
+        "delta": -15.491521053016186,
+        "position": 6076,
+        "token": "/"
+      },
+      {
+        "base_nll": 23.765634536743164,
+        "comp_nll": 9.000130653381348,
+        "context": "\",\\n            \"results/[ll]amacpp_nvfp4",
+        "delta": -14.765503883361816,
+        "position": 7844,
+        "token": "ll"
+      },
+      {
+        "base_nll": 0.4294211268424988,
+        "comp_nll": 15.062551498413086,
+        "context": "121a\", \"[compute]_121a\",",
+        "delta": 14.633130371570587,
+        "position": 4366,
+        "token": "compute"
+      },
+      {
+        "base_nll": 16.131179809570312,
+        "comp_nll": 1.6402652263641357,
+        "context": " arch_list_has_[sm]120),\\n            ",
+        "delta": -14.490914583206177,
+        "position": 4973,
+        "token": "sm"
+      },
+      {
+        "base_nll": 27.77231788635254,
+        "comp_nll": 13.292308807373047,
+        "context": "log\",\\n            \"results[/]sglang_qwen",
+        "delta": -14.480009078979492,
+        "position": 6054,
+        "token": "/"
+      },
+      {
+        "base_nll": 15.899953842163086,
+        "comp_nll": 1.6488384008407593,
+        "context": " data[0]\\n        [architecture] = first.get(\"Architecture",
+        "delta": -14.251115441322327,
+        "position": 3682,
+        "token": "architecture"
+      },
+      {
+        "base_nll": 16.383899688720703,
+        "comp_nll": 2.4684574604034424,
+        "context": "results/sglang_[q]wen_fp4kv_",
+        "delta": -13.91544222831726,
+        "position": 6218,
+        "token": "q"
+      },
+      {
+        "base_nll": 14.09027099609375,
+        "comp_nll": 0.28221380710601807,
+        "context": "                \"results/sgl[ang]*fp4_e2",
+        "delta": -13.808057188987732,
+        "position": 5812,
+        "token": "ang"
+      },
+      {
+        "base_nll": 14.255772590637207,
+        "comp_nll": 0.5834161639213562,
+        "context": "x or arch_list_[has]_sm120),",
+        "delta": -13.67235642671585,
+        "position": 4971,
+        "token": "has"
+      },
+      {
+        "base_nll": 13.312643051147461,
+        "comp_nll": 0.0003233625029679388,
+        "context": "ile*.md\",\\n            [\"]results/sglang_",
+        "delta": -13.312319688644493,
+        "position": 6294,
+        "token": "\""
+      },
+      {
+        "base_nll": 1.3162765502929688,
+        "comp_nll": 14.39624309539795,
+        "context": "\\n            \"_startup\",\\n[            ]\"_autosafe\",\\n",
+        "delta": 13.07996654510498,
+        "position": 6436,
+        "token": "            "
+      },
+      {
+        "base_nll": 13.003934860229492,
+        "comp_nll": 0.014411530457437038,
+        "context": "\", type=Path)\\n[    ]parser.add_argument(\"--",
+        "delta": -12.989523329772055,
+        "position": 4082,
+        "token": "    "
+      },
+      {
+        "base_nll": 15.662281036376953,
+        "comp_nll": 2.700504779815674,
+        "context": "results/llamacpp*[native]_fp4*build_",
+        "delta": -12.96177625656128,
+        "position": 8131,
+        "token": "native"
+      },
+      {
+        "base_nll": 0.7280212640762329,
+        "comp_nll": 13.658117294311523,
+        "context": "_or_ptx or[ arch]_list_has_sm",
+        "delta": 12.93009603023529,
+        "position": 5041,
+        "token": " arch"
+      },
+      {
+        "base_nll": 12.77273941040039,
+        "comp_nll": 5.8412379075889476e-06,
+        "context": "_or_ptx or[ arch]_list_has_sm",
+        "delta": -12.772733569162483,
+        "position": 4967,
+        "token": " arch"
+      },
+      {
+        "base_nll": 12.656274795532227,
+        "comp_nll": 0.00975803378969431,
+        "context": "_patterns=(\\n            \"[results]/llamacpp_q",
+        "delta": -12.646516761742532,
+        "position": 7778,
+        "token": "results"
+      },
+      {
+        "base_nll": 8.327681541442871,
+        "comp_nll": 20.875106811523438,
+        "context": "_or_ptx_[evidence]\": bool(has_family",
+        "delta": 12.547425270080566,
+        "position": 4954,
+        "token": "evidence"
+      },
+      {
+        "base_nll": 0.08738309144973755,
+        "comp_nll": 12.541601181030273,
+        "context": "stop_point.md\",[\\n]            \"results/aeon",
+        "delta": 12.454218089580536,
+        "position": 6976,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 14.260919570922852,
+        "comp_nll": 1.9117069244384766,
+        "context": "\\n            \"results/s[gl]ang_qwen_fp",
+        "delta": -12.349212646484375,
+        "position": 6272,
+        "token": "gl"
+      },
+      {
+        "base_nll": 6.92995548248291,
+        "comp_nll": 19.277557373046875,
+        "context": "sglang\",\\n        [model]_family=\"qwen\",",
+        "delta": 12.347601890563965,
+        "position": 6494,
+        "token": "model"
+      },
+      {
+        "base_nll": 1.4501796960830688,
+        "comp_nll": 13.761186599731445,
+        "context": "json\",\\n                \"results[/]llamacpp*native_",
+        "delta": 12.311006903648376,
+        "position": 8126,
+        "token": "/"
+      },
+      {
+        "base_nll": 2.466372013092041,
+        "comp_nll": 14.632200241088867,
+        "context": "_audit.json\",\\n[                ]\"results/llamacpp",
+        "delta": 12.165828227996826,
+        "position": 8101,
+        "token": "                "
+      },
+      {
+        "base_nll": 12.09378719329834,
+        "comp_nll": 0.05488636717200279,
+        "context": "keys=True) + \"\\[n]\", encoding=\"utf-8",
+        "delta": -12.038900826126337,
+        "position": 5132,
+        "token": "n"
+      },
+      {
+        "base_nll": 2.5286474227905273,
+        "comp_nll": 14.496871948242188,
+        "context": "\": torch_cuda,\\n[    ]}\\n\\n\\ndef main() ->",
+        "delta": 11.96822452545166,
+        "position": 4032,
+        "token": "    "
+      },
+      {
+        "base_nll": 12.550848007202148,
+        "comp_nll": 0.6594189405441284,
+        "context": "audit.json\",),\\n[        ]),\\n        partial_patterns",
+        "delta": -11.89142906665802,
+        "position": 5545,
+        "token": "        "
+      },
+      {
+        "base_nll": 0.31377020478248596,
+        "comp_nll": 12.125069618225098,
+        "context": ",\\n            \"explicit_[native]_sm121\":",
+        "delta": 11.811299413442612,
+        "position": 4918,
+        "token": "native"
+      },
+      {
+        "base_nll": 13.309272766113281,
+        "comp_nll": 1.6518771648406982,
+        "context": "\\n            \"results/s[gl]ang_qwen_fp",
+        "delta": -11.657395601272583,
+        "position": 6078,
+        "token": "gl"
+      },
+      {
+        "base_nll": 12.509783744812012,
+        "comp_nll": 0.8945810794830322,
+        "context": "\\n        ),\\n        claim[_]groups=(\\n            (\\n",
+        "delta": -11.61520266532898,
+        "position": 7673,
+        "token": "_"
+      },
+      {
+        "base_nll": 19.343116760253906,
+        "comp_nll": 7.741695880889893,
+        "context": " capacity, \"\\n            \"[quality], and serving manifests for both",
+        "delta": -11.601420879364014,
+        "position": 7246,
+        "token": "quality"
+      }
+    ],
+    "total_delta_nats": -383.1387385445369
+  }
+}

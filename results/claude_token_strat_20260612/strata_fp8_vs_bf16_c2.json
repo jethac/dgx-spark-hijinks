@@ -1,0 +1,439 @@
+{
+  "baseline": "claude_bf16_vosplit_c2_ctx8191",
+  "comparator": "claude_fp8_c2_ctx8191",
+  "kv_cache_dtypes": {
+    "baseline": "bf16",
+    "comparator": "fp8_e4m3"
+  },
+  "label": "strata_fp8_vs_bf16_c2",
+  "schema": "anomaly-token-strata/v1",
+  "strata": {
+    "mean_delta_nats": -0.164295895190162,
+    "num_scored": 8190,
+    "position_buckets": [
+      {
+        "count": 1022,
+        "mean_delta": 0.033343312715454064,
+        "positions": "0-1022",
+        "share_of_total_delta": -0.025324975071025334
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.12739458361064243,
+        "positions": "1023-2045",
+        "share_of_total_delta": 0.09685364787873797
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.13140811561855933,
+        "positions": "2046-3068",
+        "share_of_total_delta": 0.09990499594101425
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.20216657683353084,
+        "positions": "3069-4091",
+        "share_of_total_delta": 0.15370018010600003
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.16466396670701824,
+        "positions": "4092-5114",
+        "share_of_total_delta": 0.1251882568139692
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.20844043200293544,
+        "positions": "5115-6137",
+        "share_of_total_delta": 0.15846997284127728
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.27603616751126414,
+        "positions": "6138-7160",
+        "share_of_total_delta": 0.20986064722848138
+      },
+      {
+        "count": 1030,
+        "mean_delta": -0.23691056169528063,
+        "positions": "7161-8190",
+        "share_of_total_delta": 0.18134727426154493
+      }
+    ],
+    "sign": {
+      "improved": 4683,
+      "improved_frac": 0.5717948717948718,
+      "mean_abs_delta": 0.6735939037853003,
+      "tied": 3,
+      "worsened": 3504,
+      "worsened_frac": 0.4278388278388278
+    },
+    "surprisal_bands": [
+      {
+        "band_nats": "[0,0.5)",
+        "count": 2426,
+        "mean_base_nll": 0.06396173690937636,
+        "mean_delta": 0.028489923649484442,
+        "share_of_total_delta": -0.05136549374672195
+      },
+      {
+        "band_nats": "[0.5,1)",
+        "count": 316,
+        "mean_base_nll": 0.7295644083355046,
+        "mean_delta": 0.15649506072546915,
+        "share_of_total_delta": -0.0367516720741398
+      },
+      {
+        "band_nats": "[1,2)",
+        "count": 422,
+        "mean_base_nll": 1.4633350377964183,
+        "mean_delta": -0.041145130352479055,
+        "share_of_total_delta": 0.012903878901955613
+      },
+      {
+        "band_nats": "[2,4)",
+        "count": 745,
+        "mean_base_nll": 3.0217024035101767,
+        "mean_delta": -0.15439582153,
+        "share_of_total_delta": 0.08548328450849467
+      },
+      {
+        "band_nats": "[4,8)",
+        "count": 1474,
+        "mean_base_nll": 5.961140150939755,
+        "mean_delta": -0.20483657002611416,
+        "share_of_total_delta": 0.22438528027732432
+      },
+      {
+        "band_nats": ">=8",
+        "count": 2807,
+        "mean_base_nll": 13.218289840421008,
+        "mean_delta": -0.36688106138341126,
+        "share_of_total_delta": 0.7653447221330869
+      }
+    ],
+    "top_abs_delta_tokens": [
+      {
+        "base_nll": 16.184368133544922,
+        "comp_nll": 0.010960375890135765,
+        "context": " the two third he danced with[ Miss]\\nKing, and the two",
+        "delta": -16.173407757654786,
+        "position": 4381,
+        "token": " Miss"
+      },
+      {
+        "base_nll": 16.141197204589844,
+        "comp_nll": 0.32890939712524414,
+        "context": ". Do let me ask my[ partner] to introduce you.\u201d\\n\\n[",
+        "delta": -15.8122878074646,
+        "position": 3751,
+        "token": " partner"
+      },
+      {
+        "base_nll": 14.685253143310547,
+        "comp_nll": 0.8424810767173767,
+        "context": " admired by the Netherfield\\n[party]. Mr. Bingley had",
+        "delta": -13.84277206659317,
+        "position": 3966,
+        "token": "party"
+      },
+      {
+        "base_nll": 17.500484466552734,
+        "comp_nll": 5.43265438079834,
+        "context": " two next. Then, the[ two] third he danced with Miss\\n",
+        "delta": -12.067830085754395,
+        "position": 4376,
+        "token": " two"
+      },
+      {
+        "base_nll": 3.895763635635376,
+        "comp_nll": 15.343892097473145,
+        "context": ", \u201cdoes not offend _[me]_ so much as pride\\n",
+        "delta": 11.448128461837769,
+        "position": 7151,
+        "token": "me"
+      },
+      {
+        "base_nll": 8.234321594238281,
+        "comp_nll": 19.128786087036133,
+        "context": " well bred, were not\\n[inv]iting. In that respect his",
+        "delta": 10.894464492797852,
+        "position": 5868,
+        "token": "inv"
+      },
+      {
+        "base_nll": 13.619644165039062,
+        "comp_nll": 2.7721548080444336,
+        "context": "s had made him\\ncour[te]ous.\\n\\nLady Lucas was",
+        "delta": -10.847489356994629,
+        "position": 6362,
+        "token": "te"
+      },
+      {
+        "base_nll": 15.906442642211914,
+        "comp_nll": 5.173737049102783,
+        "context": " mistake?\u201d said Jane.\\n[\u201c]I certainly saw Mr. Darcy",
+        "delta": -10.73270559310913,
+        "position": 6891,
+        "token": "\u201c"
+      },
+      {
+        "base_nll": 4.775671005249023,
+        "comp_nll": 15.25377368927002,
+        "context": ". Mr. Bingley\\n[was] obliged to be in town the",
+        "delta": 10.478102684020996,
+        "position": 2766,
+        "token": "was"
+      },
+      {
+        "base_nll": 3.8433032035827637,
+        "comp_nll": 14.001763343811035,
+        "context": " Jane\\nagain, and the[ two] sixth with Lizzy, and the",
+        "delta": 10.158460140228271,
+        "position": 4404,
+        "token": " two"
+      },
+      {
+        "base_nll": 11.478837013244629,
+        "comp_nll": 1.335228681564331,
+        "context": ",\u201d cried her husband impatiently,[\\n]\u201che would not have danced",
+        "delta": -10.143608331680298,
+        "position": 4436,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 20.98402976989746,
+        "comp_nll": 11.401055335998535,
+        "context": " I am not acquainted with him[\\n]myself; how can you",
+        "delta": -9.582974433898926,
+        "position": 1687,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 1.38716721534729,
+        "comp_nll": 10.919107437133789,
+        "context": " in his life; everybody had[ been] most kind and attentive to him",
+        "delta": 9.531940221786499,
+        "position": 5938,
+        "token": " been"
+      },
+      {
+        "base_nll": 15.944859504699707,
+        "comp_nll": 25.377666473388672,
+        "context": " spirit, and some\\nex[agger]ation, the shocking rudeness",
+        "delta": 9.432806968688965,
+        "position": 4583,
+        "token": "agger"
+      },
+      {
+        "base_nll": 9.392374992370605,
+        "comp_nll": 0.0024905160535126925,
+        "context": ". I quite detest the[ man].\u201d\\n\\n\\n\\n\\n[Illustration]\\n\\n\\n\\n\\n",
+        "delta": -9.389884476317093,
+        "position": 4706,
+        "token": " man"
+      },
+      {
+        "base_nll": 11.197749137878418,
+        "comp_nll": 20.283580780029297,
+        "context": " wish of being better acquainted with[ _]them_ was expressed towards the",
+        "delta": 9.085831642150879,
+        "position": 7602,
+        "token": " _"
+      },
+      {
+        "base_nll": 14.821761131286621,
+        "comp_nll": 5.857911586761475,
+        "context": " man of large fortune from the[ north] of England; that he came",
+        "delta": -8.963849544525146,
+        "position": 263,
+        "token": " north"
+      },
+      {
+        "base_nll": 14.880956649780273,
+        "comp_nll": 6.044434547424316,
+        "context": " you,\u201d she added, \u201c[that] Lizzy does not lose much by",
+        "delta": -8.836522102355957,
+        "position": 4607,
+        "token": "that"
+      },
+      {
+        "base_nll": 10.489413261413574,
+        "comp_nll": 1.6548271179199219,
+        "context": "ed to see him stand\\n[up] with her; but, however",
+        "delta": -8.834586143493652,
+        "position": 4312,
+        "token": "up"
+      },
+      {
+        "base_nll": 12.5678071975708,
+        "comp_nll": 3.781722068786621,
+        "context": " few minutes to press his\\n[friend] to join it.\\n\\n\u201c",
+        "delta": -8.78608512878418,
+        "position": 3502,
+        "token": "friend"
+      },
+      {
+        "base_nll": 19.888080596923828,
+        "comp_nll": 11.435772895812988,
+        "context": ", who came with his\\n[s]isters, \u201cI should not",
+        "delta": -8.45230770111084,
+        "position": 7412,
+        "token": "s"
+      },
+      {
+        "base_nll": 12.241524696350098,
+        "comp_nll": 20.60567283630371,
+        "context": "age two years when he was[ tempted], by an accidental recommendation,",
+        "delta": 8.364148139953613,
+        "position": 5668,
+        "token": " tempted"
+      },
+      {
+        "base_nll": 13.566277503967285,
+        "comp_nll": 5.746744155883789,
+        "context": "\\nhousekeeping, when an[ answer] arrived which deferred it all.",
+        "delta": -7.819533348083496,
+        "position": 2754,
+        "token": " answer"
+      },
+      {
+        "base_nll": 7.7331318855285645,
+        "comp_nll": 0.009563465602695942,
+        "context": ", and coldly said,\\n[\u201c]She is tolerable: but not",
+        "delta": -7.7235684199258685,
+        "position": 3815,
+        "token": "\u201c"
+      },
+      {
+        "base_nll": 10.110565185546875,
+        "comp_nll": 2.433018207550049,
+        "context": ", and one whom\\nthey[ should] not object to know more of",
+        "delta": -7.677546977996826,
+        "position": 6081,
+        "token": " should"
+      },
+      {
+        "base_nll": 20.085187911987305,
+        "comp_nll": 12.420072555541992,
+        "context": " charming women. I never\\n[in] my life saw anything more elegant",
+        "delta": -7.6651153564453125,
+        "position": 4512,
+        "token": "in"
+      },
+      {
+        "base_nll": 13.608803749084473,
+        "comp_nll": 6.000056743621826,
+        "context": " what the owner said in its[ praise], and took it immediately.",
+        "delta": -7.6087470054626465,
+        "position": 5718,
+        "token": " praise"
+      },
+      {
+        "base_nll": 13.456689834594727,
+        "comp_nll": 5.8553996086120605,
+        "context": " my share of beauty, but[\\n]I do not pretend to be",
+        "delta": -7.601290225982666,
+        "position": 567,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 14.001177787780762,
+        "comp_nll": 6.587945461273193,
+        "context": " considered with pleasure that it\\n[was] not likely to be discovered by",
+        "delta": -7.413232326507568,
+        "position": 7756,
+        "token": "was"
+      },
+      {
+        "base_nll": 12.12943172454834,
+        "comp_nll": 4.733527660369873,
+        "context": "\\nsat close to her for[ half] an hour without once opening his",
+        "delta": -7.395904064178467,
+        "position": 6836,
+        "token": " half"
+      },
+      {
+        "base_nll": 14.253865242004395,
+        "comp_nll": 6.910264015197754,
+        "context": " to,\\na wish of[ being] better acquainted with _them_",
+        "delta": -7.343601226806641,
+        "position": 7598,
+        "token": " being"
+      },
+      {
+        "base_nll": 7.606428623199463,
+        "comp_nll": 0.3384709656238556,
+        "context": "\\n\\n[Illustration]\\n\\n\\n\\n\\n[[Illustration]]\\n\\n\\n\\n\\nCHAPTER VI.\\n\\n\\n",
+        "delta": -7.267957657575607,
+        "position": 7518,
+        "token": "Illustration"
+      },
+      {
+        "base_nll": 9.397119522094727,
+        "comp_nll": 2.146210193634033,
+        "context": "\\nremainder of his days at[ Nether]field, and leave the next",
+        "delta": -7.250909328460693,
+        "position": 5566,
+        "token": " Nether"
+      },
+      {
+        "base_nll": 9.257574081420898,
+        "comp_nll": 2.063540458679199,
+        "context": " and she had been\\ndist[inguished] by his sisters. Jane was",
+        "delta": -7.194033622741699,
+        "position": 3984,
+        "token": "inguished"
+      },
+      {
+        "base_nll": 0.7897034287452698,
+        "comp_nll": 7.920327663421631,
+        "context": " the solidity of her\\nref[lections], \u201cis a very common",
+        "delta": 7.130624234676361,
+        "position": 7266,
+        "token": "lections"
+      },
+      {
+        "base_nll": 7.272869110107422,
+        "comp_nll": 0.16982129216194153,
+        "context": " to another, and never\\n[sett]led at Netherfield as he",
+        "delta": -7.10304781794548,
+        "position": 2842,
+        "token": "sett"
+      },
+      {
+        "base_nll": 10.558497428894043,
+        "comp_nll": 17.59967803955078,
+        "context": " her at all; indeed,[ nobody]\\ncan, you know;",
+        "delta": 7.041180610656738,
+        "position": 4330,
+        "token": " nobody"
+      },
+      {
+        "base_nll": 15.563614845275879,
+        "comp_nll": 8.52502155303955,
+        "context": " were you.\u201d\\n\\n\u201cI[ believe], ma\u2019am, I",
+        "delta": -7.038593292236328,
+        "position": 7118,
+        "token": " believe"
+      },
+      {
+        "base_nll": 15.449538230895996,
+        "comp_nll": 22.360069274902344,
+        "context": " sisters are charming women. I[ never]\\nin my life saw anything",
+        "delta": 6.910531044006348,
+        "position": 4510,
+        "token": " never"
+      },
+      {
+        "base_nll": 8.109657287597656,
+        "comp_nll": 1.2057154178619385,
+        "context": " she should not; she continued[ to] declare that she\\nwould;",
+        "delta": -6.903941869735718,
+        "position": 7496,
+        "token": " to"
+      }
+    ],
+    "total_delta_nats": -1345.5833816074266
+  }
+}

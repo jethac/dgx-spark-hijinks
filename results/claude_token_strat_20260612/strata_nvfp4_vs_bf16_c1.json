@@ -1,0 +1,439 @@
+{
+  "baseline": "claude_bf16_vosplit_c1_ctx8191",
+  "comparator": "claude_nvfp4_c1_ctx8191",
+  "kv_cache_dtypes": {
+    "baseline": "bf16",
+    "comparator": "nvfp4"
+  },
+  "label": "strata_nvfp4_vs_bf16_c1",
+  "schema": "anomaly-token-strata/v1",
+  "strata": {
+    "mean_delta_nats": -0.3318279053663424,
+    "num_scored": 8190,
+    "position_buckets": [
+      {
+        "count": 1022,
+        "mean_delta": -0.27123257169689663,
+        "positions": "0-1022",
+        "share_of_total_delta": 0.10199900381202874
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.5932121116630047,
+        "positions": "1023-2045",
+        "share_of_total_delta": 0.2233000579701768
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.5002110484598125,
+        "positions": "2046-3068",
+        "share_of_total_delta": 0.1882921031488524
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.500629924130851,
+        "positions": "3069-4091",
+        "share_of_total_delta": 0.18844977855666392
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.29663122178794155,
+        "positions": "4092-5114",
+        "share_of_total_delta": 0.11165950208825211
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.2279672004772913,
+        "positions": "5115-6137",
+        "share_of_total_delta": 0.08581262600854737
+      },
+      {
+        "count": 1023,
+        "mean_delta": -0.19709307460250125,
+        "positions": "6138-7160",
+        "share_of_total_delta": 0.07419082334795765
+      },
+      {
+        "count": 1030,
+        "mean_delta": -0.06938267008633203,
+        "positions": "7161-8190",
+        "share_of_total_delta": 0.026296105067521253
+      }
+    ],
+    "sign": {
+      "improved": 4476,
+      "improved_frac": 0.5465201465201465,
+      "mean_abs_delta": 1.1434007372145722,
+      "tied": 24,
+      "worsened": 3690,
+      "worsened_frac": 0.45054945054945056
+    },
+    "surprisal_bands": [
+      {
+        "band_nats": "[0,0.5)",
+        "count": 3923,
+        "mean_base_nll": 0.04252491274914781,
+        "mean_delta": 0.16035568031688613,
+        "share_of_total_delta": -0.23147593627638863
+      },
+      {
+        "band_nats": "[0.5,1)",
+        "count": 261,
+        "mean_base_nll": 0.7369099072112891,
+        "mean_delta": 0.31052499241477877,
+        "share_of_total_delta": -0.02982223992192479
+      },
+      {
+        "band_nats": "[1,2)",
+        "count": 322,
+        "mean_base_nll": 1.4988575388926157,
+        "mean_delta": 0.12121027328154545,
+        "share_of_total_delta": -0.01436145675169422
+      },
+      {
+        "band_nats": "[2,4)",
+        "count": 568,
+        "mean_base_nll": 2.9836527201491343,
+        "mean_delta": 0.00469729325495439,
+        "share_of_total_delta": -0.0009817461405583446
+      },
+      {
+        "band_nats": "[4,8)",
+        "count": 1024,
+        "mean_base_nll": 6.020042831078172,
+        "mean_delta": -0.628180400895491,
+        "share_of_total_delta": 0.23669415401075997
+      },
+      {
+        "band_nats": ">=8",
+        "count": 2092,
+        "mean_base_nll": 13.900943081419966,
+        "mean_delta": -1.35097224756321,
+        "share_of_total_delta": 1.0399472250798063
+      }
+    ],
+    "top_abs_delta_tokens": [
+      {
+        "base_nll": 25.875606536865234,
+        "comp_nll": 2.4416356086730957,
+        "context": "60.50 |[ pass] |\\n| `medium_",
+        "delta": -23.43397092819214,
+        "position": 5094,
+        "token": " pass"
+      },
+      {
+        "base_nll": 19.811857223510742,
+        "comp_nll": 0.0005421360838226974,
+        "context": " | 1 | n/[a] | 0.03",
+        "delta": -19.81131508742692,
+        "position": 5165,
+        "token": "a"
+      },
+      {
+        "base_nll": 19.497886657714844,
+        "comp_nll": 0.060812197625637054,
+        "context": " tok/s |\\n|[---|]---:|---:|---:|",
+        "delta": -19.437074460089207,
+        "position": 6272,
+        "token": "---|"
+      },
+      {
+        "base_nll": 20.50402069091797,
+        "comp_nll": 1.810905933380127,
+        "context": "rope_text_fallback.[py]` | text-only M",
+        "delta": -18.693114757537842,
+        "position": 1276,
+        "token": "py"
+      },
+      {
+        "base_nll": 19.11155891418457,
+        "comp_nll": 0.6080656051635742,
+        "context": " is not blessed | current G[GU]F Q4_0 path",
+        "delta": -18.503493309020996,
+        "position": 1723,
+        "token": "GU"
+      },
+      {
+        "base_nll": 24.96988296508789,
+        "comp_nll": 7.313634872436523,
+        "context": "results/sglang_[q]wen_fp4kv_",
+        "delta": -17.656248092651367,
+        "position": 6861,
+        "token": "q"
+      },
+      {
+        "base_nll": 23.990013122558594,
+        "comp_nll": 7.375685214996338,
+        "context": "glang_qwen_[fp]4kv_autosafe",
+        "delta": -16.614327907562256,
+        "position": 6953,
+        "token": "fp"
+      },
+      {
+        "base_nll": 19.79341697692871,
+        "comp_nll": 3.468735694885254,
+        "context": "- `results/sgl[ang]_qwen_fp4",
+        "delta": -16.324681282043457,
+        "position": 6906,
+        "token": "ang"
+      },
+      {
+        "base_nll": 2.6685400009155273,
+        "comp_nll": 18.86028289794922,
+        "context": "/vllm_q[wen]_nvfp4_kv",
+        "delta": 16.19174289703369,
+        "position": 7553,
+        "token": "wen"
+      },
+      {
+        "base_nll": 4.029192859889008e-05,
+        "comp_nll": 16.076900482177734,
+        "context": " `results/sglang[_]qwen25_1",
+        "delta": 16.076860190249135,
+        "position": 5956,
+        "token": "_"
+      },
+      {
+        "base_nll": 15.719955444335938,
+        "comp_nll": 0.011904269456863403,
+        "context": "/sglang_q[wen]_fp4kv_aut",
+        "delta": -15.708051174879074,
+        "position": 6862,
+        "token": "wen"
+      },
+      {
+        "base_nll": 3.933898824470816e-06,
+        "comp_nll": 15.267538070678711,
+        "context": "@6804e[1]b`; evidence: `third",
+        "delta": 15.267534136779886,
+        "position": 1443,
+        "token": "1"
+      },
+      {
+        "base_nll": 15.231952667236328,
+        "comp_nll": 0.0019575259648263454,
+        "context": "8`\\n\\nArtifacts:[\\n\\n]- summary: `results/",
+        "delta": -15.229995141271502,
+        "position": 5581,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 15.171585083007812,
+        "comp_nll": 0.00878008734434843,
+        "context": " AEON weights unless re-[quant]izing; run `scripts/",
+        "delta": -15.162804995663464,
+        "position": 1831,
+        "token": "quant"
+      },
+      {
+        "base_nll": 21.755813598632812,
+        "comp_nll": 6.99737548828125,
+        "context": "glang_qwen_[fp]4kv_autosafe",
+        "delta": -14.758438110351562,
+        "position": 6819,
+        "token": "fp"
+      },
+      {
+        "base_nll": 0.025302639231085777,
+        "comp_nll": 14.770938873291016,
+        "context": ".\\n- The SGL[ang] log labeled the GB10",
+        "delta": 14.74563623405993,
+        "position": 5419,
+        "token": "ang"
+      },
+      {
+        "base_nll": 0.029041757807135582,
+        "comp_nll": 14.621424674987793,
+        "context": "` failure; current SGL[ang] already has hybrid/spec paths",
+        "delta": 14.592382917180657,
+        "position": 1250,
+        "token": "ang"
+      },
+      {
+        "base_nll": 17.79520034790039,
+        "comp_nll": 3.288177251815796,
+        "context": " `results/aeon_[g]emma26_dflash",
+        "delta": -14.507023096084595,
+        "position": 3349,
+        "token": "g"
+      },
+      {
+        "base_nll": 14.347822189331055,
+        "comp_nll": 2.932505594799295e-05,
+        "context": "/vllm@6[8]04e1b`;",
+        "delta": -14.347792864275107,
+        "position": 1317,
+        "token": "8"
+      },
+      {
+        "base_nll": 17.735036849975586,
+        "comp_nll": 3.434453248977661,
+        "context": "results/aeon_g[emma]26_dflash_",
+        "delta": -14.300583600997925,
+        "position": 3434,
+        "token": "emma"
+      },
+      {
+        "base_nll": 7.882414817810059,
+        "comp_nll": 22.11196517944336,
+        "context": "/sglang_q[wen]_fp4kv_aut",
+        "delta": 14.2295503616333,
+        "position": 6951,
+        "token": "wen"
+      },
+      {
+        "base_nll": 0.001513170194812119,
+        "comp_nll": 14.141613006591797,
+        "context": "results/aeon_g[emma]26_dflash_",
+        "delta": 14.140099836396985,
+        "position": 3477,
+        "token": "emma"
+      },
+      {
+        "base_nll": 18.29507064819336,
+        "comp_nll": 4.202733039855957,
+        "context": " `results/aeon_[g]emma26_dflash",
+        "delta": -14.092337608337402,
+        "position": 3433,
+        "token": "g"
+      },
+      {
+        "base_nll": 14.042892456054688,
+        "comp_nll": 0.0017234723782166839,
+        "context": "T0332J[ST]_openai_benchmark.json",
+        "delta": -14.04116898367647,
+        "position": 5836,
+        "token": "ST"
+      },
+      {
+        "base_nll": 11.497636795043945,
+        "comp_nll": 25.47632598876953,
+        "context": " |\\n| `medium_[decode]` | 56 |",
+        "delta": 13.978689193725586,
+        "position": 6316,
+        "token": "decode"
+      },
+      {
+        "base_nll": 17.53994369506836,
+        "comp_nll": 3.899477005004883,
+        "context": "5`\\n\\nArtifacts:[\\n\\n]- summary: `results/",
+        "delta": -13.640466690063477,
+        "position": 7443,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 13.472532272338867,
+        "comp_nll": 3.361645576660521e-05,
+        "context": ": `results/aeon[_]gemma26_d",
+        "delta": -13.4724986558831,
+        "position": 3432,
+        "token": "_"
+      },
+      {
+        "base_nll": 13.536808967590332,
+        "comp_nll": 0.301628977060318,
+        "context": " left running\\n\\nArtifacts:[\\n\\n]- smoke: `results/",
+        "delta": -13.235179990530014,
+        "position": 4798,
+        "token": "\\n\\n"
+      },
+      {
+        "base_nll": 15.93895149230957,
+        "comp_nll": 2.7227139472961426,
+        "context": "abi3.so`, and[ `]_vllm_fa",
+        "delta": -13.216237545013428,
+        "position": 4546,
+        "token": " `"
+      },
+      {
+        "base_nll": 0.06341017782688141,
+        "comp_nll": 13.203216552734375,
+        "context": "kv_autosafe_[2]026060",
+        "delta": 13.139806374907494,
+        "position": 6961,
+        "token": "2"
+      },
+      {
+        "base_nll": 18.109851837158203,
+        "comp_nll": 5.146645545959473,
+        "context": "_20260[6]08T131",
+        "delta": -12.96320629119873,
+        "position": 6877,
+        "token": "6"
+      },
+      {
+        "base_nll": 17.129436492919922,
+        "comp_nll": 4.174318790435791,
+        "context": "SupportsMRoPE` |[ ported] in `jethac/",
+        "delta": -12.95511770248413,
+        "position": 1305,
+        "token": " ported"
+      },
+      {
+        "base_nll": 0.08292897790670395,
+        "comp_nll": 12.95988941192627,
+        "context": "60608T[1]315JST_",
+        "delta": 12.876960434019566,
+        "position": 7012,
+        "token": "1"
+      },
+      {
+        "base_nll": 12.864554405212402,
+        "comp_nll": 9.536738616588991e-07,
+        "context": "llm@680[4]e1b`; evidence:",
+        "delta": -12.86455345153854,
+        "position": 1319,
+        "token": "4"
+      },
+      {
+        "base_nll": 16.007091522216797,
+        "comp_nll": 3.1600723266601562,
+        "context": "row_manifest.json`[\\n]- `results/sgl",
+        "delta": -12.84701919555664,
+        "position": 6941,
+        "token": "\\n"
+      },
+      {
+        "base_nll": 13.163317680358887,
+        "comp_nll": 0.41911226511001587,
+        "context": " deterministic output sanity in Gemma S[GL]ang row | include chat smoke",
+        "delta": -12.74420541524887,
+        "position": 1938,
+        "token": "GL"
+      },
+      {
+        "base_nll": 14.886641502380371,
+        "comp_nll": 2.184732675552368,
+        "context": "04e1b`;[ evidence]: `third_party/",
+        "delta": -12.701908826828003,
+        "position": 1324,
+        "token": " evidence"
+      },
+      {
+        "base_nll": 12.718474388122559,
+        "comp_nll": 0.03900527581572533,
+        "context": " seconds | decode tok/s[ |]\\n|---|---:|---",
+        "delta": -12.679469112306833,
+        "position": 4237,
+        "token": " |"
+      },
+      {
+        "base_nll": 16.870153427124023,
+        "comp_nll": 4.223034858703613,
+        "context": "FP4-KV benchmark:[ `]results/vllm_",
+        "delta": -12.64711856842041,
+        "position": 7710,
+        "token": " `"
+      },
+      {
+        "base_nll": 12.551352500915527,
+        "comp_nll": 0.016051122918725014,
+        "context": " `results/sglang[_]qwen25_1",
+        "delta": -12.535301377996802,
+        "position": 6010,
+        "token": "_"
+      }
+    ],
+    "total_delta_nats": -2717.6705449503443
+  }
+}
