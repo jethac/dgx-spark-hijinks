@@ -76,6 +76,7 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="/tmp/flashinfer-cache-$RUN" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
+  -e FLASHINFER_PREFILL_DEBUG_ONCE=1 \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
   -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
   -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
@@ -168,6 +169,7 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="$CACHE" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
+  -e FLASHINFER_PREFILL_DEBUG_ONCE=1 \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
   -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
   -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
@@ -260,6 +262,7 @@ docker run --rm --gpus all --memory=100g --memory-swap=100g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="/tmp/flashinfer-cache-$RUN" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
+  -e FLASHINFER_PREFILL_DEBUG_ONCE=1 \
   -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
   -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1 \
   -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
