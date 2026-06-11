@@ -8,15 +8,23 @@ serving result. The upstream serving reference today is vLLM's open `dgemma` bra
 the official `vllm/vllm-openai:gemma-aarch64-cu130` image; see
 `docs/DG0_SERVING_STACK_RECON.md`.
 
-Epoch-2 implementation checkpoint: `jethac/sglang` now has the DG-S0/DG-S2 foundation
-scaffold: a local `DiffusionGemmaConfig` alias, `DiffusionGemmaForBlockDiffusion`
-model shell, BF16 encoder/decoder-backbone weight remap into one Gemma 4 causal
-backbone, self-conditioning parameter ownership, dLLM config recognition, and
-`scripts/diffusion_gemma_config_audit.py` plus
-`scripts/diffusion_gemma_weight_manifest.py` for metadata-only geometry and weight-remap
-manifests. This does not claim BF16 parity or serving. Decoder denoise mode still
-raises `NotImplementedError`; the next live gate is a Linux/Spark metadata manifest
-followed by a BF16 weight-load manifest against the official vLLM image as oracle.
+Epoch-2 upstream rebase checkpoint: SGLang's public cookbook documents
+DiffusionGemma through `--dllm-algorithm Gemma4Renoise` and
+`--trust-remote-code`, but the runtime implementation is on the upstream
+integration branch `upstream/diffusion-gemma4-support`, not proven in the latest
+stable release. The SGLang submodule branch
+`spark/hijinks-024-diffusiongemma-upstream-rebase` now rebases our GB10/NVFP4
+work on that RC implementation. It cherry-picks upstream commit `11ffa55479`
+(`Support DiffusionGemma (RC0.1, multimodal)`) and removes our earlier local
+`DiffusionGemmaConfig` / `DiffusionGemmaForBlockDiffusion` foundation shell so
+the registry resolves the architecture only through upstream
+`gemma4_diffusion.py`. See
+`results/sglang_diffusiongemma_upstream_rebase_audit_20260611T214831JST.md`.
+
+The earlier DG-S0/DG-S2 scaffold artifacts remain useful as evidence that the
+checkpoint geometry and weight-name contract were understood before the upstream
+runtime appeared. They are superseded for implementation purposes by the
+upstream RC path and should not be treated as the serving implementation.
 
 Manifest checkpoint: `results/codex_dg_s0_s2_manifest_20260611T202238JST/summary.md`
 is green for the metadata/remap preflight on the real cached BF16 checkpoint. It
@@ -32,7 +40,9 @@ checkpoint headers using fake/meta tensor payloads from a B-backed Hugging Face 
 The loader reports 332 loaded backbone params, 30 decoder duplicates skipped, 4
 self-conditioning tensors loaded, and 356 vision keys quarantined, with no bootstrap
 or load exception. It remains a metadata-tensor loader claim, not live BF16 allocation,
-forward parity, or serving.
+forward parity, or serving. It refers to the now-superseded local shell branch;
+the next live gate should be repeated against
+`spark/hijinks-024-diffusiongemma-upstream-rebase`.
 
 ## Verdict
 
