@@ -52,6 +52,16 @@ def main() -> int:
         and "extend_paged_vosplit" in server_log
     )
     unsupported = "Unsupported max_mma_kv: 0" in server_log
+    decode_as_prefill_d512 = [
+        line
+        for line in geometry_lines
+        if "label=decode_as_prefill" in line and "head_dim=512" in line
+    ]
+    standard_decode_d512 = [
+        line
+        for line in geometry_lines
+        if "label=decode " in line and "head_dim=512" in line
+    ]
     decode_d512 = [
         line
         for line in geometry_lines
@@ -99,11 +109,18 @@ def main() -> int:
         "",
     ]
     if unsupported:
-        summary += [
-            "The SGLang Gemma 4 E4B text-only smoke remains RED after wrapper geometry was corrected.",
-            "SWA prefill plans at D=256 and global prefill enters the two-pass VO-split path at D=512/VO=256.",
-            "The remaining blocker is decode: the D=512 global layer still enters the standard decode wrapper, which instantiates a D=512/VO=512 paged module and fails in FlashInfer with `Unsupported max_mma_kv: 0`.",
-        ]
+        if decode_as_prefill_d512 and not standard_decode_d512:
+            summary += [
+                "The SGLang Gemma 4 E4B text-only smoke remains RED, but the SGLang-side D=512 decode routing is now proven.",
+                "SWA prefill plans at D=256, global prefill enters the two-pass VO-split path at D=512/VO=256, and global decode now reaches `decode_as_prefill_vosplit*` on `BatchPrefillWithPagedKVCacheWrapper`.",
+                "The remaining blocker is FlashInfer dispatcher selection inside the VO-split paged-prefill path: it still fails with `Unsupported max_mma_kv: 0`. This is the r9/`jethac/flashinfer@76af7982` dispatcher-fix target, not a standard decode-wrapper routing failure.",
+            ]
+        else:
+            summary += [
+                "The SGLang Gemma 4 E4B text-only smoke remains RED after wrapper geometry was corrected.",
+                "SWA prefill plans at D=256 and global prefill enters the two-pass VO-split path at D=512/VO=256.",
+                "The remaining blocker is decode: the D=512 global layer still enters the standard decode wrapper, which instantiates a D=512/VO=512 paged module and fails in FlashInfer with `Unsupported max_mma_kv: 0`.",
+            ]
     else:
         summary.append("See response and geometry samples below.")
 

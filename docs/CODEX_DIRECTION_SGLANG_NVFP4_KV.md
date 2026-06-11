@@ -28,11 +28,14 @@ decode API that carries `head_dim_vo`) before rung 0 can become a coherent servi
 Do not edit `prefill.cuh` trait math in the SGLang lane; the `max_mma_kv` dispatcher work
 is parked for the shared FlashInfer task.
 
-Follow-up code state: `jethac/sglang@9d78a007f` stages the SGLang-side workaround
-described above. Under `SGLANG_FLASHINFER_VOSPLIT=1`, D=512 layers now plan decode
-through the paged-prefill wrapper with one query row per request and run the existing
-two-pass `head_dim_vo=256` path; D=256 sliding layers stay on normal decode. This is
-static-checked only until the GPU window is free and the E4B rung-0 smoke is rerun.
+Follow-up result: `results/sglang_gemma4_e4b_rung0_20260611T151226JST/summary.md`
+reran with `jethac/sglang@9d78a007f` and proves the SGLang-side workaround reaches
+runtime. Under `SGLANG_FLASHINFER_VOSPLIT=1`, D=512 global decode now plans through
+the paged-prefill wrapper (`decode_as_prefill_vosplit*`) with `head_dim=512` and
+`head_dim_vo=256`; D=256 sliding layers stay on normal decode. The remaining red is
+FlashInfer dispatcher selection inside the VO-split paged-prefill path:
+`Unsupported max_mma_kv: 0`. That is the r9 / `jethac/flashinfer@76af7982` target,
+not a standard decode-wrapper routing failure.
 
 ## 2026-06-10 update — deswizzle leak is falsified for the live SGLang failure
 
