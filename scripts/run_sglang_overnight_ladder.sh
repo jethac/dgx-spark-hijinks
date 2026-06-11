@@ -24,7 +24,7 @@ STATUS_FILE="${OUT_DIR}/status.txt"
 HF_CACHE="${HF_CACHE:-${HOME}/.cache/huggingface}"
 FLASHINFER_SRC="${FLASHINFER_SRC:-${REPO_ROOT}/third_party/flashinfer}"
 FLASHINFER_CACHE_BASE="${FLASHINFER_CACHE_BASE:-/tmp}"
-CORPUS_SRC_DIR="${CORPUS_SRC_DIR:-${REPO_ROOT}/results/claude_anomaly_corpus_sweep_20260611/docs}"
+CORPUS_SRC_DIR="${CORPUS_SRC_DIR:-/home/jethac/spark_tmp/claude_overnight_ladder_20260612/docs}"
 
 MODEL_MATRIX=(
   "e2b|google/gemma-4-E2B-it|gemma4-e2b-it|0.35"
@@ -153,9 +153,25 @@ prepare_repo() {
     cp "${CORPUS_SRC_DIR}/${corpus}" "${OUT_DIR}/docs/${corpus}"
   done
   md5sum "${OUT_DIR}/docs/"* | tee "${OUT_DIR}/corpus_md5.txt" >/dev/null
-  grep -q "abb63f0e" "${OUT_DIR}/corpus_md5.txt" || log "CORPUS_MD5_RED c1"
-  grep -q "1686a33b" "${OUT_DIR}/corpus_md5.txt" || log "CORPUS_MD5_RED c2"
-  grep -q "28dfeba9" "${OUT_DIR}/corpus_md5.txt" || log "CORPUS_MD5_RED c3"
+  if ! grep -q "abb63f0e" "${OUT_DIR}/corpus_md5.txt"; then
+    log "CORPUS_MD5_RED c1"
+    write_summary || true
+    write_stop_mail "corpus_md5_red"
+    exit 2
+  fi
+  if ! grep -q "1686a33b" "${OUT_DIR}/corpus_md5.txt"; then
+    log "CORPUS_MD5_RED c2"
+    write_summary || true
+    write_stop_mail "corpus_md5_red"
+    exit 2
+  fi
+  if ! grep -q "28dfeba9" "${OUT_DIR}/corpus_md5.txt"; then
+    log "CORPUS_MD5_RED c3"
+    write_summary || true
+    write_stop_mail "corpus_md5_red"
+    exit 2
+  fi
+  log "CORPUS_MD5_GREEN source=${CORPUS_SRC_DIR}"
 }
 
 run_access_probe() {
