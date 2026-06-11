@@ -1,0 +1,7 @@
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd
+model=google/diffusiongemma-26B-A4B-it
+port=30124
+mem_fraction_static=0.55
+context_length=8192
+flags=--dllm-algorithm Gemma4Renoise --trust-remote-code --context-length 8192
+source_patch=DiffusionGemmaConfig fallback in mounted /work source

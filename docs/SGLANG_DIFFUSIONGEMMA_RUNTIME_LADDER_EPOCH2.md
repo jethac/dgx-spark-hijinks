@@ -13,7 +13,7 @@ mapping, but runtime work now starts from upstream `gemma4_diffusion.py` and
 SGLang branch:
 
 - `jethac/sglang:spark/hijinks-024-diffusiongemma-upstream-rebase`
-- current head: `0705924c1d`
+- current head: `651d55cd2e`
 
 What upstream provides:
 
@@ -30,6 +30,10 @@ Our immediate fix on top:
 - `0705924c1d` sets `is_uniform=True` on the DiffusionGemma
   `DllmConfig.from_server_args()` branch. Without it, the cookbook path can
   construct `DllmConfig` with an unbound `is_uniform` local.
+- `651d55cd2e` adds a local `DiffusionGemmaConfig` fallback for environments
+  whose installed Transformers build does not yet recognize
+  `model_type=diffusion_gemma`. This is config loading only; the model class and
+  `Gemma4Renoise` algorithm remain the upstream SGLang implementation.
 
 ## Ladder
 
@@ -69,12 +73,21 @@ Gate:
 - logs prove `Gemma4Renoise` and `DiffusionGemmaForBlockDiffusion`
 - logs prove no FlashInfer/NVFP4 performance path is being claimed yet
 
+Status: green on GB10 through the stock Triton/eager path; see
+`results/sglang_dgemma_dgr1_stock_smoke_20260611T2340JST/summary.md`.
+
+Caveat: the smoke response is coherent, but the server log reports many
+checkpoint keys as uninitialized. DG-R2 must audit those missing/uninitialized
+keys before any stronger quality claim.
+
 ### DG-R2: Upstream Runtime Quality Baseline
 
 Establish a small reproducible correctness baseline before performance changes.
 
 Gate:
 
+- audit the DG-R1 uninitialized-weight list and decide which entries are benign
+  derived/cache/statistic tensors versus real load gaps
 - deterministic short prompt set
 - stable output under fixed seed
 - one small supplied-answer or parseable QA check

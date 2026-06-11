@@ -1,0 +1,1 @@
+{"model":"google/diffusiongemma-26B-A4B-it","messages":[{"role":"user","content":"In one short sentence, say what a DGX Spark is useful for."}],"max_tokens":64,"temperature":0.0}

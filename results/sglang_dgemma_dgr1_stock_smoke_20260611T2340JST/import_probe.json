@@ -1,0 +1,39 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.2 driver version 595.58.03 with kernel driver version 580.159.03.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+
+{
+  "torch": "2.12.0a0+5aff3928d8.nv26.05",
+  "torch_cuda": "13.2",
+  "device": "NVIDIA GB10",
+  "capability": [
+    12,
+    1
+  ],
+  "flashinfer": "0.6.13",
+  "flashinfer_file": "/work/third_party/flashinfer/flashinfer/__init__.py",
+  "sglang": "0.0.0.dev1+g0705924c1",
+  "sglang_kernel": "0.4.3",
+  "sgl_kernel_file": "/usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py",
+  "config_class": "DiffusionGemmaConfig",
+  "text_config_class": "DiffusionGemmaTextConfig",
+  "head_dim": 512,
+  "swa_head_dim": 256,
+  "canvas_length": 256
+}
