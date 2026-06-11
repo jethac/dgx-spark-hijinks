@@ -171,8 +171,10 @@ Read order for full context: this doc → docs/OVERNIGHT_LADDER_PLAN_20260612.md
    THEN (gated on the x86 workflow's first green): add an arm64 CI job
    (ubuntu-24.04-arm, free on public repos) building aarch64 wheels and
    buildx-ing the Spark serving images to ghcr.io so r-image bakes stop
-   burning Spark windows (~1h each today). ghcr over GCP on purpose -
-   infra must survive Jetha's June 25 departure. Same ccache-resume +
+   burning Spark windows (~1h each today). ghcr + free arm64 runners on
+   purpose: the campaign uses no employer infra and paid cloud comes out of
+   Jetha's own pocket - free CI is sufficient; a paid spot VM (~USD1/build)
+   only if build latency ever actually blocks. Same ccache-resume +
    cubin-grep-gate design (sm_121a for the arm artifacts).
 9. DG-2 serving smoke on the dgemma branch (head dfb427952b) — was waiting
    on a Codex image (r10-class with DG support); check mail for its state.
