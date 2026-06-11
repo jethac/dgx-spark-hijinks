@@ -1,0 +1,16 @@
+vllm 0.1.dev1+g9759e3b06 /opt/jethac-vllm/vllm/__init__.py
+flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+torch 2.11.0+cu130 13.0
+cuda_available True
+device NVIDIA GB10 cc 12.1 sms 48
+humming None /usr/local/lib/python3.12/site-packages/humming/__init__.py
+import_ok vllm._C /opt/jethac-vllm/vllm/_C.abi3.so
+import_ok vllm._C_stable_libtorch /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+import_ok vllm._moe_C /opt/jethac-vllm/vllm/_moe_C.abi3.so
+import_ok vllm.vllm_flash_attn._vllm_fa2_C /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so
+import_ok vllm.vllm_flash_attn._vllm_fa3_C /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so
+binary _C.abi3.so /opt/jethac-vllm/vllm/_C.abi3.so True 88005848
+binary _C_stable_libtorch.abi3.so /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so True 159411304
+binary _moe_C.abi3.so /opt/jethac-vllm/vllm/_moe_C.abi3.so True 78096104
+binary vllm_flash_attn/_vllm_fa2_C.abi3.so /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa2_C.abi3.so True 229156064
+binary vllm_flash_attn/_vllm_fa3_C.abi3.so /opt/jethac-vllm/vllm/vllm_flash_attn/_vllm_fa3_C.abi3.so True 907469760

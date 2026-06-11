@@ -1,0 +1,10 @@
+root_cache
+/root/.cache
+/root/.cache/pip
+/root/.cache/pip/http-v2
+/root/.cache/pip/http-v2/9
+/root/.cache/pip/http-v2/a
+/root/.cache/pip/http-v2/c
+/root/.cache/pip/selfcheck
+/root/.cache/pip/selfcheck/fe300af6f7d708c14827daac3afc81fbb8306b73de8dd6e3f1f8ea3b
+tmp_flashinfer
