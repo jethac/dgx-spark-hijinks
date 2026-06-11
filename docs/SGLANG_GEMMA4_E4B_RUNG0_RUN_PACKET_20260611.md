@@ -159,7 +159,7 @@ for i in $(seq 1 90); do
   sleep 10
 done
 
-curl -sS http://127.0.0.1:30000/generate \
+curl -sS --max-time 180 http://127.0.0.1:30000/generate \
   -H 'Content-Type: application/json' \
   -d '{
     "text": "In one short sentence, name the capital of Japan.",

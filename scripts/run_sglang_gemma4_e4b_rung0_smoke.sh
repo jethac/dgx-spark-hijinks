@@ -177,7 +177,8 @@ if [[ "${ready}" != "1" ]]; then
   exit 1
 fi
 
-curl -sS "http://127.0.0.1:${PORT}/generate" \
+set +e
+curl -sS --max-time "${REQUEST_TIMEOUT_S:-180}" "http://127.0.0.1:${PORT}/generate" \
   -H 'Content-Type: application/json' \
   -d '{
     "text": "In one short sentence, name the capital of Japan.",
@@ -186,6 +187,9 @@ curl -sS "http://127.0.0.1:${PORT}/generate" \
       "max_new_tokens": 16
     }
   }' | tee "${request_json}"
+request_status=${PIPESTATUS[0]}
+set -e
+echo "${request_status}" >"${OUT_DIR}/request_status.txt"
 
 docker logs "${container}" >"${server_log}" 2>&1 || true
 
@@ -197,10 +201,15 @@ from pathlib import Path
 out = Path("${OUT_DIR}")
 server_log = (out / "server.log").read_text(encoding="utf-8", errors="replace")
 request_path = out / "generate.json"
+request_status_path = out / "request_status.txt"
 try:
     response = json.loads(request_path.read_text(encoding="utf-8"))
 except Exception as exc:
     response = {"parse_error": repr(exc), "raw": request_path.read_text(encoding="utf-8", errors="replace") if request_path.exists() else ""}
+try:
+    request_status = int(request_status_path.read_text(encoding="utf-8").strip())
+except Exception:
+    request_status = None
 
 text = json.dumps(response, ensure_ascii=False)
 coherent = "Tokyo" in text or "東京" in text
@@ -211,7 +220,7 @@ has_source = "/flashinfer-src" in server_log
 has_vosplit = "vo_split=True" in server_log
 unsupported = "Unsupported max_mma_kv: 0" in server_log
 
-status = "GREEN" if coherent and geometry_lines and wrapper_lines and has_binary and has_source and has_vosplit and not unsupported else "RED"
+status = "GREEN" if request_status == 0 and coherent and geometry_lines and wrapper_lines and has_binary and has_source and has_vosplit and not unsupported else "RED"
 summary = [
     "# SGLang Gemma 4 E4B Rung 0 Smoke",
     "",
@@ -226,6 +235,7 @@ summary = [
     f"- Wrapper geometry lines: `{len(wrapper_lines)}`",
     f"- Binary proof lines present: `{has_binary}`",
     f"- FlashInfer source paths present: `{has_source}`",
+    f"- Request curl status: `{request_status}`",
     f"- Unsupported max_mma_kv: `{unsupported}`",
     f"- Coherent Tokyo answer: `{coherent}`",
     "",
