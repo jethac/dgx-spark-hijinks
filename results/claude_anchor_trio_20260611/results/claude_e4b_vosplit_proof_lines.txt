@@ -1,0 +1,100 @@
+1:OVERLAY_CHECK vllm.__file__= /opt/vllm_overlay/vllm/__init__.py
+2:OVERLAY_CHECK flashinfer= /opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py
+3:EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+10:(APIServer pid=1) INFO 06-11 00:25:32 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-e4b-it'], 'gpu_memory_utilization': 0.72, 'language_model_only': True, 'max_num_batched_tokens': 4096}
+11:(APIServer pid=1) WARNING 06-11 00:25:32 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+15:(APIServer pid=1) INFO 06-11 00:25:37 [config.py:112] Gemma4 has heterogeneous head dimensions (head_dim=256, global_head_dim=512) and VLLM_FLASHINFER_VOSPLIT is set: forcing FLASHINFER with the FA2 VO split instead of TRITON_ATTN.
+27:(EngineCore pid=190) INFO 06-11 00:25:51 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+28:(EngineCore pid=190) INFO 06-11 00:25:51 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+47:(EngineCore pid=190) INFO 06-11 00:29:01 [flashinfer.py:1411] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+52:(EngineCore pid=190) INFO 06-11 00:29:03 [kv_cache_utils.py:1790] GPU KV cache size: 1,717,333 tokens
+55:(EngineCore pid=190) WARNING 06-11 00:29:05 [import_utils.py:408] Traceback (most recent call last):
+73:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199] EngineCore failed to start.
+74:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199] Traceback (most recent call last):
+75:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1168, in run_engine_core
+76:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+77:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+78:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+79:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+80:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+81:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 934, in __init__
+82:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     super().__init__(
+83:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 132, in __init__
+84:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+85:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+86:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+87:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+88:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+89:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 294, in _initialize_kv_caches
+90:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     self.model_executor.initialize_from_config(kv_cache_configs)
+91:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/abstract.py", line 124, in initialize_from_config
+92:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     compilation_times: list[CompilationTimes] = self.collective_rpc(
+93:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]                                                 ^^^^^^^^^^^^^^^^^^^^
+94:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/uniproc_executor.py", line 92, in collective_rpc
+95:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     result = run_method(self.driver_worker, method, args, kwargs)
+96:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+97:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/serial_utils.py", line 510, in run_method
+98:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+99:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+100:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+101:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+102:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+103:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_worker.py", line 626, in compile_or_warm_up_model
+104:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     kernel_warmup(self)
+105:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/warmup/kernel_warmup.py", line 100, in kernel_warmup
+106:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     worker.model_runner._dummy_run(
+107:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+108:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+109:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+110:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_model_runner.py", line 5897, in _dummy_run
+111:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     outputs = self.model(
+112:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]               ^^^^^^^^^^^
+113:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/cuda_graph.py", line 254, in __call__
+114:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self.runnable(*args, **kwargs)
+115:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+116:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+117:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self._call_impl(*args, **kwargs)
+118:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+119:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+120:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return forward_call(*args, **kwargs)
+121:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+122:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 1590, in forward
+123:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     hidden_states = self.language_model.model(
+124:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+125:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/decorators.py", line 520, in __call__
+126:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self.aot_compiled_fn(self, *args, **kwargs)
+127:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+128:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 224, in __call__
+129:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self.fn(*args, **kwargs)
+130:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^
+131:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4.py", line 1311, in forward
+132:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     def forward(
+133:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/caching.py", line 217, in __call__
+134:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self.optimized_call(*args, **kwargs)
+135:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+136:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "<string>", line 297, in execution_fn
+137:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "<string>", line 31, in __vllm_inlined_submods__11
+138:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/_ops.py", line 1269, in __call__
+139:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return self._op(*args, **kwargs)
+140:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+141:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/kv_transfer_utils.py", line 40, in wrapper
+142:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return func(*args, **kwargs)
+143:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+144:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/attention.py", line 834, in unified_attention_with_output
+145:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     self.impl.forward(
+146:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2791, in forward
+147:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     self._run_vo_split_prefill(
+148:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2287, in _run_vo_split_prefill
+149:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     wrapper.run(
+150:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/api_logging.py", line 2333, in _auto_dump_wrapper
+151:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     return _inner(*args, **kwargs)
+152:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^
+153:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 2602, in run
+154:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     self._cached_module.paged_run(*run_args)
+155:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 720, in paged_run
+156:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]     paged_run_func(
+157:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199]   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+158:(EngineCore pid=190) ERROR 06-11 00:29:59 [core.py:1199] RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+160:(EngineCore pid=190) Traceback (most recent call last):
+250:(EngineCore pid=190) RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+252:(APIServer pid=1) Traceback (most recent call last):

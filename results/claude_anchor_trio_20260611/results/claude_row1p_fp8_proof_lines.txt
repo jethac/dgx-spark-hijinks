@@ -1,0 +1,10 @@
+1:OVERLAY_CHECK vllm.__file__= /opt/vllm_overlay/vllm/__init__.py
+2:OVERLAY_CHECK flashinfer= /opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py
+3:EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+10:(APIServer pid=1) INFO 06-11 00:11:58 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'gpu_memory_utilization': 0.72, 'kv_cache_dtype': 'fp8_e4m3', 'language_model_only': True}
+11:(APIServer pid=1) WARNING 06-11 00:11:58 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+15:(APIServer pid=1) INFO 06-11 00:12:04 [config.py:174] Gemma4 model has heterogeneous head dimensions (head_dim=256, global_head_dim=512). Forcing TRITON_ATTN backend to prevent mixed-backend numerical divergence.
+27:(EngineCore pid=190) INFO 06-11 00:12:17 [cuda.py:341] Using AttentionBackendEnum.TRITON_ATTN backend.
+29:(EngineCore pid=190) WARNING 06-11 00:12:17 [import_utils.py:408] Traceback (most recent call last):
+44:(EngineCore pid=190) INFO 06-11 00:12:18 [cuda.py:341] Using AttentionBackendEnum.TRITON_ATTN backend.
+66:(EngineCore pid=190) INFO 06-11 00:20:43 [kv_cache_utils.py:1790] GPU KV cache size: 125,362 tokens

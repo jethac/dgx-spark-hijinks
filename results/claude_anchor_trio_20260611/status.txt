@@ -1,0 +1,17 @@
+RUN_START 2026-06-11T08:59:02+09:00 OVERLAY_HEAD=9759e3b06baa85db93e10ecc0a8afdc4199f449b IMAGE=jethac-vllm-aeon-gemma4:e08a6f3ae-rebuiltc-fb7d62ea-sm121a-r8
+OVERLAY_SO_COUNT=2 OVERLAY_REAL_SO=0
+CORPUS_MD5=abb63f0e65247a25f870d3f2d57563ff
+ROW=row0_bf16 EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row0_bf16 READY_RC=0 READY_WALL=529
+ROW=row0_bf16 PPL_RC=0 CTX=8191 PPL_WALL=546
+ROW=row0_bf16 GATES_RC=0 GATES_WALL=763
+ROW=row0_bf16 DONE ROW_WALL=765
+ROW=row1p_fp8 EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=row1p_fp8 READY_RC=0 READY_WALL=579
+ROW=row1p_fp8 PPL_RC=0 CTX=8191 PPL_WALL=595
+ROW=row1p_fp8 GATES_RC=0 GATES_WALL=812
+ROW=row1p_fp8 DONE ROW_WALL=814
+ROW=e4b_vosplit EXT_PATH=/opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+ROW=e4b_vosplit READY_RC=3 READY_WALL=287
+ROW=e4b_vosplit VERDICT=CRASHED_OR_NOT_READY READY_RC=3
+TRIO_DONE TOTAL_WALL=1866

@@ -1,0 +1,44 @@
+{
+  "schema": "claude-anchor-trio-gates/v1",
+  "model": "gemma4-31b-it",
+  "first_token_gate": {
+    "wall_s": 11.255888007988688,
+    "text": "The NVIDIA GB200 Grace Blackwell Superchip is a high-performance computing module that integrates one Grace CPU and two Blackwell GPUs via a high-speed interconnect to accelerate massive AI training and inference workloads.",
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 71,
+      "completion_tokens": 42,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop"
+  },
+  "decode_reps": [
+    {
+      "rep": 1,
+      "wall_s": 68.83878251898568,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.718833928089815,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. \n\nAt the highest reaches of the valley, the dawn arri"
+    },
+    {
+      "rep": 2,
+      "wall_s": 68.54783029199461,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7346185708506234,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. \n\nAt the highest reaches of the valley, the dawn arri"
+    },
+    {
+      "rep": 3,
+      "wall_s": 68.5571181300038,
+      "completion_tokens": 256,
+      "prompt_tokens": 42,
+      "decode_tok_per_s_incl_prefill": 3.7341126199988626,
+      "finish_reason": "length",
+      "text_head": "The world begins not with a shout, but with a slow, silver exhale. \n\nAt the highest reaches of the valley, the dawn arri"
+    }
+  ]
+}
