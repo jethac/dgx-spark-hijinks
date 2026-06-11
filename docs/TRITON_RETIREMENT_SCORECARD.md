@@ -31,11 +31,11 @@ cells use the post-merge e2-vllm head image/install.
   FI identical params: Spark for E4B (vs banked 19.03/0.317s/92.04),
   12B G4, 26B, 31B; P520-local pairs for 1B/4B/E2B (paired on-box, not
   cross-box).
-- I2 capability unlock (argued + measured): Triton CANNOT read quantized
-  KV at all; every fp8/nvfp4 row in the campaign (1.70x/2.8x/3.57x
-  capacity, fp8-beats-bf16 quality) is conditional on the FlashInfer route.
-  Retirement is the precondition, stated as such - not double-counted as a
-  speed number.
+- I2 capability unlock (argued + measured, NARROWED 2026-06-12 after the
+  overnight ladder): Triton CAN serve fp8 KV (26B fp8 row green at 2.04x on
+  the forced-Triton route) but CANNOT read NVFP4/packed-FP4 nor serve the
+  D512 VO-split path. The NVFP4 rows (3.19x-3.57x capacity) are conditional
+  on the FlashInfer route; fp8 rows are not. State it exactly that way.
 - I3 the 31B Triton-tax adjudication: fresh bf16-Triton C1 cell to confirm
   or retire the suspect 4.6532 (vs FI 4.6132 bitwise reproduction).
 - I4 mm speed pair on at least one size per family (4B G3, E4B G4 on P520;
@@ -55,3 +55,16 @@ Verdict rule: scorecard PASS = R1-R5 all green across sizes -> retirement
 stands, improvement table published. Any red -> revert the relevant flip
 commit (text: 20196b5946 revert rule banked; mm: pre-merge branch simply
 not merged), red ships with verbatim evidence.
+
+## Adjudication log
+
+- 2026-06-12 ~03:00 (Claude): Amendment-3 revert rule TRIPPED by g412b_bf16
+  RED, adjudicated NO REVERT. Evidence: pydantic ModelConfig crash from
+  Transformers not knowing `gemma4_unified`, BEFORE backend selection,
+  byte-identical across bf16/nvfp4/fp8 (incl. the Triton-routed fp8 cell) on
+  an image (r9) that predates the flip commit. Not route evidence. Both bf16
+  rows that served are fully green. CONSEQUENCE: G4-12B is a NAMED OPEN BOX -
+  retirement is NOT claimed for that size until a Transformers-bumped image
+  (r10 spec: r9 recipe + transformers >= the version knowing gemma4_unified;
+  same provenance gates) serves its paired cells green. Jetha may overrule
+  the no-revert call in the morning.
