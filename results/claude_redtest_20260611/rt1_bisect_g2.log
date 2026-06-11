@@ -1,0 +1,57 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.2.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+{
+  "batch_size": 9,
+  "capability": [
+    12,
+    1
+  ],
+  "conclusion": "(qk=512, vo=256) failed: K1 needs the smaller VO split or plan K2 (kernel surgery).",
+  "device": "NVIDIA GB10",
+  "error": "RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /fisrc/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0",
+  "error_traceback_tail": "Traceback (most recent call last):\n  File \"/work/vllm_gemma4_mixed_kv_probes.py\", line 375, in probe_fa2_vo_split_d512\n    outs.append(wrapper.run(q, (k_paged, v_half), **run_kwargs))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/fisrc/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/fisrc/flashinfer/prefill.py\", line 2602, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/fisrc/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 929, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /fisrc/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0\n",
+  "finished_utc": "2026-06-11T02:52:59.722847+00:00",
+  "flashinfer": "0.6.13",
+  "flashinfer_source_paths": {
+    "csrc": "/fisrc/csrc",
+    "include": "/fisrc/include",
+    "source_root": "/fisrc"
+  },
+  "geometry": "31b",
+  "gqa_group": 2,
+  "kv_dtype": "bf16",
+  "kv_len": 2,
+  "num_kv_heads": 16,
+  "num_qo_heads": 32,
+  "ok": false,
+  "page_size": 32,
+  "plan_parity": true,
+  "plan_parity_kwargs": [
+    "disable_split_kv",
+    "fixed_split_size",
+    "logits_soft_cap",
+    "o_data_type",
+    "sm_scale",
+    "window_left"
+  ],
+  "probe": "fa2-vo-split-d512-vo256",
+  "qo_len": 2,
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-11T02:52:28.865611+00:00",
+  "torch": "2.12.0.dev20260408+cu130",
+  "workspace_mb": 128,
+  "wrapper_backend": "fa2"
+}
