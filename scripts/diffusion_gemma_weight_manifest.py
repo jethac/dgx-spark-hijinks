@@ -140,7 +140,7 @@ def classify_key(name: str) -> str:
     if name.startswith(DECODER_PREFIX + "self_conditioning."):
         return "self_conditioning"
     if name.startswith(DECODER_PREFIX):
-        return "decoder_duplicate_backbone"
+        return "decoder_backbone_candidate"
     return "other"
 
 
@@ -226,6 +226,7 @@ def build_manifest(model_dir: Path, revision: str | None, warnings: list[str]) -
         "category_counts": dict(sorted(categories.items())),
         "mapped_backbone_key_count": len(mapped_sources),
         "duplicate_mapped_key_count": len(duplicates),
+        "decoder_backbone_candidate_key_count": categories["decoder_backbone_candidate"],
         "decoder_duplicate_backbone_key_count": len(duplicate_decoder_sources),
         "self_conditioning_key_count": len(self_conditioning),
         "vision_quarantined_key_count": len(vision),
@@ -241,8 +242,10 @@ def build_manifest(model_dir: Path, revision: str | None, warnings: list[str]) -
     ok = bool(keys) and categories["encoder_backbone"] > 0 and categories["self_conditioning"] > 0
     if categories["vision_quarantined"] == 0:
         result["warnings"].append("no vision keys found to quarantine")
-    if categories["decoder_duplicate_backbone"] == 0:
-        result["warnings"].append("no decoder duplicate backbone keys found")
+    if categories["decoder_backbone_candidate"] == 0:
+        result["warnings"].append("no decoder backbone candidate keys found")
+    if not duplicate_decoder_sources:
+        result["warnings"].append("no true encoder/decoder duplicate backbone keys found")
     if categories["self_conditioning"] == 0:
         result["warnings"].append("no decoder self-conditioning keys found")
     if not keys:
