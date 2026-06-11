@@ -207,12 +207,22 @@ echo "${request_status}" >"${OUT_DIR}/request_status.txt"
 
 capture_docker_logs "${container}" || true
 
-python3 - <<PY
+OUT_DIR_ENV="${OUT_DIR}" \
+RUN_ID_ENV="${RUN_ID}" \
+MODEL_ENV="${MODEL}" \
+SGLANG_COMMIT_ENV="${SGLANG_COMMIT}" \
+FLASHINFER_COMMIT_ENV="${FLASHINFER_COMMIT}" \
+python3 - <<'PY'
 import json
+import os
 import re
 from pathlib import Path
 
-out = Path("${OUT_DIR}")
+out = Path(os.environ["OUT_DIR_ENV"])
+run_id = os.environ["RUN_ID_ENV"]
+model = os.environ["MODEL_ENV"]
+sglang_commit = os.environ["SGLANG_COMMIT_ENV"]
+flashinfer_commit = os.environ["FLASHINFER_COMMIT_ENV"]
 server_log = (out / "server.log").read_text(encoding="utf-8", errors="replace")
 request_path = out / "generate.json"
 request_status_path = out / "request_status.txt"
@@ -243,10 +253,10 @@ summary = [
     "",
     f"Status: {status}",
     "",
-    f"- Run: `${RUN_ID}`",
-    f"- Model: `${MODEL}`",
-    f"- SGLang commit: `${SGLANG_COMMIT}`",
-    f"- FlashInfer commit: `${FLASHINFER_COMMIT}`",
+    f"- Run: `{run_id}`",
+    f"- Model: `{model}`",
+    f"- SGLang commit: `{sglang_commit}`",
+    f"- FlashInfer commit: `{flashinfer_commit}`",
     f"- VO split requested: `{has_vosplit}`",
     f"- Geometry lines: `{len(geometry_lines)}`",
     f"- Wrapper geometry lines: `{len(wrapper_lines)}`",
