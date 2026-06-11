@@ -132,9 +132,14 @@ Read order for full context: this doc → docs/OVERNIGHT_LADDER_PLAN_20260612.md
 
 ## 5. Immediate work queue (in priority order)
 
-1. **Check the mm-retire workstream** (was IN FLIGHT at handover): an agent
-   was building `~/vllm-e2` on the P520, then running image-grounded mm
-   serving smokes (Gemma 3 4B-it + Gemma 4 E4B-it × bf16/nvfp4, FlashInfer
+1. **Check the mm-retire workstream** (was IN FLIGHT at handover): the
+   flip implementation + tests are SAFE on pushed branch
+   `spark/hijinks-e2-mm-retire` @ 9766264. The P520 build runs DETACHED
+   under WSL systemd via `~/b_e2_supervisor.sh` (log `~/b_e2_supervisor.log`)
+   and CONTINUES after the Claude session pauses - HARVEST it, don't
+   restart: check the supervisor log first, then `~/vllm_e2_build_20260612.log`,
+   then whether the supervisor proceeded into the smokes. The planned smokes:
+   image-grounded mm serving (Gemma 3 4B-it + Gemma 4 E4B-it × bf16/nvfp4, FlashInfer
    mm route vs Triton route) from branch `spark/hijinks-e2-mm-retire`
    (UNMERGED — merge gate = smokes green). Look for results in
    results/p520_mm_retirement_smokes_20260612/, ~/mm_smoke_20260612/, and
