@@ -207,74 +207,9 @@ echo "${request_status}" >"${OUT_DIR}/request_status.txt"
 
 capture_docker_logs "${container}" || true
 
-OUT_DIR_ENV="${OUT_DIR}" \
-RUN_ID_ENV="${RUN_ID}" \
-MODEL_ENV="${MODEL}" \
-SGLANG_COMMIT_ENV="${SGLANG_COMMIT}" \
-FLASHINFER_COMMIT_ENV="${FLASHINFER_COMMIT}" \
-python3 - <<'PY'
-import json
-import os
-import re
-from pathlib import Path
-
-out = Path(os.environ["OUT_DIR_ENV"])
-run_id = os.environ["RUN_ID_ENV"]
-model = os.environ["MODEL_ENV"]
-sglang_commit = os.environ["SGLANG_COMMIT_ENV"]
-flashinfer_commit = os.environ["FLASHINFER_COMMIT_ENV"]
-server_log = (out / "server.log").read_text(encoding="utf-8", errors="replace")
-request_path = out / "generate.json"
-request_status_path = out / "request_status.txt"
-try:
-    response = json.loads(request_path.read_text(encoding="utf-8"))
-except Exception as exc:
-    response = {"parse_error": repr(exc), "raw": request_path.read_text(encoding="utf-8", errors="replace") if request_path.exists() else ""}
-try:
-    request_status = int(request_status_path.read_text(encoding="utf-8").strip())
-except Exception:
-    request_status = None
-
-text = json.dumps(response, ensure_ascii=False)
-coherent = "Tokyo" in text or "東京" in text
-geometry_lines = [line for line in server_log.splitlines() if "SGLang Gemma4 FlashInfer geometry" in line]
-wrapper_lines = [line for line in server_log.splitlines() if "SGLang FlashInfer wrapper geometries" in line]
-has_binary = "binary_md5 " in server_log
-has_source = "/flashinfer-src" in server_log
-has_vosplit = (
-    "SGLang FlashInfer VO split enabled" in server_log
-    and "extend_paged_vosplit" in server_log
-)
-unsupported = "Unsupported max_mma_kv: 0" in server_log
-
-status = "GREEN" if request_status == 0 and coherent and geometry_lines and wrapper_lines and has_binary and has_source and has_vosplit and not unsupported else "RED"
-summary = [
-    "# SGLang Gemma 4 E4B Rung 0 Smoke",
-    "",
-    f"Status: {status}",
-    "",
-    f"- Run: `{run_id}`",
-    f"- Model: `{model}`",
-    f"- SGLang commit: `{sglang_commit}`",
-    f"- FlashInfer commit: `{flashinfer_commit}`",
-    f"- VO split requested: `{has_vosplit}`",
-    f"- Geometry lines: `{len(geometry_lines)}`",
-    f"- Wrapper geometry lines: `{len(wrapper_lines)}`",
-    f"- Binary proof lines present: `{has_binary}`",
-    f"- FlashInfer source paths present: `{has_source}`",
-    f"- Request curl status: `{request_status}`",
-    f"- Unsupported max_mma_kv: `{unsupported}`",
-    f"- Coherent Tokyo answer: `{coherent}`",
-    "",
-    "## Response",
-    "",
-    "```json",
-    json.dumps(response, ensure_ascii=False, indent=2),
-    "```",
-]
-if geometry_lines:
-    summary += ["", "## Geometry Samples", ""]
-    summary += [f"- `{line[:500]}`" for line in geometry_lines[:8]]
-(out / "summary.md").write_text("\n".join(summary) + "\n", encoding="utf-8")
-raise SystemExit(0 if status == "GREEN" else 1)
-PY
+python3 scripts/summarize_sglang_gemma4_e4b_rung0.py \
+  --out-dir "${OUT_DIR}" \
+  --run-id "${RUN_ID}" \
+  --model "${MODEL}" \
+  --sglang-commit "${SGLANG_COMMIT}" \
+  --flashinfer-commit "${FLASHINFER_COMMIT}"
