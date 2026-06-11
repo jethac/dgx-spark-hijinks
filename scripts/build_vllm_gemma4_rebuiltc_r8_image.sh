@@ -107,6 +107,8 @@ RUN test "$(cat /opt/jethac-vllm/.spark_build_source_rev)" = "${VLLM_REF}"
 
 WORKDIR /opt/jethac-vllm
 
+RUN find /opt/jethac-vllm/vllm -type l -name '*.so' -print -delete
+
 ENV VLLM_MAIN_CUDA_VERSION=13.0 \
     VLLM_VERSION_OVERRIDE=0.1.dev1+g${VLLM_SHORT_REF} \
     SETUPTOOLS_SCM_PRETEND_VERSION=0.1.dev1+g${VLLM_SHORT_REF} \
