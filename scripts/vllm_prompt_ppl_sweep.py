@@ -150,14 +150,19 @@ def score_response(response: dict[str, Any], expected_token_ids: list[int]) -> d
 
     scored = []
     missing_positions = []
+    # Per-position logprobs aligned with expected_token_ids; position 0 is not
+    # a language-modeling target and stays None, as do unrecoverable positions.
+    token_logprobs: list[float | None] = [None]
     # The first prompt token has no previous context, so it is not a language
     # modeling target. Score positions 1..N-1.
     for index, token_id in enumerate(expected_token_ids[1:], start=1):
         logprob = supplied_token_logprob(prompt_logprobs[index], token_id)
         if logprob is None or not math.isfinite(logprob):
             missing_positions.append(index)
+            token_logprobs.append(None)
             continue
         scored.append(logprob)
+        token_logprobs.append(logprob)
 
     if not scored:
         raise ValueError("no supplied prompt tokens had recoverable logprobs")
@@ -174,10 +179,16 @@ def score_response(response: dict[str, Any], expected_token_ids: list[int]) -> d
         "mean_nll_nats": mean_nll,
         "ppl": math.exp(mean_nll) if mean_nll < 700 else float("inf"),
         "usage": response.get("usage"),
+        "token_logprobs": token_logprobs,
     }
 
 
-def run_context(args: argparse.Namespace, token_ids: list[int], ctx: int) -> dict[str, Any]:
+def run_context(
+    args: argparse.Namespace,
+    token_ids: list[int],
+    ctx: int,
+    tokenizer: Any = None,
+) -> dict[str, Any]:
     ctx_tokens = trim_tokens(token_ids, ctx)
     endpoint = args.url.rstrip("/") + "/v1/completions"
     payload = completion_payload(
@@ -196,7 +207,35 @@ def run_context(args: argparse.Namespace, token_ids: list[int], ctx: int) -> dic
     )
     elapsed_s = time.perf_counter() - started
     score = score_response(response, ctx_tokens)
+    token_logprobs = score.pop("token_logprobs")
+    dump_path = None
+    if args.dump_token_logprobs:
+        dump_dir = Path(args.dump_token_logprobs)
+        dump_dir.mkdir(parents=True, exist_ok=True)
+        dump_path = str(dump_dir / f"{args.run_id}_ctx{ctx}_tokens.json")
+        token_strs = (
+            tokenizer.convert_ids_to_tokens(ctx_tokens) if tokenizer is not None else None
+        )
+        Path(dump_path).write_text(
+            json.dumps(
+                {
+                    "schema": "vllm-prompt-token-logprobs/v1",
+                    "run_id": args.run_id,
+                    "ctx": ctx,
+                    "model": args.model,
+                    "kv_cache_dtype": args.kv_cache_dtype,
+                    "container_image": args.container_image,
+                    "mean_logprob": score["mean_logprob"],
+                    "token_ids": ctx_tokens,
+                    "token_strs": token_strs,
+                    "token_logprobs": token_logprobs,
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     return {
+        "token_logprobs_dump": dump_path,
         "ctx": ctx,
         "endpoint": endpoint,
         "elapsed_s": elapsed_s,
@@ -273,7 +312,7 @@ def run_sweep(args: argparse.Namespace) -> dict[str, Any]:
         "ok": False,
     }
     for ctx in args.ctx:
-        report["contexts"].append(run_context(args, token_ids, ctx))
+        report["contexts"].append(run_context(args, token_ids, ctx, tokenizer=tokenizer))
     report["finished_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     report["ok"] = all(row["score"]["ok"] for row in report["contexts"])
     return report
@@ -336,6 +375,10 @@ def main() -> int:
     parser.add_argument("--request-attempts", type=int, default=3)
     parser.add_argument("--retry-sleep-s", type=float, default=10.0)
     parser.add_argument("--add-special-tokens", action="store_true")
+    parser.add_argument(
+        "--dump-token-logprobs",
+        help="directory for per-context per-token logprob dumps (stratification arm)",
+    )
     parser.add_argument("--output")
     parser.add_argument("--compare-fp8")
     parser.add_argument("--compare-nvfp4")
