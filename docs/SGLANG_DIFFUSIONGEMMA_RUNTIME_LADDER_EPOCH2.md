@@ -109,11 +109,15 @@ Follow-up diagnostics:
   `--dllm-algorithm-config`, is semantically runnable on broad chat prompts
   such as TCP/UDP, but is not byte-deterministic under the zero-bug gate and
   still has a short-prompt empty-output failure.
+- `results/sglang_dgemma_dgr2_revised_text_quality_20260612T0847JST/summary.md`
+  defines and passes the revised scoped text-only gate: direct OpenAI chat
+  prompts for Tokyo, 2+2, and a DGX Spark use sentence are non-empty,
+  byte-stable across two repeats, and semantically correct.
 
 Do not include image prompts until the vision-path warning group has its own
-audit. Do not climb to DG-R3 as a quality claim until a revised text-only DG-R2
-gate is explicitly defined and passes; performance experiments can only be
-labeled as post-DG-R2 diagnostics, not support claims.
+audit. DG-R3 may now proceed only under the revised text-only DG-R2 scope above;
+the original terse-prompt baseline remains RED and should stay cited as a known
+prompt-pathology row rather than hidden.
 
 ### DG-R3: D=512 FlashInfer VO-Split Integration
 

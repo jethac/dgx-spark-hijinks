@@ -1,0 +1,22 @@
+owner=codex-dgr2-revised-text-quality-20260612T084737JST
+timestamp=20260612T0847JST
+repo=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-dgr2-20260611T2344JST
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd
+host=thinkstationpgx-00b4
+available_g_before=115
+docker_ps_before=
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+free_before=
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.2Gi        72Gi        11Mi        44Gi       115Gi
+Swap:           15Gi       497Mi        15Gi
+container=sglang-dgemma-dgr2-revised-20260612T0847JST
+ready=1
+client_rc=0
+docker_ps_after=
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+free_after=
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.2Gi        71Gi        11Mi        44Gi       115Gi
+Swap:           15Gi       496Mi        15Gi
+marker_after=present

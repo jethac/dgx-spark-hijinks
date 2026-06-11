@@ -1,0 +1,1 @@
+{"model_path":"google/diffusiongemma-26B-A4B-it","tokenizer_path":"google/diffusiongemma-26B-A4B-it","is_generation":true,"preferred_sampling_params":null,"weight_version":"default","has_image_understanding":true,"has_audio_understanding":false,"model_type":"diffusion_gemma","architectures":["DiffusionGemmaForBlockDiffusion"]}
