@@ -23,6 +23,7 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   "${IMAGE}" \
   bash -lc '
     set -euo pipefail
+    rm -rf /root/.cache/flashinfer /tmp/flashinfer-cache-*
     python - <<'"'"'PY'"'"'
 import os
 import shutil
