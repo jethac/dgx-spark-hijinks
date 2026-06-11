@@ -1,0 +1,5 @@
+/usr/local/lib/python3.12/dist-packages/torchao/quantization/quant_api.py:1674: SyntaxWarning: invalid escape sequence '\.'
+  """Configuration class for applying different quantization configs to modules or parameters based on their fully qualified names (FQNs).
+W0611 02:36:37.010000 1 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0611 02:36:37.167000 1 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+NVFP4 KV cache: this model ships no calibrated KV scales; auto-calibrating per-layer global scales from the first eager prefill. Disable with SGLANG_FP4_KV_AUTOCALIB=0.

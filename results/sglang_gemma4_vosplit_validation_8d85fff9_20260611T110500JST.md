@@ -77,6 +77,17 @@ Output cosines versus the dequantized-pool torch attention reference:
 - SWA/window: `0.9991498590`
 - decode-as-prefill: `0.9999921918`
 
+SWA residual note: the SWA/window cosine is lower than the global and decode-as-prefill
+rows, but the follow-up mask diagnostic shows it is not a hidden data/scale-factor pairing
+failure. Replaying the same seed against several torch window conventions reproduced the
+original `0.9991498589` only for the `left_only` convention used by the harness; causal
+variants were much worse (`0.9848601818` / `0.9838094115`) and same-length local masking
+collapsed (`0.0074732359`). The residual is therefore the bounded SWA/windowed paged-reader
+numerical difference against the dequantized attention reference, not evidence of a wrong
+window convention or packed-KV layout bug. The absolute error stayed small:
+`max_abs=0.006103515625`, `mean_abs=0.0007735347608104348`. Artifact:
+`results/sglang_vosplit_swa_mask_diag_20260611T113630JST/container.stdout`.
+
 The FlashInfer prefill debug output proves the SGLang reader requested the expected asymmetric module:
 
 ```text
@@ -106,3 +117,13 @@ Green through Block C. This validates SGLang's real `MHATokenToKVPoolFP4.set_kv_
 - SWA/windowed and decode-as-prefill variants.
 
 This is still a weight-free writer/reader gate, not a Gemma 4 serving claim. The next SGLang Gemma 4 step is wrapper-plan dry smoke / serving prep, with the same provenance proof lines and the `8d85fff9` FlashInfer baseline.
+
+## Graph-Gate Decision
+
+The Gemma 3 mixed-KV CUDA graph gate cannot safely collapse to a single `kv_data_type`.
+SGLang's graph planner sets `k_data_type=torch.float8_e4m3fn` and
+`v_data_type=torch.uint8` only when `is_fp8_k_nvfp4_v` is active; that describes true
+per-tensor dtypes for the mixed FP8-K + NVFP4-V pool, not just a pool-container layout.
+Under FlashInfer `8d85fff9`, equal dtypes are now unblocked, but this mixed graph-capture
+site remains a genuine unequal-dtype consumer. Split-dtype module keying still belongs on
+the FlashInfer queue before this graph gate can be green.
