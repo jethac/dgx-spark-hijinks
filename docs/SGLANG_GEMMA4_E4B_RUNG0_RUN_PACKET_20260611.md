@@ -12,7 +12,7 @@ handling the D=512 global layers.
 
 - Parent repo: `jethac/dgx-spark-hijinks@90db5e3` or newer on
   `docs/codex-direction-nvfp4-kv`.
-- SGLang fork: `jethac/sglang@a5c71988c`.
+- SGLang fork: `jethac/sglang@f3ebcf623`.
 - FlashInfer fork: `jethac/flashinfer@8d85fff9`.
 - Model: `google/gemma-4-E4B-it` from the local HF cache.
 - KV mode: default/no KV quantization. Do **not** pass `--kv-cache-dtype`.
@@ -60,7 +60,7 @@ git checkout docs/codex-direction-nvfp4-kv
 git pull --ff-only
 
 git -C third_party/sglang fetch origin
-git -C third_party/sglang checkout 0cb1c2936
+git -C third_party/sglang checkout f3ebcf623
 
 git -C third_party/flashinfer fetch origin
 git -C third_party/flashinfer checkout 8d85fff9
