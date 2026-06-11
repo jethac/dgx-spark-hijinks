@@ -146,3 +146,9 @@ cover audio inputs, not just images. Scope:
 - Same gates as image mm: grounded answers both routes, semantic
   equivalence, repeat-determinism, verbatim transcripts. Any RED = the mm
   flip does not merge (or reverts), audio row named as the reason.
+
+## Protocol patch (07:5x, after mail 0042/0043): multi-phase windows
+
+The marker persists from claim to FINAL release - never cleared between
+phases of one window. Announce phase transitions by APPENDING to the marker
+file content. A partner seeing marker-present may read it for phase/ETA.
