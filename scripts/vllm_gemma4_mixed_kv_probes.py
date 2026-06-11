@@ -205,6 +205,7 @@ def probe_fa2_vo_split_d512(
     qo_len: int = 16,
     kv_len: int = 64,
     batch_size: int = 1,
+    page_size: int = 16,
     plan_parity: bool = False,
     skip_reference: bool = False,
     sm_scale: float | None = None,
@@ -247,7 +248,8 @@ def probe_fa2_vo_split_d512(
     record["num_qo_heads"] = num_qo_heads
     record["num_kv_heads"] = num_kv_heads
     record["gqa_group"] = num_qo_heads // num_kv_heads
-    head_dim_qk, page_size = 512, 16
+    head_dim_qk = 512
+    record["page_size"] = page_size
     num_pages_per_req = (kv_len + page_size - 1) // page_size
     num_pages = num_pages_per_req * batch_size
     total_qo = qo_len * batch_size
@@ -479,6 +481,13 @@ def main() -> int:
     parser.add_argument("--kv-len", type=int, default=64)
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument(
+        "--page-size",
+        type=int,
+        default=16,
+        help="Paged-KV page size. Serving crash dump shows 32; probes "
+        "historically only tested 16.",
+    )
+    parser.add_argument(
         "--plan-parity",
         action="store_true",
         help="Pass vLLM-serving plan() kwargs (sm_scale, window_left, "
@@ -517,9 +526,13 @@ def main() -> int:
             "default": (8, 4),
             "e4b": (8, 2),
             "31b": (32, 16),
+            # What 31B global layers ACTUALLY dispatch in serving (debug
+            # dump 8e3d255): 32 qo / 4 kv heads (group 8), page_size 32.
+            "31b-serving": (32, 4),
         }
         qo_heads, kv_heads = geometry_heads[args.geometry]
         vo_workload_kwargs = dict(
+            page_size=args.page_size,
             wrapper_backend=args.wrapper_backend,
             workspace_mb=args.workspace_mb,
             qo_len=args.qo_len,
