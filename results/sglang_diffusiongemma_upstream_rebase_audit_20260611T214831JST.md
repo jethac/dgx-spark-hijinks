@@ -52,7 +52,8 @@ visible stable release.
 Created SGLang branch:
 
 - `spark/hijinks-024-diffusiongemma-upstream-rebase`
-- head: `41257f07664a3983dfa9ea0625e3842a48e775e5`
+- rebase head: `41257f07664a3983dfa9ea0625e3842a48e775e5`
+- current head after config fix: `0705924c1d`
 
 Base before integration:
 
@@ -63,6 +64,8 @@ Commits added:
 
 - `07fe5ec9d4` cherry-picks upstream `11ffa55479`
 - `41257f0766` removes the local foundation-shell duplicate and fallback config
+- `0705924c1d` sets the missing `is_uniform=True` on the DiffusionGemma
+  `DllmConfig.from_server_args()` branch
 
 Conflict resolution:
 
@@ -112,3 +115,8 @@ foundation shell.
 
 Next gate remains live Spark validation from this branch once the box is free:
 load/serve with the cookbook contract, under GB10 memory guardrails.
+
+Postscript: the first offline validation pass found and fixed one upstream RC
+config bug: `DiffusionGemmaForBlockDiffusion` did not assign `is_uniform` before
+constructing `DllmConfig`. See
+`results/sglang_diffusiongemma_uniform_config_fix_20260611T2207JST.md`.

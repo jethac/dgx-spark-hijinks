@@ -20,6 +20,15 @@ work on that RC implementation. It cherry-picks upstream commit `11ffa55479`
 the registry resolves the architecture only through upstream
 `gemma4_diffusion.py`. See
 `results/sglang_diffusiongemma_upstream_rebase_audit_20260611T214831JST.md`.
+The re-scoped post-rebase ladder is
+`docs/SGLANG_DIFFUSIONGEMMA_RUNTIME_LADDER_EPOCH2.md`.
+
+Follow-up config fix: SGLang `spark/hijinks-024-diffusiongemma-upstream-rebase`
+commit `0705924c1d` sets the missing `is_uniform=True` on the
+DiffusionGemma `DllmConfig.from_server_args()` branch. The provisioned WSL env
+validated that the cookbook architecture now produces `algorithm=Gemma4Renoise`,
+`block_size=256`, `max_running_requests=1`, and `is_uniform=True`; see
+`results/sglang_diffusiongemma_uniform_config_fix_20260611T2207JST.md`.
 
 The earlier DG-S0/DG-S2 scaffold artifacts remain useful as evidence that the
 checkpoint geometry and weight-name contract were understood before the upstream
