@@ -30,6 +30,15 @@ is the shared FlashInfer dispatcher wall from the goal packet.
 
 ## Host Prep
 
+The commands below are captured as an executable helper:
+
+```bash
+REPO_ROOT=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live \
+  bash scripts/run_sglang_gemma4_e4b_rung0_smoke.sh
+```
+
+The expanded form is kept here for review/debugging.
+
 ```bash
 set -euo pipefail
 
