@@ -304,3 +304,54 @@ reason. Per Amendment 3 this is not optional.
 Serving validation on Spark is the claim gate; nothing here upgrades the
 "NOT a support claim" status banner. §6 rows + the knob overlay smoke now
 double as the flipped-default validation.
+
+## 9. Adjudication log
+
+### 2026-06-12 — §8 default flip SCOPED to the Gemma 4 family only (urgent, zero-bug bar)
+
+Adjudication: the Amendment 3 default flip (`20196b5946`) routed knob-unset
+text-only bf16 **Gemma 3** off the upstream FLASH_ATTN default onto
+FlashInfer on CC 12.x. New ground-truth evidence shows that was a
+**regression on sm_120**, so the flip is now scoped to **Gemma 4 only**.
+
+Evidence (`results/p520_gemma3_1b_serving_20260612/` + ledger, mail 0044):
+on sm_120 (RTX 5060 Ti, WSL2) at Gemma 3 1B geometry (d256, SWA window
+512) the FlashInfer backend is numerically wrong for EVERY KV dtype —
+FI-bf16 is +0.221/+1.243/+1.380 nats (C1/C2/C3) off an
+HF-reference/FLASH_ATTN pair that agree to <0.001; FI-fp8
++0.006/+0.159/+0.494; FI-nvfp4 +1.592/+2.436/+2.752 with deterministic
+chat gibberish on a virgin JIT cache. sm_121 is corroborated fine
+(Triton/FI within 0.04 nats across five sizes), but the default must not
+regress sm_120.
+
+Change (`jethac/vllm`, branch `spark/hijinks-e2-flip-scope @ 36c9bbc83c`,
+fast-forwarded into `spark/hijinks-e2-vllm` — same head — both pushed):
+
+- `_spark_route_gemma_bf16_to_flashinfer()` grew a `default_on` parameter:
+  Gemma4Config passes True (Amendment 3 default stands; `=0` escape hatch
+  unchanged); Gemma3Config passes False — knob-unset (and empty-string)
+  Gemma 3 reverts to upstream default routing (FLASH_ATTN where
+  supported).
+- Explicit `VLLM_FLASHINFER_BF16_GEMMA=1` still opts Gemma 3 in for
+  experiments; the route logs a warning that it is known numerically
+  wrong on sm_120 d256/SWA-512.
+- NOT touched: nvfp4/fp8 knob routes, the mm carve-out, all backend-side
+  head>512 selector/VO-split machinery (head>256 is Gemma 4 geometry),
+  the envs.py value semantics (only "0" disables).
+- Test matrix 71 → 74: Gemma 3 knob-unset cell REVERTED to the pre-flip
+  expectation (backend unset), parametrized over CC 12.0/12.1 and
+  comment-marked with the sm_120 finding (the WHY cell); new pins for
+  "empty string is not a Gemma 3 opt-in" and "empty string behaves like
+  unset for Gemma 4". Validation (WSL `~/e2_triton_retire_testenv`,
+  CPU-only, worktree `spark-hijinks-flip-scope` on PYTHONPATH, import
+  provenance verified): selection suite **74/74**, MTP pin suite **9/9**;
+  `py_compile` clean on all four touched files. No mm/audio suites exist
+  on this branch (mm-retire/audio not merged into e2-vllm).
+
+§8's truth-table delta row "Gemma 3 bf16/auto text-only: upstream →
+FLASHINFER" is hereby VOID; the Gemma 4 rows stand. **Gemma 3 re-flip
+gate:** FlashInfer d256/SWA root cause on sm_120 fixed upstream + a green
+truth-referenced rerun (HF-reference or FLASH_ATTN pair) of the
+`p520_gemma3_1b_serving` rows. Until then Gemma 3 stays on upstream
+defaults; the §8 STANDING REVERT RULE continues to apply to the remaining
+(Gemma 4) scope of `20196b5946`.
