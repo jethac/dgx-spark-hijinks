@@ -1,0 +1,26 @@
+{
+  "schema": "hf-bf16-reference-ppl/v1",
+  "model": "google/gemma-3-1b-it",
+  "dtype": "bfloat16",
+  "transformers_attn": "default (sdpa/eager as resolved)",
+  "results": {
+    "c1": {
+      "file": "c1_ppl_corpus.md",
+      "ctx": 8191,
+      "scored_tokens": 8190,
+      "mean_nll_nats": 2.3577769073374544
+    },
+    "c2": {
+      "file": "c2_pride_prejudice_60k.txt",
+      "ctx": 8191,
+      "scored_tokens": 8190,
+      "mean_nll_nats": 3.2139215005914226
+    },
+    "c3": {
+      "file": "c3_hijinks_code_60k.py",
+      "ctx": 8191,
+      "scored_tokens": 8190,
+      "mean_nll_nats": 1.4242850018362714
+    }
+  }
+}

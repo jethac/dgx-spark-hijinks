@@ -1,0 +1,79 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 16960,
+  "container_image": "",
+  "contexts": [
+    {
+      "ctx": 8191,
+      "elapsed_s": 161.6958180810002,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma3-1b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8191,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -1.9187558681364287,
+        "mean_nll_nats": 1.9187558681364287,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8191,
+        "num_scored_tokens": 8190,
+        "ok": true,
+        "ppl": 6.8124775742888,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8191,
+          "prompt_tokens_details": null,
+          "total_tokens": 8192
+        }
+      },
+      "token_logprobs_dump": "/home/jetha/gemma3_1b_serving_20260612/results/token_dumps/fp8_c3/claude_p520_fp8_c3_ctx8191_ctx8191_tokens.json"
+    }
+  ],
+  "elapsed_s": 170.435,
+  "finished_utc": "2026-06-11T21:06:39Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          0
+        ],
+        "comparison_key": "NVIDIA_GeForce_RTX_5060_Ti:sm_120:sms_36",
+        "index": 0,
+        "multi_processor_count": 36,
+        "name": "NVIDIA GeForce RTX 5060 Ti",
+        "total_memory": 17102864384
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.12.0+cu130",
+    "warnings": [
+      "first CUDA device has 36 SMs, which differs from this campaign's 48-SM GB10 reference count; do not compare performance rows across different SM counts."
+    ]
+  },
+  "kv_cache_dtype": "fp8_e4m3",
+  "model": "gemma3-1b-it",
+  "ok": true,
+  "run_id": "claude_p520_fp8_c3_ctx8191",
+  "runtime_ref": "P520 RTX 5060 Ti sm_120 WSL2; jethac/vllm@9759e3b06 editable venv build (TORCH_CUDA_ARCH_LIST=12.0a); jethac/flashinfer@7d5d477b source-tree PYTHONPATH; row=fp8; corpus=c3; p520 gemma3-1b serving window",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-11T21:04:04Z",
+  "text_chars": 55513,
+  "text_files": [
+    "/home/jetha/corpora/hijinks_serving/c3_hijinks_code_60k.py"
+  ],
+  "tokenizer": "google/gemma-3-1b-it",
+  "url": "http://127.0.0.1:8000"
+}

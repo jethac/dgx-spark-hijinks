@@ -1,0 +1,73 @@
+=== GATE 1: vllm import ===
+vllm.__file__ /home/jetha/vllm-hijinks/vllm/__init__.py
+vllm.__version__ 0.1.dev1+g9759e3b06.d20260611
+GATE1_RC=0
+=== GATE 2: stable libtorch extension ===
+EXT_PATH /home/jetha/vllm-hijinks/vllm/_C_stable_libtorch.abi3.so
+GATE2_RC=0
+=== GATE 3: sm_120 cubins in extension ===
+EXT=/home/jetha/vllm-hijinks/vllm/_C_stable_libtorch.abi3.so
+CUOBJDUMP_RC=0
+42
+ELF file    1: _C_stable_libtorch.abi3.1.sm_120a.cubin
+ELF file   10: _C_stable_libtorch.abi3.10.sm_120a.cubin
+ELF file   11: _C_stable_libtorch.abi3.11.sm_120a.cubin
+ELF file   12: _C_stable_libtorch.abi3.12.sm_120a.cubin
+ELF file   13: _C_stable_libtorch.abi3.13.sm_120a.cubin
+     42 sm_120a
+      1 sm_89
+      1 sm_90
+=== GATE 4: nvfp4 linear latch diag (head 128 + 256) ===
+{
+  "env_at_entry": "1",
+  "env_now": "1",
+  "head_dim": 128,
+  "k_dequant_linear": {
+    "cosine": 0.9954829216003418,
+    "max_abs": 0.59375,
+    "mean_abs": 0.07161526381969452
+  },
+  "schema": "nvfp4-linear-latch-diag/v1",
+  "v_dequant_as_linear": {
+    "cosine": 0.9955134391784668,
+    "max_abs": 0.5625,
+    "mean_abs": 0.07092758268117905
+  },
+  "v_dequant_as_swizzled": {
+    "cosine": 0.9461231231689453,
+    "max_abs": 3.2890625,
+    "mean_abs": 0.21608582139015198
+  },
+  "verdict": "writer wrote LINEAR V-SF"
+}
+LATCH128_RC=0
+{
+  "env_at_entry": "1",
+  "env_now": "1",
+  "head_dim": 256,
+  "k_dequant_linear": {
+    "cosine": 0.9954566955566406,
+    "max_abs": 0.59375,
+    "mean_abs": 0.0716998353600502
+  },
+  "schema": "nvfp4-linear-latch-diag/v1",
+  "v_dequant_as_linear": {
+    "cosine": 0.9955009818077087,
+    "max_abs": 0.5625,
+    "mean_abs": 0.07130284607410431
+  },
+  "v_dequant_as_swizzled": {
+    "cosine": 0.9472150206565857,
+    "max_abs": 3.1640625,
+    "mean_abs": 0.21464931964874268
+  },
+  "verdict": "writer wrote LINEAR V-SF"
+}
+LATCH256_RC=0
+=== versions ===
+torch 2.12.0+cu130 cuda 13.0
+flashinfer /home/jetha/flashinfer/flashinfer/__init__.py
+Cuda compilation tools, release 13.0, V13.0.88
+Build cuda_13.0.r13.0/compiler.36424714_0
+name, driver_version, memory.total [MiB]
+NVIDIA GeForce RTX 5060 Ti, 595.79, 16311 MiB
