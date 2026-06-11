@@ -67,13 +67,23 @@ server_log="${OUT_DIR}/server.log"
 request_json="${OUT_DIR}/generate.json"
 summary_md="${OUT_DIR}/summary.md"
 
+capture_docker_logs() {
+  local name="$1"
+  local tmp_log="${server_log}.tmp"
+  if docker logs "${name}" >"${tmp_log}" 2>&1; then
+    mv "${tmp_log}" "${server_log}"
+  else
+    rm -f "${tmp_log}"
+  fi
+}
+
 cleanup() {
   local status=$?
   if docker ps --format '{{.Names}}' | grep -qx "${container}"; then
-    docker logs "${container}" >"${server_log}" 2>&1 || true
+    capture_docker_logs "${container}" || true
     docker rm -f "${container}" >/dev/null 2>&1 || true
   elif [[ -s "${cid_file}" ]]; then
-    docker logs "$(cat "${cid_file}")" >"${server_log}" 2>&1 || true
+    capture_docker_logs "$(cat "${cid_file}")" || true
     docker rm -f "$(cat "${cid_file}")" >/dev/null 2>&1 || true
   fi
   docker ps >"${OUT_DIR}/docker_ps_after.txt" 2>&1 || true
@@ -160,7 +170,11 @@ for _ in $(seq 1 "${attempts}"); do
   sleep 5
 done
 
-docker logs "${container}" >"${server_log}" 2>&1 || true
+if [[ "${ready}" != "1" ]] && curl -fsS "http://127.0.0.1:${PORT}/model_info" >/dev/null 2>&1; then
+  ready=1
+fi
+
+capture_docker_logs "${container}" || true
 
 if [[ "${ready}" != "1" ]]; then
   {
@@ -191,7 +205,7 @@ request_status=${PIPESTATUS[0]}
 set -e
 echo "${request_status}" >"${OUT_DIR}/request_status.txt"
 
-docker logs "${container}" >"${server_log}" 2>&1 || true
+capture_docker_logs "${container}" || true
 
 python3 - <<PY
 import json
@@ -217,7 +231,10 @@ geometry_lines = [line for line in server_log.splitlines() if "SGLang Gemma4 Fla
 wrapper_lines = [line for line in server_log.splitlines() if "SGLang FlashInfer wrapper geometries" in line]
 has_binary = "binary_md5 " in server_log
 has_source = "/flashinfer-src" in server_log
-has_vosplit = "vo_split=True" in server_log
+has_vosplit = (
+    "SGLang FlashInfer VO split enabled" in server_log
+    and "extend_paged_vosplit" in server_log
+)
 unsupported = "Unsupported max_mma_kv: 0" in server_log
 
 status = "GREEN" if request_status == 0 and coherent and geometry_lines and wrapper_lines and has_binary and has_source and has_vosplit and not unsupported else "RED"
