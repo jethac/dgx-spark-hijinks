@@ -1,0 +1,43 @@
+{
+  "batch_size": 9,
+  "capability": [
+    12,
+    0
+  ],
+  "conclusion": "(qk=512, vo=256) with fp8_e4m3 KV failed - likely the FA2 trait guard's extra term for 1-byte KV dtypes rejecting the pair at JIT time. The verbatim error above is the result; try the smaller VO split once.",
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "error": "RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /home/jetha/flashinfer/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.",
+  "error_traceback_tail": "Traceback (most recent call last):\n  File \"/home/jetha/hijinks/scripts/vllm_gemma4_mixed_kv_probes.py\", line 375, in probe_fa2_vo_split_d512\n    outs.append(wrapper.run(q, (k_paged, v_half), **run_kwargs))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jetha/flashinfer/flashinfer/api_logging.py\", line 2333, in _auto_dump_wrapper\n    return _inner(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jetha/flashinfer/flashinfer/prefill.py\", line 2627, in run\n    self._cached_module.paged_run(*run_args)\n  File \"/home/jetha/flashinfer/flashinfer/prefill.py\", line 720, in paged_run\n    paged_run_func(\n  File \"python/tvm_ffi/cython/function.pxi\", line 968, in tvm_ffi.core.Function.__call__\nRuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /home/jetha/flashinfer/include/flashinfer/attention/prefill.cuh:3215: FlashInfer Internal Error: Invalid configuration : NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1 please create an issue (https://github.com/flashinfer-ai/flashinfer/issues) and report the issue to the developers.\n",
+  "finished_utc": "2026-06-11T08:20:45.955114+00:00",
+  "flashinfer": "0.0.0+unknown",
+  "flashinfer_source_paths": {
+    "csrc": "/home/jetha/flashinfer/csrc",
+    "include": "/home/jetha/flashinfer/include",
+    "source_root": "/home/jetha/flashinfer"
+  },
+  "geometry": "31b-serving",
+  "gqa_group": 8,
+  "kv_dtype": "fp8_e4m3",
+  "kv_len": 2,
+  "num_kv_heads": 4,
+  "num_qo_heads": 32,
+  "ok": false,
+  "page_size": 32,
+  "plan_parity": true,
+  "plan_parity_kwargs": [
+    "disable_split_kv",
+    "fixed_split_size",
+    "logits_soft_cap",
+    "o_data_type",
+    "sm_scale",
+    "window_left"
+  ],
+  "probe": "fa2-vo-split-d512-vo256-fp8kv",
+  "qo_len": 2,
+  "run_scales_passed": true,
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-11T08:19:22.786387+00:00",
+  "torch": "2.12.0+cu130",
+  "workspace_mb": 128,
+  "wrapper_backend": "fa2"
+}

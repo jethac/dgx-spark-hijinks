@@ -1,0 +1,46 @@
+{
+  "batch_size": 9,
+  "capability": [
+    12,
+    0
+  ],
+  "conclusion": "ran to completion with finite output (workload-regime / crash-repro mode; fp32 reference skipped)",
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "finished_utc": "2026-06-11T08:12:22.470875+00:00",
+  "flashinfer": "0.0.0+unknown",
+  "flashinfer_source_paths": {
+    "csrc": "/home/jetha/flashinfer/csrc",
+    "include": "/home/jetha/flashinfer/include",
+    "source_root": "/home/jetha/flashinfer"
+  },
+  "geometry": "31b-serving",
+  "gqa_group": 8,
+  "kv_dtype": "bf16",
+  "kv_len": 2,
+  "num_kv_heads": 4,
+  "num_qo_heads": 32,
+  "ok": true,
+  "output_shape": [
+    18,
+    32,
+    512
+  ],
+  "page_size": 16,
+  "plan_parity": true,
+  "plan_parity_kwargs": [
+    "disable_split_kv",
+    "fixed_split_size",
+    "logits_soft_cap",
+    "o_data_type",
+    "sm_scale",
+    "window_left"
+  ],
+  "probe": "fa2-vo-split-d512-vo256",
+  "qo_len": 2,
+  "reference": "skipped",
+  "schema": "vllm-gemma4-mixed-kv-probe/v1",
+  "started_utc": "2026-06-11T08:12:21.713644+00:00",
+  "torch": "2.12.0+cu130",
+  "workspace_mb": 128,
+  "wrapper_backend": "fa2"
+}
