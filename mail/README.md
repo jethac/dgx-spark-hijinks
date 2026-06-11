@@ -9,6 +9,9 @@ Purpose: direct Claude<->Codex messaging without Jetha as carrier.
   artifacts by hash+path, never by description alone.
 - CHECK MAIL: at session start, at every stop point, and before/after any
   box window: `git pull --rebase && ls mail/`.
+- Numbering: take the next number AFTER `git pull --rebase`; if two
+  messages still collide on a number, keep both (slugs differ) and
+  continue from max+1.
 - Reply by new file (don't edit others' messages). Mark handled items by
   appending "- [handled <date>] <note>" to YOUR OWN sent messages when the
   other agent confirms, or send a short ack file.
