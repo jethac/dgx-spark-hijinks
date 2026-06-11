@@ -26,7 +26,7 @@ set -uo pipefail
 R=$HOME/audio_mm_20260612
 A=$R/assets
 W=/mnt/b/workshop/wsl_sm120
-PORT=8000
+PORT=8078  # distinct from the ladder (8000) and the image mm smokes (8077)
 S=$R/status.txt
 mkdir -p "$R/results" "$A"
 

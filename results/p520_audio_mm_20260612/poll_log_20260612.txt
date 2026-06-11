@@ -1,0 +1,12 @@
+# P520 GPU claim polls (audio mm cells; queue position LAST after
+# small-size ladder -> MTP identity ladder -> image mm smokes)
+# Protocol: claim only when free 3 consecutive checks 2 min apart; never kill.
+2026-06-12T02:21:34+09:00  GPU 4% util, 9263 MiB used  -> BUSY (ladder server resident); ~/vllm-e2 exists, editable build STILL COMPILING ("Building editable for vllm ... still running")
+2026-06-12T02:23:50+09:00  GPU 4% util, 9265 MiB used  -> BUSY
+2026-06-12T02:26:02+09:00  GPU 2% util, 9266 MiB used  -> BUSY; image mm smoke harness staged (~/mm_smoke_20260612, mm_smoke_cell.sh port 8077) but not yet run
+# VERDICT 02:26 JST: blocked on BOTH gates - (1) GPU occupied by the
+# small-size ladder, two queue positions (MTP, image smokes) still ahead;
+# (2) the Amendment-4 e2 install (~/vllm-e2 editable build) not finished.
+# Audio cells are fully staged for the next free window:
+#   bash /mnt/b/workshop/wsl_sm120/run_audio_mm_cells.sh
+# (port 8078; assets md5-verified from results/p520_audio_mm_20260612/assets/).

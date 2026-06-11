@@ -163,8 +163,32 @@ merge (or reverts) — audio row named as the reason.
 
 ## Cell results
 
-(to be filled by the GPU window; blocked-state recorded here if the
-queue never frees)
+BLOCKED at 2026-06-12 02:26 JST (precise state, poll log in
+`results/p520_audio_mm_20260612/poll_log_20260612.txt`):
+
+- GPU occupied on all 3 protocol polls (02:21 / 02:23 / 02:26, ~9.26 GiB
+  resident — small-size ladder server up); two queue positions (MTP
+  identity ladder, image mm smokes) still ahead of the audio cells.
+- The Amendment-4 e2 install was still building (`~/vllm-e2` editable
+  compile in flight, `~/vllm_e2_build_20260612.log`).
+
+Everything is staged for the next free window — runner:
+`bash /mnt/b/workshop/wsl_sm120/run_audio_mm_cells.sh`
+(port 8078, distinct from ladder 8000 / image smokes 8077; assets
+copied + md5-logged from the banked set; per-row proof lines, speech +
+tone + text smokes, x2 byte-identity gates; results auto-copied to
+`results/p520_audio_mm_20260612/cells/`). The runner requires no code
+checkout switch: the audio branch is tests-only, so the mm-retire head
+in `~/vllm-e2` is the correct serving code as-is.
+
+| cell | route | verdict |
+| --- | --- | --- |
+| e2b_triton_bf16 | Triton comparator | PENDING (blocked, see above) |
+| e2b_fi_bf16 | FlashInfer mm default | PENDING |
+| e2b_fi_nvfp4 | FlashInfer + NVFP4 KV | PENDING |
+| e4b_triton_bf16 | Triton comparator | PENDING |
+| e4b_fi_bf16 | FlashInfer mm default | PENDING |
+| e4b_fi_nvfp4 | FlashInfer + NVFP4 KV | PENDING |
 
 ## SPARK 12B-audio cell spec (morning block)
 
