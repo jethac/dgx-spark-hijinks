@@ -1,0 +1,12 @@
+parent_commit=39a4111ee8cecb2bc0fa3826dc9f86ed51ed2dc4
+sglang_commit=f3ebcf623efa7f63117f17219e5cf0175d8d102f
+flashinfer_commit=8d85fff94146771afa6d449666d7c5319a8fdd7a
+ M third_party/flashinfer
+?? results/sglang_gemma4_e4b_rung0_20260611T133434JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T133651JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T133950JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T134412JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T135125JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T135924JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T140659JST/
+?? results/sglang_gemma4_e4b_rung0_20260611T141256JST/
