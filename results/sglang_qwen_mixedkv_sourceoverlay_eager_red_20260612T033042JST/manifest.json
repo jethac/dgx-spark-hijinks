@@ -1,0 +1,7 @@
+{
+  "generate_rc": 7,
+  "has_none_kv_cache_sf_error": false,
+  "has_scheduler_exception": false,
+  "ready": false,
+  "schema": "sglang-qwen-mixedkv-sourceoverlay-eager-red/v1"
+}
