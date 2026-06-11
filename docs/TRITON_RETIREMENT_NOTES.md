@@ -213,3 +213,94 @@ image, and fold the honest-selector + route into the upstream filing wave
 (#38887 repro answered by row 1; #40677 answered by the selection-time reason
 string; the draft over-promise issue updated with the CC 12.x resolution and
 the remaining SM100 probe ask).
+
+## 8. Integration + default flip (overnight)
+
+Date: 2026-06-12 overnight (agent: Claude, campaign dgx-spark-hijinks,
+zero-bug bar). Branch `spark/hijinks-e2-integrate`, fast-forwarded into the
+canonical `spark/hijinks-e2-vllm` (the morning image builds from it).
+
+### Merged heads
+
+- Base: `spark/hijinks-e2-vllm @ 7df3c67ec8`.
+- `spark/hijinks-e2-triton-retire @ f5ed80e568` — merged first (fast-forward).
+- `spark/hijinks-e2-mtp @ 2d3411c331` — merge commit `6a7605cd9e`.
+- Default flip commit: `20196b5946` (== new head of BOTH
+  `spark/hijinks-e2-integrate` and `spark/hijinks-e2-vllm`, pushed to
+  jethac/vllm).
+
+### Conflict resolutions (one textual conflict, the predicted gemma4 seam)
+
+`vllm/model_executor/models/gemma4.py`, one hunk in
+`Gemma4Attention.__init__`: e2-triton-retire rewrote the mixed-KV
+backend-pin comment in place (honest-selector history note); e2-mtp
+extracted the pin into the shared `gemma4_global_attn_backend_override()`
+(single seam used by target AND KV-sharing drafter) and moved the old
+comment into its docstring. Resolution per the recorded rule: kept e2-mtp's
+structure (shared function; helper call in both attention classes) and
+folded e2-triton-retire's updated history paragraph into the shared
+function's docstring, replacing the stale paragraph it superseded. The pin
+CONDITION was changed by neither head and is unchanged; target and drafter
+resolve through the one function, so they can never diverge per layer type
+(divergence would crash spec decode — they KV-share).
+
+### Default flip (Amendment 3, OVERNIGHT_LADDER_PLAN_20260612)
+
+`VLLM_FLASHINFER_BF16_GEMMA` is now DEFAULT-ON; `=0` disables (escape
+hatch); explicit `=1` keeps the exact pre-flip opt-in semantics. The
+default is scoped so it cannot leak beyond knob-unset text-only bf16 Gemma
+on CC 12.x: new `_vllm_flashinfer_bf16_gemma_explicit()` +
+`_vllm_flashinfer_bf16_gemma_vo_split_enabled()` (flashinfer.py) gate the
+runtime sites to CC 12.x and `supports_combination`'s default acceptance to
+bf16/"auto" KV.
+
+Truth-table delta vs §3 (everything not listed is UNCHANGED — mm carve-out,
+fp8/nvfp4 routes, explicit --attention-backend, non-12.x CCs, all
+knob-set rows):
+
+| Cell (CC 12.x, knob UNSET) | Before | After |
+|---|---|---|
+| Gemma 4 bf16/auto text-only | TRITON_ATTN (model-wide force) | **FLASHINFER** (D512 via VO-split) |
+| Gemma 3 bf16/auto text-only | upstream priority order | **FLASHINFER** |
+| Selector: head 512, kv auto/bfloat16 | rejected (honest) | **valid** (default vouches for the VO split) |
+| Selector: head 512, kv fp8 | rejected | rejected (default does NOT vouch; explicit =1 still does) |
+| `_vo_split_factor(512, non-NVFP4)` on CC 12.x | 1 | **2** |
+| `envs.VLLM_FLASHINFER_BF16_GEMMA` | False | **True** |
+| Gemma 3/4 bf16 mm spans, no MM_PREFIX | Triton | Triton (carve-out stands; route logs and stands down) |
+| any of the above with `=0` | n/a | pre-flip behavior exactly |
+
+Composition note: mm spans + `VLLM_FLASHINFER_MM_PREFIX=1` now route to
+FlashInfer with the knob UNSET (default-on composes with the carve-out's
+"unless MM_PREFIX" wording; pre-flip this needed both knobs). Pinned by a
+new test cell.
+
+### Test results (WSL, isolated `~/e2_triton_retire_testenv`, CPU-only, no GPU)
+
+- `tests/v1/attention/test_sm12x_triton_retirement_selection.py`: **71/71
+  passed** (was 56; 8 cells deliberately flipped expectation — exactly the
+  knob-unset text-only bf16 CC 12.x cells listed above — and 15 new cells
+  pin the escape hatch and the default's scope; full list in commit
+  `20196b5946`).
+- `tests/models/test_gemma4_attn_backend_pin.py`: **9/9 passed** (MTP
+  pin matrix, expectations untouched by the flip).
+- `py_compile` clean on every merged/flipped file (envs.py, config.py,
+  gemma4.py, gemma4_mtp.py, flashinfer.py, both test files).
+- Worktree-shadowing verified (imports resolve to
+  `B:\workshop\worktrees\vllm\spark-hijinks-e2-integrate`); the venv's
+  vllm-0.22.1 compiled artifacts (`_C*.so`, `vllm_flash_attn` extensions,
+  `_version.py`) overlaid untracked+gitignored into the worktree, same
+  recipe as §5. Shared `~/sm120env` untouched.
+
+### STANDING REVERT RULE (zero-bug bar)
+
+**ANY RED bf16 row from tonight's ladder → revert the default before
+morning**: single-commit `git revert 20196b5946` on
+`spark/hijinks-e2-integrate`, fast-forward `spark/hijinks-e2-vllm`, push
+both. The knob stays available (opt-in again); the RED row ships as the
+reason. Per Amendment 3 this is not optional.
+
+### Still pending (unchanged from §6)
+
+Serving validation on Spark is the claim gate; nothing here upgrades the
+"NOT a support claim" status banner. §6 rows + the knob overlay smoke now
+double as the flipped-default validation.
