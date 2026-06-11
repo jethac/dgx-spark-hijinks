@@ -5,6 +5,29 @@
 > with radix-cache quality green under the prefix-cache graph guard. Full NVFP4 K+V
 > remains the parked stretch route.
 
+## 2026-06-11 update — Gemma 4 E4B rung 0 stops at D=512 decode
+
+Artifact: `results/sglang_gemma4_e4b_rung0_20260611T141256JST/summary.md`.
+
+SGLang Gemma 4 E4B text-only bring-up now reaches the intended next blocker under
+`SGLANG_FLASHINFER_VOSPLIT=1`:
+
+- source/provenance lines are present (`jethac/sglang@f3ebcf623`,
+  `jethac/flashinfer@8d85fff9`, FlashInfer source paths under `/flashinfer-src`);
+- serving dispatch logs prove SWA/local layers plan as `head_dim=256, head_dim_vo=256`;
+- global prefill enters the two-pass VO-split route at `head_dim=512, head_dim_vo=256`;
+- the remaining failure is decode: the D=512 global layer still enters the standard
+  decode wrapper, which instantiates a symmetric `head_dim_qk=512;head_dim_vo=512`
+  paged module and fails with `Unsupported max_mma_kv: 0`.
+
+Interpretation: the prior SGLang wrapper-geometry bug is fixed, and the current red is
+not evidence against the VO-split prefill route. It is the decode-side half already
+called out in `docs/SGLANG_GEMMA4_RUNG_PREP.md`: global D=512 decode must route through a
+VO-split-capable path (decode-as-prefill with `qo_len=1`, or an equivalent FlashInfer
+decode API that carries `head_dim_vo`) before rung 0 can become a coherent serving row.
+Do not edit `prefill.cuh` trait math in the SGLang lane; the `max_mma_kv` dispatcher work
+is parked for the shared FlashInfer task.
+
 ## 2026-06-10 update — deswizzle leak is falsified for the live SGLang failure
 
 Artifacts:

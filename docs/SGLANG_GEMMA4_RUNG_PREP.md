@@ -15,6 +15,14 @@ Kernel-side status is `docs/FLASHINFER_D512_FA2_KERNEL_PLAN.md`. The current usa
 
 Claude's latest probe window falsified geometry-only, plan-kwargs-only, and wrapper-backend-only explanations for the vLLM bf16 serving crash. For SGLang this means wrapper construction state must be documented and probed exactly, not inferred from shape-only tests.
 
+2026-06-11 serving checkpoint: `results/sglang_gemma4_e4b_rung0_20260611T141256JST/summary.md`
+proves the SGLang wrapper-construction half now behaves as intended for E4B text-only.
+Serving dispatch logs show SWA/local layers planned at `head_dim=256, head_dim_vo=256`
+and global prefill entering the VO-split path at `head_dim=512, head_dim_vo=256`. The
+remaining rung-0 red is decode-side: the D=512 global layer still enters the standard
+decode wrapper, which instantiates a symmetric `head_dim_qk=512;head_dim_vo=512` paged
+module and fails with `Unsupported max_mma_kv: 0`.
+
 ## SGLang Code Surfaces
 
 ### Gemma 4 Runtime Geometry
