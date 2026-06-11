@@ -406,6 +406,12 @@ EOF
   else
     c1_det=false
   fi
+  local c1_det_py
+  if [[ "${c1_det}" == "true" ]]; then
+    c1_det_py=True
+  else
+    c1_det_py=False
+  fi
 
   run_ppl_cell "${container}" "${model}" "${served}" "${row_label}" "${kv_dtype}" c2 c2_pride_prejudice_60k.txt "${prefix_len}"
   local c2_rc=$?
@@ -442,7 +448,7 @@ manifest = {
     "c3_rc": int("${c3_rc}"),
     "c1a_mean_nll_repr": "${c1a_mean}",
     "c1b_mean_nll_repr": "${c1b_mean}",
-    "c1_deterministic": ${c1_det},
+    "c1_deterministic": ${c1_det_py},
 }
 manifest["ok"] = (
     manifest["ready_rc"] == 0
