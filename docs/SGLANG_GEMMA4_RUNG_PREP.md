@@ -143,9 +143,12 @@ next E4B rung-0 serving retry before it graduates from scaffold to green row.
 4. Wrapper-construction audit: prove no ctor `jit_args`, cached module, `fast_decode_plan`, or wrapper-local `self.head_dim` value pins symmetric dims and overrides the plan-time VO-split.
 5. Writer-roundtrip gate at head 512: write via SGLang's real cache writer, read via the real FlashInfer kernel, and compare against dequant/reference output. Probes that fabricate the cache can miss writer/reader disagreements; the new vLLM 31B coherence bug is exactly "writer and reader meet at D=512 for the first time."
 6. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
-7. fp8 comparator row. Current E4B fp8 quality is red with an internal request/warmup
-   timeout and missing-scale warning, so it cannot serve as the final quality baseline
-   yet. The allocator ratio after `96a9ff9ce` is green at `1.7814x` versus fp8 tokens.
+7. fp8 comparator row. Current E4B fp8 quality is formally red in
+   `results/sglang_gemma4_e4b_fp8_comparator_red_20260611TmanualJST.md`: the run
+   reaches SWA and global VO-split prefill without the old `max_mma_kv` wall, but
+   returns timeout/HTTP-500 symptoms before any D=512 decode proof. It cannot serve
+   as the final quality baseline yet. The allocator ratio after `96a9ff9ce` is green
+   at `1.7814x` versus fp8 tokens.
 8. mixed-KV serving row first when full NVFP4 is blocked.
 9. full NVFP4 K+V: E4B has a short green checkpoint, but the generic SGLang full-NVFP4
    radix structural route remains open for Qwen and other models where the partial-state

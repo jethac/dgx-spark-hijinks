@@ -8,6 +8,15 @@ serving result. The upstream serving reference today is vLLM's open `dgemma` bra
 the official `vllm/vllm-openai:gemma-aarch64-cu130` image; see
 `docs/DG0_SERVING_STACK_RECON.md`.
 
+Epoch-2 implementation checkpoint: `jethac/sglang` now has the DG-S0/DG-S2 foundation
+scaffold: a local `DiffusionGemmaConfig` alias, `DiffusionGemmaForBlockDiffusion`
+model shell, BF16 encoder/decoder-backbone weight remap into one Gemma 4 causal
+backbone, self-conditioning parameter ownership, dLLM config recognition, and
+`scripts/diffusion_gemma_config_audit.py` for metadata-only geometry manifests. This
+does not claim BF16 parity or serving. Decoder denoise mode still raises
+`NotImplementedError`; the next live gate is a Linux/Spark metadata manifest followed
+by a BF16 weight-load manifest against the official vLLM image as oracle.
+
 ## Verdict
 
 SGLang support is feasible, but it is a medium-large runtime feature, not a model-file
