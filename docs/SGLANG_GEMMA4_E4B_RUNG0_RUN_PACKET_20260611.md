@@ -12,7 +12,7 @@ handling the D=512 global layers.
 
 - Parent repo: `jethac/dgx-spark-hijinks@90db5e3` or newer on
   `docs/codex-direction-nvfp4-kv`.
-- SGLang fork: `jethac/sglang@4773644e4`.
+- SGLang fork: `jethac/sglang@a5c71988c`.
 - FlashInfer fork: `jethac/flashinfer@8d85fff9`.
 - Model: `google/gemma-4-E4B-it` from the local HF cache.
 - KV mode: default/no KV quantization. Do **not** pass `--kv-cache-dtype`.
