@@ -106,3 +106,24 @@ Decision: yes. Structure that keeps the zero-bug bar honest:
 - Open box for morning: the bf16 speed pair (E4B bf16-FlashInfer bench vs the
   19.03 tok/s Triton baseline, same params) - quality+coherence validate
   tonight, the speed datapoint completes the scorecard in a morning window.
+
+## Amendment 4 (Jetha, ~01:3x): retire Triton for MULTIMODAL too, Gemma 3 + 4
+
+The Amendment-3 mm carve-out is replaced by: mm-prefix spans route to the
+FlashInfer custom-mask path BY DEFAULT on CC 12.x (escape hatch knob =0),
+same scoping-helper pattern as the text flip, on top of e2-vllm @ 20196b5946.
+Zero-bug structure:
+- Kernel numerics already proven (6/6 P520 probes incl. NVFP4 + VO-split +
+  mixed batches; text-only byte-identity).
+- TONIGHT's serving validation on P520 (small mm models fit 16GB): Gemma 3
+  4B-it and Gemma 4 E4B-it with REAL image inputs, bf16 + nvfp4 KV rows.
+  Gates: image-grounded coherent answers (banked transcripts); same prompts
+  via the Triton route for comparison; text-only serving byte-equivalence
+  knob-on vs knob-off; any RED -> revert the mm flip commit (text flip
+  stays), red ships as the reason.
+- e2-vllm gets a SECOND P520 install (separate venv; the 022 install belongs
+  to the small-size ladder). GPU consumers sequence: small-size ladder ->
+  MTP identity ladder -> mm smokes; builders poll nvidia-smi sustained-free
+  before claiming, never kill.
+- Morning Spark rows (image from the post-flip e2-vllm head): 12B / 26B /
+  31B mm rows, the full retirement scorecard across both modalities.
