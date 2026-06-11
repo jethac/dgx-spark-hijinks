@@ -7,7 +7,9 @@ IMAGE="${IMAGE:-sglang-source-stack-c3dae30f-e631a13fd:latest}"
 MODEL="${MODEL:-google/gemma-4-E4B-it}"
 PORT="${PORT:-30000}"
 MEM_FRACTION_STATIC="${MEM_FRACTION_STATIC:-0.40}"
+KV_CACHE_DTYPE="${KV_CACHE_DTYPE:-auto}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-900}"
+REQUEST_TIMEOUT_S="${REQUEST_TIMEOUT_S:-1800}"
 GB10_DOCKER_MEMORY="${GB10_DOCKER_MEMORY:-100g}"
 GB10_DOCKER_MEMORY_SWAP="${GB10_DOCKER_MEMORY_SWAP:-100g}"
 SGLANG_COMMIT="${SGLANG_COMMIT:-9d78a007f}"
@@ -38,6 +40,9 @@ mkdir -p "${OUT_DIR}"
   echo "model=${MODEL}"
   echo "port=${PORT}"
   echo "mem_fraction_static=${MEM_FRACTION_STATIC}"
+  echo "kv_cache_dtype=${KV_CACHE_DTYPE}"
+  echo "request_timeout_s=${REQUEST_TIMEOUT_S}"
+  echo "sglang_fp4_kv_mixed_kv=${SGLANG_FP4_KV_MIXED_KV:-0}"
   echo "sglang_commit=${SGLANG_COMMIT}"
   echo "flashinfer_commit=${FLASHINFER_COMMIT}"
   echo "started_at=$(date -Is)"
@@ -111,6 +116,10 @@ cid=$(
     -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
     -e SGLANG_FLASHINFER_VOSPLIT=1 \
     -e SGLANG_GEMMA4_TRACE_GEOMETRY=1 \
+    -e SGLANG_GEMMA_KV_GEOMETRY=1 \
+    -e SGLANG_FP4_KV_MIXED_KV="${SGLANG_FP4_KV_MIXED_KV:-0}" \
+    -e SGLANG_FP4_KV_TRACE_MODULE="${SGLANG_FP4_KV_TRACE_MODULE:-0}" \
+    -e SGLANG_E4B_KV_CACHE_DTYPE="${KV_CACHE_DTYPE}" \
     -e HF_TOKEN="${HF_TOKEN:-}" \
     "${IMAGE}" \
     bash -lc '
@@ -142,6 +151,11 @@ print("flashinfer_cccl", jit_env.CCCL_INCLUDE_DIRS, flush=True)
 print("flashinfer_spdlog", jit_env.SPDLOG_INCLUDE_DIR, flush=True)
 PY
 
+      kv_args=()
+      if [[ "${SGLANG_E4B_KV_CACHE_DTYPE}" != "auto" ]]; then
+        kv_args+=(--kv-cache-dtype "${SGLANG_E4B_KV_CACHE_DTYPE}")
+      fi
+
       exec python3 -m sglang.launch_server \
         --model-path '"${MODEL}"' \
         --dtype bfloat16 \
@@ -151,7 +165,8 @@ PY
         --disable-cuda-graph \
         --disable-piecewise-cuda-graph \
         --host 0.0.0.0 \
-        --port '"${PORT}"'
+        --port '"${PORT}"' \
+        "${kv_args[@]}"
     '
 )
 echo "${cid}" >"${cid_file}"
@@ -194,7 +209,7 @@ if [[ "${ready}" != "1" ]]; then
 fi
 
 set +e
-curl -sS --max-time "${REQUEST_TIMEOUT_S:-180}" "http://127.0.0.1:${PORT}/v1/chat/completions" \
+curl -sS --max-time "${REQUEST_TIMEOUT_S}" "http://127.0.0.1:${PORT}/v1/chat/completions" \
   -H 'Content-Type: application/json' \
   -d '{
     "model": "google/gemma-4-E4B-it",

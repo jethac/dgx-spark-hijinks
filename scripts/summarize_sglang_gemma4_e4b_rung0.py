@@ -90,7 +90,7 @@ def main() -> int:
     )
 
     summary = [
-        "# SGLang Gemma 4 E4B Rung 0 Smoke",
+        "# SGLang Gemma 4 E4B Smoke",
         "",
         f"Status: {status}",
         "",

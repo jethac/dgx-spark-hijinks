@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "baseline_ppl": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_bf16_ppl.json",
+    "baseline_server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_bf16_server.log",
+    "candidate_ppl": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_fullnvfp4_ppl.json",
+    "candidate_server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_fullnvfp4_server.log",
+    "compare": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_compare.json"
+  },
+  "baseline": {
+    "kv_cache_dtype": "auto",
+    "label": "bf16",
+    "mixed_kv": false
+  },
+  "bf16_kv_lines": [
+    "[2026-06-11 10:08:26] KV Cache is allocated. dtype: torch.bfloat16, #tokens: 285749, K size: 9.54 GB, V size: 9.54 GB",
+    "[2026-06-11 10:08:26] KV Cache is allocated. dtype: torch.bfloat16, #tokens: 357187, K size: 4.77 GB, V size: 4.77 GB",
+    "[2026-06-11 10:08:26] SWAKVPool mem usage: 28.61 GB, swa size: 285749, full size: 357187",
+    "[2026-06-11 10:08:33] max_total_num_tokens=357187, chunked_prefill_size=8192, max_prefill_tokens=16384, max_running_requests=2048, context_len=131072, available_gpu_mem=63.81 GB"
+  ],
+  "bf16_max_total_num_tokens": 357187,
+  "candidate": {
+    "kv_cache_dtype": "fp4_e2m1",
+    "label": "fullnvfp4",
+    "mixed_kv": false
+  },
+  "compare_ok": true,
+  "corpus": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_corpus.md",
+  "corpus_manifest": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_corpus_manifest.json",
+  "ctx_list": [
+    512
+  ],
+  "docker_memory": "100g",
+  "docker_memory_swap": "100g",
+  "fullnvfp4_kv_lines": [
+    "[2026-06-11 10:11:58] KV Cache is allocated. dtype: torch.float4_e2m1fn_x2, #tokens: 1019206, K size: 9.57 GB, V size: 9.57 GB",
+    "[2026-06-11 10:11:58] KV Cache is allocated. dtype: torch.float4_e2m1fn_x2, #tokens: 1274008, K size: 4.78 GB, V size: 4.78 GB",
+    "[2026-06-11 10:11:58] SWAKVPool mem usage: 28.70 GB, swa size: 1019206, full size: 1274008",
+    "[2026-06-11 10:13:38] max_total_num_tokens=1274008, chunked_prefill_size=8192, max_prefill_tokens=16384, max_running_requests=4096, context_len=131072, available_gpu_mem=60.38 GB"
+  ],
+  "fullnvfp4_max_total_num_tokens": 1274008,
+  "graphs_disabled": true,
+  "logprob_start_len": 256,
+  "mem_fraction_static": 0.4,
+  "model": "google/gemma-4-E4B-it",
+  "page_size": 1,
+  "reuse_prefix_len": 256,
+  "rows": [
+    {
+      "candidate_ok": true,
+      "ctx": 512,
+      "delta_nats_per_token": -0.19017361351703244,
+      "delta_ppl": -30.141275822128193,
+      "fp8_ok": true,
+      "nats_per_token_candidate": 4.96912012119384,
+      "nats_per_token_fp8": 5.1592937347108725,
+      "ppl_candidate": 143.900216900708,
+      "ppl_fp8": 174.04149272283618
+    }
+  ],
+  "run_id": "sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST",
+  "runtime_image": "sglang-source-stack-c3dae30f-e631a13fd:latest",
+  "schema": "sglang-gemma4-e4b-ppl-pair/v1"
+}

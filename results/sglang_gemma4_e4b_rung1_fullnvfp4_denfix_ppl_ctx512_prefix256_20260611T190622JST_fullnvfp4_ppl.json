@@ -1,0 +1,92 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 86987,
+  "container_image": "sglang-source-stack-c3dae30f-e631a13fd:latest",
+  "contexts": [
+    {
+      "ctx": 512,
+      "elapsed_s": 0.25383079901803285,
+      "endpoint": "http://127.0.0.1:30000/generate",
+      "payload": {
+        "logprob_start_len": 256,
+        "max_new_tokens": 1,
+        "prompt_token_count": 512,
+        "return_logprob": true,
+        "reuse_prefix_len": 256,
+        "score_start_index": 256,
+        "top_logprobs_num": 0
+      },
+      "score": {
+        "cached_tokens": 256,
+        "finish_reason": {
+          "length": 1,
+          "type": "length"
+        },
+        "mean_logprob": -4.96912012119384,
+        "mean_nll_nats": 4.96912012119384,
+        "mismatched_positions_preview": [],
+        "missing_positions_preview": [],
+        "num_mismatched_tokens": 0,
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 512,
+        "num_scored_tokens": 255,
+        "num_skipped_boundary_tokens": 1,
+        "ok": true,
+        "ppl": 143.900216900708,
+        "relative_logprob_entries": true,
+        "score_start_index": 256,
+        "skipped_boundary_positions": [
+          256
+        ],
+        "usage": null
+      },
+      "warmup": {
+        "cached_tokens": 0,
+        "elapsed_s": 19.21807516401168,
+        "enabled": true,
+        "finish_reason": {
+          "length": 1,
+          "type": "length"
+        },
+        "prefix_len": 256
+      }
+    }
+  ],
+  "elapsed_s": 22.878,
+  "finished_utc": "2026-06-11T10:14:03Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.2",
+    "torch_version": "2.12.0a0+5aff3928d8.nv26.05",
+    "warnings": []
+  },
+  "kv_cache_dtype": "fp4_e2m1",
+  "ok": true,
+  "run_id": "sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_fullnvfp4",
+  "runtime_ref": "SGLang sglang-source-stack-c3dae30f-e631a13fd:latest; Gemma4 E4B VO-split; mixed_kv=0; graphs disabled",
+  "schema": "sglang-prompt-ppl-sweep/v1",
+  "scope": "SGLang Gemma 4 E4B supplied-token PPL; bf16 versus fullnvfp4; sequential servers; graphs disabled",
+  "started_utc": "2026-06-11T10:13:43Z",
+  "text_chars": 249998,
+  "text_files": [
+    "/work/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_corpus.md"
+  ],
+  "tokenizer": "google/gemma-4-E4B-it",
+  "url": "http://127.0.0.1:30000"
+}

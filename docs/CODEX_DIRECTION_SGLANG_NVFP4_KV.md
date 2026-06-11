@@ -333,6 +333,27 @@ claim: long-context/deep-prefix Gemma 3, CUDA graphs, and full NVFP4 K+V remain 
 The absolute PPL is high because the eval text is a deterministic repository markdown
 corpus slice, not a cleaned benchmark corpus; the claim is the matched fp8-vs-mixed delta.
 
+Gemma 4 E4B epoch-2 Rung 1 has a SGLang full-NVFP4 checkpoint:
+`results/sglang_gemma4_e4b_rung1_fullnvfp4_20260611TmanualJST.md`. With
+`jethac/sglang@96a9ff9ce` and `jethac/flashinfer@76af7982`, full NVFP4 K+V
+(`--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=0`) serves a short
+OpenAI chat prompt coherently and passes a short native prompt-logprob PPL pair at
+`ctx=512`, `reuse_prefix_len=256` against bf16/auto (`delta_nats_per_token=-0.190174`).
+The D=512 globals route through `extend_paged_vosplit*` and
+`decode_as_prefill_vosplit*`.
+
+`96a9ff9ce` fixes the hybrid full-NVFP4 allocator denominator by accounting for
+packed data plus scale buffers in `HybridSWAPoolConfigurator`. The fixed row reports
+`1,274,008` full tokens versus bf16/auto `357,187` (`3.5668x`) and fp8 allocator
+tokens `715,185` (`1.7814x`). Before the fix, full NVFP4 received only `716,992`
+tokens and used only `16.15 GB` of KV memory, so it had quality but not capacity.
+
+Do not over-claim the fp8 quality comparison. The fp8 comparator is still red:
+SGLang allocates fp8 KV, warns that no fp8 scaling factors were provided, then times
+out internally after 600 seconds and returns `Internal Server Error`. The current
+claim is full-NVFP4 E4B short quality green versus bf16/auto plus allocator capacity
+green versus fp8; fp8 quality remains a separate open issue.
+
 Two upstream draft issues are banked for later filing:
 
 - `results/upstream_draft_issue_sglang_prefix_cache_graph_write_20260610TmanualJST.md`

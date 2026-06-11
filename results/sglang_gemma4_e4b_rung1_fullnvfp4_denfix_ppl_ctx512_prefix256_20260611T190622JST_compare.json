@@ -1,0 +1,20 @@
+{
+  "candidate_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_fullnvfp4_ppl.json",
+  "elapsed_s": 0.0,
+  "fp8_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_rung1_fullnvfp4_denfix_ppl_ctx512_prefix256_20260611T190622JST_bf16_ppl.json",
+  "ok": true,
+  "rows": [
+    {
+      "candidate_ok": true,
+      "ctx": 512,
+      "delta_nats_per_token": -0.19017361351703244,
+      "delta_ppl": -30.141275822128193,
+      "fp8_ok": true,
+      "nats_per_token_candidate": 4.96912012119384,
+      "nats_per_token_fp8": 5.1592937347108725,
+      "ppl_candidate": 143.900216900708,
+      "ppl_fp8": 174.04149272283618
+    }
+  ],
+  "schema": "sglang-prompt-ppl-comparison/v1"
+}

@@ -32,6 +32,19 @@ decode uses `decode_as_prefill_vosplit*`, and chat-formatted serving returns
 `/generate` repeats separators, so future Gemma 4 IT quality gates should use the
 OpenAI chat endpoint unless the task explicitly measures raw completion behavior.
 
+Epoch-2 Rung 1 checkpoint:
+`results/sglang_gemma4_e4b_rung1_fullnvfp4_20260611TmanualJST.md` is full-NVFP4
+K+V short-green with a fixed allocator denominator. Full NVFP4 (`fp4_e2m1`,
+`SGLANG_FP4_KV_MIXED_KV=0`) returns the Tokyo chat answer, routes global D=512
+through VO-split for prefill and decode-as-prefill, and passes a short prefix-reuse
+PPL pair against bf16/auto (`ctx=512`, `reuse_prefix_len=256`,
+`delta_nats_per_token=-0.190174`). `jethac/sglang@96a9ff9ce` fixes the hybrid
+full-NVFP4 denominator, raising full NVFP4 capacity to `1,274,008` tokens at the
+same memory fraction: `3.5668x` versus bf16/auto and `1.7814x` versus the fp8
+allocator row. fp8 serving itself is still red with an internal SGLang request/warmup
+timeout plus a missing-fp8-scale warning, so fp8 quality remains an open comparator
+issue even though the allocator capacity ratio is now green.
+
 ## SGLang Code Surfaces
 
 ### Gemma 4 Runtime Geometry
@@ -130,6 +143,10 @@ next E4B rung-0 serving retry before it graduates from scaffold to green row.
 4. Wrapper-construction audit: prove no ctor `jit_args`, cached module, `fast_decode_plan`, or wrapper-local `self.head_dim` value pins symmetric dims and overrides the plan-time VO-split.
 5. Writer-roundtrip gate at head 512: write via SGLang's real cache writer, read via the real FlashInfer kernel, and compare against dequant/reference output. Probes that fabricate the cache can miss writer/reader disagreements; the new vLLM 31B coherence bug is exactly "writer and reader meet at D=512 for the first time."
 6. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
-7. fp8 comparator row.
-8. mixed-KV serving row first.
-9. full NVFP4 K+V only after the structural route avoids the partial-state merge failure.
+7. fp8 comparator row. Current E4B fp8 quality is red with an internal request/warmup
+   timeout and missing-scale warning, so it cannot serve as the final quality baseline
+   yet. The allocator ratio after `96a9ff9ce` is green at `1.7814x` versus fp8 tokens.
+8. mixed-KV serving row first when full NVFP4 is blocked.
+9. full NVFP4 K+V: E4B has a short green checkpoint, but the generic SGLang full-NVFP4
+   radix structural route remains open for Qwen and other models where the partial-state
+   merge is known to fail.
