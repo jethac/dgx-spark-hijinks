@@ -1,0 +1,5 @@
+parent_commit=95436c5c47858009b5666adac8d35500212be8b7
+sglang_commit=9d78a007f7c92f51b43518af09aeacb1742c97a1
+flashinfer_commit=76af798243d11c4910eaceaf1d62ba4227656d4a
+ M third_party/flashinfer
+?? results/sglang_gemma4_e4b_rung0_r9fix_20260611T1748JST/
