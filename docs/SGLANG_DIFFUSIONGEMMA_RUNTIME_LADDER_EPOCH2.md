@@ -94,10 +94,26 @@ Gate:
 - one small supplied-answer or parseable QA check
 - artifact records runtime policy and memory use
 
-Status: prerequisite weight-warning audit is green for text-only DG-R2; see
+Status: RED for the deterministic text-only quality gate; see
+`results/sglang_dgemma_dgr2_text_quality_20260612T0604JST/summary.md`.
+The prerequisite weight-warning audit is green for text-only DG-R2; see
 `results/sglang_dgemma_dgr2_weight_warning_audit_20260611TmanualJST.md`.
-Next: run the deterministic short prompt set. Do not include image prompts until
-the vision-path warning group has its own audit.
+
+Follow-up diagnostics:
+
+- `results/sglang_dgemma_dgr2_promptdiag_20260612T0745JST/summary.md`
+  shows the original terse "answer only" prompts denoise to repeated `<eos>`
+  tokens; less constrained OpenAI chat prompts answer correctly.
+- `results/sglang_dgemma_cookbook_conformance_20260612T0831JST/summary.md`
+  shows the public cookbook-style path, with no explicit
+  `--dllm-algorithm-config`, is semantically runnable on broad chat prompts
+  such as TCP/UDP, but is not byte-deterministic under the zero-bug gate and
+  still has a short-prompt empty-output failure.
+
+Do not include image prompts until the vision-path warning group has its own
+audit. Do not climb to DG-R3 as a quality claim until a revised text-only DG-R2
+gate is explicitly defined and passes; performance experiments can only be
+labeled as post-DG-R2 diagnostics, not support claims.
 
 ### DG-R3: D=512 FlashInfer VO-Split Integration
 

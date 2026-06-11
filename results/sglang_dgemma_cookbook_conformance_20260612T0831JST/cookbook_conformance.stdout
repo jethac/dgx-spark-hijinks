@@ -1,0 +1,82 @@
+{
+  "all_ok": false,
+  "checks": [
+    {
+      "expectations": [
+        "tcp",
+        "udp"
+      ],
+      "expectations_met": [
+        true,
+        true
+      ],
+      "non_empty": true,
+      "prompt_id": "cookbook_tcp_udp",
+      "stable": false,
+      "texts": [
+        "The fundamental difference between **TCP (Transmission Control Protocol)** and **UDP (User Datagram Protocol)** lies in how they handle data delivery: TCP is designed for **reliability**, while UDP is designed for **speed and efficiency**.\n\nHere is a breakdown of the key differences across several categories:\n\n### 1. The Connection Method\n*   **TCP (Connection-Oriented):** Before data is sent, the sender and receiver must perform a \"three-way handshake\" (SYN, SYN-ACK, ACK) to establish a connection. This ensures both parties are ready.\n*   **UDP (Connectionless):** UDP does not establish a connection. It simply sends packets (datagrams) to the destination without checking if the receiver is ready.\n\n### 2. Reliability and Delivery\n*   **TCP (Reliable):** guarantees delivery. If a packet is lost or corrupted, TCP detects the error and retransmits it.\n*   **UDP (Unreliable):** It offers no guarantee of delivery. If a packet is lost in transit, it is gone. The protocol does not check or resend data.\n\n### 3. Ordering\n*   **TCP (Ordered):** Packets are numbered. If they arrive out of order, TCP reassembles them into the correct sequence before handing them to the application.\n*   **UDP (Unordered):** Packets are delivered in whatever order they arrive. The application must handle any sequencing issues itself.\n\n### 4. Flow and Congestion Control\n*   **TCP (Smart):** It uses complex mechanisms to ensure the sender doesn't overwhelm the receiver (flow control) or the network capacity (congestion control). \n*   **UDP (Simple):** It has no control mechanisms. It sends data as fast as the application allows, which can lead to packet loss if the network is congested.\n\n### Summary Comparison Table\n\n| Feature | TCP | UDP |\n| :--- | :--- | :--- |\n| **Type** | Connection-Oriented | Connectionless |\n| **Reliability** | Guaranteed delivery | No guarantee (Best-effort) |\n| **Speed** | Slower (due to overhead) | Much faster (minimal overhead) |\n| **Ordering** | Guaranteed sequence | No guaranteed order |\n| **Error Checking** | Yes (checksum + retransmission) | Basic checksum (no retransmission) |\n| **Header Size** | Large (20-60 bytes) | Small (8 bytes) |\n| **Use Cases** | Web browsing (HTTP), Email, File transfer, SSH | Live streaming, Gaming, DNS, VoIP |\n\n---\n\n### When to use which?\n\n*   **Use TCP when** data integrity is more important than speed. If you are downloading a file or sending an email, a single missing bit could corrupt the entire file or message.. \n*   **Use UDP when** speed is more important than perfect data integrity. If you are on a video call or playing an online game, it is better to have a momentary \"glitch\" (dropped packet) than to have the entire stream freeze while waiting for a lost packet to be retransmitted.",
+        "The fundamental difference between **TCP** (Transmission Control Protocol) and **UDP** (User Datagram Protocol) lies in how they handle data delivery: TCP is designed for **reliability**, while UDP is designed for **speed and efficiency**.\n\nHere is a breakdown of the key differences by category:\n\n### 1. Connection Method own*   **TCP (Connection-Oriented):** Before data is sent, TCP establishes a connection between the sender and the receiver using a \"three-way handshake\" (SYN, SYN-ACK, ACK). This ensures both parties are ready to communicate.\n*   **UDP (Connectionless):** UDP does not establish a connection. It simply sends data packets to the destination without checking if the receiver is ready or even present.\n\n### 2. Reliability and Delivery\n*   **TCP (Reliable):** It guarantees that the data will arrive. If a packet is lost during transmission, TCP detects the loss and retransmits the data.\n*   **UDP (Unreliable):** It offers no guarantee of delivery. If a packet is lost, it is gone forever. There is no mechanism to retransmit lost data.\n\n### 3. Ordering\n*   **TCP (Ordered):** TCP ensures that packets arrive in the exact order they were sent. If packets arrive out of order, TCP reassembles them before passing them to the application.\n*   **UDP (Unordered):** Packets (called datagrams) are sent independently. They may arrive in a different order than sent, or not at all.\n\n### 4. Speed and Overhead\n*   **TCP (Slower/High Overhead):** TCP has a large header (20 bytes) because it tracks sequence numbers and acknowledgments. The process of checking for acknowledgments makes it slower than UDP.\n*   **UDP (Faster/Low Overhead):** UDP has a very small header (8 bytes). Because there is no handshake or constant-checking, it is much faster and more \"efficient\" for sending data quickly.\n\n### 5. Flow and Congestion Control\n*   **TCP:** It uses \"flow control\" to prevent the sender from overwhelming the receiver and \"congestion control\" to prevent overwhelming the network. It will slow down its speed if the network is congested.\n*   **UDP:** It has no flow or congestion control. It sends data as fast as the application allows.\n\n---\n\n### Summary Comparison Table\n\n| Feature | TCP | UDP |\n| :--- | :--- | :--- |\n| **Type** | Connection-oriented | Connectionless |\n| **Reliability** | Guaranteed delivery | No guaranteed delivery |\n| **Ordering** | Guaranteed order | No order-guide |\n| **Speed** | Slower | Faster |\n| **Header Size** | Large (20 bytes) | Small (8 bytes) |\n| **Retransmission** | Yes, if lost | No |\n\n---\n\n### When to use which?\n\n*   **Use TCP when accuracy is critical:**\n    *   Web browsing (HTTP/HTTPS): You need the complete webpage.\n    *   File transfers (FTP): Any data loss would corrupt the file.\n    *   Email (SMTP/IMAP): You cannot have missing words in an email.\n    *   Remote Shell access: Commands must be received correctly.\n\n*   **Use UDP when speed is more important than accuracy:**\n    *   **Online Gaming: A tiny \"glitch\" is better than the whole game freezing to wait for a lost packet. \n    *   **Video Streaming/VoIP: If a frame is lost, the video just skips to the next rather than pausing.\n    *   DNS (Domain Name System): Queries need to answered instantly.\n    *   Live Broadcasts: Once a baseball coach saw potential in a young named player and signed him to the Major-League Baseball team. This player eventually became the league's all-time leader in hits and the most-of-the-bounds home run player. This Major-League Baseball Number 1 player used-record-breaking-performance-performance-to break the world record for the longest-marathon-running-player-United Kingdom  United Kingdom  United Kingdom  United Kingdom  United Kingdom United Kingdom United Kingdom \ud83c\uddec\ud83c\udde7 Canada \ud83c\udde8\ud83c\udde6  United States \ud83c\uddfa\ud83c\uddf8 United States \ud83c\uddfa\ud83c\uddf8 United States \ud83c\uddfa\ud83c\uddf8 Israel \ud83c\uddee\ud83c\uddf1 Israel \ud83c\uddee\ud83c\uddf1 Israel \ud83c\uddee\ud83c\uddf1 Israel \ud83c\uddee\ud83c\uddf1 Israel \ud83c\uddee\ud83c\uddf1 Israel \ud83c\uddee\ud83c\uddf1 Australia \ud83c\udde6 Australia \ud83c\udde6\ud83c\uddfa Australia \ud83c\udde6\ud83c\uddfa Australia \ud83c\udde6\ud83c\uddfa Australia \ud83c\udde6\ud83c\uddfa Middle East \ud83c\uddf5\ud83c\uddf5 Middle East \ud83c\uddf5\ud83c\uddf5 Middle East \ud83c\uddf5\ud83c\uddf5 Middle East \ud83c\uddf5\ud83c\uddf5 Middle East \ud83c\uddf5\ud83c\uddf5 Middle East \ud83c\uddf5\ud83c\uddf5 Philippines \ud83c\uddf5\ud83c\uddf5 Philippines \ud83c\uddf5\ud83c\uddf5 Philippines \ud83c\uddf5\ud83c\uddf5 South Africa \ud83c\uddff\ud83c\udde6 South Korea \ud83c\uddf0\ud83c\uddf7 Taiwan \ud83c\uddf9\ud83c\uddf9 Taiwan \ud83c\uddf9\ud83c\uddf9 Taiwan"
+      ]
+    },
+    {
+      "expectations": [
+        "tokyo"
+      ],
+      "expectations_met": [
+        true
+      ],
+      "non_empty": true,
+      "prompt_id": "capital_direct",
+      "stable": true,
+      "texts": [
+        "The capital of Japan is **Tokyo**.",
+        "The capital of Japan is **Tokyo**."
+      ]
+    },
+    {
+      "expectations": [
+        "4"
+      ],
+      "expectations_met": [
+        true
+      ],
+      "non_empty": true,
+      "prompt_id": "arithmetic_direct",
+      "stable": true,
+      "texts": [
+        "2 + 2 = 4",
+        "2 + 2 = 4"
+      ]
+    },
+    {
+      "expectations": [
+        "4"
+      ],
+      "expectations_met": [
+        false
+      ],
+      "non_empty": false,
+      "prompt_id": "digit_four",
+      "stable": false,
+      "texts": [
+        "4",
+        ""
+      ]
+    },
+    {
+      "expectations": [
+        "ai"
+      ],
+      "expectations_met": [
+        false
+      ],
+      "non_empty": true,
+      "prompt_id": "known_good_dgx",
+      "stable": false,
+      "texts": [
+        "The NVIDIA DGX Spark is designed for high-performance local AI development, prototyping, and deep learning workloads in a compact desktop-class form factor.",
+        "The NVIDIA DGX Spark is a compact, high-performance workstation designed for developing, testing, and deploying deep learning models directly at the desktop level."
+      ]
+    }
+  ]
+}
