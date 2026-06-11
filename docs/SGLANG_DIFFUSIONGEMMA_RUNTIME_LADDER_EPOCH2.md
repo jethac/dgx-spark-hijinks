@@ -77,8 +77,9 @@ Status: green on GB10 through the stock Triton/eager path; see
 `results/sglang_dgemma_dgr1_stock_smoke_20260611T2340JST/summary.md`.
 
 Caveat: the smoke response is coherent, but the server log reports many
-checkpoint keys as uninitialized. DG-R2 must audit those missing/uninitialized
-keys before any stronger quality claim.
+checkpoint keys as uninitialized. The text-only audit is green in
+`results/sglang_dgemma_dgr2_weight_warning_audit_20260611TmanualJST.md`;
+multimodal/image quality remains blocked on a separate vision-load audit.
 
 ### DG-R2: Upstream Runtime Quality Baseline
 
@@ -92,6 +93,11 @@ Gate:
 - stable output under fixed seed
 - one small supplied-answer or parseable QA check
 - artifact records runtime policy and memory use
+
+Status: prerequisite weight-warning audit is green for text-only DG-R2; see
+`results/sglang_dgemma_dgr2_weight_warning_audit_20260611TmanualJST.md`.
+Next: run the deterministic short prompt set. Do not include image prompts until
+the vision-path warning group has its own audit.
 
 ### DG-R3: D=512 FlashInfer VO-Split Integration
 
