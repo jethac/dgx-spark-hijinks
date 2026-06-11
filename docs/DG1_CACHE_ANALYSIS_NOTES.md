@@ -53,3 +53,26 @@ custom-mask machinery is NOT required for DiffusionGemma.
 25.6 tok/s sustained at 44-51 denoise steps/canvas (temp 0); flat tok/s
 50->6000 prompt tokens; KV pool 1.63M tokens bf16; NVIDIA claims 150
 (adaptive 12-16 steps presumably; sampler config = next DG-3 variable).
+
+
+## DG-2 wrapper-grouping design (authoring on spark/hijinks-e2-dgemma)
+`CommonAttentionMetadata.causal` is bool on shared paths; DiffusionGemma's
+ModelState passes a per-request GPU tensor (True=encoder/commit causal,
+False=denoise bidirectional), mixed batches allowed. FlashInfer builder
+changes (vllm/v1/attention/backends/flashinfer.py):
+1. build(): if causal is a tensor -> partition request indices into
+   causal/non-causal groups (CPU copy of the flag; requests' tokens are
+   contiguous via query_start_loc, so each group is a list of
+   (req_idx, tok_start, tok_end)).
+2. Plan TWO prefill wrappers: existing (causal=True) for the causal group;
+   a second wrapper planned causal=False for the denoise group - same
+   head_dim_vo VO-split logic, same kv page arrays SLICED per group
+   (qo_indptr/kv_indptr/last_page_len subset per partition).
+3. Metadata carries per-group wrapper + token-index tensor; impl forward
+   gathers q tokens per group (index_select), runs each wrapper (VO-split
+   path included - non-causal vosplit probe is GREEN on P520), scatters
+   outputs back. Decode-as-prefill routing unchanged (denoise reqs are
+   qo=canvas-len prefill-shaped anyway; encoder commits are prefills).
+4. bool-causal path byte-identical (zero risk to all existing rungs).
+Validation: P520 plan-level (two-wrapper partition with synthetic mixed
+batch); serving on r10 (mail 0017).
