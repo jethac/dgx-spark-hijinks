@@ -1,0 +1,77 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 14968,
+  "container_image": "jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9",
+  "contexts": [
+    {
+      "ctx": 8191,
+      "elapsed_s": 2.8011375379865058,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma4-26b-a4b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8191,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -6.785276250763509,
+        "mean_nll_nats": 6.785276250763509,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8191,
+        "num_scored_tokens": 8190,
+        "ok": true,
+        "ppl": 884.7244589968558,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8191,
+          "prompt_tokens_details": null,
+          "total_tokens": 8192
+        }
+      },
+      "token_logprobs_dump": "results/token_dumps/claude_g426b_fp8_c2_ctx8191_ctx8191_tokens.json"
+    }
+  ],
+  "elapsed_s": 6.77,
+  "finished_utc": "2026-06-11T16:12:28Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "fp8_e4m3",
+  "model": "gemma4-26b-a4b-it",
+  "ok": true,
+  "run_id": "claude_g426b_fp8_c2_ctx8191",
+  "runtime_ref": "r9 image (baked, no overlay); overnight ladder row=g426b_fp8 cell=c2",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-11T16:12:26Z",
+  "text_chars": 61385,
+  "text_files": [
+    "docs/c2_pride_prejudice_60k.txt"
+  ],
+  "tokenizer": "google/gemma-4-26B-A4B-it",
+  "url": "http://127.0.0.1:8000"
+}

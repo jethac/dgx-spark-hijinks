@@ -1,0 +1,51 @@
+{
+  "allow_patterns": [
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer.model",
+    "tokenizer_config.json",
+    "special_tokens_map.json"
+  ],
+  "checks": {
+    "model_info": {
+      "gated": false,
+      "ok": true,
+      "private": false,
+      "sha": "5926caa4ec0cac5cbfadaf4077420520de1d5205",
+      "siblings": 9
+    },
+    "small_snapshot": {
+      "files": [
+        "chat_template.jinja",
+        "config.json",
+        "generation_config.json",
+        "model.safetensors",
+        "processor_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "ok": true,
+      "path": "/root/.cache/huggingface/hub/models--google--gemma-4-12B-it/snapshots/5926caa4ec0cac5cbfadaf4077420520de1d5205"
+    }
+  },
+  "disk": {
+    "free_bytes": 2184854355968,
+    "path": ".",
+    "total_bytes": 3936289308672,
+    "used_bytes": 1551405817856
+  },
+  "environment": {
+    "cache_dir": null,
+    "hf_home": null,
+    "hf_hub_cache": null,
+    "hf_token_env_present": false
+  },
+  "finished_unix": 1781190408.3633418,
+  "huggingface_hub_version": "1.13.0",
+  "local_files_only": false,
+  "model": "google/gemma-4-12B-it",
+  "ok": true,
+  "schema": "hf-model-access-probe/v1",
+  "started_unix": 1781190407.652646
+}

@@ -1,0 +1,4 @@
+1:VLLM_BUILD_CHECK vllm.__file__= /opt/jethac-vllm/vllm/__init__.py
+2:EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+9:(APIServer pid=1) INFO 06-11 15:45:49 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-12B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-12B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-12b-it'], 'gpu_memory_utilization': 0.72, 'kv_cache_dtype': 'fp8_e4m3', 'language_model_only': True}
+11:(APIServer pid=1) Traceback (most recent call last):
