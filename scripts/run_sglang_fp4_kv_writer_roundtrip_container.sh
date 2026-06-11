@@ -16,7 +16,10 @@ docker run --rm --gpus all --memory=16g --memory-swap=16g --ipc=host \
   -e TORCH_CUDA_ARCH_LIST=12.1a \
   -e FLASHINFER_CACHE_DIR="${CACHE_DIR}" \
   -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
-  -e PYTHONPATH=/work/third_party/sglang/python:/tmp/flashinfer-python-path \
+  -e FLASHINFER_PREFILL_DEBUG_ONCE="${FLASHINFER_PREFILL_DEBUG_ONCE:-0}" \
+  -e SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src \
+  -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG="${SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG:-0}" \
+  -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
   "${IMAGE}" \
   bash -lc '
     set -euo pipefail
