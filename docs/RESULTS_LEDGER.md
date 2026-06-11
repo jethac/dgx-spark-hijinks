@@ -50,6 +50,7 @@ Purpose: blog/Colab source ledger for green or checkpoint rows. Capacity, speed,
 
 - The SGLang mixed-KV capacity number to quote is `~1.28x`, not the old pre-fix `~1.78x` allocator-token artifact.
 - vLLM full NVFP4 K+V has a proven prefix-cache hit smoke row. SGLang full NVFP4 K+V is now short-green on Gemma 4 E4B, including a 512-token / 256-prefix PPL row, but Qwen full-NVFP4 radix and the generic structural route remain open; do not generalize the E4B checkpoint into a global SGLang full-NVFP4 claim.
+- NVFP4-KV quality framing is comparable and corpus-dependent, not superior. Claude's corpus sweep in `results/claude_anomaly_corpus_sweep_20260611/` found FP8 negative deltas on all three corpora, but NVFP4 mixed signs (`-0.332`, `-0.047`, `+0.253` nats/token). The E4B full-NVFP4 `-0.190174` row is therefore a single-corpus checkpoint until rerun on the shared C2/C3 corpus set.
 - Gemma 3 absolute PPL values use deterministic repository markdown corpus slices, not cleaned benchmark corpora. The matched fp8-vs-FP4 delta is the claim.
 - llama.cpp Q4 rows prove practical serving, not native NVFP4 tensor-core dispatch. The native NVFP4 GGUF row proves runtime dispatch smoke, not eval-quality parity.
 - FlashInfer module-cache mode unsoundness is banked as a draft upstream issue in `results/upstream_draft_issue_flashinfer_module_cache_flags_20260611TmanualJST.md`; it should ship with the carrot package, not as a bare issue.
