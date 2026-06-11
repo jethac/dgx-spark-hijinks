@@ -86,3 +86,23 @@ Full support for MTP (multi-token-prediction) drafters in scope. Lane:
    OUTPUT-IDENTICAL to non-spec greedy at temp 0, per size, plus acceptance
    rate + speedup recorded. Identity failure = RED, full stop.
 4. Spark serving rows interleave into morning windows.
+
+## Amendment 3 (Jetha, 00:2x): retire Triton TONIGHT
+
+Decision: yes. Structure that keeps the zero-bug bar honest:
+- The overnight bf16 ladder rows ARE the retirement validation: every bf16
+  row tonight (G3 12B / G4 12B / G4 26B on Spark; 1B/4B/E2B/E4B on P520; 31B
+  already banked, bf16-FlashInfer 4.6132 BEATS bf16-Triton 4.6532) exercises
+  exactly the path the retirement selector routes to, under the determinism
+  and coherence gates.
+- When the selector branch lands tonight (spark/hijinks-e2-triton-retire),
+  Claude flips the default to ON for TEXT-ONLY Gemma configs on CC 12.x and
+  re-runs the selection truth-table tests. If ANY overnight bf16 row goes
+  RED, the default reverts before morning and the red ships as the reason.
+- CARVE-OUT: multimodal configs keep upstream (Triton) routing unless
+  VLLM_FLASHINFER_MM_PREFIX is set - Triton is the current mm-prefix-capable
+  backend and our custom-mask replacement has not passed a serving smoke yet.
+  mm retirement follows the mm smoke, not tonight.
+- Open box for morning: the bf16 speed pair (E4B bf16-FlashInfer bench vs the
+  19.03 tok/s Triton baseline, same params) - quality+coherence validate
+  tonight, the speed datapoint completes the scorecard in a morning window.
