@@ -1,0 +1,21 @@
+{
+  "speech": {
+    "file": "speech_librispeech_1272-128104-0000.wav",
+    "source": "LibriSpeech ASR corpus (Panayotov et al., 2015, CC BY 4.0), dev-clean utterance 1272-128104-0000, via HF dataset hf-internal-testing/librispeech_asr_dummy config=clean split=validation row=0",
+    "speaker": "1272",
+    "chapter": "128104",
+    "sampling_rate": 16000,
+    "duration_s": 5.855,
+    "reference_transcript": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+    "md5": "2317b0eb294e2363c818ecc4289b6ffb"
+  },
+  "tone_control": {
+    "file": "tone_control.wav",
+    "source": "synthesized by make_audio_mm_assets.py (no RNG)",
+    "pattern": "1s 440Hz sine, 1s silence, 1s 880Hz sine, 1s silence",
+    "amplitude": 0.3,
+    "sampling_rate": 16000,
+    "duration_s": 4.0,
+    "md5": "ead0918e31771b4e1c6b4a9d688efbfb"
+  }
+}
