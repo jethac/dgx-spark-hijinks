@@ -1,0 +1,321 @@
+OVERLAY_CHECK vllm.__file__= /opt/vllm_overlay/vllm/__init__.py
+OVERLAY_CHECK flashinfer= /opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py
+EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339] 
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.22.1rc1.dev281+gad2337814
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339]   █▄█▀ █     █     █     █  model   google/gemma-4-31B-it
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:339] 
+(APIServer pid=1) INFO 06-11 03:11:26 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'block_size': 16, 'gpu_memory_utilization': 0.72, 'language_model_only': True}
+(APIServer pid=1) WARNING 06-11 03:11:26 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+(APIServer pid=1) INFO 06-11 03:11:32 [model.py:611] Resolved architecture: Gemma4ForConditionalGeneration
+(APIServer pid=1) INFO 06-11 03:11:32 [model.py:1756] Using max model len 8192
+(APIServer pid=1) INFO 06-11 03:11:32 [config.py:112] Gemma4 has heterogeneous head dimensions (head_dim=256, global_head_dim=512) and VLLM_FLASHINFER_VOSPLIT is set: forcing FLASHINFER with the FA2 VO split instead of TRITON_ATTN.
+(APIServer pid=1) INFO 06-11 03:11:32 [vllm.py:999] Asynchronous scheduling is enabled.
+(APIServer pid=1) INFO 06-11 03:11:32 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(APIServer pid=1) INFO 06-11 03:11:35 [registry.py:134] All limits of multimodal modalities supported by the model are set to 0, running in text-only mode.
+(EngineCore pid=190) INFO 06-11 03:11:41 [core.py:113] Initializing a V1 LLM engine (v0.22.1rc1.dev281+gad2337814) with config: model='google/gemma-4-31B-it', speculative_config=None, tokenizer='google/gemma-4-31B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=gemma4-31b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=190) INFO 06-11 03:11:44 [registry.py:134] All limits of multimodal modalities supported by the model are set to 0, running in text-only mode.
+(EngineCore pid=190) INFO 06-11 03:11:44 [parallel_state.py:1568] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://192.168.1.104:40757 backend=nccl
+(EngineCore pid=190) INFO 06-11 03:11:44 [parallel_state.py:1903] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=190) INFO 06-11 03:11:45 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=190) INFO 06-11 03:11:45 [gpu_model_runner.py:5101] Starting to load model google/gemma-4-31B-it...
+(EngineCore pid=190) INFO 06-11 03:11:45 [vllm.py:999] Asynchronous scheduling is enabled.
+(EngineCore pid=190) INFO 06-11 03:11:45 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=190) INFO 06-11 03:11:45 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=190) INFO 06-11 03:11:46 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=190) INFO 06-11 03:11:49 [weight_utils.py:922] Filesystem type for checkpoints: EXT4. Checkpoint size: 58.25 GiB. Available RAM: 49.70 GiB.
+(EngineCore pid=190) INFO 06-11 03:11:49 [weight_utils.py:952] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre) and the checkpoint size (58.25 GiB) exceeds 90% of available RAM (49.70 GiB).
+(EngineCore pid=190) Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+(EngineCore pid=190) Loading safetensors checkpoint shards:  50% Completed | 1/2 [04:54<04:54, 294.20s/it]
+(EngineCore pid=190) Loading safetensors checkpoint shards: 100% Completed | 2/2 [06:14<00:00, 168.53s/it]
+(EngineCore pid=190) Loading safetensors checkpoint shards: 100% Completed | 2/2 [06:14<00:00, 187.38s/it]
+(EngineCore pid=190) 
+(EngineCore pid=190) INFO 06-11 03:18:04 [default_loader.py:397] Loading weights took 375.30 seconds
+(EngineCore pid=190) INFO 06-11 03:18:05 [gpu_model_runner.py:5196] Model loading took 57.91 GiB memory and 379.108832 seconds
+(EngineCore pid=190) INFO 06-11 03:18:11 [backends.py:1089] Using cache directory: /root/.cache/vllm/torch_compile_cache/0dbd650069/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=190) INFO 06-11 03:18:11 [backends.py:1148] Dynamo bytecode transform time: 6.18 s
+(EngineCore pid=190) [rank0]:W0611 03:18:12.481000 190 site-packages/torch/_inductor/utils.py:1731] Not enough SMs to use max_autotune_gemm mode
+(EngineCore pid=190) INFO 06-11 03:18:17 [backends.py:378] Cache the graph of compile range (1, 2048) for later use
+(EngineCore pid=190) INFO 06-11 03:18:28 [backends.py:393] Compiling a graph for compile range (1, 2048) takes 17.32 s
+(EngineCore pid=190) INFO 06-11 03:18:32 [decorators.py:708] saved AOT compiled function to /root/.cache/vllm/torch_compile_cache/torch_aot_compile/2e010ba12b1c654264883c730f84215381a0202e425d160bcc16fe9fda9f9041/rank_0_0/model
+(EngineCore pid=190) INFO 06-11 03:18:32 [monitor.py:53] torch.compile took 27.06 s in total
+(EngineCore pid=190) INFO 06-11 03:18:33 [monitor.py:81] Initial profiling/warmup run took 1.60 s
+(EngineCore pid=190) WARNING 06-11 03:19:14 [compilation.py:1396] CUDAGraphMode.FULL_AND_PIECEWISE is not supported with FlashInferBackend backend (support: AttentionCGSupport.NEVER); setting cudagraph_mode=PIECEWISE because attention is compiled piecewise
+(EngineCore pid=190) INFO 06-11 03:19:14 [flashinfer.py:1411] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+(EngineCore pid=190) INFO 06-11 03:19:14 [gpu_model_runner.py:6421] Profiling CUDA graph memory: PIECEWISE=51 (largest=512)
+(EngineCore pid=190) INFO 06-11 03:19:16 [gpu_model_runner.py:6526] Estimated CUDA graph memory: 0.28 GiB total
+(EngineCore pid=190) INFO 06-11 03:19:16 [gpu_worker.py:480] Available KV cache memory: 22.49 GiB
+(EngineCore pid=190) INFO 06-11 03:19:16 [gpu_worker.py:495] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.7200 is equivalent to --gpu-memory-utilization=0.7177 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.7223. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(EngineCore pid=190) INFO 06-11 03:19:16 [kv_cache_utils.py:1790] GPU KV cache size: 61,792 tokens
+(EngineCore pid=190) INFO 06-11 03:19:16 [kv_cache_utils.py:1791] Maximum concurrency for 8,192 tokens per request: 7.54x
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408] Module vllm.third_party.deep_gemm was found but failed to import
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408] Traceback (most recent call last):
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "/opt/vllm_overlay/vllm/utils/import_utils.py", line 406, in _has_module
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]     importlib.import_module(module_name)
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]     return _bootstrap._gcd_import(name[level:], package, level)
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap_external>", line 999, in exec_module
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]   File "/opt/vllm_overlay/vllm/third_party/deep_gemm/__init__.py", line 16, in <module>
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408]     from . import _C
+(EngineCore pid=190) WARNING 06-11 03:19:17 [import_utils.py:408] ImportError: cannot import name '_C' from partially initialized module 'vllm.third_party.deep_gemm' (most likely due to a circular import) (/opt/vllm_overlay/vllm/third_party/deep_gemm/__init__.py)
+(EngineCore pid=190) 2026-06-11 03:19:17,309 - INFO - autotuner.py:651 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=190) 2026-06-11 03:19:17,351 - INFO - autotuner.py:674 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=190) INFO 06-11 03:19:17 [kernel_warmup.py:97] Warming up FlashInfer attention.
+[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=256;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=nv_bfloat16,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=256,head_dim_vo=256,require_fp4_kv=0,use_swa=1,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=2,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=1023,batch_size=1,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=1,total_num_rows=8}
+[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=256;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xe86360000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xe869fda20000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xe862f8b54000,device=0,ndim=3,shape=[8,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xe86920000000,device=0,ndim=4,shape=[9210,16,16,256],stride=[131072,4096,256,1],_dtype={code=4,bits=16,lanes=1} } paged_v_cache={ptr=0xe86920020000,device=0,ndim=4,shape=[9210,16,16,256],stride=[131072,4096,256,1],_dtype={code=4,bits=16,lanes=1} } qo_indptr={ptr=0x32eea4200,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32eebbe00,device=0,ndim=1,shape=[2],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xe8719bb66200,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32eed4000,device=0,ndim=1,shape=[1],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xe862f8aaa000,device=0,ndim=3,shape=[8,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null 
+[flashinfer][prefill-debug] call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=256;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=nv_bfloat16,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=256,head_dim_vo=256,require_fp4_kv=0,use_swa=1,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=2,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=1023,batch_size=8,num_qo_heads=32,num_kv_heads=16,page_size=16,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=8,total_num_rows=8}
+[flashinfer][prefill-debug] tensors call_id=2 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=256;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=true;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xe86360000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xe86414000000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xe862f8b34000,device=0,ndim=3,shape=[8,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xe86920000000,device=0,ndim=4,shape=[9210,16,16,256],stride=[131072,4096,256,1],_dtype={code=4,bits=16,lanes=1} } paged_v_cache={ptr=0xe86920020000,device=0,ndim=4,shape=[9210,16,16,256],stride=[131072,4096,256,1],_dtype={code=4,bits=16,lanes=1} } qo_indptr={ptr=0x32ef03800,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32eeebc00,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xe8719bb66200,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32eef7a00,device=0,ndim=1,shape=[8],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xe862f8a8a000,device=0,ndim=3,shape=[8,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null 
+[flashinfer][prefill-debug] call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged compiled={dtype_q=nv_bfloat16,dtype_kv=nv_bfloat16,dtype_o=nv_bfloat16,idtype=int32_t,head_dim_qk=512,head_dim_vo=256,require_fp4_kv=0,use_swa=0,use_logits_cap=0,posenc=0,use_fp16_qk_reduction=0,sizeof_q=2,sizeof_kv=2,sizeof_o=2,sizeof_id=4,is_kv_fp4x2=0,additional_tensors=,additional_tensor_dtypes=,additional_scalars=,additional_scalar_dtypes=} runtime={layout=0,window_left=-1,batch_size=9,num_qo_heads=32,num_kv_heads=4,page_size=32,split_kv=0,cta_tile_q=16,enable_cuda_graph=0,padded_batch_size=12,total_num_rows=16}
+[flashinfer][prefill-debug] tensors call_id=1 module_uri= module_key=backend=;uri=;dtype_q=nv_bfloat16;dtype_kv=nv_bfloat16;dtype_o=nv_bfloat16;idtype=int32_t;head_dim_qk=512;head_dim_vo=256;posenc=PosEncodingMode::kNone;swa=false;logits_cap=false;fp16_qk=false;fp4_kv=0;additional_tensors=;additional_tensor_dtypes=;additional_scalars=;additional_scalar_dtypes= path=paged float_workspace={ptr=0xe862c0000000,device=0,ndim=1,shape=[413138944],stride=[1],_dtype={code=1,bits=8,lanes=1} } int_workspace={ptr=0xe86412800000,device=0,ndim=1,shape=[8388608],stride=[1],_dtype={code=1,bits=8,lanes=1} } q={ptr=0xe862d9200000,device=0,ndim=3,shape=[16,32,512],stride=[16384,512,1],_dtype={code=4,bits=16,lanes=1} } paged_k_cache={ptr=0xe86920000000,device=0,ndim=4,shape=[9210,32,4,512],stride=[131072,2048,512,1],_dtype={code=4,bits=16,lanes=1} } paged_v_cache={ptr=0xe86920020000,device=0,ndim=4,shape=[9210,32,4,256],stride=[131072,2048,512,1],_dtype={code=4,bits=16,lanes=1} } qo_indptr={ptr=0x32efc2800,device=0,ndim=1,shape=[10],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indptr={ptr=0x32efc2a00,device=0,ndim=1,shape=[10],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_indices={ptr=0xe869ca080000,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } paged_kv_last_page_len={ptr=0x32efce400,device=0,ndim=1,shape=[9],stride=[1],_dtype={code=0,bits=32,lanes=1} } o={ptr=0xe862f8abe000,device=0,ndim=3,shape=[16,32,256],stride=[8192,256,1],_dtype={code=4,bits=16,lanes=1} } maybe_lse=null 
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199] EngineCore failed to start.
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199] Traceback (most recent call last):
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     super().__init__(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 132, in __init__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 294, in _initialize_kv_caches
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     self.model_executor.initialize_from_config(kv_cache_configs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/abstract.py", line 124, in initialize_from_config
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     compilation_times: list[CompilationTimes] = self.collective_rpc(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]                                                 ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/executor/uniproc_executor.py", line 92, in collective_rpc
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_worker.py", line 626, in compile_or_warm_up_model
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     kernel_warmup(self)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/warmup/kernel_warmup.py", line 100, in kernel_warmup
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     worker.model_runner._dummy_run(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/worker/gpu_model_runner.py", line 5897, in _dummy_run
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     outputs = self.model(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]               ^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/cuda_graph.py", line 254, in __call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self.runnable(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return forward_call(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 1590, in forward
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     hidden_states = self.language_model.model(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/decorators.py", line 520, in __call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self.aot_compiled_fn(self, *args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 224, in __call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self.fn(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4.py", line 1311, in forward
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     def forward(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/compilation/caching.py", line 217, in __call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self.optimized_call(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "<string>", line 363, in execution_fn
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "<string>", line 31, in __vllm_inlined_submods__11
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/usr/local/lib/python3.12/site-packages/torch/_ops.py", line 1269, in __call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return self._op(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/kv_transfer_utils.py", line 40, in wrapper
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/attention.py", line 834, in unified_attention_with_output
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     self.impl.forward(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2791, in forward
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     self._run_vo_split_prefill(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2287, in _run_vo_split_prefill
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     wrapper.run(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/api_logging.py", line 2333, in _auto_dump_wrapper
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     return _inner(*args, **kwargs)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 2602, in run
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     self._cached_module.paged_run(*run_args)
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 720, in paged_run
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]     paged_run_func(
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199]   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+(EngineCore pid=190) ERROR 06-11 03:20:13 [core.py:1199] RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+(EngineCore pid=190) Process EngineCore:
+(EngineCore pid=190) Traceback (most recent call last):
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=190)     self.run()
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=190)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1203, in run_engine_core
+(EngineCore pid=190)     raise e
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=190)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=190)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=190)     super().__init__(
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 132, in __init__
+(EngineCore pid=190)     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=190)                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/engine/core.py", line 294, in _initialize_kv_caches
+(EngineCore pid=190)     self.model_executor.initialize_from_config(kv_cache_configs)
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/executor/abstract.py", line 124, in initialize_from_config
+(EngineCore pid=190)     compilation_times: list[CompilationTimes] = self.collective_rpc(
+(EngineCore pid=190)                                                 ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/executor/uniproc_executor.py", line 92, in collective_rpc
+(EngineCore pid=190)     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=190)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/worker/gpu_worker.py", line 626, in compile_or_warm_up_model
+(EngineCore pid=190)     kernel_warmup(self)
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/model_executor/warmup/kernel_warmup.py", line 100, in kernel_warmup
+(EngineCore pid=190)     worker.model_runner._dummy_run(
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/worker/gpu_model_runner.py", line 5897, in _dummy_run
+(EngineCore pid=190)     outputs = self.model(
+(EngineCore pid=190)               ^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/compilation/cuda_graph.py", line 254, in __call__
+(EngineCore pid=190)     return self.runnable(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+(EngineCore pid=190)     return self._call_impl(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+(EngineCore pid=190)     return forward_call(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4_mm.py", line 1590, in forward
+(EngineCore pid=190)     hidden_states = self.language_model.model(
+(EngineCore pid=190)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/compilation/decorators.py", line 520, in __call__
+(EngineCore pid=190)     return self.aot_compiled_fn(self, *args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 224, in __call__
+(EngineCore pid=190)     return self.fn(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/model_executor/models/gemma4.py", line 1311, in forward
+(EngineCore pid=190)     def forward(
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/compilation/caching.py", line 217, in __call__
+(EngineCore pid=190)     return self.optimized_call(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "<string>", line 363, in execution_fn
+(EngineCore pid=190)   File "<string>", line 31, in __vllm_inlined_submods__11
+(EngineCore pid=190)   File "/usr/local/lib/python3.12/site-packages/torch/_ops.py", line 1269, in __call__
+(EngineCore pid=190)     return self._op(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/kv_transfer_utils.py", line 40, in wrapper
+(EngineCore pid=190)     return func(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/model_executor/layers/attention/attention.py", line 834, in unified_attention_with_output
+(EngineCore pid=190)     self.impl.forward(
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2791, in forward
+(EngineCore pid=190)     self._run_vo_split_prefill(
+(EngineCore pid=190)   File "/opt/vllm_overlay/vllm/v1/attention/backends/flashinfer.py", line 2287, in _run_vo_split_prefill
+(EngineCore pid=190)     wrapper.run(
+(EngineCore pid=190)   File "/opt/jethac-flashinfer/flashinfer/api_logging.py", line 2333, in _auto_dump_wrapper
+(EngineCore pid=190)     return _inner(*args, **kwargs)
+(EngineCore pid=190)            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=190)   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 2602, in run
+(EngineCore pid=190)     self._cached_module.paged_run(*run_args)
+(EngineCore pid=190)   File "/opt/jethac-flashinfer/flashinfer/prefill.py", line 720, in paged_run
+(EngineCore pid=190)     paged_run_func(
+(EngineCore pid=190)   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+(EngineCore pid=190) RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /opt/jethac-flashinfer/include/flashinfer/attention/prefill.cuh:3201: Unsupported max_mma_kv: 0
+[rank0]:[W611 03:20:14.145641991 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+(APIServer pid=1) Traceback (most recent call last):
+(APIServer pid=1)   File "/usr/local/bin/vllm", line 8, in <module>
+(APIServer pid=1)     sys.exit(main())
+(APIServer pid=1)              ^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/cli/main.py", line 95, in main
+(APIServer pid=1)     args.dispatch_function(args)
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/cli/serve.py", line 148, in cmd
+(APIServer pid=1)     uvloop.run(run_server(args))
+(APIServer pid=1)   File "/usr/local/lib/python3.12/site-packages/uvloop/__init__.py", line 96, in run
+(APIServer pid=1)     return __asyncio.run(
+(APIServer pid=1)            ^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/asyncio/runners.py", line 195, in run
+(APIServer pid=1)     return runner.run(main)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=1)     return self._loop.run_until_complete(task)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=1)   File "/usr/local/lib/python3.12/site-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=1)     return await main
+(APIServer pid=1)            ^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 665, in run_server
+(APIServer pid=1)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 679, in run_server_worker
+(APIServer pid=1)     async with build_async_engine_client(
+(APIServer pid=1)                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 99, in build_async_engine_client
+(APIServer pid=1)     async with build_async_engine_client_from_engine_args(
+(APIServer pid=1)                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=1)     return await anext(self.gen)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/entrypoints/openai/api_server.py", line 135, in build_async_engine_client_from_engine_args
+(APIServer pid=1)     async_llm = AsyncLLM.from_vllm_config(
+(APIServer pid=1)                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/async_llm.py", line 217, in from_vllm_config
+(APIServer pid=1)     return cls(
+(APIServer pid=1)            ^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/async_llm.py", line 146, in __init__
+(APIServer pid=1)     self.engine_core = EngineCoreClient.make_async_mp_client(
+(APIServer pid=1)                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=1)     return func(*args, **kwargs)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 131, in make_async_mp_client
+(APIServer pid=1)     return AsyncMPClient(*client_args)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=1)     return func(*args, **kwargs)
+(APIServer pid=1)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 948, in __init__
+(APIServer pid=1)     super().__init__(
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/core_client.py", line 570, in __init__
+(APIServer pid=1)     with launch_core_engines(
+(APIServer pid=1)          ^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=1)   File "/usr/local/lib/python3.12/contextlib.py", line 144, in __exit__
+(APIServer pid=1)     next(self.gen)
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/utils.py", line 1190, in launch_core_engines
+(APIServer pid=1)     wait_for_engine_startup(
+(APIServer pid=1)   File "/opt/vllm_overlay/vllm/v1/engine/utils.py", line 1249, in wait_for_engine_startup
+(APIServer pid=1)     raise RuntimeError(
+(APIServer pid=1) RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
