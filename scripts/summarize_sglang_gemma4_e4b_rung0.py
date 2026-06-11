@@ -15,7 +15,9 @@ def main() -> int:
 
     out = Path(args.out_dir)
     server_log = (out / "server.log").read_text(encoding="utf-8", errors="replace")
-    request_path = out / "generate.json"
+    request_path = out / "chat_openai.json"
+    if not request_path.exists():
+        request_path = out / "generate.json"
     request_status_path = out / "request_status.txt"
 
     try:

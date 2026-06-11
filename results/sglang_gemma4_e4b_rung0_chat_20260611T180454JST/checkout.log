@@ -1,0 +1,9 @@
+parent_commit=e4212d2ef97a2ab46ccf46d85fdefe012d020543
+sglang_commit=9d78a007f7c92f51b43518af09aeacb1742c97a1
+flashinfer_commit=76af798243d11c4910eaceaf1d62ba4227656d4a
+ M scripts/run_sglang_gemma4_e4b_rung0_smoke.sh
+ M scripts/summarize_sglang_gemma4_e4b_rung0.py
+ M third_party/flashinfer
+?? results/sglang_gemma4_e4b_chat_compare_20260611T175952JST/
+?? results/sglang_gemma4_e4b_rung0_chat_20260611T180454JST/
+?? scripts/run_sglang_gemma4_e4b_chat_compare.sh

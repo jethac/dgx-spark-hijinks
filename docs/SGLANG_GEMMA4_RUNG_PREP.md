@@ -23,6 +23,15 @@ remaining rung-0 red is decode-side: the D=512 global layer still enters the sta
 decode wrapper, which instantiates a symmetric `head_dim_qk=512;head_dim_vo=512` paged
 module and fails with `Unsupported max_mma_kv: 0`.
 
+Epoch-2 update: `results/sglang_gemma4_e4b_rung0_chat_20260611T180454JST/summary.md`
+is the current rung-0 green. It uses `jethac/sglang@9d78a007f` plus
+`jethac/flashinfer@76af7982`; the D=512 dispatcher wall is closed, D=512 global
+decode uses `decode_as_prefill_vosplit*`, and chat-formatted serving returns
+`The capital of Japan is Tokyo.` The paired raw-vs-chat diagnostic
+`results/sglang_gemma4_e4b_chat_compare_20260611T175952JST/summary.md` shows raw
+`/generate` repeats separators, so future Gemma 4 IT quality gates should use the
+OpenAI chat endpoint unless the task explicitly measures raw completion behavior.
+
 ## SGLang Code Surfaces
 
 ### Gemma 4 Runtime Geometry

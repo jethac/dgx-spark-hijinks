@@ -37,6 +37,16 @@ FlashInfer dispatcher selection inside the VO-split paged-prefill path:
 `Unsupported max_mma_kv: 0`. That is the r9 / `jethac/flashinfer@76af7982` target,
 not a standard decode-wrapper routing failure.
 
+Epoch-2 result: `results/sglang_gemma4_e4b_rung0_chat_20260611T180454JST/summary.md`
+reran the same SGLang E4B text-only checkpoint with `jethac/flashinfer@76af7982`.
+The dispatcher wall is closed and the OpenAI chat endpoint returns the coherent
+answer `The capital of Japan is Tokyo.` while D=512 global prefill and decode both
+route through `*_vosplit*` paged-prefill at `head_dim=512, head_dim_vo=256`.
+The paired diagnostic `results/sglang_gemma4_e4b_chat_compare_20260611T175952JST/summary.md`
+shows raw `/generate` still emits separator repetition for the same instruction.
+Treat raw completion as a diagnostic only for this instruction-tuned checkpoint;
+the rung-0 serving gate is chat-formatted quality plus geometry/provenance.
+
 ## 2026-06-10 update — deswizzle leak is falsified for the live SGLang failure
 
 Artifacts:
