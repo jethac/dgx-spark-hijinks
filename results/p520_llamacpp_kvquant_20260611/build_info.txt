@@ -1,0 +1,5 @@
+18ef86ecec723361362a332a79b4d913fd724d40 2026-06-11 11:36:35 +0200 server: skip unused log lines on router mode (#24463)
+tag: b9596
+cuda_arch: 120a
+version: 1 (18ef86e)
+built with GNU 13.3.0 for Linux x86_64

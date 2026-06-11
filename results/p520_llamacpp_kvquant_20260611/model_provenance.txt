@@ -1,0 +1,2 @@
+90ce98129eb3e8cc57e62433d500c97c624b1e3af1fcc85dd3b55ad7e0313e9f  /home/jetha/models/gemma-4-E4B-it-Q4_K_M.gguf
+repo: ggml-org/gemma-4-E4B-it-GGUF  file: gemma-4-E4B-it-Q4_K_M.gguf

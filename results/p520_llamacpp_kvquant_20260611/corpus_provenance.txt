@@ -1,0 +1,4 @@
+173c87a53759e0201f33e0ccf978e510c2042d7f2cb78229d9a50d79b9e7dd08  wikitext-2-raw/wiki.test.raw
+e7ee03e25a1d025b4bd73c42688c65dbb49e406d92382a3dfc638c4122ec73f2  /home/jetha/corpora/local_english_50k.txt
+corpus1: wikitext-2 raw test set (wikitext-2-raw-v1.zip from huggingface.co/datasets/ggml-org/ci, the llama.cpp standard)
+corpus2: local_english_50k.txt = first 50KiB of de-markdowned llama.cpp README+docs at the built tag (identical bytes across rows)
