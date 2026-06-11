@@ -23,6 +23,20 @@ Source: upstream/dgemma branch, vllm/model_executor/models/diffusion_gemma.py
    (eb_mask/renoise with random tokens, argmax canvas, valid_canvas_len
    handling near max_model_len) - file lines ~488-620.
 
+## RESOLVED: the canvas "mask" is a per-request causal FLAG, not a mask
+DiffusionGemmaModelState.build_attn_metadata passes `causal` as a per-request
+GPU TENSOR (encoder/commit phase = True, denoise phase = False; mixed batches
+supported; diffusion_gemma.py ~1015). Semantics check out: canvas tokens sit
+after the prefix, so plan(causal=False) over (qo=canvas, kv=prefix+canvas)
+yields full prefix visibility + intra-canvas bidirectionality - exactly the
+needed pattern. CONSEQUENCE for queue item 3 (FlashInfer enablement): NOT
+packed-custom-mask work. Needed instead: (a) per-causality wrapper grouping
+in our FlashInfer builder (encoder-phase reqs -> causal wrapper, denoise-
+phase -> non-causal wrapper - same split-and-group pattern as our
+decode-as-prefill routing); (b) plan(causal=False) on the VO-split path,
+probe-validated (trivial variant of existing probes; P520). The mm-prefix
+custom-mask machinery is NOT required for DiffusionGemma.
+
 ## Still to read (continuation pointers)
 - forward() dispatch (line ~326) + how mode reaches the attention layers;
 - the bidirectional masking implementation in decoder mode (what the
