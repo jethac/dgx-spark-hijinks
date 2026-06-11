@@ -14,6 +14,8 @@ PORT=${PORT:-30000}
 PAGE_SIZE=${PAGE_SIZE:-1}
 MEM_FRACTION_STATIC=${MEM_FRACTION_STATIC:-0.40}
 HF_CACHE=${HF_CACHE:-${HOME}/.cache/huggingface}
+FLASHINFER_SRC=${FLASHINFER_SRC:-${REPO_ROOT}/third_party/flashinfer}
+FLASHINFER_CACHE_BASE=${FLASHINFER_CACHE_BASE:-/tmp}
 READY_TIMEOUT_S=${READY_TIMEOUT_S:-900}
 GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
 GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
@@ -71,11 +73,18 @@ run_one() {
   local ppl_json="${RESULTS_DIR}/${RUN}_${label}_ppl.json"
   local stdout_json="${RESULTS_DIR}/${RUN}_${label}_ppl_stdout.json"
   local stderr_log="${RESULTS_DIR}/${RUN}_${label}_ppl_stderr.log"
+  local cache_dir="${FLASHINFER_CACHE_BASE}/flashinfer-cache-${RUN}-${label}"
 
   docker rm -f "${name}" >/dev/null 2>&1 || true
+  rm -rf "${cache_dir}"
 
   extra_envs=(
-    -e PYTHONPATH="/work/third_party/sglang/python:${PYTHONPATH:-}"
+    -e TORCH_CUDA_ARCH_LIST=12.1a
+    -e FLASHINFER_CACHE_DIR="${cache_dir}"
+    -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a"
+    -e SPARK_FLASHINFER_SOURCE_ROOT=/work/third_party/flashinfer
+    -e SPARK_FLASHINFER_SITECUSTOMIZE_DEBUG=1
+    -e PYTHONPATH="/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path:${PYTHONPATH:-}"
     -e SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1
   )
   if [[ "${mixed}" == "1" ]]; then
@@ -110,10 +119,43 @@ run_one() {
     --memory "${GB10_DOCKER_MEMORY}" --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
     -v "${REPO_ROOT}:/work" \
     -v "${HF_CACHE}:/root/.cache/huggingface" \
+    -v "${FLASHINFER_SRC}:/work/third_party/flashinfer" \
     -w /work \
     "${extra_envs[@]}" \
     "${RUNTIME_IMAGE}" \
-    bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/flashinfer; git config --global --add safe.directory /work/third_party/sglang; python3 -c 'import flashinfer, importlib.metadata as md, sgl_kernel; print(\"flashinfer\", getattr(flashinfer, \"__version__\", None), getattr(flashinfer, \"__file__\", None)); print(\"flashinfer_python\", md.version(\"flashinfer_python\")); print(\"sglang_kernel\", md.version(\"sglang-kernel\")); print(\"sglang\", md.version(\"sglang\")); print(\"sgl_kernel\", getattr(sgl_kernel, \"__file__\", None)); print(\"common_ops\", getattr(getattr(sgl_kernel, \"common_ops\", None), \"__file__\", None))' > /work/results/${RUN}_${label}_install.log 2>&1; exec python3 -m sglang.launch_server ${launch_args[*]}" \
+    bash -lc "set -euo pipefail; git config --global --add safe.directory /work; git config --global --add safe.directory /work/third_party/flashinfer; git config --global --add safe.directory /work/third_party/sglang; rm -rf /root/.cache/flashinfer '${cache_dir}'; mkdir -p /tmp/flashinfer-python-path; ln -sfn /work/third_party/flashinfer/flashinfer /tmp/flashinfer-python-path/flashinfer; python3 - <<'PY' > /work/results/${RUN}_${label}_install.log 2>&1
+import hashlib
+import importlib
+import importlib.metadata as md
+import pathlib
+import flashinfer
+from flashinfer.jit import env as jit_env
+
+def md5(path):
+    p = pathlib.Path(path)
+    return hashlib.md5(p.read_bytes()).hexdigest() if p.exists() else 'missing'
+
+print('flashinfer', getattr(flashinfer, '__version__', None), getattr(flashinfer, '__file__', None), flush=True)
+for dist in ('flashinfer_python', 'sglang-kernel', 'sglang'):
+    try:
+        print('dist_version', dist, md.version(dist), flush=True)
+    except Exception as exc:
+        print('dist_version_error', dist, repr(exc), flush=True)
+for name in ('sgl_kernel', 'sgl_kernel.common_ops'):
+    try:
+        mod = importlib.import_module(name)
+        path = pathlib.Path(getattr(mod, '__file__', '')).resolve()
+        print('binary_md5', name, path, md5(path), flush=True)
+    except Exception as exc:
+        print('binary_probe_error', name, repr(exc), flush=True)
+print('flashinfer_data', jit_env.FLASHINFER_DATA, flush=True)
+print('flashinfer_csrc', jit_env.FLASHINFER_CSRC_DIR, flush=True)
+print('flashinfer_include', jit_env.FLASHINFER_INCLUDE_DIR, flush=True)
+print('flashinfer_cutlass', jit_env.CUTLASS_INCLUDE_DIRS, flush=True)
+print('flashinfer_cccl', jit_env.CCCL_INCLUDE_DIRS, flush=True)
+print('flashinfer_spdlog', jit_env.SPDLOG_INCLUDE_DIR, flush=True)
+PY
+exec python3 -m sglang.launch_server ${launch_args[*]}" \
     >/dev/null
 
   if ! wait_ready "${name}"; then
