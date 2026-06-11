@@ -1,0 +1,10 @@
+FLASHINFER_AOT_DIR=unset
+== /root/.cache/flashinfer
+ls: cannot access '/root/.cache/flashinfer': No such file or directory
+== /root/.cache/flashinfer-aiter
+ls: cannot access '/root/.cache/flashinfer-aiter': No such file or directory
+== /tmp/flashinfer
+ls: cannot access '/tmp/flashinfer': No such file or directory
+== /tmp/flashinfer_modules
+ls: cannot access '/tmp/flashinfer_modules': No such file or directory
+== payload .so search

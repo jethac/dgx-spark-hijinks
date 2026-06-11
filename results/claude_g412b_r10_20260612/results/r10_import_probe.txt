@@ -1,0 +1,9 @@
+vllm 0.1.dev1+g9759e3b06 /opt/jethac-vllm/vllm/__init__.py
+flashinfer 0.6.13 /opt/jethac-flashinfer/flashinfer/__init__.py
+torch 2.11.0+cu130 13.0
+humming /usr/local/lib/python3.12/site-packages/humming/__init__.py 0.1.4
+transformers 5.11.0 /usr/local/lib/python3.12/site-packages/transformers/__init__.py
+GEMMA4_UNIFIED present in transformers config mapping
+device NVIDIA GB10 cc (12, 1) sms 48
+arch_list ['sm_80', 'sm_90', 'sm_100', 'sm_110', 'sm_120']
+extension imports: PASS

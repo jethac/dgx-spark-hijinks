@@ -81,3 +81,22 @@ not merged), red ships with verbatim evidence.
   C1 is request-order-dependent (score-first 4.4739 bitwise == banked;
   smokes-first 4.5915) — fp8/nvfp4 rows need order provenance; bf16
   unaffected.
+- 2026-06-12 08:1x (Claude, order-control + r10 window): G4-12B OPEN BOX
+  CLOSED. r10 exists per spec (`aed0da3f96b2` = id-pinned r9 + transformers
+  5.11.0 baked, builder `scripts/build_vllm_gemma4_rebuiltc_r10_image.sh`,
+  all r9-equivalent provenance gates green) and serves the paired cells
+  green end-to-end: Tri 3.4373001938921166 x2 bitwise vs FI
+  3.464887691589146 x2 bitwise (+0.0276, R1 PASS), both routes coherent,
+  R5 proof clean, speed parity (0.99x decode, TTFT -9% FI) — every value
+  bitwise-reproduces the labeled dep-overlay pair, so the overlay is
+  validated and G4-12B joins the retirement claim set. Bonus: first 12B
+  quantized cell (nvfp4 VO-split, 3.53x capacity, C1 3.6834130552987028 x2
+  bitwise, score-first cold provenance, +0.246 vs bf16 — in band, largest
+  nvfp4 delta in the family). SAME WINDOW, order-control matrix
+  (`results/claude_order_control_20260612/ORDER_CONTROL_SUMMARY.md`): the
+  06:02 entry's "request-order-dependent" interpretation is SUPERSEDED —
+  fp8 C1 is per-boot BISTABLE (today's cold/warmed A/B inverted yesterday's
+  exactly); fp8 rows need boot-profile provenance (A=4.4739/B=4.5915 at
+  31B), not just order; bf16 (6 bitwise repins) and nvfp4 (3 boots, both
+  orders, one bitwise profile) are unaffected, so no retirement criterion
+  moves.

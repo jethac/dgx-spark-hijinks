@@ -1,0 +1,51 @@
+{
+  "content": "spark-ok",
+  "content_chars": 8,
+  "elapsed_s": 1.319,
+  "endpoint": "http://127.0.0.1:8000/v1/chat/completions",
+  "model": "gemma4-31b-it",
+  "ok": true,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": null,
+          "audio": null,
+          "content": "spark-ok",
+          "function_call": null,
+          "reasoning": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "routed_experts": null,
+        "stop_reason": 106,
+        "token_ids": null
+      }
+    ],
+    "created": 1781214266,
+    "id": "chatcmpl-a732115d8423aa1d",
+    "kv_transfer_params": null,
+    "model": "gemma4-31b-it",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_text": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.1.dev1+g9759e3b06-12d8052d",
+    "usage": {
+      "completion_tokens": 4,
+      "prompt_tokens": 22,
+      "prompt_tokens_details": null,
+      "total_tokens": 26
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

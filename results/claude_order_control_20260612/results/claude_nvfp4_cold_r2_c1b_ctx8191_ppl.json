@@ -1,0 +1,77 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 337355,
+  "container_image": "jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9",
+  "contexts": [
+    {
+      "ctx": 8191,
+      "elapsed_s": 8.447123085992644,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma4-31b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8191,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -4.2813347779571975,
+        "mean_nll_nats": 4.2813347779571975,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8191,
+        "num_scored_tokens": 8190,
+        "ok": true,
+        "ppl": 72.3369293358541,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8191,
+          "prompt_tokens_details": null,
+          "total_tokens": 8192
+        }
+      },
+      "token_logprobs_dump": null
+    }
+  ],
+  "elapsed_s": 12.748,
+  "finished_utc": "2026-06-11T22:47:10Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "nvfp4",
+  "model": "gemma4-31b-it",
+  "ok": true,
+  "run_id": "claude_oc_nvfp4_cold_r2_c1b_ctx8191",
+  "runtime_ref": "r9 image (baked); order-control row=nvfp4_cold_r2 cell=c1b",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-11T22:47:02Z",
+  "text_chars": 934744,
+  "text_files": [
+    "docs/c1_ppl_corpus.md"
+  ],
+  "tokenizer": "google/gemma-4-31B-it",
+  "url": "http://127.0.0.1:8000"
+}

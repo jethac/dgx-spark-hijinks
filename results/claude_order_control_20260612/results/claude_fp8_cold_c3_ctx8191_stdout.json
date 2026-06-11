@@ -1,0 +1,77 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 16960,
+  "container_image": "jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9",
+  "contexts": [
+    {
+      "ctx": 8191,
+      "elapsed_s": 8.884420043992577,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma4-31b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8191,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -2.9636168641269744,
+        "mean_nll_nats": 2.9636168641269744,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8191,
+        "num_scored_tokens": 8190,
+        "ok": true,
+        "ppl": 19.367896274783643,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8191,
+          "prompt_tokens_details": null,
+          "total_tokens": 8192
+        }
+      },
+      "token_logprobs_dump": null
+    }
+  ],
+  "elapsed_s": 13.04,
+  "finished_utc": "2026-06-11T21:56:19Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "fp8_e4m3",
+  "model": "gemma4-31b-it",
+  "ok": true,
+  "run_id": "claude_oc_fp8_cold_c3_ctx8191",
+  "runtime_ref": "r9 image (baked); order-control row=fp8_cold cell=c3",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-11T21:56:10Z",
+  "text_chars": 55513,
+  "text_files": [
+    "docs/c3_hijinks_code_60k.py"
+  ],
+  "tokenizer": "google/gemma-4-31B-it",
+  "url": "http://127.0.0.1:8000"
+}
