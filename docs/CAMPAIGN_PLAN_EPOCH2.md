@@ -53,3 +53,11 @@ harnesses/provenance gates carry over unchanged.
 - Box: CLAUDE_WINDOW_OPEN marker unchanged (present = Claude holds Spark).
 - Messages: mail/ on epoch2 (see mail/README.md). Jetha no longer relays.
 - Evidence/provenance/memory guardrails: unchanged from epoch 1.
+
+## Post-ladder capstone (gated; Jetha 2026-06-11)
+llama.cpp NVFP4 KV cache contribution starts ONLY after vLLM + SGLang are
+verified across Gemma 3, all Gemma 4 sizes, and DiffusionGemma. Approach:
+extend ggml's existing GGML_TYPE_NVFP4 to KV (writer kernel + fattn
+converter + plumbing), contributed upstream with our layout/provenance
+lessons and the cross-implementation quality evidence - NOT a FlashInfer
+port. Details in task 28.
