@@ -127,3 +127,22 @@ Zero-bug structure:
   before claiming, never kill.
 - Morning Spark rows (image from the post-flip e2-vllm head): 12B / 26B /
   31B mm rows, the full retirement scorecard across both modalities.
+
+## Amendment 5 (Jetha, ~02:4x): AUDIO multimodality for E2B / E4B / 12B
+
+Gemma 4 E2B, E4B and 12B carry audio encoders; retirement verification must
+cover audio inputs, not just images. Scope:
+- Recon: how vLLM builds mm doc ranges for AUDIO spans on gemma4_mm; whether
+  the per-layer masking policy for audio matches the vision policy
+  (sliding-only) or differs; whether audio spans flow through the same
+  FIPrefillMMGroup path. Tests updated to cover the audio policy explicitly.
+- Assets: deterministic audio clips with verifiable content (banked with
+  results; speech sample for ASR-style grounding + a synthetic tone pattern
+  for a content-free control).
+- Cells: E2B + E4B audio-grounded equivalence pairs (FlashInfer mm route vs
+  Triton route, bf16 + nvfp4 KV) on the P520 (GPU queue position: after the
+  image mm smokes). 12B audio pair runs on Spark (morning block, post-merge
+  image).
+- Same gates as image mm: grounded answers both routes, semantic
+  equivalence, repeat-determinism, verbatim transcripts. Any RED = the mm
+  flip does not merge (or reverts), audio row named as the reason.
