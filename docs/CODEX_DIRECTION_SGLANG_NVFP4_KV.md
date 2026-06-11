@@ -5,7 +5,7 @@
 > with radix-cache quality green under the prefix-cache graph guard. Full NVFP4 K+V
 > remains the parked stretch route.
 
-## 2026-06-11 update — Gemma 4 E4B rung 0 stops at D=512 decode
+## 2026-06-11 update — Gemma 4 E4B rung 0 D=512 decode workaround staged
 
 Artifact: `results/sglang_gemma4_e4b_rung0_20260611T141256JST/summary.md`.
 
@@ -27,6 +27,12 @@ VO-split-capable path (decode-as-prefill with `qo_len=1`, or an equivalent Flash
 decode API that carries `head_dim_vo`) before rung 0 can become a coherent serving row.
 Do not edit `prefill.cuh` trait math in the SGLang lane; the `max_mma_kv` dispatcher work
 is parked for the shared FlashInfer task.
+
+Follow-up code state: `jethac/sglang@9d78a007f` stages the SGLang-side workaround
+described above. Under `SGLANG_FLASHINFER_VOSPLIT=1`, D=512 layers now plan decode
+through the paged-prefill wrapper with one query row per request and run the existing
+two-pass `head_dim_vo=256` path; D=256 sliding layers stay on normal decode. This is
+static-checked only until the GPU window is free and the E4B rung-0 smoke is rerun.
 
 ## 2026-06-10 update — deswizzle leak is falsified for the live SGLang failure
 

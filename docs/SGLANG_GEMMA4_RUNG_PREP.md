@@ -100,6 +100,12 @@ Prefill/extend insertion point: the paged part of `forward_extend()` and `_run_p
 
 Decode insertion point: SGLang currently plans decode through `BatchDecodeWithPagedKVCacheWrapper`, whose plan path has no documented `head_dim_vo` slot in this tree. Mirror the vLLM workaround unless FlashInfer decode grows the needed metadata: route global-layer decode through the paged-prefill wrapper with `qo_len=1` / decode-as-prefill under an opt-in flag, while sliding layers keep normal decode.
 
+Implementation checkpoint: `jethac/sglang@9d78a007f` adds this opt-in SGLang route.
+When `SGLANG_FLASHINFER_VOSPLIT=1` and a layer reports `head_dim=512`, decode replans
+the paged-prefill wrapper with one query row per request, reuses the decode wrapper's
+planned page tables, and runs the existing two-pass VO-split reader. This needs the
+next E4B rung-0 serving retry before it graduates from scaffold to green row.
+
 ## Differences From vLLM To Track
 
 - vLLM's proven path uses packed-cache split views and page-16 assumptions; SGLang uses separate pool tensors, page size 1, and linear V-SF layout.
