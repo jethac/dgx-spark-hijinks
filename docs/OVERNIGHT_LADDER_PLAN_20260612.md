@@ -54,3 +54,35 @@ WRITE-THEN-VERIFY: claim by writing the marker FIRST, then check docker ps.
 If you find the marker present but docker empty for >15 min, the holder
 stalled - mail and self-clear. Mail numbering: ls mail/ immediately before
 writing, use max+1 (two collisions already).
+
+## Amendment 1 (Jetha, 00:0x): zero-bug bar
+
+"We cannot afford even the most minor bugs." Operational meaning, every row:
+- Determinism gate: C1 PPL cell run TWICE per server; bitwise-identical or the
+  row is RED (no averaging, no shrugging).
+- Sanity bands: bf16 absolute C1 PPL must be family-plausible; any quantized
+  row with |delta| > 0.5 nats vs bf16 is RED pending investigation, never
+  banked as a support claim.
+- Smoke transcripts banked verbatim; incoherent output = RED row even if the
+  server is green. RED rows ship with verbatim errors; they are deliverables,
+  not embarrassments - what we cannot afford is a WRONG green.
+- Engineering authored tonight (Triton-retirement selector, MTP) is NOT
+  "support" until it passes serving validation; overnight it lands as
+  validated-on-P520 code + a morning Spark validation spec, clearly labeled.
+- No overlay shortcuts on claim rows: claim rows run on baked images or
+  fully-verified installs; overlays only for explicitly-labeled smokes.
+
+## Amendment 2 (Jetha, 00:0x): MTP drafters
+
+Full support for MTP (multi-token-prediction) drafters in scope. Lane:
+1. Recon: what MTP/drafter checkpoints exist for Gemma 3/4 (native MTP heads
+   in checkpoints? released drafter models? EAGLE-style heads?), what vLLM and
+   SGLang spec-decode infra expects, and where quantized KV touches it: the
+   verify step is multi-token attention against the NVFP4 cache (our
+   decode-as-prefill path generalizes - qo_len=k+1), drafter KV pool dtype,
+   rejection-sampler interaction.
+2. Enablement on the vLLM lane + P520 validation where it fits.
+3. THE verification gate (fits the zero-bug bar): greedy spec decode must be
+   OUTPUT-IDENTICAL to non-spec greedy at temp 0, per size, plus acceptance
+   rate + speedup recorded. Identity failure = RED, full stop.
+4. Spark serving rows interleave into morning windows.
