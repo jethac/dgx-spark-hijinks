@@ -138,7 +138,13 @@ Read order for full context: this doc → docs/OVERNIGHT_LADDER_PLAN_20260612.md
    under WSL systemd via `~/b_e2_supervisor.sh` (log `~/b_e2_supervisor.log`)
    and CONTINUES after the Claude session pauses - HARVEST it, don't
    restart: check the supervisor log first, then `~/vllm_e2_build_20260612.log`,
-   then whether the supervisor proceeded into the smokes. The planned smokes:
+   then whether the supervisor proceeded into the smokes. NOTE: the agent
+   was killed MID-AUTHORING the smoke client/server-runner scripts - expect
+   ~/mm_smoke_20260612/ to hold prefetched models, test images and HF probes
+   but INCOMPLETE smoke scripts; author them per the gates in
+   MM_PREFIX_MASK_NOTES (image-grounded answers, FI-vs-Triton route
+   equivalence, text-only token-identity knob-on/off, repeat-determinism).
+   The planned smokes:
    image-grounded mm serving (Gemma 3 4B-it + Gemma 4 E4B-it × bf16/nvfp4, FlashInfer
    mm route vs Triton route) from branch `spark/hijinks-e2-mm-retire`
    (UNMERGED — merge gate = smokes green). Look for results in
