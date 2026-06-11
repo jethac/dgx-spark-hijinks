@@ -12,10 +12,11 @@ Epoch-2 implementation checkpoint: `jethac/sglang` now has the DG-S0/DG-S2 found
 scaffold: a local `DiffusionGemmaConfig` alias, `DiffusionGemmaForBlockDiffusion`
 model shell, BF16 encoder/decoder-backbone weight remap into one Gemma 4 causal
 backbone, self-conditioning parameter ownership, dLLM config recognition, and
-`scripts/diffusion_gemma_config_audit.py` for metadata-only geometry manifests. This
-does not claim BF16 parity or serving. Decoder denoise mode still raises
-`NotImplementedError`; the next live gate is a Linux/Spark metadata manifest followed
-by a BF16 weight-load manifest against the official vLLM image as oracle.
+`scripts/diffusion_gemma_config_audit.py` plus
+`scripts/diffusion_gemma_weight_manifest.py` for metadata-only geometry and weight-remap
+manifests. This does not claim BF16 parity or serving. Decoder denoise mode still
+raises `NotImplementedError`; the next live gate is a Linux/Spark metadata manifest
+followed by a BF16 weight-load manifest against the official vLLM image as oracle.
 
 ## Verdict
 
@@ -226,6 +227,12 @@ The SGLang loader needs explicit remaps for at least:
 
 Start BF16. Only after BF16 matches the official vLLM image should the NVFP4 checkpoint be
 loaded, because its GB10 path is unverified upstream.
+
+Epoch-2 preflight tool: `scripts/diffusion_gemma_weight_manifest.py` audits this remap
+without loading tensor payloads. It reads safetensors index/header metadata, reports
+encoder backbone keys, decoder duplicate backbone keys, self-conditioning keys, and
+vision keys quarantined for text-only rungs. Use it before the first BF16 live load; the
+serving claim still requires the real SGLang loader manifest and official-vLLM parity.
 
 ### 3. Two-Mode Model Forward
 
