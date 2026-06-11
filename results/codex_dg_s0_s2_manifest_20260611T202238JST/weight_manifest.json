@@ -1,0 +1,162 @@
+{
+  "category_counts": {
+    "decoder_backbone_candidate": 657,
+    "encoder_backbone": 30,
+    "self_conditioning": 4,
+    "vision_quarantined": 356
+  },
+  "config": {
+    "architectures": [
+      "DiffusionGemmaForBlockDiffusion"
+    ],
+    "canvas_length": 256,
+    "error": null,
+    "exists": true,
+    "global_head_dim": 512,
+    "head_dim": 256,
+    "max_denoising_steps": null,
+    "model_type": "diffusion_gemma",
+    "num_global_key_value_heads": 2,
+    "num_key_value_heads": 8,
+    "text_model_type": "diffusion_gemma_text"
+  },
+  "decoder_backbone_candidate_key_count": 657,
+  "decoder_duplicate_backbone_key_count": 30,
+  "duplicate_mapped_key_count": 30,
+  "generation_config": {
+    "error": null,
+    "exists": true,
+    "max_denoising_steps": 48,
+    "sampler_config": {
+      "_cls_name": "EntropyBoundSamplerConfig",
+      "entropy_bound": 0.1
+    }
+  },
+  "index_errors": [],
+  "index_key_count": 1047,
+  "key_count": 1047,
+  "key_source": "index",
+  "mapped_backbone_key_count": 657,
+  "model_dir": "/home/jethac/.cache/huggingface/hub/models--google--diffusiongemma-26B-A4B-it/snapshots/0f28bc42f588fbd8f71e08102b1c3960298a1358",
+  "ok_for_dg_s2_weight_remap_probe": true,
+  "revision": null,
+  "safetensors_errors": [
+    "safetensors unavailable: ModuleNotFoundError(\"No module named 'safetensors'\")"
+  ],
+  "safetensors_key_count": 0,
+  "sample_duplicate_mapped_keys": {
+    "model.layers.0.layer_scalar": [
+      "model.decoder.layers.0.layer_scalar",
+      "model.encoder.language_model.layers.0.layer_scalar"
+    ],
+    "model.layers.1.layer_scalar": [
+      "model.decoder.layers.1.layer_scalar",
+      "model.encoder.language_model.layers.1.layer_scalar"
+    ],
+    "model.layers.10.layer_scalar": [
+      "model.decoder.layers.10.layer_scalar",
+      "model.encoder.language_model.layers.10.layer_scalar"
+    ],
+    "model.layers.11.layer_scalar": [
+      "model.decoder.layers.11.layer_scalar",
+      "model.encoder.language_model.layers.11.layer_scalar"
+    ],
+    "model.layers.12.layer_scalar": [
+      "model.decoder.layers.12.layer_scalar",
+      "model.encoder.language_model.layers.12.layer_scalar"
+    ],
+    "model.layers.13.layer_scalar": [
+      "model.decoder.layers.13.layer_scalar",
+      "model.encoder.language_model.layers.13.layer_scalar"
+    ],
+    "model.layers.14.layer_scalar": [
+      "model.decoder.layers.14.layer_scalar",
+      "model.encoder.language_model.layers.14.layer_scalar"
+    ],
+    "model.layers.15.layer_scalar": [
+      "model.decoder.layers.15.layer_scalar",
+      "model.encoder.language_model.layers.15.layer_scalar"
+    ],
+    "model.layers.16.layer_scalar": [
+      "model.decoder.layers.16.layer_scalar",
+      "model.encoder.language_model.layers.16.layer_scalar"
+    ],
+    "model.layers.17.layer_scalar": [
+      "model.decoder.layers.17.layer_scalar",
+      "model.encoder.language_model.layers.17.layer_scalar"
+    ],
+    "model.layers.18.layer_scalar": [
+      "model.decoder.layers.18.layer_scalar",
+      "model.encoder.language_model.layers.18.layer_scalar"
+    ],
+    "model.layers.19.layer_scalar": [
+      "model.decoder.layers.19.layer_scalar",
+      "model.encoder.language_model.layers.19.layer_scalar"
+    ],
+    "model.layers.2.layer_scalar": [
+      "model.decoder.layers.2.layer_scalar",
+      "model.encoder.language_model.layers.2.layer_scalar"
+    ],
+    "model.layers.20.layer_scalar": [
+      "model.decoder.layers.20.layer_scalar",
+      "model.encoder.language_model.layers.20.layer_scalar"
+    ],
+    "model.layers.21.layer_scalar": [
+      "model.decoder.layers.21.layer_scalar",
+      "model.encoder.language_model.layers.21.layer_scalar"
+    ],
+    "model.layers.22.layer_scalar": [
+      "model.decoder.layers.22.layer_scalar",
+      "model.encoder.language_model.layers.22.layer_scalar"
+    ],
+    "model.layers.23.layer_scalar": [
+      "model.decoder.layers.23.layer_scalar",
+      "model.encoder.language_model.layers.23.layer_scalar"
+    ],
+    "model.layers.24.layer_scalar": [
+      "model.decoder.layers.24.layer_scalar",
+      "model.encoder.language_model.layers.24.layer_scalar"
+    ],
+    "model.layers.25.layer_scalar": [
+      "model.decoder.layers.25.layer_scalar",
+      "model.encoder.language_model.layers.25.layer_scalar"
+    ],
+    "model.layers.26.layer_scalar": [
+      "model.decoder.layers.26.layer_scalar",
+      "model.encoder.language_model.layers.26.layer_scalar"
+    ]
+  },
+  "sample_self_conditioning_keys": [
+    "model.decoder.self_conditioning.down_proj.weight",
+    "model.decoder.self_conditioning.gate_proj.weight",
+    "model.decoder.self_conditioning.pre_norm.weight",
+    "model.decoder.self_conditioning.up_proj.weight"
+  ],
+  "sample_shape_metadata": {},
+  "sample_vision_keys": [
+    "model.encoder.embed_vision.embedding_projection.weight",
+    "model.encoder.vision_tower.encoder.layers.0.input_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.mlp.down_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.mlp.gate_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.mlp.up_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.post_attention_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.post_feedforward_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.pre_feedforward_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.k_norm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.k_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.o_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.q_norm.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.q_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.0.self_attn.v_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.1.input_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.1.mlp.down_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.1.mlp.gate_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.1.mlp.up_proj.linear.weight",
+    "model.encoder.vision_tower.encoder.layers.1.post_attention_layernorm.weight",
+    "model.encoder.vision_tower.encoder.layers.1.post_feedforward_layernorm.weight"
+  ],
+  "schema": "diffusion-gemma-weight-manifest/v1",
+  "self_conditioning_key_count": 4,
+  "vision_quarantined_key_count": 356,
+  "warnings": []
+}

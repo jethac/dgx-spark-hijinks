@@ -18,6 +18,13 @@ manifests. This does not claim BF16 parity or serving. Decoder denoise mode stil
 raises `NotImplementedError`; the next live gate is a Linux/Spark metadata manifest
 followed by a BF16 weight-load manifest against the official vLLM image as oracle.
 
+Manifest checkpoint: `results/codex_dg_s0_s2_manifest_20260611T202238JST/summary.md`
+is green for the metadata/remap preflight on the real cached BF16 checkpoint. It
+confirms 25 sliding D=256 layers plus 5 global D=512 layers, and verifies the outer
+weight-name split: decoder backbone candidates, encoder layer duplicates,
+self-conditioning keys, and quarantined vision keys. It is still not a BF16 load or
+serving claim.
+
 ## Verdict
 
 SGLang support is feasible, but it is a medium-large runtime feature, not a model-file
