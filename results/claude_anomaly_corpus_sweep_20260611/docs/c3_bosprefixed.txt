@@ -1,0 +1,1550 @@
+<bos># ==== FILE: scripts/aeon_prior_art_audit.py ====
+#!/usr/bin/env python3
+"""Audit local submodules for AEON prior-art port markers."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+
+@dataclass(frozen=True)
+class TextCheck:
+    name: str
+    path: str
+    markers: tuple[str, ...]
+    reason: str
+
+
+VLLM_CHECKS = [
+    TextCheck(
+        name="vllm_lazy_stable_libtorch_import",
+        path="third_party/vllm/vllm/platforms/cuda.py",
+        markers=("RTLD_LAZY", "_C_stable_libtorch", "import_module"),
+        reason="AEON Qwen patch: lazy import around unused SM100-only symbols on SM12x.",
+    ),
+    TextCheck(
+        name="vllm_qwen3_5_text_registry",
+        path="third_party/vllm/vllm/model_executor/models/registry.py",
+        markers=("Qwen3_5ForCausalLM", "Qwen3_5MoeForCausalLM"),
+        reason="AEON Qwen patch: register text-only Qwen3.5/Qwen3.6 model classes.",
+    ),
+    TextCheck(
+        name="vllm_spec_decode_cudagraph_alignment",
+        path="third_party/vllm/vllm/config/compilation.py",
+        markers=(
+            "cudagraph_mode != CUDAGraphMode.NONE",
+            "uniform_decode_query_len > 1",
+            "adjust_cudagraph_sizes_for_spec_decode",
+        ),
+        reason="AEON Qwen patch: align capture sizes for speculative decode beyond FULL mode.",
+    ),
+    TextCheck(
+        name="vllm_mamba_block_size_fallback",
+        path="third_party/vllm/vllm/model_executor/layers/mamba/abstract.py",
+        markers=("mamba_block_size is None", "vllm_config.cache_config.block_size or 16"),
+        reason="AEON Qwen patch: keep hybrid/Mamba cache arithmetic from seeing block_size=None.",
+    ),
+    TextCheck(
+        name="vllm_hybrid_kv_block_size_none_safe",
+        path="third_party/vllm/vllm/v1/worker/gpu_model_runner.py",
+        markers=("if block_size is None", "else cdiv(max_model_len"),
+        reason="AEON Qwen patch: guard hybrid linear-attention groups that do not use KV blocks.",
+    ),
+]
+
+
+SGLANG_CHECKS = [
+    TextCheck(
+        name="sglang_dflash_algorithm_hook",
+        path="third_party/sglang/python/sglang/srt/arg_groups/speculative_hook.py",
+        markers=("speculative_algorithm == \"DFLASH\"", "def _handle_dflash"),
+        reason="SGLang counterpart surface for AEON's DFlash speed lane.",
+    ),
+    TextCheck(
+        name="sglang_dflash_model",
+        path="third_party/sglang/python/sglang/srt/models/dflash.py",
+        markers=("class DFlashDraftModel", "DFlashAttention"),
+        reason="SGLang native DFlash draft-model surface exists; serving proof remains separate.",
+    ),
+    TextCheck(
+        name="sglang_qwen_dflash_capture_hooks",
+        path="third_party/sglang/python/sglang/srt/models/qwen3_moe.py",
+        markers=("set_dflash_layers_to_capture",),
+        reason="Qwen MoE model exposes DFlash capture hooks for counterpart testing.",
+    ),
+    TextCheck(
+        name="sglang_speculative_acceptance_metrics",
+        path="third_party/sglang/python/sglang/srt/managers/scheduler_components/metrics_reporter.py",
+        markers=("spec_accept_length", "spec_accept_rate"),
+        reason="Accepted-draft metrics are needed to judge DFlash/EAGLE counterpart quality.",
+    ),
+]
+
+
+def rel(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def git_ref(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {"exists": False}
+    try:
+        branch = subprocess.check_output(
+            ["git", "-C", str(path), "rev-parse", "--abbrev-ref", "HEAD"],
+            text=True,
+        ).strip()
+        commit = subprocess.check_output(
+            ["git", "-C", str(path), "rev-parse", "HEAD"],
+            text=True,
+        ).strip()
+        dirty = bool(
+            subprocess.check_output(
+                ["git", "-C", str(path), "status", "--short"],
+                text=True,
+            ).strip()
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        return {"exists": True, "error": str(exc)}
+    return {"exists": True, "branch": branch, "commit": commit, "dirty": dirty}
+
+
+def run_check(check: TextCheck, repo_root: Path) -> dict[str, Any]:
+    path = repo_root / check.path
+    record: dict[str, Any] = {
+        "name": check.name,
+        "path": check.path,
+        "reason": check.reason,
+        "markers": list(check.markers),
+        "exists": path.exists(),
+        "ok": False,
+    }
+    if not path.exists():
+        record["missing_markers"] = list(check.markers)
+        return record
+    text = path.read_text(encoding="utf-8", errors="replace")
+    missing = [marker for marker in check.markers if marker not in text]
+    record["missing_markers"] = missing
+    record["ok"] = not missing
+    return record
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default="results/aeon_prior_art_audit.json")
+    args = parser.parse_args()
+
+    repo_root = Path(__file__).resolve().parents[1]
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    vllm_checks = [run_check(check, repo_root) for check in VLLM_CHECKS]
+    sglang_checks = [run_check(check, repo_root) for check in SGLANG_CHECKS]
+    summary = {
+        "schema": "aeon-prior-art-audit/v1",
+        "repo_root": rel(repo_root, repo_root),
+        "submodules": {
+            "vllm": git_ref(repo_root / "third_party" / "vllm"),
+            "sglang": git_ref(repo_root / "third_party" / "sglang"),
+            "flashinfer": git_ref(repo_root / "third_party" / "flashinfer"),
+        },
+        "vllm_ports": vllm_checks,
+        "sglang_counterpart_surfaces": sglang_checks,
+    }
+    all_checks = vllm_checks + sglang_checks
+    summary["ok"] = all(check["ok"] for check in all_checks)
+    summary["failed"] = [check["name"] for check in all_checks if not check["ok"]]
+
+    output.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0 if summary["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/build_ppl_corpus.py ====
+#!/usr/bin/env python3
+"""Build a deterministic markdown corpus for prompt-logprob PPL sweeps."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+
+DEFAULT_GLOBS = ("docs/*.md", "tasks/*.md", "results/*.md")
+DEFAULT_EXCLUDE_SUBSTRINGS = (
+    "vllm_qwen_clean_ppl_",
+    "_server",
+    "_trace",
+)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo-root", type=Path, default=Path("."))
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--max-chars", type=int, default=1_500_000)
+    parser.add_argument("--glob", action="append", default=[])
+    parser.add_argument("--exclude-substring", action="append", default=[])
+    return parser.parse_args()
+
+
+def iter_sources(repo_root: Path, globs: list[str], exclude_substrings: tuple[str, ...]):
+    seen: set[Path] = set()
+    for pattern in globs:
+        for path in sorted(repo_root.glob(pattern)):
+            if not path.is_file():
+                continue
+            rel = path.relative_to(repo_root)
+            rel_text = rel.as_posix()
+            if rel in seen:
+                continue
+            if any(fragment in rel_text for fragment in exclude_substrings):
+                continue
+            seen.add(rel)
+            yield rel, path
+
+
+def main() -> int:
+    args = parse_args()
+    repo_root = args.repo_root.resolve()
+    globs = args.glob or list(DEFAULT_GLOBS)
+    exclude_substrings = tuple(
+        list(DEFAULT_EXCLUDE_SUBSTRINGS) + list(args.exclude_substring)
+    )
+
+    parts: list[str] = []
+    sources: list[dict[str, object]] = []
+    total_chars = 0
+
+    for rel, path in iter_sources(repo_root, globs, exclude_substrings):
+        text = path.read_text(encoding="utf-8", errors="replace").strip()
+        if not text:
+            continue
+        header = f"\n\n<!-- source: {rel.as_posix()} -->\n\n"
+        budget = args.max_chars - total_chars - len(header)
+        if budget <= 0:
+            break
+        used_text = text[:budget]
+        parts.append(header + used_text)
+        total_chars += len(header) + len(used_text)
+        sources.append(
+            {
+                "path": rel.as_posix(),
+                "chars_used": len(used_text),
+                "chars_total": len(text),
+                "truncated": len(used_text) < len(text),
+            }
+        )
+        if total_chars >= args.max_chars:
+            break
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.manifest.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text("".join(parts).lstrip(), encoding="utf-8")
+    manifest = {
+        "schema": "ppl-corpus-manifest/v1",
+        "output": args.output.as_posix(),
+        "max_chars": args.max_chars,
+        "actual_chars": len(args.output.read_text(encoding="utf-8")),
+        "globs": globs,
+        "exclude_substrings": list(exclude_substrings),
+        "sources": sources,
+    }
+    args.manifest.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({k: manifest[k] for k in ("output", "actual_chars")}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/container_target_audit.py ====
+#!/usr/bin/env python3
+"""Audit container/image artifacts for Spark target and family/PTX evidence."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+
+SPARK_TOKENS = ("sm_121", "SM121", "12.1", "121-real", "compute_121")
+NATIVE_FP4_TOKENS = ("sm_121a", "SM121A", "12.1a", "121a", "compute_121a")
+FAMILY_OR_PTX_PATTERNS = (
+    re.compile(r"12\.0\+PTX"),
+    re.compile(r"sm_120\b"),
+    re.compile(r"compute_120\b"),
+    re.compile(r"120f\b"),
+    re.compile(r"compute_120f\b"),
+)
+
+
+def rel(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8", errors="replace"))
+
+
+def flatten_strings(value: Any) -> list[str]:
+    strings: list[str] = []
+    if isinstance(value, str):
+        strings.append(value)
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            strings.extend(flatten_strings(key))
+            strings.extend(flatten_strings(item))
+    elif isinstance(value, list):
+        for item in value:
+            strings.extend(flatten_strings(item))
+    return strings
+
+
+def collect_inspect_evidence(path: Path) -> dict[str, Any]:
+    data = load_json(path)
+    text_items = flatten_strings(data)
+    evidence: list[dict[str, str]] = []
+    for item in text_items:
+        for token in SPARK_TOKENS:
+            if token in item:
+                evidence.append({"kind": "spark_reference", "text": item})
+                break
+        for token in NATIVE_FP4_TOKENS:
+            if token in item:
+                evidence.append({"kind": "native_fp4_reference", "text": item})
+                break
+        for pattern in FAMILY_OR_PTX_PATTERNS:
+            if pattern.search(item):
+                evidence.append({"kind": "family_or_ptx_reference", "text": item})
+                break
+
+    architecture = None
+    image_tags: list[str] = []
+    image_digests: list[str] = []
+    if isinstance(data, list) and data and isinstance(data[0], dict):
+        first = data[0]
+        architecture = first.get("Architecture")
+        image_tags = list(first.get("RepoTags") or [])
+        image_digests = list(first.get("RepoDigests") or [])
+
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "architecture": architecture,
+        "image_tags": image_tags,
+        "image_digests": image_digests,
+        "evidence": evidence,
+    }
+
+
+def collect_versions_evidence(path: Path) -> dict[str, Any]:
+    data = load_json(path)
+    arch_list = data.get("arch_list") if isinstance(data, dict) else None
+    device_capability = data.get("device_capability") if isinstance(data, dict) else None
+    device_name = data.get("device_name") if isinstance(data, dict) else None
+    packages = data.get("packages") if isinstance(data, dict) else {}
+    torch_cuda = data.get("torch_cuda") if isinstance(data, dict) else None
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "arch_list": arch_list,
+        "device_capability": device_capability,
+        "device_name": device_name,
+        "multi_processor_count": data.get("multi_processor_count") if isinstance(data, dict) else None,
+        "packages": packages,
+        "torch_cuda": torch_cuda,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--image-inspect", type=Path)
+    parser.add_argument("--container-inspect", type=Path)
+    parser.add_argument("--container-versions", type=Path)
+    parser.add_argument("--output", default="results/container_target_audit.json")
+    args = parser.parse_args()
+
+    repo_root = Path(__file__).resolve().parents[1]
+    inspect_records = []
+    for path in (args.image_inspect, args.container_inspect):
+        if path is not None:
+            inspect_records.append(collect_inspect_evidence(path))
+    versions = (
+        collect_versions_evidence(args.container_versions)
+        if args.container_versions is not None
+        else None
+    )
+
+    inspect_evidence = [
+        item
+        for record in inspect_records
+        for item in record.get("evidence", [])
+    ]
+    arch_list = versions.get("arch_list") if isinstance(versions, dict) else []
+    has_native_spark = any(
+        item.get("kind") in {"native_fp4_reference", "spark_reference"}
+        and any(token in item.get("text", "") for token in ("sm_121", "compute_121", "121-real", "sm_121a", "compute_121a", "121a"))
+        for item in inspect_evidence
+    )
+    has_family_or_ptx = any(item.get("kind") == "family_or_ptx_reference" for item in inspect_evidence)
+    arch_list_has_sm120 = isinstance(arch_list, list) and "sm_120" in arch_list
+    arch_list_has_sm121 = isinstance(arch_list, list) and "sm_121" in arch_list
+    device_is_gb10 = (
+        isinstance(versions, dict)
+        and versions.get("device_name") == "NVIDIA GB10"
+        and versions.get("device_capability") == [12, 1]
+    )
+
+    findings = []
+    if device_is_gb10:
+        findings.append("OK: runtime device evidence is NVIDIA GB10 with capability 12.1.")
+    if has_native_spark or arch_list_has_sm121:
+        findings.append("OK: artifact contains explicit native sm_121 target evidence.")
+    if has_family_or_ptx or arch_list_has_sm120:
+        findings.append("INFO: artifact contains SM120-family/PTX evidence, not native sm_121 or sm_121a proof.")
+    if not (has_native_spark or arch_list_has_sm121):
+        findings.append("WARN: no explicit native sm_121/sm_121a build-target evidence found.")
+
+    report: dict[str, Any] = {
+        "schema": "container-target-audit/v1",
+        "inputs": {
+            "image_inspect": rel(args.image_inspect, repo_root) if args.image_inspect else None,
+            "container_inspect": rel(args.container_inspect, repo_root) if args.container_inspect else None,
+            "container_versions": rel(args.container_versions, repo_root) if args.container_versions else None,
+        },
+        "inspect_records": inspect_records,
+        "versions": versions,
+        "summary": {
+            "device_is_gb10_sm121": device_is_gb10,
+            "explicit_native_sm121": bool(has_native_spark or arch_list_has_sm121),
+            "family_or_ptx_evidence": bool(has_family_or_ptx or arch_list_has_sm120),
+            "claim": (
+                "native-sm121"
+                if (has_native_spark or arch_list_has_sm121)
+                else "family-or-ptx-only"
+                if (has_family_or_ptx or arch_list_has_sm120)
+                else "missing-target-evidence"
+            ),
+            "findings": findings,
+        },
+    }
+
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/counterpart_evidence_audit.py ====
+#!/usr/bin/env python3
+"""Audit SGLang and llama.cpp counterpart evidence for AEON-derived goals."""
+
+from __future__ import annotations
+
+import argparse
+import glob
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+
+@dataclass(frozen=True)
+class EvidenceRequirement:
+    name: str
+    runtime: str
+    model_family: str
+    title: str
+    acceptance: str
+    claim_groups: tuple[tuple[str, ...], ...]
+    partial_patterns: tuple[str, ...]
+    blocked_patterns: tuple[str, ...] = ()
+    forbidden_claim_fragments: tuple[str, ...] = ()
+
+
+REQUIREMENTS = (
+    EvidenceRequirement(
+        name="sglang_gemma_nvfp4_ordinary_kv",
+        runtime="sglang",
+        model_family="gemma",
+        title="SGLang Gemma NVFP4-weight serving with ordinary KV",
+        acceptance=(
+            "SGLang serves a Gemma NVFP4-weight checkpoint with BF16/fp8 ordinary KV, "
+            "deterministic output sanity, backend logs, and row manifest."
+        ),
+        claim_groups=(
+            (
+                "results/sglang*gemma*nvfp4*row_manifest.json",
+                "results/sglang*gemma*nvfp4*openai_benchmark.json",
+            ),
+            ("results/sglang*gemma*nvfp4*checkpoint_audit.json",),
+        ),
+        partial_patterns=(
+            "results/sglang_gemma4_e2b_w4a16*_server.log",
+            "results/sglang_gemma4_e2b_w4a16*_health_status.txt",
+        ),
+    ),
+    EvidenceRequirement(
+        name="sglang_clean_fp4_kv_after_row",
+        runtime="sglang",
+        model_family="qwen",
+        title="SGLang FP4 KV capacity and quality after-row",
+        acceptance=(
+            "Clean fork/container SGLang FP4 KV row serves with a justified graph policy, "
+            "passes deterministic quality checks, includes an fp8 comparator, and records "
+            "capacity and throughput in row manifests."
+        ),
+        claim_groups=(
+            (
+                "results/sglang*fp4kv*row_manifest.json",
+                "results/sglang*fp4_e2m1*row_manifest.json",
+            ),
+            (
+                "results/sglang*fp4kv*openai_benchmark.json",
+                "results/sglang*fp4_e2m1*openai_benchmark.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/flashinfer_sglang_linear_nvfp4_kv_probe*.json",
+            "results/sglang_qwen25_1_5b_fp4kv*_startup.log",
+            "results/sglang_qwen25_1_5b_fp4kv*_openai_benchmark.json",
+            "results/sglang_qwen_fp4kv_clean*.json",
+            "results/sglang_qwen_fp4kv_clean*.log",
+            "results/sglang_qwen_fp4kv_decode_dtype*.json",
+            "results/sglang_qwen_fp4kv_decode_dtype*.log",
+            "results/sglang_qwen_fp4kv_eager_only*.json",
+            "results/sglang_qwen_fp4kv_eager_only*.log",
+            "results/sglang_qwen_fp4kv_autosafe*.json",
+            "results/sglang_qwen_fp4kv_autosafe*.log",
+            "results/sglang_qwen_fp4kv_autosafe*.md",
+            "results/sglang_qwen_fp4kv_d7d931f_logprob_quality*.json",
+            "results/sglang_qwen_fp4kv_d7d931f_logprob_quality*.md",
+            "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.json",
+            "results/sglang_qwen_fp4kv_d7d931f_native_divergence*.md",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.json",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.md",
+            "results/sglang_qwen_fp4kv_prompt_path_reconcile*.log",
+            "results/sglang_nvfp4_kv_layout_probe*.json",
+            "results/sglang_nvfp4_kv_convention_probe*.json",
+            "results/sglang_fp4_pool_bridge_probe*.json",
+            "results/sglang_fp4_kv_sm121_*.md",
+        ),
+        forbidden_claim_fragments=(
+            "_patched_",
+            "_nograph",
+            "_nographs",
+            "_startup",
+            "_autosafe",
+            "_d7d931f_matched_",
+        ),
+    ),
+    EvidenceRequirement(
+        name="sglang_dflash_or_eagle_qwen",
+        runtime="sglang",
+        model_family="qwen",
+        title="SGLang DFlash/EAGLE Qwen counterpart",
+        acceptance=(
+            "SGLang Qwen-class speculative row records target/drafter, accepted-draft "
+            "metrics, quality, and speed against a non-speculative comparator."
+        ),
+        claim_groups=(
+            (
+                "results/sglang*dflash*row_manifest.json",
+                "results/sglang*eagle*row_manifest.json",
+            ),
+            (
+                "results/sglang*nodflash*row_manifest.json",
+                "results/sglang*baseline*row_manifest.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/sglang*dflash*.md",
+            "results/sglang*eagle*.md",
+            "results/aeon_prior_art_audit_*.json",
+        ),
+    ),
+    EvidenceRequirement(
+        name="vllm_qwen36_nvfp4_dflash",
+        runtime="vllm",
+        model_family="qwen",
+        title="vLLM Qwen3.6 NVFP4+DFlash local serving row",
+        acceptance=(
+            "AEON Qwen3.6 NVFP4+DFlash or matched jethac/vLLM row starts, serves, "
+            "records backend/DFlash evidence, and captures a serving manifest."
+        ),
+        claim_groups=(
+            (
+                "results/*qwen36*dflash*row_manifest.json",
+                "results/*qwen3.6*dflash*row_manifest.json",
+            ),
+            (
+                "results/*qwen36*dflash*openai_benchmark.json",
+                "results/*qwen3.6*dflash*openai_benchmark.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/aeon_qwen36_dflash*_summary.md",
+            "results/aeon_qwen36_dflash*_stop_point.md",
+            "results/aeon_qwen36_dflash_tailnet*_row_manifest.json",
+            "results/aeon_qwen36_dflash_tailnet*_server.log",
+            "results/aeon_qwen36_dflash_tailnet*_nvfp4_checkpoint_audit.json",
+            "results/vllm_aeon_qwen_patch_port_*.md",
+        ),
+        blocked_patterns=(
+            "results/aeon_qwen36_dflash*_stop_point.md",
+            "results/aeon_qwen36_dflash*_summary.md",
+        ),
+    ),
+    EvidenceRequirement(
+        name="vllm_qwen_nvfp4_kv_capacity",
+        runtime="vllm",
+        model_family="qwen",
+        title="vLLM Qwen fp8-vs-NVFP4 KV capacity row",
+        acceptance=(
+            "vLLM serves the same Qwen-class model with matched fp8 and NVFP4 KV "
+            "settings, logs FlashInfer FA2 NVFP4 KV selection, records KV capacity, "
+            "quality, and serving manifests for both rows."
+        ),
+        claim_groups=(
+            (
+                "results/vllm*qwen*nvfp4*kv*row_manifest.json",
+                "results/*qwen*nvfp4*kv*vllm*row_manifest.json",
+            ),
+            (
+                "results/vllm*qwen*nvfp4*kv*openai_benchmark.json",
+                "results/*qwen*nvfp4*kv*vllm*openai_benchmark.json",
+            ),
+            (
+                "results/vllm*qwen*fp8*kv*row_manifest.json",
+                "results/vllm*qwen*nvfp4*kv*fp8*row_manifest.json",
+                "results/*qwen*fp8*kv*vllm*row_manifest.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/vllm_nvfp4_sm12x_routing_probe_*.json",
+            "results/flashinfer_nvfp4_kv_probe_*.json",
+            "results/vllm_qwen_dflash_sm121a_patch_verify_*.md",
+            "results/vllm_aeon_qwen_patch_port_*.md",
+        ),
+    ),
+    EvidenceRequirement(
+        name="llamacpp_larger_qwen_gguf",
+        runtime="llamacpp",
+        model_family="qwen",
+        title="llama.cpp larger Qwen3/Qwen3.6 GGUF row",
+        acceptance=(
+            "llama.cpp serves a Qwen3/Qwen3.6-class GGUF with build-target evidence, "
+            "llama-bench, OpenAI smoke, and row manifest."
+        ),
+        claim_groups=(
+            (
+                "results/llamacpp*qwen3*row_manifest.json",
+                "results/llamacpp*qwen36*row_manifest.json",
+            ),
+            (
+                "results/llamacpp*qwen3*llama_bench.txt",
+                "results/llamacpp*qwen36*llama_bench.txt",
+            ),
+        ),
+        partial_patterns=(
+            "results/llamacpp_qwen25_1_5b_q4_k_m_*row_manifest.json",
+            "results/llamacpp_qwen25_1_5b_q4_k_m_*openai_benchmark.json",
+            "results/llamacpp_nvfp4_runtime_gate_*.md",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.json",
+        ),
+    ),
+    EvidenceRequirement(
+        name="llamacpp_native_fp4_gguf",
+        runtime="llamacpp",
+        model_family="qwen_or_gemma",
+        title="llama.cpp native NVFP4/MXFP4 GGUF tensor-core proof",
+        acceptance=(
+            "NVFP4/MXFP4 GGUF model uses a native FP4 path with build-target and runtime "
+            "dispatch proof, separate from Q4_0/Q4_K practical serving."
+        ),
+        claim_groups=(
+            (
+                "results/llamacpp*nvfp4*row_manifest.json",
+                "results/llamacpp*mxfp4*row_manifest.json",
+                "results/llamacpp*native_fp4*row_manifest.json",
+            ),
+            (
+                "results/llamacpp*nvfp4*build_target_audit.json",
+                "results/llamacpp*mxfp4*build_target_audit.json",
+                "results/llamacpp*native_fp4*build_target_audit.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/llamacpp*_server.log",
+            "results/llamacpp*_build_target_audit.json",
+            "results/llamacpp_nvfp4_runtime_gate_*.md",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.log",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.txt",
+            "results/llamacpp_nvfp4_runtime_gate_*/*.json",
+        ),
+    ),
+    EvidenceRequirement(
+        name="llamacpp_live_loglikelihood",
+        runtime="llamacpp",
+        model_family="qwen_or_gemma",
+        title="llama.cpp live native loglikelihood task proof",
+        acceptance=(
+            "Native llama.cpp loglikelihood probe and tiny JSONL task run against a live "
+            "server and prove arbitrary continuation-token logprobs."
+        ),
+        claim_groups=(
+            (
+                "results/llamacpp_native_loglikelihood_probe_*.json",
+                "results/llamacpp_native_loglikelihood_*_probe.json",
+            ),
+            (
+                "results/llamacpp_native_loglikelihood_task_*.json",
+                "results/llamacpp_native_loglikelihood_*_task.json",
+            ),
+        ),
+        partial_patterns=(
+            "results/llamacpp_native_loglikelihood_probe*_selftest*.json",
+            "results/llamacpp_native_loglikelihood_task_dryrun*.json",
+            "results/llamacpp_native_loglikelihood_*_summary.md",
+            "results/*gguf_logprobs_probe*.json",
+            "results/llamacpp_gguf_echo_logprobs_probe*.json",
+        ),
+    ),
+)
+
+
+def rel(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def match_patterns(root: Path, patterns: tuple[str, ...]) -> list[str]:
+    matches: list[str] = []
+    for pattern in patterns:
+        for raw in glob.glob(str(root / pattern)):
+            matches.append(rel(Path(raw), root))
+    return sorted(set(matches))
+
+
+def load_json(path: Path) -> dict[str, Any] | None:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def is_dry_run_or_selftest(path: str, root: Path) -> bool:
+    lower = path.lower()
+    if "dryrun" in lower or "dry-run" in lower or "selftest" in lower:
+        return True
+    data = load_json(root / path)
+    if isinstance(data, dict) and data.get("dry_run"):
+        return True
+    return False
+
+
+def is_failed_claim_artifact(path: str, root: Path) -> bool:
+    data = load_json(root / path)
+    if not isinstance(data, dict):
+        return False
+    return data.get("ok") is False
+
+
+def filter_claim_matches(root: Path, matches: list[str]) -> list[str]:
+    return [
+        path
+        for path in matches
+        if not is_dry_run_or_selftest(path, root)
+        and not is_failed_claim_artifact(path, root)
+    ]
+
+
+def audit_requirement(root: Path, req: EvidenceRequirement) -> dict[str, Any]:
+    claim_groups: list[dict[str, Any]] = []
+    all_claim_matches: list[str] = []
+    all_ignored_matches: list[str] = []
+    for group in req.claim_groups:
+        raw_group_matches = match_patterns(root, group)
+        filtered = filter_claim_matches(root, raw_group_matches)
+        forbidden = [
+            path
+            for path in filtered
+            if any(fragment in path for fragment in req.forbidden_claim_fragments)
+        ]
+        accepted = sorted(set(filtered) - set(forbidden))
+        all_claim_matches.extend(accepted)
+        all_ignored_matches.extend(sorted(set(raw_group_matches) - set(accepted)))
+        claim_groups.append(
+            {
+                "patterns": list(group),
+                "accepted_matches": accepted,
+                "ignored_matches": sorted(set(raw_group_matches) - set(accepted)),
+                "ok": bool(accepted),
+            }
+        )
+    partial = match_patterns(root, req.partial_patterns)
+    blocked = match_patterns(root, req.blocked_patterns)
+    claim_ready = all(group["ok"] for group in claim_groups)
+    if claim_ready:
+        status = "claim-evidence-present"
+    elif partial:
+        status = "partial-evidence-only"
+    elif blocked:
+        status = "blocked-or-stop-point"
+    else:
+        status = "missing"
+    return {
+        "name": req.name,
+        "runtime": req.runtime,
+        "model_family": req.model_family,
+        "title": req.title,
+        "acceptance": req.acceptance,
+        "status": status,
+        "claim_ready": claim_ready,
+        "claim_groups": claim_groups,
+        "claim_matches": sorted(set(all_claim_matches)),
+        "ignored_claim_matches": sorted(set(all_ignored_matches)),
+        "forbidden_claim_fragments": list(req.forbidden_claim_fragments),
+        "partial_matches": partial,
+        "blocked_matches": blocked,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default="results/counterpart_evidence_audit.json")
+    parser.add_argument("--strict", action="store_true", help="Return non-zero if any counterpart is missing.")
+    args = parser.parse_args()
+
+    root = Path(__file__).resolve().parents[1]
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    requirements = [audit_requirement(root, req) for req in REQUIREMENTS]
+    missing = [req["name"] for req in requirements if not req["claim_ready"]]
+    summary = {
+        "schema": "counterpart-evidence-audit/v1",
+        "repo_root": rel(root, root),
+        "requirement_count": len(requirements),
+        "claim_ready_count": len(requirements) - len(missing),
+        "missing_or_partial_count": len(missing),
+        "all_claim_ready": not missing,
+        "missing_or_partial": missing,
+        "requirements": requirements,
+    }
+    text = json.dumps(summary, indent=2, sort_keys=True) + "\n"
+    output.write_text(text)
+    print(text, end="")
+    return 1 if args.strict and missing else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/counterpart_task_matrix.py ====
+#!/usr/bin/env python3
+"""Validate live task definitions for missing counterpart evidence rows."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+
+REQUIRED_FIELDS = (
+    "requirement",
+    "issue",
+    "runtime",
+    "model_family",
+    "status",
+    "run_id_template",
+    "needs_live_gb10",
+    "commands",
+    "expected_claim_artifacts",
+)
+
+
+def rel(path: Path, root: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"{path}: invalid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise SystemExit(f"{path}: top-level JSON must be an object")
+    return data
+
+
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for lineno, line in enumerate(handle, start=1):
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            try:
+                row = json.loads(stripped)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"{path}:{lineno}: invalid JSON: {exc}") from exc
+            if not isinstance(row, dict):
+                raise SystemExit(f"{path}:{lineno}: row must be a JSON object")
+            row["_line"] = lineno
+            rows.append(row)
+    if not rows:
+        raise SystemExit(f"{path}: no task rows found")
+    return rows
+
+
+def validate_command(row: dict[str, Any], command: Any, index: int) -> list[str]:
+    findings: list[str] = []
+    req = row.get("requirement", f"line {row.get('_line', '?')}")
+    if not isinstance(command, dict):
+        return [f"{req}: command {index} is not an object"]
+    for field in ("name", "shell"):
+        value = command.get(field)
+        if not isinstance(value, str) or not value.strip():
+            findings.append(f"{req}: command {index} missing non-empty {field}")
+    artifacts = command.get("expected_artifacts", [])
+    if artifacts and not isinstance(artifacts, list):
+        findings.append(f"{req}: command {index} expected_artifacts must be a list")
+    for artifact in artifacts if isinstance(artifacts, list) else []:
+        if not isinstance(artifact, str) or not artifact.startswith("results/"):
+            findings.append(f"{req}: command {index} artifact must be results/*: {artifact!r}")
+    return findings
+
+
+def validate_task(row: dict[str, Any]) -> dict[str, Any]:
+    findings: list[str] = []
+    for field in REQUIRED_FIELDS:
+        if field not in row:
+            findings.append(f"missing required field {field}")
+    for field in ("requirement", "issue", "runtime", "model_family", "status", "run_id_template"):
+        value = row.get(field)
+        if not isinstance(value, str) or not value.strip():
+            findings.append(f"field {field} must be a non-empty string")
+    if not isinstance(row.get("needs_live_gb10"), bool):
+        findings.append("field needs_live_gb10 must be boolean")
+    commands = row.get("commands")
+    if not isinstance(commands, list) or not commands:
+        findings.append("commands must be a non-empty list")
+    else:
+        for index, command in enumerate(commands):
+            findings.extend(validate_command(row, command, index))
+    artifacts = row.get("expected_claim_artifacts")
+    if not isinstance(artifacts, list) or not artifacts:
+        findings.append("expected_claim_artifacts must be a non-empty list")
+    else:
+        for artifact in artifacts:
+            if not isinstance(artifact, str) or not artifact.startswith("results/"):
+                findings.append(f"expected claim artifact must be results/*: {artifact!r}")
+    return {
+        "requirement": row.get("requirement"),
+        "line": row.get("_line"),
+        "ok": not findings,
+        "findings": findings,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tasks", default="tasks/counterpart_evidence_tasks.jsonl")
+    parser.add_argument("--audit", default="results/counterpart_evidence_audit_20260608.json")
+    parser.add_argument("--output", default="results/counterpart_task_matrix.json")
+    args = parser.parse_args()
+
+    root = Path(__file__).resolve().parents[1]
+    tasks_path = Path(args.tasks)
+    audit_path = Path(args.audit)
+    output = Path(args.output)
+    rows = load_jsonl(tasks_path)
+    audit = load_json(audit_path) if audit_path.exists() else {}
+    audit_requirements = {
+        str(req.get("name"))
+        for req in audit.get("requirements", [])
+        if isinstance(req, dict) and req.get("claim_ready") is False
+    }
+    claim_ready_requirements = {
+        str(req.get("name"))
+        for req in audit.get("requirements", [])
+        if isinstance(req, dict) and req.get("claim_ready") is True
+    }
+    task_requirements = {str(row.get("requirement")) for row in rows}
+    duplicate_requirements = sorted(
+        requirement
+        for requirement in task_requirements
+        if sum(1 for row in rows if row.get("requirement") == requirement) > 1
+    )
+    row_checks = [validate_task(row) for row in rows]
+    missing_tasks_for_audit = sorted(audit_requirements - task_requirements)
+    task_already_claim_ready = sorted(task_requirements & claim_ready_requirements)
+    task_without_audit_requirement = sorted(
+        task_requirements - audit_requirements - claim_ready_requirements
+    ) if audit_requirements or claim_ready_requirements else []
+    summary = {
+        "schema": "counterpart-task-matrix/v1",
+        "tasks": rel(tasks_path, root),
+        "audit": rel(audit_path, root) if audit_path.exists() else None,
+        "task_count": len(rows),
+        "audit_missing_or_partial_count": len(audit_requirements),
+        "missing_tasks_for_audit": missing_tasks_for_audit,
+        "task_already_claim_ready": task_already_claim_ready,
+        "task_without_audit_requirement": task_without_audit_requirement,
+        "duplicate_requirements": duplicate_requirements,
+        "row_checks": row_checks,
+        "ok": (
+            all(check["ok"] for check in row_checks)
+            and not missing_tasks_for_audit
+            and not duplicate_requirements
+        ),
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(summary, indent=2, sort_keys=True) + "\n"
+    output.write_text(text)
+    print(text, end="")
+    return 0 if summary["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/cuda_artifact_arch_audit.py ====
+#!/usr/bin/env python3
+"""Audit CUDA artifacts for embedded architecture target strings.
+
+Unlike cuda_so_audit.py, this also checks standalone .cubin and .ptx files.
+Use it after a server has handled at least one request when JIT caches may have
+materialized under package or user cache directories.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib
+import json
+import os
+import re
+import shutil
+import subprocess
+from pathlib import Path
+from typing import Any
+
+
+ARCH_RE = re.compile(r"\b(?:sm|compute)_[0-9]+[a-z]?\b")
+ARTIFACT_SUFFIXES = {".so", ".cubin", ".ptx"}
+
+
+def find_executable(name: str) -> str | None:
+    found = shutil.which(name)
+    if found:
+        return found
+    for raw in ["/usr/local/cuda/bin/" + name, "/usr/local/cuda-13.0/bin/" + name]:
+        path = Path(raw)
+        if path.exists() and os.access(path, os.X_OK):
+            return str(path)
+    return None
+
+
+def module_root(name: str) -> Path:
+    mod = importlib.import_module(name)
+    file_name = getattr(mod, "__file__", None)
+    if not file_name:
+        raise RuntimeError(f"module {name!r} has no __file__")
+    return Path(file_name).resolve().parent
+
+
+def iter_artifacts(root: Path, max_files: int) -> list[Path]:
+    if not root.exists():
+        return []
+    if root.is_file():
+        return [root] if root.suffix in ARTIFACT_SUFFIXES else []
+    artifacts = [
+        path
+        for path in root.rglob("*")
+        if path.is_file() and path.suffix in ARTIFACT_SUFFIXES
+    ]
+    return sorted(artifacts)[:max_files]
+
+
+def read_arch_strings(path: Path) -> list[str]:
+    data = path.read_bytes()
+    try:
+        text = data.decode("utf-8", errors="ignore")
+    except Exception:
+        text = ""
+    return sorted(set(ARCH_RE.findall(text)))
+
+
+def cuobjdump_arches(cuobjdump: str | None, path: Path, timeout: int) -> dict[str, Any]:
+    if not cuobjdump:
+        return {"returncode": None, "architectures": [], "error": "cuobjdump not found"}
+    proc = subprocess.run(
+        [cuobjdump, "--list-elf", str(path)],
+        text=True,
+        capture_output=True,
+        timeout=timeout,
+        check=False,
+    )
+    text = "\n".join([proc.stdout, proc.stderr])
+    return {
+        "returncode": proc.returncode,
+        "architectures": sorted(set(ARCH_RE.findall(text))),
+        "stdout_head": proc.stdout[:1000],
+        "stderr_head": proc.stderr[:1000],
+    }
+
+
+def audit_artifact(cuobjdump: str | None, path: Path, timeout: int) -> dict[str, Any]:
+    item: dict[str, Any] = {
+        "path": str(path),
+        "suffix": path.suffix,
+        "text_architectures": read_arch_strings(path),
+    }
+    if path.suffix in {".so", ".cubin"}:
+        try:
+            item["cuobjdump"] = cuobjdump_arches(cuobjdump, path, timeout)
+        except Exception as exc:
+            item["cuobjdump"] = {"error": repr(exc), "architectures": []}
+    architectures = set(item["text_architectures"])
+    architectures.update(item.get("cuobjdump", {}).get("architectures", []))
+    item["architectures"] = sorted(architectures)
+    return item
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--package", action="append", default=[])
+    parser.add_argument("--path", action="append", default=[])
+    parser.add_argument("--max-files", type=int, default=300)
+    parser.add_argument("--timeout", type=int, default=60)
+    parser.add_argument("--output")
+    args = parser.parse_args()
+
+    cuobjdump = find_executable("cuobjdump")
+    report: dict[str, Any] = {
+        "schema": "cuda-artifact-arch-audit/v1",
+        "cuobjdump": cuobjdump,
+        "inputs": {"packages": args.package, "paths": args.path},
+        "roots": [],
+        "artifacts": [],
+        "summary": {},
+    }
+
+    roots: list[Path] = []
+    for package in args.package:
+        try:
+            root = module_root(package)
+            roots.append(root)
+            report["roots"].append({"package": package, "path": str(root), "exists": root.exists()})
+        except Exception as exc:
+            report["roots"].append({"package": package, "error": repr(exc), "exists": False})
+    for raw in args.path:
+        root = Path(raw).resolve()
+        roots.append(root)
+        report["roots"].append({"path": str(root), "exists": root.exists()})
+
+    seen: set[Path] = set()
+    per_root_limit = max(1, args.max_files)
+    for root in roots:
+        for artifact in iter_artifacts(root, per_root_limit):
+            if artifact in seen:
+                continue
+            seen.add(artifact)
+            try:
+                report["artifacts"].append(audit_artifact(cuobjdump, artifact, args.timeout))
+            except Exception as exc:
+                report["artifacts"].append({"path": str(artifact), "error": repr(exc), "architectures": []})
+
+    arch_counts: dict[str, int] = {}
+    suffix_counts: dict[str, int] = {}
+    for item in report["artifacts"]:
+        suffix = item.get("suffix", "")
+        suffix_counts[suffix] = suffix_counts.get(suffix, 0) + 1
+        for arch in item.get("architectures", []):
+            arch_counts[arch] = arch_counts.get(arch, 0) + 1
+
+    report["summary"] = {
+        "artifact_count": len(report["artifacts"]),
+        "suffix_counts": dict(sorted(suffix_counts.items())),
+        "architecture_counts": dict(sorted(arch_counts.items())),
+        "artifacts_with_sm_121": sum(
+            1 for item in report["artifacts"] if "sm_121" in item.get("architectures", [])
+        ),
+        "artifacts_with_sm_121a": sum(
+            1 for item in report["artifacts"] if "sm_121a" in item.get("architectures", [])
+        ),
+        "artifacts_with_compute_121": sum(
+            1 for item in report["artifacts"] if "compute_121" in item.get("architectures", [])
+        ),
+        "artifacts_with_compute_121a": sum(
+            1 for item in report["artifacts"] if "compute_121a" in item.get("architectures", [])
+        ),
+    }
+
+    text = json.dumps(report, indent=2, sort_keys=True)
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+    print(text)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/cuda_build_target_audit.py ====
+#!/usr/bin/env python3
+"""Audit CUDA build or JIT logs for Spark target evidence.
+
+This complements cuda_so_audit.py. Use this script before or beside binary
+inspection when the relevant evidence lives in build logs, JIT logs, CMake
+output, or server logs.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import time
+from pathlib import Path
+from typing import Any
+
+
+PATTERNS = {
+    "spark_target": [
+        re.compile(r"\bsm_121\b"),
+        re.compile(r"\bcompute_121\b"),
+        re.compile(r"\b121-real\b"),
+        re.compile(r"\bCMAKE_CUDA_ARCHITECTURES\b[^\n\r]*(?:\b121\b|\b12\.1\b)"),
+        re.compile(r"\bTORCH_CUDA_ARCH_LIST\b[^\n\r]*(?:\b12\.1\b|\bsm_121\b)"),
+        re.compile(r"\bCUDA\s*:.*\bARCHS\s*=\s*1210\b"),
+    ],
+    "native_fp4_target": [
+        re.compile(r"\bsm_121a\b"),
+        re.compile(r"\bcompute_121a\b"),
+        re.compile(r"\b121a(?:-real)?\b"),
+        re.compile(r"\b12\.1a\b"),
+    ],
+    "family_target": [
+        re.compile(r"\bsm_120f\b"),
+        re.compile(r"\bcompute_120f\b"),
+        re.compile(r"\b120f(?:-real)?\b"),
+        re.compile(r"\b12\.0f\b"),
+    ],
+    "adjacent_or_legacy_target": [
+        re.compile(r"\bsm_(?:70|75|80|86|87|89|90|90a|100|100a|103|103a|110|120|120a)\b"),
+        re.compile(r"\bcompute_(?:70|75|80|86|87|89|90|90a|100|100a|103|103a|110|120|120a)\b"),
+    ],
+}
+
+
+def _match_line(line: str) -> list[dict[str, str]]:
+    hits = []
+    for kind, patterns in PATTERNS.items():
+        for pattern in patterns:
+            for match in pattern.finditer(line):
+                hits.append({"kind": kind, "token": match.group(0)})
+    return hits
+
+
+def audit_log(path: Path, allow_family_targets: set[str]) -> dict[str, Any]:
+    text = path.read_text(encoding="utf-8", errors="replace")
+    evidence = []
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        for hit in _match_line(line):
+            evidence.append(
+                {
+                    "line": line[:500],
+                    "line_no": line_no,
+                    **hit,
+                }
+            )
+
+    kinds = {item["kind"] for item in evidence}
+    family_tokens = {
+        item["token"]
+        for item in evidence
+        if item["kind"] == "family_target"
+    }
+    allowed_family = sorted(family_tokens & allow_family_targets)
+    unallowed_family = sorted(family_tokens - allow_family_targets)
+    has_spark = "spark_target" in kinds
+    has_native_fp4 = "native_fp4_target" in kinds
+    has_allowed_family = bool(allowed_family)
+    has_adjacent = "adjacent_or_legacy_target" in kinds
+
+    findings = []
+    if has_native_fp4:
+        findings.append("OK: log contains native Spark FP4 target evidence.")
+    if has_spark:
+        findings.append("OK: log contains Spark sm_121 target evidence.")
+    if has_allowed_family:
+        findings.append(
+            "OK: log contains explicitly allowed SM12x family target evidence: "
+            + ", ".join(allowed_family)
+        )
+    if unallowed_family:
+        findings.append(
+            "WARN: log contains SM12x family targets that were not explicitly allowed: "
+            + ", ".join(unallowed_family)
+        )
+    if has_adjacent and not (has_spark or has_native_fp4 or has_allowed_family):
+        findings.append(
+            "WARN: log contains adjacent or legacy CUDA targets but no accepted Spark target evidence."
+        )
+    if not evidence:
+        findings.append("WARN: no CUDA architecture target evidence found in log.")
+
+    accepted = has_spark or has_native_fp4 or has_allowed_family
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "accepted_spark_target_evidence": accepted,
+        "has_spark_target": has_spark,
+        "has_native_fp4_target": has_native_fp4,
+        "allowed_family_targets": allowed_family,
+        "unallowed_family_targets": unallowed_family,
+        "evidence": evidence,
+        "findings": findings,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--log", action="append", default=[], type=Path)
+    parser.add_argument(
+        "--allow-family-target",
+        action="append",
+        default=[],
+        help="Accept a family-compatible target token such as 120f or compute_120f.",
+    )
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--fail-on-missing",
+        action="store_true",
+        help="Exit 1 if any log lacks accepted Spark target evidence.",
+    )
+    args = parser.parse_args()
+
+    allow_family_targets = set(args.allow_family_target)
+    logs = []
+    for path in args.log:
+        item: dict[str, Any]
+        if not path.exists():
+            item = {
+                "path": str(path),
+                "exists": False,
+                "accepted_spark_target_evidence": False,
+                "findings": ["ERROR: log path does not exist."],
+                "evidence": [],
+            }
+        else:
+            item = audit_log(path, allow_family_targets)
+        logs.append(item)
+
+    report = {
+        "schema": "cuda-build-target-audit/v1",
+        "created_unix": time.time(),
+        "inputs": {
+            "logs": [str(path) for path in args.log],
+            "allow_family_targets": sorted(allow_family_targets),
+        },
+        "logs": logs,
+        "summary": {
+            "log_count": len(logs),
+            "accepted_log_count": sum(
+                1 for item in logs if item.get("accepted_spark_target_evidence")
+            ),
+            "native_fp4_log_count": sum(
+                1 for item in logs if item.get("has_native_fp4_target")
+            ),
+            "missing_or_unaccepted_count": sum(
+                1 for item in logs if not item.get("accepted_spark_target_evidence")
+            ),
+        },
+    }
+
+    text = json.dumps(report, indent=2, sort_keys=True)
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(text + "\n", encoding="utf-8")
+    print(text)
+
+    if args.fail_on_missing and report["summary"]["missing_or_unaccepted_count"]:
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+# ==== FILE: scripts/cuda_so_audit.py ====
+#!/usr/bin/env python3
+"""Audit CUDA extension shared objects for embedded architecture targets."""
+
+from __future__ import annotations
+
+import argparse
+import importlib
+import json
+import os
+import re
+import shutil
+import subprocess
+from pathlib import Path
+from typing import Any
+
+
+ARCH_RE = re.compile(r"\b(?:sm|compute)_[0-9]+[a-z]?\b")
+
+
+def find_executable(name: str) -> str | None:
+    found = shutil.which(name)
+    if found:
+        return found
+    for raw in ["/usr/local/cuda/bin/" + name, "/usr/local/cuda-13.0/bin/" + name]:
+        path = Path(raw)
+        if path.exists() and os.access(path, os.X_OK):
+            return str(path)
+    return None
+
+
+def module_root(name: str) -> Path:
+    mod = importlib.import_module(name)
+    file_name = getattr(mod, "__file__", None)
+    if not file_name:
+        raise RuntimeError(f"module {name!r} has no __file__")
+    path = Path(file_name).resolve()
+    return path.parent if path.name != "__init__.py" else path.parent
+
+
+def run_cuobjdump(cuobjdump: str, so_path: Path, timeout: int) -> dict[str, Any]:
+    proc = subprocess.run(
+        [cuobjdump, "--list-elf", str(so_path)],
+        text=True,
+        capture_output=True,
+        timeout=timeout,
+        check=False,
+    )
+    text = "\n".join([proc.stdout, proc.stderr])
+    return {
+        "returncode": proc.returncode,
+        "architectures": sorted(set(ARCH_RE.findall(text))),
+        "stdout_head": proc.stdout[:2000],
+        "stderr_head": proc.stderr[:2000],
+    }
+
+
+def iter_shared_objects(root: Path, max_files: int) -> list[Path]:
+    files = sorted(root.rglob("*.so"))
+    return files[:max_files]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--package", action="append", default=[])
+    parser.add_argument("--path", action="append", default=[])
+    parser.add_argument("--max-files", type=int, default=80)
+    parser.add_argument("--timeout", type=int, default=60)
+    parser.add_argument("--output")
+    args = parser.parse_args()
+
+    cuobjdump = find_executable("cuobjdump")
+    report: dict[str, Any] = {
+        "schema": "cuda-so-audit/v1",
+        "cuobjdump": cuobjdump,
+        "inputs": {"packages": args.package, "paths": args.path},
+        "objects": [],
+        "summary": {},
+    }
+    if not cuobjdump:
+        report["error"] = "cuobjdump not found"
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return 2
+
+    roots: list[Path] = []
+    for package in args.package:
+        try:
+            roots.append(module_root(package))
+        except Exception as exc:
+            report["objects"].append({"package": package, "error": repr(exc)})
+    for raw in args.path:
+        roots.append(Path(raw).resolve())
+
+    seen: set[Path] = set()
+    for root in roots:
+        if root.is_file() and root.suffix == ".so":
+            candidates = [root]
+        else:
+            candidates = iter_shared_objects(root, args.max_files)
+        for so_path in candidates:
+            if so_path in seen:
+                continue
+            seen.add(so_path)
+            item: dict[str, Any] = {"path": str(so_path)}
+            try:
+                item.update(run_cuobjdump(cuobjdump, so_path, args.timeout))
+            except Exception as exc:
+                item["error"] = repr(exc)
+            report["objects"].append(item)
+
+    arch_counts: dict[str, int] = {}
+    for item in report["objects"]:
+        for arch in item.get("architectures", []):
+            arch_counts[arch] = arch_counts.get(arch, 0) + 1
+    report["summary"] = {
+        "object_count": len(report["objects"]),
+        "architecture_counts": dict(sorted(arch_counts.items())),
+        "objects_with_sm_121": sum(
+            1 for item in report["objects"] if "sm_121" in item.get("architectures", [])
+        ),
+        "objects_with_sm_120": sum(
+            1 for item in report["objects"] if "sm_120" in item.get("architectures", [])
+        ),
+    }
+
+    text = json.dumps(report, indent=2, sort_keys=True)
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+    print(text)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+
