@@ -15,7 +15,10 @@ This packet validates the offline scaffold recorded in
 - SGLang fork: `jethac/sglang@spark/hijinks-018-fp4-e2m1-kv-sm121-serving`, at or after
   `cf7414f80`.
 - FlashInfer fork: `jethac/flashinfer@spark/hijinks-022-fa2-d512`, at or after
-  `fb7d62ea`.
+  `8d85fff9`. This is the first target for this packet after the Block B ABI red row:
+  it accepts `k_data_type`/`v_data_type` in prefill and standard decode planning. Equal
+  K/V dtypes are expected to run; unequal dtypes currently raise a deliberate
+  `NotImplementedError` until split-dtype module keying is wired.
 - Feature flag under test: `SGLANG_FLASHINFER_VOSPLIT=1`.
 - Do **not** compile SGLang's FlashInfer modules with
   `-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1`; that flag is vLLM-layout-specific.
@@ -47,7 +50,8 @@ git -C third_party/sglang fetch origin
 git -C third_party/sglang checkout cf7414f80
 
 git -C third_party/flashinfer fetch origin
-git -C third_party/flashinfer checkout fb7d62ea
+git -C third_party/flashinfer checkout 8d85fff9
+git -C third_party/flashinfer submodule update --init --recursive 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
 
 docker ps
 free -h
