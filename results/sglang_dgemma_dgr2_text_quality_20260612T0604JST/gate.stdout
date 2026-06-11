@@ -1,0 +1,40 @@
+{
+  "all_ok": false,
+  "checks": [
+    {
+      "answer_ok": false,
+      "answer_rule": "contains standalone 4",
+      "ok": false,
+      "prompt_id": "arithmetic_2_plus_2",
+      "responses": [
+        "",
+        ""
+      ],
+      "stable": true
+    },
+    {
+      "answer_ok": false,
+      "answer_rule": "contains Tokyo",
+      "ok": false,
+      "prompt_id": "capital_japan",
+      "responses": [
+        "",
+        ""
+      ],
+      "stable": true
+    },
+    {
+      "answer_ok": true,
+      "answer_rule": "mentions local/desktop/development AI use",
+      "ok": true,
+      "prompt_id": "dgx_spark_use",
+      "responses": [
+        "The NVIDIA DGX Spark desktop is designed for high-performance AI development, data science, and machine learning prototyping in a compact, desktop-class form factor.",
+        "The NVIDIA DGX Spark desktop is designed for high-performance AI development, data science, and machine learning prototyping in a compact, desktop-class form factor."
+      ],
+      "stable": true
+    }
+  ],
+  "input": "/home/jethac/spark_tmp/sglang_dgemma_dgr2_text_quality_20260612T0604JST/responses.json",
+  "schema": "sglang-diffusiongemma-dgr2-text-quality-gate/v1"
+}

@@ -1,0 +1,290 @@
+{
+  "base_url": "http://127.0.0.1:30125",
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "repeats": 2,
+  "rows": [
+    {
+      "elapsed_s": 0.9641485214233398,
+      "prompt": "Answer with only the city name: What is the capital of Japan?",
+      "prompt_id": "capital_japan",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 32,
+        "messages": [
+          {
+            "content": "Answer with only the city name: What is the capital of Japan?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212480,
+        "id": "450ba2371ee94f66a69757680cf770e2",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 27,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 59
+        }
+      }
+    },
+    {
+      "elapsed_s": 0.4962623119354248,
+      "prompt": "Answer with only the city name: What is the capital of Japan?",
+      "prompt_id": "capital_japan",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 32,
+        "messages": [
+          {
+            "content": "Answer with only the city name: What is the capital of Japan?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212480,
+        "id": "fa1e11f01a37442f9b0f88632ccb88f3",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 27,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 59
+        }
+      }
+    },
+    {
+      "elapsed_s": 0.48743534088134766,
+      "prompt": "Answer with only the number: What is 2 + 2?",
+      "prompt_id": "arithmetic_2_plus_2",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 32,
+        "messages": [
+          {
+            "content": "Answer with only the number: What is 2 + 2?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212481,
+        "id": "b4aad5b2c7a3463fb5816de0e1e359ba",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 27,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 59
+        }
+      }
+    },
+    {
+      "elapsed_s": 0.4893803596496582,
+      "prompt": "Answer with only the number: What is 2 + 2?",
+      "prompt_id": "arithmetic_2_plus_2",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 32,
+        "messages": [
+          {
+            "content": "Answer with only the number: What is 2 + 2?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212481,
+        "id": "6c20eb2cb6884bdca84a33585e32e352",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 27,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 59
+        }
+      }
+    },
+    {
+      "elapsed_s": 2.1085762977600098,
+      "prompt": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+      "prompt_id": "dgx_spark_use",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "The NVIDIA DGX Spark desktop is designed for high-performance AI development, data science, and machine learning prototyping in a compact, desktop-class form factor.",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212483,
+        "id": "7108f1a7179940de9e94676e5360f52b",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 32,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 96
+        }
+      }
+    },
+    {
+      "elapsed_s": 1.8787310123443604,
+      "prompt": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+      "prompt_id": "dgx_spark_use",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "length",
+            "index": 0,
+            "logprobs": null,
+            "matched_stop": null,
+            "message": {
+              "content": "The NVIDIA DGX Spark desktop is designed for high-performance AI development, data science, and machine learning prototyping in a compact, desktop-class form factor.",
+              "reasoning_content": null,
+              "role": "assistant",
+              "tool_calls": null
+            }
+          }
+        ],
+        "created": 1781212485,
+        "id": "bdd9d43e375b451796539255ec6b041f",
+        "metadata": {
+          "weight_version": "default"
+        },
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 32,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 96
+        }
+      }
+    }
+  ],
+  "schema": "sglang-diffusiongemma-dgr2-text-quality/v1"
+}
