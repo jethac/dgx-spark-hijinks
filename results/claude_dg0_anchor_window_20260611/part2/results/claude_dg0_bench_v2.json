@@ -1,0 +1,243 @@
+{
+  "schema": "claude-dg0-bench/v2",
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "ignore_eos": true,
+  "max_tokens": 512,
+  "tokenize_calibration": {
+    "seed_tokens": 36
+  },
+  "scales": [
+    {
+      "target_prompt_tokens": 32,
+      "actual_prompt_tokens": 50,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 22.726367926981766,
+          "ttft_s": 13.194818027986912,
+          "n_text_chunks": 2,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 13.194818027986912,
+              "chars": 2
+            },
+            {
+              "t_rel_s": 22.726023911993252,
+              "chars": 388
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 562,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 9.53120588400634,
+          "gen_tok_per_s_first_to_last": 53.71828142534954,
+          "gen_tok_per_s_excl_ttft_wallend": 53.71634261223275,
+          "gen_tok_per_s_incl_ttft": 22.528896902708794,
+          "text_head": "  ut-------------ut--de-clut--de-clutched (*-s*)\n-clututched (*-s----ut- (*--ut---ut--de-clutched-de-clutched (*-s*)\n--clutched (*--*)\n--clutched (*------ut---u"
+        },
+        {
+          "rep": 2,
+          "wall_s": 19.35118204698665,
+          "ttft_s": 9.501044863980496,
+          "n_text_chunks": 2,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 9.501044863980496,
+              "chars": 1
+            },
+            {
+              "t_rel_s": 19.350841375999153,
+              "chars": 578
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 562,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 9.849796512018656,
+          "gen_tok_per_s_first_to_last": 51.980769285463005,
+          "gen_tok_per_s_excl_ttft_wallend": 51.97897150948543,
+          "gen_tok_per_s_incl_ttft": 26.458332041774586,
+          "text_head": " -the\": \"the name of `keys` genome-fact de-facto de-facto is 'ALGE' and 'WAIT' and 'an---- \"the name of `keys` genome-fact de-facto is-facto is 'ALGE' and '-' a"
+        },
+        {
+          "rep": 3,
+          "wall_s": 19.948705147980945,
+          "ttft_s": 9.532811779994518,
+          "n_text_chunks": 2,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 9.532811779994518,
+              "chars": 1
+            },
+            {
+              "t_rel_s": 19.94834526098566,
+              "chars": 566
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 562,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 10.415533480991144,
+          "gen_tok_per_s_first_to_last": 49.157347622608576,
+          "gen_tok_per_s_excl_ttft_wallend": 49.15564915186708,
+          "gen_tok_per_s_incl_ttft": 25.665826237941097,
+          "text_head": " n, a small \ntype of character in in a -code). \nBar (n, a period of time; a line \nside-to-side). \nPill (n, a small-ball-shaped \nreleasing medicine; a tablet- de"
+        }
+      ]
+    },
+    {
+      "target_prompt_tokens": 2000,
+      "actual_prompt_tokens": 2010,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 22.419736522017047,
+          "ttft_s": 11.652044176007621,
+          "n_text_chunks": 2,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 11.652044176007621,
+              "chars": 1322
+            },
+            {
+              "t_rel_s": 22.419380874023773,
+              "chars": 348
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2522,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 10.767336698016152,
+          "gen_tok_per_s_first_to_last": 47.551220358357924,
+          "gen_tok_per_s_excl_ttft_wallend": 47.54964978078617,
+          "gen_tok_per_s_incl_ttft": 22.837021277979616,
+          "text_head": "\n\n### **Detailed Summary**\nThe provided text is highly repetitive and fragmented, but its core message centers on the evolution of computing and its societal im"
+        },
+        {
+          "rep": 2,
+          "wall_s": 20.005339274997823,
+          "ttft_s": 20.00496698799543,
+          "n_text_chunks": 1,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 20.00496698799543,
+              "chars": 506
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2522,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_excl_ttft_wallend": 1375283.0389193478,
+          "gen_tok_per_s_incl_ttft": 25.59316755201872,
+          "text_head": "for-the---of---------it requires----- what---from \"the-of\" is repetitive--,, each-the---not-waiting-for-the-another-------it remains-last---,- what---from \"the-"
+        },
+        {
+          "rep": 3,
+          "wall_s": 20.13955473600072,
+          "ttft_s": 20.13908715301659,
+          "n_text_chunks": 1,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 20.13908715301659,
+              "chars": 1248
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2522,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_excl_ttft_wallend": 1094992.7978105852,
+          "gen_tok_per_s_incl_ttft": 25.422607734458392,
+          "text_head": "the first sentence of the prompt mentions a total lack of\"( text in the remaining part. This error is to be ignored or de-conflicted.\n\nTo help you move forward,"
+        }
+      ]
+    },
+    {
+      "target_prompt_tokens": 6000,
+      "actual_prompt_tokens": 6000,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 23.345433167007286,
+          "ttft_s": 23.34498507200624,
+          "n_text_chunks": 1,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 23.34498507200624,
+              "chars": 789
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6512,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_excl_ttft_wallend": 1142614.8446270034,
+          "gen_tok_per_s_incl_ttft": 21.93148425806805,
+          "text_head": "Wait,**!** \nIt looks like your message might have been cut off or contains some repetitive text. If you have a specific question or a different piece of text yo"
+        },
+        {
+          "rep": 2,
+          "wall_s": 20.139341759000672,
+          "ttft_s": 20.138989839004353,
+          "n_text_chunks": 1,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 20.138989839004353,
+              "chars": 1120
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6512,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_excl_ttft_wallend": 1454876.1234226706,
+          "gen_tok_per_s_incl_ttft": 25.422876582904056,
+          "text_head": ",,,. \nThe provided text is a highly repetitive deconstruction consisting of a single de-uniquely repeated sentence: \"The history of computing spans mechanical c"
+        },
+        {
+          "rep": 3,
+          "wall_s": 20.60841914601042,
+          "ttft_s": 20.607991194992792,
+          "n_text_chunks": 1,
+          "chunk_arrivals": [
+            {
+              "t_rel_s": 20.607991194992792,
+              "chars": 797
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6512,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_excl_ttft_wallend": 1196398.6038366368,
+          "gen_tok_per_s_incl_ttft": 24.84421519052411,
+          "text_head": "**Summary:**\nThe provided text is highly repetitive and consists of a single sentence repeated many times with slight variations in where the sentence might end"
+        }
+      ]
+    }
+  ]
+}

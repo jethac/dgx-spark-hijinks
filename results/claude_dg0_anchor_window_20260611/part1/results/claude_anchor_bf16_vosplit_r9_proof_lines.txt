@@ -1,0 +1,12 @@
+1:VLLM_BUILD_CHECK vllm.__file__= /opt/jethac-vllm/vllm/__init__.py
+2:VLLM_BUILD_CHECK flashinfer= /opt/jethac-vllm/vllm/v1/attention/backends/flashinfer.py
+3:EXT_PATH /opt/jethac-vllm/vllm/_C_stable_libtorch.abi3.so
+10:(APIServer pid=1) INFO 06-11 10:27:58 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'host': '0.0.0.0', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'served_model_name': ['gemma4-31b-it'], 'gpu_memory_utilization': 0.72, 'language_model_only': True}
+11:(APIServer pid=1) WARNING 06-11 10:27:58 [envs.py:2117] Unknown vLLM environment variable detected: VLLM_VERSION_OVERRIDE
+14:(APIServer pid=1) INFO 06-11 10:28:03 [config.py:112] Gemma4 has heterogeneous head dimensions (head_dim=256, global_head_dim=512) and VLLM_FLASHINFER_VOSPLIT is set: forcing FLASHINFER with the FA2 VO split instead of TRITON_ATTN.
+26:(EngineCore pid=196) INFO 06-11 10:28:18 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+27:(EngineCore pid=196) INFO 06-11 10:28:18 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+46:(EngineCore pid=196) INFO 06-11 10:35:38 [flashinfer.py:1411] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+51:(EngineCore pid=196) INFO 06-11 10:35:40 [kv_cache_utils.py:1790] GPU KV cache size: 63,912 tokens
+54:(EngineCore pid=196) WARNING 06-11 10:35:41 [import_utils.py:408] Traceback (most recent call last):
+MAX_MMA_KV_COUNT=0

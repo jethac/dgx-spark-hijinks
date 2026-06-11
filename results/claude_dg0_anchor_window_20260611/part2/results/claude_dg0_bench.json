@@ -1,0 +1,164 @@
+{
+  "schema": "claude-dg0-bench/v1",
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "coherence": {
+    "wall_s": 5.834558998001739,
+    "text": "The sky is blue because of a phenomenon called Rayleigh scattering, where sunlight reaches Earth's atmosphere and is scattered in all directions by gas molecules in the air. Blue light travels in shorter, smaller waves, causing it to be scattered more intensely than other colors, which is why our eyes perceive the sky as blue.",
+    "usage": {
+      "prompt_tokens": 24,
+      "total_tokens": 88,
+      "completion_tokens": 64,
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop"
+  },
+  "tokenize_calibration": {
+    "seed_tokens": 36
+  },
+  "scales": [
+    {
+      "target_prompt_tokens": 32,
+      "actual_prompt_tokens": 50,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 9.463267771003302,
+          "ttft_s": 9.463017819012748,
+          "stream_events_with_text": 1,
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 53,
+            "completion_tokens": 3
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.3170152290514694
+        },
+        {
+          "rep": 2,
+          "wall_s": 9.4197859709966,
+          "ttft_s": 9.41955022700131,
+          "stream_events_with_text": 1,
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 53,
+            "completion_tokens": 3
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.3184785736360637
+        },
+        {
+          "rep": 3,
+          "wall_s": 9.412333154992666,
+          "ttft_s": 9.411928722984158,
+          "stream_events_with_text": 1,
+          "usage": {
+            "prompt_tokens": 50,
+            "total_tokens": 52,
+            "completion_tokens": 2
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.2124871662600598
+        }
+      ]
+    },
+    {
+      "target_prompt_tokens": 2000,
+      "actual_prompt_tokens": 2010,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 9.096914827008732,
+          "ttft_s": null,
+          "stream_events_with_text": 0,
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2011,
+            "completion_tokens": 1
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.10992737856916071
+        },
+        {
+          "rep": 2,
+          "wall_s": 21.55316664002021,
+          "ttft_s": 10.926516367006116,
+          "stream_events_with_text": 2,
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2522,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 10.626312161009992,
+          "gen_tok_per_s_first_to_last": 48.18228490205922,
+          "gen_tok_per_s_incl_ttft": 23.75521001398057
+        },
+        {
+          "rep": 3,
+          "wall_s": 19.892435369984014,
+          "ttft_s": 9.91651910499786,
+          "stream_events_with_text": 2,
+          "usage": {
+            "prompt_tokens": 2010,
+            "total_tokens": 2522,
+            "completion_tokens": 512
+          },
+          "gen_window_s_first_to_last_chunk": 9.975495641003363,
+          "gen_tok_per_s_first_to_last": 51.32577051063716,
+          "gen_tok_per_s_incl_ttft": 25.738427220055936
+        }
+      ]
+    },
+    {
+      "target_prompt_tokens": 6000,
+      "actual_prompt_tokens": 6000,
+      "reps": [
+        {
+          "rep": 1,
+          "wall_s": 12.310233263997361,
+          "ttft_s": null,
+          "stream_events_with_text": 0,
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6001,
+            "completion_tokens": 1
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.08123322918052338
+        },
+        {
+          "rep": 2,
+          "wall_s": 9.879815728985704,
+          "ttft_s": null,
+          "stream_events_with_text": 0,
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6001,
+            "completion_tokens": 1
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.10121646267816206
+        },
+        {
+          "rep": 3,
+          "wall_s": 9.238146612013225,
+          "ttft_s": null,
+          "stream_events_with_text": 0,
+          "usage": {
+            "prompt_tokens": 6000,
+            "total_tokens": 6001,
+            "completion_tokens": 1
+          },
+          "gen_window_s_first_to_last_chunk": null,
+          "gen_tok_per_s_first_to_last": null,
+          "gen_tok_per_s_incl_ttft": 0.10824682070964393
+        }
+      ]
+    }
+  ]
+}

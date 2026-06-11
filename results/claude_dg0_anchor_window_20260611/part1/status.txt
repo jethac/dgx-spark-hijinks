@@ -1,0 +1,9 @@
+RUN_START 2026-06-11T19:27:46+09:00 IMAGE=jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9 IMAGE_ID=8c37bdbc4fdb
+CORPUS_MD5=abb63f0e65247a25f870d3f2d57563ff
+ROW=anchor_bf16_vosplit_r9 READY_RC=0 READY_WALL=562
+ROW=anchor_bf16_vosplit_r9 VERDICT=SERVED
+ROW=anchor_bf16_vosplit_r9 PPL_RC=0 CTX=8191 PPL_WALL=576
+ROW=anchor_bf16_vosplit_r9 GATES_RC=0 GATES_WALL=795
+ROW=anchor_bf16_vosplit_r9 DONE ROW_WALL=796
+ROW=anchor_bf16_vosplit_r9 FINAL_RC=0
+PART1_DONE TOTAL_WALL=796

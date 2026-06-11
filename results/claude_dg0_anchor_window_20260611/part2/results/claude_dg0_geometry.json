@@ -1,0 +1,76 @@
+{
+  "config_path": "/root/.cache/huggingface/hub/models--google--diffusiongemma-26B-A4B-it/snapshots/0f28bc42f588fbd8f71e08102b1c3960298a1358/config.json",
+  "model_type": "diffusion_gemma",
+  "architectures": [
+    "DiffusionGemmaForBlockDiffusion"
+  ],
+  "top_level_canvas_length": 256,
+  "text_config": {
+    "head_dim": 256,
+    "global_head_dim": 512,
+    "num_attention_heads": 16,
+    "num_key_value_heads": 8,
+    "num_global_key_value_heads": 2,
+    "num_hidden_layers": 30,
+    "layer_types": [
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention"
+    ],
+    "sliding_window": 1024,
+    "canvas_length": null,
+    "max_position_embeddings": 262144,
+    "hidden_size": 2816,
+    "num_experts": 128,
+    "top_k_experts": 8,
+    "moe_intermediate_size": 704,
+    "rope_theta": null,
+    "final_logit_softcapping": 30.0
+  },
+  "generation_config": {
+    "confidence_threshold": 0.005,
+    "eos_token_id": [
+      1,
+      106,
+      50
+    ],
+    "max_denoising_steps": 48,
+    "max_new_tokens": 256,
+    "pad_token_id": 0,
+    "sampler_config": {
+      "_cls_name": "EntropyBoundSamplerConfig",
+      "entropy_bound": 0.1
+    },
+    "stability_threshold": 1,
+    "t_max": 0.8,
+    "t_min": 0.4,
+    "transformers_version": "5.8.0.dev0"
+  }
+}

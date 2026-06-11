@@ -1,0 +1,171 @@
+WARNING 06-11 10:59:55 [argparse_utils.py:257] With `vllm serve`, you should provide the model as a positional argument or in a config file instead of via the `--model` option. The `--model` option will be removed in a future version.
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339] 
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.22.1rc1.dev357+g74b5964f0
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339]   █▄█▀ █     █     █     █  model   google/diffusiongemma-26B-A4B-it
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:339] 
+(APIServer pid=1) INFO 06-11 10:59:55 [api_utils.py:273] non-default args: {'model_tag': 'google/diffusiongemma-26B-A4B-it', 'host': '0.0.0.0', 'model': 'google/diffusiongemma-26B-A4B-it', 'max_model_len': 262144, 'attention_backend': 'TRITON_ATTN', 'gpu_memory_utilization': 0.72, 'max_num_seqs': 4, 'diffusion_config': {'canvas_length': 256}}
+(APIServer pid=1) WARNING 06-11 10:59:55 [envs.py:2111] Unknown vLLM environment variable detected: VLLM_BUILD_COMMIT
+(APIServer pid=1) WARNING 06-11 10:59:55 [envs.py:2111] Unknown vLLM environment variable detected: VLLM_BUILD_PIPELINE
+(APIServer pid=1) WARNING 06-11 10:59:55 [envs.py:2111] Unknown vLLM environment variable detected: VLLM_BUILD_URL
+(APIServer pid=1) WARNING 06-11 10:59:55 [envs.py:2111] Unknown vLLM environment variable detected: VLLM_IMAGE_TAG
+(APIServer pid=1) INFO 06-11 11:00:03 [model.py:611] Resolved architecture: DiffusionGemmaForBlockDiffusion
+(APIServer pid=1) INFO 06-11 11:00:03 [model.py:1750] Using max model len 262144
+(APIServer pid=1) INFO 06-11 11:00:03 [vllm.py:1011] Asynchronous scheduling is enabled.
+(APIServer pid=1) INFO 06-11 11:00:03 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=124) INFO 06-11 11:00:12 [core.py:113] Initializing a V1 LLM engine (v0.22.1rc1.dev357+g74b5964f0) with config: model='google/diffusiongemma-26B-A4B-it', speculative_config=None, tokenizer='google/diffusiongemma-26B-A4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=262144, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/diffusiongemma-26B-A4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=124) INFO 06-11 11:00:16 [parallel_state.py:1568] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://192.168.1.104:41953 backend=nccl
+(EngineCore pid=124) INFO 06-11 11:00:16 [parallel_state.py:1903] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank 0, EPLB rank N/A
+(EngineCore pid=124) INFO 06-11 11:00:16 [gpu_worker.py:303] Using V2 Model Runner
+(EngineCore pid=124) INFO 06-11 11:00:17 [model_runner.py:269] Loading model from scratch...
+(EngineCore pid=124) INFO 06-11 11:00:17 [cuda.py:318] Using AttentionBackendEnum.TRITON_ATTN backend.
+(EngineCore pid=124) INFO 06-11 11:00:17 [unquantized.py:291] Using FlashInfer CUTLASS Unquantized MoE backend out of potential backends: ['FlashInfer TRTLLM', 'FlashInfer CUTLASS', 'TRITON', 'BATCHED_TRITON'].
+(EngineCore pid=124) INFO 06-11 11:00:17 [cuda.py:318] Using AttentionBackendEnum.TRITON_ATTN backend.
+(EngineCore pid=124) INFO 06-11 11:00:20 [weight_utils.py:922] Filesystem type for checkpoints: EXT4. Checkpoint size: 48.10 GiB. Available RAM: 60.77 GiB.
+(EngineCore pid=124) INFO 06-11 11:00:20 [weight_utils.py:945] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+(EngineCore pid=124) Loading safetensors checkpoint shards:   0% Completed | 0/11 [00:00<?, ?it/s]
+(EngineCore pid=124) Loading safetensors checkpoint shards:   9% Completed | 1/11 [00:29<04:54, 29.49s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  18% Completed | 2/11 [01:02<04:45, 31.72s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  27% Completed | 3/11 [01:34<04:13, 31.70s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  36% Completed | 4/11 [02:06<03:42, 31.81s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  45% Completed | 5/11 [02:37<03:08, 31.38s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  55% Completed | 6/11 [03:06<02:32, 30.57s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  64% Completed | 7/11 [03:35<02:00, 30.19s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  73% Completed | 8/11 [04:05<01:30, 30.14s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  82% Completed | 9/11 [04:35<01:00, 30.04s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards:  91% Completed | 10/11 [05:06<00:30, 30.46s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards: 100% Completed | 11/11 [05:23<00:00, 26.17s/it]
+(EngineCore pid=124) Loading safetensors checkpoint shards: 100% Completed | 11/11 [05:23<00:00, 29.38s/it]
+(EngineCore pid=124) 
+(EngineCore pid=124) INFO 06-11 11:05:43 [default_loader.py:397] Loading weights took 323.25 seconds
+(EngineCore pid=124) INFO 06-11 11:05:43 [unquantized.py:347] Using MoEPrepareAndFinalizeNoDPEPModular
+(EngineCore pid=124) INFO 06-11 11:05:44 [model_runner.py:290] Model loading took 48.58 GiB and 327.009561 seconds
+(EngineCore pid=124) INFO 06-11 11:05:44 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=124) INFO 06-11 11:05:49 [backends.py:1089] Using cache directory: /root/.cache/vllm/torch_compile_cache/049a86066f/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=124) INFO 06-11 11:05:49 [backends.py:1148] Dynamo bytecode transform time: 4.69 s
+(EngineCore pid=124) [rank0]:W0611 11:05:49.809000 124 torch/_inductor/utils.py:1731] Not enough SMs to use max_autotune_gemm mode
+(EngineCore pid=124) INFO 06-11 11:05:55 [backends.py:378] Cache the graph of compile range (1, 2048) for later use
+(EngineCore pid=124) INFO 06-11 11:06:07 [backends.py:393] Compiling a graph for compile range (1, 2048) takes 17.86 s
+(EngineCore pid=124) INFO 06-11 11:06:09 [decorators.py:708] saved AOT compiled function to /root/.cache/vllm/torch_compile_cache/torch_aot_compile/9f8eae1dd86b5fb06b8b19d439cb8dc0957c0e05d3fa0d069846bb297eabde40/rank_0_0/model
+(EngineCore pid=124) INFO 06-11 11:06:09 [monitor.py:53] torch.compile took 24.75 s in total
+(EngineCore pid=124) INFO 06-11 11:06:11 [monitor.py:81] Initial profiling/warmup run took 2.21 s
+(EngineCore pid=124) INFO 06-11 11:06:12 [gpu_worker.py:480] Available KV cache memory: 35.6 GiB
+(EngineCore pid=124) INFO 06-11 11:06:12 [kv_cache_utils.py:1744] GPU KV cache size: 1,669,826 tokens
+(EngineCore pid=124) INFO 06-11 11:06:12 [kv_cache_utils.py:1745] Maximum concurrency for 262,144 tokens per request: 6.37x
+(EngineCore pid=124) 2026-06-11 11:06:16,096 - INFO - autotuner.py:622 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:   0%|          | 0/10 [00:00<?, ?profile/s]2026-06-11 11:06:17,321 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) 2026-06-11 11:06:17,375 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  20%|██        | 2/10 [00:00<00:00, 19.06profile/s]2026-06-11 11:06:17,468 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) 2026-06-11 11:06:17,618 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  40%|████      | 4/10 [00:00<00:00, 10.73profile/s]2026-06-11 11:06:17,855 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) 2026-06-11 11:06:18,171 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  60%|██████    | 6/10 [00:00<00:00,  5.65profile/s]2026-06-11 11:06:18,526 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  70%|███████   | 7/10 [00:01<00:00,  4.53profile/s]2026-06-11 11:06:18,890 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  80%|████████  | 8/10 [00:01<00:00,  3.88profile/s]2026-06-11 11:06:19,267 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1:  90%|█████████ | 9/10 [00:01<00:00,  3.45profile/s]2026-06-11 11:06:19,670 - INFO - autotuner.py:1287 - flashinfer.jit: [Autotuner]: Skipped 2 unsupported tactic(s) for trtllm::fused_moe::gemm1 (enable debug logs to see details)
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm1: 100%|██████████| 10/10 [00:02<00:00,  3.11profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm1: 100%|██████████| 10/10 [00:02<00:00,  4.17profile/s]
+(EngineCore pid=124) [AutoTuner]: Tuning trtllm::fused_moe::gemm2:   0%|          | 0/10 [00:00<?, ?profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2:  30%|███       | 3/10 [00:00<00:00, 23.93profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2:  60%|██████    | 6/10 [00:00<00:00,  9.01profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2:  80%|████████  | 8/10 [00:01<00:00,  6.32profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2:  90%|█████████ | 9/10 [00:01<00:00,  5.64profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2: 100%|██████████| 10/10 [00:01<00:00,  5.07profile/s][AutoTuner]: Tuning trtllm::fused_moe::gemm2: 100%|██████████| 10/10 [00:01<00:00,  6.23profile/s]
+(EngineCore pid=124) 2026-06-11 11:06:21,963 - INFO - autotuner.py:641 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=124) Capturing CUDA graphs (PIECEWISE):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):  50%|█████     | 1/2 [00:00<00:00,  3.99it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 2/2 [00:00<00:00,  5.26it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 2/2 [00:00<00:00,  5.02it/s]
+(EngineCore pid=124) Capturing CUDA graphs (FULL):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (FULL):  50%|█████     | 1/2 [00:00<00:00,  4.20it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:01<00:00,  1.77it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:01<00:00,  1.94it/s]
+(EngineCore pid=124) INFO 06-11 11:06:23 [model_runner.py:706] Graph capturing finished in 2 secs, took 0.39 GiB
+(EngineCore pid=124) WARNING 06-11 11:06:24 [diffusion_gemma.py:1123] DiffusionGemma does not support repetition/frequency/presence penalties; ignoring them for this request.
+(EngineCore pid=124) INFO 06-11 11:06:32 [jit_monitor.py:54] Kernel JIT monitor activated — Triton JIT compilations during inference will be logged as warnings.
+(EngineCore pid=124) INFO 06-11 11:06:33 [core.py:309] init engine (profile, create kv cache, warmup model) took 48.77 s (compilation: 24.75 s)
+(EngineCore pid=124) INFO 06-11 11:06:33 [vllm.py:1011] Asynchronous scheduling is enabled.
+(EngineCore pid=124) INFO 06-11 11:06:33 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(APIServer pid=1) INFO 06-11 11:06:33 [api_server.py:579] Supported tasks: ['generate']
+(APIServer pid=1) WARNING 06-11 11:06:33 [model.py:1502] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'max_tokens': 256}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+(APIServer pid=1) INFO 06-11 11:06:40 [hf.py:548] Detected the chat template content format to be 'openai'. You can set `--chat-template-content-format` to override this.
+(APIServer pid=1) INFO 06-11 11:07:26 [base.py:227] Multi-modal warmup completed in 45.633s
+(APIServer pid=1) INFO 06-11 11:07:26 [base.py:227] Readonly multi-modal warmup completed in 0.106s
+(APIServer pid=1) INFO 06-11 11:07:27 [api_server.py:583] Starting vLLM server on http://0.0.0.0:8000
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:37] Available routes are:
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /load, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /version, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /health, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /metrics, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /tokenize, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /detokenize, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/models, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /ping, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /ping, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /invocations, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/chat/completions/batch, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/responses, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/completions, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/messages, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/messages/count_tokens, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /generative_scoring, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+(APIServer pid=1) INFO 06-11 11:07:27 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+(APIServer pid=1) INFO:     Started server process [1]
+(APIServer pid=1) INFO:     Waiting for application startup.
+(APIServer pid=1) INFO:     Application startup complete.
+(APIServer pid=1) INFO:     127.0.0.1:52194 - "GET /v1/models HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:52208 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:52224 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:52228 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:07:47 [loggers.py:273] Engine 000: Avg prompt throughput: 5.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 0.0%
+(APIServer pid=1) INFO 06-11 11:07:47 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 51.00, Mean tokens committed per denoising step: 5.02, Committed: 256 tokens, Denoising steps: 51, Canvas positions evaluated: 13056
+(APIServer pid=1) INFO:     127.0.0.1:46804 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:07:57 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.3%, Prefix cache hit rate: 32.0%
+(APIServer pid=1) INFO 06-11 11:07:57 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 51.00, Mean tokens committed per denoising step: 5.02, Committed: 256 tokens, Denoising steps: 51, Canvas positions evaluated: 13056
+(APIServer pid=1) INFO 06-11 11:08:07 [loggers.py:273] Engine 000: Avg prompt throughput: 1.8 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 32.0%
+(APIServer pid=1) INFO 06-11 11:08:07 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 52.00, Mean tokens committed per denoising step: 4.92, Committed: 256 tokens, Denoising steps: 52, Canvas positions evaluated: 13312
+(APIServer pid=1) INFO:     127.0.0.1:36034 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:08:17 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.3%, Prefix cache hit rate: 42.7%
+(APIServer pid=1) INFO 06-11 11:08:17 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 50.00, Mean tokens committed per denoising step: 5.12, Committed: 256 tokens, Denoising steps: 50, Canvas positions evaluated: 12800
+(APIServer pid=1) INFO 06-11 11:08:27 [loggers.py:273] Engine 000: Avg prompt throughput: 1.8 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.5%, Prefix cache hit rate: 42.7%
+(APIServer pid=1) INFO 06-11 11:08:27 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 50.00, Mean tokens committed per denoising step: 5.12, Committed: 256 tokens, Denoising steps: 50, Canvas positions evaluated: 12800
+(APIServer pid=1) INFO:     127.0.0.1:40828 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:40834 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:40846 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:40852 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:08:37 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 4.4%
+(APIServer pid=1) INFO 06-11 11:08:37 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 42.00, Mean tokens committed per denoising step: 6.10, Committed: 256 tokens, Denoising steps: 42, Canvas positions evaluated: 10752
+(APIServer pid=1) INFO 06-11 11:08:47 [loggers.py:273] Engine 000: Avg prompt throughput: 197.8 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 4.4%
+(APIServer pid=1) INFO 06-11 11:08:47 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 46.00, Mean tokens committed per denoising step: 5.57, Committed: 256 tokens, Denoising steps: 46, Canvas positions evaluated: 11776
+(APIServer pid=1) INFO:     127.0.0.1:43504 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:08:57 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 49.9%
+(APIServer pid=1) INFO 06-11 11:08:57 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.59 tokens/s, Mean denoising steps per canvas: 44.00, Mean tokens committed per denoising step: 5.82, Committed: 256 tokens, Denoising steps: 44, Canvas positions evaluated: 11264
+(APIServer pid=1) INFO 06-11 11:09:07 [loggers.py:273] Engine 000: Avg prompt throughput: 2.6 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 49.9%
+(APIServer pid=1) INFO 06-11 11:09:07 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 51.00, Mean tokens committed per denoising step: 5.02, Committed: 256 tokens, Denoising steps: 51, Canvas positions evaluated: 13056
+(APIServer pid=1) INFO:     127.0.0.1:47360 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:09:17 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 65.8%
+(APIServer pid=1) INFO 06-11 11:09:17 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 47.00, Mean tokens committed per denoising step: 5.45, Committed: 256 tokens, Denoising steps: 47, Canvas positions evaluated: 12032
+(APIServer pid=1) INFO 06-11 11:09:27 [loggers.py:273] Engine 000: Avg prompt throughput: 2.6 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 65.8%
+(APIServer pid=1) INFO 06-11 11:09:27 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 49.00, Mean tokens committed per denoising step: 5.22, Committed: 256 tokens, Denoising steps: 49, Canvas positions evaluated: 12544
+(APIServer pid=1) INFO:     127.0.0.1:51468 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:51478 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:51480 - "POST /tokenize HTTP/1.1" 200 OK
+(APIServer pid=1) INFO:     127.0.0.1:51488 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:09:37 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 49.7%
+(APIServer pid=1) INFO 06-11 11:09:37 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 34.00, Mean tokens committed per denoising step: 7.53, Committed: 256 tokens, Denoising steps: 34, Canvas positions evaluated: 8704
+(APIServer pid=1) INFO 06-11 11:09:47 [loggers.py:273] Engine 000: Avg prompt throughput: 395.2 tokens/s, Avg generation throughput: 25.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 49.7%
+(APIServer pid=1) INFO 06-11 11:09:47 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.19 tokens/s, Mean denoising steps per canvas: 47.00, Mean tokens committed per denoising step: 5.45, Committed: 256 tokens, Denoising steps: 47, Canvas positions evaluated: 12032
+(APIServer pid=1) INFO 06-11 11:09:57 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 49.7%
+(APIServer pid=1) INFO 06-11 11:09:57 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 0.00 tokens/s, Mean denoising steps per canvas: nan, Mean tokens committed per denoising step: 0.00, Committed: 0 tokens, Denoising steps: 47, Canvas positions evaluated: 12032
+(APIServer pid=1) INFO:     127.0.0.1:44496 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:10:07 [loggers.py:273] Engine 000: Avg prompt throughput: 1.6 tokens/s, Avg generation throughput: 51.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 66.2%
+(APIServer pid=1) INFO 06-11 11:10:07 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 51.03 tokens/s, Mean denoising steps per canvas: 22.00, Mean tokens committed per denoising step: 11.64, Committed: 512 tokens, Denoising steps: 44, Canvas positions evaluated: 11264
+(APIServer pid=1) INFO 06-11 11:10:17 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 66.2%
+(APIServer pid=1) INFO 06-11 11:10:17 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 0.00 tokens/s, Mean denoising steps per canvas: nan, Mean tokens committed per denoising step: 0.00, Committed: 0 tokens, Denoising steps: 43, Canvas positions evaluated: 11008
+(APIServer pid=1) INFO:     127.0.0.1:50598 - "POST /v1/completions HTTP/1.1" 200 OK
+(APIServer pid=1) INFO 06-11 11:10:27 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 74.5%
+(APIServer pid=1) INFO 06-11 11:10:27 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 46.00, Mean tokens committed per denoising step: 5.57, Committed: 256 tokens, Denoising steps: 46, Canvas positions evaluated: 11776
+(APIServer pid=1) INFO 06-11 11:10:37 [loggers.py:273] Engine 000: Avg prompt throughput: 1.6 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.0%, Prefix cache hit rate: 74.5%
+(APIServer pid=1) INFO 06-11 11:10:37 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 45.00, Mean tokens committed per denoising step: 5.69, Committed: 256 tokens, Denoising steps: 45, Canvas positions evaluated: 11520
+(APIServer pid=1) INFO 06-11 11:10:47 [loggers.py:273] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 74.5%
+(APIServer pid=1) INFO 06-11 11:10:47 [metrics.py:156] DiffusionDecoding metrics: Committed token throughput: 25.60 tokens/s, Mean denoising steps per canvas: 5.00, Mean tokens committed per denoising step: 51.20, Committed: 256 tokens, Denoising steps: 5, Canvas positions evaluated: 1280
