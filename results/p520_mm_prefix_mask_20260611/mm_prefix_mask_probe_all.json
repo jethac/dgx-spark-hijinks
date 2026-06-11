@@ -1,0 +1,945 @@
+{
+  "capability": [
+    12,
+    0
+  ],
+  "cases": {
+    "bf16_d256": {
+      "case": "bf16_d256",
+      "cosine_gate": 0.9999,
+      "custom_mask_bits": 3264,
+      "effective_spans": [
+        [],
+        [
+          [
+            8,
+            23
+          ]
+        ],
+        [
+          [
+            20,
+            35
+          ]
+        ],
+        []
+      ],
+      "head_dim_qk": 256,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        16,
+        8,
+        13
+      ],
+      "mm_reqs": [
+        1,
+        2
+      ],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": false,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999985098838806,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": null,
+          "max_abs_diff": 0.007911205291748047,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 33,
+          "request": "req0_text",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 48,
+          "mask_engaged": true,
+          "max_abs_diff": 0.007427692413330078,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 48,
+          "request": "req1_mm",
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ],
+          "vs_causal_max_abs": 1.74609375
+        },
+        {
+          "cosine": 0.9999980330467224,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": true,
+          "max_abs_diff": 0.0039757490158081055,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 24,
+          "request": "req2_mm_append",
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ],
+          "vs_causal_max_abs": 0.9130859375
+        },
+        {
+          "cosine": 0.9999979734420776,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": null,
+          "max_abs_diff": 0.004799246788024902,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 17,
+          "request": "req3_text_append",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        }
+      ],
+      "plain_reqs": [
+        0,
+        3
+      ],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_text",
+          "qo_len": 33,
+          "spans": []
+        },
+        {
+          "kv_len": 48,
+          "name": "req1_mm",
+          "qo_len": 48,
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ]
+        },
+        {
+          "kv_len": 40,
+          "name": "req2_mm_append",
+          "qo_len": 24,
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req3_text_append",
+          "qo_len": 17,
+          "spans": []
+        }
+      ],
+      "sliding_window": -1
+    },
+    "bf16_d256_allmm": {
+      "case": "bf16_d256_allmm",
+      "cosine_gate": 0.9999,
+      "custom_mask_bits": 4846,
+      "effective_spans": [
+        [
+          [
+            0,
+            15
+          ]
+        ],
+        [
+          [
+            8,
+            23
+          ],
+          [
+            30,
+            41
+          ]
+        ],
+        [
+          [
+            20,
+            35
+          ]
+        ],
+        [
+          [
+            14,
+            27
+          ]
+        ]
+      ],
+      "head_dim_qk": 256,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        16,
+        8,
+        13
+      ],
+      "mm_reqs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": false,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999980330467224,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": true,
+          "max_abs_diff": 0.004795670509338379,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 33,
+          "request": "req0_mm",
+          "spans": [
+            [
+              0,
+              15
+            ]
+          ],
+          "vs_causal_max_abs": 4.115234375
+        },
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 48,
+          "mask_engaged": true,
+          "max_abs_diff": 0.007427692413330078,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 48,
+          "request": "req1_mm",
+          "spans": [
+            [
+              8,
+              23
+            ],
+            [
+              30,
+              41
+            ]
+          ],
+          "vs_causal_max_abs": 1.74609375
+        },
+        {
+          "cosine": 0.9999980330467224,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": true,
+          "max_abs_diff": 0.0039757490158081055,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 24,
+          "request": "req2_mm_append",
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ],
+          "vs_causal_max_abs": 0.9130859375
+        },
+        {
+          "cosine": 0.9999979138374329,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": true,
+          "max_abs_diff": 0.004595637321472168,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 17,
+          "request": "req3_mm_append",
+          "spans": [
+            [
+              14,
+              27
+            ]
+          ],
+          "vs_causal_max_abs": 1.212890625
+        }
+      ],
+      "plain_reqs": [],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_mm",
+          "qo_len": 33,
+          "spans": [
+            [
+              0,
+              15
+            ]
+          ]
+        },
+        {
+          "kv_len": 48,
+          "name": "req1_mm",
+          "qo_len": 48,
+          "spans": [
+            [
+              8,
+              23
+            ],
+            [
+              30,
+              41
+            ]
+          ]
+        },
+        {
+          "kv_len": 40,
+          "name": "req2_mm_append",
+          "qo_len": 24,
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req3_mm_append",
+          "qo_len": 17,
+          "spans": [
+            [
+              14,
+              27
+            ]
+          ]
+        }
+      ],
+      "sliding_window": -1
+    },
+    "bf16_d256_nomm": {
+      "case": "bf16_d256_nomm",
+      "cosine_gate": 0.9999,
+      "effective_spans": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "head_dim_qk": 256,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        8,
+        13,
+        1
+      ],
+      "mm_reqs": [],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": false,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": null,
+          "max_abs_diff": 0.007839202880859375,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 33,
+          "request": "req0_text",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999979138374329,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": null,
+          "max_abs_diff": 0.0028949379920959473,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 8,
+          "request": "req1_span_in_ctx",
+          "spans": [
+            [
+              2,
+              17
+            ]
+          ],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999982118606567,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": null,
+          "max_abs_diff": 0.0022106170654296875,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 1,
+          "request": "req2_decode_like",
+          "spans": [
+            [
+              4,
+              19
+            ]
+          ],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999986290931702,
+          "finite": true,
+          "kv_len": 17,
+          "mask_engaged": null,
+          "max_abs_diff": 0.00813436508178711,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 17,
+          "request": "req3_degenerate",
+          "spans": [
+            [
+              5,
+              5
+            ]
+          ],
+          "vs_causal_max_abs": 0.0
+        }
+      ],
+      "plain_reqs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_text",
+          "qo_len": 33,
+          "spans": []
+        },
+        {
+          "kv_len": 40,
+          "name": "req1_span_in_ctx",
+          "qo_len": 8,
+          "spans": [
+            [
+              2,
+              17
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req2_decode_like",
+          "qo_len": 1,
+          "spans": [
+            [
+              4,
+              19
+            ]
+          ]
+        },
+        {
+          "kv_len": 17,
+          "name": "req3_degenerate",
+          "qo_len": 17,
+          "spans": [
+            [
+              5,
+              5
+            ]
+          ]
+        }
+      ],
+      "sliding_window": -1
+    },
+    "bf16_d256_sw": {
+      "case": "bf16_d256_sw",
+      "cosine_gate": 0.9999,
+      "custom_mask_bits": 3264,
+      "effective_spans": [
+        [],
+        [
+          [
+            8,
+            23
+          ]
+        ],
+        [
+          [
+            20,
+            35
+          ]
+        ],
+        []
+      ],
+      "head_dim_qk": 256,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        16,
+        8,
+        13
+      ],
+      "mm_reqs": [
+        1,
+        2
+      ],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": false,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": null,
+          "max_abs_diff": 0.007911205291748047,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 33,
+          "request": "req0_text",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 48,
+          "mask_engaged": true,
+          "max_abs_diff": 0.007427692413330078,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 48,
+          "request": "req1_mm",
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ],
+          "vs_causal_max_abs": 1.74609375
+        },
+        {
+          "cosine": 0.9999980330467224,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": true,
+          "max_abs_diff": 0.0039757490158081055,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 24,
+          "request": "req2_mm_append",
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ],
+          "vs_causal_max_abs": 0.9130859375
+        },
+        {
+          "cosine": 0.9999979734420776,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": null,
+          "max_abs_diff": 0.004799246788024902,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 17,
+          "request": "req3_text_append",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        }
+      ],
+      "plain_reqs": [
+        0,
+        3
+      ],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_text",
+          "qo_len": 33,
+          "spans": []
+        },
+        {
+          "kv_len": 48,
+          "name": "req1_mm",
+          "qo_len": 48,
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ]
+        },
+        {
+          "kv_len": 40,
+          "name": "req2_mm_append",
+          "qo_len": 24,
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req3_text_append",
+          "qo_len": 17,
+          "spans": []
+        }
+      ],
+      "sliding_window": 32
+    },
+    "bf16_d512_vosplit": {
+      "case": "bf16_d512_vosplit",
+      "cosine_gate": 0.9999,
+      "custom_mask_bits": 3264,
+      "effective_spans": [
+        [],
+        [
+          [
+            8,
+            23
+          ]
+        ],
+        [
+          [
+            20,
+            35
+          ]
+        ],
+        []
+      ],
+      "head_dim_qk": 512,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        16,
+        8,
+        13
+      ],
+      "mm_reqs": [
+        1,
+        2
+      ],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": false,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999985694885254,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": null,
+          "max_abs_diff": 0.007910966873168945,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 33,
+          "request": "req0_text",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 48,
+          "mask_engaged": true,
+          "max_abs_diff": 0.008931159973144531,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 48,
+          "request": "req1_mm",
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ],
+          "vs_causal_max_abs": 1.890625
+        },
+        {
+          "cosine": 0.999998152256012,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": true,
+          "max_abs_diff": 0.0056455135345458984,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 24,
+          "request": "req2_mm_append",
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ],
+          "vs_causal_max_abs": 1.328125
+        },
+        {
+          "cosine": 0.9999980926513672,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": null,
+          "max_abs_diff": 0.0055294036865234375,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 17,
+          "request": "req3_text_append",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        }
+      ],
+      "plain_reqs": [
+        0,
+        3
+      ],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_text",
+          "qo_len": 33,
+          "spans": []
+        },
+        {
+          "kv_len": 48,
+          "name": "req1_mm",
+          "qo_len": 48,
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ]
+        },
+        {
+          "kv_len": 40,
+          "name": "req2_mm_append",
+          "qo_len": 24,
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req3_text_append",
+          "qo_len": 17,
+          "spans": []
+        }
+      ],
+      "sliding_window": -1
+    },
+    "nvfp4_d256": {
+      "case": "nvfp4_d256",
+      "cosine_gate": 0.999,
+      "custom_mask_bits": 3264,
+      "effective_spans": [
+        [],
+        [
+          [
+            8,
+            23
+          ]
+        ],
+        [
+          [
+            20,
+            35
+          ]
+        ],
+        []
+      ],
+      "head_dim_qk": 256,
+      "head_dim_vo": 256,
+      "last_page_len": [
+        1,
+        16,
+        8,
+        13
+      ],
+      "mm_reqs": [
+        1,
+        2
+      ],
+      "num_kv_heads": 4,
+      "num_qo_heads": 8,
+      "nvfp4": true,
+      "ok": true,
+      "page_size": 16,
+      "per_request": [
+        {
+          "cosine": 0.9999985694885254,
+          "finite": true,
+          "kv_len": 33,
+          "mask_engaged": null,
+          "max_abs_diff": 0.016930580139160156,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 33,
+          "request": "req0_text",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        },
+        {
+          "cosine": 0.9999985694885254,
+          "finite": true,
+          "kv_len": 48,
+          "mask_engaged": true,
+          "max_abs_diff": 0.017923831939697266,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 48,
+          "request": "req1_mm",
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ],
+          "vs_causal_max_abs": 6.84375
+        },
+        {
+          "cosine": 0.9999983310699463,
+          "finite": true,
+          "kv_len": 40,
+          "mask_engaged": true,
+          "max_abs_diff": 0.01703786849975586,
+          "mm": true,
+          "ok": true,
+          "plain_rows_equal_causal_plan": null,
+          "qo_len": 24,
+          "request": "req2_mm_append",
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ],
+          "vs_causal_max_abs": 5.375
+        },
+        {
+          "cosine": 0.9999984502792358,
+          "finite": true,
+          "kv_len": 29,
+          "mask_engaged": null,
+          "max_abs_diff": 0.0150146484375,
+          "mm": false,
+          "ok": true,
+          "plain_rows_equal_causal_plan": true,
+          "qo_len": 17,
+          "request": "req3_text_append",
+          "spans": [],
+          "vs_causal_max_abs": 0.0
+        }
+      ],
+      "plain_reqs": [
+        0,
+        3
+      ],
+      "requests": [
+        {
+          "kv_len": 33,
+          "name": "req0_text",
+          "qo_len": 33,
+          "spans": []
+        },
+        {
+          "kv_len": 48,
+          "name": "req1_mm",
+          "qo_len": 48,
+          "spans": [
+            [
+              8,
+              23
+            ]
+          ]
+        },
+        {
+          "kv_len": 40,
+          "name": "req2_mm_append",
+          "qo_len": 24,
+          "spans": [
+            [
+              20,
+              35
+            ]
+          ]
+        },
+        {
+          "kv_len": 29,
+          "name": "req3_text_append",
+          "qo_len": 17,
+          "spans": []
+        }
+      ],
+      "sliding_window": 32
+    }
+  },
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "env": {
+    "FLASHINFER_EXTRA_CUDAFLAGS": "",
+    "PYTHONPATH": "/home/jetha/flashinfer"
+  },
+  "finished_utc": "2026-06-11T14:48:05.738918+00:00",
+  "flashinfer": "0.0.0+unknown",
+  "flashinfer_source_paths": {
+    "git_dirty": false,
+    "git_head": "7d5d477b7725943c8f1242490d38e88aa3d99e19",
+    "source_root": "/home/jetha/flashinfer"
+  },
+  "ok": true,
+  "schema": "mm-prefix-custom-mask-probe/v1",
+  "started_utc": "2026-06-11T14:47:59.912015+00:00",
+  "torch": "2.12.0+cu130"
+}
