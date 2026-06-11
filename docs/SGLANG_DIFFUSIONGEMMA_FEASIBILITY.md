@@ -25,6 +25,15 @@ weight-name split: decoder backbone candidates, encoder layer duplicates,
 self-conditioning keys, and quarantined vision keys. It is still not a BF16 load or
 serving claim.
 
+Weight-load checkpoint: `results/codex_dg_s2_weight_load_20260611T210137JST/summary.md`
+is green for the next DG-S2 gate. It runs the real SGLang
+`DiffusionGemmaForBlockDiffusion.load_weights()` path against the official BF16
+checkpoint headers using fake/meta tensor payloads from a B-backed Hugging Face cache.
+The loader reports 332 loaded backbone params, 30 decoder duplicates skipped, 4
+self-conditioning tensors loaded, and 356 vision keys quarantined, with no bootstrap
+or load exception. It remains a metadata-tensor loader claim, not live BF16 allocation,
+forward parity, or serving.
+
 ## Verdict
 
 SGLang support is feasible, but it is a medium-large runtime feature, not a model-file
@@ -240,6 +249,13 @@ without loading tensor payloads. It reads safetensors index/header metadata, rep
 encoder backbone keys, decoder duplicate backbone keys, self-conditioning keys, and
 vision keys quarantined for text-only rungs. Use it before the first BF16 live load; the
 serving claim still requires the real SGLang loader manifest and official-vLLM parity.
+
+Epoch-2 loader tool: `scripts/diffusion_gemma_weight_load_manifest.py` is the next
+offline rung. It instantiates the SGLang model on `meta`, builds fake tensors from the
+real safetensors headers, and runs the actual `load_weights()` method. The green
+`20260611T210137JST` row proves the remap reaches the real loader without exceptions
+and that the self-conditioning/duplicate/quarantine accounting is internally complete.
+It still does not allocate the full BF16 model or execute a forward pass.
 
 ### 3. Two-Mode Model Forward
 
