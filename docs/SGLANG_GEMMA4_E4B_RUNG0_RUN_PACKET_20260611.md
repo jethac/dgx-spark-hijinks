@@ -110,7 +110,11 @@ import pathlib
 from flashinfer.jit import env as jit_env
 
 for name in ("sgl_kernel", "sgl_kernel.common_ops"):
-    mod = importlib.import_module(name)
+    try:
+        mod = importlib.import_module(name)
+    except ModuleNotFoundError as exc:
+        print(f"binary_missing {name} {exc}", flush=True)
+        continue
     path = pathlib.Path(getattr(mod, "__file__", "")).resolve()
     if path.is_file():
         print(f"binary_md5 {name} {path} {hashlib.md5(path.read_bytes()).hexdigest()}", flush=True)
