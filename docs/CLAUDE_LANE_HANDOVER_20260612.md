@@ -73,11 +73,17 @@ Read order for full context: this doc → docs/OVERNIGHT_LADDER_PLAN_20260612.md
   Notebook notebooks/colab_g4_gemma4_test_drive.ipynb (version KANGAROO;
   bump animal alphabetically in BOTH title banner and NOTEBOOK_VERSION on
   every push; mirror to slash-free `colab` branch). CI wheel workflow
-  `.github/workflows/build-sm120a-wheel.yml` on jethac/vllm — first run was
-  in progress at handover (https://github.com/jethac/vllm/actions/runs/27382718191,
-  resumable via ccache if it hits the 6h limit; re-run on timeout). CONFIRM
-  the release tag matches the notebook's `WHEEL_RELEASE_TAG =
-  'sm120a-wheels-4e9f2ae9c'` once it completes. docs/COLAB_G4_LANE.md.
+  `.github/workflows/build-sm120a-wheel.yml` on jethac/vllm — STATE AT
+  HANDOVER: run 1 (27382718191) FAILED at the "Require wheel" gate (the
+  build step is continue-on-error with an always-run ccache save, so a
+  partial compile still banks its cache); run 2 (27382746557) was IN
+  PROGRESS on the restored cache and may simply complete. If run 2 also
+  fails: `gh run view 27382746557 --repo jethac/vllm --log-failed` — the
+  real compile error will be in the build step log (run 1's failed-step
+  list was empty precisely because the gate, not the build step, "failed").
+  Re-runs are cheap after the first cache save. CONFIRM the eventual
+  release tag matches the notebook's `WHEEL_RELEASE_TAG =
+  'sm120a-wheels-4e9f2ae9c'`. docs/COLAB_G4_LANE.md.
 
 ## 4. State of knowledge (what is PROVEN, with one-line provenance)
 
