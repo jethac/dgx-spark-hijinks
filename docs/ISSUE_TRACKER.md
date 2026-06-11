@@ -4,6 +4,7 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 
 | plan id(s) | area | status | issue |
 |---|---|---|---|
+| `e2-bug-1` | FlashInfer serving numerics at Gemma 3 1B geometry (d256/SWA-512/1kv) | OPEN - evidence banked, bisect queued; docs/BUG_FLASHINFER_GEMMA3_1B_SERVING_NUMERICS.md | local, upstream filing after root cause |
 | `1` | `sm_121` target naming and build flags | build/JIT target log audit added | [#1](https://github.com/jethac/dgx-spark-hijinks/issues/1) |
 | `2` | ARM64 + CUDA 13 wheel/container matrix | first matrix added; clean blessed stack still missing | [#2](https://github.com/jethac/dgx-spark-hijinks/issues/2) |
 | `6` | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
