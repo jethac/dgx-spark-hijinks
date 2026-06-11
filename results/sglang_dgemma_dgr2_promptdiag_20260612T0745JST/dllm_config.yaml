@@ -1,0 +1,10 @@
+max_denoising_steps: 48
+seed: 1234
+sampler_config:
+  entropy_bound: 0.1
+temperature_schedule:
+  t_min: 0.4
+  t_max: 0.8
+stopping_config:
+  confidence_threshold: 0.005
+  stability_threshold: 1
