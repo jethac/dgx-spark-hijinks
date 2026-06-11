@@ -1141,6 +1141,17 @@
   - trace status after parser repair: `733` trace events total, `301` warmup/health-check events ignored, `432` request-bound events compared (`324` dense, `108` cached, `0` unknown), `648` matched tensor comparisons, `0` metricless rows, no schema findings. First localized request-bound divergence is attention output at layer 0: dense full-prefill `o_rows` versus cached-prefix merged `merged_rows` (`cosine=0.006467887232207366`, `max_abs=0.318359375`, `rms=0.13599727805129772`). The next SGLang step is to inspect why FP4 cached-prefix attention output disagrees despite the earlier paged-prefix read/LSE/merge references passing.
   - build/perf note: the source build succeeds but emits repeated SM12x warnings (`242` `.multicast::cluster` advisories, `109` `compute_120a` refs, `109` `compute_121a` refs, `74` `setmaxnreg` compatibility warnings). This is separate from FP4-KV correctness and should be tracked as an SGLang SM12x performance-portability issue.
 
+- Ran the SGLang Qwen mixed-KV default radix row.
+  - artifact: `results/sglang_qwen_mixedkv_default_20260610T0042JST_summary.md`
+  - runner: `scripts/run_sglang_fp4_dense_cache_trace.sh` with `MIXED_KV=1`
+  - runtime image: `sglang-source-stack-c3dae30f-e631a13fd`
+  - launch shape: `--attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --page-size 1 --mem-fraction-static 0.40`, CUDA graph and piecewise graph disabled.
+  - storage policy: FP8 K plus packed NVFP4 V; server log confirms `SGLang FP4 KV mixed mode enabled`.
+  - result: green for the targeted radix first-token gate. The old second-request cached-prefix failure (`ark` / token `838`) is gone: both cached-prefix second requests now emit `**` / token `334` at logprob `-0.7601577043533325`, while fresh controls remain `**` at `-0.7235294580459595`.
+  - audit: dense-cache summary audit `ok: true`, `733` trace events, `648` metric comparisons, no findings.
+  - capacity log: `#tokens: 5573469`, `K size: 37.21 GB`, `V size: 20.93 GB`, `max_total_num_tokens=5573469`.
+  - caveat: this is not exact tensor equality or long-form quality. The first request-bound dense-vs-cached tensor delta remains layer-0 attention output (`cosine=0.4661444810372346`, `max_abs=0.2578125`, `rms=0.11784679304779001`), but it no longer flips the tested first token. Next gates are a fresh sequential fp8 comparator, long-form/benchmark quality, throughput, and graph-safety.
+
 ## First Benchmark Campaign Summary
 
 The initial personal Gemma 4 benchmark run was run on `thinkstationpgx-00b4` in `/home/jethac/gemma4-evals`.

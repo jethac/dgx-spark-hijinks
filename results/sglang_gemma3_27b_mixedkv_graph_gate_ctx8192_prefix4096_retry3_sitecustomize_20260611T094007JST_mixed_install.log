@@ -1,0 +1,7 @@
+[spark-sitecustomize] {'pid': 152, 'source_root': '/work/third_party/flashinfer', 'jit_utils_file': '/work/third_party/flashinfer/flashinfer/jit/utils.py', 'attention_modules_file': '/work/third_party/flashinfer/flashinfer/jit/attention/modules.py', 'prefill_file': '/work/third_party/flashinfer/flashinfer/prefill.py', 'force_prefill_module': False, 'patch_prefill_run_scale_args': True, 'dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'attention_dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'prefill_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'jit_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'prefill_run_scale_arg_patch': True, 'prefill_run_marker': True, 'prefill_run_has_k_sf_source': False, 'prefill_run_has_v_sf_source': False}
+flashinfer 0.0.0+unknown /work/third_party/flashinfer/flashinfer/__init__.py
+flashinfer_python 0.6.13
+sglang_kernel 0.4.3
+sglang 0.5.12.post2.dev1022+ge631a13fd
+sgl_kernel /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py
+common_ops /usr/local/lib/python3.12/dist-packages/sgl_kernel/sm100/common_ops.abi3.so

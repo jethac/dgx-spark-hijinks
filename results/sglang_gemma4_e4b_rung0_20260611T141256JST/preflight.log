@@ -1,0 +1,12 @@
+run_id=sglang_gemma4_e4b_rung0_20260611T141256JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+image=sglang-source-stack-c3dae30f-e631a13fd:latest
+model=google/gemma-4-E4B-it
+port=30000
+mem_fraction_static=0.40
+sglang_commit=f3ebcf623
+flashinfer_commit=8d85fff9
+started_at=2026-06-11T14:12:56+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.2Gi        83Gi        10Mi        33Gi       115Gi
+Swap:           15Gi       465Mi        15Gi

@@ -1,0 +1,70 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.2 driver version 595.58.03 with kernel driver version 580.159.03.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+
+{
+  "causal_left": {
+    "lse": {
+      "cosine": 0.9999972581863403,
+      "max_abs": 2.5689353942871094,
+      "mean_abs": 2.5332465171813965
+    },
+    "out": {
+      "cosine": 0.9848601818084717,
+      "max_abs": 0.019744873046875,
+      "mean_abs": 0.0029188161715865135
+    }
+  },
+  "left_only": {
+    "lse": {
+      "cosine": 0.9999995827674866,
+      "max_abs": 2.5100955963134766,
+      "mean_abs": 2.504526376724243
+    },
+    "out": {
+      "cosine": 0.9991498589515686,
+      "max_abs": 0.006103515625,
+      "mean_abs": 0.0007735347608104348
+    }
+  },
+  "left_plus_one_causal": {
+    "lse": {
+      "cosine": 0.9999973177909851,
+      "max_abs": 2.5652551651000977,
+      "mean_abs": 2.529348850250244
+    },
+    "out": {
+      "cosine": 0.9838094115257263,
+      "max_abs": 0.02030181884765625,
+      "mean_abs": 0.0030245264060795307
+    }
+  },
+  "same_length_local": {
+    "lse": {
+      "cosine": 0.9279745817184448,
+      "max_abs": 8.306633949279785,
+      "mean_abs": 6.161667823791504
+    },
+    "out": {
+      "cosine": 0.007473235949873924,
+      "max_abs": 1.41400146484375,
+      "mean_abs": 0.11761816591024399
+    }
+  }
+}

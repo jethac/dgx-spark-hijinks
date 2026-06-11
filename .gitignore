@@ -9,4 +9,17 @@ results/*.json
 results/*.jsonl
 results/spark_doctor*.md
 results/spark_doctor*.json
+results/*_container_id.txt
+results/*_install.log
+results/*_editable_install.log
+results/*_flashinfer_editable_install.log
+results/*_server.log
+results/*_server_before_ppl.log
+results/*_server_before_probe.log
+results/*_server_after_probe.log
+results/*_ppl_stderr.log
+results/*_metrics_after_probe.txt
+results/*_source_stack.log
+results/*_import_probe.txt
+results/*_corpus.md
 !results/20260606_BENCHMARKING.md

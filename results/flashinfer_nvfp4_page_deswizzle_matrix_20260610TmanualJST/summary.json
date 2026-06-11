@@ -1,0 +1,93 @@
+{
+  "rows": [
+    {
+      "cosine": 0.9999995231628418,
+      "deswizzle": "off",
+      "error": null,
+      "file": "page16_deswizzle_off.json",
+      "layout": "NHD",
+      "max_abs": 0.015625,
+      "operation": "decode",
+      "page_size": 16,
+      "passed": true
+    },
+    {
+      "cosine": 0.9999996423721313,
+      "deswizzle": "off",
+      "error": null,
+      "file": "page16_deswizzle_off.json",
+      "layout": "NHD",
+      "max_abs": 0.015625,
+      "operation": "prefill",
+      "page_size": 16,
+      "passed": true
+    },
+    {
+      "cosine": 0.7745687961578369,
+      "deswizzle": "on",
+      "error": null,
+      "file": "page16_deswizzle_on.json",
+      "layout": "NHD",
+      "max_abs": 3.6328125,
+      "operation": "decode",
+      "page_size": 16,
+      "passed": false
+    },
+    {
+      "cosine": 0.6371105909347534,
+      "deswizzle": "on",
+      "error": null,
+      "file": "page16_deswizzle_on.json",
+      "layout": "NHD",
+      "max_abs": 5.0625,
+      "operation": "prefill",
+      "page_size": 16,
+      "passed": false
+    },
+    {
+      "cosine": 0.9999995231628418,
+      "deswizzle": "off",
+      "error": null,
+      "file": "page1_deswizzle_off.json",
+      "layout": "NHD",
+      "max_abs": 0.015625,
+      "operation": "decode",
+      "page_size": 1,
+      "passed": true
+    },
+    {
+      "cosine": 0.9999996423721313,
+      "deswizzle": "off",
+      "error": null,
+      "file": "page1_deswizzle_off.json",
+      "layout": "NHD",
+      "max_abs": 0.015625,
+      "operation": "prefill",
+      "page_size": 1,
+      "passed": true
+    },
+    {
+      "cosine": 0.789713978767395,
+      "deswizzle": "on",
+      "error": null,
+      "file": "page1_deswizzle_on.json",
+      "layout": "NHD",
+      "max_abs": 2.99609375,
+      "operation": "decode",
+      "page_size": 1,
+      "passed": false
+    },
+    {
+      "cosine": 0.17456990480422974,
+      "deswizzle": "on",
+      "error": null,
+      "file": "page1_deswizzle_on.json",
+      "layout": "NHD",
+      "max_abs": 117.3125,
+      "operation": "prefill",
+      "page_size": 1,
+      "passed": false
+    }
+  ],
+  "schema": "flashinfer-nvfp4-page-deswizzle-matrix/v1"
+}

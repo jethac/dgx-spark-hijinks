@@ -1,0 +1,114 @@
+{
+  "cases": [
+    {
+      "case": "global_qo",
+      "head_dim": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 0.9999999403953552,
+        "finite": true,
+        "max_abs_diff": 0.0018529891967773438,
+        "mean_abs_diff": 0.0015144702047109604,
+        "out_norm": 194.3783416748047,
+        "ref_norm": 194.34405517578125
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.9999911785125732,
+        "finite": true,
+        "max_abs_diff": 0.00048828125,
+        "mean_abs_diff": 4.982619429938495e-05,
+        "out_norm": 6.607852458953857,
+        "ref_norm": 6.613651752471924
+      },
+      "page_size": 1,
+      "qo_len": 16,
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006336030783131719,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "window_left": -1
+    },
+    {
+      "case": "swa_qo",
+      "head_dim": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 0.9999999403953552,
+        "finite": true,
+        "max_abs_diff": 0.026469707489013672,
+        "mean_abs_diff": 0.020087379962205887,
+        "out_norm": 182.50694274902344,
+        "ref_norm": 182.0526580810547
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.9997446537017822,
+        "finite": true,
+        "max_abs_diff": 0.003173828125,
+        "mean_abs_diff": 0.000438343093264848,
+        "out_norm": 7.925836086273193,
+        "ref_norm": 8.032422065734863
+      },
+      "page_size": 1,
+      "qo_len": 16,
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006336030783131719,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "window_left": 255
+    },
+    {
+      "case": "swa_decode_as_prefill",
+      "head_dim": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 0.9999999403953552,
+        "finite": true,
+        "max_abs_diff": 0.006306648254394531,
+        "mean_abs_diff": 0.00602056086063385,
+        "out_norm": 45.31536865234375,
+        "ref_norm": 45.28131103515625
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.9999914169311523,
+        "finite": true,
+        "max_abs_diff": 0.000732421875,
+        "mean_abs_diff": 8.879245433490723e-05,
+        "out_norm": 2.0269405841827393,
+        "ref_norm": 2.0351638793945312
+      },
+      "page_size": 1,
+      "qo_len": 1,
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006336030783131719,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "window_left": 255
+    }
+  ],
+  "cuda_capability": [
+    12,
+    1
+  ],
+  "cuda_device": "NVIDIA GB10",
+  "flashinfer_extra_cudaflags": "-gencode=arch=compute_121a,code=sm_121a",
+  "k_size_bytes": 905476,
+  "mixed_fp8_k_nvfp4_v": false,
+  "ok": true,
+  "probe": "sglang_fp4_kv_writer_roundtrip",
+  "scope": "full NVFP4 K+V, SGLang MHATokenToKVPoolFP4 writer, FlashInfer FA2 paged reader, linear scale factors",
+  "seed": 20260611,
+  "torch_version": "2.12.0a0+5aff3928d8.nv26.05",
+  "v_size_bytes": 905476
+}

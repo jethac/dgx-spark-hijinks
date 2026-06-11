@@ -1,0 +1,82 @@
+{
+  "artifacts": {
+    "container_inspect": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_hybridswa_mf060_poolclassfix_20260610TmanualJST_container_inspect.json",
+    "editable_install_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_hybridswa_mf060_poolclassfix_20260610TmanualJST_editable_install.log",
+    "openai_benchmark": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_hybridswa_mf060_poolclassfix_20260610TmanualJST_openai_benchmark.json",
+    "server_log": "/home/jethac/spark_tmp/dgx-spark-hijinks-live-4df2367/results/sglang_gemma3_27b_rung1_mixedkv_hybridswa_mf060_poolclassfix_20260610TmanualJST_server.log"
+  },
+  "benchmark_cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 67,
+      "completion_tok_s_total": 3.311558915883538,
+      "content_chars": 364,
+      "content_preview": "A local AI workstation thrives on fast memory (RAM) because AI tasks, particularly those involving large language models and deep learning, are incredibly memory-intensive. These models require loading massive datasets and parameters into RAM for efficient processing.  Slow memory creates a bottleneck, forcing the CPU or GPU to wait for data, drastically slowing",
+      "decode_s": 15.416172156998073,
+      "decode_tok_s": 4.151484515625859,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781058964,
+        "id": "4dbceb639cc14e91b1bb523d28324588",
+        "model": "gemma3-27b-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 24,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 88
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 364,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 19.326245320000453,
+      "ttft_s": 3.91007316300238,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 88
+      }
+    }
+  ],
+  "benchmark_ok": true,
+  "docker_memory": "100g",
+  "docker_memory_swap": "100g",
+  "enable_fp4_cuda_graph": false,
+  "extra_server_envs": [
+    "SGLANG_GEMMA_KV_GEOMETRY=1",
+    "SGLANG_GEMMA3_ENABLE_HYBRID_SWA=1"
+  ],
+  "graphs_disabled": true,
+  "k_size_gb": 1.84,
+  "kv_cache_dtype": "fp4_e2m1",
+  "kv_line": "[2026-06-10 02:34:03] KV Cache is allocated. dtype: torch.float4_e2m1fn_x2, #tokens: 96277, K size: 1.84 GB, V size: 1.03 GB",
+  "kv_tokens": 96277,
+  "max_total_num_tokens": 96277,
+  "mem_fraction_static": 0.6,
+  "mixed_kv": true,
+  "model": "google/gemma-3-27b-it",
+  "page_size": 1,
+  "radix_cache_disabled": false,
+  "ready": true,
+  "run_id": "sglang_gemma3_27b_rung1_mixedkv_hybridswa_mf060_poolclassfix_20260610TmanualJST",
+  "runner_status": 0,
+  "runtime_image": "sglang-source-stack-c3dae30f-e631a13fd",
+  "schema": "sglang-qwen-kv-serving-row/v1",
+  "served_model_name": "gemma3-27b-it",
+  "v_size_gb": 1.03
+}

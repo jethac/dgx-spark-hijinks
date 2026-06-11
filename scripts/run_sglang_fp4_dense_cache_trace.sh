@@ -20,6 +20,7 @@ TRACE_LOC_LIMIT=${TRACE_LOC_LIMIT:-128}
 K_SCALE_MULTIPLIERS=${K_SCALE_MULTIPLIERS:-}
 K_HEAD_SCALE_POLICY=${K_HEAD_SCALE_POLICY:-0}
 K_GLOBAL_SCALE_MULTIPLIER=${K_GLOBAL_SCALE_MULTIPLIER:-}
+MIXED_KV=${MIXED_KV:-0}
 READY_TIMEOUT_S=${READY_TIMEOUT_S:-360}
 GB10_DOCKER_MEMORY=${GB10_DOCKER_MEMORY:-100g}
 GB10_DOCKER_MEMORY_SWAP=${GB10_DOCKER_MEMORY_SWAP:-100g}
@@ -73,6 +74,7 @@ COMMON_ENVS=(
   -e SGLANG_FP4_KV_TRACE_QUANT_ERROR=1
   -e SGLANG_FP4_KV_TRACE_RADIX=1
   -e SGLANG_FP4_KV_TRACE_BACKEND=1
+  -e SGLANG_FP4_KV_TRACE_MODULE=1
   -e SGLANG_FP4_KV_TRACE_LAYERS="${TRACE_LAYERS}"
   -e SGLANG_FP4_KV_TRACE_VALUES="${TRACE_VALUES}"
   -e SGLANG_FP4_KV_TRACE_LOC_LIMIT="${TRACE_LOC_LIMIT}"
@@ -90,6 +92,11 @@ fi
 if [[ -n "${K_GLOBAL_SCALE_MULTIPLIER}" ]]; then
   COMMON_ENVS+=(
     -e SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER="${K_GLOBAL_SCALE_MULTIPLIER}"
+  )
+fi
+if [[ "${MIXED_KV}" == "1" ]]; then
+  COMMON_ENVS+=(
+    -e SGLANG_FP4_KV_MIXED_KV=1
   )
 fi
 
@@ -181,7 +188,7 @@ run_case() {
     --output "/work/${out}" \
     --max-new-tokens 1 \
     --top-logprobs-num 20 \
-    --timeout 180
+    --timeout "${REQUEST_TIMEOUT_S:-180}"
   local rc=$?
 
   docker logs "${container}" >"${REPO_ROOT}/${server_log}" 2>&1 || true
@@ -213,6 +220,7 @@ summary = {
     "schema": "sglang-fp4-kv-dense-cache-trace-summary/v1",
     "run_id": run,
     "runtime_image": "${RUNTIME_IMAGE}",
+    "mixed_kv": "${MIXED_KV}" == "1",
     "cases": {},
 }
 for name in case_names:

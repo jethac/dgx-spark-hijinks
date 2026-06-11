@@ -1,0 +1,5 @@
+{
+  "output": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma3_27b_mixedkv_graph_gate_ctx8192_prefix4096_retry3_sitecustomize_20260611T094007JST_corpus.md",
+  "actual_chars": 249998
+}
+server not ready for mixed
