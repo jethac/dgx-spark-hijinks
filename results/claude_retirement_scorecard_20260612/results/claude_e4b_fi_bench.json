@@ -1,0 +1,316 @@
+{
+  "cases": {
+    "concurrent4": {
+      "median_aggregate_decode_tok_s": 90.17930526052359,
+      "reps": [
+        {
+          "aggregate_decode_tok_s": 90.17930526052359,
+          "aggregate_tok_s_incl_prefill": 90.01713848692742,
+          "batch_wall_s": 11.375611547002336,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.308712745987577,
+              "decode_tok_s": 22.548985523615503,
+              "finish_reason": "length",
+              "prefill_tok_s": 644.3237079797342,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.375449387007393,
+              "ttft_s": 0.06673664101981558
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nA desktop AI workstation benefits significantly from **fast unified memory** because it allows the CPU and GPU to share the *same* high-speed memory pool directly, eliminating the bottlenecks associated with traditional discrete memory architectures.\n\nHere is a breakdown of the tradeoffs concerning bandwidth, latency, and cap",
+              "decode_s": 11.309377080993727,
+              "decode_tok_s": 22.547660951949954,
+              "finish_reason": "length",
+              "prefill_tok_s": 663.4522661452124,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.374189580994425,
+              "ttft_s": 0.06481250000069849
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.30885244300589,
+              "decode_tok_s": 22.548706978461652,
+              "finish_reason": "length",
+              "prefill_tok_s": 655.3276292152773,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.374468477006303,
+              "ttft_s": 0.06561603400041349
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nA desktop AI workstation benefits significantly from **fast unified memory** because it allows the CPU and GPU to share the *same* high-speed memory pool directly, eliminating the bottlenecks associated with traditional discrete memory architectures.\n\nHere is a breakdown of the tradeoffs concerning bandwidth, latency, and cap",
+              "decode_s": 11.309005641989643,
+              "decode_tok_s": 22.54840151933435,
+              "finish_reason": "length",
+              "prefill_tok_s": 648.8893812196175,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.375272714998573,
+              "ttft_s": 0.06626707300893031
+            }
+          ],
+          "total_completion_tokens": 1024
+        },
+        {
+          "aggregate_decode_tok_s": 89.87725872509226,
+          "aggregate_tok_s_incl_prefill": 89.71642307450671,
+          "batch_wall_s": 11.413740816991776,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.297968958999263,
+              "decode_tok_s": 22.57042844828165,
+              "finish_reason": "length",
+              "prefill_tok_s": 372.6159931373411,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.413369265996153,
+              "ttft_s": 0.11540030699688941
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.299023933010176,
+              "decode_tok_s": 22.568321079046108,
+              "finish_reason": "length",
+              "prefill_tok_s": 376.80864757570043,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.413140210002894,
+              "ttft_s": 0.11411627699271776
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.305346624023514,
+              "decode_tok_s": 22.555699394314267,
+              "finish_reason": "length",
+              "prefill_tok_s": 662.2509723652337,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.370276691013714,
+              "ttft_s": 0.06493006699020043
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nA desktop AI workstation benefits significantly from **fast unified memory** because it allows the CPU and GPU to share the *same* high-speed memory pool directly, eliminating the bottlenecks associated with traditional discrete memory architectures.\n\nHere is a breakdown of the tradeoffs concerning bandwidth, latency, and cap",
+              "decode_s": 11.305162912991364,
+              "decode_tok_s": 22.556065928688735,
+              "finish_reason": "length",
+              "prefill_tok_s": 659.8895600408644,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.370325331983622,
+              "ttft_s": 0.06516241899225861
+            }
+          ],
+          "total_completion_tokens": 1024
+        },
+        {
+          "aggregate_decode_tok_s": 90.24799933082835,
+          "aggregate_tok_s_incl_prefill": 90.08421996149299,
+          "batch_wall_s": 11.367140665010083,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.301405798993073,
+              "decode_tok_s": 22.563564616246225,
+              "finish_reason": "length",
+              "prefill_tok_s": 654.9903118562166,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.367055624985369,
+              "ttft_s": 0.06564982599229552
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.301134662993718,
+              "decode_tok_s": 22.56410595964436,
+              "finish_reason": "length",
+              "prefill_tok_s": 656.8305928341747,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.366600553999888,
+              "ttft_s": 0.06546589100616984
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.299997257010546,
+              "decode_tok_s": 22.56637715923315,
+              "finish_reason": "length",
+              "prefill_tok_s": 656.6855051539711,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.365477612009272,
+              "ttft_s": 0.0654803549987264
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+              "decode_s": 11.301115640002536,
+              "decode_tok_s": 22.56414394145097,
+              "finish_reason": "length",
+              "prefill_tok_s": 662.0369345989664,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 11.366066699003568,
+              "ttft_s": 0.06495105900103226
+            }
+          ],
+          "total_completion_tokens": 1024
+        }
+      ]
+    },
+    "long_prefill": {
+      "median_prefill_tok_s": 6241.641017416469,
+      "median_ttft_s": 0.33372633802355267,
+      "reps": [
+        {
+          "completion_tokens": 64,
+          "content_preview": "Here are five bullet points summarizing the requirements for the local inference server benchmark:\n\n* **Comprehensive Metadata Capture:** Record detailed environment information and the specific backend used for each test run.\n* **Performance Metrics:** Measure both the initial **cold-start time** and the sustained **warm decode speed** of the inference server",
+          "decode_s": 3.393322468997212,
+          "decode_tok_s": 18.56587476598345,
+          "finish_reason": "length",
+          "prefill_tok_s": 6248.714502498789,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 3.726671031996375,
+          "ttft_s": 0.3333485629991628
+        },
+        {
+          "completion_tokens": 64,
+          "content_preview": "Here are five bullet points summarizing the requirements for the local inference server benchmark:\n\n* **Comprehensive Metadata Capture:** Record detailed environment information and the specific backend used for each test run.\n* **Performance Metrics:** Measure both the initial **cold-start time** and the sustained **warm decode speed** of the inference server",
+          "decode_s": 3.3937910590029787,
+          "decode_tok_s": 18.56331132491934,
+          "finish_reason": "length",
+          "prefill_tok_s": 6191.049866393486,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 3.730244495003717,
+          "ttft_s": 0.3364534360007383
+        },
+        {
+          "completion_tokens": 64,
+          "content_preview": "Here are five bullet points summarizing the requirements for the local inference server benchmark:\n\n* **Comprehensive Metadata Capture:** Record detailed environment information and the specific backend used for each test run.\n* **Performance Metrics:** Measure both the initial **cold-start time** and the sustained **warm decode speed** of the inference server",
+          "decode_s": 3.3980053849809337,
+          "decode_tok_s": 18.54028845229552,
+          "finish_reason": "length",
+          "prefill_tok_s": 6241.641017416469,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 3.7317317230044864,
+          "ttft_s": 0.33372633802355267
+        }
+      ]
+    },
+    "short_decode": {
+      "median_decode_tok_s": 18.662699709726528,
+      "median_ttft_s": 0.06054588398546912,
+      "reps": [
+        {
+          "completion_tokens": 256,
+          "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+          "decode_s": 13.663618017017143,
+          "decode_tok_s": 18.662699709726528,
+          "finish_reason": "length",
+          "prefill_tok_s": 741.2543580527232,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 13.721627794002416,
+          "ttft_s": 0.058009776985272765
+        },
+        {
+          "completion_tokens": 256,
+          "content_preview": "## Fast Unified Memory for Desktop AI Workstations: A Brief Explanation\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for desktop AI workstations performing local inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** for the AI workload.\n\nHere is a brief breakdown:\n\n### 1. Bandwidth (The Data Throughput)\n* **Benef",
+          "decode_s": 13.655755763989873,
+          "decode_tok_s": 18.6734446930014,
+          "finish_reason": "length",
+          "prefill_tok_s": 700.1645012522448,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 13.717169902985916,
+          "ttft_s": 0.06141413899604231
+        },
+        {
+          "completion_tokens": 256,
+          "content_preview": "## Why Fast Unified Memory Benefits Desktop AI Workstations for Local Inference\n\nFast unified memory (where the CPU and GPU share the same high-speed memory pool) is crucial for local AI inference because it optimizes the trade-offs between **bandwidth, latency, and capacity** in a tightly coupled system.\n\nHere is a brief breakdown:\n\n1. **Bandwidth (The Throughput):**\n    * **Benefit:** AI models ",
+          "decode_s": 13.701464722020319,
+          "decode_tok_s": 18.611148893459294,
+          "finish_reason": "length",
+          "prefill_tok_s": 710.2051728292531,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 13.762010606005788,
+          "ttft_s": 0.06054588398546912
+        }
+      ]
+    }
+  },
+  "finished_utc": "2026-06-11T19:15:09Z",
+  "model": "gemma4-e4b-it",
+  "payloads": {
+    "concurrent4": {
+      "note": "4 simultaneous short_decode payloads, unique nonces"
+    },
+    "long_prefill": {
+      "ignore_eos": true,
+      "max_tokens": 64,
+      "messages": [
+        {
+          "content": "[request nonce 0002] You are benchmarking a local inference server. Summarize the following requirements into five bullets. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. ",
+          "role": "user"
+        }
+      ],
+      "model": "gemma4-e4b-it",
+      "seed": 0,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0
+    },
+    "nonce_note": "every real request gets a fresh '[request nonce NNNN] ' prefix to defeat prefix caching; these recorded payloads are templates (nonces 0001/0002)",
+    "short_decode": {
+      "ignore_eos": true,
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "[request nonce 0001] Explain briefly why a desktop AI workstation benefits from fast unified memory, covering bandwidth, latency, and capacity tradeoffs for local inference.",
+          "role": "user"
+        }
+      ],
+      "model": "gemma4-e4b-it",
+      "seed": 0,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0
+    }
+  },
+  "phase": "scorecard",
+  "run_id": "claude_rsc_e4b_fi_bench",
+  "schema": "blockE23-benchmark/v2",
+  "started_utc": "2026-06-11T19:13:41Z",
+  "url": "http://127.0.0.1:8000",
+  "warmup": {
+    "ok": true,
+    "total_s": 0.8791176360100508,
+    "ttft_s": 0.07821749901631847
+  }
+}

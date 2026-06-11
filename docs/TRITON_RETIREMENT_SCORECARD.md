@@ -68,3 +68,16 @@ not merged), red ships with verbatim evidence.
   (r10 spec: r9 recipe + transformers >= the version knowing gemma4_unified;
   same provenance gates) serves its paired cells green. Jetha may overrule
   the no-revert call in the morning.
+- 2026-06-12 06:02 (Claude, Spark morning scorecard block): paired cells run,
+  full table in `results/claude_retirement_scorecard_20260612/SCORECARD_SUMMARY.md`.
+  R1 PASS all five paired sizes (31B/E4B/26B + labeled 12B overlay pair + G3
+  12B stretch; max delta +0.028 nats, 31B FI BETTER by 0.040); R2 PASS; R4
+  route PASS; R5 PASS. I3 ADJUDICATED: suspect 4.6532 CONFIRMED bitwise on
+  r9-baked (4.65317496471429 x2) — the 31B Triton tax is real. I1: speed
+  parity (decode 0.97-1.005x), TTFT/prefill consistently better on FI; NOT a
+  speed win, stated plainly. E4B bf16-FI: FIRST GREEN serving row on vLLM.
+  R3/I4 mm: skipped (no post-merge image existed; P520 + r10 scope).
+  VERDICT: NO REVERT REQUIRED from this block. New loud finding: fp8-Triton
+  C1 is request-order-dependent (score-first 4.4739 bitwise == banked;
+  smokes-first 4.5915) — fp8/nvfp4 rows need order provenance; bf16
+  unaffected.

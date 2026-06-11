@@ -1,0 +1,316 @@
+{
+  "cases": {
+    "concurrent4": {
+      "median_aggregate_decode_tok_s": 37.481456472427624,
+      "reps": [
+        {
+          "aggregate_decode_tok_s": 37.31878617855203,
+          "aggregate_tok_s_incl_prefill": 37.29222306059062,
+          "batch_wall_s": 27.45880819001468,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a breakdown of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditional syst",
+              "decode_s": 27.120892361010192,
+              "decode_tok_s": 9.402345490910013,
+              "finish_reason": "length",
+              "prefill_tok_s": 339.3053387459198,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.247621873015305,
+              "ttft_s": 0.12672951200511307
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.075616293994244,
+              "decode_tok_s": 9.418068169940886,
+              "finish_reason": "length",
+              "prefill_tok_s": 112.32690032590529,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.458427534002112,
+              "ttft_s": 0.38281124000786804
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a breakdown of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditional syst",
+              "decode_s": 27.07522262999555,
+              "decode_tok_s": 9.41820510526461,
+              "finish_reason": "length",
+              "prefill_tok_s": 112.23788200000362,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.45833748599398,
+              "ttft_s": 0.38311485599842854
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.07581482201931,
+              "decode_tok_s": 9.417999113829888,
+              "finish_reason": "length",
+              "prefill_tok_s": 112.53167138346092,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.457929470023373,
+              "ttft_s": 0.3821146480040625
+            }
+          ],
+          "total_completion_tokens": 1024
+        },
+        {
+          "aggregate_decode_tok_s": 37.66844220705078,
+          "aggregate_tok_s_incl_prefill": 37.62628737268001,
+          "batch_wall_s": 27.215015658002812,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Hungry**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditional",
+              "decode_s": 27.077138391003245,
+              "decode_tok_s": 9.41753874865622,
+              "finish_reason": "length",
+              "prefill_tok_s": 312.90061506701903,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.214562218025094,
+              "ttft_s": 0.1374238270218484
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.07714426299208,
+              "decode_tok_s": 9.417536706355088,
+              "finish_reason": "length",
+              "prefill_tok_s": 313.7419369253094,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.214199578011176,
+              "ttft_s": 0.13705531501909718
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.077215750992764,
+              "decode_tok_s": 9.417511842614418,
+              "finish_reason": "length",
+              "prefill_tok_s": 312.80224742517083,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.21468279400142,
+              "ttft_s": 0.1374670430086553
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on the tradeoffs:\n\n**The Core Benefit: Speeding Up Inference**\n\nAI inference (running a trained model to make predictions) is *extremely* memory-intensive.  Large models (like LLMs) and the data they process need to be readily available. Fast unified memory directly ",
+              "decode_s": 27.07691435900051,
+              "decode_tok_s": 9.417616668541726,
+              "finish_reason": "length",
+              "prefill_tok_s": 314.68157807459886,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.213560425996548,
+              "ttft_s": 0.1366460669960361
+            }
+          ],
+          "total_completion_tokens": 1024
+        },
+        {
+          "aggregate_decode_tok_s": 37.481456472427624,
+          "aggregate_tok_s_incl_prefill": 37.44503379541862,
+          "batch_wall_s": 27.346750589000294,
+          "errors": [],
+          "per_request": [
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on the tradeoffs:\n\n**The Core Benefit: Speeding Up Inference**\n\nAI inference (running a trained model to make predictions) is *extremely* memory-intensive.  Large models (like LLMs) and the data you feed them need to be readily accessible. Fast unified memory directl",
+              "decode_s": 27.097696330980398,
+              "decode_tok_s": 9.410394038125752,
+              "finish_reason": "length",
+              "prefill_tok_s": 172.9528498272146,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.346319004980614,
+              "ttft_s": 0.24862267400021665
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.081948544015177,
+              "decode_tok_s": 9.415866055042494,
+              "finish_reason": "length",
+              "prefill_tok_s": 322.5959013562922,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.21524223999586,
+              "ttft_s": 0.13329369598068297
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Intensive**\n\nAI inference (using a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Traditio",
+              "decode_s": 27.082061280001653,
+              "decode_tok_s": 9.41582685909883,
+              "finish_reason": "length",
+              "prefill_tok_s": 321.4147367066142,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.21584481600439,
+              "ttft_s": 0.1337835360027384
+            },
+            {
+              "completion_tokens": 256,
+              "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on the tradeoffs:\n\n**The Core Benefit: Speeding Up Inference**\n\nAI inference (running a trained model to make predictions) is *extremely* memory-intensive.  Large models (like LLMs) and the data you feed them need to be readily accessible. Fast unified memory directl",
+              "decode_s": 27.082050160010112,
+              "decode_tok_s": 9.415830725272713,
+              "finish_reason": "length",
+              "prefill_tok_s": 321.32558073609965,
+              "prompt_tokens": 43,
+              "started_offset_s": null,
+              "total_s": 27.21587081599864,
+              "ttft_s": 0.13382065598852932
+            }
+          ],
+          "total_completion_tokens": 1024
+        }
+      ]
+    },
+    "long_prefill": {
+      "median_prefill_tok_s": 2728.520176468916,
+      "median_ttft_s": 0.7634174810082186,
+      "reps": [
+        {
+          "completion_tokens": 64,
+          "content_preview": "Okay, the requirements are repetitive, but here's a summary of the benchmark requirements in five bullets:\n\n*   **Environment & Configuration:** Capture detailed environment metadata (hardware specs, OS, software versions) and the specific backend configuration being used for inference.\n*   **Performance Metrics:** Measure cold-start time",
+          "decode_s": 8.482270373002393,
+          "decode_tok_s": 7.427256763769068,
+          "finish_reason": "length",
+          "prefill_tok_s": 2728.520176468916,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 9.245687854010612,
+          "ttft_s": 0.7634174810082186
+        },
+        {
+          "completion_tokens": 64,
+          "content_preview": "Okay, the requirements are repetitive, but here's a summary of the benchmark requirements in five bullets:\n\n*   **Environment & Configuration:** Capture detailed environment metadata (hardware specs, OS, software versions) and the specific backend(s) being tested.\n*   **Performance Metrics:** Measure cold-start time",
+          "decode_s": 8.48253202601336,
+          "decode_tok_s": 7.42702766188186,
+          "finish_reason": "length",
+          "prefill_tok_s": 2712.5919906828426,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 9.250432251021266,
+          "ttft_s": 0.7679002250079066
+        },
+        {
+          "completion_tokens": 64,
+          "content_preview": "Okay, the requirements are repetitive, but here's a summary of the benchmark requirements in five bullets:\n\n*   **Environment & Configuration:** Capture detailed environment metadata (hardware specs, OS, software versions) and the specific backend(s) being tested (e.g., Triton, TorchServe, etc.).\n",
+          "decode_s": 8.492387072008569,
+          "decode_tok_s": 7.418408919166189,
+          "finish_reason": "length",
+          "prefill_tok_s": 2735.2301866793277,
+          "prompt_tokens": 2083,
+          "started_offset_s": null,
+          "total_s": 9.253931753017241,
+          "ttft_s": 0.7615446810086723
+        }
+      ]
+    },
+    "short_decode": {
+      "median_decode_tok_s": 7.588127769602536,
+      "median_ttft_s": 0.12706576101481915,
+      "reps": [
+        {
+          "completion_tokens": 256,
+          "content_preview": "Okay, here's a breakdown of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Memory-Hungry & Speed-Sensitive**\n\nAI inference (running a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output",
+          "decode_s": 33.621346291998634,
+          "decode_tok_s": 7.584467254384935,
+          "finish_reason": "length",
+          "prefill_tok_s": 337.8537722807688,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 33.74862028899952,
+          "ttft_s": 0.12727399700088426
+        },
+        {
+          "completion_tokens": 256,
+          "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Data-Hungry**\n\nAI inference (running a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations, and output.  Tradition",
+          "decode_s": 33.592963224014966,
+          "decode_tok_s": 7.590875455062726,
+          "finish_reason": "length",
+          "prefill_tok_s": 340.3864600987117,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 33.719290223001735,
+          "ttft_s": 0.12632699898676947
+        },
+        {
+          "completion_tokens": 256,
+          "content_preview": "Okay, here's a brief explanation of why fast unified memory is a big win for desktop AI workstations doing local inference, focusing on bandwidth, latency, and capacity tradeoffs:\n\n**The Core Problem: AI Inference is Memory-Hungry & Speed-Sensitive**\n\nAI inference (running a trained model to make predictions) involves massive data movement \u2013 model weights, input data, intermediate calculations.  T",
+          "decode_s": 33.605127343995264,
+          "decode_tok_s": 7.588127769602536,
+          "finish_reason": "length",
+          "prefill_tok_s": 338.40744868308855,
+          "prompt_tokens": 43,
+          "started_offset_s": null,
+          "total_s": 33.73219310501008,
+          "ttft_s": 0.12706576101481915
+        }
+      ]
+    }
+  },
+  "finished_utc": "2026-06-11T20:18:38Z",
+  "model": "gemma3-12b-it",
+  "payloads": {
+    "concurrent4": {
+      "note": "4 simultaneous short_decode payloads, unique nonces"
+    },
+    "long_prefill": {
+      "ignore_eos": true,
+      "max_tokens": 64,
+      "messages": [
+        {
+          "content": "[request nonce 0002] You are benchmarking a local inference server. Summarize the following requirements into five bullets. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. The benchmark must capture environment metadata, backend selection, cold-start time, warm decode speed, memory pressure, output quality, and reproducibility of every serving row. ",
+          "role": "user"
+        }
+      ],
+      "model": "gemma3-12b-it",
+      "seed": 0,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0
+    },
+    "nonce_note": "every real request gets a fresh '[request nonce NNNN] ' prefix to defeat prefix caching; these recorded payloads are templates (nonces 0001/0002)",
+    "short_decode": {
+      "ignore_eos": true,
+      "max_tokens": 256,
+      "messages": [
+        {
+          "content": "[request nonce 0001] Explain briefly why a desktop AI workstation benefits from fast unified memory, covering bandwidth, latency, and capacity tradeoffs for local inference.",
+          "role": "user"
+        }
+      ],
+      "model": "gemma3-12b-it",
+      "seed": 0,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0
+    }
+  },
+  "phase": "scorecard",
+  "run_id": "claude_rsc_g312b_def_bench",
+  "schema": "blockE23-benchmark/v2",
+  "started_utc": "2026-06-11T20:15:05Z",
+  "url": "http://127.0.0.1:8000",
+  "warmup": {
+    "ok": true,
+    "total_s": 2.117734637024114,
+    "ttft_s": 0.14421636701445095
+  }
+}

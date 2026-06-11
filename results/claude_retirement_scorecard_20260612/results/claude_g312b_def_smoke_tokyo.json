@@ -1,0 +1,51 @@
+{
+  "content": "The capital of Japan is **Tokyo**.\n",
+  "content_chars": 35,
+  "elapsed_s": 1.307,
+  "endpoint": "http://127.0.0.1:8000/v1/chat/completions",
+  "model": "gemma3-12b-it",
+  "ok": false,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": null,
+          "audio": null,
+          "content": "The capital of Japan is **Tokyo**.\n",
+          "function_call": null,
+          "reasoning": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "routed_experts": null,
+        "stop_reason": 106,
+        "token_ids": null
+      }
+    ],
+    "created": 1781208887,
+    "id": "chatcmpl-9b6e1b0105a9808f",
+    "kv_transfer_params": null,
+    "model": "gemma3-12b-it",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_text": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.1.dev1+g9759e3b06-d2b4edd9",
+    "usage": {
+      "completion_tokens": 10,
+      "prompt_tokens": 14,
+      "prompt_tokens_details": null,
+      "total_tokens": 24
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}
