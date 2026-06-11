@@ -1,0 +1,8 @@
+{
+  "elapsed_s": 598.973,
+  "endpoint": "http://127.0.0.1:30000/v1/chat/completions",
+  "error": "<HTTPError 500: 'Internal Server Error'>",
+  "model": "gemma4-e2b-it",
+  "ok": false,
+  "schema": "openai-chat-smoke/v1"
+}

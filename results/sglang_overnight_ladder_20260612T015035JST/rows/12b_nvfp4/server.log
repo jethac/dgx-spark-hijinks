@@ -1,0 +1,93 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+ERROR: This container was built for NVIDIA Driver Release 595.58 or later, but
+       version 580.159.03 was detected and compatibility mode is UNAVAILABLE.
+
+       [[]]
+
+[spark-sitecustomize] {'pid': 152, 'source_root': '/flashinfer-src', 'jit_utils_file': '/flashinfer-src/flashinfer/jit/utils.py', 'attention_modules_file': '/flashinfer-src/flashinfer/jit/attention/modules.py', 'prefill_file': '/tmp/flashinfer-python-path/flashinfer/prefill.py', 'force_prefill_module': False, 'patch_prefill_run_scale_args': True, 'dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'attention_dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'prefill_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'jit_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'prefill_run_scale_arg_patch': True, 'prefill_run_marker': True, 'prefill_run_has_k_sf_source': False, 'prefill_run_has_v_sf_source': False}
+python_flashinfer /tmp/flashinfer-python-path/flashinfer/__init__.py
+dist_version sglang 0.0.0.dev1+g0705924c1
+dist_version sglang-kernel 0.4.3
+dist_version flashinfer_python 0.6.13
+binary_md5 sgl_kernel /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py ef74392975d0e0665ea6ad43283ed4ba
+binary_probe_error sgl_kernel.common_ops ModuleNotFoundError("No module named 'sgl_kernel.common_ops'")
+flashinfer_data /flashinfer-src
+flashinfer_csrc /flashinfer-src/csrc
+flashinfer_include /flashinfer-src/include
+flashinfer_cutlass [PosixPath('/flashinfer-src/3rdparty/cutlass/include'), PosixPath('/flashinfer-src/3rdparty/cutlass/tools/util/include')]
+flashinfer_cccl [PosixPath('/flashinfer-src/3rdparty/cccl/cub'), PosixPath('/flashinfer-src/3rdparty/cccl/libcudacxx/include'), PosixPath('/flashinfer-src/3rdparty/cccl/thrust')]
+flashinfer_spdlog /flashinfer-src/3rdparty/spdlog/include
+[spark-sitecustomize] {'pid': 1, 'source_root': '/flashinfer-src', 'jit_utils_file': '/flashinfer-src/flashinfer/jit/utils.py', 'attention_modules_file': '/flashinfer-src/flashinfer/jit/attention/modules.py', 'prefill_file': '/tmp/flashinfer-python-path/flashinfer/prefill.py', 'force_prefill_module': False, 'patch_prefill_run_scale_args': True, 'dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'attention_dtype_map_kv_uint8': '__nv_fp4x2_e2m1', 'prefill_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'jit_gen_batch_prefill_module': 'flashinfer.jit.attention.modules', 'prefill_run_scale_arg_patch': True, 'prefill_run_marker': True, 'prefill_run_has_k_sf_source': False, 'prefill_run_has_v_sf_source': False}
+/usr/local/lib/python3.12/dist-packages/torchao/quantization/quant_api.py:1674: SyntaxWarning: invalid escape sequence '\.'
+  """Configuration class for applying different quantization configs to modules or parameters based on their fully qualified names (FQNs).
+W0611 17:10:58.904000 1 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W0611 17:10:59.062000 1 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+/work/third_party/sglang/python/sglang/launch_server.py:54: UserWarning: 'python -m sglang.launch_server' is still supported, but 'sglang serve' is the recommended entrypoint.
+  Example: sglang serve --model-path <model> [options]
+  warnings.warn(
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py", line 405, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py", line 105, in __getitem__
+    raise KeyError(key)
+KeyError: 'gemma4_unified'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/work/third_party/sglang/python/sglang/launch_server.py", line 66, in <module>
+    server_args = prepare_server_args(sys.argv[1:])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 7980, in prepare_server_args
+    return ServerArgs.from_cli_args(raw_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 7255, in from_cli_args
+    return cls(**{attr: getattr(args, attr) for attr in attrs})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 397, in __init__
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 951, in __post_init__
+    self._handle_piecewise_cuda_graph()
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 1346, in _handle_piecewise_cuda_graph
+    if self.get_model_config().is_piecewise_cuda_graph_disabled_model:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 7305, in get_model_config
+    self.model_config = ModelConfig.from_server_args(self)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/configs/model_config.py", line 389, in from_server_args
+    return ModelConfig(
+           ^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/configs/model_config.py", line 201, in __init__
+    self.hf_config = get_config(
+                     ^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/utils/common.py", line 3506, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/utils/hf_transformers/config.py", line 250, in get_config
+    config = parser.parse(
+             ^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/utils/hf_transformers/config.py", line 63, in parse
+    config = AutoConfig.from_pretrained(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py", line 407, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `gemma4_unified` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+
+You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new, then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing Transformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`

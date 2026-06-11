@@ -29,6 +29,7 @@ def main() -> int:
     parser.add_argument("--model", required=True)
     parser.add_argument("--timeout", type=int, default=120)
     parser.add_argument("--prompt", default="Reply with exactly this text: spark-ok")
+    parser.add_argument("--expect-substring", default="spark-ok")
     parser.add_argument("--max-tokens", type=int, default=8)
     parser.add_argument("--chat-template-kwargs-json")
     parser.add_argument("--output")
@@ -56,6 +57,7 @@ def main() -> int:
         "model": args.model,
         "ok": False,
         "elapsed_s": None,
+        "expect_substring": args.expect_substring,
     }
 
     try:
@@ -75,7 +77,7 @@ def main() -> int:
         report["reasoning_content_chars"] = len(reasoning)
         report["reasoning_chars"] = len(reasoning_legacy)
         combined = "\n".join([content, reasoning, reasoning_legacy])
-        report["ok"] = "spark-ok" in combined.lower()
+        report["ok"] = args.expect_substring.lower() in combined.lower()
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
         report["error"] = repr(exc)
     finally:

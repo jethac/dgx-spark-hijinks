@@ -1,0 +1,35 @@
+{
+  "delta_gates": [],
+  "model_slug": "26b_a4b",
+  "ok": false,
+  "rows": {
+    "bf16": {
+      "kv_cache_dtype": "auto",
+      "model": "google/gemma-4-26B-A4B-it",
+      "ok": false,
+      "ready_rc": 3,
+      "red_reason": "server_not_ready",
+      "row": "26b_a4b_bf16",
+      "schema": "sglang-overnight-row/v1"
+    },
+    "fp8": {
+      "kv_cache_dtype": "fp8_e4m3",
+      "model": "google/gemma-4-26B-A4B-it",
+      "ok": false,
+      "ready_rc": 3,
+      "red_reason": "server_not_ready",
+      "row": "26b_a4b_fp8",
+      "schema": "sglang-overnight-row/v1"
+    },
+    "nvfp4": {
+      "kv_cache_dtype": "fp4_e2m1",
+      "model": "google/gemma-4-26B-A4B-it",
+      "ok": false,
+      "ready_rc": 3,
+      "red_reason": "server_not_ready",
+      "row": "26b_a4b_nvfp4",
+      "schema": "sglang-overnight-row/v1"
+    }
+  },
+  "schema": "sglang-overnight-model-summary/v1"
+}

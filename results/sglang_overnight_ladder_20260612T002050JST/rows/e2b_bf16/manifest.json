@@ -1,0 +1,1 @@
+{"schema":"sglang-overnight-row/v1","row":"e2b_bf16","model":"google/gemma-4-E2B-it","kv_cache_dtype":"auto","ok":false,"red_reason":"server_not_ready","ready_rc":3}

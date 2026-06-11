@@ -1,0 +1,43 @@
+{
+  "content": "The capital of Japan is Tokyo.",
+  "content_chars": 30,
+  "elapsed_s": 0.352,
+  "endpoint": "http://127.0.0.1:30000/v1/chat/completions",
+  "model": "gemma4-e2b-it",
+  "ok": false,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "matched_stop": 106,
+        "message": {
+          "content": "The capital of Japan is Tokyo.",
+          "reasoning_content": null,
+          "role": "assistant",
+          "tool_calls": null
+        }
+      }
+    ],
+    "created": 1781197102,
+    "id": "65fc134c031948c9932a34b108bca3cf",
+    "metadata": {
+      "weight_version": "default"
+    },
+    "model": "gemma4-e2b-it",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 8,
+      "prompt_tokens": 20,
+      "prompt_tokens_details": null,
+      "reasoning_tokens": 0,
+      "total_tokens": 28
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

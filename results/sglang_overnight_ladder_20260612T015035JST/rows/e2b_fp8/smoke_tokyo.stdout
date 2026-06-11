@@ -1,0 +1,8 @@
+{
+  "elapsed_s": 0.016,
+  "endpoint": "http://127.0.0.1:30000/v1/chat/completions",
+  "error": "URLError(ConnectionRefusedError(111, 'Connection refused'))",
+  "model": "gemma4-e2b-it",
+  "ok": false,
+  "schema": "openai-chat-smoke/v1"
+}

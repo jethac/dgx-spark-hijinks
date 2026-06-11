@@ -1,0 +1,9 @@
+2026-06-12T01:42:20+09:00 RUN_START run_id=sglang_overnight_ladder_20260612T014220JST image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+2026-06-12T01:42:20+09:00 SPARK_DATE 2026-06-12T01:42:20+09:00
+2026-06-12T01:42:20+09:00 DOCKER_IMAGE_ID b0f904496e76
+2026-06-12T01:42:21+09:00 CORPUS_MD5_GREEN source=/home/jethac/spark_tmp/claude_overnight_ladder_20260612/docs
+2026-06-12T01:42:21+09:00 PREFLIGHT_MODEL_ACCESS e2b google/gemma-4-E2B-it
+2026-06-12T01:42:24+09:00 PREFLIGHT_MODEL_ACCESS_RC e2b 0
+2026-06-12T01:42:24+09:00 ROW_START e2b_bf16 model=google/gemma-4-E2B-it kv=auto mem_fraction=0.35
+2026-06-12T01:45:54+09:00 ROW_RED e2b_bf16 manifest=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_overnight_ladder_20260612T014220JST/rows/e2b_bf16/manifest.json
+2026-06-12T01:45:54+09:00 ROW_START e2b_nvfp4 model=google/gemma-4-E2B-it kv=fp4_e2m1 mem_fraction=0.35

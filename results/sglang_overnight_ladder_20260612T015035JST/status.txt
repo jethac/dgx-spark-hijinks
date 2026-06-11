@@ -1,0 +1,38 @@
+2026-06-12T01:50:35+09:00 RUN_START run_id=sglang_overnight_ladder_20260612T015035JST image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+2026-06-12T01:50:35+09:00 SPARK_DATE 2026-06-12T01:50:35+09:00
+2026-06-12T01:50:35+09:00 DOCKER_IMAGE_ID b0f904496e76
+2026-06-12T01:50:36+09:00 CORPUS_MD5_GREEN source=/home/jethac/spark_tmp/claude_overnight_ladder_20260612/docs
+2026-06-12T01:50:36+09:00 PREFLIGHT_MODEL_ACCESS e2b google/gemma-4-E2B-it
+2026-06-12T01:50:38+09:00 PREFLIGHT_MODEL_ACCESS_RC e2b 0
+2026-06-12T01:50:38+09:00 ROW_START e2b_bf16 model=google/gemma-4-E2B-it kv=auto mem_fraction=0.35
+2026-06-12T01:54:03+09:00 ROW_GREEN e2b_bf16 c1=3.923662672115819
+2026-06-12T01:54:03+09:00 ROW_START e2b_nvfp4 model=google/gemma-4-E2B-it kv=fp4_e2m1 mem_fraction=0.35
+2026-06-12T01:58:48+09:00 ROW_GREEN e2b_nvfp4 c1=3.9244879447009984
+2026-06-12T01:58:48+09:00 ROW_START e2b_fp8 model=google/gemma-4-E2B-it kv=fp8_e4m3 mem_fraction=0.35
+2026-06-12T02:10:30+09:00 ROW_RED e2b_fp8 manifest=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_overnight_ladder_20260612T015035JST/rows/e2b_fp8/manifest.json
+2026-06-12T02:10:30+09:00 PREFLIGHT_MODEL_ACCESS 12b google/gemma-4-12B-it
+2026-06-12T02:10:34+09:00 PREFLIGHT_MODEL_ACCESS_RC 12b 0
+2026-06-12T02:10:34+09:00 ROW_START 12b_bf16 model=google/gemma-4-12B-it kv=auto mem_fraction=0.38
+2026-06-12T02:10:49+09:00 ROW_RED 12b_bf16 readiness_rc=3
+2026-06-12T02:10:49+09:00 ROW_START 12b_nvfp4 model=google/gemma-4-12B-it kv=fp4_e2m1 mem_fraction=0.38
+2026-06-12T02:11:04+09:00 ROW_RED 12b_nvfp4 readiness_rc=3
+2026-06-12T02:11:05+09:00 ROW_START 12b_fp8 model=google/gemma-4-12B-it kv=fp8_e4m3 mem_fraction=0.38
+2026-06-12T02:11:20+09:00 ROW_RED 12b_fp8 readiness_rc=3
+2026-06-12T02:11:20+09:00 PREFLIGHT_MODEL_ACCESS 26b_a4b google/gemma-4-26B-A4B-it
+2026-06-12T02:11:23+09:00 PREFLIGHT_MODEL_ACCESS_RC 26b_a4b 0
+2026-06-12T02:11:23+09:00 ROW_START 26b_a4b_bf16 model=google/gemma-4-26B-A4B-it kv=auto mem_fraction=0.38
+2026-06-12T02:17:20+09:00 ROW_RED 26b_a4b_bf16 readiness_rc=3
+2026-06-12T02:17:20+09:00 ROW_START 26b_a4b_nvfp4 model=google/gemma-4-26B-A4B-it kv=fp4_e2m1 mem_fraction=0.38
+2026-06-12T02:22:52+09:00 ROW_RED 26b_a4b_nvfp4 readiness_rc=3
+2026-06-12T02:22:52+09:00 ROW_START 26b_a4b_fp8 model=google/gemma-4-26B-A4B-it kv=fp8_e4m3 mem_fraction=0.38
+2026-06-12T02:29:04+09:00 ROW_RED 26b_a4b_fp8 readiness_rc=3
+2026-06-12T02:29:04+09:00 PREFLIGHT_MODEL_ACCESS 31b google/gemma-4-31B-it
+2026-06-12T02:29:08+09:00 PREFLIGHT_MODEL_ACCESS_RC 31b 0
+2026-06-12T02:29:08+09:00 ROW_START 31b_bf16 model=google/gemma-4-31B-it kv=auto mem_fraction=0.36
+2026-06-12T02:36:00+09:00 ROW_RED 31b_bf16 readiness_rc=3
+2026-06-12T02:36:00+09:00 ROW_START 31b_nvfp4 model=google/gemma-4-31B-it kv=fp4_e2m1 mem_fraction=0.36
+2026-06-12T02:43:02+09:00 ROW_RED 31b_nvfp4 readiness_rc=3
+2026-06-12T02:43:02+09:00 ROW_START 31b_fp8 model=google/gemma-4-31B-it kv=fp8_e4m3 mem_fraction=0.36
+2026-06-12T02:50:19+09:00 ROW_RED 31b_fp8 readiness_rc=3
+2026-06-12T02:50:20+09:00 MAIL_WRITTEN /home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/mail/0036_codex-to-claude_sglang-overnight-stop.md
+2026-06-12T02:50:20+09:00 RUN_DONE /home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_overnight_ladder_20260612T015035JST

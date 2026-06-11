@@ -383,6 +383,7 @@ EOF
     --model "${served}" \
     --timeout "${REQUEST_TIMEOUT_S}" \
     --prompt "In one short sentence, name the capital of Japan." \
+    --expect-substring "Tokyo" \
     --max-tokens 24 \
     --output "/work/results/${RUN_ID}/rows/${row_label}/smoke_tokyo.json" \
     >"${row_dir}/smoke_tokyo.stdout" \
@@ -453,6 +454,7 @@ manifest = {
 manifest["ok"] = (
     manifest["ready_rc"] == 0
     and manifest["spark_smoke_rc"] == 0
+    and manifest["tokyo_smoke_rc"] == 0
     and manifest["tokyo_contains_tokyo"]
     and manifest["c1a_rc"] == 0
     and manifest["c1b_rc"] == 0
@@ -462,7 +464,7 @@ manifest["ok"] = (
 )
 if not manifest["ok"]:
     reasons = []
-    for key in ("ready_rc", "spark_smoke_rc", "c1a_rc", "c1b_rc", "c2_rc", "c3_rc"):
+    for key in ("ready_rc", "spark_smoke_rc", "tokyo_smoke_rc", "c1a_rc", "c1b_rc", "c2_rc", "c3_rc"):
         if manifest[key] != 0:
             reasons.append(f"{key}={manifest[key]}")
     if not manifest["tokyo_contains_tokyo"]:

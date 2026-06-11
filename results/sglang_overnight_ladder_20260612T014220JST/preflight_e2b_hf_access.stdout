@@ -1,0 +1,69 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+ERROR: The NVIDIA Driver is present, but CUDA failed to initialize.  GPU functionality will not be available.
+   [[ Unable to initialize CUDA driver (error ???) ]]
+
+Failed to detect NVIDIA driver version.
+
+{
+  "allow_patterns": [
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer.model",
+    "tokenizer_config.json",
+    "special_tokens_map.json"
+  ],
+  "checks": {
+    "model_info": {
+      "gated": false,
+      "ok": true,
+      "private": false,
+      "sha": "70af34e20bd4b7a91f0de6b22675850c43922a03",
+      "siblings": 9
+    },
+    "small_snapshot": {
+      "files": [
+        "config.json",
+        "generation_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "ok": true,
+      "path": "/root/.cache/huggingface/models--google--gemma-4-E2B-it/snapshots/70af34e20bd4b7a91f0de6b22675850c43922a03"
+    }
+  },
+  "disk": {
+    "free_bytes": 2126177271808,
+    "path": "/root/.cache/huggingface",
+    "total_bytes": 3936289308672,
+    "used_bytes": 1610082902016
+  },
+  "environment": {
+    "cache_dir": "/root/.cache/huggingface",
+    "hf_home": null,
+    "hf_hub_cache": null,
+    "hf_token_env_present": false
+  },
+  "finished_unix": 1781196143.8125474,
+  "huggingface_hub_version": "1.15.0",
+  "local_files_only": false,
+  "model": "google/gemma-4-E2B-it",
+  "ok": true,
+  "schema": "hf-model-access-probe/v1",
+  "started_unix": 1781196143.3032756
+}

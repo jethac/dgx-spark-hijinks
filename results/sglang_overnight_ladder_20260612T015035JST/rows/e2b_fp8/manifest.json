@@ -1,0 +1,33 @@
+{
+  "c1_deterministic": false,
+  "c1a_mean_nll_repr": "",
+  "c1a_rc": 128,
+  "c1b_mean_nll_repr": "",
+  "c1b_rc": 128,
+  "c2_rc": 128,
+  "c3_rc": 128,
+  "ctx": 8191,
+  "image": "sglang-source-stack-dgemma-024-0705924c-f99323bd:latest",
+  "kv_cache_dtype": "fp8_e4m3",
+  "mem_fraction_static": 0.35,
+  "model": "google/gemma-4-E2B-it",
+  "ok": false,
+  "ready_rc": 0,
+  "red_reasons": [
+    "spark_smoke_rc=2",
+    "c1a_rc=128",
+    "c1b_rc=128",
+    "c2_rc=128",
+    "c3_rc=128",
+    "tokyo_smoke_not_coherent",
+    "c1_determinism_fail"
+  ],
+  "reuse_prefix_len": 2048,
+  "row": "e2b_fp8",
+  "run_id": "sglang_overnight_ladder_20260612T015035JST",
+  "schema": "sglang-overnight-row/v1",
+  "served_model": "gemma4-e2b-it",
+  "spark_smoke_rc": 2,
+  "tokyo_contains_tokyo": false,
+  "tokyo_smoke_rc": 2
+}
