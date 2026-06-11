@@ -16,6 +16,7 @@ Environment:
   BASE_IMAGE=ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
   FLASHINFER_REPO=https://github.com/jethac/flashinfer.git
   FLASHINFER_REF=fb7d62ea45f19cb61f19057a93519c17b6e257f3
+  IMAGE_GENERATION=r8
   MAX_JOBS=3
   NVCC_THREADS=1
   RESULTS_DIR=/home/jethac/dgx-spark-hijinks/results
@@ -34,9 +35,10 @@ EXPECTED_VLLM_REF=${EXPECTED_VLLM_REF:-e08a6f3ae7557d87553f1892d2ecc822f2187957}
 BASE_IMAGE=${BASE_IMAGE:-ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2}
 FLASHINFER_REPO=${FLASHINFER_REPO:-https://github.com/jethac/flashinfer.git}
 FLASHINFER_REF=${FLASHINFER_REF:-fb7d62ea45f19cb61f19057a93519c17b6e257f3}
+IMAGE_GENERATION=${IMAGE_GENERATION:-r8}
 MAX_JOBS=${MAX_JOBS:-3}
 NVCC_THREADS=${NVCC_THREADS:-1}
-RUN_ID=${RUN_ID:-vllm_gemma4_rebuiltc_image_build_$(TZ=Asia/Tokyo date +%Y%m%dT%H%MJST)_r8}
+RUN_ID=${RUN_ID:-vllm_gemma4_rebuiltc_image_build_$(TZ=Asia/Tokyo date +%Y%m%dT%H%MJST)_${IMAGE_GENERATION}}
 RESULTS_DIR=${RESULTS_DIR:-/home/jethac/dgx-spark-hijinks/results}
 LOG_PATH=${RESULTS_DIR}/${RUN_ID}.log
 SUMMARY_PATH=${RESULTS_DIR}/${RUN_ID}_summary.md
@@ -48,6 +50,7 @@ mkdir -p "${RESULTS_DIR}"
 
 test -d "${VLLM_SRC}/vllm"
 actual_ref=$(git -C "${VLLM_SRC}" rev-parse HEAD)
+actual_short_ref=${actual_ref:0:9}
 if [[ "${actual_ref}" != "${EXPECTED_VLLM_REF}" ]]; then
   echo "wrong vLLM ref: got ${actual_ref}, expected ${EXPECTED_VLLM_REF}" >&2
   exit 1
@@ -68,8 +71,10 @@ FROM ${BASE_IMAGE}
 
 ARG BASE_IMAGE=ghcr.io/aeon-7/aeon-gemma-4-26b-a4b-dflash:v2
 ARG VLLM_REF=e08a6f3ae7557d87553f1892d2ecc822f2187957
+ARG VLLM_SHORT_REF=e08a6f3ae
 ARG FLASHINFER_REPO=https://github.com/jethac/flashinfer.git
 ARG FLASHINFER_REF=fb7d62ea45f19cb61f19057a93519c17b6e257f3
+ARG IMAGE_GENERATION=r8
 ARG MAX_JOBS=3
 ARG NVCC_THREADS=1
 
@@ -79,7 +84,7 @@ LABEL org.opencontainers.image.source="https://github.com/jethac/vllm" \
       spark.vllm_rebuilt_c="true" \
       spark.flashinfer_ref="${FLASHINFER_REF}" \
       spark.cuda_arch="sm_121a" \
-      spark.image_generation="r8"
+      spark.image_generation="${IMAGE_GENERATION}"
 
 RUN test -x /usr/local/cuda/bin/nvcc
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -103,8 +108,8 @@ RUN test "$(cat /opt/jethac-vllm/.spark_build_source_rev)" = "${VLLM_REF}"
 WORKDIR /opt/jethac-vllm
 
 ENV VLLM_MAIN_CUDA_VERSION=13.0 \
-    VLLM_VERSION_OVERRIDE=0.1.dev1+ge08a6f3ae \
-    SETUPTOOLS_SCM_PRETEND_VERSION=0.1.dev1+ge08a6f3ae \
+    VLLM_VERSION_OVERRIDE=0.1.dev1+g${VLLM_SHORT_REF} \
+    SETUPTOOLS_SCM_PRETEND_VERSION=0.1.dev1+g${VLLM_SHORT_REF} \
     VLLM_TARGET_DEVICE=cuda \
     CMAKE_CUDA_ARCHITECTURES=121a-real \
     TORCH_CUDA_ARCH_LIST=12.1a \
@@ -162,13 +167,14 @@ RUN VLLM_C="$(python3 -c 'from pathlib import Path; import vllm; print(Path(vllm
 EOF
 
 {
-  echo "# vLLM Gemma4 Rebuilt-C Image Build r8"
+  echo "# vLLM Gemma4 Rebuilt-C Image Build ${IMAGE_GENERATION}"
   echo
   echo "- image: \`${IMAGE_TAG}\`"
   echo "- base image: \`${BASE_IMAGE}\`"
   echo "- vLLM source: \`${VLLM_SRC}\`"
   echo "- vLLM ref: \`${actual_ref}\`"
   echo "- FlashInfer ref: \`${FLASHINFER_REF}\`"
+  echo "- image generation: \`${IMAGE_GENERATION}\`"
   echo "- MAX_JOBS: \`${MAX_JOBS}\`"
   echo "- NVCC_THREADS: \`${NVCC_THREADS}\`"
   echo "- log: \`${LOG_PATH}\`"
@@ -180,8 +186,10 @@ EOF
 if docker build \
   --build-arg BASE_IMAGE="${BASE_IMAGE}" \
   --build-arg VLLM_REF="${actual_ref}" \
+  --build-arg VLLM_SHORT_REF="${actual_short_ref}" \
   --build-arg FLASHINFER_REPO="${FLASHINFER_REPO}" \
   --build-arg FLASHINFER_REF="${FLASHINFER_REF}" \
+  --build-arg IMAGE_GENERATION="${IMAGE_GENERATION}" \
   --build-arg MAX_JOBS="${MAX_JOBS}" \
   --build-arg NVCC_THREADS="${NVCC_THREADS}" \
   -t "${IMAGE_TAG}" \
@@ -196,7 +204,7 @@ else
 fi
 
 {
-  echo "# vLLM Gemma4 Rebuilt-C Image Build r8"
+  echo "# vLLM Gemma4 Rebuilt-C Image Build ${IMAGE_GENERATION}"
   echo
   echo "- image: \`${IMAGE_TAG}\`"
   echo "- image id: \`${IMAGE_ID}\`"
@@ -205,6 +213,7 @@ fi
   echo "- vLLM source: \`${VLLM_SRC}\`"
   echo "- vLLM ref: \`${actual_ref}\`"
   echo "- FlashInfer ref: \`${FLASHINFER_REF}\`"
+  echo "- image generation: \`${IMAGE_GENERATION}\`"
   echo "- MAX_JOBS: \`${MAX_JOBS}\`"
   echo "- NVCC_THREADS: \`${NVCC_THREADS}\`"
   echo "- log: \`${LOG_PATH}\`"
