@@ -1,0 +1,28 @@
+
+============
+== SGLang ==
+============
+
+NVIDIA Release 26.05 (build 320256704)
+SGLang Version 0.5.11+05fb6a52
+Container image Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.2 driver version 595.58.03 with kernel driver version 580.159.03.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+
+binary_md5 sgl_kernel /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py ef74392975d0e0665ea6ad43283ed4ba
+binary_import_error sgl_kernel.common_ops ModuleNotFoundError: No module named 'sgl_kernel.common_ops'
+flashinfer_data /flashinfer-src
+flashinfer_csrc /flashinfer-src/csrc
+flashinfer_include /flashinfer-src/include
+flashinfer_cutlass [PosixPath('/flashinfer-src/3rdparty/cutlass/include'), PosixPath('/flashinfer-src/3rdparty/cutlass/tools/util/include')]
+flashinfer_cccl [PosixPath('/flashinfer-src/3rdparty/cccl/cub'), PosixPath('/flashinfer-src/3rdparty/cccl/libcudacxx/include'), PosixPath('/flashinfer-src/3rdparty/cccl/thrust')]
+flashinfer_spdlog /flashinfer-src/3rdparty/spdlog/include

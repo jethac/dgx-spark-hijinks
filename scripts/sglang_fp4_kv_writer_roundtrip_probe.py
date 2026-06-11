@@ -67,6 +67,33 @@ def dequant_pool_tensor(pool, packed, scales, global_scale, kv_len, num_heads, h
     )
 
 
+def torch_prefill_reference(q, k, v, *, sm_scale: float, window_left: int, dtype):
+    import torch
+
+    qo_len, num_qo_heads, _ = q.shape
+    kv_len, num_kv_heads, _ = k.shape
+    if num_qo_heads % num_kv_heads != 0:
+        raise ValueError(
+            f"num_qo_heads={num_qo_heads} must be divisible by num_kv_heads={num_kv_heads}"
+        )
+    group = num_qo_heads // num_kv_heads
+    k_expanded = k.repeat_interleave(group, dim=1).float()
+    v_expanded = v.repeat_interleave(group, dim=1).float()
+    q_float = q.float()
+
+    scores = torch.einsum("qhd,khd->hqk", q_float, k_expanded) * sm_scale
+    if window_left >= 0:
+        key_pos = torch.arange(kv_len, device=q.device)
+        query_pos = torch.arange(kv_len - qo_len, kv_len, device=q.device)
+        keep = key_pos[None, :] >= (query_pos[:, None] - window_left)
+        scores = scores.masked_fill(~keep.unsqueeze(0), float("-inf"))
+
+    lse = torch.logsumexp(scores, dim=-1).transpose(0, 1).contiguous()
+    probs = torch.softmax(scores, dim=-1)
+    out = torch.einsum("hqk,khd->qhd", probs, v_expanded).to(dtype)
+    return out.contiguous(), lse
+
+
 def run_case(
     *,
     name: str,
@@ -192,18 +219,36 @@ def run_case(
         head_dim,
         dtype,
     )
-    ref, ref_lse = flashinfer.prefill.single_prefill_with_kv_cache(
-        q_case,
-        ref_k,
-        ref_v,
-        causal=False,
-        pos_encoding_mode="NONE",
-        sm_scale=sm_scale,
-        window_left=window_left,
-        logits_soft_cap=0.0,
-        backend="fa2",
-        return_lse=True,
-    )
+    try:
+        ref, ref_lse = flashinfer.prefill.single_prefill_with_kv_cache(
+            q_case,
+            ref_k,
+            ref_v,
+            causal=False,
+            pos_encoding_mode="NONE",
+            sm_scale=sm_scale,
+            window_left=window_left,
+            logits_soft_cap=0.0,
+            backend="fa2",
+            return_lse=True,
+        )
+        reference_backend = "flashinfer_single_prefill"
+    except RuntimeError as exc:
+        message = str(exc)
+        if (
+            "Invalid configuration" not in message
+            and "Unsupported max_mma_kv" not in message
+        ):
+            raise
+        ref, ref_lse = torch_prefill_reference(
+            q_case,
+            ref_k,
+            ref_v,
+            sm_scale=sm_scale,
+            window_left=window_left,
+            dtype=dtype,
+        )
+        reference_backend = "torch_dequant_attention"
 
     result = {
         "case": name,
@@ -222,6 +267,7 @@ def run_case(
         "v_cache_dtype": str(v_cache.dtype),
         "k_sf_dtype": str(k_sf_paged.dtype),
         "v_sf_dtype": str(v_sf_paged.dtype),
+        "reference_backend": reference_backend,
         "out": compare_tensors(out, ref),
         "lse": compare_tensors(lse, ref_lse),
     }

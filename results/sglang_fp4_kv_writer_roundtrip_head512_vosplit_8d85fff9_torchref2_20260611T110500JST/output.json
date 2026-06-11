@@ -1,0 +1,124 @@
+{
+  "cases": [
+    {
+      "case": "global_qo",
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 0.9999999403953552,
+        "finite": true,
+        "max_abs_diff": 2.6420388221740723,
+        "mean_abs_diff": 2.6380558013916016,
+        "out_norm": 194.39251708984375,
+        "ref_norm": 134.70013427734375
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.999992311000824,
+        "finite": true,
+        "max_abs_diff": 0.00048828125,
+        "mean_abs_diff": 4.798966983798891e-05,
+        "out_norm": 9.163033485412598,
+        "ref_norm": 9.177225112915039
+      },
+      "page_size": 1,
+      "qo_len": 16,
+      "reference_backend": "torch_dequant_attention",
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006626674439758062,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "vo_split": 2,
+      "window_left": -1
+    },
+    {
+      "case": "swa_qo",
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 0.9999995827674866,
+        "finite": true,
+        "max_abs_diff": 2.5100955963134766,
+        "mean_abs_diff": 2.504526376724243,
+        "out_norm": 182.8455352783203,
+        "ref_norm": 126.17469024658203
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.9991498589515686,
+        "finite": true,
+        "max_abs_diff": 0.006103515625,
+        "mean_abs_diff": 0.0007735347608104348,
+        "out_norm": 10.811601638793945,
+        "ref_norm": 11.070289611816406
+      },
+      "page_size": 1,
+      "qo_len": 16,
+      "reference_backend": "torch_dequant_attention",
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006626674439758062,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "vo_split": 2,
+      "window_left": 255
+    },
+    {
+      "case": "swa_decode_as_prefill",
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "k_cache_dtype": "torch.uint8",
+      "k_global": 0.0006423223530873656,
+      "k_sf_dtype": "torch.float8_e4m3fn",
+      "kv_len": 384,
+      "lse": {
+        "cosine": 1.0,
+        "finite": true,
+        "max_abs_diff": 2.470824718475342,
+        "mean_abs_diff": 2.46665620803833,
+        "out_norm": 45.33454513549805,
+        "ref_norm": 31.381023406982422
+      },
+      "num_kv_heads": 16,
+      "num_qo_heads": 32,
+      "out": {
+        "cosine": 0.9999921917915344,
+        "finite": true,
+        "max_abs_diff": 0.0009765625,
+        "mean_abs_diff": 0.00013241500710137188,
+        "out_norm": 2.7849795818328857,
+        "ref_norm": 2.8049798011779785
+      },
+      "page_size": 1,
+      "qo_len": 1,
+      "reference_backend": "torch_dequant_attention",
+      "v_cache_dtype": "torch.uint8",
+      "v_global": 0.0006626674439758062,
+      "v_sf_dtype": "torch.float8_e4m3fn",
+      "vo_split": 2,
+      "window_left": 255
+    }
+  ],
+  "cuda_capability": [
+    12,
+    1
+  ],
+  "cuda_device": "NVIDIA GB10",
+  "flashinfer_extra_cudaflags": "-gencode=arch=compute_121a,code=sm_121a",
+  "k_size_bytes": 1810948,
+  "mixed_fp8_k_nvfp4_v": false,
+  "ok": true,
+  "probe": "sglang_fp4_kv_writer_roundtrip",
+  "scope": "full NVFP4 K+V, SGLang MHATokenToKVPoolFP4 writer, FlashInfer FA2 paged reader, linear scale factors",
+  "seed": 20260611,
+  "torch_version": "2.12.0a0+5aff3928d8.nv26.05",
+  "v_size_bytes": 1810948,
+  "vo_split": 2
+}
