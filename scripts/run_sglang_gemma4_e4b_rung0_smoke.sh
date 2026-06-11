@@ -2,6 +2,7 @@
 set -euo pipefail
 
 REPO_ROOT="${REPO_ROOT:-/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live}"
+SOURCE_BRANCH="${SOURCE_BRANCH:-epoch2}"
 IMAGE="${IMAGE:-sglang-source-stack-c3dae30f-e631a13fd:latest}"
 MODEL="${MODEL:-google/gemma-4-E4B-it}"
 PORT="${PORT:-30000}"
@@ -32,6 +33,7 @@ mkdir -p "${OUT_DIR}"
 {
   echo "run_id=${RUN_ID}"
   echo "repo_root=${REPO_ROOT}"
+  echo "source_branch=${SOURCE_BRANCH}"
   echo "image=${IMAGE}"
   echo "model=${MODEL}"
   echo "port=${PORT}"
@@ -43,7 +45,7 @@ mkdir -p "${OUT_DIR}"
 } | tee "${OUT_DIR}/preflight.log"
 
 git fetch origin
-git checkout docs/codex-direction-nvfp4-kv
+git checkout "${SOURCE_BRANCH}"
 git pull --ff-only
 git -C third_party/sglang fetch origin
 git -C third_party/sglang checkout "${SGLANG_COMMIT}"
