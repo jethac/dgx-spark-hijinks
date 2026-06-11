@@ -164,15 +164,15 @@ for _ in $(seq 1 "${attempts}"); do
     ready=1
     break
   fi
+  if curl -fsS "http://127.0.0.1:${PORT}/model_info" >/dev/null 2>&1; then
+    ready=1
+    break
+  fi
   if ! docker ps --format '{{.Names}}' | grep -qx "${container}"; then
     break
   fi
   sleep 5
 done
-
-if [[ "${ready}" != "1" ]] && curl -fsS "http://127.0.0.1:${PORT}/model_info" >/dev/null 2>&1; then
-  ready=1
-fi
 
 capture_docker_logs "${container}" || true
 
