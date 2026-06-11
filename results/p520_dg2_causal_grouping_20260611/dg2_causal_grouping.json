@@ -1,0 +1,150 @@
+{
+  "capability": [
+    12,
+    0
+  ],
+  "cosine_gate": 0.9999,
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "finished_utc": "2026-06-11T11:56:29.236698+00:00",
+  "flashinfer": "0.0.0+unknown",
+  "flashinfer_source_paths": {
+    "source_root": "/home/jetha/flashinfer"
+  },
+  "groups": [
+    {
+      "causal": true,
+      "kv_indices": [
+        0,
+        4,
+        8,
+        2,
+        6,
+        10
+      ],
+      "kv_indptr": [
+        0,
+        3,
+        6
+      ],
+      "num_tokens": 59,
+      "qo_indptr": [
+        0,
+        35,
+        59
+      ],
+      "req_indices": [
+        0,
+        2
+      ]
+    },
+    {
+      "causal": false,
+      "kv_indices": [
+        1,
+        5,
+        9,
+        3,
+        7
+      ],
+      "kv_indptr": [
+        0,
+        3,
+        5
+      ],
+      "num_tokens": 33,
+      "qo_indptr": [
+        0,
+        16,
+        33
+      ],
+      "req_indices": [
+        1,
+        3
+      ]
+    }
+  ],
+  "head_dim_qk": 512,
+  "head_dim_vo": 256,
+  "last_page_len": [
+    3,
+    16,
+    8,
+    1
+  ],
+  "num_kv_heads": 4,
+  "num_qo_heads": 8,
+  "ok": true,
+  "page_size": 16,
+  "per_request": [
+    {
+      "causal": true,
+      "cosine": 0.9999983906745911,
+      "finite": true,
+      "kv_len": 35,
+      "max_abs_diff": 0.009321451187133789,
+      "ok": true,
+      "qo_len": 35,
+      "request": "req0_encoder"
+    },
+    {
+      "causal": false,
+      "cosine": 0.9999978542327881,
+      "finite": true,
+      "kv_len": 48,
+      "max_abs_diff": 0.00251615047454834,
+      "ok": true,
+      "qo_len": 16,
+      "request": "req1_denoise"
+    },
+    {
+      "causal": true,
+      "cosine": 0.9999980926513672,
+      "finite": true,
+      "kv_len": 40,
+      "max_abs_diff": 0.0042688846588134766,
+      "ok": true,
+      "qo_len": 24,
+      "request": "req2_encoder_append"
+    },
+    {
+      "causal": false,
+      "cosine": 0.9999979734420776,
+      "finite": true,
+      "kv_len": 17,
+      "max_abs_diff": 0.0064084529876708984,
+      "ok": true,
+      "qo_len": 17,
+      "request": "req3_denoise_pure"
+    }
+  ],
+  "requests": [
+    {
+      "causal": true,
+      "kv_len": 35,
+      "name": "req0_encoder",
+      "qo_len": 35
+    },
+    {
+      "causal": false,
+      "kv_len": 48,
+      "name": "req1_denoise",
+      "qo_len": 16
+    },
+    {
+      "causal": true,
+      "kv_len": 40,
+      "name": "req2_encoder_append",
+      "qo_len": 24
+    },
+    {
+      "causal": false,
+      "kv_len": 17,
+      "name": "req3_denoise_pure",
+      "qo_len": 17
+    }
+  ],
+  "schema": "dg2-causal-grouping-plan-level/v1",
+  "started_utc": "2026-06-11T11:56:25.050928+00:00",
+  "torch": "2.12.0+cu130",
+  "wrapper_backend": "fa2"
+}
