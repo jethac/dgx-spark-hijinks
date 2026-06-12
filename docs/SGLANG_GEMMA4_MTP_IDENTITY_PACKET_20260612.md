@@ -11,14 +11,18 @@ This is a correctness row only, not a speedup row.
 - Draft: `google/gemma-4-E2B-it-assistant`
 - Runtime: SGLang on `epoch2`, source stack image
   `sglang-source-stack-dgemma-024-0705924c-f99323bd:latest`
-- SGLang pin: `0211f87b234b0f05eb10005b3791d81a962883ca`, which adds
+- SGLang pin: `98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968`, which adds
   `gemma4_assistant` / `gemma4_unified_assistant` config aliases for the
   native assistant checkpoints and passes prefix lengths for Frozen-KV MTP
   verify prefill planning, plus narrows MRoPE positions for the one-token draft
   seed, narrows seed cache slots to the last target token per request, and
-  reports eager buffer shape mismatches by slot.
+  reports eager buffer shape mismatches by slot. It also skips NVFP4 KV-cache
+  calibration for the Frozen-KV draft worker, because the native assistant has
+  no own KV cache and reads the already-calibrated target cache.
 - First row: BF16 target, unquantized draft, `topk=1`, `num_steps=1`,
   `num_draft_tokens=1`, graphs disabled
+- Second row: full NVFP4 K+V target cache (`KV_CACHE_DTYPE=fp4_e2m1`),
+  unquantized draft weights, same speculative settings, graphs disabled.
 - Memory rule: spec-off and spec-on servers are run sequentially; no concurrent
   comparator servers on GB10.
 
@@ -27,6 +31,13 @@ This is a correctness row only, not a speedup row.
 ```bash
 cd /home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
 bash scripts/run_sglang_gemma4_mtp_identity_gate.sh
+```
+
+Full NVFP4 K+V row:
+
+```bash
+KV_CACHE_DTYPE=fp4_e2m1 SGLANG_FP4_KV_MIXED_KV=0 DISABLE_GRAPHS=1 \
+  bash scripts/run_sglang_gemma4_mtp_identity_gate.sh
 ```
 
 Optional cache/online controls:

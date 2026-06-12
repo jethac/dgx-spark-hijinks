@@ -1,0 +1,40 @@
+{
+  "allow_patterns": [
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer.model",
+    "tokenizer_config.json",
+    "special_tokens_map.json"
+  ],
+  "checks": {
+    "model_info": {
+      "exception_type": "ModuleNotFoundError",
+      "message": "No module named 'huggingface_hub'",
+      "ok": false
+    },
+    "small_snapshot": {
+      "exception_type": "ModuleNotFoundError",
+      "message": "No module named 'huggingface_hub'",
+      "ok": false
+    }
+  },
+  "disk": {
+    "free_bytes": 2123343429632,
+    "path": "/home/jethac/.cache/huggingface",
+    "total_bytes": 3936289308672,
+    "used_bytes": 1612916744192
+  },
+  "environment": {
+    "cache_dir": "/home/jethac/.cache/huggingface",
+    "hf_home": null,
+    "hf_hub_cache": null,
+    "hf_token_env_present": false
+  },
+  "finished_unix": 1781239834.4751396,
+  "local_files_only": false,
+  "model": "google/gemma-4-E2B-it",
+  "ok": false,
+  "schema": "hf-model-access-probe/v1",
+  "started_unix": 1781239834.4750361
+}
