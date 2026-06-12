@@ -33,14 +33,19 @@ Created 2026-06-12:
   `standard-60` request failed with `maximum allowed vCPU count: 16`.
 - CUDA: `13.0`, `nvcc V13.0.88`
 - ccache: `/opt/build-cache/ccache`, max size `100G`
+- Docker: required for image-build workflows. The first image workflow attempt
+  found the runner missing Docker and non-passwordless sudo, so VM bootstrap now
+  installs `docker.io` and adds the runner user to the `docker` group. Existing
+  runners provisioned before that change must be re-bootstrapped before image
+  workflows can run.
 
 Registered repo-level GitHub runners on this VM:
 
 | repo | runner name | labels |
 |---|---|---|
-| `jethac/vllm` | `ubicloud-persistent-vllm-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `vllm-wheel` |
-| `jethac/sglang` | `ubicloud-persistent-sglang-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `sglang-wheel` |
-| `jethac/dgx-spark-hijinks` | `ubicloud-persistent-hijinks-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `hijinks` |
+| `jethac/vllm` | `ubicloud-persistent-vllm-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `docker`, `vllm-wheel` |
+| `jethac/sglang` | `ubicloud-persistent-sglang-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `docker`, `sglang-wheel` |
+| `jethac/dgx-spark-hijinks` | `ubicloud-persistent-hijinks-x64` | `self-hosted`, `Linux`, `X64`, `ubicloud-persistent-build-x64`, `cuda-toolkit-13`, `ccache`, `docker`, `hijinks` |
 
 Service-level environment overrides are installed under:
 
@@ -104,7 +109,7 @@ Copy `scripts/bootstrap_ubicloud_build_runner.sh` to the VM and run:
 sudo env \
   GITHUB_REPO=jethac/vllm \
   GITHUB_RUNNER_TOKEN='<short-lived token from gh api>' \
-  RUNNER_LABELS='ubicloud-persistent-build-x64,cuda-toolkit-13,ccache,vllm-wheel' \
+  RUNNER_LABELS='ubicloud-persistent-build-x64,cuda-toolkit-13,ccache,docker,vllm-wheel' \
   bash bootstrap_ubicloud_build_runner.sh
 ```
 
@@ -118,6 +123,7 @@ Suggested labels:
 - `ubicloud-persistent-build-arm64`
 - `cuda-toolkit-13`
 - `ccache`
+- `docker` if image builds will run on the VM
 - repo-specific labels such as `vllm-wheel` or `sglang-wheel`
 
 ## Workflow Target
@@ -194,5 +200,7 @@ A persistent runner is usable only after a workflow records:
 - runner labels and `nproc`
 - CUDA toolkit version (`nvcc --version`)
 - ccache location and stats
+- Docker CLI and daemon access from the runner user (`docker version` and
+  `docker info` without sudo) if any image-build workflow will use the runner
 - build artifact upload or release link
 - no GPU runtime test claimed from this CPU-only VM

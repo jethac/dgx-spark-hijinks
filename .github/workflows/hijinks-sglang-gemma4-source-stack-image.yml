@@ -23,7 +23,7 @@ permissions:
 jobs:
   build-image:
     name: build SGLang Gemma4 source-stack image
-    runs-on: [self-hosted, Linux, X64, ubicloud-persistent-build-x64, hijinks]
+    runs-on: [self-hosted, Linux, X64, ubicloud-persistent-build-x64, docker, hijinks]
     timeout-minutes: 240
     env:
       CUDA_HOME: /usr/local/cuda
@@ -55,11 +55,11 @@ jobs:
         run: |
           set -euxo pipefail
           if ! command -v docker >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y --no-install-recommends docker.io
+            echo "::error::Docker is missing from the persistent runner. Re-run scripts/bootstrap_ubicloud_build_runner.sh with INSTALL_DOCKER=1."
+            exit 1
           fi
-          sudo systemctl start docker || sudo service docker start || true
-          sudo docker version
+          docker version
+          docker info
 
       - name: Prepare compact Docker context
         run: |
@@ -174,12 +174,12 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euxo pipefail
-          printf '%s' "${GHCR_TOKEN}" | sudo docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+          printf '%s' "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
       - name: Build and push image
         run: |
           set -euxo pipefail
-          sudo docker build \
+          docker build \
             --build-arg BASE_IMAGE="${{ inputs.base_image }}" \
             --build-arg TRANSFORMERS_PIN="${{ inputs.transformers_pin }}" \
             --build-arg HIJINKS_REF="${GITHUB_SHA}" \
@@ -187,14 +187,14 @@ jobs:
             --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
             -t "${{ steps.meta.outputs.image }}" \
             /tmp/sglang-gemma4-image-context
-          sudo docker push "${{ steps.meta.outputs.image }}"
+          docker push "${{ steps.meta.outputs.image }}"
 
       - name: Write summary artifact
         run: |
           set -euxo pipefail
           mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
-          image_id="$(sudo docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
-          image_digest="$(sudo docker image inspect --format '{{index .RepoDigests 0}}' '${{ steps.meta.outputs.image }}' 2>/dev/null || true)"
+          image_id="$(docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
+          image_digest="$(docker image inspect --format '{{index .RepoDigests 0}}' '${{ steps.meta.outputs.image }}' 2>/dev/null || true)"
           if [ -z "${image_digest}" ]; then
             image_digest=unknown
           fi

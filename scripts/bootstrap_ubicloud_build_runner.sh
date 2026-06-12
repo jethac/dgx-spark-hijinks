@@ -11,6 +11,7 @@ CCACHE_DIR=${CCACHE_DIR:-/opt/build-cache/ccache}
 CCACHE_MAXSIZE=${CCACHE_MAXSIZE:-100G}
 CUDA_MAJOR_MINOR=${CUDA_MAJOR_MINOR:-13-0}
 INSTALL_CUDA=${INSTALL_CUDA:-1}
+INSTALL_DOCKER=${INSTALL_DOCKER:-1}
 
 if [[ -z "${GITHUB_REPO:-}" ]]; then
   echo "GITHUB_REPO is required, for example jethac/vllm" >&2
@@ -32,12 +33,12 @@ case "${arch}" in
   x86_64)
     runner_arch=x64
     cuda_repo_arch=x86_64
-    default_labels="ubicloud-persistent-build-x64,cuda-toolkit-13,ccache"
+    default_labels="ubicloud-persistent-build-x64,cuda-toolkit-13,ccache,docker"
     ;;
   aarch64|arm64)
     runner_arch=arm64
     cuda_repo_arch=sbsa
-    default_labels="ubicloud-persistent-build-arm64,cuda-toolkit-13,ccache"
+    default_labels="ubicloud-persistent-build-arm64,cuda-toolkit-13,ccache,docker"
     ;;
   *)
     echo "Unsupported architecture: ${arch}" >&2
@@ -68,8 +69,19 @@ if [[ "${INSTALL_CUDA}" == "1" ]]; then
   apt-get install -y --no-install-recommends "cuda-toolkit-${CUDA_MAJOR_MINOR}"
 fi
 
+if [[ "${INSTALL_DOCKER}" == "1" ]]; then
+  apt-get update
+  apt-get install -y --no-install-recommends docker.io
+  systemctl enable docker >/dev/null 2>&1 || true
+  systemctl start docker || service docker start || true
+fi
+
 if ! id -u "${RUNNER_USER}" >/dev/null 2>&1; then
   useradd --create-home --shell /bin/bash "${RUNNER_USER}"
+fi
+
+if [[ "${INSTALL_DOCKER}" == "1" ]]; then
+  usermod -aG docker "${RUNNER_USER}"
 fi
 
 mkdir -p "${RUNNER_BASE}" "${RUNNER_WORK_BASE}" "${CCACHE_DIR}" "${runner_dir}" "${runner_work}"
@@ -84,6 +96,11 @@ EOF
 
 sudo -u "${RUNNER_USER}" ccache --set-config "max_size=${CCACHE_MAXSIZE}"
 sudo -u "${RUNNER_USER}" env CCACHE_DIR="${CCACHE_DIR}" ccache --set-config "max_size=${CCACHE_MAXSIZE}"
+
+if [[ "${INSTALL_DOCKER}" == "1" ]]; then
+  docker version
+  sudo -u "${RUNNER_USER}" docker version
+fi
 
 latest_tag=$(curl -fsSL https://api.github.com/repos/actions/runner/releases/latest | jq -r .tag_name)
 runner_version=${latest_tag#v}
@@ -132,3 +149,6 @@ popd >/dev/null
 echo "Registered ${runner_name} for ${GITHUB_REPO}"
 echo "Labels: self-hosted,Linux,${runner_arch},${runner_labels}"
 echo "ccache: ${CCACHE_DIR} (${CCACHE_MAXSIZE})"
+if [[ "${INSTALL_DOCKER}" == "1" ]]; then
+  echo "docker: $(docker --version)"
+fi
