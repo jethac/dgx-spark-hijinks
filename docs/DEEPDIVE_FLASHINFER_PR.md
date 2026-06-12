@@ -465,7 +465,38 @@ keep `mask_indptr` on CPU. `flashinfer/prefill.py:1994`:
 
 ---
 
-## 5. What this does NOT change
+## 5. Why FA2, not FA4
+
+A reviewer's first question will be "FA4 is the future — why build on FA2?" The honest
+answer is that **FA4 is the kernel that *creates* this gap; it is structurally the wrong
+tool for head_dim=512 NVFP4 KV on CC 12.x.**
+
+1. **FA4 architecturally excludes head_dim > 128 on Blackwell.** FA4's design relies on
+   Blackwell TMEM (tensor memory) for operand/accumulator residency, and the TMEM budget
+   caps the head dimension at 128 — so upstream's own FA4 unification gates out head>128 on
+   all Blackwell and force-routes the entire Gemma 4 family to Triton on consumer cards.
+   Gemma 4's global heads are **512**. You cannot "just use FA4" for a 512-wide head without
+   first redesigning FA4's TMEM allocation to lift that wall — a major new-kernel effort
+   owned by the FA team, not a patch. FA4 is the gate this PR routes *around*.
+2. **FA2 already has the asymmetric-head machinery the fix needs.** The VO-split runs a
+   512-wide head as `(qk=512, vo=256)` over two passes of V — which requires asymmetric
+   `qk_head_dim != vo_head_dim` support. FA2 ships exactly that, battle-tested, via the
+   DeepSeek MLA precedent (192/128). The VO-split is that blessed capability applied to
+   `(512, 256)`, with **zero kernel-math changes**. FA4 has no clean asymmetric path.
+3. **FA2 is the only path that reads NVFP4 KV on CC 12.x at all.** FA4's FP4 path is
+   trtllm-gen, which exists only for **sm_100** (datacenter B200). There is no FA4 FP4-KV
+   kernel for consumer or Spark Blackwell; FlashInfer's FA2 JIT path can read packed-FP4
+   paged KV on sm_120/sm_121. So even setting head size aside, FA4 brings no NVFP4-KV
+   capability to CC 12.x.
+4. **It is surgical and coexists with FA4.** The diff is a smem-aware dispatcher fix,
+   output sizing, and a scale-layout flag — no kernel math touched — and the backend
+   selection is knob-gated to slot *next to* FA4: FA4 stays the default where it shines
+   (Hopper, sm_100); this route fills the hole FA4 leaves on CC 12.x. The day FA4 gains
+   head>128 + FP4-KV on consumer Blackwell, the selector can simply prefer it. **This PR is
+   the bridge, not a fork in the road** — it costs upstream nothing and unblocks the
+   consumer-Blackwell audience today.
+
+## 6. What this does NOT change
 
 - **FA2 attention math is untouched.** The VO-split is a host-side decomposition over two
   passes of an already-shipping asymmetric `(qk, vo)` kernel; the per-pass kernel math is
@@ -477,13 +508,6 @@ keep `mask_indptr` on CPU. `flashinfer/prefill.py:1994`:
   so upstream's mixed-backend divergence concern does not apply.
 - **Validated on CC 12.0 AND 12.1** — RTX PRO 6000 (sm_120) and GB10 / DGX Spark
   (sm_121). Same fix, both targets green.
-- **Split-dtype removed (descoped).** The `k_data_type != v_data_type` shim (the
-  `plan()` kwargs, the equal-collapse path, the validated `(fp8_e4m3, uint8)` mixed-KV
-  pair, and the `NotImplementedError` for other unequal pairs) has been **removed** from
-  the branch (`flashinfer/{decode,prefill}.py`, head `3fa0775c`) so the branch matches the
-  clean PR. Full split-dtype `dtype_k`/`dtype_v` module keying was never wired. The
-  full-NVFP4 path is unaffected: callers pass `kv_data_type=uint8` (a single dtype) and
-  the FP4 module-keying guards still key on it. See `docs/SPLIT_DTYPE_REMOVAL.md`.
 - The committed `flashinfer/data/*` entries are dev-clone convenience symlinks (so a raw
   clone is self-contained), not PR content.
 
