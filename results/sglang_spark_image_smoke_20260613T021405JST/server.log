@@ -1,0 +1,38 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.0.2
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+/work/third_party/sglang/python/sglang/launch_server.py:54: UserWarning: 'python -m sglang.launch_server' is still supported, but 'sglang serve' is the recommended entrypoint.
+  Example: sglang serve --model-path <model> [options]
+  warnings.warn(
+[2026-06-12 17:20:04] Hybrid swa model: self.hf_config.architectures=['Gemma4ForConditionalGeneration']
+[2026-06-12 17:20:05] Failed to get GPU memory capacity from nvidia-smi. Falling back to torch.cuda.mem_get_info(). Reported total GPU memory per device (MiB): [122501], using min: 122501 MiB.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/work/third_party/sglang/python/sglang/launch_server.py", line 66, in <module>
+    server_args = prepare_server_args(sys.argv[1:])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 7993, in prepare_server_args
+    return ServerArgs.from_cli_args(raw_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 7268, in from_cli_args
+    return cls(**{attr: getattr(args, attr) for attr in attrs})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 397, in __init__
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 966, in __post_init__
+    self._handle_model_specific_adjustments()
+  File "/work/third_party/sglang/python/sglang/srt/server_args.py", line 2389, in _handle_model_specific_adjustments
+    prefill_backend in accepted_backends
+AssertionError: Gemma4 only supports ('trtllm_mha', 'triton', 'intel_xpu') attention backend, got prefill=flashinfer, decode=flashinfer

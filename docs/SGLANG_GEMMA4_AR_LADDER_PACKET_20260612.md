@@ -10,10 +10,13 @@ rows after the Ubicloud-built source-stack image.
 - GB10 memory guardrails: one server at a time, `--memory 100g`, no concurrent
   comparators, `MEM_FRACTION_STATIC` at or below `0.72`.
 - Use the baked GHCR image, not a Spark-local rebuild:
-  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91`
-  (`sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70`).
-- The image must include a `linux/arm64` manifest. The first preflight with the
-  x64-only image failed before serving; see
+  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-spark-u22-torch211-arm64`
+  (`sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94`).
+- The image includes a `linux/arm64` manifest, Ubuntu 22.04 / glibc <= 2.35,
+  torch 2.11 + CUDA 13, and passed the Spark E2B readiness smoke; see
+  `results/sglang_gemma4_source_stack_image_27428220601/summary.md` and
+  `results/sglang_spark_image_smoke_20260613T022153JST/summary.md`. The first
+  preflight with the older x64-only image failed before serving; see
   `results/sglang_gemma4_ar_ladder_20260612T183849JST/summary.md`.
 
 ## Run

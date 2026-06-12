@@ -27,7 +27,7 @@ quality, or isolated kernel speed attribution.
 cd /home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
 REPO_ROOT=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live \
 SOURCE_BRANCH=epoch2 \
-IMAGE=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest \
+IMAGE=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94 \
 SGLANG_COMMIT=98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968 \
 FLASHINFER_COMMIT=f99323bd7d1c \
 MEM_FRACTION_STATIC=0.55 \

@@ -7,7 +7,7 @@ set -euo pipefail
 
 REPO_ROOT="${REPO_ROOT:-/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live}"
 SOURCE_BRANCH="${SOURCE_BRANCH:-epoch2}"
-IMAGE="${IMAGE:-sglang-source-stack-dgemma-024-0705924c-f99323bd:latest}"
+IMAGE="${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}"
 MODEL="${MODEL:-google/diffusiongemma-26B-A4B-it}"
 PORT="${PORT:-30125}"
 MEM_FRACTION_STATIC="${MEM_FRACTION_STATIC:-0.55}"

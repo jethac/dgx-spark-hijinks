@@ -87,3 +87,29 @@ The artifact is not Spark-ready until the workflow proves:
 
 Only after those pass should Spark run a minimal no-build smoke under the usual
 memory guardrails.
+
+## Final Receipt
+
+The Spark-deployable carrier is green as of 2026-06-13 JST:
+
+- image:
+  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-spark-u22-torch211-arm64`
+- digest:
+  `sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94`
+- build workflow: `27428220601`
+- build artifact:
+  `results/sglang_gemma4_source_stack_image_27428220601/summary.md`
+- Spark smoke:
+  `results/sglang_spark_image_smoke_20260613T022153JST/summary.md`
+
+Scope: this closes the packaging/runtime-smoke goal only. It proves the image
+pulls on Spark, imports with Ubuntu 22.04 / torch 2.11 / CUDA 13 provenance,
+has no baked FlashInfer module-cache payload, reaches SGLang readiness, and
+answers a minimal Gemma4 E2B prompt with the supported `triton` backend. It
+does not make a Gemma4 ladder, DiffusionGemma quality, NVFP4, capacity, or
+FlashInfer-serving claim.
+
+The prior build `27424620048` is retained as a rejected intermediate: it used
+the correct Ubuntu 22 arm64 base but let an unpinned torchvision dependency
+upgrade torch at runtime. The final workflow pins torch-family packages and
+asserts torch `2.11.0` during both build verification and Spark smoke.

@@ -1,0 +1,89 @@
+ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94: Pulling from jethac/dgx-spark-hijinks/sglang-gemma4-source-stack
+f85691aa4b90: Already exists
+c327bf13a03a: Already exists
+5c04029b1239: Already exists
+cadec1e93194: Already exists
+526d5438c009: Already exists
+300f6e1e28d0: Already exists
+ef2d628e7d42: Already exists
+360f9dd63191: Already exists
+cf605dedfba6: Already exists
+17f0029d5ec7: Already exists
+cf195d61773b: Already exists
+6723094aa88f: Pulling fs layer
+eed2c4a76db6: Pulling fs layer
+8a43c6476156: Pulling fs layer
+f8324a17e42b: Pulling fs layer
+847d5378dc10: Pulling fs layer
+9369d3223231: Pulling fs layer
+bad7b5122599: Pulling fs layer
+cd259ec05ef8: Pulling fs layer
+0cd5f0234d14: Pulling fs layer
+8ff3877ba1af: Pulling fs layer
+24b1be469d8e: Pulling fs layer
+8546841787b6: Pulling fs layer
+217651ab2001: Pulling fs layer
+93bb88def213: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+f445a02aa4b8: Pulling fs layer
+cd259ec05ef8: Waiting
+0cd5f0234d14: Waiting
+8ff3877ba1af: Waiting
+24b1be469d8e: Waiting
+8546841787b6: Waiting
+217651ab2001: Waiting
+93bb88def213: Waiting
+4f4fb700ef54: Waiting
+f445a02aa4b8: Waiting
+847d5378dc10: Waiting
+9369d3223231: Waiting
+bad7b5122599: Waiting
+f8324a17e42b: Waiting
+6723094aa88f: Verifying Checksum
+6723094aa88f: Download complete
+6723094aa88f: Pull complete
+eed2c4a76db6: Verifying Checksum
+eed2c4a76db6: Download complete
+eed2c4a76db6: Pull complete
+f8324a17e42b: Download complete
+847d5378dc10: Verifying Checksum
+847d5378dc10: Download complete
+8a43c6476156: Verifying Checksum
+8a43c6476156: Download complete
+bad7b5122599: Verifying Checksum
+bad7b5122599: Download complete
+0cd5f0234d14: Verifying Checksum
+0cd5f0234d14: Download complete
+8ff3877ba1af: Download complete
+8a43c6476156: Pull complete
+f8324a17e42b: Pull complete
+847d5378dc10: Pull complete
+9369d3223231: Verifying Checksum
+9369d3223231: Download complete
+8546841787b6: Verifying Checksum
+8546841787b6: Download complete
+217651ab2001: Verifying Checksum
+217651ab2001: Download complete
+9369d3223231: Pull complete
+93bb88def213: Verifying Checksum
+93bb88def213: Download complete
+4f4fb700ef54: Download complete
+f445a02aa4b8: Verifying Checksum
+f445a02aa4b8: Download complete
+bad7b5122599: Pull complete
+24b1be469d8e: Verifying Checksum
+24b1be469d8e: Download complete
+cd259ec05ef8: Verifying Checksum
+cd259ec05ef8: Download complete
+cd259ec05ef8: Pull complete
+0cd5f0234d14: Pull complete
+8ff3877ba1af: Pull complete
+24b1be469d8e: Pull complete
+8546841787b6: Pull complete
+217651ab2001: Pull complete
+93bb88def213: Pull complete
+4f4fb700ef54: Pull complete
+f445a02aa4b8: Pull complete
+Digest: sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
+Status: Downloaded newer image for ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
+ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94

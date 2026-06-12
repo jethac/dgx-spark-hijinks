@@ -8,8 +8,8 @@
 set -euo pipefail
 
 REPO_ROOT="${REPO_ROOT:-/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live}"
-IMAGE="${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91}"
-IMAGE_DIGEST="${IMAGE_DIGEST:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70}"
+IMAGE="${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}"
+IMAGE_DIGEST="${IMAGE_DIGEST:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}"
 MODELS="${MODELS:-google/gemma-4-12B-it google/gemma-4-26B-A4B-it google/gemma-4-31B-it}"
 PORT="${PORT:-30000}"
 MEM_FRACTION_STATIC="${MEM_FRACTION_STATIC:-0.72}"

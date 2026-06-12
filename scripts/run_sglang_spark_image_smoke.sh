@@ -11,7 +11,7 @@ published linux/arm64 image, records provenance, verifies in-container imports,
 then starts one guarded SGLang server and records whether it reaches readiness.
 
 Environment:
-  IMAGE=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-spark-u22-torch211-arm64
+  IMAGE=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
   MODEL=google/gemma-4-E2B-it
   SERVED_MODEL=sglang-spark-packaging-smoke
   PORT=30000
@@ -32,7 +32,7 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 2
 fi
 
-IMAGE=${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-spark-u22-torch211-arm64}
+IMAGE=${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}
 MODEL=${MODEL:-google/gemma-4-E2B-it}
 SERVED_MODEL=${SERVED_MODEL:-sglang-spark-packaging-smoke}
 PORT=${PORT:-30000}

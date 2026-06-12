@@ -10,7 +10,7 @@ This is a correctness row only, not a speedup row.
 - Target: `google/gemma-4-E2B-it`
 - Draft: `google/gemma-4-E2B-it-assistant`
 - Runtime: SGLang on `epoch2`, source stack image
-  `sglang-source-stack-dgemma-024-0705924c-f99323bd:latest`
+  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94`
 - SGLang pin: `98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968`, which adds
   `gemma4_assistant` / `gemma4_unified_assistant` config aliases for the
   native assistant checkpoints and passes prefix lengths for Frozen-KV MTP

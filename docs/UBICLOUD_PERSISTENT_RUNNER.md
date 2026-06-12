@@ -160,11 +160,12 @@ same persistent runner:
 .github/workflows/hijinks-sglang-gemma4-source-stack-image.yml
 ```
 
-First green receipt: GitHub Actions run `27405349785`, published
-`ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91`
-at digest `sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70`.
-This is a CPU build/provenance gate only; Spark serving and GPU runtime checks
-remain separate.
+Current Spark-deployable receipt: GitHub Actions run `27428220601`, published
+`ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-spark-u22-torch211-arm64`
+at digest `sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94`.
+It uses Ubuntu 22.04, torch `2.11.0+cu130`, and a `linux/arm64` manifest.
+Spark runtime smoke passed under
+`results/sglang_spark_image_smoke_20260613T022153JST/summary.md`.
 
 The SGLang fork has a non-publishing persistent wheel build workflow:
 

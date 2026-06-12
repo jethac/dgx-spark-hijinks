@@ -1,0 +1,13 @@
+run_id=sglang_spark_image_smoke_20260613T022153JST
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
+platform=linux/arm64
+model=google/gemma-4-E2B-it
+served_model=sglang-spark-packaging-smoke
+port=30000
+mem_fraction_static=0.35
+attention_backend=triton
+started_at=2026-06-13T02:21:54+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.0Gi        46Gi        12Mi        70Gi       115Gi
+Swap:           15Gi       465Mi        15Gi
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES

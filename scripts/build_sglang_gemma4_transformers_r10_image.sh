@@ -13,7 +13,7 @@ sgl-kernel, or FlashInfer. Use it after a source-stack image has already been
 compiled and verified.
 
 Environment:
-  BASE_IMAGE=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+  BASE_IMAGE=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
   TRANSFORMERS_PIN=5.11.0
   RESULTS_DIR=/home/jethac/dgx-spark-hijinks/results
   RUN_ID=sglang_gemma4_transformers_r10_YYYYMMDDTHHMMJST
@@ -25,8 +25,8 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 2
 fi
 
-IMAGE_TAG=${1:-sglang-source-stack-dgemma-024-0705924c-f99323bd-tf511-r10:latest}
-BASE_IMAGE=${BASE_IMAGE:-sglang-source-stack-dgemma-024-0705924c-f99323bd:latest}
+IMAGE_TAG=${1:-sglang-gemma4-source-stack-u22-torch211-tf511-r10:latest}
+BASE_IMAGE=${BASE_IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}
 TRANSFORMERS_PIN=${TRANSFORMERS_PIN:-5.11.0}
 RUN_ID=${RUN_ID:-sglang_gemma4_transformers_r10_$(TZ=Asia/Tokyo date +%Y%m%dT%H%MJST)}
 RESULTS_DIR=${RESULTS_DIR:-/home/jethac/dgx-spark-hijinks/results}
@@ -41,7 +41,7 @@ context_dir=$(mktemp -d)
 trap 'rm -f "${dockerfile}"; rm -rf "${context_dir}"' EXIT
 
 cat >"${dockerfile}" <<'EOF'
-ARG BASE_IMAGE=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+ARG BASE_IMAGE=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
 FROM ${BASE_IMAGE}
 
 ARG BASE_IMAGE_ID

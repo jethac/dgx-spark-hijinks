@@ -1,0 +1,14 @@
+python 3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]
+machine aarch64
+torch 2.11.0+cu130 13.0
+transformers 5.11.0
+gemma4_unified True
+sglang_spec /work/third_party/sglang/python/sglang/__init__.py
+flashinfer_spec /work/third_party/flashinfer/flashinfer/__init__.py
+sgl_kernel_spec /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py
+sglang_version 0.0.0
+flashinfer_python_version 0.6.13
+sglang_kernel_version 0.4.3
+flashinfer_cache_payload /root/.cache/flashinfer 0
+flashinfer_cache_payload /tmp/flashinfer 0
+flashinfer_cache_payload /tmp/flashinfer_modules 0
