@@ -154,6 +154,24 @@ legacy AR-ladder path structurally untouched. **NOT yet verified:** anything num
 5. DG-V5 (full-NVFP4 K+V coherent + >=3.5x + bitwise) + DG-V6 (perf pair) on sm_120 + sm_121.
 6. Bank receipts to results/, flip the two vLLM DG cells green.
 
+## VALIDATION PROGRESS (2026-06-12)
+- **CI wheels building** off e2-dgv: sm120a (run 27404118729) + sm121a-arm64 (27404118751),
+  triggered via push-branch add. ~2-5h compile. These are the clean deployable wheels +
+  the proper base for all serve validation.
+- **Overlay validated ABI-safe**: only non-Python drift base-wheel(6adc00f70)..e2-dgv is one
+  cmake build-config file (vllm_flash_attn.cmake, build-time only); ZERO .cu/.cpp drift. So a
+  Python-only overlay (wheel .so + e2-dgv .py at ~/dgv_overlay) is sound for bf16/legacy-path
+  checks (the cmake bump only matters for the DG FA-diffkv kernel -> validated on Spark).
+- **LIVE IMPORT + REGISTRATION SMOKE GREEN** (P520 WSL2, overlay, GPU-free): vllm imports e2-dgv
+  with real _C + flashinfer source; unified `FIPrefillGroup` present + `supports_non_causal=True`;
+  `DiffusionGemmaForBlockDiffusion` registers; diffusion configs import. Beyond py_compile --
+  confirms the reconciliation loads in a real vLLM runtime (no import-time breakage). P520 GPU
+  released (never occupied -- import-only).
+- **DEFERRED to the e2-dgv CI wheel + proper harness** (the wheel env lacks pytest + the direct
+  1B serve harness; ad-hoc reconstruction risks a false-green): the bf16 AR-ladder PPL regression
+  (target: match banked g3-1b FLASHINFER bf16 2.3571850630239095 -> proves legacy path byte-id on
+  silicon), the DG-2 4-request cosine, and (Spark, sm_121) DG-V5/V6 nvfp4 coherence.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
