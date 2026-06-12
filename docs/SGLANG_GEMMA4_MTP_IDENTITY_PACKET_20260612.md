@@ -11,6 +11,9 @@ This is a correctness row only, not a speedup row.
 - Draft: `google/gemma-4-E2B-it-assistant`
 - Runtime: SGLang on `epoch2`, source stack image
   `sglang-source-stack-dgemma-024-0705924c-f99323bd:latest`
+- SGLang pin: `37545bde57f60ab1868e5e8ccb9de40d47074d58`, which adds
+  `gemma4_assistant` / `gemma4_unified_assistant` config aliases for the
+  native assistant checkpoints.
 - First row: BF16 target, unquantized draft, `topk=1`, `num_steps=1`,
   `num_draft_tokens=1`, graphs disabled
 - Memory rule: spec-off and spec-on servers are run sequentially; no concurrent
