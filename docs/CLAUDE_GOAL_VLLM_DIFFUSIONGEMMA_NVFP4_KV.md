@@ -265,6 +265,40 @@ wheel/r11 pipeline are done. (Note: upstream's recipe serves DG via `vllm serve`
 docker image -> their newer vLLM base may profile DG correctly where our cherry-picked PR-on-older-
 base has a gap.)
 
+## BISECT RESULT (2026-06-12): hang is BLOCK-DIFFUSION-GENERAL, not nvfp4. KV code cleared.
+Served bf16 DiffusionGemma (--kv-cache-dtype auto) in r11: **hangs IDENTICALLY** to nvfp4
+(loaded 48.6 GiB, frozen at "Using FlashInfer for top-p & top-k sampling", no "GPU KV cache size"
+line, generation empty, no error). => the post-load memory-profiling hang is independent of KV
+dtype. Decisive corroboration: vLLM's profiling dummy run sets **skip_attn=True**
+(model_runner.py:511-513) -> attention is SKIPPED during profiling -> the hang cannot be in our
+nvfp4/VO-split/FlashInfer path. **The DG-V NVFP4-KV contribution is fully cleared of this bug.**
+
+### Root-cause hypothesis (code-localized, no repro needed):
+profile_run -> _dummy_run builds a `SchedulerOutput.make_empty()` (model_runner.py:533) with synthetic
+`_dummy_req_i` ids but NO `new_requests` -> `model_state.add_request` (runner:778) is never called for
+the dummy reqs -> `DiffusionGemmaModelState.diffusion_states` (canvas / is_encoder_phase / step) stay
+uninitialized -> the block-diffusion forward (diffusion_gemma.py:312, the denoise/canvas/state-update
+path ~554-633) hangs on uninitialized/empty state during the profiling dummy forward. This is a
+vLLM **block-diffusion serving-runtime** gap -- almost certainly the upstream DiffusionGemma PR's
+diffusion-aware dummy/profile handling not fully landing on our OLDER runner base (upstream serves DG
+fine via `vllm serve` in the Gemma docker image, which runs a newer vLLM).
+
+### FIX DIRECTION (scoped follow-up, separate from the KV goal):
+Diff our merged `model_runner.py` profile_run/_dummy_run/execute_model + `diffusion_gemma.py`
+forward/model_state against the upstream PR eb28452b1 to find the dummy/profile diffusion gap. Likely
+one of: (a) make the diffusion model_state register/handle the dummy reqs during profiling, or
+(b) short-circuit the denoise/canvas logic in the DG forward when dummy_run/is_profile is set. Then
+rebuild r11 + re-serve. ALT (cleaner long-term): rebase the DG cherry-pick onto a newer vLLM base
+that already serves DG (the upstream Gemma-docker recipe lineage).
+
+### STATE OF DG-V (honest):
+DONE + PROVEN: Gate 0; full code reconciliation (unified FIPrefillGroup); P520 bf16 legacy-path
+byte-identical (2.3571850630239095); the entire image/wheel/r11 deterministic Spark pipeline (pivot
+hardware-validated); DiffusionGemma nvfp4 serve INITIALIZES correctly on sm_121 (nvfp4 + VO-split +
+linear-V-SF all engage; 26B MoE loads). REMAINING (one item, isolated): the block-diffusion
+profiling-forward hang -- a serving-runtime gap, NOT the NVFP4-KV code -- blocks the final DG-V5/V6
+serving receipt.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
