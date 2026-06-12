@@ -1,5 +1,30 @@
 # Campaign Log
 
+## 2026-06-12
+
+- Task #38 (long-context RETRIEVAL: NVFP4 KV vs fp8 vs bf16 on Gemma 4) —
+  harness READY, awaiting a Spark window. Backs Jetha's public promise
+  ("i've measured perplexity, not retrieval — needle-in-a-haystack test is
+  next"). Motivated by the per-token stratification finding that NVFP4's prose
+  error grows mildly with position (H-late), the signature that could nip deep
+  retrieval.
+  - Harness: `scripts/vllm_needle_retrieval.py` (schema
+    `vllm-needle-retrieval/v1`) — needle-in-a-haystack + RULER-style multi-needle
+    probe through the vLLM OpenAI chat endpoint. Deterministic filler, controllable
+    DEPTH (context fraction) and CONTEXT LENGTH, temperature-0 exact-code scoring,
+    per-(length, depth) accuracy grid, fp8 boot-profile note field,
+    `spark_hardware` provenance, `--self-test` (21/21 green offline).
+  - Runner: `scripts/run_needle_retrieval_spark.sh` — STAGED, not executed.
+    Three sequential servers (bf16 VOSPLIT / fp8 / nvfp4 VOSPLIT+LINEAR_V_SF) on
+    the r10 baked image, `google/gemma-4-E4B-it` first, `gemma-4-31B-it` as a
+    documented stretch (`RUN_31B=1`). Marker protocol + memory guardrails
+    (`--memory 100g`) + per-row double-run determinism gate, matching the
+    overnight/corpus-sweep runners.
+  - Plan + hypothesis + decisive cells: `docs/RETRIEVAL_EVAL_PLAN.md`. Null =
+    "retrieval holds, strong claim"; positive = "the real depth limit of the
+    capacity win". Self-test banked at
+    `results/claude_needle_retrieval_selftest_20260612/self_test.json`.
+
 ## 2026-06-07
 
 - Created this public record repository.

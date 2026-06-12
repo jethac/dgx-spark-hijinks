@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "expected": 76,
+        "got": 76
+      },
+      "name": "single_needle_offset",
+      "ok": true
+    },
+    {
+      "detail": {
+        "len": 200
+      },
+      "name": "single_needle_total_len",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "single_needle_contiguous",
+      "ok": true
+    },
+    {
+      "detail": {
+        "offset": 0
+      },
+      "name": "depth0_at_front",
+      "ok": true
+    },
+    {
+      "detail": {
+        "expected": 153,
+        "offset": 153
+      },
+      "name": "depth1_at_end",
+      "ok": true
+    },
+    {
+      "detail": {
+        "len": 300
+      },
+      "name": "multi_total_len",
+      "ok": true
+    },
+    {
+      "detail": {
+        "offsets": [
+          16,
+          127,
+          237
+        ]
+      },
+      "name": "multi_offsets_ascending",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "multi_all_needles_present",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "score_right",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "score_wrong",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "score_missing",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "multi_score_all",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "multi_score_partial",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "grid_context_lengths",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "grid_cell_value",
+      "ok": true
+    },
+    {
+      "detail": 0.75,
+      "name": "grid_accuracy",
+      "ok": true
+    },
+    {
+      "detail": {
+        "a": "35313",
+        "b": "35313"
+      },
+      "name": "code_deterministic",
+      "ok": true
+    },
+    {
+      "detail": {
+        "a": "35313",
+        "diff": "68063"
+      },
+      "name": "code_varies_by_depth",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "chat_answer_extract",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "end_to_end_mock_retrieved",
+      "ok": true
+    },
+    {
+      "detail": null,
+      "name": "small_context_raises",
+      "ok": true
+    }
+  ],
+  "elapsed_s": 0.0,
+  "num_checks": 21,
+  "num_failed": 0,
+  "ok": true,
+  "schema": "vllm-needle-retrieval-self-test/v1"
+}
