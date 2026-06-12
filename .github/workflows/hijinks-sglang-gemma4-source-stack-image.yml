@@ -195,6 +195,8 @@ jobs:
           ARG TRANSFORMERS_PIN=5.11.0
           ARG TORCH_VERSION=2.11.0
           ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
+          ARG BUILD_PARALLEL_LEVEL=6
+          ARG BUILD_MAX_JOBS=6
           ARG HIJINKS_REF
           ARG SGLANG_REF
           ARG FLASHINFER_REF
@@ -211,8 +213,8 @@ jobs:
           ENV PATH="/root/.cargo/bin:${PATH}" \
               CUDA_HOME=/usr/local/cuda \
               CCACHE_DIR=/root/.cache/ccache \
-              CMAKE_BUILD_PARALLEL_LEVEL=20 \
-              MAX_JOBS=20 \
+              CMAKE_BUILD_PARALLEL_LEVEL=${BUILD_PARALLEL_LEVEL} \
+              MAX_JOBS=${BUILD_MAX_JOBS} \
               TORCH_CUDA_ARCH_LIST=12.1a \
               SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1 \
               DEBIAN_FRONTEND=noninteractive \
@@ -432,6 +434,8 @@ jobs:
             --build-arg TRANSFORMERS_PIN="${TRANSFORMERS_PIN}" \
             --build-arg TORCH_VERSION="${TORCH_VERSION}" \
             --build-arg TORCH_INDEX_URL="${TORCH_INDEX_URL}" \
+            --build-arg BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
+            --build-arg BUILD_MAX_JOBS="${MAX_JOBS}" \
             --build-arg HIJINKS_REF="${GITHUB_SHA}" \
             --build-arg SGLANG_REF="${{ steps.meta.outputs.sglang_ref }}" \
             --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
