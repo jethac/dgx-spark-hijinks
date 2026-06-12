@@ -12,6 +12,7 @@ CCACHE_MAXSIZE=${CCACHE_MAXSIZE:-100G}
 CUDA_MAJOR_MINOR=${CUDA_MAJOR_MINOR:-13-0}
 INSTALL_CUDA=${INSTALL_CUDA:-1}
 INSTALL_DOCKER=${INSTALL_DOCKER:-1}
+SWAP_SIZE=${SWAP_SIZE:-64G}
 
 if [[ -z "${GITHUB_REPO:-}" ]]; then
   echo "GITHUB_REPO is required, for example jethac/vllm" >&2
@@ -74,6 +75,21 @@ if [[ "${INSTALL_DOCKER}" == "1" ]]; then
   apt-get install -y --no-install-recommends docker.io docker-buildx
   systemctl enable docker >/dev/null 2>&1 || true
   systemctl start docker || service docker start || true
+fi
+
+if [[ "${SWAP_SIZE}" != "0" && "${SWAP_SIZE}" != "0G" ]]; then
+  swap_file=/swapfile
+  if ! swapon --show=NAME | grep -qx "${swap_file}"; then
+    if [[ ! -f "${swap_file}" ]]; then
+      fallocate -l "${SWAP_SIZE}" "${swap_file}"
+      chmod 600 "${swap_file}"
+      mkswap "${swap_file}"
+    fi
+    swapon "${swap_file}"
+  fi
+  if ! grep -qE "^${swap_file}[[:space:]]" /etc/fstab; then
+    echo "${swap_file} none swap sw 0 0" >>/etc/fstab
+  fi
 fi
 
 if ! id -u "${RUNNER_USER}" >/dev/null 2>&1; then
@@ -155,3 +171,4 @@ if [[ "${INSTALL_DOCKER}" == "1" ]]; then
   echo "docker: $(docker --version)"
   echo "docker buildx: $(docker buildx version)"
 fi
+swapon --show || true

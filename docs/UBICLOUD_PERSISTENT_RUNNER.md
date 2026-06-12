@@ -33,6 +33,10 @@ Created 2026-06-12:
   `standard-60` request failed with `maximum allowed vCPU count: 16`.
 - CUDA: `13.0`, `nvcc V13.0.88`
 - ccache: `/opt/build-cache/ccache`, max size `100G`
+- Swap: `/swapfile`, default `64G` from bootstrap. The first cold Docker
+  source-stack image build OOM-killed the runner service at `MAX_JOBS=20`; the
+  image workflow now uses `MAX_JOBS=8`, with swap as a guardrail rather than as
+  expected steady-state memory.
 - Docker: required for image-build workflows. The first image workflow attempt
   found the runner missing Docker and non-passwordless sudo, so VM bootstrap now
   installs `docker.io` plus `docker-buildx` and adds the runner user to the
