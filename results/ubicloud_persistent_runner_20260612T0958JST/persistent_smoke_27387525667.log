@@ -1,0 +1,182 @@
+persistent x64 runner smoke	Set up job	﻿2026-06-12T01:00:27.6109072Z Current runner version: '2.335.1'
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6115698Z Runner name: 'ubicloud-persistent-hijinks-x64'
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6116531Z Runner group name: 'Default'
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6117468Z Machine name: 'vmzrp4jj'
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6120652Z ##[group]GITHUB_TOKEN Permissions
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6122508Z Contents: read
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6123124Z Metadata: read
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6123789Z ##[endgroup]
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6125633Z Secret source: Actions
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6126385Z Prepare workflow directory
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6473456Z Prepare all required actions
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:27.6510371Z Getting action download info
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:28.3355644Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+persistent x64 runner smoke	Set up job	2026-06-12T01:00:28.7942906Z Complete job name: persistent x64 runner smoke
+persistent x64 runner smoke	Run actions/checkout@v4	﻿2026-06-12T01:00:28.8727167Z ##[group]Run actions/checkout@v4
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8727950Z with:
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8728417Z   repository: jethac/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8733144Z   token: ***
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8733595Z   ssh-strict: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8734046Z   ssh-user: git
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8734499Z   persist-credentials: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8734994Z   clean: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8735445Z   sparse-checkout-cone-mode: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8735963Z   fetch-depth: 1
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8736406Z   fetch-tags: false
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8736857Z   show-progress: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8737321Z   lfs: false
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8737743Z   submodules: false
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8738269Z   set-safe-directory: true
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8739062Z env:
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8739498Z   CUDA_HOME: /usr/local/cuda
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8740060Z   CCACHE_DIR: /opt/build-cache/ccache
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8740633Z   CCACHE_MAXSIZE: 100G
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8741388Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:28.8742236Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0317421Z Syncing repository: jethac/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0322420Z ##[group]Getting Git version info
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0325120Z Working directory is '/opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks'
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0328322Z [command]/usr/bin/git version
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0330006Z git version 2.43.0
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0333914Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0344024Z Temporarily overriding HOME='/opt/actions-work/jethac-dgx-spark-hijinks-x64/_temp/2c8cd1c0-3c3e-45b2-b14c-3fa42200761a' before making global git config changes
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0347640Z Adding repository directory to the temporary git global config as a safe directory
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0351205Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0389703Z Deleting the contents of '/opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks'
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0393424Z ##[group]Initializing the repository
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0396217Z [command]/usr/bin/git init /opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0515470Z hint: Using 'master' as the name for the initial branch. This default branch name
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0518032Z hint: is subject to change. To configure the initial branch name to use in all
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0520572Z hint: of your new repositories, which will suppress this warning, call:
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0522301Z hint: 
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0523563Z hint: 	git config --global init.defaultBranch <name>
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0525092Z hint: 
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0526533Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0528744Z hint: 'development'. The just-created branch can be renamed via this command:
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0530968Z hint: 
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0532681Z hint: 	git branch -m <name>
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0535909Z Initialized empty Git repository in /opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks/.git/
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0550181Z [command]/usr/bin/git remote add origin https://github.com/jethac/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0616161Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0618358Z ##[group]Disabling automatic garbage collection
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0620311Z [command]/usr/bin/git config --local gc.auto 0
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0675109Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0677078Z ##[group]Setting up auth
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0680033Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.0736211Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.1373248Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.1442234Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2012141Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2083678Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2771110Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2776444Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2778627Z ##[group]Fetching the repository
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:29.2782594Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d08330810f78cbf5e1bd0f47966e46a80664a232:refs/remotes/origin/epoch2
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3360846Z From https://github.com/jethac/dgx-spark-hijinks
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3362345Z  * [new ref]         d08330810f78cbf5e1bd0f47966e46a80664a232 -> origin/epoch2
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3421408Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3425241Z ##[group]Determining the checkout info
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3426469Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3433207Z [command]/usr/bin/git sparse-checkout disable
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3518509Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3582600Z ##[group]Checking out the ref
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.3588761Z [command]/usr/bin/git checkout --progress --force -B epoch2 refs/remotes/origin/epoch2
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.6625226Z Switched to a new branch 'epoch2'
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.6626404Z branch 'epoch2' set up to track 'origin/epoch2'.
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.6655464Z ##[endgroup]
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.6713255Z [command]/usr/bin/git log -1 --format=%H
+persistent x64 runner smoke	Run actions/checkout@v4	2026-06-12T01:00:30.6767714Z d08330810f78cbf5e1bd0f47966e46a80664a232
+persistent x64 runner smoke	Runner inventory	﻿2026-06-12T01:00:30.7169399Z ##[group]Run set -euxo pipefail
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7170478Z ^[[36;1mset -euxo pipefail^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7171246Z ^[[36;1mhostname^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7171930Z ^[[36;1muname -a^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7172612Z ^[[36;1mlscpu | sed -n '1,24p'^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7173353Z ^[[36;1mnproc^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7173962Z ^[[36;1mfree -h^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7174639Z ^[[36;1mdf -h / /opt/build-cache || true^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7175465Z ^[[36;1mnvcc --version^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7176184Z ^[[36;1mcuobjdump --version || true^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7177162Z ^[[36;1mccache --show-config | grep -E 'cache_dir|max_size'^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7178173Z ^[[36;1mccache --show-stats^[[0m
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7235486Z shell: /usr/bin/bash -e {0}
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7236310Z env:
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7237121Z   CUDA_HOME: /usr/local/cuda
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7237900Z   CCACHE_DIR: /opt/build-cache/ccache
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7238704Z   CCACHE_MAXSIZE: 100G
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7240145Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7241485Z ##[endgroup]
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7390775Z + hostname
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7409729Z vmzrp4jj
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7412708Z + uname -a
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7435820Z Linux vmzrp4jj 6.8.0-106-generic #106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 07:58:08 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7445961Z + lscpu
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7448762Z + sed -n 1,24p
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7627235Z Architecture:                            x86_64
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7628396Z CPU op-mode(s):                          32-bit, 64-bit
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7629660Z Address sizes:                           46 bits physical, 57 bits virtual
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7630651Z Byte Order:                              Little Endian
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7631479Z CPU(s):                                  16
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7632253Z On-line CPU(s) list:                     0-15
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7633081Z Vendor ID:                               AuthenticAMD
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7634078Z Model name:                              AMD EPYC 9454P 48-Core Processor
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7635416Z CPU family:                              25
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7636315Z Model:                                   17
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7637476Z Thread(s) per core:                      2
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7638242Z Core(s) per socket:                      8
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7639264Z Socket(s):                               1
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7639982Z Stepping:                                1
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7640728Z BogoMIPS:                                5499.99
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7647586Z Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr wbnoinvd arat npt nrip_save avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid fsrm arch_capabilities
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7654668Z Virtualization:                          AMD-V
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7655488Z Hypervisor vendor:                       KVM
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7656277Z Virtualization type:                     full
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7657127Z L1d cache:                               256 KiB (8 instances)
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7658031Z L1i cache:                               256 KiB (8 instances)
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7659102Z L2 cache:                                8 MiB (8 instances)
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7660595Z L3 cache:                                32 MiB (1 instance)
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7661388Z NUMA node(s):                            1
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7662128Z + nproc
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7662666Z + free -h
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7663191Z 16
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7695006Z                total        used        free      shared  buff/cache   available
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7696102Z Mem:            62Gi       1.3Gi        47Gi        68Mi        14Gi        61Gi
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7696986Z Swap:             0B          0B          0B
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7700690Z + df -h / /opt/build-cache
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7725221Z Filesystem      Size  Used Avail Use% Mounted on
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7726071Z /dev/vda1       309G   16G  294G   5% /
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7726801Z /dev/vda1       309G   16G  294G   5% /
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7728533Z + nvcc --version
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7763509Z nvcc: NVIDIA (R) Cuda compiler driver
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7764508Z Copyright (c) 2005-2025 NVIDIA Corporation
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7765373Z Built on Wed_Aug_20_01:58:59_PM_PDT_2025
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7766182Z Cuda compilation tools, release 13.0, V13.0.88
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7767535Z Build cuda_13.0.r13.0/compiler.36424714_0
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7768295Z + cuobjdump --version
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7798672Z cuobjdump: NVIDIA (R) fat binary listing tool
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7799961Z Copyright (c) 2005-2025 NVIDIA Corporation
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7800786Z Built on Thu_Aug_14_07:26:37_PM_PDT_2025
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7801605Z Cuda compilation tools, release 13.0, V13.0.85
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7802441Z Build cuda_13.0.r13.0/compiler.36400806_0
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7810016Z + ccache --show-config
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7811654Z + grep -E 'cache_dir|max_size'
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7852693Z (environment) cache_dir = /opt/build-cache/ccache
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7853127Z (environment) max_size = 100.0 GB
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7857161Z + ccache --show-stats
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7921905Z Local storage:
+persistent x64 runner smoke	Runner inventory	2026-06-12T01:00:30.7922677Z   Cache size (GB): 0.0 / 100.0 ( 0.00%)
+persistent x64 runner smoke	Post Run actions/checkout@v4	﻿2026-06-12T01:00:30.8197802Z Post job cleanup.
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9549312Z [command]/usr/bin/git version
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9602498Z git version 2.43.0
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9642743Z Temporarily overriding HOME='/opt/actions-work/jethac-dgx-spark-hijinks-x64/_temp/94533857-aa7b-4d53-8cf4-89540a2ddf99' before making global git config changes
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9645001Z Adding repository directory to the temporary git global config as a safe directory
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9646989Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-dgx-spark-hijinks-x64/dgx-spark-hijinks/dgx-spark-hijinks
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9703001Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:30.9760721Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.0331926Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.0378658Z http.https://github.com/.extraheader
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.0398869Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.0463247Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.1005412Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+persistent x64 runner smoke	Post Run actions/checkout@v4	2026-06-12T01:00:31.1241464Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+persistent x64 runner smoke	Complete job	﻿2026-06-12T01:00:31.1947436Z Cleaning up orphan processes
+persistent x64 runner smoke	Complete job	2026-06-12T01:00:31.2482587Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4. Actions will be forced to run with Node.js 24 by default starting June 16th, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -45,3 +45,15 @@ All runners are repo-level self-hosted runners on the same VM.
 - Hijinks persistent-runner smoke workflow:
   `.github/workflows/ubicloud-persistent-smoke.yml`.
 
+## GitHub Actions Smoke
+
+- Workflow: `.github/workflows/ubicloud-persistent-smoke.yml`
+- Run: `27387525667`
+- URL: `https://github.com/jethac/dgx-spark-hijinks/actions/runs/27387525667`
+- Result: `success`
+- Head: `d08330810f78cbf5e1bd0f47966e46a80664a232`
+- Log: `persistent_smoke_27387525667.log`
+
+The smoke ran on the `ubicloud-persistent-hijinks-x64` self-hosted runner and
+records runner inventory, `nvcc --version`, `cuobjdump --version`, ccache config,
+and disk/memory state.
