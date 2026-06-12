@@ -1,0 +1,216 @@
+name: hijinks-sglang-gemma4-source-stack-image
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Tag suffix for the GHCR image"
+        required: false
+        default: "epoch2-gemma4-tf511"
+      base_image:
+        description: "Base SGLang runtime image"
+        required: false
+        default: "nvcr.io/nvidia/sglang:26.05-py3"
+      transformers_pin:
+        description: "Transformers version with gemma4_unified"
+        required: false
+        default: "5.11.0"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-image:
+    name: build SGLang Gemma4 source-stack image
+    runs-on: [self-hosted, Linux, X64, ubicloud-persistent-build-x64, hijinks]
+    timeout-minutes: 240
+    env:
+      CUDA_HOME: /usr/local/cuda
+      CCACHE_DIR: /opt/build-cache/ccache
+      CCACHE_MAXSIZE: 100G
+      CMAKE_BUILD_PARALLEL_LEVEL: "20"
+      MAX_JOBS: "20"
+      DOCKER_BUILDKIT: "1"
+      PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Runner inventory
+        run: |
+          set -euxo pipefail
+          hostname
+          uname -a
+          nproc
+          free -h
+          df -h / /opt/build-cache || true
+          nvcc --version
+          ccache --show-config | grep -E 'cache_dir|max_size' || true
+          ccache --show-stats || true
+
+      - name: Prepare compact Docker context
+        run: |
+          set -euxo pipefail
+          rm -rf /tmp/sglang-gemma4-image-context
+          mkdir -p /tmp/sglang-gemma4-image-context/scripts /tmp/sglang-gemma4-image-context/third_party
+          cp scripts/install_sglang_source_stack.sh /tmp/sglang-gemma4-image-context/scripts/
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude 'build' \
+            --exclude 'dist' \
+            --exclude '.mypy_cache' \
+            third_party/flashinfer/ /tmp/sglang-gemma4-image-context/third_party/flashinfer/
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude 'build' \
+            --exclude 'dist' \
+            --exclude '.mypy_cache' \
+            third_party/sglang/ /tmp/sglang-gemma4-image-context/third_party/sglang/
+
+      - name: Write Dockerfile
+        env:
+          BASE_IMAGE: ${{ inputs.base_image }}
+          TRANSFORMERS_PIN: ${{ inputs.transformers_pin }}
+          SGLANG_REF: ${{ github.sha }}
+        run: |
+          set -euxo pipefail
+          cat >/tmp/sglang-gemma4-image-context/Dockerfile <<'EOF'
+          ARG BASE_IMAGE=nvcr.io/nvidia/sglang:26.05-py3
+          FROM ${BASE_IMAGE}
+
+          ARG TRANSFORMERS_PIN=5.11.0
+          ARG HIJINKS_REF
+          ARG SGLANG_REF
+          ARG FLASHINFER_REF
+
+          LABEL org.opencontainers.image.source="https://github.com/jethac/dgx-spark-hijinks" \
+                spark.image_generation="sglang-gemma4-source-stack-tf511" \
+                spark.hijinks_ref="${HIJINKS_REF}" \
+                spark.sglang_ref="${SGLANG_REF}" \
+                spark.flashinfer_ref="${FLASHINFER_REF}" \
+                spark.transformers_pin="${TRANSFORMERS_PIN}"
+
+          ENV PATH="/root/.cargo/bin:${PATH}" \
+              CUDA_HOME=/usr/local/cuda \
+              CMAKE_BUILD_PARALLEL_LEVEL=20 \
+              MAX_JOBS=20
+
+          WORKDIR /work
+          COPY scripts /work/scripts
+          COPY third_party /work/third_party
+
+          RUN apt-get update \
+           && apt-get install -y --no-install-recommends protobuf-compiler ccache \
+           && rm -rf /var/lib/apt/lists/*
+          RUN if ! command -v cargo >/dev/null 2>&1; then \
+                curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable; \
+              fi
+
+          RUN git config --global --add safe.directory /work/third_party/flashinfer \
+           && git config --global --add safe.directory /work/third_party/sglang \
+           && REPO_ROOT=/work \
+              CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
+              MAX_JOBS="${MAX_JOBS}" \
+              bash /work/scripts/install_sglang_source_stack.sh
+
+          RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
+
+          RUN python3 - <<'PY'
+          import importlib.metadata as md
+          import flashinfer
+          import sgl_kernel
+          import sglang
+          import transformers
+
+          print("TRANSFORMERS_BAKED", transformers.__version__)
+          try:
+              from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES as mapping
+          except Exception:
+              from transformers.models.auto.configuration_auto import CONFIG_MAPPING as mapping
+          assert "gemma4_unified" in mapping, "gemma4_unified missing from transformers config mapping"
+          print("GEMMA4_UNIFIED_CONFIG_MAPPING present")
+          print("SGLANG", md.version("sglang"), sglang.__file__)
+          print("FLASHINFER", getattr(flashinfer, "__version__", None), flashinfer.__file__)
+          print("SGLANG_KERNEL", md.version("sglang-kernel"), sgl_kernel.__file__)
+          print("SGL_KERNEL_FILE", sgl_kernel.__file__)
+          PY
+
+          RUN rm -rf /root/.cache/flashinfer /root/.cache/flashinfer-aiter \
+                /tmp/flashinfer /tmp/flashinfer_modules /root/.cache/pip
+          EOF
+
+      - name: Compute image metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euxo pipefail
+          owner_repo="${GITHUB_REPOSITORY,,}"
+          tag_input="${{ inputs.image_tag }}"
+          tag="$(printf '%s' "${tag_input}" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_.-' '-')"
+          image="ghcr.io/${owner_repo}/sglang-gemma4-source-stack:${tag}"
+          sglang_ref="$(git -C third_party/sglang rev-parse HEAD)"
+          flashinfer_ref="$(git -C third_party/flashinfer rev-parse HEAD)"
+          {
+            echo "image=${image}"
+            echo "sglang_ref=${sglang_ref}"
+            echo "flashinfer_ref=${flashinfer_ref}"
+          } >>"${GITHUB_OUTPUT}"
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        run: |
+          set -euxo pipefail
+          docker build \
+            --build-arg BASE_IMAGE="${{ inputs.base_image }}" \
+            --build-arg TRANSFORMERS_PIN="${{ inputs.transformers_pin }}" \
+            --build-arg HIJINKS_REF="${GITHUB_SHA}" \
+            --build-arg SGLANG_REF="${{ steps.meta.outputs.sglang_ref }}" \
+            --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
+            -t "${{ steps.meta.outputs.image }}" \
+            /tmp/sglang-gemma4-image-context
+          docker push "${{ steps.meta.outputs.image }}"
+
+      - name: Write summary artifact
+        run: |
+          set -euxo pipefail
+          mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
+          image_id="$(docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
+          image_digest="$(docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' --format '{{json .Manifest.Digest}}' 2>/dev/null | tr -d '"' || true)"
+          if [ -z "${image_digest}" ]; then
+            image_digest=unknown
+          fi
+          cat >results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/summary.md <<EOF
+          # SGLang Gemma4 Source-Stack Image Build
+
+          - workflow: \`${GITHUB_WORKFLOW}\`
+          - run id: \`${GITHUB_RUN_ID}\`
+          - image: \`${{ steps.meta.outputs.image }}\`
+          - local image id: \`${image_id}\`
+          - pushed digest: \`${image_digest}\`
+          - base image: \`${{ inputs.base_image }}\`
+          - hijinks ref: \`${GITHUB_SHA}\`
+          - SGLang ref: \`${{ steps.meta.outputs.sglang_ref }}\`
+          - FlashInfer ref: \`${{ steps.meta.outputs.flashinfer_ref }}\`
+          - transformers pin: \`${{ inputs.transformers_pin }}\`
+          - runner: \`${RUNNER_NAME}\`
+          - labels: \`${RUNNER_TRACKING_ID:-unknown}\`
+
+          Status: built and pushed.
+
+          Scope: CPU build/provenance only. No Spark serving, quality, capacity,
+          or GPU runtime claim is made by this workflow.
+          EOF
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sglang-gemma4-source-stack-image-summary
+          path: results/sglang_gemma4_source_stack_image_${{ github.run_id }}/
