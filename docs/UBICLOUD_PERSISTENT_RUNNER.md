@@ -143,6 +143,18 @@ The hijinks repo has a smoke workflow for the current persistent runner:
 .github/workflows/ubicloud-persistent-smoke.yml
 ```
 
+The SGLang fork has a non-publishing persistent wheel build workflow:
+
+```text
+.github/workflows/hijinks-sglang-wheel-build.yml
+```
+
+It runs on `ubicloud-persistent-sglang-x64`, builds the Python wheel in a
+user-owned persistent virtualenv, caches Rust/pip/protoc under
+`$HOME/.cache/hijinks-build`, and uploads the wheel artifact. The first green
+receipt is
+`results/sglang_wheel_persistent_20260612T1026JST/summary.md`.
+
 ## Build Cache Policy
 
 The bootstrap script sets:

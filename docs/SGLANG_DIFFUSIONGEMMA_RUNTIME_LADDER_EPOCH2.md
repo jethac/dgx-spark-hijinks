@@ -13,7 +13,7 @@ mapping, but runtime work now starts from upstream `gemma4_diffusion.py` and
 SGLang branch:
 
 - `jethac/sglang:spark/hijinks-024-diffusiongemma-upstream-rebase`
-- current head: `06e4a98a56`
+- current head: `3c381eaa6a`
 
 What upstream provides:
 
@@ -39,6 +39,10 @@ Our immediate fix on top:
   `results/sglang_dgemma_static_audit_persistent_20260612T1014JST/summary.md`.
   Scope is static audit only: no model weights, no serving, and no quality
   claim.
+- `3c381eaa6a` adds a persistent-Ubicloud SGLang wheel build workflow. The
+  green run is `results/sglang_wheel_persistent_20260612T1026JST/summary.md`.
+  Scope is CPU package build only: no model weights, no runtime load, no
+  serving, and no quality claim.
 
 ## Ladder
 
