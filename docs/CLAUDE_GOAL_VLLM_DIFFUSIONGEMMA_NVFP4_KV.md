@@ -122,6 +122,38 @@ through the merge -- it's the diffusion-specific FlashInfer logic, already autho
   +313) onto the current flashinfer.py -- the crux, hand-resolved; (c) arch register; (d) build
   sm120a wheel; (e) DG-V5/V6 both silicon + bank.
 
+## CODE INTEGRATION COMPLETE (2026-06-12) -- branch spark/hijinks-e2-dgv @ 52bfe5c34
+Pushed to origin. Delta vs integrated HEAD: 53 files, +3500/-317. Three commits:
+1. `291621ecb` cherry-pick upstream PR eb28452b1 (DiffusionGemma model + runner denoise
+   integration + FA/Triton mixed-causal base) onto our NVFP4 HEAD. Auto-merged almost
+   entirely (v2-runner match); only 2 trivial conflicts (docs table + the diffkv triton
+   file kept from PR). py_compile clean. Arch `DiffusionGemmaForBlockDiffusion` registered.
+2. `e8acd5236` **unify FlashInfer prefill grouping** -- the crux. Merged HEAD's
+   FIPrefillMMGroup (image-span packed-mask) + DG-2's FIPrefillCausalGroup (per-request
+   causal) into ONE `FIPrefillGroup` keyed by (is_mm, causal). Handles mm-only, causal-only,
+   AND composed mm x causal (DiffusionGemma is multimodal -> needs both). Legacy scalar-causal
+   no-mm path byte-identical behind `prefill_groups is None`. NVFP4 jit_args + head_dim_vo
+   VO-split preserved per group. DG-2 guards + supports_non_causal=True preserved. (Subagent
+   authored under precise spec; I reviewed the full diff -- dispatch gate, impl gather/run/
+   scatter loop, VO-split-per-group, coherent rename all verified.)
+3. `52bfe5c34` knob-gate the DiffusionGemma FLASHINFER allowance (DG-2 routing) -- replaces
+   upstream's hard "unsupported" raise with the VLLM_FLASHINFER_VOSPLIT/VLLM_NVFP4_KV_VOSPLIT
+   gated path.
+
+**Verified statically:** py_compile clean on all changed Python; coherent rename (grep clean);
+legacy AR-ladder path structurally untouched. **NOT yet verified:** anything numeric (no build/GPU).
+
+## REMAINING (build + GPU -- needs marker coordination before touching a card)
+1. Build sm120a + sm121a-arm64 wheels off e2-dgv.
+2. **Composed mm x non-causal mask GPU cosine** -- the one flagged-untested unification branch
+   (causal_base=False). Moot at DG shipping config (canvas 256 <= window 1024) but verify.
+3. DG-2 4-request mixed-batch cosine harness re-run on the unified path (sanity vs the prior
+   0.999998 baseline).
+4. **AR-ladder regression**: re-run a Gemma 4 NVFP4 row (e.g. E4B) to confirm the unification
+   didn't disturb the proven path (legacy + grouped both exercised).
+5. DG-V5 (full-NVFP4 K+V coherent + >=3.5x + bitwise) + DG-V6 (perf pair) on sm_120 + sm_121.
+6. Bank receipts to results/, flip the two vLLM DG cells green.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
