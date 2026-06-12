@@ -1,0 +1,13 @@
+{
+  "schema": "hf-bf16-reference-ppl/v1",
+  "model": "google/gemma-3-270m-it",
+  "dtype": "bfloat16",
+  "results": {
+    "c1": {
+      "file": "c1_ppl_corpus.md",
+      "ctx": 8191,
+      "scored_tokens": 8190,
+      "mean_nll_nats": 2.912123534560058
+    }
+  }
+}

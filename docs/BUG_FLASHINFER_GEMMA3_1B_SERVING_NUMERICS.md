@@ -1,8 +1,12 @@
 # BUG: FlashInfer serving-path numerics wrong at Gemma 3 1B geometry (d256 / SWA-512 / 1 KV head)
 
-Status: OPEN, root cause unknown. Observed 2026-06-12 on sm_120; platform
-attribution PENDING (1B has never been served on any other platform - "sm_120
-bug" is provisional naming).
+Status: OPEN, root cause unknown. Observed 2026-06-12 on sm_120; confirmed
+sm_120-specific (Spark/sm_121 bisect clean). As of the 270M repro test (§ below)
+the bug is understood to be TWO SEPARABLE sm_120 defects: (A) an FI-bf16 SWA-512
+long-context inflation that tracks model width/depth (1B yes, 270M no) and also
+manifests as the wheel engine-wedge; (B) an nvfp4 KV read-path defect that is
+model/size-independent (1B + 270M + 4B-mm all gibberish). 270M is a fast minimal
+repro for (B) but NOT (A).
 Found by: P520 Gemma 3 1B serving verification (zero-bug diagnostics).
 Severity: FI-bf16 quality silently wrong (+0.22 to +1.38 nats); FI-nvfp4
 unusable (deterministic gibberish). Coherent short-prompt chat MASKS the bug.
@@ -153,8 +157,50 @@ mm-prefix mask path (the mask machinery ran; bf16 mm is clean).
 Artifacts: results/p520_1b_wheel_disambig_20260612/DISAMBIG_SUMMARY.md
 (server logs incl. `_WEDGED`, diag1/diag2 run logs, proof lines).
 
+## 270M repro test 2026-06-12 (P520 / sm_120): SPLIT — nvfp4 REPRODUCES, FI-bf16 does NOT
+
+Task #37 follow-up. Re-ran the bisect on `google/gemma-3-270m-it` to ask whether
+the bug is 1B-geometry-specific or broad across small Gemma 3. Same **sm120a
+RELEASE wheel `g6adc00f70`** + FlashInfer JIT `7d5d477b` as the task #37 1B
+disambig. Backend engaged verified from the `Using AttentionBackendEnum.<X>
+backend.` proof line (FI-bf16 and FI-nvfp4 both confirmed FLASHINFER, no
+false-green). C1 ctx 8191, each row run TWICE bitwise, util 0.6 for the FI rows
+(util 0.3 OOM'd on the WDDM-shared card — `No available memory for the cache
+blocks`, environmental; FLASH_ATTN truth row ran at 0.3).
+
+270M GEOMETRY: hidden 640, 18 layers, 4 attn heads, **head_dim 256,
+num_key_value_heads 1, sliding_window 512** — shares ALL THREE suspect axes
+(d256 / SWA-512 / 1-kv-head) with the 1B; only width (640 vs 1152) and depth (18
+vs 26) differ. HF bf16 eager C1 ground truth = 2.912124 nats.
+
+| row | backend (proof) | kv dtype | C1 ×2 (bitwise) | delta vs FLASH_ATTN | smoke |
+|---|---|---|---|---:|---|
+| FLASH_ATTN bf16 (truth) | FLASH_ATTN | bf16 | 2.911488 (IDENTICAL) | — (+0.00064 vs HF) | "Tokyo" COHERENT |
+| FLASHINFER bf16 (suspect) | FLASHINFER | bf16 | 2.912821 (IDENTICAL) | **+0.00133** | "Tokyo" COHERENT |
+| FLASHINFER nvfp4 (+LINEAR_V_SF) | FLASHINFER | nvfp4 | 11.034120 (IDENTICAL) | **+8.122** | **GIBBERISH, deterministic** |
+
+**Verdict: SPLIT — the two sm_120 defects are SEPARABLE.**
+- **FI-nvfp4 REPRODUCES**: deterministic gibberish + 11.034 nats (Cyrillic/JP
+  salad, same failure class as the 1B's nvfp4 RED). Combined with the 1B and the
+  4B-mm smoke, the **nvfp4 KV read-path defect is model/size-independent on
+  sm_120**, and **270M IS a valid fast minimal repro for it** (~90 s to serve,
+  ~10 s/PPL, 0.5 GB).
+- **FI-bf16 does NOT reproduce**: +0.00133 nats vs FLASH_ATTN (the 1B was
+  +0.221, ~165× larger) — effectively clean. So the **bf16 SWA-512 inflation arm
+  is NOT a pure function of the d256/SWA-512/1-kv-head geometry** (270M has the
+  geometry and stays clean); it scales with width/depth or a 1B-specific path.
+  **270M is NOT a minimal repro for the bf16-inflation arm** — use the 1B for it.
+- No engine WEDGE at 270M either: all C1 ctx-8191 (window-crossing) requests
+  served fine on all three backends, where the 1B wheel run wedged. The wedge
+  arm, like the bf16 inflation, did not reproduce at 270M.
+
+Artifacts: results/p520_g3_270m_20260612/ (SUMMARY.md, per-row proof_lines,
+chat_smoke.json, c1/c1b_ctx8191_ppl.json ×2, hf_bf16_reference_ppl.json,
+util-0.3 OOM crash excerpt, status.txt, scripts).
+
 ## Cross-references
 
+- results/p520_g3_270m_20260612/ (P520 sm_120 270M repro — SPLIT verdict: nvfp4 reproduces, FI-bf16 clean)
 - results/p520_1b_wheel_disambig_20260612/ (P520 sm_120 WHEEL disambig — wedge verdict)
 - results/p520_mm_retirement_smokes_20260612/ (g3-4b nvfp4 mm gibberish corroboration)
 - results/claude_1b_bug_bisect_20260612/ (Spark sm_121 bisect — PLATFORM verdict)

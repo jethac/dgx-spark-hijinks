@@ -1,0 +1,51 @@
+{
+  "content": "\\\u306a\u305c\n\u043a\u044a \u043c\u0435\u0442\u043e\u0434\u0438:\n\n\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0443\u043c \u0444\u0430\u043a\u0442\u044a\u0442 \u0442\u0438 \u0441\u0438\u0440\u0438\u0441\u0442\u043e: 25 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u0440\u044f \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0438$:\n\n$[]$$? \u043e\u043a\u0430\u0437\u0430: \u043e\u043a\u0430\u0437\u0430: \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442?\"\n\n\u041c\u043e\u043b\u044f\u0441\u0442\u044f \u0441\u0435 \u043d\u0430 \u043f\u043e\u0441\u0442\u0430\u0432\u044f\u043d\u0438\u0435:",
+  "content_chars": 129,
+  "elapsed_s": 0.495,
+  "endpoint": "http://127.0.0.1:8000/v1/chat/completions",
+  "model": "gemma3-270m-it",
+  "ok": false,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": null,
+          "audio": null,
+          "content": "\\\u306a\u305c\n\u043a\u044a \u043c\u0435\u0442\u043e\u0434\u0438:\n\n\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0443\u043c \u0444\u0430\u043a\u0442\u044a\u0442 \u0442\u0438 \u0441\u0438\u0440\u0438\u0441\u0442\u043e: 25 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u0440\u044f \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0438$:\n\n$[]$$? \u043e\u043a\u0430\u0437\u0430: \u043e\u043a\u0430\u0437\u0430: \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442?\"\n\n\u041c\u043e\u043b\u044f\u0441\u0442\u044f \u0441\u0435 \u043d\u0430 \u043f\u043e\u0441\u0442\u0430\u0432\u044f\u043d\u0438\u0435:",
+          "function_call": null,
+          "reasoning": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "routed_experts": null,
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "created": 1781243583,
+    "id": "chatcmpl-aeecbb74904e4b09",
+    "kv_transfer_params": null,
+    "model": "gemma3-270m-it",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_text": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.1.dev1+g6adc00f70.sm120a-e6ef2e60",
+    "usage": {
+      "completion_tokens": 48,
+      "prompt_tokens": 15,
+      "prompt_tokens_details": null,
+      "total_tokens": 63
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}
