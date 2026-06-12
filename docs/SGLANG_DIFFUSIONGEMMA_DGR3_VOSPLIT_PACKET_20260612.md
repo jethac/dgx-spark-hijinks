@@ -58,6 +58,7 @@ The server launch is intentionally narrow:
 python3 -m sglang.launch_server \
   --model-path google/diffusiongemma-26B-A4B-it \
   --dllm-algorithm Gemma4Renoise \
+  --dllm-algorithm-config results/<run_id>/dllm_config.yaml \
   --trust-remote-code \
   --dtype bfloat16 \
   --attention-backend flashinfer \
@@ -76,6 +77,22 @@ Environment:
 - `SPARK_FLASHINFER_SOURCE_ROOT=/flashinfer-src`
 - `PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path`
 
+The packet writes the same deterministic `Gemma4Renoise` config used by the
+DG-R2 revised green row:
+
+```yaml
+max_denoising_steps: 48
+seed: 1234
+sampler_config:
+  entropy_bound: 0.1
+temperature_schedule:
+  t_min: 0.4
+  t_max: 0.8
+stopping_config:
+  confidence_threshold: 0.005
+  stability_threshold: 1
+```
+
 ## Green Gate
 
 The row is green only if all of these pass:
@@ -85,8 +102,9 @@ The row is green only if all of these pass:
   `scripts/diffusion_gemma_dgr2_revised_text_quality_client.py`.
 - Server log contains the explicit policy warning:
   `DiffusionGemma is using the experimental FlashInfer VO-split path`.
-- Geometry trace contains at least one D=512 FlashInfer attention line with
-  `vo_split=True`.
+- Geometry trace contains at least one D=512 FlashInfer attention line with a
+  VO-split pass label, for example `extend_paged_vosplit0` or
+  `extend_paged_vosplit1`.
 - The same D=512 route exposes `head_dim_vo=256`.
 
 If text quality passes but routing proof is absent, the row is RED. That case

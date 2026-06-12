@@ -75,6 +75,20 @@ cid_file="${OUT_DIR}/container_id.txt"
 server_log="${OUT_DIR}/server.log"
 quality_json="${OUT_DIR}/revised_text_quality.json"
 summary_md="${OUT_DIR}/summary.md"
+dllm_config="${OUT_DIR}/dllm_config.yaml"
+
+cat >"${dllm_config}" <<'EOF'
+max_denoising_steps: 48
+seed: 1234
+sampler_config:
+  entropy_bound: 0.1
+temperature_schedule:
+  t_min: 0.4
+  t_max: 0.8
+stopping_config:
+  confidence_threshold: 0.005
+  stability_threshold: 1
+EOF
 
 capture_docker_logs() {
   local name="$1"
@@ -158,6 +172,7 @@ PY
       exec python3 -m sglang.launch_server \
         --model-path "${MODEL}" \
         --dllm-algorithm Gemma4Renoise \
+        --dllm-algorithm-config "/work/results/'"${RUN_ID}"'/dllm_config.yaml" \
         --trust-remote-code \
         --dtype bfloat16 \
         --attention-backend flashinfer \
@@ -250,7 +265,12 @@ geometry_lines = [
 ]
 vosplit_lines = [
     line for line in geometry_lines
-    if "layer_head_dim=512" in line and "vo_split=True" in line
+    if "layer_head_dim=512" in line
+    and (
+        "vo_split=True" in line
+        or "label=extend_paged_vosplit" in line
+        or "label=decode_as_prefill_vosplit" in line
+    )
 ]
 head_dim_vo_ok = any(
     re.search(r"head_dim_vo=256|head_dim_vo': 256|head_dim_vo\": 256", line)
@@ -265,7 +285,7 @@ if not quality_ok:
 if not policy_ok:
     reasons.append("DiffusionGemma FlashInfer VO-split policy warning missing")
 if not vosplit_lines:
-    reasons.append("no D=512 geometry line with vo_split=True")
+    reasons.append("no D=512 geometry line with VO-split trace label")
 if vosplit_lines and not head_dim_vo_ok:
     reasons.append("D=512 VO-split geometry did not expose head_dim_vo=256")
 
@@ -285,14 +305,14 @@ lines = [
     f"- Image: `{image}`",
     f"- SGLang: `{sglang_commit}`",
     f"- FlashInfer: `{flashinfer_commit}`",
-    "- Launch: `--dllm-algorithm Gemma4Renoise --attention-backend flashinfer --dtype bfloat16 --page-size 256 --disable-cuda-graph --disable-piecewise-cuda-graph`",
+    "- Launch: `--dllm-algorithm Gemma4Renoise --dllm-algorithm-config dllm_config.yaml --attention-backend flashinfer --dtype bfloat16 --page-size 256 --disable-cuda-graph --disable-piecewise-cuda-graph`",
     "- Environment: `SGLANG_FLASHINFER_VOSPLIT=1`, `SGLANG_GEMMA4_TRACE_GEOMETRY=1`, offline HF mode",
     "",
     "## Gates",
     "",
     f"- Revised DG-R2 text quality gate: {'PASS' if quality_ok else 'FAIL'}",
     f"- Opt-in policy warning present: {'PASS' if policy_ok else 'FAIL'}",
-    f"- D=512 geometry routes with `vo_split=True`: {'PASS' if bool(vosplit_lines) else 'FAIL'}",
+    f"- D=512 geometry routes through VO-split trace labels: {'PASS' if bool(vosplit_lines) else 'FAIL'}",
     f"- D=512 VO-split exposes `head_dim_vo=256`: {'PASS' if head_dim_vo_ok else 'FAIL'}",
 ]
 if reasons:

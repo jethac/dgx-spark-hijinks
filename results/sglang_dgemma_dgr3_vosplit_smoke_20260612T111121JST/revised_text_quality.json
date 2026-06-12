@@ -1,0 +1,369 @@
+{
+  "all_ok": false,
+  "base_url": "http://127.0.0.1:30125",
+  "checks": [
+    {
+      "answer_ok": true,
+      "answer_rule": "contains Tokyo",
+      "non_empty": true,
+      "prompt_id": "capital_japan_direct",
+      "stable": true,
+      "texts": [
+        "The capital of Japan is **Tokyo**.",
+        "The capital of Japan is **Tokyo**."
+      ]
+    },
+    {
+      "answer_ok": true,
+      "answer_rule": "contains standalone 4",
+      "non_empty": true,
+      "prompt_id": "arithmetic_2_plus_2_direct",
+      "stable": true,
+      "texts": [
+        "2 + 2 = 4",
+        "2 + 2 = 4"
+      ]
+    },
+    {
+      "answer_ok": true,
+      "answer_rule": "mentions local/desktop/development AI use",
+      "non_empty": true,
+      "prompt_id": "dgx_spark_use",
+      "stable": false,
+      "texts": [
+        "The NVIDIA DGX Spark desktop is used for developing, testing, and deploying AI models and machine learning workflows in a compact, desktop-grade form factor.",
+        "The NVIDIA DGX Spark is designed for high-performance local AI development, machine learning prototyping, and data science workflows in a desktop-class form factor."
+      ]
+    }
+  ],
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "model_info": {
+    "architectures": [
+      "DiffusionGemmaForBlockDiffusion"
+    ],
+    "has_audio_understanding": false,
+    "has_image_understanding": true,
+    "is_generation": true,
+    "model_path": "google/diffusiongemma-26B-A4B-it",
+    "model_type": "diffusion_gemma",
+    "preferred_sampling_params": null,
+    "tokenizer_path": "google/diffusiongemma-26B-A4B-it",
+    "weight_version": "default"
+  },
+  "repeats": 2,
+  "rows": [
+    {
+      "prompt": "What is the capital of Japan?",
+      "prompt_id": "capital_japan_direct",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "What is the capital of Japan?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 58.522292613983154,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The capital of Japan is **Tokyo**.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230738,
+          "id": "6179f0c5ece7481e90b4f1fbc18145b5",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 20,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 84
+          }
+        },
+        "status": 200
+      },
+      "text": "The capital of Japan is **Tokyo**."
+    },
+    {
+      "prompt": "What is the capital of Japan?",
+      "prompt_id": "capital_japan_direct",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "What is the capital of Japan?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 4.331834554672241,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The capital of Japan is **Tokyo**.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230743,
+          "id": "95f1d91ddffd477282aa567f6f719019",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 20,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 84
+          }
+        },
+        "status": 200
+      },
+      "text": "The capital of Japan is **Tokyo**."
+    },
+    {
+      "prompt": "What is 2 + 2?",
+      "prompt_id": "arithmetic_2_plus_2_direct",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "What is 2 + 2?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.6910879611968994,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "2 + 2 = 4",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230744,
+          "id": "7be6c0986002445f9939d5adec203e40",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 85
+          }
+        },
+        "status": 200
+      },
+      "text": "2 + 2 = 4"
+    },
+    {
+      "prompt": "What is 2 + 2?",
+      "prompt_id": "arithmetic_2_plus_2_direct",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "What is 2 + 2?",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.6921164989471436,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "2 + 2 = 4",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230744,
+          "id": "1332fcf7ea9c486da1246b6b1830ebf7",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 85
+          }
+        },
+        "status": 200
+      },
+      "text": "2 + 2 = 4"
+    },
+    {
+      "prompt": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+      "prompt_id": "dgx_spark_use",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 1.785857915878296,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The NVIDIA DGX Spark desktop is used for developing, testing, and deploying AI models and machine learning workflows in a compact, desktop-grade form factor.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230746,
+          "id": "4c921921af0f4d49b66aaed7c498f19a",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 32,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 96
+          }
+        },
+        "status": 200
+      },
+      "text": "The NVIDIA DGX Spark desktop is used for developing, testing, and deploying AI models and machine learning workflows in a compact, desktop-grade form factor."
+    },
+    {
+      "prompt": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+      "prompt_id": "dgx_spark_use",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": "In one short sentence, say what the NVIDIA DGX Spark desktop AI computer is useful for.",
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 1.7867918014526367,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The NVIDIA DGX Spark is designed for high-performance local AI development, machine learning prototyping, and data science workflows in a desktop-class form factor.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781230748,
+          "id": "fe749b1da5fe48c4ac414c1fddd834cb",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 32,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 96
+          }
+        },
+        "status": 200
+      },
+      "text": "The NVIDIA DGX Spark is designed for high-performance local AI development, machine learning prototyping, and data science workflows in a desktop-class form factor."
+    }
+  ],
+  "schema": "sglang-diffusiongemma-dgr2-revised-text-quality/v1"
+}

@@ -166,7 +166,7 @@ called green. The prepared Spark run packet is
 `docs/SGLANG_DIFFUSIONGEMMA_DGR3_VOSPLIT_PACKET_20260612.md`; it runs
 `scripts/run_sglang_dgemma_dgr3_vosplit_smoke.sh` and keeps the row RED unless
 the revised DG-R2 text gate passes and the log proves D=512 FlashInfer geometry
-with `vo_split=True` and `head_dim_vo=256`.
+through the VO-split pass labels with `head_dim_vo=256`.
 
 ### DG-R4: Mixed-KV Safety Path
 
