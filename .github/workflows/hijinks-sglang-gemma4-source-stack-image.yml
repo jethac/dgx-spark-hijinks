@@ -54,7 +54,7 @@ jobs:
     # This is a Spark runtime image. Build it natively on arm64 rather than
     # cross-compiling the sgl-kernel/FlashInfer stack through QEMU on x64.
     # The shipped ABI is controlled by BASE_IMAGE and the in-image GLIBC audit.
-    runs-on: ubicloud-standard-8-arm-ubuntu-2404
+    runs-on: ubicloud-standard-30-arm-ubuntu-2204
     timeout-minutes: 355
     env:
       CUDA_HOME: /usr/local/cuda
@@ -68,8 +68,8 @@ jobs:
       TORCH_INDEX_URL: ${{ inputs.torch_index_url || 'https://download.pytorch.org/whl/cu130' }}
       CCACHE_DIR: /opt/build-cache/ccache
       CCACHE_MAXSIZE: 100G
-      CMAKE_BUILD_PARALLEL_LEVEL: "6"
-      MAX_JOBS: "6"
+      CMAKE_BUILD_PARALLEL_LEVEL: "20"
+      MAX_JOBS: "20"
       DOCKER_BUILDKIT: "1"
       PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
     steps:
@@ -195,8 +195,8 @@ jobs:
           ARG TRANSFORMERS_PIN=5.11.0
           ARG TORCH_VERSION=2.11.0
           ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
-          ARG BUILD_PARALLEL_LEVEL=6
-          ARG BUILD_MAX_JOBS=6
+          ARG BUILD_PARALLEL_LEVEL=20
+          ARG BUILD_MAX_JOBS=20
           ARG HIJINKS_REF
           ARG SGLANG_REF
           ARG FLASHINFER_REF
