@@ -1,0 +1,19 @@
+{
+  "image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91",
+  "image_digest": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70",
+  "models": [
+    "google/gemma-4-12B-it"
+  ],
+  "rows": [
+    {
+      "bf16": null,
+      "compare": null,
+      "dir": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_ar_ladder_20260612T183849JST/google-gemma-4-12b-it",
+      "fullnvfp4": null,
+      "model": "google/gemma-4-12B-it"
+    }
+  ],
+  "run_id": "sglang_gemma4_ar_ladder_20260612T183849JST",
+  "schema": "sglang-gemma4-ar-ladder-pair/v1",
+  "scope": "SGLang Gemma 4 AR ladder; sequential bf16/auto and full-NVFP4 K+V; graphs disabled; one server at a time"
+}

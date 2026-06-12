@@ -12,6 +12,9 @@ rows after the Ubicloud-built source-stack image.
 - Use the baked GHCR image, not a Spark-local rebuild:
   `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91`
   (`sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70`).
+- The image must include a `linux/arm64` manifest. The first preflight with the
+  x64-only image failed before serving; see
+  `results/sglang_gemma4_ar_ladder_20260612T183849JST/summary.md`.
 
 ## Run
 

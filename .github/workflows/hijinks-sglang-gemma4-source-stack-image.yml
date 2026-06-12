@@ -15,6 +15,10 @@ on:
         description: "Transformers version with gemma4_unified"
         required: false
         default: "5.11.0"
+      target_platform:
+        description: "Docker target platform for the pushed runtime image"
+        required: false
+        default: "linux/arm64"
 
 permissions:
   contents: read
@@ -60,6 +64,18 @@ jobs:
           fi
           docker version
           docker info
+
+      - name: Prepare Buildx for target platform
+        env:
+          TARGET_PLATFORM: ${{ inputs.target_platform }}
+        run: |
+          set -euxo pipefail
+          docker buildx version
+          if [ "${TARGET_PLATFORM}" != "linux/amd64" ]; then
+            docker run --privileged --rm tonistiigi/binfmt --install arm64
+          fi
+          docker buildx create --name hijinks-sglang-gemma4-builder --use --driver docker-container 2>/dev/null || docker buildx use hijinks-sglang-gemma4-builder
+          docker buildx inspect --bootstrap
 
       - name: Prepare compact Docker context
         run: |
@@ -168,6 +184,11 @@ jobs:
           owner_repo="${GITHUB_REPOSITORY,,}"
           tag_input="${{ inputs.image_tag }}"
           tag="$(printf '%s' "${tag_input}" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_.-' '-')"
+          platform_suffix="$(printf '%s' '${{ inputs.target_platform }}' | sed 's#linux/##; s#[^A-Za-z0-9_.-]#-#g' | tr '[:upper:]' '[:lower:]')"
+          case "${tag}" in
+            *"${platform_suffix}"*) ;;
+            *) tag="${tag}-${platform_suffix}" ;;
+          esac
           image="ghcr.io/${owner_repo}/sglang-gemma4-source-stack:${tag}"
           sglang_ref="$(git -C third_party/sglang rev-parse HEAD)"
           flashinfer_ref="$(git -C third_party/flashinfer rev-parse HEAD)"
@@ -185,9 +206,15 @@ jobs:
           printf '%s' "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
       - name: Build and push image
+        env:
+          TARGET_PLATFORM: ${{ inputs.target_platform }}
         run: |
           set -euxo pipefail
-          docker build \
+          docker buildx build \
+            --platform "${TARGET_PLATFORM}" \
+            --push \
+            --provenance=false \
+            --metadata-file /tmp/sglang-gemma4-image-build-metadata.json \
             --build-arg BASE_IMAGE="${{ inputs.base_image }}" \
             --build-arg TRANSFORMERS_PIN="${{ inputs.transformers_pin }}" \
             --build-arg HIJINKS_REF="${GITHUB_SHA}" \
@@ -195,25 +222,24 @@ jobs:
             --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
             -t "${{ steps.meta.outputs.image }}" \
             /tmp/sglang-gemma4-image-context
-          docker push "${{ steps.meta.outputs.image }}"
+          cat /tmp/sglang-gemma4-image-build-metadata.json
 
       - name: Write summary artifact
+        env:
+          TARGET_PLATFORM: ${{ inputs.target_platform }}
         run: |
           set -euxo pipefail
           mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
-          image_id="$(docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
-          image_digest="$(docker image inspect --format '{{index .RepoDigests 0}}' '${{ steps.meta.outputs.image }}' 2>/dev/null || true)"
-          if [ -z "${image_digest}" ]; then
-            image_digest=unknown
-          fi
+          image_digest="$(docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' --format '{{.Digest}}')"
+          docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' >results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/imagetools.txt
           cat >results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/summary.md <<EOF
           # SGLang Gemma4 Source-Stack Image Build
 
           - workflow: \`${GITHUB_WORKFLOW}\`
           - run id: \`${GITHUB_RUN_ID}\`
           - image: \`${{ steps.meta.outputs.image }}\`
-          - local image id: \`${image_id}\`
           - pushed digest: \`${image_digest}\`
+          - target platform: \`${TARGET_PLATFORM}\`
           - base image: \`${{ inputs.base_image }}\`
           - hijinks ref: \`${GITHUB_SHA}\`
           - SGLang ref: \`${{ steps.meta.outputs.sglang_ref }}\`

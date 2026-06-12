@@ -1,0 +1,90 @@
+{
+  "schema": "ppl-corpus-manifest/v1",
+  "output": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_ar_ladder_20260612T183849JST/ppl_corpus.md",
+  "max_chars": 250000,
+  "actual_chars": 249998,
+  "globs": [
+    "docs/*.md",
+    "tasks/*.md",
+    "results/*.md"
+  ],
+  "exclude_substrings": [
+    "vllm_qwen_clean_ppl_",
+    "_server",
+    "_trace"
+  ],
+  "sources": [
+    {
+      "path": "docs/AEON_PRIOR_ART_PORT_MAP.md",
+      "chars_used": 9662,
+      "chars_total": 9662,
+      "truncated": false
+    },
+    {
+      "path": "docs/AUDIO_MM_NOTES.md",
+      "chars_used": 11750,
+      "chars_total": 11750,
+      "truncated": false
+    },
+    {
+      "path": "docs/BASELINE_RESULTS.md",
+      "chars_used": 38299,
+      "chars_total": 38299,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARKING_REPORT.md",
+      "chars_used": 12524,
+      "chars_total": 12524,
+      "truncated": false
+    },
+    {
+      "path": "docs/BENCHMARK_PROTOCOL.md",
+      "chars_used": 8144,
+      "chars_total": 8144,
+      "truncated": false
+    },
+    {
+      "path": "docs/BLESSED_STACK.md",
+      "chars_used": 7667,
+      "chars_total": 7667,
+      "truncated": false
+    },
+    {
+      "path": "docs/BUG_FLASHINFER_GEMMA3_1B_SERVING_NUMERICS.md",
+      "chars_used": 17357,
+      "chars_total": 17357,
+      "truncated": false
+    },
+    {
+      "path": "docs/CAMPAIGN_LOG.md",
+      "chars_used": 115275,
+      "chars_total": 115275,
+      "truncated": false
+    },
+    {
+      "path": "docs/CAMPAIGN_PLAN_EPOCH2.md",
+      "chars_used": 3489,
+      "chars_total": 3489,
+      "truncated": false
+    },
+    {
+      "path": "docs/CLAUDE_GOAL_EPOCH2.md",
+      "chars_used": 2118,
+      "chars_total": 2118,
+      "truncated": false
+    },
+    {
+      "path": "docs/CLAUDE_GOAL_VLLM_DIFFUSIONGEMMA_NVFP4_KV.md",
+      "chars_used": 14029,
+      "chars_total": 14029,
+      "truncated": false
+    },
+    {
+      "path": "docs/CLAUDE_LANE_HANDOVER_20260612.md",
+      "chars_used": 9075,
+      "chars_total": 14078,
+      "truncated": true
+    }
+  ]
+}

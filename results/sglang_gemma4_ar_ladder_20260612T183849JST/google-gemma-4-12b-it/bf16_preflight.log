@@ -1,0 +1,14 @@
+run_id=sglang_gemma4_ar_ladder_20260612T183849JST
+model=google/gemma-4-12B-it
+label=bf16
+kv_cache_dtype=auto
+mixed_kv=0
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+started_at=2026-06-12T18:38:49+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.4Gi        70Gi        12Mi        46Gi       115Gi
+Swap:           15Gi       485Mi        15Gi
