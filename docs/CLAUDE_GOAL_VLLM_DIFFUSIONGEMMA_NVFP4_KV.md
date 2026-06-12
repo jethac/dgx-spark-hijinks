@@ -211,7 +211,20 @@ arm e2-dgv serving image so no glibc/torch retrofit is needed.) Either way it's 
 build, not a Spark build. NOTE: this arm64-wheel glibc bug affects ALL Spark wheel deploys,
 not just DG-V -- worth fixing regardless.
 
-## SPARK-READY IMAGE PATTERN (2026-06-12) -- the deterministic fix
+## SPARK IMAGE DECISION REVISED (2026-06-12): match r10, don't rebuild from scratch
+Jetha: "wouldn't it make more sense to build spark containers that are ubuntu 22.04 + torch 2.11."
+YES -- better. The r10 image (22.04/glibc-2.35/torch-2.11/flashinfer-76af7982/transformers-5.11.0)
+already serves the full Gemma 4 nvfp4 ladder green. So build the arm64 wheel to FIT r10, then
+bake r11 = r10 + the e2-dgv wheel (swap only vLLM; reuse the validated stack). Implemented:
+`build-sm121a-arm64-wheel.yml` retargeted to `ubicloud-standard-30-arm-ubuntu-2204` + torch 2.11.0
++ a GLIBC_2.35 gate. Rebuild: run 27409465227. The from-scratch 24.04/torch-2.12 image
+(Dockerfile.spark + build-spark-image.yml) is PARKED dispatch-only (the 24.04 build failed anyway;
+it's the heavier "full CI-repro" end-state). Wheel matrix: x64/Colab=22.04/torch-2.12 bare;
+arm64/Spark=22.04/torch-2.11 baked into r11. Decision mailed to Codex (mail 0089).
+NEXT: when the retargeted wheel lands, bake r11 on Spark (r10 + wheel layer-add, no compile),
+serve DG-V5 via scripts/run_vllm_dgemma_dgv_spark.sh.
+
+## (superseded) SPARK-READY IMAGE PATTERN (2026-06-12) -- the deterministic fix
 Jetha: "adjust our work to build images that work as-is on spark." Implemented in the vLLM
 repo (branch e2-dgv):
 - `docker/Dockerfile.spark`: self-contained image -- Ubuntu 24.04 (glibc 2.39) + CUDA 13 cu130
