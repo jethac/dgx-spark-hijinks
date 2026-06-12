@@ -43,6 +43,14 @@ Our immediate fix on top:
   green run is `results/sglang_wheel_persistent_20260612T1026JST/summary.md`.
   Scope is CPU package build only: no model weights, no runtime load, no
   serving, and no quality claim.
+- `f36ecf495b` gates the experimental DG-R3 FlashInfer path behind an explicit
+  opt-in: `--attention-backend flashinfer` plus
+  `SGLANG_FLASHINFER_VOSPLIT=1`. Stock `Gemma4Renoise` launches still force
+  Triton, and CUDA graphs / chunked prefill remain disabled for DiffusionGemma.
+  A persistent-Ubicloud wheel build for this runtime-code commit is green.
+- `dec4c040a8` fixes the static-audit marker for that policy and is the current
+  SGLang branch head. The persistent-Ubicloud static audit is green; see
+  `results/sglang_dgemma_dgr3_vosplit_policy_20260612T1050JST/summary.md`.
 
 ## Ladder
 
@@ -147,6 +155,14 @@ Gate:
 - BF16/no-KV-quant serving still coherent
 - D=512 global layers route through VO-split where expected
 - no claim about NVFP4 yet
+
+Status: source-policy gate green, serving gate not run. The stock runtime still
+uses Triton by default; the experimental FlashInfer route requires both
+`--attention-backend flashinfer` and `SGLANG_FLASHINFER_VOSPLIT=1`. Off-box
+validation is banked in
+`results/sglang_dgemma_dgr3_vosplit_policy_20260612T1050JST/summary.md`. The
+next Spark row must prove routing and revised-text coherence before DG-R3 can be
+called green.
 
 ### DG-R4: Mixed-KV Safety Path
 

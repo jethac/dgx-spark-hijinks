@@ -1,0 +1,334 @@
+DiffusionGemma static runtime audit	Set up job	﻿2026-06-12T01:51:50.2059310Z Current runner version: '2.335.1'
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2065475Z Runner name: 'ubicloud-persistent-sglang-x64'
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2066380Z Runner group name: 'Default'
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2067220Z Machine name: 'vmzrp4jj'
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2070085Z ##[group]GITHUB_TOKEN Permissions
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2072327Z Contents: read
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2072949Z Metadata: read
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2073588Z ##[endgroup]
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2075415Z Secret source: Actions
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2076129Z Prepare workflow directory
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2559163Z Prepare all required actions
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.2595981Z Getting action download info
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:50.8872040Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+DiffusionGemma static runtime audit	Set up job	2026-06-12T01:51:51.2833315Z Complete job name: DiffusionGemma static runtime audit
+DiffusionGemma static runtime audit	Run actions/checkout@v4	﻿2026-06-12T01:51:51.3591534Z ##[group]Run actions/checkout@v4
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3592324Z with:
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3592770Z   repository: jethac/sglang
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3597063Z   token: ***
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3597514Z   ssh-strict: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3597962Z   ssh-user: git
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3598411Z   persist-credentials: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3599084Z   clean: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3599544Z   sparse-checkout-cone-mode: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3600069Z   fetch-depth: 1
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3600516Z   fetch-tags: false
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3600974Z   show-progress: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3601423Z   lfs: false
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3601843Z   submodules: false
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3602297Z   set-safe-directory: true
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3602932Z env:
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3603359Z   CUDA_HOME: /usr/local/cuda
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3603875Z   CCACHE_DIR: /opt/build-cache/ccache
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3604410Z   CCACHE_MAXSIZE: 100G
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3605214Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.3606040Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5196119Z Syncing repository: jethac/sglang
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5200623Z ##[group]Getting Git version info
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5202567Z Working directory is '/opt/actions-work/jethac-sglang-x64/sglang/sglang'
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5205321Z [command]/usr/bin/git version
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5206708Z git version 2.43.0
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5210957Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5221741Z Temporarily overriding HOME='/opt/actions-work/jethac-sglang-x64/_temp/c761a24a-a34c-4573-877d-bec8f90deeb6' before making global git config changes
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5225219Z Adding repository directory to the temporary git global config as a safe directory
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5227988Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-sglang-x64/sglang/sglang
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5232093Z [command]/usr/bin/git config --local --get remote.origin.url
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5238655Z https://github.com/jethac/sglang
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5256824Z ##[group]Removing previously created refs, to avoid conflicts
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5259921Z [command]/usr/bin/git rev-parse --symbolic-full-name --verify --quiet HEAD
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5301959Z refs/heads/spark/hijinks-024-diffusiongemma-upstream-rebase
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5312033Z [command]/usr/bin/git checkout --detach
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5603150Z HEAD is now at f36ecf495b Gate DiffusionGemma FlashInfer VO-split opt-in
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5696634Z [command]/usr/bin/git branch --delete --force spark/hijinks-024-diffusiongemma-upstream-rebase
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.5759293Z Deleted branch spark/hijinks-024-diffusiongemma-upstream-rebase (was f36ecf495b).
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.6226787Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.6228391Z [command]/usr/bin/git submodule status
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.6803657Z ##[group]Cleaning the repository
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:51.6810641Z [command]/usr/bin/git clean -ffdx
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0380809Z Removing python/LICENSE
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0383221Z Removing python/README.md
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0385208Z Removing python/build/
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0386973Z Removing python/dist/
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0389259Z Removing python/sglang.egg-info/
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0392083Z Removing python/sglang/_version.py
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0394234Z Removing rust/sglang-grpc/Cargo.lock
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0396479Z Removing rust/sglang-grpc/target/
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0401296Z [command]/usr/bin/git reset --hard HEAD
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0944477Z HEAD is now at f36ecf495b Gate DiffusionGemma FlashInfer VO-split opt-in
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0968136Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0971611Z ##[group]Disabling automatic garbage collection
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.0977384Z [command]/usr/bin/git config --local gc.auto 0
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1050975Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1057728Z ##[group]Setting up auth
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1063678Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1133075Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1744658Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.1820057Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.2439583Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.2506795Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.3100271Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.3181045Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.3185411Z ##[group]Fetching the repository
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.3205337Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +dec4c040a8ede4561c1f26cccc599286643b49fd:refs/remotes/origin/spark/hijinks-024-diffusiongemma-upstream-rebase
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9742009Z From https://github.com/jethac/sglang
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9744704Z  + f36ecf495b...dec4c040a8 dec4c040a8ede4561c1f26cccc599286643b49fd -> origin/spark/hijinks-024-diffusiongemma-upstream-rebase  (forced update)
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9809284Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9810790Z ##[group]Determining the checkout info
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9812698Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9820296Z [command]/usr/bin/git sparse-checkout disable
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9937962Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9973627Z ##[group]Checking out the ref
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:52.9981345Z [command]/usr/bin/git checkout --progress --force -B spark/hijinks-024-diffusiongemma-upstream-rebase refs/remotes/origin/spark/hijinks-024-diffusiongemma-upstream-rebase
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0314462Z Warning: you are leaving 19 commits behind, not connected to
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0315937Z any of your branches:
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0316417Z 
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0316986Z   f36ecf495b Gate DiffusionGemma FlashInfer VO-split opt-in
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0318314Z   542525bf3c Add Gemma 4 MTP static audit workflow
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0319977Z   3c381eaa6a Build SGLang wheel in persistent virtualenv
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0321323Z   e8a89db13a Make cached protoc executable in wheel workflow
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0322382Z  ... and 15 more.
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0322960Z 
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0323732Z If you want to keep them by creating a new branch, this may be a good time
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0325584Z to do so with:
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0326204Z 
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0326813Z  git branch <new-branch-name> f36ecf495b
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0327665Z 
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0328602Z Switched to a new branch 'spark/hijinks-024-diffusiongemma-upstream-rebase'
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0331696Z branch 'spark/hijinks-024-diffusiongemma-upstream-rebase' set up to track 'origin/spark/hijinks-024-diffusiongemma-upstream-rebase'.
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0346536Z ##[endgroup]
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0396284Z [command]/usr/bin/git log -1 --format=%H
+DiffusionGemma static runtime audit	Run actions/checkout@v4	2026-06-12T01:51:53.0427213Z dec4c040a8ede4561c1f26cccc599286643b49fd
+DiffusionGemma static runtime audit	Runner inventory	﻿2026-06-12T01:51:53.0820476Z ##[group]Run set -euxo pipefail
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0821946Z ^[[36;1mset -euxo pipefail^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0823118Z ^[[36;1mhostname^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0824135Z ^[[36;1mnproc^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0825124Z ^[[36;1mfree -h^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0826183Z ^[[36;1mdf -h / /opt/build-cache || true^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0827456Z ^[[36;1mnvcc --version^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0828746Z ^[[36;1mccache --show-config | grep -E 'cache_dir|max_size'^[[0m
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0882956Z shell: /usr/bin/bash -e {0}
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0884254Z env:
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0885419Z   CUDA_HOME: /usr/local/cuda
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0886605Z   CCACHE_DIR: /opt/build-cache/ccache
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0887817Z   CCACHE_MAXSIZE: 100G
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0889619Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.0891328Z ##[endgroup]
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1029931Z + hostname
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1047944Z vmzrp4jj
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1051422Z + nproc
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1073087Z 16
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1077291Z + free -h
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1117134Z                total        used        free      shared  buff/cache   available
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1118472Z Mem:            62Gi       1.5Gi        45Gi        87Mi        16Gi        61Gi
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1119822Z Swap:             0B          0B          0B
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1123963Z + df -h / /opt/build-cache
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1149759Z Filesystem      Size  Used Avail Use% Mounted on
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1150798Z /dev/vda1       309G   17G  293G   6% /
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1151747Z /dev/vda1       309G   17G  293G   6% /
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1154480Z + nvcc --version
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1190742Z nvcc: NVIDIA (R) Cuda compiler driver
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1191793Z Copyright (c) 2005-2025 NVIDIA Corporation
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1192844Z Built on Wed_Aug_20_01:58:59_PM_PDT_2025
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1193861Z Cuda compilation tools, release 13.0, V13.0.88
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1194882Z Build cuda_13.0.r13.0/compiler.36424714_0
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1202552Z + ccache --show-config
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1205253Z + grep -E 'cache_dir|max_size'
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1245441Z (environment) cache_dir = /opt/build-cache/ccache
+DiffusionGemma static runtime audit	Runner inventory	2026-06-12T01:51:53.1247181Z (environment) max_size = 100.0 GB
+DiffusionGemma static runtime audit	DiffusionGemma static audit	﻿2026-06-12T01:51:53.1342137Z ##[group]Run set -euxo pipefail
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1343781Z ^[[36;1mset -euxo pipefail^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1344864Z ^[[36;1mpython3 - <<'PY'^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1345886Z ^[[36;1mimport ast^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1346872Z ^[[36;1mimport compileall^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1347911Z ^[[36;1mimport json^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1349204Z ^[[36;1mimport pathlib^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1350287Z ^[[36;1mimport sys^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1351239Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1352166Z ^[[36;1mroot = pathlib.Path.cwd()^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1353293Z ^[[36;1mfiles = [^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1354349Z ^[[36;1m    "python/sglang/srt/dllm/config.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1355769Z ^[[36;1m    "python/sglang/srt/dllm/algorithm/gemma4_renoise.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1357265Z ^[[36;1m    "python/sglang/srt/models/gemma4_diffusion.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1358815Z ^[[36;1m    "python/sglang/srt/multimodal/processors/diffusion_gemma.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1360648Z ^[[36;1m    "python/sglang/srt/configs/model_config.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1362122Z ^[[36;1m    "python/sglang/srt/configs/diffusion_gemma.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1363512Z ^[[36;1m    "python/sglang/srt/managers/scheduler.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1365096Z ^[[36;1m    "python/sglang/srt/model_executor/forward_batch_info.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1366530Z ^[[36;1m    "python/sglang/srt/server_args.py",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1367677Z ^[[36;1m]^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1369153Z ^[[36;1mmissing = [path for path in files if not (root / path).exists()]^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1371067Z ^[[36;1mif missing:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1372356Z ^[[36;1m    raise SystemExit(f"missing expected files: {missing}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1373754Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1374728Z ^[[36;1mcompiled = []^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1375805Z ^[[36;1mfor rel in files:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1376934Z ^[[36;1m    path = root / rel^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1378359Z ^[[36;1m    if not compileall.compile_file(str(path), quiet=1, force=True):^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1380301Z ^[[36;1m        raise SystemExit(f"compile failed: {rel}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1381678Z ^[[36;1m    compiled.append(rel)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1382817Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1383793Z ^[[36;1mdef parse(rel):^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1385280Z ^[[36;1m    return ast.parse((root / rel).read_text(encoding="utf-8-sig"), filename=rel)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1386884Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1388069Z ^[[36;1mdllm_tree = parse("python/sglang/srt/dllm/config.py")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1390262Z ^[[36;1mdllm_source = (root / "python/sglang/srt/dllm/config.py").read_text(encoding="utf-8")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1391957Z ^[[36;1mfor needle in [^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1393161Z ^[[36;1m    '"DiffusionGemmaForBlockDiffusion"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1394454Z ^[[36;1m    '"is_uniform": True',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1395678Z ^[[36;1m    'is_uniform = params["is_uniform"]',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1396935Z ^[[36;1m    "canvas_length",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1398014Z ^[[36;1m]:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1399357Z ^[[36;1m    if needle not in dllm_source:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1400982Z ^[[36;1m        raise SystemExit(f"DllmConfig missing expected source marker: {needle}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1402579Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1403591Z ^[[36;1malgorithm_source = (^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1405075Z ^[[36;1m    root / "python/sglang/srt/dllm/algorithm/gemma4_renoise.py"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1406545Z ^[[36;1m).read_text(encoding="utf-8")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1407958Z ^[[36;1mfor needle in ["class Gemma4Renoise", "entropy", "renoise"]:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1409747Z ^[[36;1m    if needle not in algorithm_source:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1411333Z ^[[36;1m        raise SystemExit(f"Gemma4Renoise missing expected marker: {needle}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1412854Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1414121Z ^[[36;1mgemma_tree = parse("python/sglang/srt/models/gemma4_diffusion.py")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1415612Z ^[[36;1mclass_names = {^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1417053Z ^[[36;1m    node.name for node in ast.walk(gemma_tree) if isinstance(node, ast.ClassDef)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1419395Z ^[[36;1m}^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1420404Z ^[[36;1mrequired_classes = {^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1421562Z ^[[36;1m    "DiffusionGemmaAttention",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1422819Z ^[[36;1m    "DiffusionGemmaDecoderLayer",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1424063Z ^[[36;1m    "DiffusionGemmaModel",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1425318Z ^[[36;1m    "DiffusionGemmaForBlockDiffusion",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1426554Z ^[[36;1m}^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1427743Z ^[[36;1mmissing_classes = sorted(required_classes - class_names)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1429438Z ^[[36;1mif missing_classes:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1430907Z ^[[36;1m    raise SystemExit(f"gemma4_diffusion missing classes: {missing_classes}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1432436Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1433411Z ^[[36;1mentry_classes = []^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1434818Z ^[[36;1mfor path in sorted((root / "python/sglang/srt/models").glob("*.py")):^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1436765Z ^[[36;1m    tree = ast.parse(path.read_text(encoding="utf-8-sig"), filename=str(path))^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1438533Z ^[[36;1m    for node in tree.body:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1607906Z ^[[36;1m        if (^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1609662Z ^[[36;1m            isinstance(node, ast.Assign)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1611451Z ^[[36;1m            and any(^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1613542Z ^[[36;1m                isinstance(target, ast.Name) and target.id == "EntryClass"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1615196Z ^[[36;1m                for target in node.targets^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1617343Z ^[[36;1m            )^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1619210Z ^[[36;1m            and isinstance(node.value, ast.Name)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1620512Z ^[[36;1m        ):^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1621759Z ^[[36;1m            entry_classes.append((path.name, node.value.id))^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1623135Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1624138Z ^[[36;1mdgemma_entries = [^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1625666Z ^[[36;1m    item for item in entry_classes if item[1] == "DiffusionGemmaForBlockDiffusion"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1627647Z ^[[36;1m]^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1629352Z ^[[36;1mif dgemma_entries != [("gemma4_diffusion.py", "DiffusionGemmaForBlockDiffusion")]:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1631513Z ^[[36;1m    raise SystemExit(f"unexpected DiffusionGemma EntryClass entries: {dgemma_entries}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1633181Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1634665Z ^[[36;1mfallback_source = (root / "python/sglang/srt/configs/diffusion_gemma.py").read_text(^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1636702Z ^[[36;1m    encoding="utf-8"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1637827Z ^[[36;1m)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1638815Z ^[[36;1mfor needle in [^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1640280Z ^[[36;1m    "class DiffusionGemmaConfig",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1641783Z ^[[36;1m    "class DiffusionGemmaTextConfig",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1643148Z ^[[36;1m    "class DiffusionGemmaVisionConfig",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1644485Z ^[[36;1m    'model_type = "diffusion_gemma"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1645900Z ^[[36;1m    "canvas_length",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1647019Z ^[[36;1m]:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1648065Z ^[[36;1m    if needle not in fallback_source:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1649500Z ^[[36;1m        raise SystemExit(f"fallback config missing marker: {needle}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1650664Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1651464Z ^[[36;1mprocessor_source = (^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1652629Z ^[[36;1m    root / "python/sglang/srt/multimodal/processors/diffusion_gemma.py"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1653847Z ^[[36;1m).read_text(encoding="utf-8")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1655036Z ^[[36;1mif "DiffusionGemmaForBlockDiffusion" not in processor_source:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1656506Z ^[[36;1m    raise SystemExit("multimodal processor is not bound to DiffusionGemma")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1657721Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1658760Z ^[[36;1mserver_args_source = (root / "python/sglang/srt/server_args.py").read_text(^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1660212Z ^[[36;1m    encoding="utf-8"^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1661081Z ^[[36;1m)^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1661870Z ^[[36;1mfor needle in [^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1663121Z ^[[36;1m    'self.dllm_algorithm == "Gemma4Renoise"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1664177Z ^[[36;1m    "dgemma_flashinfer_vosplit",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1665224Z ^[[36;1m    'self.attention_backend == "flashinfer"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1666380Z ^[[36;1m    'os.environ.get("SGLANG_FLASHINFER_VOSPLIT") == "1"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1667518Z ^[[36;1m    "experimental FlashInfer ",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1668605Z ^[[36;1m    "VO-split path because SGLANG_FLASHINFER_VOSPLIT=1",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1669996Z ^[[36;1m    'self.attention_backend = "triton"',^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1671060Z ^[[36;1m    "self.disable_cuda_graph = True",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1672098Z ^[[36;1m    "self.chunked_prefill_size = -1",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1673061Z ^[[36;1m]:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1673913Z ^[[36;1m    if needle not in server_args_source:^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1675245Z ^[[36;1m        raise SystemExit(f"server_args DiffusionGemma policy missing marker: {needle}")^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1676546Z ^[[36;1m^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1677338Z ^[[36;1mpayload = {^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1678173Z ^[[36;1m    "ok": True,^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1679245Z ^[[36;1m    "compiled": compiled,^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1680242Z ^[[36;1m    "dgemma_entry_classes": dgemma_entries,^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1681374Z ^[[36;1m    "required_classes": sorted(required_classes),^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1682532Z ^[[36;1m    "runner": "ubicloud-persistent-sglang-x64",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1683910Z ^[[36;1m    "scope": "static source/runtime audit only; no model weights, no serving claim",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1686263Z ^[[36;1m    "dgr3_policy": "stock Gemma4Renoise stays Triton; FlashInfer requires SGLANG_FLASHINFER_VOSPLIT=1 plus --attention-backend flashinfer",^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1687938Z ^[[36;1m}^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1688879Z ^[[36;1mprint(json.dumps(payload, indent=2, sort_keys=True))^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1690153Z ^[[36;1mPY^[[0m
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1729662Z shell: /usr/bin/bash -e {0}
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1730592Z env:
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1731428Z   CUDA_HOME: /usr/local/cuda
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1732374Z   CCACHE_DIR: /opt/build-cache/ccache
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1733340Z   CCACHE_MAXSIZE: 100G
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1734593Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1735930Z ##[endgroup]
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.1822266Z + python3 -
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9270640Z {
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9271686Z   "compiled": [
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9272516Z     "python/sglang/srt/dllm/config.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9273556Z     "python/sglang/srt/dllm/algorithm/gemma4_renoise.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9274518Z     "python/sglang/srt/models/gemma4_diffusion.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9275522Z     "python/sglang/srt/multimodal/processors/diffusion_gemma.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9276489Z     "python/sglang/srt/configs/model_config.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9277321Z     "python/sglang/srt/configs/diffusion_gemma.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9278145Z     "python/sglang/srt/managers/scheduler.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9279315Z     "python/sglang/srt/model_executor/forward_batch_info.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9280192Z     "python/sglang/srt/server_args.py"
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9280843Z   ],
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9281349Z   "dgemma_entry_classes": [
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9281940Z     [
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9282438Z       "gemma4_diffusion.py",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9283132Z       "DiffusionGemmaForBlockDiffusion"
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9283811Z     ]
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9284265Z   ],
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9285834Z   "dgr3_policy": "stock Gemma4Renoise stays Triton; FlashInfer requires SGLANG_FLASHINFER_VOSPLIT=1 plus --attention-backend flashinfer",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9287330Z   "ok": true,
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9287849Z   "required_classes": [
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9288456Z     "DiffusionGemmaAttention",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9289337Z     "DiffusionGemmaDecoderLayer",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9290050Z     "DiffusionGemmaForBlockDiffusion",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9290772Z     "DiffusionGemmaModel"
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9292172Z   ],
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9292741Z   "runner": "ubicloud-persistent-sglang-x64",
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9293816Z   "scope": "static source/runtime audit only; no model weights, no serving claim"
+DiffusionGemma static runtime audit	DiffusionGemma static audit	2026-06-12T01:51:53.9294803Z }
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	﻿2026-06-12T01:51:53.9644066Z Post job cleanup.
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0645707Z [command]/usr/bin/git version
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0701234Z git version 2.43.0
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0741962Z Temporarily overriding HOME='/opt/actions-work/jethac-sglang-x64/_temp/f477549b-c211-4d26-9dae-1dfd53a0be38' before making global git config changes
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0744570Z Adding repository directory to the temporary git global config as a safe directory
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0746749Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-sglang-x64/sglang/sglang
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0802979Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.0858344Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.1409523Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.1455516Z http.https://github.com/.extraheader
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.1468056Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.1530149Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.2158467Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+DiffusionGemma static runtime audit	Post Run actions/checkout@v4	2026-06-12T01:51:54.2214171Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+DiffusionGemma static runtime audit	Complete job	﻿2026-06-12T01:51:54.3071542Z Cleaning up orphan processes
+DiffusionGemma static runtime audit	Complete job	2026-06-12T01:51:54.3769907Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4. Actions will be forced to run with Node.js 24 by default starting June 16th, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
