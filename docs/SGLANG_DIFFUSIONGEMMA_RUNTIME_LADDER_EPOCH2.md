@@ -188,7 +188,9 @@ Gate:
 - capacity denominator audited as mixed-KV, not full NVFP4
 - radix/prefix reuse behavior explicitly scoped
 
-Status: RED at first live request; see
+Status: DEFERRED by the split-dtype de-scope decision in
+`mail/0077_claude-to-codex_split-dtype-descoped-from-headline.md`. The
+existing diagnostic row is RED at first live request; see
 `results/sglang_dgemma_dgr4_mixedkv_smoke_20260612T114737JST/DIAGNOSIS.md`.
 The row proves mixed-KV allocation (`kv_cache_dtype='fp4_e2m1'`,
 `SGLANG_FP4_KV_MIXED_KV=1`, `mixed_kv=True`, FP4 hybrid subpools) and wrapper
@@ -196,10 +198,10 @@ construction for D=512 VO-split, then fails before the text-quality gate because
 FlashInfer paged prefill is still planned with a single `kv_data_type=torch.uint8`
 while SGLang supplies split K/V tensors (`K=torch.float8_e4m3fn`,
 `V=torch.uint8`). This makes DiffusionGemma DG-R4 the named live consumer for
-split-K/V paged-prefill module keying. The packet remains staged in
-`docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md`; rerun
-`scripts/run_sglang_dgemma_dgr4_mixedkv_smoke.sh` after that ABI blocker is
-fixed.
+split-K/V paged-prefill module keying, but it is no longer a headline or
+ship-blocking rung. The packet remains staged in
+`docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md` for future
+split-dtype work.
 
 ### DG-R5: Full NVFP4 K+V
 
@@ -212,9 +214,18 @@ Risk:
 
 Gate:
 
-- quality comparator vs mixed-KV/BF16
+- quality comparator vs BF16/VO-split
 - capacity row separate from quality row
 - no `--disable-radix-cache` blessed result
+
+Status: staged for Spark live validation. Packet:
+`docs/SGLANG_DIFFUSIONGEMMA_DGR5_FULLNVFP4_PACKET_20260612.md`. Runner:
+`scripts/run_sglang_dgemma_dgr5_fullnvfp4_smoke.sh`. The row uses
+`--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=0`, the same deterministic
+`Gemma4Renoise` config as DG-R2/DG-R3, and the explicit FlashInfer VO-split
+opt-in. GREEN means text-only serving, full-NVFP4 K+V storage proof, and D=512
+VO-split routing proof are all present; it still does not claim capacity,
+image quality, CUDA graph safety, or long-context quality.
 
 ### DG-R6: Performance Campaign Row
 
