@@ -162,7 +162,11 @@ uses Triton by default; the experimental FlashInfer route requires both
 validation is banked in
 `results/sglang_dgemma_dgr3_vosplit_policy_20260612T1050JST/summary.md`. The
 next Spark row must prove routing and revised-text coherence before DG-R3 can be
-called green.
+called green. The prepared Spark run packet is
+`docs/SGLANG_DIFFUSIONGEMMA_DGR3_VOSPLIT_PACKET_20260612.md`; it runs
+`scripts/run_sglang_dgemma_dgr3_vosplit_smoke.sh` and keeps the row RED unless
+the revised DG-R2 text gate passes and the log proves D=512 FlashInfer geometry
+with `vo_split=True` and `head_dim_vo=256`.
 
 ### DG-R4: Mixed-KV Safety Path
 
