@@ -1,0 +1,7 @@
+parent_commit=01f50a00539fd0a07050f107e36df81f272375f9
+sglang_commit=37545bde57f39b0acf4383c10be49706c202b4f0
+flashinfer_commit=f99323bd7d1cc88d9445202c12934070be754e2d
+?? results/sglang_gemma4_mtp_identity_20260612T122211JST/
+?? results/sglang_gemma4_mtp_identity_20260612T122931JST/
+?? results/sglang_gemma4_mtp_identity_20260612T123731JST/
+?? results/sglang_gemma4_mtp_identity_20260612T123947JST/

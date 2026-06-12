@@ -1,0 +1,18 @@
+run_id=sglang_gemma4_mtp_identity_20260612T123947JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+source_branch=epoch2
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+model=google/gemma-4-E2B-it
+draft_model=google/gemma-4-E2B-it-assistant
+port=30135
+mem_fraction_static=0.40
+sglang_commit=37545bde57f39b0acf4383c10be49706c202b4f0
+flashinfer_commit=f99323bd7d1c
+hf_cache=/home/jethac/.cache/huggingface
+hf_local_files_only=0
+hf_hub_offline=0
+scope=bf16 greedy spec-off/spec-on MTP identity, sequential servers
+started_at=2026-06-12T12:39:47+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.8Gi        68Gi        11Mi        48Gi       115Gi
+Swap:           15Gi       489Mi        15Gi
