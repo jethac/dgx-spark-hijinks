@@ -1,0 +1,40 @@
+name: ubicloud-persistent-smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - epoch2
+    paths:
+      - ".github/workflows/ubicloud-persistent-smoke.yml"
+      - "docs/UBICLOUD_PERSISTENT_RUNNER.md"
+      - "scripts/bootstrap_ubicloud_build_runner.sh"
+
+permissions:
+  contents: read
+
+jobs:
+  persistent-x64:
+    name: persistent x64 runner smoke
+    runs-on: [self-hosted, Linux, X64, ubicloud-persistent-build-x64, hijinks]
+    timeout-minutes: 10
+    env:
+      CUDA_HOME: /usr/local/cuda
+      CCACHE_DIR: /opt/build-cache/ccache
+      CCACHE_MAXSIZE: 100G
+      PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runner inventory
+        run: |
+          set -euxo pipefail
+          hostname
+          uname -a
+          lscpu | sed -n '1,24p'
+          nproc
+          free -h
+          df -h / /opt/build-cache || true
+          nvcc --version
+          cuobjdump --version || true
+          ccache --show-config | grep -E 'cache_dir|max_size'
+          ccache --show-stats
