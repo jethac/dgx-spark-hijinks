@@ -40,6 +40,34 @@ FlashInfer module-keying work. SGLang's mixed-KV pool supplies FP8 K and packed
 NVFP4 V, but the paged-prefill wrapper state still carries a single
 `kv_data_type=torch.uint8` into `run()`, so FlashInfer rejects the FP8 K tensor.
 
+## Code-Level Follow-Up
+
+The failure is not a missing SGLang plan kwarg:
+
+- `FlashInferIndicesUpdaterPrefill.call_begin_forward()` builds
+  `paged_plan_kwargs` with `kv_data_type=self.kv_data_type` and, when mixed-KV
+  is active, also adds `k_data_type=self.k_data_type` and
+  `v_data_type=self.v_data_type`
+  (`third_party/sglang/python/sglang/srt/layers/attention/flashinfer_backend.py`,
+  around lines 3914-3930 in `jethac/sglang@dec4c040a`).
+- In the FlashInfer fork, `BatchPrefillWithPagedKVCacheWrapper.plan()` accepts
+  that validated mixed pair but collapses it back to `kv_data_type=torch.uint8`
+  for module selection (`third_party/flashinfer/flashinfer/prefill.py`, around
+  lines 1929-1963 / 3098-3132 in `jethac/flashinfer@f99323bd`).
+- The wrapper then caches only `_cached_kv_data_type`, not separate cached
+  K/V dtypes, and `run()` validates `k_cache.dtype` against that single cached
+  dtype (`prefill.py` around lines 2101-2103 and 2380-2383 / 3218-3220 and
+  3486-3488).
+- The generated paged-prefill surface is still single-typed: the JIT URI has
+  only `dtype_kv`, `batch_prefill.cu` instantiates one `DTypeKV`, and
+  `paged_kv_t<DType, IdType>` stores both `k_data` and `v_data` as `DType*`.
+  Bypassing the Python dtype check would therefore still feed FP8-K bytes to a
+  kernel compiled for the packed-NVFP4 KV type.
+
+Conclusion: this row is blocked on real FlashInfer split-K/V paged-prefill
+state/keying/params (`DTypeK` + `DTypeV` or an equivalent dedicated mixed-KV
+module), not on SGLang wrapper plumbing.
+
 The generated `summary.md` also marks D=512 route proof as missing because the
 first request crashed before per-call `SGLang Gemma4 FlashInfer geometry
 label=...` lines were emitted. Wrapper-construction route proof is present in
