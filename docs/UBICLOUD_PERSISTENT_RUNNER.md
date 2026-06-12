@@ -35,9 +35,9 @@ Created 2026-06-12:
 - ccache: `/opt/build-cache/ccache`, max size `100G`
 - Docker: required for image-build workflows. The first image workflow attempt
   found the runner missing Docker and non-passwordless sudo, so VM bootstrap now
-  installs `docker.io` and adds the runner user to the `docker` group. Existing
-  runners provisioned before that change must be re-bootstrapped before image
-  workflows can run.
+  installs `docker.io` plus `docker-buildx` and adds the runner user to the
+  `docker` group. Existing runners provisioned before that change must be
+  re-bootstrapped before image workflows can run.
 
 Registered repo-level GitHub runners on this VM:
 
@@ -200,7 +200,8 @@ A persistent runner is usable only after a workflow records:
 - runner labels and `nproc`
 - CUDA toolkit version (`nvcc --version`)
 - ccache location and stats
-- Docker CLI and daemon access from the runner user (`docker version` and
-  `docker info` without sudo) if any image-build workflow will use the runner
+- Docker CLI, Buildx plugin, and daemon access from the runner user
+  (`docker version`, `docker buildx version`, and `docker info` without sudo)
+  if any image-build workflow will use the runner
 - build artifact upload or release link
 - no GPU runtime test claimed from this CPU-only VM

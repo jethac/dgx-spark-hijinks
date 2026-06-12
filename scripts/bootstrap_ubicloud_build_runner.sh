@@ -71,7 +71,7 @@ fi
 
 if [[ "${INSTALL_DOCKER}" == "1" ]]; then
   apt-get update
-  apt-get install -y --no-install-recommends docker.io
+  apt-get install -y --no-install-recommends docker.io docker-buildx
   systemctl enable docker >/dev/null 2>&1 || true
   systemctl start docker || service docker start || true
 fi
@@ -99,7 +99,9 @@ sudo -u "${RUNNER_USER}" env CCACHE_DIR="${CCACHE_DIR}" ccache --set-config "max
 
 if [[ "${INSTALL_DOCKER}" == "1" ]]; then
   docker version
+  docker buildx version
   sudo -u "${RUNNER_USER}" docker version
+  sudo -u "${RUNNER_USER}" docker buildx version
 fi
 
 latest_tag=$(curl -fsSL https://api.github.com/repos/actions/runner/releases/latest | jq -r .tag_name)
@@ -151,4 +153,5 @@ echo "Labels: self-hosted,Linux,${runner_arch},${runner_labels}"
 echo "ccache: ${CCACHE_DIR} (${CCACHE_MAXSIZE})"
 if [[ "${INSTALL_DOCKER}" == "1" ]]; then
   echo "docker: $(docker --version)"
+  echo "docker buildx: $(docker buildx version)"
 fi
