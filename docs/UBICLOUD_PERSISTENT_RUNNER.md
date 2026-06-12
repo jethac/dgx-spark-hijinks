@@ -155,6 +155,17 @@ user-owned persistent virtualenv, caches Rust/pip/protoc under
 receipt is
 `results/sglang_wheel_persistent_20260612T1026JST/summary.md`.
 
+The SGLang fork also has a no-weight Gemma 4 MTP static audit workflow:
+
+```text
+.github/workflows/hijinks-gemma4-mtp-static-audit.yml
+```
+
+It runs on `ubicloud-persistent-sglang-x64` and checks the assistant-model,
+`FROZEN_KV_MTP`, target-KV-pool, FlashInfer target-verify, and split-dtype
+source markers without downloading model weights. The first green receipt is
+`results/sglang_mtp_static_audit_persistent_20260612T1041JST/summary.md`.
+
 ## Build Cache Policy
 
 The bootstrap script sets:

@@ -1,0 +1,355 @@
+Gemma 4 MTP static audit	Set up job	﻿2026-06-12T01:41:27.2361501Z Current runner version: '2.335.1'
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2367670Z Runner name: 'ubicloud-persistent-sglang-x64'
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2368563Z Runner group name: 'Default'
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2369581Z Machine name: 'vmzrp4jj'
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2372351Z ##[group]GITHUB_TOKEN Permissions
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2374321Z Contents: read
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2375013Z Metadata: read
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2375621Z ##[endgroup]
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2377456Z Secret source: Actions
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2378297Z Prepare workflow directory
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2890808Z Prepare all required actions
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.2999814Z Getting action download info
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:27.9028079Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Gemma 4 MTP static audit	Set up job	2026-06-12T01:41:28.3326690Z Complete job name: Gemma 4 MTP static audit
+Gemma 4 MTP static audit	Run actions/checkout@v4	﻿2026-06-12T01:41:28.4139367Z ##[group]Run actions/checkout@v4
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4140350Z with:
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4140900Z   repository: jethac/sglang
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4145983Z   token: ***
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4146572Z   ssh-strict: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4147128Z   ssh-user: git
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4147678Z   persist-credentials: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4148291Z   clean: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4148842Z   sparse-checkout-cone-mode: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4149641Z   fetch-depth: 1
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4150182Z   fetch-tags: false
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4150731Z   show-progress: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4151284Z   lfs: false
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4151796Z   submodules: false
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4152361Z   set-safe-directory: true
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4153116Z env:
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4153631Z   CUDA_HOME: /usr/local/cuda
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4154251Z   CCACHE_DIR: /opt/build-cache/ccache
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4154896Z   CCACHE_MAXSIZE: 100G
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4155776Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.4156769Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5751383Z Syncing repository: jethac/sglang
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5755757Z ##[group]Getting Git version info
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5758009Z Working directory is '/opt/actions-work/jethac-sglang-x64/sglang/sglang'
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5761687Z [command]/usr/bin/git version
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5763207Z git version 2.43.0
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5768048Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5781019Z Temporarily overriding HOME='/opt/actions-work/jethac-sglang-x64/_temp/cfed995e-3b6d-4a38-908a-bb73065fa564' before making global git config changes
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5785335Z Adding repository directory to the temporary git global config as a safe directory
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5788827Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-sglang-x64/sglang/sglang
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5793829Z [command]/usr/bin/git config --local --get remote.origin.url
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5795849Z https://github.com/jethac/sglang
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5800506Z ##[group]Removing previously created refs, to avoid conflicts
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5803270Z [command]/usr/bin/git rev-parse --symbolic-full-name --verify --quiet HEAD
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5805886Z refs/heads/spark/hijinks-024-diffusiongemma-upstream-rebase
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.5810026Z [command]/usr/bin/git checkout --detach
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.6093236Z HEAD is now at 3c381eaa6a Build SGLang wheel in persistent virtualenv
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.6173430Z [command]/usr/bin/git branch --delete --force spark/hijinks-024-diffusiongemma-upstream-rebase
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.6234053Z Deleted branch spark/hijinks-024-diffusiongemma-upstream-rebase (was 3c381eaa6a).
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.6797047Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.6804826Z [command]/usr/bin/git submodule status
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.7424761Z ##[group]Cleaning the repository
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:28.7430764Z [command]/usr/bin/git clean -ffdx
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0404538Z Removing python/LICENSE
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0407389Z Removing python/README.md
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0410285Z Removing python/build/
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0412522Z Removing python/dist/
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0414424Z Removing python/sglang.egg-info/
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0417259Z Removing python/sglang/_version.py
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0419648Z Removing rust/sglang-grpc/Cargo.lock
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0421748Z Removing rust/sglang-grpc/target/
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0426201Z [command]/usr/bin/git reset --hard HEAD
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0968027Z HEAD is now at 3c381eaa6a Build SGLang wheel in persistent virtualenv
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0983895Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0987790Z ##[group]Disabling automatic garbage collection
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.0990885Z [command]/usr/bin/git config --local gc.auto 0
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1054594Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1059508Z ##[group]Setting up auth
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1063177Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1127057Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1753633Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.1825048Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.2451891Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.2523688Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.3126796Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.3212640Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.3217668Z ##[group]Fetching the repository
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:29.3235656Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +542525bf3c00a5d76c12ec9290f0ccb17e8da0a7:refs/remotes/origin/spark/hijinks-024-diffusiongemma-upstream-rebase
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0217591Z From https://github.com/jethac/sglang
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0223916Z  + 3c381eaa6a...542525bf3c 542525bf3c00a5d76c12ec9290f0ccb17e8da0a7 -> origin/spark/hijinks-024-diffusiongemma-upstream-rebase  (forced update)
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0283970Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0287318Z ##[group]Determining the checkout info
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0291099Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0295833Z [command]/usr/bin/git sparse-checkout disable
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0425724Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0490721Z ##[group]Checking out the ref
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.0501719Z [command]/usr/bin/git checkout --progress --force -B spark/hijinks-024-diffusiongemma-upstream-rebase refs/remotes/origin/spark/hijinks-024-diffusiongemma-upstream-rebase
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1148298Z Warning: you are leaving 17 commits behind, not connected to
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1153132Z any of your branches:
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1154790Z 
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1156492Z   3c381eaa6a Build SGLang wheel in persistent virtualenv
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1161331Z   e8a89db13a Make cached protoc executable in wheel workflow
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1166244Z   1053821615 Install protoc without sudo in SGLang wheel workflow
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1171530Z   cc76d66d91 Derive SGLang wheel cache paths from runner home
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1175514Z  ... and 13 more.
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1176982Z 
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1179307Z If you want to keep them by creating a new branch, this may be a good time
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1183685Z to do so with:
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1185236Z 
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1186587Z  git branch <new-branch-name> 3c381eaa6a
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1188832Z 
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1191528Z Switched to a new branch 'spark/hijinks-024-diffusiongemma-upstream-rebase'
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1200220Z branch 'spark/hijinks-024-diffusiongemma-upstream-rebase' set up to track 'origin/spark/hijinks-024-diffusiongemma-upstream-rebase'.
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1213563Z ##[endgroup]
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1259250Z [command]/usr/bin/git log -1 --format=%H
+Gemma 4 MTP static audit	Run actions/checkout@v4	2026-06-12T01:41:30.1292372Z 542525bf3c00a5d76c12ec9290f0ccb17e8da0a7
+Gemma 4 MTP static audit	Runner inventory	﻿2026-06-12T01:41:30.1802919Z ##[group]Run set -euxo pipefail
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1806428Z ^[[36;1mset -euxo pipefail^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1810041Z ^[[36;1mhostname^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1812661Z ^[[36;1mnproc^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1815265Z ^[[36;1mfree -h^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1818089Z ^[[36;1mdf -h / /opt/build-cache || true^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1821879Z ^[[36;1mpython3 --version^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1825004Z ^[[36;1mnvcc --version || true^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1829456Z ^[[36;1mccache --show-config | grep -E 'cache_dir|max_size' || true^[[0m
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1895916Z shell: /usr/bin/bash -e {0}
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1898209Z env:
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1900100Z   CUDA_HOME: /usr/local/cuda
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1902257Z   CCACHE_DIR: /opt/build-cache/ccache
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1904541Z   CCACHE_MAXSIZE: 100G
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1907834Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.1911782Z ##[endgroup]
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2048399Z + hostname
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2067034Z vmzrp4jj
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2069081Z + nproc
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2096454Z 16
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2099512Z + free -h
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2142113Z                total        used        free      shared  buff/cache   available
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2145729Z Mem:            62Gi       1.4Gi        46Gi        85Mi        16Gi        61Gi
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2149134Z Swap:             0B          0B          0B
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2151545Z + df -h / /opt/build-cache
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2175949Z Filesystem      Size  Used Avail Use% Mounted on
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2181069Z + python3 --version
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2184549Z /dev/vda1       309G   17G  293G   6% /
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2188426Z /dev/vda1       309G   17G  293G   6% /
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2207804Z Python 3.12.3
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2214026Z + nvcc --version
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2252721Z nvcc: NVIDIA (R) Cuda compiler driver
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2256537Z Copyright (c) 2005-2025 NVIDIA Corporation
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2260479Z Built on Wed_Aug_20_01:58:59_PM_PDT_2025
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2264475Z Cuda compilation tools, release 13.0, V13.0.88
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2268698Z Build cuda_13.0.r13.0/compiler.36424714_0
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2272521Z + ccache --show-config
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2275401Z + grep -E 'cache_dir|max_size'
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2314008Z (environment) cache_dir = /opt/build-cache/ccache
+Gemma 4 MTP static audit	Runner inventory	2026-06-12T01:41:30.2325027Z (environment) max_size = 100.0 GB
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	﻿2026-06-12T01:41:30.2512001Z ##[group]Run set -euxo pipefail
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2515689Z ^[[36;1mset -euxo pipefail^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2518686Z ^[[36;1mpython3 - <<'PY'^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2521883Z ^[[36;1mimport ast^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2524565Z ^[[36;1mimport compileall^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2527573Z ^[[36;1mimport json^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2530470Z ^[[36;1mimport pathlib^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2533302Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2535748Z ^[[36;1mroot = pathlib.Path.cwd()^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2539149Z ^[[36;1mfiles = [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2542487Z ^[[36;1m    "python/sglang/srt/arg_groups/speculative_hook.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2547410Z ^[[36;1m    "python/sglang/srt/speculative/frozen_kv_mtp_info.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2552700Z ^[[36;1m    "python/sglang/srt/speculative/frozen_kv_mtp_utils.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2557870Z ^[[36;1m    "python/sglang/srt/speculative/frozen_kv_mtp_worker.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2562914Z ^[[36;1m    "python/sglang/srt/speculative/spec_info.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2567382Z ^[[36;1m    "python/sglang/srt/models/gemma4_mtp.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2572370Z ^[[36;1m    "python/sglang/srt/layers/attention/flashinfer_backend.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2577817Z ^[[36;1m    "python/sglang/srt/layers/attention/hybrid_attn_backend.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2582924Z ^[[36;1m    "python/sglang/srt/mem_cache/common.py",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2587001Z ^[[36;1m]^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2590768Z ^[[36;1mmissing = [path for path in files if not (root / path).exists()]^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2595137Z ^[[36;1mif missing:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2598615Z ^[[36;1m    raise SystemExit(f"missing expected files: {missing}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2602915Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2605309Z ^[[36;1mcompiled = []^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2608362Z ^[[36;1mfor rel in files:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2611528Z ^[[36;1m    path = root / rel^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2615632Z ^[[36;1m    if not compileall.compile_file(str(path), quiet=1, force=True):^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2620781Z ^[[36;1m        raise SystemExit(f"compile failed: {rel}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2624654Z ^[[36;1m    compiled.append(rel)^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2627674Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2630255Z ^[[36;1mdef read(rel):^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2633644Z ^[[36;1m    return (root / rel).read_text(encoding="utf-8-sig")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2637479Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2640045Z ^[[36;1mdef parse(rel):^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2643463Z ^[[36;1m    return ast.parse(read(rel), filename=rel)^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2647293Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2650859Z ^[[36;1mgemma_tree = parse("python/sglang/srt/models/gemma4_mtp.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2655173Z ^[[36;1mclass_names = {^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2659655Z ^[[36;1m    node.name for node in ast.walk(gemma_tree) if isinstance(node, ast.ClassDef)^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2664442Z ^[[36;1m}^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2666880Z ^[[36;1mrequired_classes = {^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2670264Z ^[[36;1m    "Gemma4AssistantForCausalLM",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2674054Z ^[[36;1m    "Gemma4UnifiedAssistantForCausalLM",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2677637Z ^[[36;1m}^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2681097Z ^[[36;1mmissing_classes = sorted(required_classes - class_names)^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2685268Z ^[[36;1mif missing_classes:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2689705Z ^[[36;1m    raise SystemExit(f"gemma4_mtp missing classes: {missing_classes}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2694197Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2697552Z ^[[36;1mgemma_source = read("python/sglang/srt/models/gemma4_mtp.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2702073Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2706808Z ^[[36;1m    "EntryClass = [Gemma4AssistantForCausalLM, Gemma4UnifiedAssistantForCausalLM]",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2712503Z ^[[36;1m    "build_frozen_kv_mtp_context",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2715991Z ^[[36;1m    "bind_frozen_kv_context",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2719474Z ^[[36;1m    "target_token_to_kv_pool",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2722900Z ^[[36;1m    "kv_shared_layer_index",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2726096Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2729771Z ^[[36;1m    if needle not in gemma_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2734150Z ^[[36;1m        raise SystemExit(f"gemma4_mtp missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2738137Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2740925Z ^[[36;1mhook_source = read("python/sglang/srt/arg_groups/speculative_hook.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2744245Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2746533Z ^[[36;1m    "_resolve_speculative_algorithm_alias",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2749404Z ^[[36;1m    "Gemma4AssistantForCausalLM",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2752118Z ^[[36;1m    "Gemma4UnifiedAssistantForCausalLM",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2754901Z ^[[36;1m    'speculative_algorithm == "EAGLE3"',^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2757447Z ^[[36;1m    'return "FROZEN_KV_MTP"',^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2759895Z ^[[36;1m    "_handle_frozen_kv_mtp",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2762105Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2763935Z ^[[36;1m    if needle not in hook_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2767255Z ^[[36;1m        raise SystemExit(f"speculative_hook missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2898783Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2900509Z ^[[36;1mspec_source = read("python/sglang/srt/speculative/spec_info.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2902759Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2904162Z ^[[36;1m    "FROZEN_KV_MTP",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2905379Z ^[[36;1m    "def is_frozen_kv_mtp",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2906962Z ^[[36;1m    "def supports_spec_v2",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2908366Z ^[[36;1m    "and not self.is_frozen_kv_mtp()",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2910128Z ^[[36;1m    "FrozenKVMTPWorker",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2911550Z ^[[36;1m    "FROZEN_KV_MTP does not support spec v2",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2912958Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2913992Z ^[[36;1m    if needle not in spec_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2915660Z ^[[36;1m        raise SystemExit(f"spec_info missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2917298Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2918867Z ^[[36;1mworker_source = read("python/sglang/srt/speculative/frozen_kv_mtp_worker.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2921063Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2922230Z ^[[36;1m    "class FrozenKVMTPWorker",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2923642Z ^[[36;1m    "target_worker.get_memory_pool()",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2925234Z ^[[36;1m    "target_worker.model_runner.token_to_kv_pool",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2926768Z ^[[36;1m    "bind_frozen_kv_context",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2928185Z ^[[36;1m    "self.topk == 1",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2929738Z ^[[36;1m    "topk > 1 currently supports only the triton",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2931299Z ^[[36;1m    "ForwardMode.TARGET_VERIFY",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2933041Z ^[[36;1m    "batch_result = self.target_worker.forward_batch_generation",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2934720Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2935751Z ^[[36;1m    if needle not in worker_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2937580Z ^[[36;1m        raise SystemExit(f"frozen_kv_mtp_worker missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2939493Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2941002Z ^[[36;1mutils_source = read("python/sglang/srt/speculative/frozen_kv_mtp_utils.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2942909Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2944046Z ^[[36;1m    "frozen_kv_target_view",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2945318Z ^[[36;1m    "target_kv_pool_view",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2947118Z ^[[36;1m    "draft_attn_backend.token_to_kv_pool = kv_context.target_token_to_kv_pool",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2949209Z ^[[36;1m    "set_frozen_kv_positions",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2950457Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2951499Z ^[[36;1m    if needle not in utils_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2953307Z ^[[36;1m        raise SystemExit(f"frozen_kv_mtp_utils missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2955077Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2956606Z ^[[36;1mfi_source = read("python/sglang/srt/layers/attention/flashinfer_backend.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2958517Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2959816Z ^[[36;1m    "forward_mode.is_target_verify()",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2961312Z ^[[36;1m    "self.prefill_wrappers_verify",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2963352Z ^[[36;1m    "torch.uint8 if attn_backend.is_nvfp4_native else self.data_type",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2965130Z ^[[36;1m    "torch.float8_e4m3fn",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2966456Z ^[[36;1m    "k_data_type=updater.k_data_type",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2967978Z ^[[36;1m    "v_data_type=updater.v_data_type",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2969583Z ^[[36;1m    '"kv_cache_sf"',^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2970773Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2971815Z ^[[36;1m    if needle not in fi_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2973576Z ^[[36;1m        raise SystemExit(f"flashinfer_backend missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2975523Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2977296Z ^[[36;1mhybrid_source = read("python/sglang/srt/layers/attention/hybrid_attn_backend.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2979506Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2981168Z ^[[36;1m    "forward_mode.is_target_verify() or forward_mode.is_draft_extend()",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2983283Z ^[[36;1m    'speculative_attention_mode == "decode"',^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2984815Z ^[[36;1m    "else self.prefill_backend",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2986101Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2987135Z ^[[36;1m    if needle not in hybrid_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2989108Z ^[[36;1m        raise SystemExit(f"hybrid_attn_backend missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2991134Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2992423Z ^[[36;1mmem_source = read("python/sglang/srt/mem_cache/common.py")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2994075Z ^[[36;1mfor needle in [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2995230Z ^[[36;1m    "get_alloc_len_per_decode",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2996568Z ^[[36;1m    "speculative_num_steps",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2997871Z ^[[36;1m    "speculative_eagle_topk",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.2999365Z ^[[36;1m    "max_speculative_num_draft_tokens",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3000873Z ^[[36;1m    "get_req_to_token_extra_context_len",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3002228Z ^[[36;1m]:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3003230Z ^[[36;1m    if needle not in mem_source:^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3004983Z ^[[36;1m        raise SystemExit(f"mem_cache/common missing marker: {needle}")^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3006709Z ^[[36;1m^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3007696Z ^[[36;1mpayload = {^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3008738Z ^[[36;1m    "ok": True,^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3009952Z ^[[36;1m    "compiled": compiled,^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3011392Z ^[[36;1m    "runner": "ubicloud-persistent-sglang-x64",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3013361Z ^[[36;1m    "scope": "static source audit only; no model weights, no serving claim",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3015175Z ^[[36;1m    "gates": [^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3016399Z ^[[36;1m        "Gemma4 assistant classes registered",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3018296Z ^[[36;1m        "NEXTN/EAGLE alias path can promote assistants to FROZEN_KV_MTP",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3020400Z ^[[36;1m        "EAGLE3 assistant rejection marker present",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3022061Z ^[[36;1m        "FrozenKVMTPWorker binds target KV pool",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3023929Z ^[[36;1m        "TARGET_VERIFY routes through FlashInfer prefill metadata",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3026240Z ^[[36;1m        "full NVFP4 uses one uint8 KV container; mixed KV has split K/V dtype markers",^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3028176Z ^[[36;1m    ],^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3029238Z ^[[36;1m}^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3030452Z ^[[36;1mprint(json.dumps(payload, indent=2, sort_keys=True))^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3031968Z ^[[36;1mPY^[[0m
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3054834Z shell: /usr/bin/bash -e {0}
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3055929Z env:
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3056845Z   CUDA_HOME: /usr/local/cuda
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3058019Z   CCACHE_DIR: /opt/build-cache/ccache
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3059357Z   CCACHE_MAXSIZE: 100G
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3061119Z   PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3063108Z ##[endgroup]
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.3139493Z + python3 -
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4174306Z {
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4176925Z   "compiled": [
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4180530Z     "python/sglang/srt/arg_groups/speculative_hook.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4185859Z     "python/sglang/srt/speculative/frozen_kv_mtp_info.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4190831Z     "python/sglang/srt/speculative/frozen_kv_mtp_utils.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4195636Z     "python/sglang/srt/speculative/frozen_kv_mtp_worker.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4200283Z     "python/sglang/srt/speculative/spec_info.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4204301Z     "python/sglang/srt/models/gemma4_mtp.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4208875Z     "python/sglang/srt/layers/attention/flashinfer_backend.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4214171Z     "python/sglang/srt/layers/attention/hybrid_attn_backend.py",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4218629Z     "python/sglang/srt/mem_cache/common.py"
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4222226Z   ],
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4224564Z   "gates": [
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4227227Z     "Gemma4 assistant classes registered",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4231873Z     "NEXTN/EAGLE alias path can promote assistants to FROZEN_KV_MTP",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4236628Z     "EAGLE3 assistant rejection marker present",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4240755Z     "FrozenKVMTPWorker binds target KV pool",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4245074Z     "TARGET_VERIFY routes through FlashInfer prefill metadata",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4251385Z     "full NVFP4 uses one uint8 KV container; mixed KV has split K/V dtype markers"
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4256782Z   ],
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4259961Z   "ok": true,
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4262824Z   "runner": "ubicloud-persistent-sglang-x64",
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4267536Z   "scope": "static source audit only; no model weights, no serving claim"
+Gemma 4 MTP static audit	Gemma 4 MTP static audit	2026-06-12T01:41:30.4272164Z }
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	﻿2026-06-12T01:41:30.4796236Z Post job cleanup.
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6153228Z [command]/usr/bin/git version
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6205099Z git version 2.43.0
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6247362Z Temporarily overriding HOME='/opt/actions-work/jethac-sglang-x64/_temp/1c44fc23-3607-47fc-8c65-fd08c215948c' before making global git config changes
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6256078Z Adding repository directory to the temporary git global config as a safe directory
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6263207Z [command]/usr/bin/git config --global --add safe.directory /opt/actions-work/jethac-sglang-x64/sglang/sglang
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6312690Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6380019Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.6968293Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.7014276Z http.https://github.com/.extraheader
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.7027291Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.7086405Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.7652310Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Gemma 4 MTP static audit	Post Run actions/checkout@v4	2026-06-12T01:41:30.7722438Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Gemma 4 MTP static audit	Complete job	﻿2026-06-12T01:41:30.8632904Z Cleaning up orphan processes
+Gemma 4 MTP static audit	Complete job	2026-06-12T01:41:30.9573115Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4. Actions will be forced to run with Node.js 24 by default starting June 16th, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
