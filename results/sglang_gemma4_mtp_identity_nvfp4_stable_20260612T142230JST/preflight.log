@@ -1,0 +1,21 @@
+run_id=sglang_gemma4_mtp_identity_nvfp4_stable_20260612T142230JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+source_branch=epoch2
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+model=google/gemma-4-E2B-it
+draft_model=google/gemma-4-E2B-it-assistant
+port=30135
+mem_fraction_static=0.40
+kv_cache_dtype=fp4_e2m1
+sglang_fp4_kv_mixed_kv=0
+disable_graphs=1
+sglang_commit=98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968
+flashinfer_commit=f99323bd7d1c
+hf_cache=/home/jethac/.cache/huggingface
+hf_local_files_only=0
+hf_hub_offline=0
+scope=greedy spec-off/spec-on MTP identity, sequential servers
+started_at=2026-06-12T14:22:30+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.8Gi        67Gi        12Mi        48Gi       115Gi
+Swap:           15Gi       487Mi        15Gi

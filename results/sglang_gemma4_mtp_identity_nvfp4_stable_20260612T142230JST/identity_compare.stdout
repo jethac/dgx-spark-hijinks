@@ -1,0 +1,41 @@
+{
+  "all_ok": true,
+  "any_token_ids": true,
+  "checks": [
+    {
+      "chat_text_match": true,
+      "chat_token_ids_match": null,
+      "native_text_match": null,
+      "native_token_ids_match": true,
+      "off_chat_text": "The capital of Japan is Tokyo.",
+      "off_native_text": "",
+      "on_chat_text": "The capital of Japan is Tokyo.",
+      "on_native_text": "",
+      "prompt_id": "capital_japan"
+    },
+    {
+      "chat_text_match": true,
+      "chat_token_ids_match": null,
+      "native_text_match": null,
+      "native_token_ids_match": true,
+      "off_chat_text": "2 + 2 equals 4.",
+      "off_native_text": "",
+      "on_chat_text": "2 + 2 equals 4.",
+      "on_native_text": "",
+      "prompt_id": "arithmetic"
+    },
+    {
+      "chat_text_match": true,
+      "chat_token_ids_match": null,
+      "native_text_match": true,
+      "native_token_ids_match": true,
+      "off_chat_text": "spark-ok",
+      "off_native_text": "-spark-ok-\n-",
+      "on_chat_text": "spark-ok",
+      "on_native_text": "-spark-ok-\n-",
+      "prompt_id": "literal_spark_ok"
+    }
+  ],
+  "text_identity_ok": true,
+  "token_identity_ok": true
+}
