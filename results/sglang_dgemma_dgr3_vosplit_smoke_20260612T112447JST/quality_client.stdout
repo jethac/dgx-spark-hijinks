@@ -1,0 +1,38 @@
+{
+  "all_ok": true,
+  "checks": [
+    {
+      "answer_ok": true,
+      "answer_rule": "contains Tokyo",
+      "non_empty": true,
+      "prompt_id": "capital_japan_direct",
+      "stable": true,
+      "texts": [
+        "The capital of Japan is **Tokyo**.",
+        "The capital of Japan is **Tokyo**."
+      ]
+    },
+    {
+      "answer_ok": true,
+      "answer_rule": "contains standalone 4",
+      "non_empty": true,
+      "prompt_id": "arithmetic_2_plus_2_direct",
+      "stable": true,
+      "texts": [
+        "2 + 2 = 4",
+        "2 + 2 = 4"
+      ]
+    },
+    {
+      "answer_ok": true,
+      "answer_rule": "mentions local/desktop/development AI use",
+      "non_empty": true,
+      "prompt_id": "dgx_spark_use",
+      "stable": true,
+      "texts": [
+        "The NVIDIA DGX Spark desktop is designed for high-performance AI development, prototyping, and deep learning tasks in a compact, desktop form factor.",
+        "The NVIDIA DGX Spark desktop is designed for high-performance AI development, prototyping, and deep learning tasks in a compact, desktop form factor."
+      ]
+    }
+  ]
+}

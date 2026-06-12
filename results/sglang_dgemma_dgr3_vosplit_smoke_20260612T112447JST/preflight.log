@@ -1,0 +1,14 @@
+run_id=sglang_dgemma_dgr3_vosplit_smoke_20260612T112447JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+source_branch=epoch2
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+model=google/diffusiongemma-26B-A4B-it
+port=30125
+mem_fraction_static=0.55
+sglang_commit=dec4c040a8ede4561c1f26cccc599286643b49fd
+flashinfer_commit=f99323bd7d1c
+scope=BF16/no-KV-quant DiffusionGemma FlashInfer VO-split smoke
+started_at=2026-06-12T11:24:47+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.8Gi        75Gi        11Mi        41Gi       115Gi
+Swap:           15Gi       490Mi        15Gi

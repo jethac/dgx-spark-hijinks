@@ -156,17 +156,21 @@ Gate:
 - D=512 global layers route through VO-split where expected
 - no claim about NVFP4 yet
 
-Status: source-policy gate green, serving gate not run. The stock runtime still
-uses Triton by default; the experimental FlashInfer route requires both
-`--attention-backend flashinfer` and `SGLANG_FLASHINFER_VOSPLIT=1`. Off-box
-validation is banked in
+Status: green for BF16/no-KV-quant text-only serving through the explicit
+FlashInfer VO-split opt-in. The stock runtime still uses Triton by default; the
+experimental FlashInfer route requires both `--attention-backend flashinfer` and
+`SGLANG_FLASHINFER_VOSPLIT=1`. Off-box source-policy validation is banked in
 `results/sglang_dgemma_dgr3_vosplit_policy_20260612T1050JST/summary.md`. The
-next Spark row must prove routing and revised-text coherence before DG-R3 can be
-called green. The prepared Spark run packet is
-`docs/SGLANG_DIFFUSIONGEMMA_DGR3_VOSPLIT_PACKET_20260612.md`; it runs
-`scripts/run_sglang_dgemma_dgr3_vosplit_smoke.sh` and keeps the row RED unless
-the revised DG-R2 text gate passes and the log proves D=512 FlashInfer geometry
-through the VO-split pass labels with `head_dim_vo=256`.
+Spark serving gate is green in
+`results/sglang_dgemma_dgr3_vosplit_smoke_20260612T112447JST/summary.md`: the
+revised DG-R2 text gate passes, the opt-in warning is present, and D=512 global
+layers route through VO-split trace labels with `head_dim_vo=256`.
+
+The earlier run
+`results/sglang_dgemma_dgr3_vosplit_smoke_20260612T111121JST/summary.md` stays
+as a RED harness-diagnosis artifact, not a model-quality result: routing proof
+was present but the parser expected the wrong trace shape, and the runner had
+omitted the deterministic `Gemma4Renoise` config used by the revised DG-R2 gate.
 
 ### DG-R4: Mixed-KV Safety Path
 
