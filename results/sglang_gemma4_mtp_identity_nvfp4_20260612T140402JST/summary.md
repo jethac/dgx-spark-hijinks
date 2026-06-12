@@ -40,6 +40,13 @@ Greedy spec-off vs spec-on identity for SGLang Gemma 4 Frozen-KV MTP with `fp4_e
 - Native `/generate` exposed matching stop-token IDs for all prompts, but the
   OpenAI chat path changed one greedy continuation under spec-on, so this row
   remains RED and is not a speedup or graph-capture claim.
+- Post-hoc control: the prior target-only NVFP4 `spec_off` capture
+  (`20260612T135033JST`) produced a third DGX Spark prompt variant
+  (`high-performance, large-scale AI...`) that differs from this row's
+  target-only `spec_off` text (`accelerating large-scale data science...`).
+  That falsifies the old third prompt as a clean identity discriminator across
+  sequential NVFP4 server boots; follow-up gates use a literal low-entropy
+  prompt for MTP identity and leave open-ended quality prompts to quality rows.
 
 ## Prompt Checks
 

@@ -30,9 +30,9 @@ PROMPTS = [
         "max_tokens": 24,
     },
     {
-        "id": "spark_use",
-        "text": "In one short sentence, say what a DGX Spark is useful for.",
-        "max_tokens": 32,
+        "id": "literal_spark_ok",
+        "text": "Reply with exactly: spark-ok",
+        "max_tokens": 8,
     },
 ]
 
