@@ -211,6 +211,21 @@ arm e2-dgv serving image so no glibc/torch retrofit is needed.) Either way it's 
 build, not a Spark build. NOTE: this arm64-wheel glibc bug affects ALL Spark wheel deploys,
 not just DG-V -- worth fixing regardless.
 
+## SPARK-READY IMAGE PATTERN (2026-06-12) -- the deterministic fix
+Jetha: "adjust our work to build images that work as-is on spark." Implemented in the vLLM
+repo (branch e2-dgv):
+- `docker/Dockerfile.spark`: self-contained image -- Ubuntu 24.04 (glibc 2.39) + CUDA 13 cu130
+  + torch 2.12 + the e2-dgv arm64 wheel + campaign FlashInfer source (JIT) + transformers 5.11.0
+  + VO-split env defaults + GPU-free build-time provenance asserts. One consistent stack, so the
+  glibc-2.38 wheel loads natively and it runs AS-IS on GB10 (host supplies only the driver).
+- `.github/workflows/build-spark-image.yml`: builds on `ubicloud-standard-30-arm`, consumes an
+  already-published arm64 wheel release (decoupled from compile), pushes to
+  `ghcr.io/jethac/spark-vllm:e2-dgv-<sha>` via the built-in token. First run: 27408638063.
+This kills the bare-wheel host-mismatch (lineage/torch/glibc) that blocked DG-V5. Spark just
+`docker pull` + `docker run` -- no torch upgrade, no overlay, no glibc retrofit. Once the image
+publishes, DG-V5/V6 serve via scripts/run_vllm_dgemma_dgv_spark.sh inside it.
+Full end-state (later): move the rebuilt-C base build to Ubicloud too for end-to-end CI repro.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
