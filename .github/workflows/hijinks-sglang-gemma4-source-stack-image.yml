@@ -1,16 +1,24 @@
 name: hijinks-sglang-gemma4-source-stack-image
 
 on:
+  push:
+    branches:
+      - epoch2
+    paths:
+      - ".github/workflows/hijinks-sglang-gemma4-source-stack-image.yml"
+      - "scripts/install_sglang_source_stack.sh"
+      - "third_party/flashinfer/**"
+      - "third_party/sglang/**"
   workflow_dispatch:
     inputs:
       image_tag:
         description: "Tag suffix for the GHCR image"
         required: false
-        default: "epoch2-gemma4-tf511"
+        default: "epoch2-sglang-spark-u22-torch211"
       base_image:
-        description: "Base SGLang runtime image; must be Ubuntu 22.04 / glibc <= 2.35 for Spark portability"
+        description: "Base CUDA/toolchain image; must be Ubuntu 22.04 / glibc <= 2.35 for Spark portability"
         required: false
-        default: "nvcr.io/nvidia/sglang:26.05-py3"
+        default: "nvidia/cuda:13.0.2-devel-ubuntu22.04"
       transformers_pin:
         description: "Transformers version with gemma4_unified"
         required: false
@@ -27,6 +35,14 @@ on:
         description: "Only probe base image OS/glibc, do not build/push"
         required: false
         default: "false"
+      torch_version:
+        description: "Torch version matching the proven Spark r10/r11 ABI"
+        required: false
+        default: "2.11.0"
+      torch_index_url:
+        description: "PyTorch cu130 wheel index"
+        required: false
+        default: "https://download.pytorch.org/whl/cu130"
 
 permissions:
   contents: read
@@ -37,14 +53,22 @@ jobs:
     name: build SGLang Gemma4 source-stack image
     # This is a Spark runtime image. Build it natively on arm64 rather than
     # cross-compiling the sgl-kernel/FlashInfer stack through QEMU on x64.
-    runs-on: ubicloud-standard-30-arm
-    timeout-minutes: 240
+    runs-on: ubicloud-standard-30-arm-ubuntu-2204
+    timeout-minutes: 355
     env:
       CUDA_HOME: /usr/local/cuda
+      IMAGE_TAG: ${{ inputs.image_tag || 'epoch2-sglang-spark-u22-torch211' }}
+      BASE_IMAGE: ${{ inputs.base_image || 'nvidia/cuda:13.0.2-devel-ubuntu22.04' }}
+      TRANSFORMERS_PIN: ${{ inputs.transformers_pin || '5.11.0' }}
+      TARGET_PLATFORM: ${{ inputs.target_platform || 'linux/arm64' }}
+      EXPECTED_OS_VERSION: ${{ inputs.expected_os_version || '22.04' }}
+      BASE_PROBE_ONLY: ${{ inputs.base_probe_only || 'false' }}
+      TORCH_VERSION: ${{ inputs.torch_version || '2.11.0' }}
+      TORCH_INDEX_URL: ${{ inputs.torch_index_url || 'https://download.pytorch.org/whl/cu130' }}
       CCACHE_DIR: /opt/build-cache/ccache
       CCACHE_MAXSIZE: 100G
-      CMAKE_BUILD_PARALLEL_LEVEL: "8"
-      MAX_JOBS: "8"
+      CMAKE_BUILD_PARALLEL_LEVEL: "20"
+      MAX_JOBS: "20"
       DOCKER_BUILDKIT: "1"
       PATH: /usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
     steps:
@@ -86,9 +110,9 @@ jobs:
 
       - name: Probe base image OS and glibc
         env:
-          BASE_IMAGE: ${{ inputs.base_image }}
-          TARGET_PLATFORM: ${{ inputs.target_platform }}
-          EXPECTED_OS_VERSION: ${{ inputs.expected_os_version }}
+          BASE_IMAGE: ${{ env.BASE_IMAGE }}
+          TARGET_PLATFORM: ${{ env.TARGET_PLATFORM }}
+          EXPECTED_OS_VERSION: ${{ env.EXPECTED_OS_VERSION }}
         run: |
           set -euxo pipefail
           docker buildx imagetools inspect "${BASE_IMAGE}"
@@ -99,7 +123,8 @@ jobs:
             echo "BASE_IMAGE_OS_VERSION=${VERSION_ID}"
             echo "BASE_IMAGE_PRETTY_NAME=${PRETTY_NAME}"
             ldd --version | head -n 1
-            python3 - <<'"'"'PY'"'"'
+            if command -v python3 >/dev/null 2>&1; then
+              python3 - <<'"'"'PY'"'"'
           import importlib.util
           import platform
           import sys
@@ -110,6 +135,9 @@ jobs:
               spec = importlib.util.find_spec(name)
               print(f"MODULE_{name.upper()}={spec.origin if spec else None}")
           PY
+            else
+              echo "BASE_IMAGE_PYTHON=absent (allowed for CUDA/toolchain bases; runtime installs Python in Dockerfile)"
+            fi
             if [ "${VERSION_ID}" != "'"${EXPECTED_OS_VERSION}"'" ]; then
               echo "Expected base image VERSION_ID='"${EXPECTED_OS_VERSION}"' but got ${VERSION_ID}" >&2
               exit 42
@@ -117,9 +145,9 @@ jobs:
           '
 
       - name: Prepare Buildx for target platform
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         env:
-          TARGET_PLATFORM: ${{ inputs.target_platform }}
+          TARGET_PLATFORM: ${{ env.TARGET_PLATFORM }}
         run: |
           set -euxo pipefail
           docker buildx version
@@ -127,12 +155,13 @@ jobs:
           docker buildx inspect --bootstrap
 
       - name: Prepare compact Docker context
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         run: |
           set -euxo pipefail
           rm -rf /tmp/sglang-gemma4-image-context
           mkdir -p /tmp/sglang-gemma4-image-context/scripts /tmp/sglang-gemma4-image-context/third_party
           cp scripts/install_sglang_source_stack.sh /tmp/sglang-gemma4-image-context/scripts/
+          cp third_party/sglang/python/pyproject.toml /tmp/sglang-gemma4-image-context/sglang-pyproject.toml
           rsync -a --delete \
             --exclude '.git' \
             --exclude 'build' \
@@ -147,19 +176,23 @@ jobs:
             third_party/sglang/ /tmp/sglang-gemma4-image-context/third_party/sglang/
 
       - name: Write Dockerfile
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         env:
-          BASE_IMAGE: ${{ inputs.base_image }}
-          TRANSFORMERS_PIN: ${{ inputs.transformers_pin }}
+          BASE_IMAGE: ${{ env.BASE_IMAGE }}
+          TRANSFORMERS_PIN: ${{ env.TRANSFORMERS_PIN }}
+          TORCH_VERSION: ${{ env.TORCH_VERSION }}
+          TORCH_INDEX_URL: ${{ env.TORCH_INDEX_URL }}
           SGLANG_REF: ${{ github.sha }}
         run: |
           set -euxo pipefail
           cat >/tmp/sglang-gemma4-image-context/Dockerfile <<'EOF'
           # syntax=docker/dockerfile:1.7
-          ARG BASE_IMAGE=nvcr.io/nvidia/sglang:26.05-py3
+          ARG BASE_IMAGE=nvidia/cuda:13.0.2-devel-ubuntu22.04
           FROM ${BASE_IMAGE}
 
           ARG TRANSFORMERS_PIN=5.11.0
+          ARG TORCH_VERSION=2.11.0
+          ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
           ARG HIJINKS_REF
           ARG SGLANG_REF
           ARG FLASHINFER_REF
@@ -169,17 +202,22 @@ jobs:
                 spark.hijinks_ref="${HIJINKS_REF}" \
                 spark.sglang_ref="${SGLANG_REF}" \
                 spark.flashinfer_ref="${FLASHINFER_REF}" \
-                spark.transformers_pin="${TRANSFORMERS_PIN}"
+                spark.transformers_pin="${TRANSFORMERS_PIN}" \
+                spark.torch_version="${TORCH_VERSION}" \
+                spark.torch_index_url="${TORCH_INDEX_URL}"
 
           ENV PATH="/root/.cargo/bin:${PATH}" \
               CUDA_HOME=/usr/local/cuda \
               CCACHE_DIR=/root/.cache/ccache \
-              CMAKE_BUILD_PARALLEL_LEVEL=8 \
-              MAX_JOBS=8
+              CMAKE_BUILD_PARALLEL_LEVEL=20 \
+              MAX_JOBS=20 \
+              TORCH_CUDA_ARCH_LIST=12.1a \
+              SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1
 
           WORKDIR /work
           COPY scripts /work/scripts
           COPY third_party /work/third_party
+          COPY sglang-pyproject.toml /work/sglang-pyproject.toml
 
           RUN set -eux; \
               . /etc/os-release; \
@@ -188,20 +226,76 @@ jobs:
               ldd --version | head -n 1
 
           RUN apt-get update \
-           && apt-get install -y --no-install-recommends protobuf-compiler ccache binutils \
+           && apt-get install -y --no-install-recommends \
+                bash binutils build-essential ca-certificates ccache clang cmake curl \
+                git jq libnuma1 ninja-build pkg-config protobuf-compiler \
+                python3 python3-dev python3-pip python3-venv rsync \
+                software-properties-common unzip wget \
+           && add-apt-repository -y ppa:deadsnakes/ppa \
+           && apt-get update \
+           && apt-get install -y --no-install-recommends \
+                python3.12 python3.12-dev python3.12-venv \
+           && curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3.12 \
+           && ln -sf /usr/bin/python3.12 /usr/local/bin/python3 \
+           && ln -sf /usr/local/bin/pip3.12 /usr/local/bin/pip3 \
+           && python3 -m pip install --upgrade pip setuptools wheel \
            && rm -rf /var/lib/apt/lists/*
           RUN if ! command -v cargo >/dev/null 2>&1; then \
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable; \
               fi
+
+          RUN python3 -m pip install --no-cache-dir \
+                "torch==${TORCH_VERSION}" \
+                "torchaudio==${TORCH_VERSION}" \
+                --index-url "${TORCH_INDEX_URL}" \
+           && python3 -m pip install --no-cache-dir torchvision --index-url "${TORCH_INDEX_URL}" \
+           && python3 - <<'PY'
+          import platform
+          import sys
+          import torch
+
+          print("PYTHON", sys.version.replace("\n", " "))
+          print("MACHINE", platform.machine())
+          print("TORCH", torch.__version__, torch.version.cuda)
+          PY
+
+          RUN python3 - <<'PY' >/tmp/sglang-runtime-reqs.txt
+          import tomllib
+          from pathlib import Path
+
+          skip = {
+              "flashinfer_python",
+              "flashinfer-cubin",
+              "flashinfer_cubin",
+              "flashinfer-jit-cache",
+              "flashinfer_jit_cache",
+              "sglang-kernel",
+              "torch",
+              "torchaudio",
+              "torchvision",
+          }
+
+          data = tomllib.loads(Path("/work/sglang-pyproject.toml").read_text())
+          reqs = list(data["project"]["dependencies"])
+          reqs += data["project"]["optional-dependencies"]["diffusion"]
+          for req in reqs:
+              name = req.split(";", 1)[0].split("[", 1)[0].split("==", 1)[0].split(">=", 1)[0].split("<", 1)[0].strip()
+              if name.replace("_", "-").lower() in {item.replace("_", "-") for item in skip}:
+                  continue
+              print(req)
+          PY
+
+          RUN --mount=type=cache,id=sglang-gemma4-pip,target=/root/.cache/pip \
+              python3 -m pip install --extra-index-url "${TORCH_INDEX_URL}" -r /tmp/sglang-runtime-reqs.txt
 
           RUN --mount=type=cache,id=sglang-gemma4-ccache,target=/root/.cache/ccache \
               git config --global --add safe.directory /work/third_party/flashinfer \
            && git config --global --add safe.directory /work/third_party/sglang \
            && REPO_ROOT=/work \
               CCACHE_DIR="${CCACHE_DIR}" \
-              CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
-              MAX_JOBS="${MAX_JOBS}" \
-              bash /work/scripts/install_sglang_source_stack.sh
+               CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
+               MAX_JOBS="${MAX_JOBS}" \
+               bash /work/scripts/install_sglang_source_stack.sh
 
           RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
 
@@ -286,15 +380,15 @@ jobs:
           EOF
 
       - name: Compute image metadata
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         id: meta
         shell: bash
         run: |
           set -euxo pipefail
           owner_repo="${GITHUB_REPOSITORY,,}"
-          tag_input="${{ inputs.image_tag }}"
+          tag_input="${IMAGE_TAG}"
           tag="$(printf '%s' "${tag_input}" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_.-' '-')"
-          platform_suffix="$(printf '%s' '${{ inputs.target_platform }}' | sed 's#linux/##; s#[^A-Za-z0-9_.-]#-#g' | tr '[:upper:]' '[:lower:]')"
+          platform_suffix="$(printf '%s' "${TARGET_PLATFORM}" | sed 's#linux/##; s#[^A-Za-z0-9_.-]#-#g' | tr '[:upper:]' '[:lower:]')"
           case "${tag}" in
             *"${platform_suffix}"*) ;;
             *) tag="${tag}-${platform_suffix}" ;;
@@ -309,7 +403,7 @@ jobs:
           } >>"${GITHUB_OUTPUT}"
 
       - name: Login to GHCR
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -317,9 +411,9 @@ jobs:
           printf '%s' "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
       - name: Build and push image
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         env:
-          TARGET_PLATFORM: ${{ inputs.target_platform }}
+          TARGET_PLATFORM: ${{ env.TARGET_PLATFORM }}
         run: |
           set -euxo pipefail
           docker buildx build \
@@ -327,8 +421,10 @@ jobs:
             --push \
             --provenance=false \
             --metadata-file /tmp/sglang-gemma4-image-build-metadata.json \
-            --build-arg BASE_IMAGE="${{ inputs.base_image }}" \
-            --build-arg TRANSFORMERS_PIN="${{ inputs.transformers_pin }}" \
+            --build-arg BASE_IMAGE="${BASE_IMAGE}" \
+            --build-arg TRANSFORMERS_PIN="${TRANSFORMERS_PIN}" \
+            --build-arg TORCH_VERSION="${TORCH_VERSION}" \
+            --build-arg TORCH_INDEX_URL="${TORCH_INDEX_URL}" \
             --build-arg HIJINKS_REF="${GITHUB_SHA}" \
             --build-arg SGLANG_REF="${{ steps.meta.outputs.sglang_ref }}" \
             --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
@@ -337,9 +433,9 @@ jobs:
           cat /tmp/sglang-gemma4-image-build-metadata.json
 
       - name: Write summary artifact
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         env:
-          TARGET_PLATFORM: ${{ inputs.target_platform }}
+          TARGET_PLATFORM: ${{ env.TARGET_PLATFORM }}
         run: |
           set -euxo pipefail
           mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
@@ -353,11 +449,13 @@ jobs:
           - image: \`${{ steps.meta.outputs.image }}\`
           - pushed digest: \`${image_digest}\`
           - target platform: \`${TARGET_PLATFORM}\`
-          - base image: \`${{ inputs.base_image }}\`
+          - base image: \`${BASE_IMAGE}\`
+          - torch: \`${TORCH_VERSION}\`
+          - torch index: \`${TORCH_INDEX_URL}\`
           - hijinks ref: \`${GITHUB_SHA}\`
           - SGLang ref: \`${{ steps.meta.outputs.sglang_ref }}\`
           - FlashInfer ref: \`${{ steps.meta.outputs.flashinfer_ref }}\`
-          - transformers pin: \`${{ inputs.transformers_pin }}\`
+          - transformers pin: \`${TRANSFORMERS_PIN}\`
           - runner: \`${RUNNER_NAME}\`
           - labels: \`${RUNNER_TRACKING_ID:-unknown}\`
 
@@ -368,7 +466,7 @@ jobs:
           EOF
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.base_probe_only != 'true' }}
+        if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         with:
           name: sglang-gemma4-source-stack-image-summary
           path: results/sglang_gemma4_source_stack_image_${{ github.run_id }}/
