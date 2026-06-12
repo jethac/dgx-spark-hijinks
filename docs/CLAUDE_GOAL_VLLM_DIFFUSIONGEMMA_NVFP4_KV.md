@@ -239,6 +239,32 @@ This kills the bare-wheel host-mismatch (lineage/torch/glibc) that blocked DG-V5
 publishes, DG-V5/V6 serve via scripts/run_vllm_dgemma_dgv_spark.sh inside it.
 Full end-state (later): move the rebuilt-C base build to Ubicloud too for end-to-end CI repro.
 
+## DG-V5 SERVE: pipeline GREEN to the runtime; block-diffusion PROFILING HANGS (2026-06-12)
+The whole serving pipeline now works end-to-end up to the serving runtime:
+- Pivot validated ON HARDWARE: 22.04/torch-2.11 wheel (sm121a-arm64-wheels-3d6a0d507) loads in r10
+  with ZERO retrofit (FIPrefillGroup/supports_non_causal/DiffusionGemma all True, no torch/glibc fight).
+- **r11 baked + provenance-green**: jethac-vllm-aeon-gemma4:e2-dgv-3d6a0d507-sm121a-r11 (r10 + e2-dgv
+  vLLM, swap-only). Dockerfile.r11 + docker/Dockerfile.r11 pushed.
+- DiffusionGemma serve INITIALIZES correctly: nvfp4 KV engaged, FLASHINFER backend, **VO-split +
+  VLLM_NVFP4_KV_LINEAR_V_SF=1 proof line present** ("NVFP4 V scale factors are linear"), 26B MoE
+  loads (48.6 GiB). Two config gates surfaced + satisfied: enforce-eager (cudagraph OOM on 26B MoE),
+  VLLM_NVFP4_KV_LINEAR_V_SF=1 (512-wide-head VO split).
+- **BLOCKER: serve HANGS in the post-load memory-profiling dummy forward** (frozen right after
+  "Using FlashInfer for top-p & top-k sampling"; no "GPU KV cache size" line; generation empty;
+  container alive, no error). NOT fixed by --no-enable-prefix-caching --no-enable-chunked-prefill.
+  This is a vLLM **block-diffusion serving-runtime** issue (the profiling forward vs the denoise /
+  model_states integration), NOT our NVFP4-KV code (which is proven: P520 byte-identical + engages
+  here correctly). Iteration cost ~6min/model-reload.
+
+### NEXT (decisive bisect): serve **bf16** DiffusionGemma (--kv-cache-dtype auto) in r11.
+- bf16 ALSO hangs -> block-diffusion serving-runtime general (upstream DG-in-our-base profiling
+  path); investigate the profiling dummy-run vs the diffusion model_states/denoise setup.
+- bf16 SERVES but nvfp4 hangs -> our nvfp4+VO-split+diffusion-attention interaction during profiling.
+Either way it's a scoped serving-runtime follow-up; the NVFP4-KV contribution + the whole image/
+wheel/r11 pipeline are done. (Note: upstream's recipe serves DG via `vllm serve` in the Gemma
+docker image -> their newer vLLM base may profile DG correctly where our cherry-picked PR-on-older-
+base has a gap.)
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
