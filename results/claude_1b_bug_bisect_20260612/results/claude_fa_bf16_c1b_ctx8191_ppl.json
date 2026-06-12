@@ -1,0 +1,77 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 337353,
+  "container_image": "jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9",
+  "contexts": [
+    {
+      "ctx": 8191,
+      "elapsed_s": 0.8345160860044416,
+      "endpoint": "http://127.0.0.1:8000/v1/completions",
+      "payload": {
+        "max_tokens": 1,
+        "model": "gemma3-1b-it",
+        "prompt_logprobs": 1,
+        "prompt_token_count": 8191,
+        "return_token_ids": true,
+        "return_tokens_as_token_ids": true,
+        "stream": false,
+        "temperature": 0
+      },
+      "score": {
+        "mean_logprob": -2.356493110435786,
+        "mean_nll_nats": 2.356493110435786,
+        "missing_positions_preview": [],
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8191,
+        "num_scored_tokens": 8190,
+        "ok": true,
+        "ppl": 10.553875204461503,
+        "usage": {
+          "completion_tokens": 1,
+          "prompt_tokens": 8191,
+          "prompt_tokens_details": null,
+          "total_tokens": 8192
+        }
+      },
+      "token_logprobs_dump": "results/token_dumps_fa_bf16_c1b/claude_1b_bisect_fa_bf16_c1b_ctx8191_ctx8191_tokens.json"
+    }
+  ],
+  "elapsed_s": 4.915,
+  "finished_utc": "2026-06-12T00:56:18Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "bf16",
+  "model": "gemma3-1b-it",
+  "ok": true,
+  "run_id": "claude_1b_bisect_fa_bf16_c1b_ctx8191",
+  "runtime_ref": "r9 spark sm121 1B bisect row=fa_bf16 cell=c1b",
+  "schema": "vllm-prompt-ppl-sweep/v1",
+  "scope": "clean full-attention path; prefix caching disabled; Gemma/SWA and SGLang radix reuse paths excluded",
+  "started_utc": "2026-06-12T00:56:17Z",
+  "text_chars": 934744,
+  "text_files": [
+    "docs/c1_ppl_corpus.md"
+  ],
+  "tokenizer": "google/gemma-3-1b-it",
+  "url": "http://127.0.0.1:8000"
+}

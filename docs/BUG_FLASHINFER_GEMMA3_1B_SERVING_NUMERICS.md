@@ -74,9 +74,45 @@ preserved at WSL ~/.cache/flashinfer_prediag_070355 for forensics.
 4. Once root-caused: fix on jethac/flashinfer branch + upstream filing with
    minimal repro (this doc is the filing draft skeleton).
 
+## Bisect result 2026-06-12 (Spark / GB10, sm_121): PLATFORM / sm_120-specific
+
+Bisect step 1 of the plan above, run on the Spark (GB10, sm_121) with the
+baked r9 image `jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r9`
+(id 8c37bdbc4fdb), `google/gemma-3-1b-it`, C1 ctx 8191, each cell run TWICE
+bitwise. Backend forced via `--attention-backend FLASH_ATTN|FLASHINFER`,
+engaged backend verified from the `Using AttentionBackendEnum.<X> backend.`
+proof lines (not the flag).
+
+| row | backend (proof) | kv dtype | C1 ×2 (bitwise) | smoke |
+|---|---|---|---|---|
+| FLASH_ATTN bf16 (truth) | FLASH_ATTN | bf16 | 2.356493110435786 (IDENTICAL) | "Tokyo" COHERENT |
+| FLASHINFER bf16 (suspect) | FLASHINFER | bf16 | 2.359283581557766 (IDENTICAL) | "Tokyo" COHERENT |
+| FLASHINFER nvfp4 (+LINEAR_V_SF) | FLASHINFER | nvfp4 | 2.400746942552027 (IDENTICAL) | "Tokyo" COHERENT |
+
+**FI-bf16 − FLASH_ATTN-bf16 on the Spark = +0.00279 nats** (P520 was +0.221).
+That is well under the 0.01 threshold → FlashInfer MATCHES FLASH_ATTN at the
+exact 1B geometry on sm_121. **Verdict: PLATFORM / sm_120-specific. The bug
+does NOT reproduce on the Spark — the GEOMETRY hypothesis is REFUTED.** NVFP4 KV
+is COHERENT and deterministic on the Spark (+0.044 vs truth) where the P520 gave
+deterministic gibberish (+1.59). The Spark FLASH_ATTN truth row (2.35649) is
+within 0.0014 nats of both the P520 FLASH_ATTN row (2.35785) and the HF eager
+truth (2.35778), confirming the setup is sound.
+
+Implication: the defect is scoped to sm_120 (the P520 editable / source-tree
+FlashInfer build — JIT codegen or an arch-conditional path), NOT the
+d256/SWA-512/1-kv-head geometry. The Spark/sm_121 Gemma 3 1B path (bf16 AND
+NVFP4 KV) is fine. The Gemma 3 1B NVFP4 row banked RED on the P520 is
+GREEN-class on the Spark. Bug stays OPEN but re-scoped to sm_120; investigation
+steps 2-3 (P520 logit-diff probe + window/kv-head ablation) remain the way to
+localize the sm_120 root cause. Artifacts:
+results/claude_1b_bug_bisect_20260612/ (BISECT_SUMMARY.md, ppl JSONs ×2/row,
+smoke transcripts, proof lines); Spark master copy + server logs + token dumps
+at /home/jethac/spark_tmp/claude_1b_bug_bisect_20260612/.
+
 ## Cross-references
 
+- results/claude_1b_bug_bisect_20260612/ (Spark sm_121 bisect — PLATFORM verdict)
 - results/p520_gemma3_1b_serving_20260612/ (full artifacts incl. token
   dumps on the P520 side: B:\workshop\wsl_sm120\results\gemma3_1b_serving_20260612\)
-- docs/RESULTS_LEDGER.md row (2026-06-12); mail/0044.
+- docs/RESULTS_LEDGER.md row (2026-06-12); mail/0044, mail/0056.
 - docs/TRITON_RETIREMENT_SCORECARD.md adjudication log (flip scoping).
