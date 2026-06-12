@@ -276,6 +276,10 @@ geometry_lines = [
     line for line in log.splitlines()
     if "SGLang Gemma4 FlashInfer geometry" in line
 ]
+wrapper_geometry_lines = [
+    line for line in log.splitlines()
+    if "SGLang FlashInfer wrapper geometries" in line
+]
 vosplit_lines = [
     line for line in geometry_lines
     if "layer_head_dim=512" in line
@@ -285,11 +289,15 @@ vosplit_lines = [
         or "label=decode_as_prefill_vosplit" in line
     )
 ]
+wrapper_vosplit_lines = [
+    line for line in wrapper_geometry_lines
+    if "head_dim=512" in line and "head_dim_vo=256" in line
+]
 head_dim_vo_ok = any(
     re.search(r"head_dim_vo=256|head_dim_vo': 256|head_dim_vo\": 256", line)
     for line in vosplit_lines
-)
-route_ok = policy_ok and bool(vosplit_lines) and head_dim_vo_ok
+) or bool(wrapper_vosplit_lines)
+route_ok = policy_ok and (bool(vosplit_lines) or bool(wrapper_vosplit_lines)) and head_dim_vo_ok
 kv_ok = mixed_mode_ok and kv_dtype_ok and pool_mixed_ok and pool_class_ok
 
 status = "GREEN" if quality_ok and route_ok and kv_ok else "RED"
@@ -306,9 +314,9 @@ if not pool_mixed_ok:
     reasons.append("pool configurator did not report mixed_kv=True")
 if not pool_class_ok:
     reasons.append("hybrid SWA pool did not use MHATokenToKVPoolFP4 for both subpools")
-if not vosplit_lines:
-    reasons.append("no D=512 geometry line with VO-split trace label")
-if vosplit_lines and not head_dim_vo_ok:
+if not vosplit_lines and not wrapper_vosplit_lines:
+    reasons.append("no D=512 geometry line with VO-split trace label or wrapper geometry")
+if (vosplit_lines or wrapper_vosplit_lines) and not head_dim_vo_ok:
     reasons.append("D=512 VO-split geometry did not expose head_dim_vo=256")
 
 lines = [
@@ -338,7 +346,7 @@ lines = [
     f"- Server args prove `kv_cache_dtype='fp4_e2m1'`: {'PASS' if kv_dtype_ok else 'FAIL'}",
     f"- Pool configurator reports `mixed_kv=True`: {'PASS' if pool_mixed_ok else 'FAIL'}",
     f"- Hybrid subpools are `MHATokenToKVPoolFP4`: {'PASS' if pool_class_ok else 'FAIL'}",
-    f"- D=512 geometry routes through VO-split trace labels: {'PASS' if bool(vosplit_lines) else 'FAIL'}",
+    f"- D=512 geometry routes through VO-split trace labels or wrapper geometry: {'PASS' if bool(vosplit_lines) or bool(wrapper_vosplit_lines) else 'FAIL'}",
     f"- D=512 VO-split exposes `head_dim_vo=256`: {'PASS' if head_dim_vo_ok else 'FAIL'}",
 ]
 if reasons:
@@ -347,6 +355,10 @@ if reasons:
 if geometry_lines:
     lines += ["", "## Geometry Evidence", ""]
     for line in vosplit_lines[:8]:
+        lines.append(f"- `{line[:500]}`")
+if wrapper_vosplit_lines:
+    lines += ["", "## Wrapper Geometry Evidence", ""]
+    for line in wrapper_vosplit_lines[:4]:
         lines.append(f"- `{line[:500]}`")
 pool_lines = [
     line for line in log.splitlines()

@@ -188,14 +188,18 @@ Gate:
 - capacity denominator audited as mixed-KV, not full NVFP4
 - radix/prefix reuse behavior explicitly scoped
 
-Status: Spark serving packet staged in
-`docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md`. The packet runs
-`scripts/run_sglang_dgemma_dgr4_mixedkv_smoke.sh` and keeps the row RED unless
-the revised DG-R2 text gate passes, D=512 globals still route through VO-split,
-and the logs prove `--kv-cache-dtype fp4_e2m1` with
-`SGLANG_FP4_KV_MIXED_KV=1`, `mixed_kv=True`, and FP4 hybrid subpools. A green
-row is still a text-only mixed-KV smoke, not full NVFP4 K+V or multimodal
-support.
+Status: RED at first live request; see
+`results/sglang_dgemma_dgr4_mixedkv_smoke_20260612T114737JST/DIAGNOSIS.md`.
+The row proves mixed-KV allocation (`kv_cache_dtype='fp4_e2m1'`,
+`SGLANG_FP4_KV_MIXED_KV=1`, `mixed_kv=True`, FP4 hybrid subpools) and wrapper
+construction for D=512 VO-split, then fails before the text-quality gate because
+FlashInfer paged prefill is still planned with a single `kv_data_type=torch.uint8`
+while SGLang supplies split K/V tensors (`K=torch.float8_e4m3fn`,
+`V=torch.uint8`). This makes DiffusionGemma DG-R4 the named live consumer for
+split-K/V paged-prefill module keying. The packet remains staged in
+`docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md`; rerun
+`scripts/run_sglang_dgemma_dgr4_mixedkv_smoke.sh` after that ABI blocker is
+fixed.
 
 ### DG-R5: Full NVFP4 K+V
 
