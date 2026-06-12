@@ -96,7 +96,11 @@ Status: green on GB10 through the stock Triton/eager path; see
 Caveat: the smoke response is coherent, but the server log reports many
 checkpoint keys as uninitialized. The text-only audit is green in
 `results/sglang_dgemma_dgr2_weight_warning_audit_20260611TmanualJST.md`;
-multimodal/image quality remains blocked on a separate vision-load audit.
+the follow-up static vision audit
+`results/sglang_dgemma_vision_warning_static_audit_20260612T1554JST.md`
+classifies the vision warning group as SGLang-created defaults rather than
+missing checkpoint payload. Multimodal/image quality remains unclaimed until a
+live image prompt or vision-forward gate runs.
 
 ### DG-R2: Upstream Runtime Quality Baseline
 
@@ -131,10 +135,14 @@ Follow-up diagnostics:
   prompts for Tokyo, 2+2, and a DGX Spark use sentence are non-empty,
   byte-stable across two repeats, and semantically correct.
 
-Do not include image prompts until the vision-path warning group has its own
-audit. DG-R3 may now proceed only under the revised text-only DG-R2 scope above;
-the original terse-prompt baseline remains RED and should stay cited as a known
-prompt-pathology row rather than hidden.
+The vision-path warning group now has a static load audit in
+`results/sglang_dgemma_vision_warning_static_audit_20260612T1554JST.md`: the
+checkpoint has no matching payload for the warning-only no-scale norm,
+layer-scalar, or clippable-bound defaults. Do not include image prompts in
+claims until a live multimodal gate exercises the real image processor and
+vision-forward path. DG-R3 may now proceed only under the revised text-only
+DG-R2 scope above; the original terse-prompt baseline remains RED and should
+stay cited as a known prompt-pathology row rather than hidden.
 
 ### DG-R3: D=512 FlashInfer VO-Split Integration
 
