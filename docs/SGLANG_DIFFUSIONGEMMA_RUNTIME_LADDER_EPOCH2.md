@@ -249,6 +249,16 @@ Gate:
 - speed, capacity, and quality reported as separate claims
 - all artifacts live under `results/`
 
+Status: staged. Packet:
+`docs/SGLANG_DIFFUSIONGEMMA_DGR6_PERF_PACKET_20260612.md`. Runner:
+`scripts/run_sglang_dgemma_dgr6_perf_pair.sh`.
+
+The staged pair is intentionally a combined stack comparison, not an isolated
+kernel benchmark: before is the stock SGLang DiffusionGemma policy path
+(Triton attention, BF16/auto KV), and after is the GB10-tuned path
+(FlashInfer VO-split, full NVFP4 K+V). DG-R5 remains the separate source for
+the full-NVFP4 quality/capacity claims.
+
 ## Rule
 
 Do not merge the stock-runtime claim with the GB10-performance claim. Upstream
