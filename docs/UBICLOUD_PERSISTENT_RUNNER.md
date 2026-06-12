@@ -153,6 +153,19 @@ The hijinks repo has a smoke workflow for the current persistent runner:
 .github/workflows/ubicloud-persistent-smoke.yml
 ```
 
+It also builds the SGLang Gemma4 source-stack container with Docker on the
+same persistent runner:
+
+```text
+.github/workflows/hijinks-sglang-gemma4-source-stack-image.yml
+```
+
+First green receipt: GitHub Actions run `27405349785`, published
+`ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-gemma4-tf511-12fca91`
+at digest `sha256:bf24438b302c96e457b8a59f8a8dbaf109fab08013554be81e6957d4fb0f1a70`.
+This is a CPU build/provenance gate only; Spark serving and GPU runtime checks
+remain separate.
+
 The SGLang fork has a non-publishing persistent wheel build workflow:
 
 ```text
