@@ -61,10 +61,18 @@ mkdir -p "${OUT_DIR}"
 git fetch origin
 git checkout "${SOURCE_BRANCH}"
 git pull --ff-only
-git -C third_party/sglang fetch origin
-git -C third_party/sglang checkout "${SGLANG_COMMIT}"
-git -C third_party/flashinfer fetch origin
-git -C third_party/flashinfer checkout "${FLASHINFER_COMMIT}"
+
+checkout_submodule_commit() {
+  local path="$1"
+  local commit="$2"
+  if ! git -C "${path}" rev-parse --verify "${commit}^{commit}" >/dev/null 2>&1; then
+    git -C "${path}" fetch origin
+  fi
+  git -C "${path}" checkout "${commit}"
+}
+
+checkout_submodule_commit third_party/sglang "${SGLANG_COMMIT}"
+checkout_submodule_commit third_party/flashinfer "${FLASHINFER_COMMIT}"
 git -C third_party/flashinfer submodule update --init --recursive \
   3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
 
