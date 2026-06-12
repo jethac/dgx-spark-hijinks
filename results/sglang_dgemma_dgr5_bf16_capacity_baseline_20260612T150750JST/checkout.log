@@ -1,0 +1,10 @@
+parent_commit=69f9d377d37fe0e52ab90af8bc15bece4e552217
+sglang_commit=98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968
+flashinfer_commit=f99323bd7d1cc88d9445202c12934070be754e2d
+?? results/sglang_dgemma_dgr5_bf16_capacity_baseline_20260612T150750JST/
+?? results/sglang_gemma4_mtp_identity_20260612T122211JST/
+?? results/sglang_gemma4_mtp_identity_20260612T122931JST/
+?? results/sglang_gemma4_mtp_identity_20260612T123731JST/
+?? results/sglang_gemma4_mtp_identity_20260612T130454JST/
+?? results/sglang_gemma4_mtp_identity_20260612T131627JST/
+?? results/sglang_gemma4_mtp_identity_20260612T132510JST/

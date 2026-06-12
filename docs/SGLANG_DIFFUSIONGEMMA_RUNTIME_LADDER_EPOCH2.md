@@ -229,6 +229,15 @@ image quality, CUDA graph safety, or long-context quality. Packet:
 `docs/SGLANG_DIFFUSIONGEMMA_DGR5_FULLNVFP4_PACKET_20260612.md`. Runner:
 `scripts/run_sglang_dgemma_dgr5_fullnvfp4_smoke.sh`.
 
+Matched BF16/auto-KV capacity denominator is also green; see
+`results/sglang_dgemma_dgr5_capacity_pair_20260612T1517JST/summary.md`. At the
+same current SGLang commit, image, page size, memory fraction, graph policy, and
+VO-split launch shape, BF16/auto KV allocated `66560` full-layer / `53248` SWA
+tokens, while full NVFP4 K+V allocated `237312` / `189696`, or about `3.56x`
+KV token capacity versus BF16/auto KV for this model/launch envelope. This
+capacity pair does not add image, CUDA graph, long-context quality, fp8
+denominator, or throughput claims.
+
 ### DG-R6: Performance Campaign Row
 
 Produce the public/blog-grade row.
