@@ -13,7 +13,7 @@ mapping, but runtime work now starts from upstream `gemma4_diffusion.py` and
 SGLang branch:
 
 - `jethac/sglang:spark/hijinks-024-diffusiongemma-upstream-rebase`
-- current head: `651d55cd2e`
+- current head: `06e4a98a56`
 
 What upstream provides:
 
@@ -34,6 +34,11 @@ Our immediate fix on top:
   whose installed Transformers build does not yet recognize
   `model_type=diffusion_gemma`. This is config loading only; the model class and
   `Gemma4Renoise` algorithm remain the upstream SGLang implementation.
+- `06e4a98a56` adds a persistent-Ubicloud static source/runtime audit workflow
+  for the DiffusionGemma surface. The green run is
+  `results/sglang_dgemma_static_audit_persistent_20260612T1014JST/summary.md`.
+  Scope is static audit only: no model weights, no serving, and no quality
+  claim.
 
 ## Ladder
 
