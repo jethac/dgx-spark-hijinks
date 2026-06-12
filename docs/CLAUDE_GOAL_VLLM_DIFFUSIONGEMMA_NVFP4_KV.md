@@ -109,6 +109,19 @@ three-way by hand against the current surface; (3) register the arch; (4) build 
 (5) run DG-V5/V6 on sm_120 + sm_121 and bank. The DG-2 causal grouping is the asset to preserve
 through the merge -- it's the diffusion-specific FlashInfer logic, already authored.
 
+## EXECUTION STATUS (2026-06-12)
+- Working branch `spark/hijinks-e2-dgv` created off integrated HEAD (e32459eea).
+- **Relief found:** HEAD already has the gpu/ v2 runner infra (model_states/, attn_utils,
+  sample/, buffer_utils) that diffusion_gemma.py imports -> NO runner subsystem to port.
+  Same v2-runner base as upstream PR eb28452b1, so the CLEAN upstream PR is the preferred
+  source for shared-file diffusion hunks (over the entangled dgemma branch).
+- DONE: landed the 3 clean new files (diffusion_gemma.py 1359L + 2 config files) on e2-dgv.
+- NEXT: (a) shared-file diffusion hunks from PR eb28452b1 -> registry, model/config.py routing,
+  transformers config registration, model_runner denoise loop, model_states diffusion ModelState,
+  scheduler/sampler/cudagraph hooks; (b) replay DG-2 flashinfer causal grouping (dfb427952,
+  +313) onto the current flashinfer.py -- the crux, hand-resolved; (c) arch register; (d) build
+  sm120a wheel; (e) DG-V5/V6 both silicon + bank.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
