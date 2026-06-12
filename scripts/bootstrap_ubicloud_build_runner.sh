@@ -118,7 +118,7 @@ pushd "${runner_dir}" >/dev/null
 if [[ -f .runner ]]; then
   ./svc.sh stop || true
   ./svc.sh uninstall || true
-  sudo -u "${RUNNER_USER}" ./config.sh remove --unattended --token "${GITHUB_RUNNER_TOKEN}" || true
+  sudo -u "${RUNNER_USER}" ./config.sh remove --token "${GITHUB_RUNNER_TOKEN}" || true
 fi
 
 sudo -u "${RUNNER_USER}" ./config.sh \
