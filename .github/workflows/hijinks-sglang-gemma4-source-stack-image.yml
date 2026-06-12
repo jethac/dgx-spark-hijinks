@@ -122,7 +122,8 @@ jobs:
             . /etc/os-release
             echo "BASE_IMAGE_OS_VERSION=${VERSION_ID}"
             echo "BASE_IMAGE_PRETTY_NAME=${PRETTY_NAME}"
-            ldd --version | head -n 1
+            ldd --version >/tmp/base-ldd-version.txt
+            sed -n '1p' /tmp/base-ldd-version.txt
             if command -v python3 >/dev/null 2>&1; then
               python3 - <<'"'"'PY'"'"'
           import importlib.util
@@ -223,7 +224,8 @@ jobs:
               . /etc/os-release; \
               echo "IMAGE_OS=${PRETTY_NAME}"; \
               test "${VERSION_ID}" = "22.04"; \
-              ldd --version | head -n 1
+              ldd --version >/tmp/image-ldd-version.txt; \
+              sed -n '1p' /tmp/image-ldd-version.txt
 
           RUN apt-get update \
            && apt-get install -y --no-install-recommends \
