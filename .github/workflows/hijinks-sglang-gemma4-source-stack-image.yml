@@ -450,8 +450,9 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
-          image_digest="$(docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' --format '{{.Digest}}')"
           docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' >results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/imagetools.txt
+          image_digest="$(awk '/^Digest:/ {print $2; exit}' results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/imagetools.txt)"
+          test -n "${image_digest}"
           cat >results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}/summary.md <<EOF
           # SGLang Gemma4 Source-Stack Image Build
 
