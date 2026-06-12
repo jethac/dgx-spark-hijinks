@@ -1,0 +1,1015 @@
+{
+  "contents": [
+    "In language modeling, perplexity is a measure of how well a probability distribution predicts a sample of text.  Specifically, it quantifies the average uncertainty a language model has when predicting the next word in a sequence. A lower perplexity score indicates a better model \u2013 meaning it\u2019s more confident and accurate in its predictions and, therefore, has a more reliable probability distribution for the text.  Essentially, perplexity represents the inverse probability of the test set, normalized by the number of words, giving a sense of how surprised the model is by the observed text; the less surprised, the better the model\u2019s fit.",
+    "In language modeling, perplexity is a measure of how well a probability distribution predicts a sample of text.  Specifically, it quantifies the average uncertainty a language model has when predicting the next word in a sequence. A lower perplexity score indicates a better model \u2013 meaning it\u2019s more confident and accurate in its predictions and, therefore, has a more reliable representation of the language it\u2019s trained on.  Essentially, perplexity represents the inverse probability of the test set, giving a sense of how surprised the model is by the observed text; a lower surprise is a better model."
+  ],
+  "elapsed_s": 112.649,
+  "endpoint": "http://127.0.0.1:8077/v1/chat/completions",
+  "label": "g3_4b_bf16_fi_knobon",
+  "model": "google/gemma-3-4b-it",
+  "ok": false,
+  "ok_deterministic": false,
+  "prompt": "Write a single paragraph explaining what a perplexity metric measures in language modeling.",
+  "repeats": 2,
+  "schema": "text-identity-smoke/v1",
+  "token_seqs": [
+    [
+      {
+        "logprob": -0.2014133334159851,
+        "token": "In"
+      },
+      {
+        "logprob": -0.00020346954988781363,
+        "token": " language"
+      },
+      {
+        "logprob": 0.0,
+        "token": " modeling"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": 0.0,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.000459565402707085,
+        "token": " is"
+      },
+      {
+        "logprob": -2.264974000354414e-06,
+        "token": " a"
+      },
+      {
+        "logprob": -0.26657262444496155,
+        "token": " measure"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -4.768370445162873e-07,
+        "token": " how"
+      },
+      {
+        "logprob": -2.2649508537142538e-05,
+        "token": " well"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -1.0251946150674485e-05,
+        "token": " probability"
+      },
+      {
+        "logprob": -0.03804267570376396,
+        "token": " distribution"
+      },
+      {
+        "logprob": -0.0002646096108946949,
+        "token": " predicts"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -2.264974000354414e-06,
+        "token": " sample"
+      },
+      {
+        "logprob": -0.386999249458313,
+        "token": " of"
+      },
+      {
+        "logprob": -1.5616295058862306e-05,
+        "token": " text"
+      },
+      {
+        "logprob": -3.576278118089249e-07,
+        "token": "."
+      },
+      {
+        "logprob": -0.8562644124031067,
+        "token": "  "
+      },
+      {
+        "logprob": -0.273374080657959,
+        "token": "Specifically"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -2.50339189733495e-06,
+        "token": " it"
+      },
+      {
+        "logprob": -3.8265450712060556e-05,
+        "token": " quant"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ifies"
+      },
+      {
+        "logprob": -9.60780744208023e-05,
+        "token": " the"
+      },
+      {
+        "logprob": -0.20247112214565277,
+        "token": " average"
+      },
+      {
+        "logprob": -0.04247346147894859,
+        "token": " uncertainty"
+      },
+      {
+        "logprob": -0.003464294131845236,
+        "token": " a"
+      },
+      {
+        "logprob": -0.3132617473602295,
+        "token": " language"
+      },
+      {
+        "logprob": 0.0,
+        "token": " model"
+      },
+      {
+        "logprob": -6.365573790390044e-05,
+        "token": " has"
+      },
+      {
+        "logprob": -0.0005547653418034315,
+        "token": " when"
+      },
+      {
+        "logprob": -1.0728830375228426e-06,
+        "token": " predicting"
+      },
+      {
+        "logprob": 0.0,
+        "token": " the"
+      },
+      {
+        "logprob": 0.0,
+        "token": " next"
+      },
+      {
+        "logprob": -1.0132738680113107e-05,
+        "token": " word"
+      },
+      {
+        "logprob": -4.768360213347478e-06,
+        "token": " in"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -1.4305104514278355e-06,
+        "token": " sequence"
+      },
+      {
+        "logprob": -0.0008771148277446628,
+        "token": "."
+      },
+      {
+        "logprob": -0.3412192463874817,
+        "token": " A"
+      },
+      {
+        "logprob": -1.8000440832111053e-05,
+        "token": " lower"
+      },
+      {
+        "logprob": 0.0,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.01819479651749134,
+        "token": " score"
+      },
+      {
+        "logprob": -2.7656173188006505e-05,
+        "token": " indicates"
+      },
+      {
+        "logprob": -0.3150721788406372,
+        "token": " a"
+      },
+      {
+        "logprob": -2.7418097943154862e-06,
+        "token": " better"
+      },
+      {
+        "logprob": -5.960446742392378e-06,
+        "token": " model"
+      },
+      {
+        "logprob": -0.005113499239087105,
+        "token": " \u2013"
+      },
+      {
+        "logprob": -0.3157835304737091,
+        "token": " meaning"
+      },
+      {
+        "logprob": -0.029750416055321693,
+        "token": " it"
+      },
+      {
+        "logprob": -0.03914456441998482,
+        "token": "\u2019"
+      },
+      {
+        "logprob": 0.0,
+        "token": "s"
+      },
+      {
+        "logprob": -0.018156634643673897,
+        "token": " more"
+      },
+      {
+        "logprob": -3.85038583772257e-05,
+        "token": " confident"
+      },
+      {
+        "logprob": -0.00047874910524114966,
+        "token": " and"
+      },
+      {
+        "logprob": -0.04260644316673279,
+        "token": " accurate"
+      },
+      {
+        "logprob": -2.9802276912960224e-06,
+        "token": " in"
+      },
+      {
+        "logprob": -0.038115546107292175,
+        "token": " its"
+      },
+      {
+        "logprob": -0.00016366096679121256,
+        "token": " predictions"
+      },
+      {
+        "logprob": -0.38982412219047546,
+        "token": " and"
+      },
+      {
+        "logprob": -0.43637439608573914,
+        "token": ","
+      },
+      {
+        "logprob": -0.026233911514282227,
+        "token": " therefore"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -0.6515527963638306,
+        "token": " has"
+      },
+      {
+        "logprob": -1.9192511899746023e-05,
+        "token": " a"
+      },
+      {
+        "logprob": -0.20517444610595703,
+        "token": " more"
+      },
+      {
+        "logprob": -0.4589909315109253,
+        "token": " reliable"
+      },
+      {
+        "logprob": -0.9075786471366882,
+        "token": " probability"
+      },
+      {
+        "logprob": -9.321732068201527e-05,
+        "token": " distribution"
+      },
+      {
+        "logprob": -0.386760413646698,
+        "token": " for"
+      },
+      {
+        "logprob": -0.00010334911348763853,
+        "token": " the"
+      },
+      {
+        "logprob": -0.030473489314317703,
+        "token": " text"
+      },
+      {
+        "logprob": -0.024765508249402046,
+        "token": "."
+      },
+      {
+        "logprob": -0.20980308949947357,
+        "token": "  "
+      },
+      {
+        "logprob": -0.022016631439328194,
+        "token": "Essentially"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -0.5760367512702942,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.206851065158844,
+        "token": " represents"
+      },
+      {
+        "logprob": -0.31331923604011536,
+        "token": " the"
+      },
+      {
+        "logprob": -0.48273420333862305,
+        "token": " inverse"
+      },
+      {
+        "logprob": -0.01837177574634552,
+        "token": " probability"
+      },
+      {
+        "logprob": -2.098061486321967e-05,
+        "token": " of"
+      },
+      {
+        "logprob": -4.637133679352701e-05,
+        "token": " the"
+      },
+      {
+        "logprob": -0.008838814683258533,
+        "token": " test"
+      },
+      {
+        "logprob": -0.5771329402923584,
+        "token": " set"
+      },
+      {
+        "logprob": -0.00022349244682118297,
+        "token": ","
+      },
+      {
+        "logprob": -0.6759688258171082,
+        "token": " normalized"
+      },
+      {
+        "logprob": -0.0002982171718031168,
+        "token": " by"
+      },
+      {
+        "logprob": -7.152555099310121e-07,
+        "token": " the"
+      },
+      {
+        "logprob": -4.0531076592742465e-06,
+        "token": " number"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -1.0490362910786644e-05,
+        "token": " words"
+      },
+      {
+        "logprob": -0.018379030749201775,
+        "token": ","
+      },
+      {
+        "logprob": -0.7823612093925476,
+        "token": " giving"
+      },
+      {
+        "logprob": -0.01484161801636219,
+        "token": " a"
+      },
+      {
+        "logprob": -0.03622116521000862,
+        "token": " sense"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -0.00016127715934999287,
+        "token": " how"
+      },
+      {
+        "logprob": -0.8463073372840881,
+        "token": " surprised"
+      },
+      {
+        "logprob": -1.5497195136049413e-06,
+        "token": " the"
+      },
+      {
+        "logprob": -1.1920928244535389e-07,
+        "token": " model"
+      },
+      {
+        "logprob": -0.0002637753786984831,
+        "token": " is"
+      },
+      {
+        "logprob": -0.0009750141180120409,
+        "token": " by"
+      },
+      {
+        "logprob": -0.002940974896773696,
+        "token": " the"
+      },
+      {
+        "logprob": -0.0858258306980133,
+        "token": " observed"
+      },
+      {
+        "logprob": -0.25209397077560425,
+        "token": " text"
+      },
+      {
+        "logprob": -0.08349169790744781,
+        "token": ";"
+      },
+      {
+        "logprob": -0.4748060703277588,
+        "token": " the"
+      },
+      {
+        "logprob": -0.00022420754248742014,
+        "token": " less"
+      },
+      {
+        "logprob": -0.00895649567246437,
+        "token": " surprised"
+      },
+      {
+        "logprob": -0.006917930208146572,
+        "token": ","
+      },
+      {
+        "logprob": -3.576278118089249e-07,
+        "token": " the"
+      },
+      {
+        "logprob": -0.1002228632569313,
+        "token": " better"
+      },
+      {
+        "logprob": -0.0011997176334261894,
+        "token": " the"
+      },
+      {
+        "logprob": -0.00010382589971413836,
+        "token": " model"
+      },
+      {
+        "logprob": -0.20668402314186096,
+        "token": "\u2019"
+      },
+      {
+        "logprob": 0.0,
+        "token": "s"
+      },
+      {
+        "logprob": -0.35456714034080505,
+        "token": " fit"
+      },
+      {
+        "logprob": -0.0011810240102931857,
+        "token": "."
+      },
+      {
+        "logprob": 0.0,
+        "token": "<end_of_turn>"
+      }
+    ],
+    [
+      {
+        "logprob": -0.3132617473602295,
+        "token": "In"
+      },
+      {
+        "logprob": -0.00012337400403339416,
+        "token": " language"
+      },
+      {
+        "logprob": 0.0,
+        "token": " modeling"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": 0.0,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.000459565402707085,
+        "token": " is"
+      },
+      {
+        "logprob": -2.264974000354414e-06,
+        "token": " a"
+      },
+      {
+        "logprob": -0.21342305839061737,
+        "token": " measure"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -4.768370445162873e-07,
+        "token": " how"
+      },
+      {
+        "logprob": -1.764281842042692e-05,
+        "token": " well"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -9.059865078597795e-06,
+        "token": " probability"
+      },
+      {
+        "logprob": -0.06196918338537216,
+        "token": " distribution"
+      },
+      {
+        "logprob": -0.00033945043105632067,
+        "token": " predicts"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -1.4305104514278355e-06,
+        "token": " sample"
+      },
+      {
+        "logprob": -0.31336796283721924,
+        "token": " of"
+      },
+      {
+        "logprob": -9.417489309271332e-06,
+        "token": " text"
+      },
+      {
+        "logprob": -3.576278118089249e-07,
+        "token": "."
+      },
+      {
+        "logprob": -0.7394198179244995,
+        "token": "  "
+      },
+      {
+        "logprob": -0.2733871340751648,
+        "token": "Specifically"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -2.0265558760002023e-06,
+        "token": " it"
+      },
+      {
+        "logprob": -3.8265450712060556e-05,
+        "token": " quant"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ifies"
+      },
+      {
+        "logprob": -9.60780744208023e-05,
+        "token": " the"
+      },
+      {
+        "logprob": -0.1614076942205429,
+        "token": " average"
+      },
+      {
+        "logprob": -0.04464782774448395,
+        "token": " uncertainty"
+      },
+      {
+        "logprob": -0.003150739474222064,
+        "token": " a"
+      },
+      {
+        "logprob": -0.3132617473602295,
+        "token": " language"
+      },
+      {
+        "logprob": 0.0,
+        "token": " model"
+      },
+      {
+        "logprob": -5.3881147323409095e-05,
+        "token": " has"
+      },
+      {
+        "logprob": -0.0009137984015978873,
+        "token": " when"
+      },
+      {
+        "logprob": -1.4305104514278355e-06,
+        "token": " predicting"
+      },
+      {
+        "logprob": 0.0,
+        "token": " the"
+      },
+      {
+        "logprob": 0.0,
+        "token": " next"
+      },
+      {
+        "logprob": -6.198863957251888e-06,
+        "token": " word"
+      },
+      {
+        "logprob": -6.198863957251888e-06,
+        "token": " in"
+      },
+      {
+        "logprob": 0.0,
+        "token": " a"
+      },
+      {
+        "logprob": -1.4305104514278355e-06,
+        "token": " sequence"
+      },
+      {
+        "logprob": -0.0010805251076817513,
+        "token": "."
+      },
+      {
+        "logprob": -0.2751348316669464,
+        "token": " A"
+      },
+      {
+        "logprob": -2.312633478140924e-05,
+        "token": " lower"
+      },
+      {
+        "logprob": 0.0,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.01819479651749134,
+        "token": " score"
+      },
+      {
+        "logprob": -2.1457441107486375e-05,
+        "token": " indicates"
+      },
+      {
+        "logprob": -0.3150721788406372,
+        "token": " a"
+      },
+      {
+        "logprob": -1.6689286894688848e-06,
+        "token": " better"
+      },
+      {
+        "logprob": -7.390948667307384e-06,
+        "token": " model"
+      },
+      {
+        "logprob": -0.005112076178193092,
+        "token": " \u2013"
+      },
+      {
+        "logprob": -0.3157404959201813,
+        "token": " meaning"
+      },
+      {
+        "logprob": -0.04858732968568802,
+        "token": " it"
+      },
+      {
+        "logprob": -0.04998739808797836,
+        "token": "\u2019"
+      },
+      {
+        "logprob": 0.0,
+        "token": "s"
+      },
+      {
+        "logprob": -0.01815405860543251,
+        "token": " more"
+      },
+      {
+        "logprob": -3.0636318115284666e-05,
+        "token": " confident"
+      },
+      {
+        "logprob": -0.00029869386344216764,
+        "token": " and"
+      },
+      {
+        "logprob": -0.04228264465928078,
+        "token": " accurate"
+      },
+      {
+        "logprob": -2.9802276912960224e-06,
+        "token": " in"
+      },
+      {
+        "logprob": -0.029822388663887978,
+        "token": " its"
+      },
+      {
+        "logprob": -0.00010001159535022452,
+        "token": " predictions"
+      },
+      {
+        "logprob": -0.3891814351081848,
+        "token": " and"
+      },
+      {
+        "logprob": -0.4478485584259033,
+        "token": ","
+      },
+      {
+        "logprob": -0.031503695994615555,
+        "token": " therefore"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -0.7287793159484863,
+        "token": " has"
+      },
+      {
+        "logprob": -1.823885577323381e-05,
+        "token": " a"
+      },
+      {
+        "logprob": -0.16441109776496887,
+        "token": " more"
+      },
+      {
+        "logprob": -0.46162164211273193,
+        "token": " reliable"
+      },
+      {
+        "logprob": -0.7666215896606445,
+        "token": " representation"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -2.3841855067985307e-07,
+        "token": " the"
+      },
+      {
+        "logprob": -0.31514421105384827,
+        "token": " language"
+      },
+      {
+        "logprob": -0.344958633184433,
+        "token": " it"
+      },
+      {
+        "logprob": -0.3303261697292328,
+        "token": "\u2019"
+      },
+      {
+        "logprob": 0.0,
+        "token": "s"
+      },
+      {
+        "logprob": -0.061134204268455505,
+        "token": " trained"
+      },
+      {
+        "logprob": -1.1920928244535389e-07,
+        "token": " on"
+      },
+      {
+        "logprob": -0.03830957040190697,
+        "token": "."
+      },
+      {
+        "logprob": -0.1678188443183899,
+        "token": "  "
+      },
+      {
+        "logprob": -0.03564903140068054,
+        "token": "Essentially"
+      },
+      {
+        "logprob": 0.0,
+        "token": ","
+      },
+      {
+        "logprob": -0.38691872358322144,
+        "token": " perplex"
+      },
+      {
+        "logprob": 0.0,
+        "token": "ity"
+      },
+      {
+        "logprob": -0.41414234042167664,
+        "token": " represents"
+      },
+      {
+        "logprob": -0.16027630865573883,
+        "token": " the"
+      },
+      {
+        "logprob": -0.1088748350739479,
+        "token": " inverse"
+      },
+      {
+        "logprob": -0.002007494680583477,
+        "token": " probability"
+      },
+      {
+        "logprob": -6.329813186312094e-05,
+        "token": " of"
+      },
+      {
+        "logprob": -3.123234637314454e-05,
+        "token": " the"
+      },
+      {
+        "logprob": -0.002890815259888768,
+        "token": " test"
+      },
+      {
+        "logprob": -0.474963903427124,
+        "token": " set"
+      },
+      {
+        "logprob": -0.00028165188268758357,
+        "token": ","
+      },
+      {
+        "logprob": -0.9938017129898071,
+        "token": " giving"
+      },
+      {
+        "logprob": -0.01804506592452526,
+        "token": " a"
+      },
+      {
+        "logprob": -0.0020524642895907164,
+        "token": " sense"
+      },
+      {
+        "logprob": 0.0,
+        "token": " of"
+      },
+      {
+        "logprob": -0.00022539935889653862,
+        "token": " how"
+      },
+      {
+        "logprob": -0.9465064406394958,
+        "token": " surprised"
+      },
+      {
+        "logprob": -2.0265558760002023e-06,
+        "token": " the"
+      },
+      {
+        "logprob": -1.1920928244535389e-07,
+        "token": " model"
+      },
+      {
+        "logprob": -0.0005565524916164577,
+        "token": " is"
+      },
+      {
+        "logprob": -0.00035398892941884696,
+        "token": " by"
+      },
+      {
+        "logprob": -0.0053534009493887424,
+        "token": " the"
+      },
+      {
+        "logprob": -0.10704111307859421,
+        "token": " observed"
+      },
+      {
+        "logprob": -0.02326780930161476,
+        "token": " text"
+      },
+      {
+        "logprob": -0.030420644208788872,
+        "token": ";"
+      },
+      {
+        "logprob": -0.576457679271698,
+        "token": " a"
+      },
+      {
+        "logprob": -0.5382211804389954,
+        "token": " lower"
+      },
+      {
+        "logprob": -0.06945624947547913,
+        "token": " surprise"
+      },
+      {
+        "logprob": -1.3097764253616333,
+        "token": " is"
+      },
+      {
+        "logprob": -0.5770440101623535,
+        "token": " a"
+      },
+      {
+        "logprob": -0.003508366644382477,
+        "token": " better"
+      },
+      {
+        "logprob": -0.0070094396360218525,
+        "token": " model"
+      },
+      {
+        "logprob": -0.007197759114205837,
+        "token": "."
+      },
+      {
+        "logprob": 0.0,
+        "token": "<end_of_turn>"
+      }
+    ]
+  ],
+  "usages": [
+    {
+      "completion_tokens": 126,
+      "prompt_tokens": 24,
+      "prompt_tokens_details": null,
+      "total_tokens": 150
+    },
+    {
+      "completion_tokens": 119,
+      "prompt_tokens": 24,
+      "prompt_tokens_details": null,
+      "total_tokens": 143
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+SERVER READY 2026-06-12T11:05:45+09:00
+=== probe ctx~16 words, completion prompt_logprobs ===
+probe 16 RC=0 WALL=1s
+=== probe ctx~600 words, completion prompt_logprobs ===
+probe 600 RC=28 WALL=120s
+=== probe ctx~2000 words, completion prompt_logprobs ===
+probe 2000 RC=22 WALL=0s
+=== probe ctx~6000 words, completion prompt_logprobs ===
+probe 6000 RC=22 WALL=0s
+=== teardown ===
+DIAG_DONE 2026-06-12T11:07:56+09:00

@@ -1,0 +1,24 @@
+RUN_START 2026-06-12T12:02:16+09:00
+name, memory.used [MiB], memory.total [MiB]
+NVIDIA GeForce RTX 5060 Ti, 1997 MiB, 16311 MiB
+===== MODEL g3_4b (google/gemma-3-4b-it) =====
+CELL=g3_4b_bf16_fi READY_RC=0 READY_WALL=236
+CELL=g3_4b_bf16_fi SERVED
+CELL=g3_4b_bf16_fi IMG_SMOKE_RC=0
+CELL=g3_4b_bf16_fi_knobon TXT_SMOKE_RC=2
+CELL=g3_4b_bf16_fi_knoboff READY_RC=0 READY_WALL=234
+CELL=g3_4b_bf16_fi_knoboff SERVED
+CELL=g3_4b_bf16_fi_knoboff TXT_SMOKE_RC=2
+CELL=g3_4b_bf16_triton READY_RC=0 READY_WALL=225
+CELL=g3_4b_bf16_triton SERVED
+CELL=g3_4b_bf16_triton IMG_SMOKE_RC=0
+CELL=g3_4b_nvfp4_fi READY_RC=0 READY_WALL=721
+CELL=g3_4b_nvfp4_fi SERVED
+CELL=g3_4b_nvfp4_fi IMG_SMOKE_RC=2
+CELL=g3_4b_nvfp4_fi_knobon TXT_SMOKE_RC=2
+CELL=g3_4b_bf16_FIvsTriton_CMP_RC=0
+CELL=g3_4b_nvfp4_FIvsTriton_CMP_RC=2
+CELL=g3_4b_bf16_text_identity_CMP_RC=0
+===== MODEL g4_e4b (google/gemma-4-E4B-it) =====
+CELL=g4_e4b_bf16_fi READY_RC=3 READY_WALL=730
+CELL=g4_e4b_bf16_fi SERVER_DID_NOT_BECOME_READY (RED)

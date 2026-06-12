@@ -109,8 +109,54 @@ results/claude_1b_bug_bisect_20260612/ (BISECT_SUMMARY.md, ppl JSONs ×2/row,
 smoke transcripts, proof lines); Spark master copy + server logs + token dumps
 at /home/jethac/spark_tmp/claude_1b_bug_bisect_20260612/.
 
+## Baked-WHEEL disambiguation 2026-06-12 (P520 / sm_120): bug PERSISTS, harder form
+
+Task #37. Re-ran the 1B bisect with the **sm120a RELEASE WHEEL**
+(`vllm 0.1.dev1+g6adc00f70.sm120a`, from `spark/hijinks-e2-vllm @ 6adc00f70`)
+instead of the editable build (`9759e3b06`), FlashInfer JIT-from-source
+`7d5d477b` in BOTH (controlled variable). Provenance gates GREEN: EXT_PATH =
+wheel `_C_stable_libtorch.abi3.so`, 42 sm_120a cubins, linear-V-SF latch
+"writer wrote LINEAR V-SF" (hd128+hd256).
+
+**The bug did NOT vanish — it WORSENED into an engine wedge.** Where the editable
+build returned wrong-but-finite numbers (+0.221/+1.243/+1.380 nats), the wheel
+**deadlocks the vLLM engine on the first window-crossing (>512-token) request**
+at this geometry:
+- 16-token prompt_logprobs → valid, server coherent ("Tokyo").
+- 600-token (crosses SWA-512) COLD → server heartbeat logger FREEZES after a
+  `Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel`
+  warning; GPU 100% util / ~34 W (idle-spin, not matmul); `Running: 0 reqs`;
+  curl times out at 120 s.
+- WARMED 600-token (short req first) → RC=0 in 1 s, so the 512-crossing path is
+  functionally fine once its slot-mapping shape is compiled.
+- ctx-8191 prompt_logprobs → still wedges the engine even AFTER a 700-token
+  warmup (socket ESTABLISHED to server, heartbeat logger silent >10 min). NO
+  FLASH_ATTN/FLASHINFER/nvfp4 PPL rows could be produced.
+
+Implication: the wedge is on the **FLASH_ATTN** backend's serving/slot-mapping
+path (not only FlashInfer), tied to the SWA-512 window crossing on sm_120 — so
+the defect is **NOT an editable-vs-wheel `_C` artifact**; it persists on the
+release wheel and keeps suspicion on the sm_120 long-context / SWA-512 serving
+path. Named confound: the wheel env excludes the optional accel-kernel pip
+extras (tilelang/quack/tokenspeed/humming/cutlass-dsl/flashinfer-python|cubin —
+omitted to keep FlashInfer source-tree JIT authoritative); a missing accel
+kernel could aggravate the slot-mapping slow-JIT. Next localizer: the Colab G4
+sm_120 cell at this geometry (off-WSL, bigger sm_120 card), and a P520 rerun
+with the full accel-kernel pip set to rule the confound in/out.
+
+Same nvfp4-on-sm_120 GIBBERISH also reproduced in the **Gemma 3 4B multimodal**
+nvfp4-KV smoke (`results/p520_mm_retirement_smokes_20260612/`, cell
+`g3_4b_nvfp4_fi`): coherent under bf16, gibberish under nvfp4 KV — confirming the
+nvfp4 KV READ defect on sm_120 is model/size-independent and independent of the
+mm-prefix mask path (the mask machinery ran; bf16 mm is clean).
+
+Artifacts: results/p520_1b_wheel_disambig_20260612/DISAMBIG_SUMMARY.md
+(server logs incl. `_WEDGED`, diag1/diag2 run logs, proof lines).
+
 ## Cross-references
 
+- results/p520_1b_wheel_disambig_20260612/ (P520 sm_120 WHEEL disambig — wedge verdict)
+- results/p520_mm_retirement_smokes_20260612/ (g3-4b nvfp4 mm gibberish corroboration)
 - results/claude_1b_bug_bisect_20260612/ (Spark sm_121 bisect — PLATFORM verdict)
 - results/p520_gemma3_1b_serving_20260612/ (full artifacts incl. token
   dumps on the P520 side: B:\workshop\wsl_sm120\results\gemma3_1b_serving_20260612\)

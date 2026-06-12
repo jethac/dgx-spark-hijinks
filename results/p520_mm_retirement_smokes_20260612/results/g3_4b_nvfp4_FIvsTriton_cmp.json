@@ -1,0 +1,16 @@
+{
+  "a_content": "DISTDISTf DISTDISTYouDISTIDIST\uc5ec\uc12fDIST1DISTLGPSquareDISTIfDIST CrossDIST\u1230DISTDIST FDIST\ube0cDIST\uff06DIST\u00ad\nDIST solchenDIST<h2>IDIST\u2014DISTDIST</sub> AllDISTDISTCurrentlyDISTDIST\u00ad DIST\u00ad\u2014\ufffdDIST    DIST\nDIST DIST -- DIST",
+  "a_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_nvfp4_fi_img.json",
+  "a_ok": false,
+  "b_content": "Here's a breakdown of the colors and shapes in the image:\n\n**Colors:**\n\n*   Blue\n*   Yellow\n\n**Shapes:**\n\n*   Square\n*   Triangle",
+  "b_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_bf16_triton_img.json",
+  "b_ok": true,
+  "both_grounded": false,
+  "exact_match": false,
+  "label": "g3_4b_nvfp4FIvsTritonBf16",
+  "mode": "semantic",
+  "ok": false,
+  "schema": "smoke-compare/v1",
+  "verdict": "RED: routes diverge (inspect verbatim)",
+  "word_jaccard": 0.0
+}

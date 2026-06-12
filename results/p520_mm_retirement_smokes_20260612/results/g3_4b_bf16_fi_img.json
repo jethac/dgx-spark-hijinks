@@ -1,0 +1,35 @@
+{
+  "contents": [
+    "Here's a breakdown of the colors and shapes in the image:\n\n**Colors:**\n\n*   Blue\n*   Yellow\n\n**Shapes:**\n\n*   Square\n*   Triangle",
+    "Here's a breakdown of the colors and shapes in the image:\n\n**Colors:**\n\n*   Blue\n*   Yellow\n\n**Shapes:**\n\n*   Square\n*   Triangle"
+  ],
+  "elapsed_s": 97.179,
+  "endpoint": "http://127.0.0.1:8077/v1/chat/completions",
+  "expect_keywords": [
+    "blue",
+    "triangle"
+  ],
+  "image_file": "/home/jetha/mm_smoke_20260612/images/two_shapes.png",
+  "label": "g3_4b_bf16_fi",
+  "model": "google/gemma-3-4b-it",
+  "ok": true,
+  "ok_deterministic": true,
+  "ok_grounded": true,
+  "prompt": "List the colors and the shapes you see in this image.",
+  "repeats": 2,
+  "schema": "image-mm-smoke/v1",
+  "usages": [
+    {
+      "completion_tokens": 39,
+      "prompt_tokens": 280,
+      "prompt_tokens_details": null,
+      "total_tokens": 319
+    },
+    {
+      "completion_tokens": 39,
+      "prompt_tokens": 280,
+      "prompt_tokens_details": null,
+      "total_tokens": 319
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+1d10325bbc9e7ce460b62ed934bba490144c9a77
+100644 b2468524062374530f263d68a9fd4a53a964f334 1	vllm/model_executor/models/config.py
+100644 03039477a89d36b3bbe0e9da1a5b23163fbd618f 2	vllm/model_executor/models/config.py
+100644 b6886992145535eeec857347e7a9547e426bd24c 3	vllm/model_executor/models/config.py
+
+Auto-merging tests/v1/attention/test_sm12x_triton_retirement_selection.py
+Auto-merging vllm/envs.py
+Auto-merging vllm/model_executor/models/config.py
+CONFLICT (content): Merge conflict in vllm/model_executor/models/config.py
+Auto-merging vllm/v1/attention/backends/flashinfer.py

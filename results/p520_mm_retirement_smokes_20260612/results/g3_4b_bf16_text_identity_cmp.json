@@ -1,0 +1,15 @@
+{
+  "a_content": "In language modeling, perplexity is a measure of how well a probability distribution predicts a sample of text.  Specifically, it quantifies the average uncertainty a language model has when predicting the next word in a sequence. A lower perplexity score indicates a better model \u2013 meaning it\u2019s more confident and accurate in its predictions and, therefore, has a more reliable probability distribution for the text.  Essentially, perplexity represents the inverse probability of the test set, normalized by the number of words, giving a sense of how surprised the model is by the observed text; the less surprised, the better the model\u2019s fit.",
+  "a_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_bf16_fi_knobon_txt.json",
+  "a_ok": false,
+  "b_content": "In language modeling, perplexity is a measure of how well a probability distribution predicts a sample of text.  Specifically, it quantifies the average uncertainty a language model has when predicting the next word in a sequence. A lower perplexity score indicates a better model \u2013 meaning it\u2019s more confident and accurate in its predictions and, therefore, has a more reliable probability distribution for the text.  Essentially, perplexity represents the inverse probability of the test set, normalized by the number of words, giving a sense of how surprised the model is by the observed text; the less surprised, the better the model\u2019s fit.",
+  "b_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_bf16_fi_knoboff_txt.json",
+  "b_ok": false,
+  "content_identical": true,
+  "label": "g3_4b_bf16_text_knob_identity",
+  "mode": "identical",
+  "ok": true,
+  "schema": "smoke-compare/v1",
+  "tokens_identical": true,
+  "verdict": "GREEN: token-identical"
+}

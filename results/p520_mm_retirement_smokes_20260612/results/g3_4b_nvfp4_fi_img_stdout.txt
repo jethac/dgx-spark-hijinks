@@ -1,0 +1,35 @@
+{
+  "contents": [
+    "DISTDISTf DISTDISTYouDISTIDIST\uc5ec\uc12fDIST1DISTLGPSquareDISTIfDIST CrossDIST\u1230DISTDIST FDIST\ube0cDIST\uff06DIST\u00ad\nDIST solchenDIST<h2>IDIST\u2014DISTDIST</sub> AllDISTDISTCurrentlyDISTDIST\u00ad DIST\u00ad\u2014\ufffdDIST    DIST\nDIST DIST -- DIST",
+    "HereDIST 3DIST DIST\nDIST\n\nDIST DIST\n\nDIST\u7684\u989c\u8272DIST\u8c03\u6574DIST\u4e86DIST\u88ab\u5b50\u7684DIST\u7406\u89e3\u4e86DISTDIST DIST\u6c34\nDIST\u8bf7DISTDIST\u4e86DIST\u7684\u8bddDIST DIST\u5177\u5408DISTDIST\u7ba1DIST\u4e0eDIST\u200b\u200b:DIST\u5e95\uff1aDIST\u00adDISTDISTDIST\u03c4\u03b7\u03c3\u03b7DISTDISTDIST"
+  ],
+  "elapsed_s": 139.63,
+  "endpoint": "http://127.0.0.1:8077/v1/chat/completions",
+  "expect_keywords": [
+    "blue",
+    "triangle"
+  ],
+  "image_file": "/home/jetha/mm_smoke_20260612/images/two_shapes.png",
+  "label": "g3_4b_nvfp4_fi",
+  "model": "google/gemma-3-4b-it",
+  "ok": false,
+  "ok_deterministic": false,
+  "ok_grounded": false,
+  "prompt": "List the colors and the shapes you see in this image.",
+  "repeats": 2,
+  "schema": "image-mm-smoke/v1",
+  "usages": [
+    {
+      "completion_tokens": 96,
+      "prompt_tokens": 280,
+      "prompt_tokens_details": null,
+      "total_tokens": 376
+    },
+    {
+      "completion_tokens": 96,
+      "prompt_tokens": 280,
+      "prompt_tokens_details": null,
+      "total_tokens": 376
+    }
+  ]
+}

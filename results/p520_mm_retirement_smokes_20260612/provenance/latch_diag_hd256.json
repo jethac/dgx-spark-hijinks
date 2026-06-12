@@ -1,0 +1,22 @@
+{
+  "env_at_entry": "1",
+  "env_now": "1",
+  "head_dim": 256,
+  "k_dequant_linear": {
+    "cosine": 0.9954566955566406,
+    "max_abs": 0.59375,
+    "mean_abs": 0.0716998353600502
+  },
+  "schema": "nvfp4-linear-latch-diag/v1",
+  "v_dequant_as_linear": {
+    "cosine": 0.9955009818077087,
+    "max_abs": 0.5625,
+    "mean_abs": 0.07130284607410431
+  },
+  "v_dequant_as_swizzled": {
+    "cosine": 0.9472150206565857,
+    "max_abs": 3.1640625,
+    "mean_abs": 0.21464931964874268
+  },
+  "verdict": "writer wrote LINEAR V-SF"
+}

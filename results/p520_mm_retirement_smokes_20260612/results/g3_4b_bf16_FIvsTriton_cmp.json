@@ -1,0 +1,16 @@
+{
+  "a_content": "Here's a breakdown of the colors and shapes in the image:\n\n**Colors:**\n\n*   Blue\n*   Yellow\n\n**Shapes:**\n\n*   Square\n*   Triangle",
+  "a_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_bf16_fi_img.json",
+  "a_ok": true,
+  "b_content": "Here's a breakdown of the colors and shapes in the image:\n\n**Colors:**\n\n*   Blue\n*   Yellow\n\n**Shapes:**\n\n*   Square\n*   Triangle",
+  "b_file": "/home/jetha/p520_mm_smokes_20260612/results/g3_4b_bf16_triton_img.json",
+  "b_ok": true,
+  "both_grounded": true,
+  "exact_match": true,
+  "label": "g3_4b_bf16_FIvsTriton",
+  "mode": "semantic",
+  "ok": true,
+  "schema": "smoke-compare/v1",
+  "verdict": "GREEN: semantically equivalent",
+  "word_jaccard": 1.0
+}

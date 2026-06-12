@@ -1,0 +1,8 @@
+RUN_START 2026-06-12T11:17:07+09:00
+CORPUS c1 MD5=abb63f0e65247a25f870d3f2d57563ff
+name, memory.used [MiB], memory.total [MiB]
+NVIDIA GeForce RTX 5060 Ti, 1264 MiB, 16311 MiB
+ROW=flashattn_bf16 READY_RC=0 READY_WALL=97
+ROW=flashattn_bf16 VERDICT=SERVED
+ROW=flashattn_bf16 CHAT_SMOKE_RC=2
+ROW=flashattn_bf16 WARMUP_RC=0 WALL=369
