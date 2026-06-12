@@ -16,6 +16,7 @@ Environment:
   SERVED_MODEL=sglang-spark-packaging-smoke
   PORT=30000
   MEM_FRACTION_STATIC=0.35
+  ATTENTION_BACKEND=triton
   EXPECTED_TORCH_VERSION=2.11.0
   RESULTS_DIR=/home/jethac/dgx-spark-hijinks/results
   RUN_ID=sglang_spark_image_smoke_YYYYMMDDTHHMMSSJST
@@ -36,6 +37,7 @@ MODEL=${MODEL:-google/gemma-4-E2B-it}
 SERVED_MODEL=${SERVED_MODEL:-sglang-spark-packaging-smoke}
 PORT=${PORT:-30000}
 MEM_FRACTION_STATIC=${MEM_FRACTION_STATIC:-0.35}
+ATTENTION_BACKEND=${ATTENTION_BACKEND:-triton}
 EXPECTED_TORCH_VERSION=${EXPECTED_TORCH_VERSION:-2.11.0}
 RESULTS_DIR=${RESULTS_DIR:-/home/jethac/dgx-spark-hijinks/results}
 RUN_ID=${RUN_ID:-sglang_spark_image_smoke_$(TZ=Asia/Tokyo date +%Y%m%dT%H%M%SJST)}
@@ -84,6 +86,7 @@ trap cleanup EXIT
   echo "served_model=${SERVED_MODEL}"
   echo "port=${PORT}"
   echo "mem_fraction_static=${MEM_FRACTION_STATIC}"
+  echo "attention_backend=${ATTENTION_BACKEND}"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   free -h
   docker ps
@@ -146,7 +149,7 @@ docker run -d --name "${CONTAINER}" --gpus all --ipc=host --network=host \
     --model-path '${MODEL}' \
     --served-model-name '${SERVED_MODEL}' \
     --dtype bfloat16 \
-    --attention-backend flashinfer \
+    --attention-backend '${ATTENTION_BACKEND}' \
     --host 0.0.0.0 \
     --port '${PORT}' \
     --mem-fraction-static '${MEM_FRACTION_STATIC}' \
@@ -200,6 +203,7 @@ gemma_line=$(grep '^gemma4_unified ' "${OUT_DIR}/import_probe.txt" 2>/dev/null |
   echo "- pulled digest: \`${image_digest}\`"
   echo "- platform: \`${PLATFORM}\`"
   echo "- model: \`${MODEL}\`"
+  echo "- attention backend: \`${ATTENTION_BACKEND}\`"
   echo "- torch: \`${torch_line}\`"
   echo "- gemma4 mapping: \`${gemma_line}\`"
   echo "- server ready: \`${ready}\`"
