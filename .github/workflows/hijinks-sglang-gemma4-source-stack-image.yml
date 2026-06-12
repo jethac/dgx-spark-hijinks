@@ -27,7 +27,9 @@ permissions:
 jobs:
   build-image:
     name: build SGLang Gemma4 source-stack image
-    runs-on: [self-hosted, Linux, X64, ubicloud-persistent-build-x64, docker, hijinks]
+    # This is a Spark runtime image. Build it natively on arm64 rather than
+    # cross-compiling the sgl-kernel/FlashInfer stack through QEMU on x64.
+    runs-on: ubicloud-standard-30-arm
     timeout-minutes: 240
     env:
       CUDA_HOME: /usr/local/cuda
@@ -71,9 +73,6 @@ jobs:
         run: |
           set -euxo pipefail
           docker buildx version
-          if [ "${TARGET_PLATFORM}" != "linux/amd64" ]; then
-            docker run --privileged --rm tonistiigi/binfmt --install arm64
-          fi
           docker buildx create --name hijinks-sglang-gemma4-builder --use --driver docker-container 2>/dev/null || docker buildx use hijinks-sglang-gemma4-builder
           docker buildx inspect --bootstrap
 
