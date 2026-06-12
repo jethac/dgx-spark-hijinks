@@ -477,10 +477,13 @@ keep `mask_indptr` on CPU. `flashinfer/prefill.py:1994`:
   so upstream's mixed-backend divergence concern does not apply.
 - **Validated on CC 12.0 AND 12.1** — RTX PRO 6000 (sm_120) and GB10 / DGX Spark
   (sm_121). Same fix, both targets green.
-- **Split-dtype module keying is OUT OF SCOPE for this PR.** A `k_data_type != v_data_type`
-  shim exists in-tree (`prefill.py` `plan()`, the validated `(fp8_e4m3, uint8)` mixed-KV
-  pair) but full split-dtype `dtype_k`/`dtype_v` module keying is descoped here; it is
-  noted only so the PR's `plan()` kwargs are understood, not featured.
+- **Split-dtype removed (descoped).** The `k_data_type != v_data_type` shim (the
+  `plan()` kwargs, the equal-collapse path, the validated `(fp8_e4m3, uint8)` mixed-KV
+  pair, and the `NotImplementedError` for other unequal pairs) has been **removed** from
+  the branch (`flashinfer/{decode,prefill}.py`, head `3fa0775c`) so the branch matches the
+  clean PR. Full split-dtype `dtype_k`/`dtype_v` module keying was never wired. The
+  full-NVFP4 path is unaffected: callers pass `kv_data_type=uint8` (a single dtype) and
+  the FP4 module-keying guards still key on it. See `docs/SPLIT_DTYPE_REMOVAL.md`.
 - The committed `flashinfer/data/*` entries are dev-clone convenience symlinks (so a raw
   clone is self-contained), not PR content.
 
