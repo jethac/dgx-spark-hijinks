@@ -188,6 +188,15 @@ Gate:
 - capacity denominator audited as mixed-KV, not full NVFP4
 - radix/prefix reuse behavior explicitly scoped
 
+Status: Spark serving packet staged in
+`docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md`. The packet runs
+`scripts/run_sglang_dgemma_dgr4_mixedkv_smoke.sh` and keeps the row RED unless
+the revised DG-R2 text gate passes, D=512 globals still route through VO-split,
+and the logs prove `--kv-cache-dtype fp4_e2m1` with
+`SGLANG_FP4_KV_MIXED_KV=1`, `mixed_kv=True`, and FP4 hybrid subpools. A green
+row is still a text-only mixed-KV smoke, not full NVFP4 K+V or multimodal
+support.
+
 ### DG-R5: Full NVFP4 K+V
 
 Attempt the full capacity path after mixed-KV and VO-split are green.
