@@ -218,14 +218,16 @@ Gate:
 - capacity row separate from quality row
 - no `--disable-radix-cache` blessed result
 
-Status: staged for Spark live validation. Packet:
+Status: green for the scoped Spark text-only smoke; see
+`results/sglang_dgemma_dgr5_fullnvfp4_smoke_20260612T145433JST/summary.md`.
+The row uses `--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=0`, the same
+deterministic `Gemma4Renoise` config as DG-R2/DG-R3, and the explicit
+FlashInfer VO-split opt-in. It proves text-only serving, full-NVFP4 K+V storage
+(`mixed_kv=False`, FP4 K/V pools, FP4 module traces), and D=512 VO-split
+routing (`head_dim=512`, `head_dim_vo=256`). It still does not claim capacity,
+image quality, CUDA graph safety, or long-context quality. Packet:
 `docs/SGLANG_DIFFUSIONGEMMA_DGR5_FULLNVFP4_PACKET_20260612.md`. Runner:
-`scripts/run_sglang_dgemma_dgr5_fullnvfp4_smoke.sh`. The row uses
-`--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=0`, the same deterministic
-`Gemma4Renoise` config as DG-R2/DG-R3, and the explicit FlashInfer VO-split
-opt-in. GREEN means text-only serving, full-NVFP4 K+V storage proof, and D=512
-VO-split routing proof are all present; it still does not claim capacity,
-image quality, CUDA graph safety, or long-context quality.
+`scripts/run_sglang_dgemma_dgr5_fullnvfp4_smoke.sh`.
 
 ### DG-R6: Performance Campaign Row
 
