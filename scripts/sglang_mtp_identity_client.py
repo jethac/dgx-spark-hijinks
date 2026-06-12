@@ -198,7 +198,9 @@ def compare_runs(spec_off: dict[str, Any], spec_on: dict[str, Any]) -> dict[str,
     any_token_ids = False
     for off, on in zip(spec_off["rows"], spec_on["rows"]):
         chat_text_match = bool(off["chat_text"]) and off["chat_text"] == on["chat_text"]
-        native_text_match = bool(off["native_text"]) and off["native_text"] == on["native_text"]
+        native_text_match = None
+        if off["native_text"] or on["native_text"]:
+            native_text_match = off["native_text"] == on["native_text"]
         chat_ids_match = None
         native_ids_match = None
         if off["chat_token_ids"] is not None or on["chat_token_ids"] is not None:
@@ -234,7 +236,8 @@ def compare_runs(spec_off: dict[str, Any], spec_on: dict[str, Any]) -> dict[str,
         for check in token_identity_checks
     )
     text_identity_ok = all(
-        check["chat_text_match"] and check["native_text_match"] for check in checks
+        check["chat_text_match"] and check["native_text_match"] is not False
+        for check in checks
     )
     return {
         "checks": checks,

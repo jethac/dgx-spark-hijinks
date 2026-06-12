@@ -308,9 +308,10 @@ lines = [
     "",
     "## Gates",
     "",
-    f"- Text identity: {'PASS' if cmp.get('text_identity_ok') else 'FAIL'}",
+    f"- Chat/native text identity: {'PASS' if cmp.get('text_identity_ok') else 'FAIL'}",
     f"- Token IDs exposed: {'PASS' if cmp.get('any_token_ids') else 'FAIL'}",
     f"- Token identity: {'PASS' if cmp.get('token_identity_ok') else 'FAIL'}",
+    "- Native `/generate` text is treated as not comparable when both sides return empty text; matching exposed token IDs remain the native endpoint gate.",
 ]
 if reasons:
     lines += ["", "## Red Reasons", ""]

@@ -1,0 +1,1571 @@
+{
+  "comparison": {
+    "all_ok": true,
+    "any_token_ids": true,
+    "checks": [
+      {
+        "chat_text_match": true,
+        "chat_token_ids_match": null,
+        "native_text_match": null,
+        "native_token_ids_match": true,
+        "off_chat_text": "The capital of Japan is Tokyo.",
+        "off_native_text": "",
+        "on_chat_text": "The capital of Japan is Tokyo.",
+        "on_native_text": "",
+        "prompt_id": "capital_japan"
+      },
+      {
+        "chat_text_match": true,
+        "chat_token_ids_match": null,
+        "native_text_match": null,
+        "native_token_ids_match": true,
+        "off_chat_text": "2 + 2 equals 4.",
+        "off_native_text": "",
+        "on_chat_text": "2 + 2 equals 4.",
+        "on_native_text": "",
+        "prompt_id": "arithmetic"
+      },
+      {
+        "chat_text_match": true,
+        "chat_token_ids_match": null,
+        "native_text_match": null,
+        "native_token_ids_match": true,
+        "off_chat_text": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+        "off_native_text": "",
+        "on_chat_text": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+        "on_native_text": "",
+        "prompt_id": "spark_use"
+      }
+    ],
+    "text_identity_ok": true,
+    "token_identity_ok": true
+  },
+  "model": "google/gemma-4-E2B-it",
+  "schema": "sglang-mtp-identity-comparison/v1",
+  "spec_off": {
+    "base_url": "http://127.0.0.1:30135",
+    "label": "spec_off",
+    "model_info": {
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "has_audio_understanding": true,
+      "has_image_understanding": true,
+      "is_generation": true,
+      "model_path": "google/gemma-4-E2B-it",
+      "model_type": "gemma4",
+      "preferred_sampling_params": null,
+      "tokenizer_path": "google/gemma-4-E2B-it",
+      "weight_version": "default"
+    },
+    "rows": [
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 24,
+          "messages": [
+            {
+              "content": "In one short sentence, name the capital of Japan.",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 72.914,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        84,
+                        104,
+                        101
+                      ],
+                      "logprob": -3.576278118089249e-07,
+                      "token": "The",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        99,
+                        97,
+                        112,
+                        105,
+                        116,
+                        97,
+                        108
+                      ],
+                      "logprob": 0.0,
+                      "token": " capital",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        111,
+                        102
+                      ],
+                      "logprob": 0.0,
+                      "token": " of",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        74,
+                        97,
+                        112,
+                        97,
+                        110
+                      ],
+                      "logprob": 0.0,
+                      "token": " Japan",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        105,
+                        115
+                      ],
+                      "logprob": 0.0,
+                      "token": " is",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        84,
+                        111,
+                        107,
+                        121,
+                        111
+                      ],
+                      "logprob": 0.0,
+                      "token": " Tokyo",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": 0.0,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "The capital of Japan is Tokyo.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239114,
+            "id": "dc56be8e5c6840bc97ea62fab1b1d872",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 8,
+              "prompt_tokens": 20,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 28
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "The capital of Japan is Tokyo.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 24,
+            "temperature": 0.0
+          },
+          "text": "In one short sentence, name the capital of Japan.",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.054,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 0,
+              "cached_tokens_details": null,
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.05137011199258268,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "1a214ef461e84b1188082da7c3cf95eb",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.0021213425789028406,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 11,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239114.5536196,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "In one short sentence, name the capital of Japan.",
+        "prompt_id": "capital_japan"
+      },
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 24,
+          "messages": [
+            {
+              "content": "Answer with one sentence: what is 2 + 2?",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 0.276,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        50
+                      ],
+                      "logprob": -0.09765219688415527,
+                      "token": "2",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        43
+                      ],
+                      "logprob": -0.004620826803147793,
+                      "token": " +",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32
+                      ],
+                      "logprob": 0.0,
+                      "token": " ",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        50
+                      ],
+                      "logprob": 0.0,
+                      "token": "2",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        101,
+                        113,
+                        117,
+                        97,
+                        108,
+                        115
+                      ],
+                      "logprob": -0.004153435584157705,
+                      "token": " equals",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32
+                      ],
+                      "logprob": -3.576278118089249e-07,
+                      "token": " ",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        52
+                      ],
+                      "logprob": 0.0,
+                      "token": "4",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": 0.0,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "2 + 2 equals 4.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239114,
+            "id": "daf7b26402294c0b89091bbaaffb08bf",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 22,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 31
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "2 + 2 equals 4.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 24,
+            "temperature": 0.0
+          },
+          "text": "Answer with one sentence: what is 2 + 2?",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.052,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 0,
+              "cached_tokens_details": null,
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.05036033698706888,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "6dd7be9c77e94fbeae838332539aaa46",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.02625841274857521,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 13,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239114.8818307,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "Answer with one sentence: what is 2 + 2?",
+        "prompt_id": "arithmetic"
+      },
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 32,
+          "messages": [
+            {
+              "content": "In one short sentence, say what a DGX Spark is useful for.",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 0.548,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        65
+                      ],
+                      "logprob": -1.4066597032069694e-05,
+                      "token": "A",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        68,
+                        71
+                      ],
+                      "logprob": 0.0,
+                      "token": " DG",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        88
+                      ],
+                      "logprob": 0.0,
+                      "token": "X",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        83,
+                        112,
+                        97,
+                        114,
+                        107
+                      ],
+                      "logprob": -3.576278118089249e-07,
+                      "token": " Spark",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        105,
+                        115
+                      ],
+                      "logprob": -6.961580220377073e-05,
+                      "token": " is",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        117,
+                        115,
+                        101,
+                        102,
+                        117,
+                        108
+                      ],
+                      "logprob": -0.0002774807217065245,
+                      "token": " useful",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        102,
+                        111,
+                        114
+                      ],
+                      "logprob": -1.1920928244535389e-07,
+                      "token": " for",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        97,
+                        99,
+                        99,
+                        101,
+                        108,
+                        101,
+                        114,
+                        97,
+                        116,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": -0.7462096810340881,
+                      "token": " accelerating",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        108,
+                        97,
+                        114,
+                        103,
+                        101
+                      ],
+                      "logprob": -0.2630873918533325,
+                      "token": " large",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        45
+                      ],
+                      "logprob": -1.811964830267243e-05,
+                      "token": "-",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        115,
+                        99,
+                        97,
+                        108,
+                        101
+                      ],
+                      "logprob": 0.0,
+                      "token": "scale",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        100,
+                        97,
+                        116,
+                        97
+                      ],
+                      "logprob": -0.7891545295715332,
+                      "token": " data",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        112,
+                        114,
+                        111,
+                        99,
+                        101,
+                        115,
+                        115,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": -0.7522870302200317,
+                      "token": " processing",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        97,
+                        110,
+                        100
+                      ],
+                      "logprob": -0.0026333199348300695,
+                      "token": " and",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        109,
+                        97,
+                        99,
+                        104,
+                        105,
+                        110,
+                        101
+                      ],
+                      "logprob": -0.04716641828417778,
+                      "token": " machine",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        108,
+                        101,
+                        97,
+                        114,
+                        110,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": 0.0,
+                      "token": " learning",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        119,
+                        111,
+                        114,
+                        107,
+                        108,
+                        111,
+                        97,
+                        100,
+                        115
+                      ],
+                      "logprob": -0.0007376333815045655,
+                      "token": " workloads",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": -0.003130656434223056,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239115,
+            "id": "58061407c58b4d3a92792314a3e6478c",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 19,
+              "prompt_tokens": 24,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 43
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 32,
+            "temperature": 0.0
+          },
+          "text": "In one short sentence, say what a DGX Spark is useful for.",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.052,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 5,
+              "cached_tokens_details": {
+                "device": 5,
+                "host": 0
+              },
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.05003051401581615,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "32cad03fa0784ef6891b45a8d0b7eac2",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.429532915353775,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 15,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239115.481933,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "In one short sentence, say what a DGX Spark is useful for.",
+        "prompt_id": "spark_use"
+      }
+    ]
+  },
+  "spec_off_artifact": "results\\sglang_gemma4_mtp_identity_20260612T133519JST\\spec_off.capture.json",
+  "spec_on": {
+    "base_url": "http://127.0.0.1:30135",
+    "label": "spec_on",
+    "model_info": {
+      "architectures": [
+        "Gemma4ForConditionalGeneration"
+      ],
+      "has_audio_understanding": true,
+      "has_image_understanding": true,
+      "is_generation": true,
+      "model_path": "google/gemma-4-E2B-it",
+      "model_type": "gemma4",
+      "preferred_sampling_params": null,
+      "tokenizer_path": "google/gemma-4-E2B-it",
+      "weight_version": "default"
+    },
+    "rows": [
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 24,
+          "messages": [
+            {
+              "content": "In one short sentence, name the capital of Japan.",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 79.405,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        84,
+                        104,
+                        101
+                      ],
+                      "logprob": -3.576278118089249e-07,
+                      "token": "The",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        99,
+                        97,
+                        112,
+                        105,
+                        116,
+                        97,
+                        108
+                      ],
+                      "logprob": 0.0,
+                      "token": " capital",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        111,
+                        102
+                      ],
+                      "logprob": 0.0,
+                      "token": " of",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        74,
+                        97,
+                        112,
+                        97,
+                        110
+                      ],
+                      "logprob": 0.0,
+                      "token": " Japan",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        105,
+                        115
+                      ],
+                      "logprob": 0.0,
+                      "token": " is",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        84,
+                        111,
+                        107,
+                        121,
+                        111
+                      ],
+                      "logprob": 0.0,
+                      "token": " Tokyo",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": 0.0,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "The capital of Japan is Tokyo.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239306,
+            "id": "9758d42c673d4b4abfd115826a1023f1",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 8,
+              "prompt_tokens": 20,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 28
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "The capital of Japan is Tokyo.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 24,
+            "temperature": 0.0
+          },
+          "text": "In one short sentence, name the capital of Japan.",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.03,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 0,
+              "cached_tokens_details": null,
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.028169907978735864,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "6f14703be49247eba13d22697e771d78",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.0021213425789028406,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 11,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239306.8560889,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "In one short sentence, name the capital of Japan.",
+        "prompt_id": "capital_japan"
+      },
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 24,
+          "messages": [
+            {
+              "content": "Answer with one sentence: what is 2 + 2?",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 0.379,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        50
+                      ],
+                      "logprob": -0.08218313753604889,
+                      "token": "2",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        43
+                      ],
+                      "logprob": -0.00580956507474184,
+                      "token": " +",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32
+                      ],
+                      "logprob": 0.0,
+                      "token": " ",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        50
+                      ],
+                      "logprob": 0.0,
+                      "token": "2",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        101,
+                        113,
+                        117,
+                        97,
+                        108,
+                        115
+                      ],
+                      "logprob": -0.0032703985925763845,
+                      "token": " equals",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32
+                      ],
+                      "logprob": -4.768370445162873e-07,
+                      "token": " ",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        52
+                      ],
+                      "logprob": 0.0,
+                      "token": "4",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": 0.0,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "2 + 2 equals 4.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239307,
+            "id": "2a960dabbdb7465bae5262613c21804c",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 22,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 31
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "2 + 2 equals 4.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 24,
+            "temperature": 0.0
+          },
+          "text": "Answer with one sentence: what is 2 + 2?",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.03,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 0,
+              "cached_tokens_details": null,
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.028259876009542495,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "5e1b92d926d34b2aa859427528aef9cf",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.02625841274857521,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 13,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239307.2643366,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "Answer with one sentence: what is 2 + 2?",
+        "prompt_id": "arithmetic"
+      },
+      {
+        "chat_request": {
+          "logprobs": true,
+          "max_tokens": 32,
+          "messages": [
+            {
+              "content": "In one short sentence, say what a DGX Spark is useful for.",
+              "role": "user"
+            }
+          ],
+          "model": "google/gemma-4-E2B-it",
+          "temperature": 0.0,
+          "top_logprobs": 0
+        },
+        "chat_response": {
+          "elapsed_s": 0.558,
+          "ok": true,
+          "response": {
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": {
+                  "content": [
+                    {
+                      "bytes": [
+                        65
+                      ],
+                      "logprob": -1.8596476365928538e-05,
+                      "token": "A",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        68,
+                        71
+                      ],
+                      "logprob": 0.0,
+                      "token": " DG",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        88
+                      ],
+                      "logprob": 0.0,
+                      "token": "X",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        83,
+                        112,
+                        97,
+                        114,
+                        107
+                      ],
+                      "logprob": -3.576278118089249e-07,
+                      "token": " Spark",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        105,
+                        115
+                      ],
+                      "logprob": -5.8887653722194955e-05,
+                      "token": " is",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        117,
+                        115,
+                        101,
+                        102,
+                        117,
+                        108
+                      ],
+                      "logprob": -0.00032824851223267615,
+                      "token": " useful",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        102,
+                        111,
+                        114
+                      ],
+                      "logprob": -1.1920928244535389e-07,
+                      "token": " for",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        97,
+                        99,
+                        99,
+                        101,
+                        108,
+                        101,
+                        114,
+                        97,
+                        116,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": -0.7325843572616577,
+                      "token": " accelerating",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        108,
+                        97,
+                        114,
+                        103,
+                        101
+                      ],
+                      "logprob": -0.26703083515167236,
+                      "token": " large",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        45
+                      ],
+                      "logprob": -1.9788545614574105e-05,
+                      "token": "-",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        115,
+                        99,
+                        97,
+                        108,
+                        101
+                      ],
+                      "logprob": 0.0,
+                      "token": "scale",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        100,
+                        97,
+                        116,
+                        97
+                      ],
+                      "logprob": -0.7754314541816711,
+                      "token": " data",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        112,
+                        114,
+                        111,
+                        99,
+                        101,
+                        115,
+                        115,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": -0.8050984740257263,
+                      "token": " processing",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        97,
+                        110,
+                        100
+                      ],
+                      "logprob": -0.002717138035222888,
+                      "token": " and",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        109,
+                        97,
+                        99,
+                        104,
+                        105,
+                        110,
+                        101
+                      ],
+                      "logprob": -0.04137249290943146,
+                      "token": " machine",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        108,
+                        101,
+                        97,
+                        114,
+                        110,
+                        105,
+                        110,
+                        103
+                      ],
+                      "logprob": 0.0,
+                      "token": " learning",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        32,
+                        119,
+                        111,
+                        114,
+                        107,
+                        108,
+                        111,
+                        97,
+                        100,
+                        115
+                      ],
+                      "logprob": -0.0007257211836986244,
+                      "token": " workloads",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        46
+                      ],
+                      "logprob": -0.0031305374577641487,
+                      "token": ".",
+                      "top_logprobs": []
+                    },
+                    {
+                      "bytes": [
+                        60,
+                        116,
+                        117,
+                        114,
+                        110,
+                        124,
+                        62
+                      ],
+                      "logprob": 0.0,
+                      "token": "<turn|>",
+                      "top_logprobs": []
+                    }
+                  ]
+                },
+                "matched_stop": 106,
+                "message": {
+                  "content": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+                  "reasoning_content": null,
+                  "role": "assistant",
+                  "tool_calls": null
+                }
+              }
+            ],
+            "created": 1781239307,
+            "id": "98f30bf5dd24465285e8ee1b2a5c77dd",
+            "metadata": {
+              "weight_version": "default"
+            },
+            "model": "google/gemma-4-E2B-it",
+            "object": "chat.completion",
+            "usage": {
+              "completion_tokens": 19,
+              "prompt_tokens": 24,
+              "prompt_tokens_details": null,
+              "reasoning_tokens": 0,
+              "total_tokens": 43
+            }
+          },
+          "status": 200
+        },
+        "chat_text": "A DGX Spark is useful for accelerating large-scale data processing and machine learning workloads.",
+        "chat_token_ids": null,
+        "native_request": {
+          "return_logprob": true,
+          "return_text_in_logprobs": true,
+          "sampling_params": {
+            "max_new_tokens": 32,
+            "temperature": 0.0
+          },
+          "text": "In one short sentence, say what a DGX Spark is useful for.",
+          "top_logprobs_num": 0
+        },
+        "native_response": {
+          "elapsed_s": 0.029,
+          "ok": true,
+          "response": {
+            "meta_info": {
+              "cached_tokens": 4,
+              "cached_tokens_details": {
+                "device": 4,
+                "host": 0
+              },
+              "completion_tokens": 1,
+              "dp_rank": null,
+              "e2e_latency": 0.028041477024089545,
+              "finish_reason": {
+                "matched": 106,
+                "type": "stop"
+              },
+              "id": "f4a2764914d4485da8ba793218ff121e",
+              "input_token_logprobs": [],
+              "num_retractions": 0,
+              "output_token_logprobs": [
+                [
+                  -0.43763482570648193,
+                  106,
+                  "<turn|>"
+                ]
+              ],
+              "output_token_logprobs_length": 1,
+              "prompt_tokens": 15,
+              "reasoning_tokens": 0,
+              "response_sent_to_client_ts": 1781239307.85221,
+              "weight_version": "default"
+            },
+            "output_ids": [
+              106
+            ],
+            "text": ""
+          },
+          "status": 200
+        },
+        "native_text": "",
+        "native_token_ids": [
+          106
+        ],
+        "prompt": "In one short sentence, say what a DGX Spark is useful for.",
+        "prompt_id": "spark_use"
+      }
+    ]
+  },
+  "spec_on_artifact": "results\\sglang_gemma4_mtp_identity_20260612T133519JST\\spec_on.capture.json"
+}
