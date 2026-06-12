@@ -299,6 +299,24 @@ linear-V-SF all engage; 26B MoE loads). REMAINING (one item, isolated): the bloc
 profiling-forward hang -- a serving-runtime gap, NOT the NVFP4-KV code -- blocks the final DG-V5/V6
 serving receipt.
 
+## CORRECTED DIAGNOSIS (2026-06-12, via py-spy): NOT a hang -- FlashInfer CUTLASS MoE JIT compile
+py-spy dump of the "hung" EngineCore (served with --cap-add SYS_PTRACE):
+  run_ninja (flashinfer/jit/cpp_ext.py:368) <- subprocess.communicate, COMPILING
+  get_cutlass_fused_moe_module (flashinfer/fused_moe/core.py:278)
+  cutlass_fused_moe -> flashinfer_cutlass_moe.apply -> ... -> gemma4.py:419 (MoE layer)
+  -> diffusion_gemma.py:322 forward -> execute_model -> _dummy_run (profiling)
+The "hang" was the **FlashInfer CUTLASS fused-MoE kernel JIT-compiling on first invocation**
+(26B-A4B = 128-expert MoE; moe_backend=auto picked flashinfer_cutlass). CUTLASS MoE builds take
+10-30min COLD. **Every earlier attempt was KILLED prematurely at ~8min -- misread the compile as a
+hang.** Explains the bisect: bf16 + nvfp4 share the MoE -> both "hang" on the same compile. This is
+the JIT-toolchain-gauntlet (task #39), NOT a block-diffusion bug and NOT our KV code. The earlier
+"dummy-run diffusion_states" hypothesis is REFUTED.
+
+FIX/PATH: (a) just WAIT for the cold compile (serve dgv_spy left running to finish); (b) faster path
+-- force a non-CUTLASS MoE backend (triton) to skip the slow JIT, or pre-warm/cache the kernel
+(task #39 AOT). Once the MoE kernel is built+cached, subsequent serves are fast. DG-V5 is one
+compile away.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
