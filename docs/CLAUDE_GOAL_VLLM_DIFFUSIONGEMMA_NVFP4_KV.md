@@ -191,6 +191,26 @@ proof (kv uint8, mixed_kv False), VO-split proof (global head_dim 512 -> vo 256)
 capacity vs bf16, double-run bitwise; DG-V6 perf pair. Harness staged:
 scripts/run_vllm_dgemma_dgv_spark.sh.
 
+## SPARK DG-V5 BLOCKED ON ARM64-WHEEL PORTABILITY (2026-06-12)
+Tried to serve the e2-dgv arm64 wheel on Spark; hit a 3-layer env mismatch retrofitting the
+existing r10 container, fully diagnosed:
+1. lineage: existing Spark gemma4 image is 9759e3b06 (022 line, divergent) -> can't overlay e2-dgv
+   .py (MoE compiled drift). Used the WHEEL instead (clean swap).
+2. torch: wheel needs torch 2.12 (CI pin); both Spark images ship torch 2.11. `_C.abi3.so`
+   undefined-symbol until I upgraded torch->2.12 in-container (then `_C` loaded).
+3. glibc: wheel's `_C_stable_libtorch.abi3.so` needs GLIBC_2.38; both Spark images are
+   Ubuntu 22.04 / glibc 2.35. HARD WALL.
+ROOT CAUSE: the **sm121a-arm64 CI workflow lacks the glibc gate sm120a has**. sm120a builds on
+`ubicloud-standard-30-ubuntu-2204` + fails if any .so needs > GLIBC_2.35; the arm64 workflow
+builds on `ubicloud-standard-30-arm` (Ubuntu 24.04), no gate -> glibc-2.38 wheel.
+FIX: mirror sm120a in the arm64 workflow -> build on a 22.04 arm runner + add the glibc-2.35
+gate, rebuild. Then the glibc-2.35 + torch-2.12 wheel loads in the r10 container after an
+in-container `pip install torch==2.12.0 cu130` (proven: `_C` loads once torch matches). Then
+serve DG-V5 per scripts/run_vllm_dgemma_dgv_spark.sh. (Alternative: build a full Ubuntu-24.04
+arm e2-dgv serving image so no glibc/torch retrofit is needed.) Either way it's a CI/Ubicloud
+build, not a Spark build. NOTE: this arm64-wheel glibc bug affects ALL Spark wheel deploys,
+not just DG-V -- worth fixing regardless.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
