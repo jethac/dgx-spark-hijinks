@@ -48,7 +48,8 @@ rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer \
        /root/.cache/flashinfer || true
 
 log_flashinfer python3 -m pip install --upgrade --no-deps \
-  "nvidia-cutlass-dsl[cu13]>=4.5.0" scikit-build-core ninja cmake wheel
+  "nvidia-cutlass-dsl[cu13]>=4.5.0" scikit-build-core ninja cmake wheel \
+  packaging pathspec pyproject-metadata
 log_flashinfer python3 -m pip install --no-deps --no-build-isolation -e \
   "${REPO_ROOT}/third_party/flashinfer" -v
 
