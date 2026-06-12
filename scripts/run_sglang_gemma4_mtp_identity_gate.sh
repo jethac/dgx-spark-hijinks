@@ -12,6 +12,9 @@ MODEL="${MODEL:-google/gemma-4-E2B-it}"
 DRAFT_MODEL="${DRAFT_MODEL:-google/gemma-4-E2B-it-assistant}"
 PORT="${PORT:-30135}"
 MEM_FRACTION_STATIC="${MEM_FRACTION_STATIC:-0.40}"
+KV_CACHE_DTYPE="${KV_CACHE_DTYPE:-auto}"
+SGLANG_FP4_KV_MIXED_KV="${SGLANG_FP4_KV_MIXED_KV:-0}"
+DISABLE_GRAPHS="${DISABLE_GRAPHS:-1}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-1200}"
 REQUEST_TIMEOUT_S="${REQUEST_TIMEOUT_S:-300}"
 GB10_DOCKER_MEMORY="${GB10_DOCKER_MEMORY:-100g}"
@@ -48,12 +51,15 @@ mkdir -p "${OUT_DIR}"
   echo "draft_model=${DRAFT_MODEL}"
   echo "port=${PORT}"
   echo "mem_fraction_static=${MEM_FRACTION_STATIC}"
+  echo "kv_cache_dtype=${KV_CACHE_DTYPE}"
+  echo "sglang_fp4_kv_mixed_kv=${SGLANG_FP4_KV_MIXED_KV}"
+  echo "disable_graphs=${DISABLE_GRAPHS}"
   echo "sglang_commit=${SGLANG_COMMIT}"
   echo "flashinfer_commit=${FLASHINFER_COMMIT}"
   echo "hf_cache=${HF_CACHE}"
   echo "hf_local_files_only=${HF_LOCAL_FILES_ONLY}"
   echo "hf_hub_offline=${HF_HUB_OFFLINE}"
-  echo "scope=bf16 greedy spec-off/spec-on MTP identity, sequential servers"
+  echo "scope=greedy spec-off/spec-on MTP identity, sequential servers"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   free -h
 } | tee "${OUT_DIR}/preflight.log"
@@ -167,6 +173,9 @@ launch_and_capture() {
       -e PYTHONPATH=/work/python_sitecustomize:/work/third_party/sglang/python:/tmp/flashinfer-python-path \
       -e SGLANG_FLASHINFER_VOSPLIT=1 \
       -e SGLANG_GEMMA4_TRACE_GEOMETRY=1 \
+      -e SGLANG_FP4_KV_MIXED_KV="${SGLANG_FP4_KV_MIXED_KV}" \
+      -e KV_CACHE_DTYPE="${KV_CACHE_DTYPE}" \
+      -e DISABLE_GRAPHS="${DISABLE_GRAPHS}" \
       -e HF_HUB_OFFLINE="${HF_HUB_OFFLINE}" \
       -e TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE}" \
       -e HF_TOKEN="${HF_TOKEN:-}" \
@@ -198,14 +207,22 @@ print("flashinfer_cutlass", jit_env.CUTLASS_INCLUDE_DIRS, flush=True)
 print("flashinfer_cccl", jit_env.CCCL_INCLUDE_DIRS, flush=True)
 print("flashinfer_spdlog", jit_env.SPDLOG_INCLUDE_DIR, flush=True)
 PY
+        kv_args=()
+        if [[ "${KV_CACHE_DTYPE}" != "auto" ]]; then
+          kv_args+=(--kv-cache-dtype "${KV_CACHE_DTYPE}")
+        fi
+        graph_args=()
+        if [[ "${DISABLE_GRAPHS}" == "1" ]]; then
+          graph_args+=(--disable-cuda-graph --disable-piecewise-cuda-graph)
+        fi
         exec python3 -m sglang.launch_server \
           --model-path "${MODEL}" \
           --dtype bfloat16 \
           --attention-backend flashinfer \
           --page-size 1 \
           --mem-fraction-static "${MEM_FRACTION_STATIC}" \
-          --disable-cuda-graph \
-          --disable-piecewise-cuda-graph \
+          "${kv_args[@]}" \
+          "${graph_args[@]}" \
           --host 0.0.0.0 \
           --port "${PORT}" '"${extra_args}"'
       '
@@ -277,6 +294,17 @@ comparison = {}
 if comparison_path.exists():
     comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
 cmp = comparison.get("comparison", {})
+preflight = {}
+preflight_path = out_dir / "preflight.log"
+if preflight_path.exists():
+    for line in preflight_path.read_text(encoding="utf-8").splitlines():
+        if "=" in line:
+            key, value = line.split("=", 1)
+            preflight[key] = value
+kv_cache_dtype = preflight.get("kv_cache_dtype", "unknown")
+disable_graphs = preflight.get("disable_graphs", "unknown")
+scope_kv = "BF16/auto KV" if kv_cache_dtype == "auto" else f"`{kv_cache_dtype}` KV"
+scope_graph = "graphs disabled" if disable_graphs == "1" else "graphs enabled"
 status = "GREEN" if cmp.get("all_ok") else "RED"
 reasons = []
 if not cmp.get("text_identity_ok"):
@@ -293,7 +321,7 @@ lines = [
     "",
     "## Scope",
     "",
-    "BF16 greedy spec-off vs spec-on identity for SGLang Gemma 4 Frozen-KV MTP. Servers are run sequentially; this is not a speedup claim and not an NVFP4 row.",
+    f"Greedy spec-off vs spec-on identity for SGLang Gemma 4 Frozen-KV MTP with {scope_kv}, {scope_graph}. Servers are run sequentially; this is not a speedup claim.",
     "",
     "## Provenance",
     "",
@@ -304,7 +332,8 @@ lines = [
     f"- SGLang: `{sglang_commit}`",
     f"- FlashInfer: `{flashinfer_commit}`",
     "- Spec flags: `--speculative-algorithm NEXTN --speculative-num-steps 1 --speculative-num-draft-tokens 1 --speculative-eagle-topk 1 --speculative-draft-model-quantization unquant`",
-    "- Graphs disabled for the first identity gate.",
+    f"- KV cache dtype: `{kv_cache_dtype}`",
+    f"- Graphs disabled: `{disable_graphs}`",
     "",
     "## Gates",
     "",
