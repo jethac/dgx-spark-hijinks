@@ -1,0 +1,208 @@
+{
+  "backend": "sglang",
+  "cases": [
+    {
+      "case": "short_decode",
+      "chunk_count": 4,
+      "completion_tok_s_total": 17.143814435294598,
+      "content_chars": 378,
+      "content_preview": "A local AI workstation benefits from fast memory because it serves as the critical high-speed conduit between the storage and the processing units, particularly the GPU and CPU. During tasks such as training large models or running inference on complex datasets, the system must constantly swap massive tensors and model weights; high-bandwidth memory minimizes data bottlenecks",
+      "decode_s": 7.369596278294921e-05,
+      "decode_tok_s": 868432.9179400784,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781246123,
+        "id": "f24d15d101ff4c46ba8f7574b0f031ff",
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 28,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 92
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 378,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 79,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 3.733124867954757,
+      "ttft_s": 3.733051171991974,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 28,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 92
+      }
+    },
+    {
+      "case": "medium_decode",
+      "chunk_count": 4,
+      "completion_tok_s_total": 40.27445516604327,
+      "content_chars": 840,
+      "content_preview": "**Engineering Note: Validation of GPU Kernel Execution in LLM Inference**\n\n**Objective:** To verify that the LLM inference server (e.g., vLLM, TGI, Triton-LLM) is executing optimized, intended kernels (e.g., FlashAttention, PagedAttention, Triton kernels) rather than falling back to generic or unoptimized implementations.\n\n### 1. Methodology\nValidation is performed by capturing the GPU execution trace during an active inference request and comparing the captured kernel names against the expected",
+      "decode_s": 7.172703044489026e-05,
+      "decode_tok_s": 2676815.125470984,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781246127,
+        "id": "2fd41cb6b2304d33ad08e0308217fbe1",
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 192,
+          "prompt_tokens": 40,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 232
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 840,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 192,
+        "message_chars": 151,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 4.767289817042183,
+      "ttft_s": 4.767218090011738,
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 40,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 232
+      }
+    },
+    {
+      "case": "long_prefill",
+      "chunk_count": 4,
+      "completion_tok_s_total": 15.075969589193235,
+      "content_chars": 336,
+      "content_preview": "Here is the summary of the requirements for the local inference server benchmark:\n\n*   **Configuration Tracking:** Capture detailed environment metadata and the specific backend used for each test.\n*   **Latency Metrics:** Measure both the cold-start time for initial requests and the warm decode speed for sustained performance.\n*   **",
+      "decode_s": 7.196702063083649e-05,
+      "decode_tok_s": 889296.2281750654,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781246132,
+        "id": "8aa077deda314e1d899f039b69b1fb26",
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 2270,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 2334
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 336,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 64,
+        "message_chars": 12743,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 4.24516643001698,
+      "ttft_s": 4.245094462996349,
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 2270,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 2334
+      }
+    },
+    {
+      "case": "natural_long_prefill",
+      "chunk_count": 4,
+      "completion_tok_s_total": 21.886454131142376,
+      "content_chars": 695,
+      "content_preview": "Based on the field notes, here are the key takeaways for the infrastructure test:\n\n*   **Operational Risk:** Resource contention on unified memory systems causes host-level freezes; sequential execution and strict cgroup limits are required to prevent driver wedging.\n*   **Operational Risk:** Kernel builds may silently fallback to generic instructions rather than architecture-specific targets, leading to \"false confidence\" and inaccurate performance metrics.\n*   **Measurements Needed:** Benchmar",
+      "decode_s": 6.8527995608747e-05,
+      "decode_tok_s": 1867849.757795366,
+      "finish_reason": "length",
+      "last_event": {
+        "choices": [],
+        "created": 1781246137,
+        "id": "e0a19b2075b64a47824f5c0bcb8e86a6",
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "object": "chat.completion.chunk",
+        "usage": {
+          "completion_tokens": 128,
+          "prompt_tokens": 691,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0,
+          "total_tokens": 819
+        }
+      },
+      "matched_stop": null,
+      "ok": true,
+      "output_chars": 695,
+      "payload": {
+        "chat_template_kwargs": null,
+        "max_tokens": 128,
+        "message_chars": 3765,
+        "prompt_suffix": ""
+      },
+      "reasoning_chars": 0,
+      "reasoning_content_chars": 0,
+      "reasoning_content_preview": "",
+      "reasoning_preview": "",
+      "total_s": 5.848366264952347,
+      "ttft_s": 5.848297736956738,
+      "usage": {
+        "completion_tokens": 128,
+        "prompt_tokens": 691,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0,
+        "total_tokens": 819
+      }
+    }
+  ],
+  "finished_utc": "2026-06-12T06:35:37Z",
+  "hardware": {
+    "devices": [],
+    "error": "ModuleNotFoundError(\"No module named 'torch'\")",
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": false,
+    "warnings": [
+      "torch is unavailable; CUDA SM count is not recorded."
+    ]
+  },
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "models_response": null,
+  "ok": true,
+  "phase": "before",
+  "run_id": "sglang_dgemma_dgr6_perf_pair_20260612T152803JST_before_stock_triton_bf16",
+  "schema": "openai-serving-benchmark/v1",
+  "started_utc": "2026-06-12T06:35:19Z",
+  "url": "http://127.0.0.1:30125"
+}

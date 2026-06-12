@@ -1,0 +1,9 @@
+run_id=sglang_dgemma_dgr6_perf_pair_20260612T152803JST_after_flashinfer_fullnvfp4
+mode=after_flashinfer_fullnvfp4
+phase=after
+description=GB10 tuned path: FlashInfer VO-split, full NVFP4 K+V
+started_at=2026-06-12T15:35:39+09:00
+launch_args=--attention-backend flashinfer --kv-cache-dtype fp4_e2m1 --context-length 8192 --page-size 256
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.3Gi        72Gi        12Mi        44Gi       115Gi
+Swap:           15Gi       492Mi        15Gi

@@ -1,0 +1,9 @@
+run_id=sglang_dgemma_dgr6_perf_pair_20260612T152803JST_before_stock_triton_bf16
+mode=before_stock_triton_bf16
+phase=before
+description=stock DiffusionGemma policy: Triton attention, BF16/auto KV
+started_at=2026-06-12T15:28:05+09:00
+launch_args=--context-length 8192
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.8Gi        73Gi        12Mi        43Gi       115Gi
+Swap:           15Gi       492Mi        15Gi

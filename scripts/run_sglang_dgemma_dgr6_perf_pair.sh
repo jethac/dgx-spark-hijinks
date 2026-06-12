@@ -328,7 +328,10 @@ for mode, phase, label in modes:
     bench_ok = bool(bench.get("ok"))
     status_text = (mode_dir / "status.txt").read_text(encoding="utf-8", errors="replace").strip() if (mode_dir / "status.txt").exists() else "missing"
     full_tokens = first_match(r"max_total_num_tokens=(\d+)", log)
-    swa_tokens = first_match(r"SGLANG_GEMMA_KV_SWAKVPOOL.*?swa_tokens=(\d+)", log)
+    swa_tokens = (
+        first_match(r"SGLANG_GEMMA_KV_SWAKVPOOL.*?swa_tokens=(\d+)", log)
+        or first_match(r"SWAKVPool mem usage:.*?swa size: (\d+)", log)
+    )
     policy_stock = "Attention backend forced to triton for DiffusionGemma" in log
     policy_vosplit = "DiffusionGemma is using the experimental FlashInfer VO-split path" in log
     full_nvfp4 = "mixed_kv=False" in log and "full_pool=MHATokenToKVPoolFP4" in log and "swa_pool=MHATokenToKVPoolFP4" in log
@@ -421,6 +424,8 @@ if before and after and before.get("full_tokens") and after.get("full_tokens"):
     lines.append(f"Capacity ratio in this performance pair: `{after['full_tokens']} / {before['full_tokens']} = {after['full_tokens'] / before['full_tokens']:.4f}x` full-layer tokens.")
 
 lines += ["", "## Throughput", ""]
+lines.append("DiffusionGemma's OpenAI streaming path emits each measured completion as effectively one stream event, so `ttft_s` is nearly equal to `total_s` and the synthetic `decode_tok_s` field is not meaningful. Use total completion-token throughput for this row.")
+lines.append("")
 lines.append("| Case | Before TTFT s | Before total s | Before total tok/s | After TTFT s | After total s | After total tok/s | After/Before total tok/s |")
 lines.append("|---|---:|---:|---:|---:|---:|---:|---:|")
 before_cases = {case["case"]: case for case in before.get("cases", [])} if before else {}

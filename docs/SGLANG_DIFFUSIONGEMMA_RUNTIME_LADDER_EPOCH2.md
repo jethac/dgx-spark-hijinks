@@ -249,15 +249,23 @@ Gate:
 - speed, capacity, and quality reported as separate claims
 - all artifacts live under `results/`
 
-Status: staged. Packet:
-`docs/SGLANG_DIFFUSIONGEMMA_DGR6_PERF_PACKET_20260612.md`. Runner:
+Status: green for the scoped text-only performance pair; see
+`results/sglang_dgemma_dgr6_perf_pair_20260612T152803JST/summary.md`.
+Packet: `docs/SGLANG_DIFFUSIONGEMMA_DGR6_PERF_PACKET_20260612.md`. Runner:
 `scripts/run_sglang_dgemma_dgr6_perf_pair.sh`.
 
-The staged pair is intentionally a combined stack comparison, not an isolated
+The pair is intentionally a combined stack comparison, not an isolated
 kernel benchmark: before is the stock SGLang DiffusionGemma policy path
 (Triton attention, BF16/auto KV), and after is the GB10-tuned path
-(FlashInfer VO-split, full NVFP4 K+V). DG-R5 remains the separate source for
-the full-NVFP4 quality/capacity claims.
+(FlashInfer VO-split, full NVFP4 K+V). Both rows passed the revised text-only
+quality gate and OpenAI benchmark cases. The after row shows about `3.52x` KV
+token capacity in the same performance launch envelope (`237568/67584`
+full-layer tokens, `189952/54016` SWA tokens). Total completion-token
+throughput is case-dependent: `1.016x` short, `0.902x` medium, `1.042x`
+long-prefill, and `1.444x` natural-long-prefill. DiffusionGemma streaming emits
+each measured completion as effectively one event, so `decode_tok_s` is not a
+meaningful field for this row. DG-R5 remains the separate source for the
+full-NVFP4 quality/capacity claims.
 
 ## Rule
 

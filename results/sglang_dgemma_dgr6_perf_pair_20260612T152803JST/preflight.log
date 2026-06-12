@@ -1,0 +1,14 @@
+pair_run_id=sglang_dgemma_dgr6_perf_pair_20260612T152803JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+source_branch=epoch2
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+model=google/diffusiongemma-26B-A4B-it
+port=30125
+mem_fraction_static=0.55
+sglang_commit=98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968
+flashinfer_commit=f99323bd7d1c
+scope=DiffusionGemma DG-R6 stock-vs-full-NVFP4 performance pair
+started_at=2026-06-12T15:28:03+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.8Gi        73Gi        12Mi        43Gi       115Gi
+Swap:           15Gi       492Mi        15Gi
