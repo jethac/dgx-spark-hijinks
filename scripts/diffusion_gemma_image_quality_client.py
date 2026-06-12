@@ -62,12 +62,17 @@ def make_images() -> dict[str, dict[str, Any]]:
     specs = {
         "red_blue_halves": {
             "png": png_from_rgb(width, height, red_blue_rows),
-            "prompt": "What are the two main colors in this image? Answer with only color words.",
+            "prompt": (
+                "Look at the image and describe its two main colors in one short phrase."
+            ),
             "required_terms": ["red", "blue"],
         },
         "green_square": {
             "png": png_from_rgb(width, height, green_rows),
-            "prompt": "What is the main color of the square in this image? Answer with one color word.",
+            "prompt": (
+                "Look at the image and describe the main color of the square in one "
+                "short phrase."
+            ),
             "required_terms": ["green"],
         },
     }

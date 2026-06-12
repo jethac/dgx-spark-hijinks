@@ -37,6 +37,10 @@ Expected pass:
 - two repeats of the green-square image mention green
 - outputs are non-empty and byte-stable per image prompt
 
+Prompt policy: use short descriptive prompts, not terse "answer with one word"
+forms. DG-R2 already showed DiffusionGemma can denoise overly constrained terse
+prompts to empty output even when broader direct prompts are semantically fine.
+
 Stop on red:
 
 1. readiness failure
