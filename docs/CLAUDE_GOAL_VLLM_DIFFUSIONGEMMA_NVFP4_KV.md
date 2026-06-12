@@ -78,6 +78,37 @@ is automatic (Gemma4Model underneath) -- confirm it engages for the new arch nam
 confirm the bidirectional (causal=False) decoder phase reads NVFP4 correctly on vLLM (the one genuine
 remaining unknown, de-risked by SGLang DG-R5). No new kernel work identified.
 
+## CORRECTION (2026-06-12): this is a RECONCILIATION, not a port
+DiffusionGemma-on-vLLM was NOT un-started. Branch `spark/hijinks-e2-dgemma` (local + origin)
+already carries:
+- the full model stack: `diffusion_gemma.py`, `config/diffusion.py`,
+  `transformers_utils/configs/diffusion_gemma.py` (the DG-0 baseline, task #24);
+- commit `6fe6d798f` "spark-hijinks epoch-2 patch set on the dgemma branch (DiffusionGemma stack)"
+  -- the runner/scheduler/sampler block-diffusion denoise integration;
+- commit `dfb427952` "DG-2: per-request causal grouping in the FlashInfer backend + gate lifts"
+  -- config.py +25, **flashinfer.py +313**: the NVFP4 diffusion attention path, WIRED but never
+  verified-and-banked (no receipts on the branch; task #27 still pending).
+
+It never merged to the integrated NVFP4 line, and it diverged: dgemma is 23 commits off our
+HEAD, and the integrated line moved **44 commits** since (AR-ladder completion, MTP, Triton
+retirement, mm-prefix). Only `k_eq_v` reached mainline (via the MTP merge) -- which is why the
+integrated branch showed DiffusionGemma as a gap.
+
+**So DG-V = reconcile the e2-dgemma DiffusionGemma stack onto the current confirmed-good
+integrated NVFP4 HEAD, then verify DG-V5/V6 + bank receipts. NOT a from-scratch port.**
+
+**Crux conflict:** `flashinfer.py` three-way merge -- dgemma's DG-2 causal-grouping (+313) vs
+HEAD's 44-commit evolution of the SAME file (VO-split refinements, MTP backend pin, mm-prefix
+masking, the max_mma_kv dispatcher fix). Plus `config.py` routing. The model/config files are
+clean adds (no conflict).
+
+**Plan:** off a working branch from HEAD: (1) bring the clean model/config files over as-is;
+(2) cherry-pick the two MEANINGFUL dgemma commits (6fe6d798f stack + dfb427952 DG-2), discarding
+the noise commits (race-fix/cleanup/revert churn), resolving the flashinfer.py + config.py
+three-way by hand against the current surface; (3) register the arch; (4) build the wheel;
+(5) run DG-V5/V6 on sm_120 + sm_121 and bank. The DG-2 causal grouping is the asset to preserve
+through the merge -- it's the diffusion-specific FlashInfer logic, already authored.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
