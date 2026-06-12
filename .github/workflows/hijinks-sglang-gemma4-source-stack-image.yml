@@ -8,7 +8,7 @@ on:
         required: false
         default: "epoch2-gemma4-tf511"
       base_image:
-        description: "Base SGLang runtime image"
+        description: "Base SGLang runtime image; must be Ubuntu 22.04 / glibc <= 2.35 for Spark portability"
         required: false
         default: "nvcr.io/nvidia/sglang:26.05-py3"
       transformers_pin:
@@ -138,8 +138,14 @@ jobs:
           COPY scripts /work/scripts
           COPY third_party /work/third_party
 
+          RUN set -eux; \
+              . /etc/os-release; \
+              echo "IMAGE_OS=${PRETTY_NAME}"; \
+              test "${VERSION_ID}" = "22.04"; \
+              ldd --version | head -n 1
+
           RUN apt-get update \
-           && apt-get install -y --no-install-recommends protobuf-compiler ccache \
+           && apt-get install -y --no-install-recommends protobuf-compiler ccache binutils \
            && rm -rf /var/lib/apt/lists/*
           RUN if ! command -v cargo >/dev/null 2>&1; then \
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable; \
@@ -182,6 +188,54 @@ jobs:
           assert common_ops, f"sgl_kernel common_ops library missing under {sgl_kernel_dir}"
           print("SGL_KERNEL_DIR", sgl_kernel_dir)
           print("SGL_KERNEL_COMMON_OPS", [str(path) for path in common_ops])
+          PY
+
+          RUN python3 - <<'PY'
+          import importlib.util
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          package_roots = []
+          for name in ("sglang", "flashinfer", "sgl_kernel"):
+              spec = importlib.util.find_spec(name)
+              if spec is None:
+                  raise SystemExit(f"{name} import spec missing")
+              if spec.submodule_search_locations:
+                  package_roots.extend(Path(path) for path in spec.submodule_search_locations)
+              elif spec.origin:
+                  package_roots.append(Path(spec.origin).parent)
+
+          pattern = re.compile(r"GLIBC_(\d+)\.(\d+)")
+          ceiling = (2, 35)
+          max_seen = (0, 0)
+          offenders = []
+          checked = 0
+          for root in package_roots:
+              for so_path in sorted(root.rglob("*.so")):
+                  checked += 1
+                  proc = subprocess.run(
+                      ["objdump", "-T", str(so_path)],
+                      text=True,
+                      stdout=subprocess.PIPE,
+                      stderr=subprocess.DEVNULL,
+                      check=False,
+                  )
+                  versions = [tuple(map(int, match.groups())) for match in pattern.finditer(proc.stdout)]
+                  if not versions:
+                      continue
+                  local_max = max(versions)
+                  max_seen = max(max_seen, local_max)
+                  if local_max > ceiling:
+                      offenders.append((str(so_path), local_max))
+
+          print(f"GLIBC_AUDIT_CHECKED_SO={checked}")
+          print(f"GLIBC_AUDIT_MAX=GLIBC_{max_seen[0]}.{max_seen[1]}")
+          if offenders:
+              for so_path, version in offenders[:20]:
+                  print(f"GLIBC_AUDIT_OFFENDER {so_path} GLIBC_{version[0]}.{version[1]}", file=sys.stderr)
+              raise SystemExit("compiled extension requires GLIBC newer than 2.35")
           PY
 
           RUN rm -rf /root/.cache/flashinfer /root/.cache/flashinfer-aiter \
