@@ -24,8 +24,18 @@ log_sglang() {
 mkdir -p "$(dirname "${FLASHINFER_INSTALL_LOG:-/tmp/flashinfer-install.log}")"
 mkdir -p "$(dirname "${SGLANG_INSTALL_LOG:-/tmp/sglang-install.log}")"
 
-git -C "${REPO_ROOT}/third_party/flashinfer" submodule update --init \
-  3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+if git -C "${REPO_ROOT}/third_party/flashinfer" rev-parse --git-dir >/dev/null 2>&1; then
+  git -C "${REPO_ROOT}/third_party/flashinfer" submodule update --init \
+    3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+else
+  for required_dir in 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog; do
+    if [[ ! -d "${REPO_ROOT}/third_party/flashinfer/${required_dir}" ]]; then
+      echo "missing FlashInfer dependency directory: ${required_dir}" >&2
+      echo "provide a recursive checkout or run git submodule update before packaging the source tree" >&2
+      exit 1
+    fi
+  done
+fi
 
 python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache \
   sglang-kernel || true

@@ -41,7 +41,7 @@ context_dir=$(mktemp -d)
 trap 'rm -f "${dockerfile}"; rm -rf "${context_dir}"' EXIT
 
 cat >"${dockerfile}" <<'EOF'
-ARG BASE_IMAGE
+ARG BASE_IMAGE=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
 FROM ${BASE_IMAGE}
 
 ARG BASE_IMAGE_ID
@@ -51,26 +51,11 @@ LABEL spark.image_generation="sglang-gemma4-transformers-r10" \
       spark.transformers_pin="${TRANSFORMERS_PIN}" \
       spark.base_image_id="${BASE_IMAGE_ID}"
 
-RUN python3 - <<'PY'
-import importlib.metadata as md
-import flashinfer
-import sgl_kernel
-import sglang
-import transformers
-
-print("BEFORE_TRANSFORMERS", transformers.__version__)
-print("BEFORE_SGLANG", md.version("sglang"), sglang.__file__)
-print("BEFORE_FLASHINFER", getattr(flashinfer, "__version__", None), flashinfer.__file__)
-print("BEFORE_SGL_KERNEL", md.version("sglang-kernel"), sgl_kernel.__file__)
-PY
+RUN python3 -c 'import transformers; print("BEFORE_TRANSFORMERS", transformers.__version__)'
 
 RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
 
 RUN python3 - <<'PY'
-import importlib.metadata as md
-import flashinfer
-import sgl_kernel
-import sglang
 import transformers
 
 print("TRANSFORMERS_BAKED", transformers.__version__)
@@ -81,9 +66,6 @@ except Exception:
     from transformers.models.auto.configuration_auto import CONFIG_MAPPING as mapping
 assert "gemma4_unified" in mapping, "gemma4_unified missing from transformers config mapping"
 print("GEMMA4_UNIFIED_CONFIG_MAPPING present")
-print("SGLANG", md.version("sglang"), sglang.__file__)
-print("FLASHINFER", getattr(flashinfer, "__version__", None), flashinfer.__file__)
-print("SGLANG_KERNEL", md.version("sglang-kernel"), sgl_kernel.__file__)
 PY
 
 RUN rm -rf /root/.cache/flashinfer /root/.cache/flashinfer-aiter \
@@ -123,6 +105,41 @@ else
   status=failed
 fi
 
+VERIFY_STATUS=not_run
+VERIFY_LOG=${RESULTS_DIR}/${RUN_ID}_runtime_verify.log
+if [[ "${status}" == built ]]; then
+  if docker run --rm \
+    -v "$(pwd):/work" \
+    -w /work \
+    -e PYTHONPATH=/work/third_party/sglang/python:/work/third_party/flashinfer \
+    "${IMAGE_TAG}" \
+    bash -lc 'python3 - <<'"'"'PY'"'"'
+import importlib.metadata as md
+
+import flashinfer
+import sgl_kernel
+import sglang
+import transformers
+
+print("RUNTIME_TRANSFORMERS", transformers.__version__)
+try:
+    from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES as mapping
+except Exception:
+    from transformers.models.auto.configuration_auto import CONFIG_MAPPING as mapping
+assert "gemma4_unified" in mapping, "gemma4_unified missing from transformers config mapping"
+print("RUNTIME_GEMMA4_UNIFIED_CONFIG_MAPPING present")
+print("RUNTIME_SGLANG", md.version("sglang"), sglang.__file__)
+print("RUNTIME_FLASHINFER", getattr(flashinfer, "__version__", None), flashinfer.__file__)
+print("RUNTIME_SGLANG_KERNEL", md.version("sglang-kernel"), sgl_kernel.__file__)
+print("RUNTIME_SGL_KERNEL_FILE", sgl_kernel.__file__)
+PY' >"${VERIFY_LOG}" 2>&1; then
+    VERIFY_STATUS=passed
+  else
+    VERIFY_STATUS=failed
+    status=failed
+  fi
+fi
+
 {
   echo "# SGLang Gemma 4 Transformers r10 Image Build"
   echo
@@ -133,6 +150,8 @@ fi
   echo "- base image id: \`${base_id}\`"
   echo "- transformers pin: \`${TRANSFORMERS_PIN}\`"
   echo "- log: \`${LOG_PATH}\`"
+  echo "- runtime verify: \`${VERIFY_STATUS}\`"
+  echo "- runtime verify log: \`${VERIFY_LOG}\`"
   echo "- finished JST: \`$(TZ=Asia/Tokyo date --iso-8601=seconds)\`"
   echo
   echo "Status: ${status}"
