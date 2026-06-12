@@ -32,7 +32,7 @@ notebooks/colab_g4_gemma4_test_drive.ipynb  (animal-versioned; first cut KANGARO
   suffix, e.g. `-retry1`).
 - Release page: `https://github.com/jethac/vllm/releases/tag/sm120a-wheels-<shortsha>`
 - Asset: one wheel, deterministic name
-  `vllm-0.1.dev1+g<shortsha>.sm120a-cp38-abi3-linux_x86_64.whl`; the notebook does
+  `vllm-0.1.dev1+g<shortsha>.sm120a-cp312-cp312-linux_x86_64.whl`; the notebook does
   not hardcode it - it resolves the `.whl` asset via the GitHub API
   (`/repos/jethac/vllm/releases/tags/<tag>`), so only the tag is templated
   (`WHEEL_RELEASE_TAG` at the top of the env cell).
@@ -42,6 +42,8 @@ notebooks/colab_g4_gemma4_test_drive.ipynb  (animal-versioned; first cut KANGARO
   the wheel so the ABI always matches.
 - First tag: `sm120a-wheels-4e9f2ae9c` (from the workflow-introduction commit
   itself; runs 27382718191 push / 27382746557 dispatch).
+- Current multimodal/audio merged tag: `sm120a-wheels-e32459eea`, built from
+  `spark/hijinks-e2-vllm@e32459eea` by workflow run `27395473939`.
 
 ## What is deliberately NOT done in Colab anymore
 
