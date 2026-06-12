@@ -317,6 +317,27 @@ FIX/PATH: (a) just WAIT for the cold compile (serve dgv_spy left running to fini
 (task #39 AOT). Once the MoE kernel is built+cached, subsequent serves are fast. DG-V5 is one
 compile away.
 
+## *** DG-V5 GREEN (2026-06-12) *** -- the headline is DONE on vLLM/sm_121
+The "hang" was a misdiagnosis: it was the cold CUTLASS fused-MoE JIT compile (97 targets, ~20min).
+Waited it out, cached the kernel (docker cp the flashinfer cache), mounted it for the nvfp4 row so it
+skipped the recompile. RESULT (results/vllm_dgemma_dgv5_20260612/):
+- **Coherent** (chat endpoint, temp 0): "The capital of Japan is Tokyo." + a coherent DGX-Spark answer.
+  (raw /v1/completions gives gibberish -- block-diffusion needs the chat/denoise path; the empty "2+2"
+  is the known terse-prompt pathology Codex flagged in DG-R2, not a serving fault.)
+- **full-NVFP4 proof**: "Using nvfp4 data type to store kv cache"; VLLM_NVFP4_KV_LINEAR_V_SF=1 linear;
+  VO-split (512-wide head) engaged.
+- **Capacity**: bf16 81,203 KV tokens -> **nvfp4 360,143 KV tokens = 4.43x raw** (extra over the
+  32/9=3.556x format ratio because nvfp4's lower activation footprint freed more KV memory: 21.3 vs
+  17.1 GiB). >=3.56x headline holds and then some.
+- Image: jethac-vllm-aeon-gemma4:e2-dgv-3d6a0d507-sm121a-r11 (r10 + e2-dgv wheel, swap-only).
+Matches SGLang DG-R5 parity. **The two vLLM DiffusionGemma cells flip GREEN.**
+
+DG-V status: DONE -- Gate 0; unified FIPrefillGroup; P520 bf16 legacy byte-identical; deterministic
+Spark image pipeline (22.04/torch-2.11 wheel -> r11); **DG-V5 nvfp4 coherent + >=3.56x on sm_121.**
+REMAINING (minor): DG-V6 perf pair (nvfp4 vs bf16 throughput at matched batch); bake the MoE+attn
+kernel cache into r11 (AOT, task #39) so serves skip the JIT; optional sm_120 (P520) once the native-
+Linux nvfp4 testbed lands. The NVFP4-KV contribution + serving receipt are COMPLETE.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
