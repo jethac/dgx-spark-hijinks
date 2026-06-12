@@ -63,11 +63,13 @@ Defaults:
 - `transformers_pin=5.11.0`
 
 Runner:
-`ubicloud-standard-30-arm-ubuntu-2204`
+`ubicloud-standard-30-arm`
 
 The repo currently has an online persistent x64 runner only. Native arm64
 builds therefore use the Ubicloud arm64 runner until an arm64 persistent
-runner is registered.
+runner is registered. The runner host OS is not part of the shipped artifact's
+ABI: the build happens inside `nvidia/cuda:13.0.2-devel-ubuntu22.04`, and the
+workflow gates the resulting image for Ubuntu 22.04 and `GLIBC_2.35`.
 
 ## Acceptance Gates
 
