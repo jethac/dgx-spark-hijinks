@@ -19,6 +19,14 @@ on:
         description: "Docker target platform for the pushed runtime image"
         required: false
         default: "linux/arm64"
+      expected_os_version:
+        description: "Required VERSION_ID from /etc/os-release"
+        required: false
+        default: "22.04"
+      base_probe_only:
+        description: "Only probe base image OS/glibc, do not build/push"
+        required: false
+        default: "false"
 
 permissions:
   contents: read
@@ -76,7 +84,40 @@ jobs:
           docker version
           docker info
 
+      - name: Probe base image OS and glibc
+        env:
+          BASE_IMAGE: ${{ inputs.base_image }}
+          TARGET_PLATFORM: ${{ inputs.target_platform }}
+          EXPECTED_OS_VERSION: ${{ inputs.expected_os_version }}
+        run: |
+          set -euxo pipefail
+          docker buildx imagetools inspect "${BASE_IMAGE}"
+          docker run --rm --platform "${TARGET_PLATFORM}" "${BASE_IMAGE}" bash -lc '
+            set -euxo pipefail
+            cat /etc/os-release
+            . /etc/os-release
+            echo "BASE_IMAGE_OS_VERSION=${VERSION_ID}"
+            echo "BASE_IMAGE_PRETTY_NAME=${PRETTY_NAME}"
+            ldd --version | head -n 1
+            python3 - <<'"'"'PY'"'"'
+import importlib.util
+import platform
+import sys
+
+print("PYTHON", sys.version.replace("\n", " "))
+print("MACHINE", platform.machine())
+for name in ("torch", "sglang", "flashinfer", "sgl_kernel", "transformers"):
+    spec = importlib.util.find_spec(name)
+    print(f"MODULE_{name.upper()}={spec.origin if spec else None}")
+PY
+            if [ "${VERSION_ID}" != "'"${EXPECTED_OS_VERSION}"'" ]; then
+              echo "Expected base image VERSION_ID='"${EXPECTED_OS_VERSION}"' but got ${VERSION_ID}" >&2
+              exit 42
+            fi
+          '
+
       - name: Prepare Buildx for target platform
+        if: ${{ inputs.base_probe_only != 'true' }}
         env:
           TARGET_PLATFORM: ${{ inputs.target_platform }}
         run: |
@@ -86,6 +127,7 @@ jobs:
           docker buildx inspect --bootstrap
 
       - name: Prepare compact Docker context
+        if: ${{ inputs.base_probe_only != 'true' }}
         run: |
           set -euxo pipefail
           rm -rf /tmp/sglang-gemma4-image-context
@@ -105,6 +147,7 @@ jobs:
             third_party/sglang/ /tmp/sglang-gemma4-image-context/third_party/sglang/
 
       - name: Write Dockerfile
+        if: ${{ inputs.base_probe_only != 'true' }}
         env:
           BASE_IMAGE: ${{ inputs.base_image }}
           TRANSFORMERS_PIN: ${{ inputs.transformers_pin }}
@@ -243,6 +286,7 @@ jobs:
           EOF
 
       - name: Compute image metadata
+        if: ${{ inputs.base_probe_only != 'true' }}
         id: meta
         shell: bash
         run: |
@@ -265,6 +309,7 @@ jobs:
           } >>"${GITHUB_OUTPUT}"
 
       - name: Login to GHCR
+        if: ${{ inputs.base_probe_only != 'true' }}
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -272,6 +317,7 @@ jobs:
           printf '%s' "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
       - name: Build and push image
+        if: ${{ inputs.base_probe_only != 'true' }}
         env:
           TARGET_PLATFORM: ${{ inputs.target_platform }}
         run: |
@@ -291,6 +337,7 @@ jobs:
           cat /tmp/sglang-gemma4-image-build-metadata.json
 
       - name: Write summary artifact
+        if: ${{ inputs.base_probe_only != 'true' }}
         env:
           TARGET_PLATFORM: ${{ inputs.target_platform }}
         run: |
@@ -321,6 +368,7 @@ jobs:
           EOF
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.base_probe_only != 'true' }}
         with:
           name: sglang-gemma4-source-stack-image-summary
           path: results/sglang_gemma4_source_stack_image_${{ github.run_id }}/
