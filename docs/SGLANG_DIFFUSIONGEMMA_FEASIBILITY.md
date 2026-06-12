@@ -8,6 +8,17 @@ serving result. The upstream serving reference today is vLLM's open `dgemma` bra
 the official `vllm/vllm-openai:gemma-aarch64-cu130` image; see
 `docs/DG0_SERVING_STACK_RECON.md`.
 
+2026-06-12 closeout: this original feasibility study has been overtaken by the
+rebased upstream runtime ladder. SGLang DiffusionGemma is now proven through the
+scoped DG-R7 evidence chain in `docs/SGLANG_DIFFUSIONGEMMA_RUNTIME_LADDER_EPOCH2.md`:
+stock text runtime, revised text-quality gate, explicit FlashInfer VO-split,
+full NVFP4 K+V text serving, matched capacity denominator, stock-vs-tuned
+performance pair, and a tiny stock-path image smoke are all documented under
+`results/`. The current campaign ship gate has therefore pivoted to the SGLang
+Gemma 4 autoregressive ladder. Treat the "Recommended Next Move" at the end of
+this document as historical guidance for the pre-rebase local-shell path, not as
+the active next action.
+
 Epoch-2 upstream rebase checkpoint: SGLang's public cookbook documents
 DiffusionGemma through `--dllm-algorithm Gemma4Renoise` and
 `--trust-remote-code`, but the runtime implementation is on the upstream
@@ -446,6 +457,10 @@ Gate:
   weights and KV, so start with low `max_running_requests` and conservative memory caps.
 
 ## Recommended Next Move
+
+Historical note: this recommendation described the local-shell path before the
+upstream `gemma4_diffusion.py` runtime was rebased into the SGLang lane. It is no
+longer the active path.
 
 Do not start by serving the NVFP4 checkpoint. Start with a code branch that implements only
 DG-S0 and DG-S1:

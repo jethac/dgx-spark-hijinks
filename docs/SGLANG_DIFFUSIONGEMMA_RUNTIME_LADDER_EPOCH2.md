@@ -8,12 +8,19 @@ the implementation path. It remains historical evidence for geometry and weight
 mapping, but runtime work now starts from upstream `gemma4_diffusion.py` and
 `Gemma4Renoise`.
 
+2026-06-12 closeout: the scoped DiffusionGemma ladder is green through DG-R7.
+Remaining caveats are explicitly scoped inside the rung rows: the original terse
+DG-R2 prompt baseline remains RED, DG-R4 mixed-KV is deferred with split-dtype
+module-keying as the named blocker, DG-R7 is only a tiny stock-path image smoke,
+and no CUDA-graph, long-context, or broad multimodal quality claim is made. The
+current ship gate is the separate SGLang Gemma 4 autoregressive ladder.
+
 ## Base
 
 SGLang branch:
 
 - `jethac/sglang:spark/hijinks-024-diffusiongemma-upstream-rebase`
-- current head: `3c381eaa6a`
+- closeout head for DG-R5/DG-R6/DG-R7 rows: `98bf8f129d`
 
 What upstream provides:
 
@@ -48,9 +55,12 @@ Our immediate fix on top:
   `SGLANG_FLASHINFER_VOSPLIT=1`. Stock `Gemma4Renoise` launches still force
   Triton, and CUDA graphs / chunked prefill remain disabled for DiffusionGemma.
   A persistent-Ubicloud wheel build for this runtime-code commit is green.
-- `dec4c040a8` fixes the static-audit marker for that policy and is the current
-  SGLang branch head. The persistent-Ubicloud static audit is green; see
+- `dec4c040a8` fixes the static-audit marker for that policy and was the
+  DG-R3 policy checkpoint. The persistent-Ubicloud static audit is green; see
   `results/sglang_dgemma_dgr3_vosplit_policy_20260612T1050JST/summary.md`.
+- `98bf8f129d` is the current branch head used by the later DG-R5/DG-R6/DG-R7
+  closeout rows. It carries the intervening Gemma 4/MTP and NVFP4 safety fixes
+  without changing the scoped DiffusionGemma claims below.
 
 ## Ladder
 
