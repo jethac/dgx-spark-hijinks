@@ -100,16 +100,16 @@ jobs:
             echo "BASE_IMAGE_PRETTY_NAME=${PRETTY_NAME}"
             ldd --version | head -n 1
             python3 - <<'"'"'PY'"'"'
-import importlib.util
-import platform
-import sys
+          import importlib.util
+          import platform
+          import sys
 
-print("PYTHON", sys.version.replace("\n", " "))
-print("MACHINE", platform.machine())
-for name in ("torch", "sglang", "flashinfer", "sgl_kernel", "transformers"):
-    spec = importlib.util.find_spec(name)
-    print(f"MODULE_{name.upper()}={spec.origin if spec else None}")
-PY
+          print("PYTHON", sys.version.replace("\n", " "))
+          print("MACHINE", platform.machine())
+          for name in ("torch", "sglang", "flashinfer", "sgl_kernel", "transformers"):
+              spec = importlib.util.find_spec(name)
+              print(f"MODULE_{name.upper()}={spec.origin if spec else None}")
+          PY
             if [ "${VERSION_ID}" != "'"${EXPECTED_OS_VERSION}"'" ]; then
               echo "Expected base image VERSION_ID='"${EXPECTED_OS_VERSION}"' but got ${VERSION_ID}" >&2
               exit 42
