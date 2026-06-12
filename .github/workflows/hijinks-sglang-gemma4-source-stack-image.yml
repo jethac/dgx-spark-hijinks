@@ -39,6 +39,10 @@ on:
         description: "Torch version matching the proven Spark r10/r11 ABI"
         required: false
         default: "2.11.0"
+      torchvision_version:
+        description: "Torchvision version compatible with the Spark torch pin"
+        required: false
+        default: "0.26.0"
       torch_index_url:
         description: "PyTorch cu130 wheel index"
         required: false
@@ -65,6 +69,7 @@ jobs:
       EXPECTED_OS_VERSION: ${{ inputs.expected_os_version || '22.04' }}
       BASE_PROBE_ONLY: ${{ inputs.base_probe_only || 'false' }}
       TORCH_VERSION: ${{ inputs.torch_version || '2.11.0' }}
+      TORCHVISION_VERSION: ${{ inputs.torchvision_version || '0.26.0' }}
       TORCH_INDEX_URL: ${{ inputs.torch_index_url || 'https://download.pytorch.org/whl/cu130' }}
       CCACHE_DIR: /opt/build-cache/ccache
       CCACHE_MAXSIZE: 100G
@@ -194,6 +199,7 @@ jobs:
 
           ARG TRANSFORMERS_PIN=5.11.0
           ARG TORCH_VERSION=2.11.0
+          ARG TORCHVISION_VERSION=0.26.0
           ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
           ARG BUILD_PARALLEL_LEVEL=20
           ARG BUILD_MAX_JOBS=20
@@ -208,6 +214,7 @@ jobs:
                 spark.flashinfer_ref="${FLASHINFER_REF}" \
                 spark.transformers_pin="${TRANSFORMERS_PIN}" \
                 spark.torch_version="${TORCH_VERSION}" \
+                spark.torchvision_version="${TORCHVISION_VERSION}" \
                 spark.torch_index_url="${TORCH_INDEX_URL}"
 
           ENV PATH="/root/.cargo/bin:${PATH}" \
@@ -257,8 +264,9 @@ jobs:
                 "torch==${TORCH_VERSION}" \
                 "torchaudio==${TORCH_VERSION}" \
                 --index-url "${TORCH_INDEX_URL}" \
-           && python3 -m pip install --no-cache-dir torchvision --index-url "${TORCH_INDEX_URL}" \
-           && python3 - <<'PY'
+           && python3 -m pip install --no-cache-dir "torchvision==${TORCHVISION_VERSION}" --index-url "${TORCH_INDEX_URL}" \
+           && EXPECTED_TORCH_VERSION="${TORCH_VERSION}" python3 - <<'PY'
+          import os
           import platform
           import sys
           import torch
@@ -266,6 +274,7 @@ jobs:
           print("PYTHON", sys.version.replace("\n", " "))
           print("MACHINE", platform.machine())
           print("TORCH", torch.__version__, torch.version.cuda)
+          assert torch.__version__.split("+", 1)[0] == os.environ["EXPECTED_TORCH_VERSION"], torch.__version__
           PY
 
           RUN python3 - <<'PY' >/tmp/sglang-runtime-reqs.txt
@@ -294,8 +303,14 @@ jobs:
               print(req)
           PY
 
+          RUN printf 'torch==%s\ntorchaudio==%s\ntorchvision==%s\n' \
+                "${TORCH_VERSION}" "${TORCH_VERSION}" "${TORCHVISION_VERSION}" \
+                >/tmp/torch-constraints.txt
+
           RUN --mount=type=cache,id=sglang-gemma4-pip,target=/root/.cache/pip \
-              python3 -m pip install --extra-index-url "${TORCH_INDEX_URL}" -r /tmp/sglang-runtime-reqs.txt
+              python3 -m pip install --extra-index-url "${TORCH_INDEX_URL}" \
+                -r /tmp/sglang-runtime-reqs.txt \
+                -c /tmp/torch-constraints.txt
 
           RUN --mount=type=cache,id=sglang-gemma4-ccache,target=/root/.cache/ccache \
               git config --global --add safe.directory /work/third_party/flashinfer \
@@ -308,15 +323,19 @@ jobs:
 
           RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
 
-          RUN python3 - <<'PY'
+          RUN EXPECTED_TORCH_VERSION="${TORCH_VERSION}" python3 - <<'PY'
           import importlib.util
           import importlib.metadata as md
+          import os
           from pathlib import Path
 
           import flashinfer
           import sglang
+          import torch
           import transformers
 
+          print("TORCH_FINAL", torch.__version__, torch.version.cuda)
+          assert torch.__version__.split("+", 1)[0] == os.environ["EXPECTED_TORCH_VERSION"], torch.__version__
           print("TRANSFORMERS_BAKED", transformers.__version__)
           try:
               from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES as mapping
@@ -433,6 +452,7 @@ jobs:
             --build-arg BASE_IMAGE="${BASE_IMAGE}" \
             --build-arg TRANSFORMERS_PIN="${TRANSFORMERS_PIN}" \
             --build-arg TORCH_VERSION="${TORCH_VERSION}" \
+            --build-arg TORCHVISION_VERSION="${TORCHVISION_VERSION}" \
             --build-arg TORCH_INDEX_URL="${TORCH_INDEX_URL}" \
             --build-arg BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
             --build-arg BUILD_MAX_JOBS="${MAX_JOBS}" \
@@ -463,6 +483,7 @@ jobs:
           - target platform: \`${TARGET_PLATFORM}\`
           - base image: \`${BASE_IMAGE}\`
           - torch: \`${TORCH_VERSION}\`
+          - torchvision: \`${TORCHVISION_VERSION}\`
           - torch index: \`${TORCH_INDEX_URL}\`
           - hijinks ref: \`${GITHUB_SHA}\`
           - SGLang ref: \`${{ steps.meta.outputs.sglang_ref }}\`

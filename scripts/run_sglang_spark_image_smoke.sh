@@ -16,6 +16,7 @@ Environment:
   SERVED_MODEL=sglang-spark-packaging-smoke
   PORT=30000
   MEM_FRACTION_STATIC=0.35
+  EXPECTED_TORCH_VERSION=2.11.0
   RESULTS_DIR=/home/jethac/dgx-spark-hijinks/results
   RUN_ID=sglang_spark_image_smoke_YYYYMMDDTHHMMSSJST
   GB10_DOCKER_MEMORY=100g
@@ -35,6 +36,7 @@ MODEL=${MODEL:-google/gemma-4-E2B-it}
 SERVED_MODEL=${SERVED_MODEL:-sglang-spark-packaging-smoke}
 PORT=${PORT:-30000}
 MEM_FRACTION_STATIC=${MEM_FRACTION_STATIC:-0.35}
+EXPECTED_TORCH_VERSION=${EXPECTED_TORCH_VERSION:-2.11.0}
 RESULTS_DIR=${RESULTS_DIR:-/home/jethac/dgx-spark-hijinks/results}
 RUN_ID=${RUN_ID:-sglang_spark_image_smoke_$(TZ=Asia/Tokyo date +%Y%m%dT%H%M%SJST)}
 OUT_DIR=${OUT_DIR:-${RESULTS_DIR}/${RUN_ID}}
@@ -93,6 +95,7 @@ docker image inspect "${IMAGE}" >"${OUT_DIR}/image_inspect.json" 2>&1
 
 docker run --rm --platform "${PLATFORM}" \
   -v "${OUT_DIR}:/out" \
+  -e EXPECTED_TORCH_VERSION="${EXPECTED_TORCH_VERSION}" \
   "${IMAGE}" \
   bash -lc 'set -euo pipefail
     cat /etc/os-release | tee /out/os-release.txt
@@ -101,6 +104,7 @@ docker run --rm --platform "${PLATFORM}" \
     python3 - <<'"'"'PY'"'"' | tee /out/import_probe.txt
 import importlib.metadata as md
 import importlib.util
+import os
 import pathlib
 import platform
 import sys
@@ -111,6 +115,9 @@ import transformers
 print("python", sys.version.replace("\n", " "))
 print("machine", platform.machine())
 print("torch", torch.__version__, torch.version.cuda)
+expected_torch = os.environ.get("EXPECTED_TORCH_VERSION")
+if expected_torch:
+    assert torch.__version__.split("+", 1)[0] == expected_torch, torch.__version__
 print("transformers", transformers.__version__)
 try:
     from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES as mapping
