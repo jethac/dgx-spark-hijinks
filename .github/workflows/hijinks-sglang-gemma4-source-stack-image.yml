@@ -52,10 +52,19 @@ jobs:
           uname -a
           nproc
           free -h
+          mkdir -p /opt/build-cache/ccache
           df -h / /opt/build-cache || true
-          nvcc --version
-          ccache --show-config | grep -E 'cache_dir|max_size' || true
-          ccache --show-stats || true
+          if command -v nvcc >/dev/null 2>&1; then
+            nvcc --version
+          else
+            echo "HOST_NVCC=absent (expected; CUDA toolchain is supplied by the Docker base image)"
+          fi
+          if command -v ccache >/dev/null 2>&1; then
+            ccache --show-config | grep -E 'cache_dir|max_size' || true
+            ccache --show-stats || true
+          else
+            echo "HOST_CCACHE=absent (Docker build uses its own BuildKit cache mount)"
+          fi
 
       - name: Ensure Docker is available
         run: |
@@ -103,6 +112,7 @@ jobs:
         run: |
           set -euxo pipefail
           cat >/tmp/sglang-gemma4-image-context/Dockerfile <<'EOF'
+          # syntax=docker/dockerfile:1.7
           ARG BASE_IMAGE=nvcr.io/nvidia/sglang:26.05-py3
           FROM ${BASE_IMAGE}
 
@@ -120,6 +130,7 @@ jobs:
 
           ENV PATH="/root/.cargo/bin:${PATH}" \
               CUDA_HOME=/usr/local/cuda \
+              CCACHE_DIR=/root/.cache/ccache \
               CMAKE_BUILD_PARALLEL_LEVEL=8 \
               MAX_JOBS=8
 
@@ -134,9 +145,11 @@ jobs:
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal --default-toolchain stable; \
               fi
 
-          RUN git config --global --add safe.directory /work/third_party/flashinfer \
+          RUN --mount=type=cache,id=sglang-gemma4-ccache,target=/root/.cache/ccache \
+              git config --global --add safe.directory /work/third_party/flashinfer \
            && git config --global --add safe.directory /work/third_party/sglang \
            && REPO_ROOT=/work \
+              CCACHE_DIR="${CCACHE_DIR}" \
               CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL}" \
               MAX_JOBS="${MAX_JOBS}" \
               bash /work/scripts/install_sglang_source_stack.sh
