@@ -129,9 +129,11 @@ jobs:
           RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
 
           RUN python3 - <<'PY'
+          import importlib.util
           import importlib.metadata as md
+          from pathlib import Path
+
           import flashinfer
-          import sgl_kernel
           import sglang
           import transformers
 
@@ -144,8 +146,14 @@ jobs:
           print("GEMMA4_UNIFIED_CONFIG_MAPPING present")
           print("SGLANG", md.version("sglang"), sglang.__file__)
           print("FLASHINFER", getattr(flashinfer, "__version__", None), flashinfer.__file__)
-          print("SGLANG_KERNEL", md.version("sglang-kernel"), sgl_kernel.__file__)
-          print("SGL_KERNEL_FILE", sgl_kernel.__file__)
+          print("SGLANG_KERNEL", md.version("sglang-kernel"))
+          spec = importlib.util.find_spec("sgl_kernel")
+          assert spec and spec.submodule_search_locations, "sgl_kernel package missing"
+          sgl_kernel_dir = Path(next(iter(spec.submodule_search_locations)))
+          common_ops = sorted(sgl_kernel_dir.glob("sm*/common_ops*.so"))
+          assert common_ops, f"sgl_kernel common_ops library missing under {sgl_kernel_dir}"
+          print("SGL_KERNEL_DIR", sgl_kernel_dir)
+          print("SGL_KERNEL_COMMON_OPS", [str(path) for path in common_ops])
           PY
 
           RUN rm -rf /root/.cache/flashinfer /root/.cache/flashinfer-aiter \

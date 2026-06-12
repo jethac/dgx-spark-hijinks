@@ -64,11 +64,12 @@ log_sglang python3 -m pip install --no-deps --no-build-isolation -e \
   "${REPO_ROOT}/third_party/sglang/python" -v
 
 python3 - <<'PY'
+import importlib.util
 import importlib.metadata as md
-import sgl_kernel
-import torch
+from pathlib import Path
 
 import flashinfer
+import torch
 
 print("torch", torch.__version__, torch.version.cuda)
 print("capability", torch.cuda.get_device_capability() if torch.cuda.is_available() else None)
@@ -76,6 +77,13 @@ print("flashinfer", getattr(flashinfer, "__version__", None), getattr(flashinfer
 print("flashinfer_python", md.version("flashinfer_python"))
 print("sglang_kernel", md.version("sglang-kernel"))
 print("sglang", md.version("sglang"))
-print("sgl_kernel", getattr(sgl_kernel, "__file__", None))
-print("common_ops", getattr(getattr(sgl_kernel, "common_ops", None), "__file__", None))
+spec = importlib.util.find_spec("sgl_kernel")
+if spec is None or not spec.submodule_search_locations:
+    raise SystemExit("sgl_kernel package not installed")
+sgl_kernel_dir = Path(next(iter(spec.submodule_search_locations)))
+common_ops = sorted(sgl_kernel_dir.glob("sm*/common_ops*.so"))
+if not common_ops:
+    raise SystemExit(f"sgl_kernel common_ops library missing under {sgl_kernel_dir}")
+print("sgl_kernel_dir", sgl_kernel_dir)
+print("common_ops_files", [str(path) for path in common_ops])
 PY
