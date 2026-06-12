@@ -1,0 +1,570 @@
+[
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": []
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=7681) INFO 06-12 02:46:09 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}"
+    ]
+  },
+  {
+    "model": "google/gemma-4-12B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": []
+  },
+  {
+    "model": "google/gemma-4-12B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=8387) INFO 06-12 02:47:11 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-12B-it', 'model': 'google/gemma-4-12B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}"
+    ]
+  },
+  {
+    "model": "google/gemma-4-31B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": []
+  },
+  {
+    "model": "google/gemma-4-31B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=9051) INFO 06-12 02:48:13 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'gpu_memory_utilization': 0.9, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}"
+    ]
+  },
+  {
+    "model": "google/gemma-3-1b-it",
+    "row": "bisect_flashattn_bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {
+      "VLLM_ATTENTION_BACKEND": "FLASH_ATTN"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(EngineCore pid=9700) INFO 06-12 02:49:00 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-3-1b-it', speculative_config=None, tokenizer='google/gemma-3-1b-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-3-1b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=9700) INFO 06-12 02:49:01 [cuda.py:401] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION']."
+    ]
+  },
+  {
+    "model": "google/gemma-3-1b-it",
+    "row": "bisect_flashinfer_bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {
+      "VLLM_ATTENTION_BACKEND": "FLASHINFER"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(EngineCore pid=10310) INFO 06-12 02:49:55 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-3-1b-it', speculative_config=None, tokenizer='google/gemma-3-1b-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-3-1b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=10310) INFO 06-12 02:49:56 [cuda.py:401] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION']."
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": []
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=11557) INFO 06-12 02:52:58 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=14667) INFO 06-12 03:03:04 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=14994) INFO 06-12 03:03:15 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=14994) INFO 06-12 03:03:18 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=14994) INFO 06-12 03:03:18 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend."
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=15786) INFO 06-12 03:04:59 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=15786) INFO 06-12 03:05:00 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=15937) INFO 06-12 03:05:09 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=15937) INFO 06-12 03:05:13 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=15937) INFO 06-12 03:05:13 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled."
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=19534) INFO 06-12 03:16:09 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=19688) INFO 06-12 03:16:18 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=19688) INFO 06-12 03:16:22 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=19688) INFO 06-12 03:16:22 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend."
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=20032) INFO 06-12 03:16:49 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=20032) INFO 06-12 03:16:50 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=20186) INFO 06-12 03:16:59 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=20186) INFO 06-12 03:17:03 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=20186) INFO 06-12 03:17:03 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled."
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 1740455,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.441579432141261,
+    "proof_lines": [
+      "(APIServer pid=22984) INFO 06-12 03:25:41 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=23137) INFO 06-12 03:25:51 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=23137) INFO 06-12 03:25:54 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=23137) INFO 06-12 03:25:54 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=23137) INFO 06-12 03:26:45 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=23137) INFO 06-12 03:26:46 [kv_cache_utils.py:1790] GPU KV cache size: 1,740,455 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=24504) INFO 06-12 03:27:42 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=24504) INFO 06-12 03:27:43 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=24661) INFO 06-12 03:27:52 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 1740455,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.441579432141261,
+    "proof_lines": [
+      "(APIServer pid=26621) INFO 06-12 03:33:51 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=26774) INFO 06-12 03:34:00 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=26774) INFO 06-12 03:34:03 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=26774) INFO 06-12 03:34:03 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=26774) INFO 06-12 03:34:07 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=26774) INFO 06-12 03:34:09 [kv_cache_utils.py:1790] GPU KV cache size: 1,740,455 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": false,
+    "kv_tokens": null,
+    "chat": null,
+    "ppl_mean_nll": null,
+    "proof_lines": [
+      "(APIServer pid=27331) INFO 06-12 03:34:46 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=27331) INFO 06-12 03:34:47 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=27484) INFO 06-12 03:34:56 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 1740455,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.441579432141261,
+    "proof_lines": [
+      "(APIServer pid=39764) INFO 06-12 04:21:17 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=39917) INFO 06-12 04:21:26 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=39917) INFO 06-12 04:21:29 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=39917) INFO 06-12 04:21:29 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=39917) INFO 06-12 04:21:34 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=39917) INFO 06-12 04:21:35 [kv_cache_utils.py:1790] GPU KV cache size: 1,740,455 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": true,
+    "kv_tokens": 6188289,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.415629705957498,
+    "proof_lines": [
+      "(APIServer pid=40431) INFO 06-12 04:21:58 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E4B-it', 'model': 'google/gemma-4-E4B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=40431) INFO 06-12 04:21:59 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=40582) INFO 06-12 04:22:08 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E4B-it', speculative_config=None, tokenizer='google/gemma-4-E4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=40582) INFO 06-12 04:22:12 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=40582) INFO 06-12 04:22:12 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.",
+      "(EngineCore pid=40582) INFO 06-12 04:22:20 [flashinfer.py:1584] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=40582) INFO 06-12 04:22:21 [kv_cache_utils.py:1790] GPU KV cache size: 6,188,289 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E2B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 5616320,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 5.9730454212785125,
+    "proof_lines": [
+      "(APIServer pid=42780) INFO 06-12 04:26:46 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=42991) INFO 06-12 04:26:57 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E2B-it', speculative_config=None, tokenizer='google/gemma-4-E2B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E2B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=42991) INFO 06-12 04:27:01 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=42991) INFO 06-12 04:27:01 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=42991) INFO 06-12 04:28:07 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=42991) INFO 06-12 04:28:09 [kv_cache_utils.py:1790] GPU KV cache size: 5,616,320 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-E2B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": true,
+    "kv_tokens": 19969138,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 5.933477028831619,
+    "proof_lines": [
+      "(APIServer pid=43922) INFO 06-12 04:28:32 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-E2B-it', 'model': 'google/gemma-4-E2B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=43922) INFO 06-12 04:28:33 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=44073) INFO 06-12 04:28:42 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-E2B-it', speculative_config=None, tokenizer='google/gemma-4-E2B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-E2B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=44073) INFO 06-12 04:28:46 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=44073) INFO 06-12 04:28:46 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.",
+      "(EngineCore pid=44073) INFO 06-12 04:29:28 [flashinfer.py:1584] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=44073) INFO 06-12 04:29:30 [kv_cache_utils.py:1790] GPU KV cache size: 19,969,138 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-12B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 286216,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.63506255036407,
+    "proof_lines": [
+      "(APIServer pid=45179) INFO 06-12 04:31:14 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=45513) INFO 06-12 04:31:25 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=45513) INFO 06-12 04:31:29 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=45513) INFO 06-12 04:31:29 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=45513) INFO 06-12 04:33:07 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=45513) INFO 06-12 04:33:09 [kv_cache_utils.py:1790] GPU KV cache size: 286,216 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-12B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": true,
+    "kv_tokens": 1017670,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 5.026964626428898,
+    "proof_lines": [
+      "(APIServer pid=46559) INFO 06-12 04:33:31 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-12B-it', 'model': 'google/gemma-4-12B-it', 'max_model_len': 16384, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=46559) INFO 06-12 04:33:32 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=46713) INFO 06-12 04:33:41 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=46713) INFO 06-12 04:33:45 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=46713) INFO 06-12 04:33:45 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.",
+      "(EngineCore pid=46713) INFO 06-12 04:34:20 [flashinfer.py:1584] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=46713) INFO 06-12 04:34:22 [kv_cache_utils.py:1790] GPU KV cache size: 1,017,670 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-31B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 27238,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 5.343906382669173,
+    "proof_lines": [
+      "(APIServer pid=47446) INFO 06-12 04:34:49 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=47653) INFO 06-12 04:35:00 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-31B-it', speculative_config=None, tokenizer='google/gemma-4-31B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-31B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=47653) INFO 06-12 04:35:04 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=47653) INFO 06-12 04:35:04 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=47653) INFO 06-12 04:39:03 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=47653) INFO 06-12 04:39:05 [kv_cache_utils.py:1790] GPU KV cache size: 27,238 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-31B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": true,
+    "kv_tokens": 96849,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.953561079987125,
+    "proof_lines": [
+      "(APIServer pid=49449) INFO 06-12 04:39:32 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-31B-it', 'model': 'google/gemma-4-31B-it', 'max_model_len': 8192, 'gpu_memory_utilization': 0.9, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=49449) INFO 06-12 04:39:33 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=49596) INFO 06-12 04:39:42 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-31B-it', speculative_config=None, tokenizer='google/gemma-4-31B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-31B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=49596) INFO 06-12 04:39:46 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=49596) INFO 06-12 04:39:46 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.",
+      "(EngineCore pid=49596) INFO 06-12 04:40:38 [flashinfer.py:1584] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=49596) INFO 06-12 04:40:41 [kv_cache_utils.py:1790] GPU KV cache size: 96,849 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-3-1b-it",
+    "row": "bisect_flashattn_bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {
+      "VLLM_ATTENTION_BACKEND": "FLASH_ATTN"
+    },
+    "ready": true,
+    "kv_tokens": 1896327,
+    "chat": "g4-ok. Tokyo.",
+    "ppl_mean_nll": 2.358031502385882,
+    "proof_lines": [
+      "(EngineCore pid=50565) INFO 06-12 04:41:19 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-3-1b-it', speculative_config=None, tokenizer='google/gemma-3-1b-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-3-1b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=50565) INFO 06-12 04:41:21 [cuda.py:401] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+      "(EngineCore pid=50565) INFO 06-12 04:42:27 [kv_cache_utils.py:1790] GPU KV cache size: 1,896,327 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-3-1b-it",
+    "row": "bisect_flashinfer_bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {
+      "VLLM_ATTENTION_BACKEND": "FLASHINFER"
+    },
+    "ready": true,
+    "kv_tokens": 1896327,
+    "chat": "g4-ok. Tokyo.",
+    "ppl_mean_nll": 2.358031502385882,
+    "proof_lines": [
+      "(EngineCore pid=51460) INFO 06-12 04:42:57 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-3-1b-it', speculative_config=None, tokenizer='google/gemma-3-1b-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-3-1b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=51460) INFO 06-12 04:42:58 [cuda.py:401] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].",
+      "(EngineCore pid=51460) INFO 06-12 04:43:02 [kv_cache_utils.py:1790] GPU KV cache size: 1,896,327 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-26B-A4B-it",
+    "row": "bf16",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {},
+    "ready": true,
+    "kv_tokens": 134344,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 3.9103316977314395,
+    "proof_lines": [
+      "(APIServer pid=51932) INFO 06-12 04:43:25 [config.py:144] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(EngineCore pid=52143) INFO 06-12 04:43:36 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-26B-A4B-it', speculative_config=None, tokenizer='google/gemma-4-26B-A4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-26B-A4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=52143) INFO 06-12 04:43:40 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=52143) INFO 06-12 04:43:40 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=52143) INFO 06-12 04:49:15 [flashinfer.py:1584] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=52143) INFO 06-12 04:49:17 [kv_cache_utils.py:1790] GPU KV cache size: 134,344 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-4-26B-A4B-it",
+    "row": "nvfp4",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "nvfp4",
+    "env_knobs": {
+      "VLLM_NVFP4_KV_VOSPLIT": "1",
+      "VLLM_NVFP4_KV_LINEAR_V_SF": "1"
+    },
+    "ready": true,
+    "kv_tokens": 477676,
+    "chat": "g4-ok. Tokyo",
+    "ppl_mean_nll": 4.233099204127047,
+    "proof_lines": [
+      "(APIServer pid=54367) INFO 06-12 04:49:42 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-4-26B-A4B-it', 'model': 'google/gemma-4-26B-A4B-it', 'max_model_len': 8192, 'gpu_memory_utilization': 0.85, 'kv_cache_dtype': 'nvfp4', 'language_model_only': True}",
+      "(APIServer pid=54367) INFO 06-12 04:49:43 [config.py:265] Gemma4 heterogeneous head dims with VLLM_NVFP4_KV_VOSPLIT: keeping per-layer resolution for the NVFP4 VO split.",
+      "(EngineCore pid=54521) INFO 06-12 04:49:52 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-4-26B-A4B-it', speculative_config=None, tokenizer='google/gemma-4-26B-A4B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=nvfp4, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-26B-A4B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=54521) INFO 06-12 04:49:56 [cuda.py:401] Using FLASHINFER attention backend out of potential backends: ['FLASHINFER'].",
+      "(EngineCore pid=54521) INFO 06-12 04:49:56 [flashinfer.py:622] VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear; FlashInfer in-kernel V-SF de-swizzle disabled.",
+      "(EngineCore pid=54521) INFO 06-12 04:50:34 [flashinfer.py:1584] FA2 VO split (nvfp4 KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.",
+      "(EngineCore pid=54521) INFO 06-12 04:50:36 [kv_cache_utils.py:1790] GPU KV cache size: 477,676 tokens"
+    ]
+  },
+  {
+    "model": "google/gemma-3-1b-it",
+    "row": "bisect_FI_real",
+    "notebook_version": "NARWHAL",
+    "kv_mode": "auto(bf16)",
+    "env_knobs": {
+      "VLLM_FLASHINFER_BF16_GEMMA": "1"
+    },
+    "ready": true,
+    "kv_tokens": 1687561,
+    "chat": "g4-ok. Tokyo.",
+    "ppl_mean_nll": 2.3572741712990126,
+    "proof_lines": [
+      "(APIServer pid=55269) INFO 06-12 04:51:00 [config.py:144] Gemma3 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (explicit opt-in): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.",
+      "(APIServer pid=55269) WARNING 06-12 04:51:00 [config.py:156] Explicit VLLM_FLASHINFER_BF16_GEMMA opt-in for Gemma3: FlashInfer is KNOWN NUMERICALLY WRONG on sm_120 at Gemma 3 1B geometry (head_dim 256, SWA window 512) for every KV dtype (results/p520_gemma3_1b_serving_20260612/); this opt-in is for experiments only, pending the FlashInfer root-cause fix.",
+      "(EngineCore pid=55419) INFO 06-12 04:51:09 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+g512cca4e9.sm120a) with config: model='google/gemma-3-1b-it', speculative_config=None, tokenizer='google/gemma-3-1b-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-3-1b-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')",
+      "(EngineCore pid=55419) INFO 06-12 04:51:10 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.",
+      "(EngineCore pid=55419) INFO 06-12 04:51:41 [kv_cache_utils.py:1790] GPU KV cache size: 1,687,561 tokens"
+    ]
+  }
+]
