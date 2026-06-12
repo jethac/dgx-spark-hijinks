@@ -1,0 +1,41 @@
+{
+  "all_ok": false,
+  "any_token_ids": true,
+  "checks": [
+    {
+      "chat_text_match": true,
+      "chat_token_ids_match": null,
+      "native_text_match": null,
+      "native_token_ids_match": true,
+      "off_chat_text": "The capital of Japan is Tokyo.",
+      "off_native_text": "",
+      "on_chat_text": "The capital of Japan is Tokyo.",
+      "on_native_text": "",
+      "prompt_id": "capital_japan"
+    },
+    {
+      "chat_text_match": true,
+      "chat_token_ids_match": null,
+      "native_text_match": null,
+      "native_token_ids_match": true,
+      "off_chat_text": "2 + 2 equals 4.",
+      "off_native_text": "",
+      "on_chat_text": "2 + 2 equals 4.",
+      "on_native_text": "",
+      "prompt_id": "arithmetic"
+    },
+    {
+      "chat_text_match": false,
+      "chat_token_ids_match": null,
+      "native_text_match": null,
+      "native_token_ids_match": true,
+      "off_chat_text": "A DGX Spark is useful for accelerating large-scale data science and machine learning workloads.",
+      "off_native_text": "",
+      "on_chat_text": "A DGX Spark is useful for high-performance, large-scale data processing and machine learning workloads.",
+      "on_native_text": "",
+      "prompt_id": "spark_use"
+    }
+  ],
+  "text_identity_ok": false,
+  "token_identity_ok": true
+}
