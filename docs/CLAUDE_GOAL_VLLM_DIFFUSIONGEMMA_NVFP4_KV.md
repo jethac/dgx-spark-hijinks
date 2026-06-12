@@ -172,6 +172,25 @@ legacy AR-ladder path structurally untouched. **NOT yet verified:** anything num
   (target: match banked g3-1b FLASHINFER bf16 2.3571850630239095 -> proves legacy path byte-id on
   silicon), the DG-2 4-request cosine, and (Spark, sm_121) DG-V5/V6 nvfp4 coherence.
 
+## WHEEL GREEN + P520 LEGACY-PATH REGRESSION GREEN (2026-06-12)
+- Both CI wheels built SUCCESS off e2-dgv @ 98cd3e59f: `sm120a-wheels-98cd3e59f`,
+  `sm121a-arm64-wheels-98cd3e59f` (Latest). On-CI, no GPU-box build (per Jetha).
+- **P520 (sm_120) bf16 legacy-path regression: GREEN, byte-identical.** Served Gemma 3 1B
+  bf16 FLASHINFER on the e2-dgv overlay (VLLM_BUILD_CHECK -> dgv_overlay/vllm; backend proof
+  = AttentionBackendEnum.FLASHINFER; ready 99s, no wedge). C1 ctx8191 x2:
+  **mean_nll_nats = 2.3571850630239095 (both rows)** == banked baseline 2.3571850630239095
+  to 16 figures. Coherent ("The capital of Japan is Tokyo."). => the unified FIPrefillGroup
+  refactor does NOT disturb the legacy/AR-ladder serving path on real silicon. Crown-jewel
+  safety gate PASSED. Artifacts: ~/g3_1b_retest/results/claude_p520_dgv_fi_bf16_*.
+
+## REMAINING: Spark DG-V5/V6 nvfp4 coherence (sm_121, the headline)
+Serve the sm121a-arm64-wheels-98cd3e59f wheel clean on Spark (no overlay -- divergent image
+lineage; fresh container + pip install wheel). DiffusionGemma 26B-A4B FLASHINFER + nvfp4 KV +
+VO-split knobs. Targets (SGLang DG-R5/R6 parity): coherent (Tokyo/2+2/DGX Spark), full-NVFP4
+proof (kv uint8, mixed_kv False), VO-split proof (global head_dim 512 -> vo 256), ~3.56x
+capacity vs bf16, double-run bitwise; DG-V6 perf pair. Harness staged:
+scripts/run_vllm_dgemma_dgv_spark.sh.
+
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
