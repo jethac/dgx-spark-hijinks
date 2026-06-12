@@ -11,11 +11,12 @@ This is a correctness row only, not a speedup row.
 - Draft: `google/gemma-4-E2B-it-assistant`
 - Runtime: SGLang on `epoch2`, source stack image
   `sglang-source-stack-dgemma-024-0705924c-f99323bd:latest`
-- SGLang pin: `be50b535550e269f832f27baba2d1cb880387cca`, which adds
+- SGLang pin: `0211f87b234b0f05eb10005b3791d81a962883ca`, which adds
   `gemma4_assistant` / `gemma4_unified_assistant` config aliases for the
   native assistant checkpoints and passes prefix lengths for Frozen-KV MTP
   verify prefill planning, plus narrows MRoPE positions for the one-token draft
-  seed and reports eager buffer shape mismatches by slot.
+  seed, narrows seed cache slots to the last target token per request, and
+  reports eager buffer shape mismatches by slot.
 - First row: BF16 target, unquantized draft, `topk=1`, `num_steps=1`,
   `num_draft_tokens=1`, graphs disabled
 - Memory rule: spec-off and spec-on servers are run sequentially; no concurrent
