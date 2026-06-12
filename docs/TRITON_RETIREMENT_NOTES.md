@@ -355,3 +355,77 @@ truth-referenced rerun (HF-reference or FLASH_ATTN pair) of the
 `p520_gemma3_1b_serving` rows. Until then Gemma 3 stays on upstream
 defaults; the §8 STANDING REVERT RULE continues to apply to the remaining
 (Gemma 4) scope of `20196b5946`.
+
+## 10. mm-prefix + audio merge into e2-vllm (campaign dgx-spark-hijinks)
+
+### 2026-06-12 — multimodal mm-prefix masking + audio policy folded onto the canonical wheel line
+
+TL;DR: `spark/hijinks-e2-mm-retire` (mm-prefix masking flip) and
+`spark/hijinks-e2-audio` (tests-only) merged into `spark/hijinks-e2-vllm`
+so the next sm120a wheel carries the FlashInfer mm-prefix custom-mask
+path. New `e2-vllm` head **`e32459eea`** (pushed; `spark/hijinks-e2-mm-merge`
+@ `e32459eea` is the same head, also pushed). RECOMMENDED by the P520
+smoke agent (bf16 mm masking GREEN on sm_120: image-grounded, FI-route
+byte-identical to Triton, text knob-on/off token-identical).
+
+Merge topology (worktree `spark-hijinks-mm-merge`, base `512cca4e9`):
+- `a1eefbb15` Merge e2-mm-retire — `envs.py`, `flashinfer.py`, and the
+  selection test auto-merged clean; **`config.py` conflicted** and was
+  resolved per the banked 3-way reference
+  (`results/p520_mm_retirement_smokes_20260612/overlay/config_merged.py`).
+- `91464e012` Merge e2-audio — clean (tests-only + the behavior-identical
+  `mm_prefix_doc_ranges_for_request` extraction in `gpu_model_runner.py`).
+- `e32459eea` Reconcile one stale Gemma 3 mm selection cell (below).
+
+Conflict resolution (`vllm/model_executor/models/config.py`, 1 hunk):
+e2-vllm advanced (`20196b594` → `512cca4e9`, incl. the §9 Gemma-3
+scope-out) AFTER e2-mm-retire branched, and both rewrote
+`_spark_route_gemma_bf16_to_flashinfer`'s mm-guard. Blobs matched the
+bank exactly (base `b2468524`, ours/e2-vllm `03039477`, theirs/mm-retire
+`b6886992`; resolved blob `c054aba8`). The single textual conflict was
+one `logger.info()` message body; git had already auto-merged mm-retire's
+`if/else` inverted-default restructure (MM_PREFIX default `"1"`, removal
+of the old return-False) into e2-vllm's `default_on` Gemma3/4 split. The
+resolution **COMBINES both**: keeps e2-vllm's `default_on` split (Gemma 3
+`default_on=False`, scoped OUT of the bf16 TEXT flip per the §9 sm_120 1B
+d256/SWA-512 bug; Gemma 4 `default_on=True`) AND takes mm-retire's
+inverted mm default (the Amendment-4 FA2 custom-mask serving line). The
+mm flip applies to CC 12.x Gemma mm (bf16/"auto" KV).
+
+Selection-matrix cells whose expectation CHANGED with the merge:
+- **Gemma 4 mm-prefix, MM_PREFIX unset: TRITON → FLASHINFER** (was the mm
+  carve-out; now the FA2 custom-mask path by default).
+- **Gemma 3 mm-prefix, MM_PREFIX unset: (new cell) → None** — NOT
+  FLASHINFER. The mm-retire test asserted FLASHINFER, but that predated
+  the §9 Gemma-3 scope-out: with `default_on=False` the bf16-knob-unset
+  early-return fires BEFORE the mm-prefix branch, so knob-unset Gemma 3 —
+  text or mm — leaves the backend unset. Stale test reconciled in
+  `e32459eea` (`test_mm_prefix_lm_default_routes_flashinfer` →
+  `test_mm_prefix_lm_default_leaves_backend_unset`, asserts None; added
+  `test_mm_prefix_lm_explicit_opt_in_routes_flashinfer`: Gemma 3 mm routes
+  FLASHINFER only on explicit bf16 `=1`).
+- Newly-pinned escape-hatch cells (intent unchanged): Gemma 4 MM_PREFIX=0
+  → TRITON; Gemma 4 BF16_GEMMA=0 → TRITON; Gemma 3 MM_PREFIX=0 → unset;
+  Gemma 3 BF16_GEMMA=0 → unset; explicit MM_PREFIX=1 → FLASHINFER (now
+  coincides with the Gemma 4 default).
+
+`FlashInferBackend.supports_mm_prefix()` still CLAIMS Gemma 3 **and** 4 mm
+on CC 12.x (capability ≠ routing-default; `TestFlashInferMMPrefixSupport`
+unchanged) — Gemma 3 just isn't routed there by default.
+
+Validation (WSL `~/e2_triton_retire_testenv`, CPU-only, worktree
+`spark-hijinks-mm-merge` on PYTHONPATH; import provenance verified:
+under-test Python from the worktree, compiled `_C`/`vllm_flash_attn` from
+the build):
+- selection matrix + mm-prefix policy
+  (`test_sm12x_triton_retirement_selection.py`): **103/103**
+- MTP pin (`tests/models/test_gemma4_attn_backend_pin.py`): **9/9**
+- audio policy (`test_mm_prefix_audio_policy.py`): **18/18**
+- Total **130 passed, 0 failed**; `py_compile` clean on all touched files
+  (`config.py`, `envs.py`, `flashinfer.py`, `gpu_model_runner.py`, the
+  three test files).
+
+Wheel: a NEW sm120a wheel must be built from `e2-vllm @ e32459eea` so the
+Colab notebook can serve multimodal with NVFP4 KV (the current wheel is
+text-capable; mm via Triton cannot read nvfp4). Requested from Codex
+(mail 0074).
