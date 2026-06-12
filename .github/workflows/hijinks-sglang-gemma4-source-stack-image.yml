@@ -51,6 +51,16 @@ jobs:
           ccache --show-config | grep -E 'cache_dir|max_size' || true
           ccache --show-stats || true
 
+      - name: Ensure Docker is available
+        run: |
+          set -euxo pipefail
+          if ! command -v docker >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends docker.io
+          fi
+          sudo systemctl start docker || sudo service docker start || true
+          sudo docker version
+
       - name: Prepare compact Docker context
         run: |
           set -euxo pipefail
@@ -160,16 +170,16 @@ jobs:
           } >>"${GITHUB_OUTPUT}"
 
       - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euxo pipefail
+          printf '%s' "${GHCR_TOKEN}" | sudo docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
       - name: Build and push image
         run: |
           set -euxo pipefail
-          docker build \
+          sudo docker build \
             --build-arg BASE_IMAGE="${{ inputs.base_image }}" \
             --build-arg TRANSFORMERS_PIN="${{ inputs.transformers_pin }}" \
             --build-arg HIJINKS_REF="${GITHUB_SHA}" \
@@ -177,14 +187,14 @@ jobs:
             --build-arg FLASHINFER_REF="${{ steps.meta.outputs.flashinfer_ref }}" \
             -t "${{ steps.meta.outputs.image }}" \
             /tmp/sglang-gemma4-image-context
-          docker push "${{ steps.meta.outputs.image }}"
+          sudo docker push "${{ steps.meta.outputs.image }}"
 
       - name: Write summary artifact
         run: |
           set -euxo pipefail
           mkdir -p results/sglang_gemma4_source_stack_image_${GITHUB_RUN_ID}
-          image_id="$(docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
-          image_digest="$(docker buildx imagetools inspect '${{ steps.meta.outputs.image }}' --format '{{json .Manifest.Digest}}' 2>/dev/null | tr -d '"' || true)"
+          image_id="$(sudo docker image inspect --format '{{.Id}}' '${{ steps.meta.outputs.image }}')"
+          image_digest="$(sudo docker image inspect --format '{{index .RepoDigests 0}}' '${{ steps.meta.outputs.image }}' 2>/dev/null || true)"
           if [ -z "${image_digest}" ]; then
             image_digest=unknown
           fi
