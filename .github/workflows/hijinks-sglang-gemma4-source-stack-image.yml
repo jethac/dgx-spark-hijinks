@@ -54,7 +54,7 @@ jobs:
     # This is a Spark runtime image. Build it natively on arm64 rather than
     # cross-compiling the sgl-kernel/FlashInfer stack through QEMU on x64.
     # The shipped ABI is controlled by BASE_IMAGE and the in-image GLIBC audit.
-    runs-on: ubicloud-standard-30-arm
+    runs-on: ubicloud-standard-30-arm-ubuntu-2404
     timeout-minutes: 355
     env:
       CUDA_HOME: /usr/local/cuda
