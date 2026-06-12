@@ -1,0 +1,305 @@
+{
+  "all_ok": false,
+  "base_url": "http://127.0.0.1:30125",
+  "checks": [
+    {
+      "answer_ok": true,
+      "image_id": "red_blue_halves",
+      "non_empty": true,
+      "required_terms": [
+        "red",
+        "blue"
+      ],
+      "sha256": "2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71",
+      "stable": true,
+      "texts": [
+        "Red, blue",
+        "Red, blue"
+      ]
+    },
+    {
+      "answer_ok": false,
+      "image_id": "green_square",
+      "non_empty": false,
+      "required_terms": [
+        "green"
+      ],
+      "sha256": "481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55",
+      "stable": true,
+      "texts": [
+        "",
+        ""
+      ]
+    }
+  ],
+  "image_dimensions": {
+    "height": 64,
+    "width": 96
+  },
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "model_info": {
+    "architectures": [
+      "DiffusionGemmaForBlockDiffusion"
+    ],
+    "has_audio_understanding": false,
+    "has_image_understanding": true,
+    "is_generation": true,
+    "model_path": "google/diffusiongemma-26B-A4B-it",
+    "model_type": "diffusion_gemma",
+    "preferred_sampling_params": null,
+    "tokenizer_path": "google/diffusiongemma-26B-A4B-it",
+    "weight_version": "default"
+  },
+  "repeats": 2,
+  "rows": [
+    {
+      "image_id": "red_blue_halves",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "What are the two main colors in this image? Answer with only color words.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 27.224671125411987,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "Red, blue",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248087,
+          "id": "49fd4844bb1f4272aca580c7f89a5d28",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 291,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 355
+          }
+        },
+        "status": 200
+      },
+      "text": "Red, blue"
+    },
+    {
+      "image_id": "red_blue_halves",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "What are the two main colors in this image? Answer with only color words.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.785538911819458,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "Red, blue",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248088,
+          "id": "67e8dcee038945b29fa5e8e05a9db1b1",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 291,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 355
+          }
+        },
+        "status": 200
+      },
+      "text": "Red, blue"
+    },
+    {
+      "image_id": "green_square",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "What is the main color of the square in this image? Answer with one color word.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.9496028423309326,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248089,
+          "id": "a81a50bedf2c4b7f9b5cc0f7236a21d8",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 293,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 357
+          }
+        },
+        "status": 200
+      },
+      "text": ""
+    },
+    {
+      "image_id": "green_square",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "What is the main color of the square in this image? Answer with one color word.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.553504467010498,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248089,
+          "id": "0af714918adf4e51bc518da06173976d",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 293,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 357
+          }
+        },
+        "status": 200
+      },
+      "text": ""
+    }
+  ],
+  "schema": "sglang-diffusiongemma-image-quality/v1"
+}

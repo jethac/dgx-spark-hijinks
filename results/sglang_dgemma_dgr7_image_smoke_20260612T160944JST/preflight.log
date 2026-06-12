@@ -1,0 +1,16 @@
+run_id=sglang_dgemma_dgr7_image_smoke_20260612T160944JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
+source_branch=epoch2
+image=sglang-source-stack-dgemma-024-0705924c-f99323bd:latest
+model=google/diffusiongemma-26B-A4B-it
+port=30125
+mem_fraction_static=0.55
+sglang_commit=98bf8f129d701d2829f2d1a82c4ce6a8b2f5a968
+flashinfer_commit=f99323bd7d1c
+scope=stock DiffusionGemma multimodal image prompt smoke
+kv_cache_dtype=auto
+attention_policy=stock DiffusionGemma Triton/eager
+started_at=2026-06-12T16:09:44+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.3Gi        72Gi        12Mi        44Gi       115Gi
+Swap:           15Gi       488Mi        15Gi

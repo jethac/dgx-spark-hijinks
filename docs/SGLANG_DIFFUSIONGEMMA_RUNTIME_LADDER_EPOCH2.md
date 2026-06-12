@@ -100,7 +100,8 @@ the follow-up static vision audit
 `results/sglang_dgemma_vision_warning_static_audit_20260612T1554JST.md`
 classifies the vision warning group as SGLang-created defaults rather than
 missing checkpoint payload. Multimodal/image quality remains unclaimed until a
-live image prompt or vision-forward gate runs.
+live image prompt or vision-forward gate runs; the later DG-R7 row supplies a
+tiny stock-path color-recognition smoke only.
 
 ### DG-R2: Upstream Runtime Quality Baseline
 
@@ -138,11 +139,13 @@ Follow-up diagnostics:
 The vision-path warning group now has a static load audit in
 `results/sglang_dgemma_vision_warning_static_audit_20260612T1554JST.md`: the
 checkpoint has no matching payload for the warning-only no-scale norm,
-layer-scalar, or clippable-bound defaults. Do not include image prompts in
-claims until a live multimodal gate exercises the real image processor and
-vision-forward path. DG-R3 may now proceed only under the revised text-only
-DG-R2 scope above; the original terse-prompt baseline remains RED and should
-stay cited as a known prompt-pathology row rather than hidden.
+layer-scalar, or clippable-bound defaults. The later DG-R7 live image smoke
+exercises the real image processor and vision-forward path for two synthetic
+color prompts only. Do not generalize it into broad image-quality,
+FlashInfer-image, NVFP4-image, or benchmark claims. DG-R3 may now proceed only
+under the revised text-only DG-R2 scope above; the original terse-prompt
+baseline remains RED and should stay cited as a known prompt-pathology row
+rather than hidden.
 
 ### DG-R3: D=512 FlashInfer VO-Split Integration
 
@@ -274,6 +277,36 @@ long-prefill, and `1.444x` natural-long-prefill. DiffusionGemma streaming emits
 each measured completion as effectively one event, so `decode_tok_s` is not a
 meaningful field for this row. DG-R5 remains the separate source for the
 full-NVFP4 quality/capacity claims.
+
+### DG-R7: Stock Multimodal Image Smoke
+
+Exercise the image processor and vision-forward path after the static
+vision-warning audit.
+
+Gate:
+
+- stock upstream policy path only: Triton attention, BF16/auto KV, eager/no
+  graphs
+- OpenAI chat `image_url` request with synthetic PNGs
+- two repeats per image, stable non-empty answer
+- semantic color check only
+
+Status: GREEN for the revised scoped image smoke; see
+`results/sglang_dgemma_dgr7_image_smoke_20260612T160944JST/summary.md`.
+The red/blue image returns `Red and blue.` twice, and the green-square image
+returns `The color is green.` twice. This proves the real multimodal request
+path is live for a tiny deterministic color-recognition gate.
+
+The earlier strict-prompt row
+`results/sglang_dgemma_dgr7_image_smoke_20260612T160201JST/summary.md` stays
+as a RED diagnostic: the red/blue image passed twice, but the terse
+green-square prompt (`Answer with one color word`) returned empty twice. This
+matches the DG-R2 terse-prompt pathology and is why the claim-grade image smoke
+uses short descriptive prompts instead of one-word answer constraints.
+
+Scope caveat: DG-R7 is not a broad image-quality benchmark and makes no
+FlashInfer, NVFP4, capacity, throughput, image-generation, or long-context
+claim.
 
 ## Rule
 

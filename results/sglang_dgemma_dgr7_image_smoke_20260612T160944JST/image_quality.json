@@ -1,0 +1,305 @@
+{
+  "all_ok": true,
+  "base_url": "http://127.0.0.1:30125",
+  "checks": [
+    {
+      "answer_ok": true,
+      "image_id": "red_blue_halves",
+      "non_empty": true,
+      "required_terms": [
+        "red",
+        "blue"
+      ],
+      "sha256": "2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71",
+      "stable": true,
+      "texts": [
+        "Red and blue.",
+        "Red and blue."
+      ]
+    },
+    {
+      "answer_ok": true,
+      "image_id": "green_square",
+      "non_empty": true,
+      "required_terms": [
+        "green"
+      ],
+      "sha256": "481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55",
+      "stable": true,
+      "texts": [
+        "The color is green.",
+        "The color is green."
+      ]
+    }
+  ],
+  "image_dimensions": {
+    "height": 64,
+    "width": 96
+  },
+  "model": "google/diffusiongemma-26B-A4B-it",
+  "model_info": {
+    "architectures": [
+      "DiffusionGemmaForBlockDiffusion"
+    ],
+    "has_audio_understanding": false,
+    "has_image_understanding": true,
+    "is_generation": true,
+    "model_path": "google/diffusiongemma-26B-A4B-it",
+    "model_type": "diffusion_gemma",
+    "preferred_sampling_params": null,
+    "tokenizer_path": "google/diffusiongemma-26B-A4B-it",
+    "weight_version": "default"
+  },
+  "repeats": 2,
+  "rows": [
+    {
+      "image_id": "red_blue_halves",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "Look at the image and describe its two main colors in one short phrase.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 28.606189727783203,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "Red and blue.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248622,
+          "id": "f8d77d1188364bff80c575db792c7086",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 290,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 354
+          }
+        },
+        "status": 200
+      },
+      "text": "Red and blue."
+    },
+    {
+      "image_id": "red_blue_halves",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "Look at the image and describe its two main colors in one short phrase.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.7837460041046143,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "Red and blue.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248622,
+          "id": "e510e1320d6e4b49b87a63bc88e7d81c",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 290,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 354
+          }
+        },
+        "status": 200
+      },
+      "text": "Red and blue."
+    },
+    {
+      "image_id": "green_square",
+      "repeat": 0,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "Look at the image and describe the main color of the square in one short phrase.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 1.1949124336242676,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The color is green.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248624,
+          "id": "c301b7f2bac84a19880a71820fda0de6",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 292,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 356
+          }
+        },
+        "status": 200
+      },
+      "text": "The color is green."
+    },
+    {
+      "image_id": "green_square",
+      "repeat": 1,
+      "request": {
+        "max_tokens": 64,
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "Look at the image and describe the main color of the square in one short phrase.",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,<sha256:481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55>"
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "model": "google/diffusiongemma-26B-A4B-it",
+        "temperature": 0.0
+      },
+      "response": {
+        "elapsed_s": 0.7915325164794922,
+        "ok": true,
+        "response": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "logprobs": null,
+              "matched_stop": null,
+              "message": {
+                "content": "The color is green.",
+                "reasoning_content": null,
+                "role": "assistant",
+                "tool_calls": null
+              }
+            }
+          ],
+          "created": 1781248624,
+          "id": "8b7f7ba5060c4b8589a0b28db3cdbf87",
+          "metadata": {
+            "weight_version": "default"
+          },
+          "model": "google/diffusiongemma-26B-A4B-it",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 292,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 356
+          }
+        },
+        "status": 200
+      },
+      "text": "The color is green."
+    }
+  ],
+  "schema": "sglang-diffusiongemma-image-quality/v1"
+}

@@ -1,0 +1,34 @@
+{
+  "all_ok": false,
+  "checks": [
+    {
+      "answer_ok": true,
+      "image_id": "red_blue_halves",
+      "non_empty": true,
+      "required_terms": [
+        "red",
+        "blue"
+      ],
+      "sha256": "2c4b727cc52a2545160f0699eed27e844a61573a53294a96009fd34ea9f9ca71",
+      "stable": true,
+      "texts": [
+        "Red, blue",
+        "Red, blue"
+      ]
+    },
+    {
+      "answer_ok": false,
+      "image_id": "green_square",
+      "non_empty": false,
+      "required_terms": [
+        "green"
+      ],
+      "sha256": "481cb5bb2b99689cce735e1fd17789e246699ff47af5ef252a87f2e28bbade55",
+      "stable": true,
+      "texts": [
+        "",
+        ""
+      ]
+    }
+  ]
+}
