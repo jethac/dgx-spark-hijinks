@@ -1,0 +1,51 @@
+{
+  "content": "* - \nWhat is the most radical, a. of</strong> icular?</strong> \u0627\u0650TA\u0c02\u0c17\u0c4d\u200c.\n\n",
+  "content_chars": 74,
+  "elapsed_s": 0.742,
+  "endpoint": "http://127.0.0.1:8000/v1/chat/completions",
+  "model": "gemma3-1b-it",
+  "ok": false,
+  "reasoning": "",
+  "reasoning_chars": 0,
+  "reasoning_content": "",
+  "reasoning_content_chars": 0,
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "annotations": null,
+          "audio": null,
+          "content": "* - \nWhat is the most radical, a. of</strong> icular?</strong> \u0627\u0650TA\u0c02\u0c17\u0c4d\u200c.\n\n",
+          "function_call": null,
+          "reasoning": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": []
+        },
+        "routed_experts": null,
+        "stop_reason": null,
+        "token_ids": null
+      }
+    ],
+    "created": 1781246088,
+    "id": "chatcmpl-b75b709b6136efac",
+    "kv_transfer_params": null,
+    "model": "gemma3-1b-it",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_text": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.1.dev1+g6adc00f70.sm120a-e9db3935",
+    "usage": {
+      "completion_tokens": 24,
+      "prompt_tokens": 22,
+      "prompt_tokens_details": null,
+      "total_tokens": 46
+    }
+  },
+  "schema": "openai-chat-smoke/v1"
+}

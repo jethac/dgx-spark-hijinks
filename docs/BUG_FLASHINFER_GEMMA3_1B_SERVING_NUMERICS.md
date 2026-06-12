@@ -1,5 +1,23 @@
 # BUG: FlashInfer serving-path numerics wrong at Gemma 3 1B geometry (d256 / SWA-512 / 1 KV head)
 
+Status (UPDATED 2026-06-12 by the 1B RIGOROUS re-test, § below): the **bf16 arm
+is NOT a bug — defect (A) is REFUTED. It was an ENVIRONMENTAL / false-green
+ARTIFACT.** A controlled 1B re-run (same `g6adc00f70` wheel, same FlashInfer
+`7d5d477b` JIT, FlashInfer verified-engaged from the engine proof line, util 0.6,
+serve-ready timeout 300 s as a wedge detector) gives **FI-bf16 − FLASH_ATTN =
+−0.0006633 nats and NO engine wedge** — the earlier +0.221/wedge does NOT
+reproduce. Both bf16 backends match HF eager truth (2.359755). This closes the
+"width/depth-driven bf16 inflation" hypothesis the 270M test left open (1B is
+also clean). Only ONE real sm_120 defect remains: **(B) the nvfp4 KV read-path
+defect** (model/size-independent: 1B + 270M + 4B-mm all gibberish; 1B re-test
++1.587 nats / gibberish). The earlier "+0.22–1.38 nats bf16 inflation" and the
+"wheel engine-wedge" are now attributed to methodology artifacts: the
+`VLLM_ATTENTION_BACKEND` false-green fallback and the util-0.3 OOM / slot-mapping
+JIT regime on the WDDM-shared card.
+
+Bug RE-SCOPED: bf16/wedge arm CLOSED (no bug); nvfp4 read-path arm OPEN.
+
+--- original status, now superseded ---
 Status: OPEN, root cause unknown. Observed 2026-06-12 on sm_120; confirmed
 sm_120-specific (Spark/sm_121 bisect clean). As of the 270M repro test (§ below)
 the bug is understood to be TWO SEPARABLE sm_120 defects: (A) an FI-bf16 SWA-512
@@ -198,8 +216,65 @@ Artifacts: results/p520_g3_270m_20260612/ (SUMMARY.md, per-row proof_lines,
 chat_smoke.json, c1/c1b_ctx8191_ppl.json ×2, hf_bf16_reference_ppl.json,
 util-0.3 OOM crash excerpt, status.txt, scripts).
 
+## 1B rigorous re-test 2026-06-12 (P520 / sm_120): bf16 defect REFUTED — environmental/false-green ARTIFACT
+
+Task #37 decisive re-run. The old 1B numbers were suspect on two counts: (i) one
+earlier run used the `VLLM_ATTENTION_BACKEND` false-green trap that silently ran
+FLASH_ATTN while claiming FlashInfer; (ii) the 270M agent established that
+`--gpu-memory-utilization 0.3` OOMs the FlashInfer rows on this WDDM-shared 5060
+Ti (a capacity ValueError mistakable for a wedge). Re-ran cleanly at util 0.6
+with FlashInfer **verified-engaged from the engine proof line**, serve-ready
+timeout 300 s as an explicit wedge detector.
+
+Same **sm120a RELEASE wheel `g6adc00f70`** + FlashInfer source-JIT `7d5d477b`
+(the exact stack of the task #37 wheel-disambig that reported the wedge, and of
+the 270M test). Model google/gemma-3-1b-it. Corpus C1 md5 abb63f0e... (verified),
+ctx 8191, 8190 scored, each row run TWICE bitwise. HF transformers bf16 **eager**
+C1 ground truth on the identical token window = **2.359755277633667 nats**.
+
+| row | backend (engine PROOF line) | kv dtype | C1 ×2 (bitwise) | delta vs FLASH_ATTN | wedge | smoke |
+|---|---|---|---|---:|---|---|
+| FLASH_ATTN bf16 (truth) | FLASH_ATTN (FA v2) | bf16 | 2.3578483823599337 (IDENTICAL) | — (−0.00191 vs HF) | no | "Tokyo" COHERENT |
+| FLASHINFER bf16 (suspect) | FLASHINFER | bf16 | 2.3571850630239095 (IDENTICAL) | **−0.0006633** | **no** | "Tokyo" COHERENT |
+| FLASHINFER nvfp4 (+LINEAR_V_SF) | FLASHINFER | nvfp4 | 3.9452781399784085 (IDENTICAL) | **+1.5874298** | no | **GIBBERISH, deterministic** |
+
+FI-bf16 forced with `--attention-backend flashinfer` AND
+`VLLM_FLASHINFER_BF16_GEMMA=1`; engine proof line confirms
+`Using AttentionBackendEnum.FLASHINFER backend.` with `attention_backend:
+'flashinfer'` in non-default args — **no false-green FLASH_ATTN substitution**.
+
+**Verdict: the bf16 1B FlashInfer defect is an ENVIRONMENTAL / FALSE-GREEN
+ARTIFACT — it does NOT reproduce.**
+- **bf16 inflation REFUTED:** FI-bf16 − FLASH_ATTN = −0.00066 nats (the old
+  suspect was +0.221, ~330× larger and the *opposite sign*). Both bf16 backends
+  match HF eager truth to <3e-3. This is consistent with the Spark sm_121 bisect
+  (+0.00279, clean) and the 270M re-test (+0.00133, clean): bf16 FlashInfer on
+  Gemma 3 1B is clean everywhere once FlashInfer is verified-engaged at a
+  non-OOM util.
+- **wedge REFUTED:** no engine wedge on any window-crossing (>512 tok) ctx-8191
+  `prompt_logprobs` request; all three rows served, ready in 146–149 s, never
+  approaching the 300 s timeout. The earlier wheel-disambig "wedge" (a freeze
+  after a `_compute_slot_mapping_kernel` Triton JIT, at util 0.3) was the
+  artifact — at util 0.6 the slot-mapping path compiles and serves fine.
+- **nvfp4 read-path defect (B) REPRODUCES:** deterministic gibberish, +1.587
+  nats vs truth — broad sm_120 defect, unchanged. (Matches the original 1B nvfp4
+  +1.592 and corroborates 270M/4B-mm.)
+
+**Reconciliation of all 1B arms:** the only real defect on Gemma 3 1B is the
+nvfp4 KV read path (sm_120-specific, broad across sizes). The "bf16 inflation"
+and "wedge" were methodology artifacts (false-green fallback / util-0.3 OOM &
+slot-mapping JIT), now retired. **Gemma 3 retirement flip: NO 1B bf16 caveat
+needed; the nvfp4-KV caveat stands.** Task #37 narrows to localizing defect (B)
+only (use 270M as the fast minimal repro).
+
+Artifacts: results/p520_g3_1b_retest_20260612/ (SUMMARY.md, per-row
+proof_lines.txt / server.log / chat_smoke.json / c1{,b}_ctx8191_ppl.json ×2,
+hf_bf16_reference_ppl.json, status.txt, scripts/ incl. run_row.sh &
+hf_bf16_reference.py).
+
 ## Cross-references
 
+- results/p520_g3_1b_retest_20260612/ (P520 sm_120 1B RIGOROUS re-test — bf16 defect REFUTED/artifact, nvfp4 reproduces)
 - results/p520_g3_270m_20260612/ (P520 sm_120 270M repro — SPLIT verdict: nvfp4 reproduces, FI-bf16 clean)
 - results/p520_1b_wheel_disambig_20260612/ (P520 sm_120 WHEEL disambig — wedge verdict)
 - results/p520_mm_retirement_smokes_20260612/ (g3-4b nvfp4 mm gibberish corroboration)

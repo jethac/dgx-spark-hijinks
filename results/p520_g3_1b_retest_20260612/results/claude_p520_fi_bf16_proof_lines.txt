@@ -1,0 +1,5 @@
+1:VLLM_BUILD_CHECK 0.1.dev1+g6adc00f70.sm120a /home/jetha/vllm_wheel_env/lib/python3.12/site-packages/vllm/__init__.py
+2:EXT_PATH /home/jetha/vllm_wheel_env/lib/python3.12/site-packages/vllm/_C_stable_libtorch.abi3.so
+3:FLASHINFER_CHECK /home/jetha/flashinfer/flashinfer/__init__.py
+11:(APIServer pid=1393) INFO 06-12 15:28:43 [api_utils.py:273] non-default args: {'model_tag': 'google/gemma-3-1b-it', 'host': '127.0.0.1', 'model': 'google/gemma-3-1b-it', 'max_model_len': 8192, 'served_model_name': ['gemma3-1b-it'], 'attention_backend': 'flashinfer', 'gpu_memory_utilization': 0.6}
+22:(EngineCore pid=1513) INFO 06-12 15:29:11 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.

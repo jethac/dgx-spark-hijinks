@@ -1,0 +1,28 @@
+CAMPAIGN dgx-spark-hijinks epoch2 — agent p520-g3-1b-retest
+RUN_DATE 2026-06-12 JST
+HOST P520, RTX 5060 Ti 16GB, CC12.0/sm_120, WSL2 Ubuntu, WDDM-shared
+VLLM 0.1.dev1+g6adc00f70.sm120a (spark/hijinks-e2-vllm @ 6adc00f70)
+FLASHINFER source-tree JIT (PYTHONPATH=~/flashinfer; FLASHINFER_EXTRA_CUDAFLAGS=-DFLASHINFER_PAGED_V_SF_DESWIZZLE=1)
+TORCH 2.12.0+cu130, CUDA 13.0
+MODEL google/gemma-3-1b-it
+CORPUS c1_ppl_corpus.md MD5=abb63f0e65247a25f870d3f2d57563ff (verified) ctx8191 scored8190
+SERVE --max-model-len 8192 --gpu-memory-utilization 0.6 (one server at a time)
+GPU CLAIM 2026-06-12T06:20:50Z  RELEASE 2026-06-12T06:36:12Z (verified free, WDDM-only, no compute apps)
+
+HF_BF16_EAGER_C1_TRUTH 2.359755277633667 nats (8190 scored)
+
+ROW=diagA_flashattn BACKEND_PROOF=FLASH_ATTN(v2) READY=149s WEDGE=no
+  C1a=2.3578483823599337  C1b=2.3578483823599337  BITWISE_IDENTICAL=yes  delta_vs_HF=-0.0019069
+  CHAT="The capital of Japan is Tokyo." COHERENT
+ROW=fi_bf16 BACKEND_PROOF=FLASHINFER(VLLM_FLASHINFER_BF16_GEMMA=1 + --attention-backend flashinfer) READY=149s WEDGE=no
+  C1a=2.3571850630239095  C1b=2.3571850630239095  BITWISE_IDENTICAL=yes
+  delta_vs_FLASH_ATTN=-0.0006633  delta_vs_HF=-0.0025702
+  CHAT="The capital of Japan is Tokyo." COHERENT
+ROW=fi_nvfp4 BACKEND_PROOF=FLASHINFER+nvfp4+VLLM_NVFP4_KV_LINEAR_V_SF=1 READY=146s WEDGE=no
+  C1a=3.9452781399784085  C1b=3.9452781399784085  BITWISE_IDENTICAL=yes  ppl=51.69
+  delta_vs_FLASH_ATTN=+1.5874298  CHAT=GIBBERISH (deterministic)
+
+VERDICT bf16 1B FlashInfer defect = ENVIRONMENTAL/FALSE-GREEN ARTIFACT (does NOT reproduce).
+  FI-bf16 delta -0.00066 nats (old suspect +0.221; ~330x smaller, opposite sign). No wedge on window-crossing ctx8191.
+  nvfp4 read-path defect A REPRODUCES (gibberish, +1.587) — broad/environmental, sanity anchor holds.
+GEMMA-3-FLIP no 1B caveat needed for bf16 serving numerics; nvfp4-KV caveat remains (broad sm_120 read-path defect).
