@@ -1,77 +1,89 @@
 #!/usr/bin/env bash
-# DG-V: vLLM DiffusionGemma 26B-A4B NVFP4-KV on Spark (sm_121 / GB10).
-# STAGED 2026-06-12 (Claude / vLLM lane) -- runs once the e2-dgv sm121a-arm64 CI
-# wheel lands. Spark = serve/eval ONLY (no build); wheel comes from CI per Jetha.
-#
-# Parity target = SGLang DG-R5/R6 (Codex):
-#   coherence: Tokyo / 2+2 / DGX Spark prompts PASS
-#   full-NVFP4 proof: mixed_kv=False, FP4 K+V pools (kv_data_type=uint8)
-#   VO-split proof: global layers head_dim=512 -> head_dim_vo=256
-#   capacity: ~3.56x KV token budget vs bf16/auto (SGLang: 3.5654x full / 3.5625x SWA)
-#   DG-R6: perf pair (nvfp4 vs bf16 throughput/latency at matched batch)
+# DG-V5/V6: vLLM DiffusionGemma 26B-A4B NVFP4-KV on Spark (sm_121 / GB10), via r11.
+# r11 = proven r10 stack + the e2-dgv vLLM wheel (22.04/glibc-2.35/torch-2.11, no
+# retrofit). Run ON SPARK. Parity target = SGLang DG-R5/R6.
+#   coherence: Tokyo / 2+2 / DGX Spark PASS
+#   full-NVFP4: kv uint8, mixed_kv False, FP4 K+V pools
+#   VO-split: global layers head_dim=512 -> head_dim_vo=256
+#   capacity: ~3.56x KV token budget vs bf16/auto
 set -euo pipefail
 
-# ---- wheel + env (fill WHEEL_TAG when the e2-dgv arm64 build publishes) -------
-WHEEL_TAG=${WHEEL_TAG:-sm121a-arm64-wheels-PENDING}     # e.g. sm121a-arm64-wheels-<e2dgv-sha>-dgv
-VLLM_REPO=${VLLM_REPO:-jethac/vllm}
+WHEEL_SHA=${WHEEL_SHA:-98cd3e59f}                      # e2-dgv head; wheel release sha
+WHEEL_TAG=${WHEEL_TAG:-sm121a-arm64-wheels-${WHEEL_SHA}}
+R10_IMAGE=${R10_IMAGE:-jethac-vllm-aeon-gemma4:9759e3b06-rebuiltc-76af7982-sm121a-r10}
+R11_IMAGE=${R11_IMAGE:-jethac-vllm-aeon-gemma4:e2-dgv-${WHEEL_SHA}-sm121a-r11}
 MODEL=${MODEL:-google/diffusiongemma-26B-A4B-it}
 SERVED=${SERVED:-diffusiongemma-26b-a4b}
-# Base aarch64 image with torch 2.12 cu130 deps (serve in a container, no build):
-BASE_IMAGE=${BASE_IMAGE:-vllm/vllm-openai:gemma-aarch64-cu130}
-FLASHINFER_SRC=${FLASHINFER_SRC:-$HOME/flashinfer}      # spark/hijinks-022-fa2-d512 JIT tree
+DOCKERFILE_R11=${DOCKERFILE_R11:-$HOME/vllm/docker/Dockerfile.r11}   # from the e2-dgv checkout
 RUN_ROOT=${RUN_ROOT:-$HOME/spark_tmp/vllm_dgemma_dgv_$(date +%Y%m%dT%H%MJST)}
+MAX_NUM_SEQS=${MAX_NUM_SEQS:-4}        # recipe (block-diffusion)
+GPU_MEM_UTIL=${GPU_MEM_UTIL:-0.85}     # recipe
+MAX_MODEL_LEN=${MAX_MODEL_LEN:-8192}   # DG-V5 smoke len
 PORT=${PORT:-8000}
-
-# ---- DG-V serve knobs (mirror SGLang DG-R5 + the config.py allowance I wired) -
-# VO-split knobs gate the DiffusionGemma FLASHINFER allowance (config.py) AND the
-# D=512 global-layer two-pass in the unified FIPrefillGroup path.
-export VLLM_FLASHINFER_VOSPLIT=1
-export VLLM_NVFP4_KV_VOSPLIT=1
-ATTN_BACKEND=FLASHINFER
-KV_CACHE_DTYPE=${KV_CACHE_DTYPE:-fp4_e2m1}   # CONFIRM exact vLLM flag on wheel-land (nvfp4 KV)
-MAX_NUM_SEQS=${MAX_NUM_SEQS:-4}              # recipe constraint (block-diffusion)
-GPU_MEM_UTIL=${GPU_MEM_UTIL:-0.85}           # recipe
-MAX_MODEL_LEN=${MAX_MODEL_LEN:-8192}         # DG-V5 smoke len (256k is the headline; smoke smaller)
-
+URL="http://127.0.0.1:${PORT}"
 mkdir -p "$RUN_ROOT"
-echo "[DG-V] run root: $RUN_ROOT  wheel: $WHEEL_TAG  model: $MODEL"
 
-# ---- marker (claim Spark per bus contract; release on EXIT) -------------------
 MARKER=$HOME/spark_tmp/MARKER_claude_dgv
 echo "claude dgv $(date -u +%FT%TZ)" > "$MARKER"
 trap 'rm -f "$MARKER"; docker rm -f dgv_nvfp4 dgv_bf16 >/dev/null 2>&1 || true' EXIT
 
-COHERENCE_PROMPTS=("The capital of Japan is" "2 + 2 =" "The NVIDIA DGX Spark is")
+# ---- 1) bake r11 (download the wheel, layer it onto r10; no compile) ----------
+if ! docker image inspect "$R11_IMAGE" >/dev/null 2>&1; then
+  CTX=$(mktemp -d)
+  ASSET="${RUN_ROOT}/$(basename "$(curl -fsSL "https://api.github.com/repos/jethac/vllm/releases/tags/${WHEEL_TAG}" | grep -oE 'https://[^"]*\.whl' | head -1)")"
+  curl -fsSL -o "$ASSET" "$(curl -fsSL "https://api.github.com/repos/jethac/vllm/releases/tags/${WHEEL_TAG}" | grep -oE 'https://[^"]*\.whl' | head -1)"
+  cp "$ASSET" "$CTX/$(basename "$ASSET")"
+  cp "$DOCKERFILE_R11" "$CTX/Dockerfile"
+  docker build "$CTX" \
+    --build-arg BASE_IMAGE="$R10_IMAGE" \
+    --build-arg VLLM_WHEEL="$(basename "$ASSET")" \
+    -t "$R11_IMAGE"
+  rm -rf "$CTX"
+fi
+echo "[DG-V] r11 image ready: $R11_IMAGE"
 
-serve_and_eval() {  # $1=tag(nvfp4|bf16) $2=kv_dtype_args
-  local tag=$1 kvargs=$2 name=dgv_${tag} log="$RUN_ROOT/${tag}_serve.log"
-  echo "[DG-V] launching $tag ..."
-  # NOTE on wheel-land: docker run $BASE_IMAGE, pip install the $WHEEL_TAG asset,
-  # mount $FLASHINFER_SRC, then `vllm serve $MODEL --attention-backend $ATTN_BACKEND
-  #   $kvargs --max-num-seqs $MAX_NUM_SEQS --gpu-memory-utilization $GPU_MEM_UTIL
-  #   --max-model-len $MAX_MODEL_LEN --served-model-name $SERVED --port $PORT`
-  # (kept as a NOTE not a live cmd until the wheel exists + the kv-dtype flag is
-  #  confirmed, so this script never half-runs a wrong config.)
-  echo "TODO(wheel): launch $name with $kvargs; capture proofs to $log" | tee -a "$log"
-  # Proof captures to grep from $log once live:
-  #   full-NVFP4:  'mixed_kv' false + FP4 K/V pool alloc + kv_data_type=uint8
-  #   VO-split:    global layer head_dim=512 head_dim_vo=256 (FIPrefillGroup VO path)
-  #   capacity:    'GPU KV cache size' / num KV tokens -> ratio vs bf16 run
-  #   coherence:   POST /v1/completions for each COHERENCE_PROMPTS -> coherent
+# ---- 2) serve + eval one row -------------------------------------------------
+serve_row() {  # $1=tag(nvfp4|bf16)  $2=kv-cache-dtype
+  local tag=$1 kv=$2 name=dgv_${tag} log="$RUN_ROOT/${tag}_server.log"
+  docker rm -f "$name" >/dev/null 2>&1 || true
+  docker run -d --name "$name" --gpus all --net host --ipc host \
+    -v "$HOME/.cache/huggingface:/root/.cache/huggingface" \
+    "$R11_IMAGE" bash -lc "
+      vllm serve '$MODEL' --served-model-name '$SERVED' --host 127.0.0.1 --port $PORT \
+        --attention-backend FLASHINFER --kv-cache-dtype $kv \
+        --max-num-seqs $MAX_NUM_SEQS --gpu-memory-utilization $GPU_MEM_UTIL \
+        --max-model-len $MAX_MODEL_LEN" >/dev/null
+  # wait ready (timeout = wedge detector)
+  local ready=0
+  for i in $(seq 1 600); do
+    docker logs "$name" > "$log" 2>&1 || true
+    curl -fsS "$URL/v1/models" >/dev/null 2>&1 && { ready=1; echo "[$tag] READY ${i}s"; break; }
+    docker inspect -f '{{.State.Running}}' "$name" 2>/dev/null | grep -q true || { echo "[$tag] CONTAINER DIED ${i}s"; break; }
+    sleep 1
+  done
+  docker logs "$name" > "$log" 2>&1 || true
+  [ "$ready" = 1 ] || { echo "[$tag] NOT READY -> tail:"; tail -40 "$log"; return 3; }
+  # coherence
+  for p in "The capital of Japan is" "2 + 2 =" "The NVIDIA DGX Spark is"; do
+    curl -fsS "$URL/v1/completions" -H 'content-type: application/json' \
+      -d "{\"model\":\"$SERVED\",\"prompt\":\"$p\",\"max_tokens\":24,\"temperature\":0}" \
+      | tee -a "$RUN_ROOT/${tag}_coherence.json"; echo >> "$RUN_ROOT/${tag}_coherence.json"
+  done
+  # proofs from the server log
+  grep -iE "mixed_kv|nvfp4|fp4|head_dim_vo|head_dim=512|vosplit|GPU KV cache|num.*kv.*token|available_kv" "$log" \
+    | tee "$RUN_ROOT/${tag}_proofs.txt" | head -40 || true
+  docker rm -f "$name" >/dev/null 2>&1 || true
 }
 
-# DG-V5: full-NVFP4 K+V (the headline) + bf16 denominator for the 3.56x ratio
-serve_and_eval nvfp4 "--kv-cache-dtype ${KV_CACHE_DTYPE}"
-serve_and_eval bf16  "--kv-cache-dtype auto"
+echo "=== DG-V5: full-NVFP4 K+V ==="; serve_row nvfp4 nvfp4
+echo "=== DG-V5: bf16/auto denominator ==="; serve_row bf16 auto
 
-# DG-V6: perf pair (nvfp4 vs bf16 throughput/latency at matched batch) -- add the
-# vllm bench / a fixed request set once DG-V5 is green.
-
+# ---- 3) summary skeleton (fill the capacity ratio from the two proof files) ---
 cat > "$RUN_ROOT/summary.md" <<EOF
-# DG-V (vLLM DiffusionGemma 26B-A4B NVFP4-KV on Spark sm_121)
-STAGED run skeleton. Fill on wheel-land. Parity target: SGLang DG-R5/R6.
-- wheel: $WHEEL_TAG ; model: $MODEL ; backend: $ATTN_BACKEND ; VO-split knobs ON
-- DG-V5 green bar: coherent + full-NVFP4 proof + VO-split proof + ~3.5x capacity + double-run bitwise
-- DG-V6: perf pair
+# DG-V5 (vLLM DiffusionGemma 26B-A4B NVFP4-KV, Spark sm_121, image $R11_IMAGE)
+- coherence: see {nvfp4,bf16}_coherence.json (expect Tokyo / 4 / Spark coherent)
+- full-NVFP4 proof + VO-split proof: nvfp4_proofs.txt (mixed_kv False, head_dim 512->vo 256)
+- capacity ratio: nvfp4 KV tokens / bf16 KV tokens (from *_proofs.txt) -- target ~3.56x
+- parity: SGLang DG-R5 (3.5654x full / 3.5625x SWA), DG-R6 perf pair
 EOF
-echo "[DG-V] staged summary at $RUN_ROOT/summary.md"
+echo "[DG-V] done -> $RUN_ROOT/summary.md"
