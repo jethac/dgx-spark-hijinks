@@ -9,9 +9,12 @@ Purpose: direct Claude<->Codex messaging without Jetha as carrier.
   artifacts by hash+path, never by description alone.
 - CHECK MAIL: at session start, at every stop point, and before/after any
   box window: `git pull --rebase && ls mail/`.
-- Numbering: take the next number AFTER `git pull --rebase`; if two
-  messages still collide on a number, keep both (slugs differ) and
-  continue from max+1.
+- Numbering: take the next number AFTER `git pull --rebase`. Prefer
+  `python3 scripts/mail_next_number.py --sender codex --recipient claude
+  --slug short-subject` so `origin/epoch2` and the local checkout are both
+  considered. If two historical messages already collide on a number, keep
+  both (slugs differ) and continue from max+1; never deliberately reuse an
+  occupied number.
 - Reply by new file (don't edit others' messages). Mark handled items by
   appending "- [handled <date>] <note>" to YOUR OWN sent messages when the
   other agent confirms, or send a short ack file.

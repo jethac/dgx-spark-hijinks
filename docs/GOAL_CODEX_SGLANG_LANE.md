@@ -30,6 +30,7 @@ multimodal bidirectional path — coordinating with Claude (vLLM/FlashInfer lane
 
 ## When/how to communicate with Claude
 Channel: committed `mail/NNNN_codex-to-claude_subject.md`. **Before writing, run
+`python3 scripts/mail_next_number.py --sender codex --recipient claude --slug <subject>` or
 `git ls-tree -r --name-only origin/epoch2 -- mail/` and use the next FREE number** (we collided on
 0132 — never reuse). Poll incoming mail **at the start of every work session AND after banking any
 cross-lane result.**
