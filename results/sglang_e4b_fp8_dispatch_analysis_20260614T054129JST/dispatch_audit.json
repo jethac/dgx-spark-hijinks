@@ -1,0 +1,78 @@
+{
+  "expected_geometry": {
+    "head_dim": 512,
+    "head_dim_vo": 256,
+    "num_kv_heads": 2,
+    "num_qo_heads": 8
+  },
+  "expected_trait": {
+    "num_mma_d_qk": 32,
+    "num_mma_d_vo": 16,
+    "num_mma_kv": 1,
+    "num_mma_q": 1,
+    "num_warps_kv": 1,
+    "num_warps_q": 4
+  },
+  "inputs": [
+    "results\\sglang_0513_fix_gemma4_e4b_fp8_comparator_ctx512_prefix256_20260614T032241JST\\STOP_SUMMARY.md",
+    "results\\sglang_0513_fix_gemma4_e4b_fp8_comparator_ctx512_prefix256_20260614T032241JST\\google-gemma-4-e4b-it\\fp8_server.log"
+  ],
+  "known_red": true,
+  "matching_geometries": [
+    {
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "num_kv_heads": 2,
+      "num_qo_heads": 8
+    },
+    {
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "num_kv_heads": 2,
+      "num_qo_heads": 8
+    },
+    {
+      "head_dim": 512,
+      "head_dim_vo": 256,
+      "num_kv_heads": 2,
+      "num_qo_heads": 8
+    }
+  ],
+  "matching_traits": [
+    {
+      "num_mma_d_qk": 32,
+      "num_mma_d_vo": 16,
+      "num_mma_kv": 1,
+      "num_mma_q": 1,
+      "num_warps_kv": 1,
+      "num_warps_q": 4
+    },
+    {
+      "num_mma_d_qk": 32,
+      "num_mma_d_vo": 16,
+      "num_mma_kv": 1,
+      "num_mma_q": 1,
+      "num_warps_kv": 1,
+      "num_warps_q": 4
+    }
+  ],
+  "missing_inputs": [],
+  "recommended_action": "Keep the SGLang E4B fp8 comparator scoped red until the FlashInfer D512/VO256 1-byte-KV dispatcher fix is in the packaged dependency, then rerun the smallest E4B fp8 row.",
+  "sample_lines": {
+    "geometry": "planned=FlashInferWrapperGeometry(num_qo_heads=8, num_kv_heads=2,",
+    "invalid_configuration": "FlashInfer Internal Error: Invalid configuration :",
+    "module": "dtype_kv=__nv_fp8_e4m3; head_dim_qk=512; head_dim_vo=256;"
+  },
+  "schema": "sglang-e4b-fp8-dispatch-audit/v1",
+  "signals": {
+    "batch_prefill_paged_dispatch": true,
+    "cta_tile_q_64": true,
+    "fp8_module": true,
+    "head_dim_qk_512_head_dim_vo_256": true,
+    "invalid_configuration": true,
+    "matching_geometry_count": 3,
+    "matching_trait_count": 2,
+    "page_size_1": true
+  },
+  "verdict": "known_e4b_fp8_d512_vo256_num_mma_kv1_dispatcher_red"
+}

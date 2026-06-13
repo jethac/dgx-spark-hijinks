@@ -101,3 +101,9 @@ can either:
 - reject it explicitly before serving with a clear unsupported-shape reason.
 
 No code change was applied in this stop point.
+
+## Machine Audit Addendum
+
+Added 2026-06-14: `scripts/sglang_e4b_fp8_dispatch_audit.py` classifies this artifact as
+`known_e4b_fp8_d512_vo256_num_mma_kv1_dispatcher_red`. Current JSON:
+`results/sglang_e4b_fp8_dispatch_analysis_20260614T054129JST/dispatch_audit.json`.
