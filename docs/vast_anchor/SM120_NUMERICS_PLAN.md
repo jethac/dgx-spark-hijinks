@@ -1,4 +1,12 @@
-# Plan (for Codex): fix the x86 sm_120 vLLM Gemma-4 forward-numerics bug → unblock vast.ai anchor runs
+> **SUPERSEDED 2026-06-13 — there is no sm_120 hardware bug.** Codex's prompt-contract
+> control (see `docs/GEMMA4_SM120_FORWARD_BUG.md`) showed the degenerate output was a
+> **harness bug**: raw prompts fed to Gemma-4 `-it` (instruct) models, which reproduces on
+> sm_100 B200 and CPU fp32 and disappears under `apply_chat_template`. The vLLM anchor is
+> **NOT blocked by hardware** — it only needs a valid prompt contract (chat template, or the
+> non-`-it` base checkpoint for raw-text PPL). The §5 vast.ai box runbook below is still
+> accurate and reusable; the §1–4 "kernel bug" framing is retracted.
+
+# Plan (for Codex): ~~fix the x86 sm_120 vLLM Gemma-4 forward-numerics bug~~ (RETRACTED — prompt-contract artifact)
 
 **Date:** 2026-06-13 · **Owner ask:** Codex resolves the sm_120 serving-numerics bug so
 that an x86 sm_120 vast.ai box (RTX 5090 / RTX PRO 6000) can produce claim-grade vLLM
