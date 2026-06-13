@@ -18,6 +18,7 @@ CONTEXT_LENGTH="${CONTEXT_LENGTH:-8192}"
 READY_TIMEOUT_S="${READY_TIMEOUT_S:-1800}"
 REQUEST_TIMEOUT_S="${REQUEST_TIMEOUT_S:-1800}"
 PPL_TIMEOUT_S="${PPL_TIMEOUT_S:-1800}"
+CHAT_TIMEOUT_S="${CHAT_TIMEOUT_S:-120}"
 GB10_DOCKER_MEMORY="${GB10_DOCKER_MEMORY:-100g}"
 GB10_DOCKER_MEMORY_SWAP="${GB10_DOCKER_MEMORY_SWAP:-100g}"
 HF_CACHE="${HF_CACHE:-${HOME}/.cache/huggingface}"
@@ -208,7 +209,7 @@ PY
 
   local chat_transport_ok=1
   for idx in 1 2; do
-    if ! curl -sS --max-time "${REQUEST_TIMEOUT_S}" "http://127.0.0.1:${PORT}/v1/chat/completions" \
+    if ! curl -sS --max-time "${CHAT_TIMEOUT_S}" "http://127.0.0.1:${PORT}/v1/chat/completions" \
       -H 'Content-Type: application/json' \
       -d '{
         "model": "'"${model}"'",
@@ -307,6 +308,9 @@ PY
   echo "page_size=${PAGE_SIZE}"
   echo "context_length=${CONTEXT_LENGTH}"
   echo "ctx_list=${CTX_LIST}"
+  echo "chat_timeout_s=${CHAT_TIMEOUT_S}"
+  echo "request_timeout_s=${REQUEST_TIMEOUT_S}"
+  echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   git rev-parse HEAD
   docker image inspect "${IMAGE}" --format '{{json .RepoDigests}}' 2>/dev/null || true
