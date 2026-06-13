@@ -1,0 +1,20 @@
+{
+  "candidate_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live-0513/results/sglang_0513_fix_gemma4_e4b_matched_bf16_fullnvfp4_ctx512_prefix256_20260614T030829JST/google-gemma-4-e4b-it/fullnvfp4_ppl.json",
+  "elapsed_s": 0.0,
+  "fp8_report": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live-0513/results/sglang_0513_fix_gemma4_e4b_matched_bf16_fullnvfp4_ctx512_prefix256_20260614T030829JST/google-gemma-4-e4b-it/bf16_ppl.json",
+  "ok": true,
+  "rows": [
+    {
+      "candidate_ok": true,
+      "ctx": 512,
+      "delta_nats_per_token": -0.1951031146752591,
+      "delta_ppl": -30.98294414487927,
+      "fp8_ok": true,
+      "nats_per_token_candidate": 4.968526825588333,
+      "nats_per_token_fp8": 5.163629940263592,
+      "ppl_candidate": 143.8148668557961,
+      "ppl_fp8": 174.79781100067538
+    }
+  ],
+  "schema": "sglang-prompt-ppl-comparison/v1"
+}
