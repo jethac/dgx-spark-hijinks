@@ -17,6 +17,19 @@ and `root`. Live validation is no longer blocked by host access.
 
 ## Latest Deltas
 
+- **2026-06-14 SGLang epoch2 supersession:** the active SGLang lane is no longer
+  the old Qwen dense-cache trace climb. The current packaged Spark carrier is
+  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-mm-prefix-f920e2d-arm64`
+  / `sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`
+  with SGLang `f920e2d88a` and FlashInfer `f99323bd`. It has a scoped E4B
+  full-NVFP4 multimodal/mm-prefix baked-image green row, but **not** a broad
+  Gemma 4 AR blessing. The 12B long-context full-NVFP4 red is now a shared
+  FlashInfer/numerics blocker (`+0.402969` nats/token in SGLang, reproduced by
+  Claude's vLLM discriminator in mail 0138), and the E4B fp8 comparator remains
+  a FlashInfer D512/VO256 1-byte-KV dispatcher blocker. The active run packet is
+  `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`; the runner refuses known
+  blocked rows unless `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` is set after a
+  relevant dependency change or for a labeled diagnostic.
 - `jethac/flashinfer@spark/hijinks-021-prefill-debug` commit `96be2fa8` adds inactive
   `FLASHINFER_PREFILL_DEBUG_ONCE=1` C++/JIT identity and tensor logging for the Gemma 3 NVFP4-KV
   FlashInfer paged-prefill failure. Run packet:

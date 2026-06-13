@@ -11,6 +11,24 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 - The capacity denominator audit corrects the mixed-KV claim: current equal-budget capacity is about `1.28x` versus fp8 KV. The earlier `~1.78x` mixed-KV token count was an allocator-overbudget artifact and is not the current claim.
 - This promotes SGLang Qwen mixed-KV to a scoped radix-cache capacity/quality row, not a broad SGLang FP4 KV blessing. Full NVFP4 K+V, Gemma serving, and final throughput rows remain open.
 
+## 2026-06-14 SGLang Epoch2 Supersession
+
+- The active SGLang goal has moved from the old Qwen dense-cache trace queue to
+  the packaged Gemma 4 AR ladder. Current carrier:
+  `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-mm-prefix-f920e2d-arm64`
+  / `sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`,
+  SGLang `f920e2d88a`, FlashInfer `f99323bd`.
+- Scoped green: E4B full-NVFP4 text/image/audio mm-prefix baked-image row,
+  `results/sglang_gemma4_e4b_fullnvfp4_mm_prefix_baked_20260614T072000JST/STOP_SUMMARY.md`.
+- Still red / not claim-grade: 12B long-context full-NVFP4 matched row
+  `+0.402969` nats/token, now classified by mail 0138 as a shared
+  FlashInfer/numerics blocker rather than SGLang radix/merge; E4B fp8 comparator
+  remains a FlashInfer D512/VO256 1-byte-KV dispatcher blocker.
+- Current live packet: `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
+  `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses the known-blocked rows
+  by default; set `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant
+  dependency fix or for an explicitly labeled diagnostic replay.
+
 ## Status Map
 
 | solution area | status | current evidence | missing proof |
