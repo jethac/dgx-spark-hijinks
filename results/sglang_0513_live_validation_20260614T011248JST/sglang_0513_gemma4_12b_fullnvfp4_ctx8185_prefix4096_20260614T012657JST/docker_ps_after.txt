@@ -1,0 +1,2 @@
+CONTAINER ID   IMAGE                                                         COMMAND                  CREATED         STATUS         PORTS     NAMES
+5d9752468e94   ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack   "/opt/nvidia/nvidia_…"   6 minutes ago   Up 6 minutes             sglang_0513_gemma4_12b_fullnvfp4_ctx8185_prefix4096_20260614T012657JST_google-gemma-4-12b-it_fp8

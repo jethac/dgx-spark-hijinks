@@ -1,0 +1,8 @@
+run_id=sglang_0513_nvfp4_sf_stride_probe_20260614T011248JST
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:561b2a82b4169905625584ea1837feca5f7e0502b8f5f1bbd2a665c234ec8bb3
+repo=a4881aca75c094f8b1d225303e1bc7ba8e4a0966
+started_at=2026-06-14T01:12:48+09:00
+MARKER_ABSENT
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.4Gi        91Gi        15Mi        25Gi       115Gi
+Swap:           15Gi       211Mi        15Gi
