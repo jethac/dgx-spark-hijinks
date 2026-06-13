@@ -1,0 +1,236 @@
+INFO 06-13 11:14:08 [api_utils.py:273] non-default args: {'trust_remote_code': True, 'kv_cache_dtype': 'bfloat16', 'max_model_len': 8192, 'enable_prefix_caching': True, 'gpu_memory_utilization': 0.72, 'max_num_batched_tokens': 4096, 'disable_log_stats': True, 'attention_backend': 'FLASH_ATTN', 'model': 'google/gemma-4-12B-it'}
+INFO 06-13 11:14:16 [model.py:609] Resolved architecture: Gemma4UnifiedForConditionalGeneration
+INFO 06-13 11:14:16 [model.py:1752] Using max model len 8192
+INFO 06-13 11:14:16 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=4096.
+INFO 06-13 11:14:16 [vllm.py:995] Asynchronous scheduling is enabled.
+INFO 06-13 11:14:16 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+WARNING 06-13 11:14:16 [cuda.py:266] Forcing --disable_chunked_mm_input for models with multimodal-bidirectional attention.
+(EngineCore pid=3608) INFO 06-13 11:14:48 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+ge32459eea.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=bfloat16, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [4096], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=3608) INFO 06-13 11:14:48 [parallel_state.py:1568] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:43089 backend=nccl
+(EngineCore pid=3608) INFO 06-13 11:14:48 [parallel_state.py:1903] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=3608) INFO 06-13 11:14:49 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=3608) INFO 06-13 11:14:50 [gpu_model_runner.py:5122] Starting to load model google/gemma-4-12B-it...
+(EngineCore pid=3608) INFO 06-13 11:14:50 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199] EngineCore failed to start.
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199] Traceback (most recent call last):
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     super().__init__(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 122, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self._init_executor()
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 68, in _init_executor
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.driver_worker.load_model()
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 356, in load_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.model_runner.load_model(load_dummy_weights=load_dummy_weights)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_model_runner.py", line 5138, in load_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.model = model_loader.load_model(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                  ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/base_loader.py", line 55, in load_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     model = initialize_model(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]             ^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/utils.py", line 61, in initialize_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     model = model_class(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4_unified.py", line 297, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.language_model: Gemma4ForCausalLM = init_vllm_registered_model(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 392, in init_vllm_registered_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return initialize_model(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return func(*args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/utils.py", line 61, in initialize_model
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     model = model_class(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1603, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.model = Gemma4Model(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                  ^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/compilation/decorators.py", line 383, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     old_init(self, *args, **kwargs)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1100, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.start_layer, self.end_layer, self.layers = make_layers(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                                                     ^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 658, in make_layers
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     + get_offloader().wrap_modules(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/offloader/base.py", line 104, in wrap_modules
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return list(modules_generator)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 659, in <genexpr>
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     layer_fn(prefix=f"{prefix}.{idx}") for idx in range(start_layer, end_layer)
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1102, in <lambda>
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     lambda prefix: Gemma4DecoderLayer(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                    ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 641, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.self_attn = Gemma4Attention(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                      ^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 550, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.attn = Attention(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                 ^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/layers/attention/attention.py", line 342, in __init__
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     self.attn_backend = get_attn_backend(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                         ^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/selector.py", line 106, in get_attn_backend
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     return _cached_get_attn_backend(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/selector.py", line 121, in _cached_get_attn_backend
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     attention_cls = current_platform.get_attn_backend_cls(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]   File "/root/venv/lib/python3.12/site-packages/vllm/platforms/cuda.py", line 336, in get_attn_backend_cls
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199]     raise ValueError(
+(EngineCore pid=3608) ERROR 06-13 11:14:51 [core.py:1199] ValueError: Selected backend AttentionBackendEnum.FLASH_ATTN is not valid for this configuration. Reason: ['partial multimodal token full attention not supported', 'mm_prefix (PrefixLM bidirectional attention) requires FlashAttention v4, which does not resolve for this head_size']
+(EngineCore pid=3608) Process EngineCore:
+(EngineCore pid=3608) Traceback (most recent call last):
+(EngineCore pid=3608)   File "/usr/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=3608)     self.run()
+(EngineCore pid=3608)   File "/usr/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=3608)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1203, in run_engine_core
+(EngineCore pid=3608)     raise e
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1168, in run_engine_core
+(EngineCore pid=3608)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=3608)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 934, in __init__
+(EngineCore pid=3608)     super().__init__(
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 122, in __init__
+(EngineCore pid=3608)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=3608)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=3608)     self._init_executor()
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 68, in _init_executor
+(EngineCore pid=3608)     self.driver_worker.load_model()
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 356, in load_model
+(EngineCore pid=3608)     self.model_runner.load_model(load_dummy_weights=load_dummy_weights)
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_model_runner.py", line 5138, in load_model
+(EngineCore pid=3608)     self.model = model_loader.load_model(
+(EngineCore pid=3608)                  ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/base_loader.py", line 55, in load_model
+(EngineCore pid=3608)     model = initialize_model(
+(EngineCore pid=3608)             ^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/utils.py", line 61, in initialize_model
+(EngineCore pid=3608)     model = model_class(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608)             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4_unified.py", line 297, in __init__
+(EngineCore pid=3608)     self.language_model: Gemma4ForCausalLM = init_vllm_registered_model(
+(EngineCore pid=3608)                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 392, in init_vllm_registered_model
+(EngineCore pid=3608)     return initialize_model(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3608)     return func(*args, **kwargs)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/model_loader/utils.py", line 61, in initialize_model
+(EngineCore pid=3608)     model = model_class(vllm_config=vllm_config, prefix=prefix)
+(EngineCore pid=3608)             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1603, in __init__
+(EngineCore pid=3608)     self.model = Gemma4Model(
+(EngineCore pid=3608)                  ^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/compilation/decorators.py", line 383, in __init__
+(EngineCore pid=3608)     old_init(self, *args, **kwargs)
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1100, in __init__
+(EngineCore pid=3608)     self.start_layer, self.end_layer, self.layers = make_layers(
+(EngineCore pid=3608)                                                     ^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 658, in make_layers
+(EngineCore pid=3608)     + get_offloader().wrap_modules(
+(EngineCore pid=3608)       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/offloader/base.py", line 104, in wrap_modules
+(EngineCore pid=3608)     return list(modules_generator)
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/utils.py", line 659, in <genexpr>
+(EngineCore pid=3608)     layer_fn(prefix=f"{prefix}.{idx}") for idx in range(start_layer, end_layer)
+(EngineCore pid=3608)     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1102, in <lambda>
+(EngineCore pid=3608)     lambda prefix: Gemma4DecoderLayer(
+(EngineCore pid=3608)                    ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 641, in __init__
+(EngineCore pid=3608)     self.self_attn = Gemma4Attention(
+(EngineCore pid=3608)                      ^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 550, in __init__
+(EngineCore pid=3608)     self.attn = Attention(
+(EngineCore pid=3608)                 ^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/layers/attention/attention.py", line 342, in __init__
+(EngineCore pid=3608)     self.attn_backend = get_attn_backend(
+(EngineCore pid=3608)                         ^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/selector.py", line 106, in get_attn_backend
+(EngineCore pid=3608)     return _cached_get_attn_backend(
+(EngineCore pid=3608)            ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/selector.py", line 121, in _cached_get_attn_backend
+(EngineCore pid=3608)     attention_cls = current_platform.get_attn_backend_cls(
+(EngineCore pid=3608)                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=3608)   File "/root/venv/lib/python3.12/site-packages/vllm/platforms/cuda.py", line 336, in get_attn_backend_cls
+(EngineCore pid=3608)     raise ValueError(
+(EngineCore pid=3608) ValueError: Selected backend AttentionBackendEnum.FLASH_ATTN is not valid for this configuration. Reason: ['partial multimodal token full attention not supported', 'mm_prefix (PrefixLM bidirectional attention) requires FlashAttention v4, which does not resolve for this head_size']
+Traceback (most recent call last):
+  File "/root/vllm_matched_kv_anchor.py", line 240, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/root/vllm_matched_kv_anchor.py", line 170, in main
+    llm = build_llm(args)
+          ^^^^^^^^^^^^^^^
+  File "/root/vllm_matched_kv_anchor.py", line 147, in build_llm
+    return LLM(**kwargs)
+           ^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 349, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 102, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 771, in __init__
+    super().__init__(
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 570, in __init__
+    with launch_core_engines(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1190, in launch_core_engines
+    wait_for_engine_startup(
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1249, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}

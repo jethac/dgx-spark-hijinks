@@ -1,0 +1,172 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO 06-13 11:21:04 [api_utils.py:273] non-default args: {'trust_remote_code': True, 'kv_cache_dtype': 'bfloat16', 'max_model_len': 8192, 'enable_prefix_caching': True, 'gpu_memory_utilization': 0.72, 'max_num_batched_tokens': 4096, 'disable_log_stats': True, 'model': 'google/gemma-4-12B-it'}
+INFO 06-13 11:21:05 [model.py:609] Resolved architecture: Gemma4UnifiedForConditionalGeneration
+INFO 06-13 11:21:05 [model.py:1752] Using max model len 8192
+INFO 06-13 11:21:05 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=4096.
+INFO 06-13 11:21:05 [config.py:148] Gemma4 multimodal prefix spans will run on the FlashInfer FA2 custom-mask path (VLLM_FLASHINFER_MM_PREFIX, default-on; set =0 to keep the Triton mm route).
+INFO 06-13 11:21:05 [config.py:157] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.
+INFO 06-13 11:21:05 [vllm.py:995] Asynchronous scheduling is enabled.
+INFO 06-13 11:21:05 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+WARNING 06-13 11:21:05 [cuda.py:266] Forcing --disable_chunked_mm_input for models with multimodal-bidirectional attention.
+(EngineCore pid=5753) INFO 06-13 11:21:39 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+ge32459eea.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=bfloat16, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [4096], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=5753) INFO 06-13 11:21:39 [parallel_state.py:1568] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:53165 backend=nccl
+(EngineCore pid=5753) INFO 06-13 11:21:39 [parallel_state.py:1903] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=5753) INFO 06-13 11:21:40 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=5753) INFO 06-13 11:21:41 [gpu_model_runner.py:5122] Starting to load model google/gemma-4-12B-it...
+(EngineCore pid=5753) INFO 06-13 11:21:41 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=5753) INFO 06-13 11:21:42 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=5753) INFO 06-13 11:21:42 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=5753) INFO 06-13 11:21:43 [weight_utils.py:630] No model.safetensors.index.json found in remote.
+(EngineCore pid=5753) INFO 06-13 11:21:43 [weight_utils.py:905] Filesystem type for checkpoints: OVERLAY. Checkpoint size: 22.28 GiB. Available RAM: 592.93 GiB.
+(EngineCore pid=5753) INFO 06-13 11:21:43 [weight_utils.py:928] Auto-prefetch is disabled because the filesystem (OVERLAY) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+(EngineCore pid=5753) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+(EngineCore pid=5753) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.23s/it]
+(EngineCore pid=5753) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.23s/it]
+(EngineCore pid=5753) 
+(EngineCore pid=5753) INFO 06-13 11:21:48 [default_loader.py:397] Loading weights took 5.08 seconds
+(EngineCore pid=5753) INFO 06-13 11:21:49 [gpu_model_runner.py:5217] Model loading took 22.68 GiB memory and 7.074589 seconds
+(EngineCore pid=5753) INFO 06-13 11:21:49 [gpu_model_runner.py:6230] Encoder cache will be initialized with a budget of 4096 tokens, and profiled with 1 video items of the maximum feature size.
+(EngineCore pid=5753) INFO 06-13 11:22:35 [backends.py:1089] Using cache directory: /root/.cache/vllm/torch_compile_cache/0b3e36bc90/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=5753) INFO 06-13 11:22:35 [backends.py:1148] Dynamo bytecode transform time: 7.43 s
+(EngineCore pid=5753) INFO 06-13 11:22:55 [backends.py:393] Compiling a graph for compile range (1, 4096) takes 20.12 s
+(EngineCore pid=5753) INFO 06-13 11:22:59 [backends.py:915] collected artifacts: 49 entries, 6 artifacts, 16352652 bytes total
+(EngineCore pid=5753) INFO 06-13 11:22:59 [decorators.py:708] saved AOT compiled function to /root/.cache/vllm/torch_compile_cache/torch_aot_compile/c340bd57abba9af1ecca1e45dc3d9f313e044afa7520394d5a25fe600b87294a/rank_0_0/model
+(EngineCore pid=5753) INFO 06-13 11:22:59 [monitor.py:53] torch.compile took 32.13 s in total
+(EngineCore pid=5753) INFO 06-13 11:22:59 [monitor.py:81] Initial profiling/warmup run took 0.01 s
+(EngineCore pid=5753) WARNING 06-13 11:23:05 [compilation.py:1396] CUDAGraphMode.FULL_AND_PIECEWISE is not supported with FlashInferBackend backend (support: AttentionCGSupport.NEVER); setting cudagraph_mode=PIECEWISE because attention is compiled piecewise
+(EngineCore pid=5753) INFO 06-13 11:23:05 [flashinfer.py:1739] FlashInfer mm-prefix: image-token spans of multimodal requests run with FA2 packed custom masks on a second prefill wrapper (layer group window_left=1023).
+(EngineCore pid=5753) INFO 06-13 11:23:05 [flashinfer.py:1681] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+(EngineCore pid=5753) INFO 06-13 11:23:06 [gpu_model_runner.py:6442] Profiling CUDA graph memory: PIECEWISE=51 (largest=512)
+(EngineCore pid=5753) INFO 06-13 11:23:08 [gpu_model_runner.py:6547] Estimated CUDA graph memory: 0.34 GiB total
+(EngineCore pid=5753) INFO 06-13 11:23:08 [gpu_worker.py:480] Available KV cache memory: 41.37 GiB
+(EngineCore pid=5753) INFO 06-13 11:23:08 [gpu_worker.py:495] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.7200 is equivalent to --gpu-memory-utilization=0.7164 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.7236. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(EngineCore pid=5753) INFO 06-13 11:23:08 [kv_cache_utils.py:1790] GPU KV cache size: 200,257 tokens
+(EngineCore pid=5753) INFO 06-13 11:23:08 [kv_cache_utils.py:1791] Maximum concurrency for 8,192 tokens per request: 24.45x
+(EngineCore pid=5753) 2026-06-13 11:23:09,685 - INFO - autotuner.py:622 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=5753) 2026-06-13 11:23:09,703 - INFO - autotuner.py:641 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=5753) INFO 06-13 11:23:09 [kernel_warmup.py:97] Warming up FlashInfer attention.
+(EngineCore pid=5753) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:03, 14.91it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:03, 11.91it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:04, 11.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▌        | 8/51 [00:00<00:03, 12.11it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|█▉        | 10/51 [00:00<00:03, 11.85it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  24%|██▎       | 12/51 [00:01<00:03, 11.91it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  27%|██▋       | 14/51 [00:01<00:02, 13.06it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 16/51 [00:01<00:02, 12.83it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  35%|███▌      | 18/51 [00:01<00:02, 14.07it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  39%|███▉      | 20/51 [00:01<00:02, 13.54it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 22/51 [00:01<00:02, 14.36it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  47%|████▋     | 24/51 [00:01<00:01, 14.61it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  51%|█████     | 26/51 [00:01<00:01, 14.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▍    | 28/51 [00:02<00:01, 14.51it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  59%|█████▉    | 30/51 [00:02<00:01, 15.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  63%|██████▎   | 32/51 [00:02<00:01, 14.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 34/51 [00:02<00:01, 15.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  71%|███████   | 36/51 [00:02<00:01, 14.43it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  75%|███████▍  | 38/51 [00:02<00:00, 13.57it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  78%|███████▊  | 40/51 [00:02<00:00, 14.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  82%|████████▏ | 42/51 [00:03<00:00, 13.58it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  86%|████████▋ | 44/51 [00:03<00:00, 14.89it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  90%|█████████ | 46/51 [00:03<00:00, 14.25it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  94%|█████████▍| 48/51 [00:03<00:00, 15.30it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  98%|█████████▊| 50/51 [00:03<00:00, 14.89it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:03<00:00, 13.92it/s]
+(EngineCore pid=5753) INFO 06-13 11:23:38 [gpu_model_runner.py:6615] Graph capturing finished in 5 secs, took 0.46 GiB
+(EngineCore pid=5753) INFO 06-13 11:23:38 [gpu_worker.py:639] CUDA graph pool memory: 0.46 GiB (actual), 0.34 GiB (estimated), difference: 0.12 GiB (26.2%).
+(EngineCore pid=5753) INFO 06-13 11:23:38 [jit_monitor.py:54] Kernel JIT monitor activated — Triton JIT compilations during inference will be logged as warnings.
+(EngineCore pid=5753) INFO 06-13 11:23:39 [core.py:310] init engine (profile, create kv cache, warmup model) took 109.52 s (compilation: 32.13 s)
+(EngineCore pid=5753) INFO 06-13 11:23:39 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+Rendering prompts:   0%|          | 0/1 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 1/1 [00:00<00:00, 101.74it/s]
+Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s](EngineCore pid=5753) WARNING 06-13 11:23:39 [jit_monitor.py:103] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [dump_input.py:72] Dumping input data for V1 LLM engine (v0.1.dev1+ge32459eea.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=bfloat16, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '/root/.cache/vllm/torch_compile_cache/0b3e36bc90', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [4096], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.PIECEWISE: 1>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': '/root/.cache/vllm/torch_compile_cache/0b3e36bc90/rank_0_0/backbone', 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto'), 
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [dump_input.py:79] Dumping scheduler output for model execution: SchedulerOutput(scheduled_new_reqs=[], scheduled_cached_reqs=CachedRequestData(req_ids=['0-b162ebf6'],resumed_req_ids=set(),new_token_ids_lens=[],all_token_ids_lens={},new_block_ids=[None],num_computed_tokens=[25],num_output_tokens=[1]), num_scheduled_tokens={0-b162ebf6: 1}, total_num_scheduled_tokens=1, scheduled_spec_decode_tokens={}, scheduled_encoder_inputs={}, num_common_prefix_blocks=[0, 0, 0, 0, 0, 1], finished_req_ids=[], free_encoder_mm_hashes=[], preempted_req_ids=[], has_structured_output_requests=false, pending_structured_output_tokens=false, num_invalid_spec_tokens=null, kv_connector_metadata=null, ec_connector_metadata=null, new_block_ids_to_zero=null)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201] EngineCore encountered a fatal error.
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201] Traceback (most recent call last):
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1192, in run_engine_core
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     engine_core.run_busy_loop()
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1233, in run_busy_loop
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     self._process_engine_step()
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1272, in _process_engine_step
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     outputs, model_executed = self.step_fn()
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]                               ^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 518, in step_with_batch_queue
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     exec_future = self.model_executor.execute_model(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 118, in execute_model
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     output.result()
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.__get_result()
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     raise self._exception
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 96, in collective_rpc
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return func(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/worker_base.py", line 345, in execute_model
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.worker.execute_model(scheduler_output)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return func(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 866, in execute_model
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     output = self.model_runner.execute_model(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return func(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4311, in execute_model
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     model_output = self._model_forward(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]                    ^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/worker/gpu_model_runner.py", line 3772, in _model_forward
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.model(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/compilation/cuda_graph.py", line 254, in __call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.runnable(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self._call_impl(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return forward_call(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4_mm.py", line 1594, in forward
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     hidden_states = self.language_model.model(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/compilation/decorators.py", line 520, in __call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.aot_compiled_fn(self, *args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/_dynamo/aot_compile.py", line 240, in __call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.fn(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4.py", line 1337, in forward
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     def forward(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/compilation/caching.py", line 217, in __call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self.optimized_call(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "<string>", line 302, in execution_fn
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "<string>", line 31, in __vllm_inlined_submods__11
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/torch/_ops.py", line 1275, in __call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return self._op(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/layers/attention/kv_transfer_utils.py", line 40, in wrapper
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return func(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/model_executor/layers/attention/attention.py", line 834, in unified_attention_with_output
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     self.impl.forward(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/backends/flashinfer.py", line 3407, in forward
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     self._run_vo_split_prefill(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/vllm/v1/attention/backends/flashinfer.py", line 2846, in _run_vo_split_prefill
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     wrapper.run(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/flashinfer/api_logging.py", line 2333, in _auto_dump_wrapper
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     return _inner(*args, **kwargs)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]            ^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/flashinfer/prefill.py", line 2493, in run
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     self._cached_module.paged_run(*run_args)
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "/root/venv/lib/python3.12/site-packages/flashinfer/prefill.py", line 720, in paged_run
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]     paged_run_func(
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201]   File "python/tvm_ffi/cython/function.pxi", line 929, in tvm_ffi.core.Function.__call__
+(EngineCore pid=5753) ERROR 06-13 11:23:39 [core.py:1201] RuntimeError: Error in function 'BatchPrefillWithPagedKVCacheDispatched' at /root/venv/lib/python3.12/site-packages/flashinfer/data/include/flashinfer/attention/prefill.cuh:2964: Unsupported max_mma_kv: 0
+Traceback (most recent call last):
+  File "/root/vllm_matched_kv_anchor.py", line 240, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/root/vllm_matched_kv_anchor.py", line 172, in main
+    chat = chat_smoke(llm, tokenizer, args.model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/vllm_matched_kv_anchor.py", line 121, in chat_smoke
+    output = llm.generate(
+             ^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 476, in generate
+    return self._run_completion(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/entrypoints/offline_utils.py", line 349, in _run_completion
+    return self._run_engine(use_tqdm=use_tqdm, output_type=output_type)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/entrypoints/offline_utils.py", line 595, in _run_engine
+    step_outputs = self.llm_engine.step()
+                   ^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 295, in step
+    outputs = self.engine_core.get_output()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 841, in get_output
+    raise self._format_exception(outputs) from None
+vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause.
+Processed prompts:   0%|          | 0/1 [00:01<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]

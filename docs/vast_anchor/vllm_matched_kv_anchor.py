@@ -142,6 +142,8 @@ def build_llm(args: argparse.Namespace) -> LLM:
         "enable_prefix_caching": True,
         "max_num_batched_tokens": args.max_num_batched_tokens,
     }
+    if args.attention_backend:
+        kwargs["attention_backend"] = args.attention_backend
     return LLM(**kwargs)
 
 
@@ -157,6 +159,7 @@ def main() -> int:
     parser.add_argument("--max-model-len", type=int, default=8192)
     parser.add_argument("--max-num-batched-tokens", type=int, default=4096)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
+    parser.add_argument("--attention-backend", default=None)
     parser.add_argument("--enforce-eager", action="store_true")
     args = parser.parse_args()
 
