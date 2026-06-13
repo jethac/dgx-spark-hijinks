@@ -11,6 +11,7 @@ REPO_ROOT="${REPO_ROOT:-/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live}"
 IMAGE="${IMAGE:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}"
 IMAGE_DIGEST="${IMAGE_DIGEST:-ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94}"
 MODELS="${MODELS:-google/gemma-4-12B-it google/gemma-4-26B-A4B-it google/gemma-4-31B-it}"
+ROW_LABELS="${ROW_LABELS:-bf16 fp8 fullnvfp4}"
 PORT="${PORT:-30000}"
 MEM_FRACTION_STATIC="${MEM_FRACTION_STATIC:-0.72}"
 PAGE_SIZE="${PAGE_SIZE:-1}"
@@ -304,6 +305,7 @@ PY
   echo "image=${IMAGE}"
   echo "image_digest=${IMAGE_DIGEST}"
   echo "models=${MODELS}"
+  echo "row_labels=${ROW_LABELS}"
   echo "mem_fraction_static=${MEM_FRACTION_STATIC}"
   echo "page_size=${PAGE_SIZE}"
   echo "context_length=${CONTEXT_LENGTH}"
@@ -321,26 +323,48 @@ overall_status=0
 for model in ${MODELS}; do
   model_slug="$(slugify "${model}")"
   mkdir -p "${OUT_DIR}/${model_slug}"
-  if ! run_one "${model}" "bf16" "auto" "0"; then
-    overall_status=1
+  for row_label in ${ROW_LABELS}; do
+    case "${row_label}" in
+      bf16)
+        if ! run_one "${model}" "bf16" "auto" "0"; then
+          overall_status=1
+          break
+        fi
+        ;;
+      fp8)
+        if ! run_one "${model}" "fp8" "fp8_e4m3" "0"; then
+          overall_status=1
+          break
+        fi
+        ;;
+      fullnvfp4)
+        if ! run_one "${model}" "fullnvfp4" "fp4_e2m1" "0"; then
+          overall_status=1
+          break
+        fi
+        ;;
+      *)
+        echo "unknown ROW_LABELS entry: ${row_label}" >&2
+        overall_status=2
+        break
+        ;;
+    esac
+  done
+  if [[ "${overall_status}" != "0" ]]; then
     break
   fi
-  if ! run_one "${model}" "fp8" "fp8_e4m3" "0"; then
-    overall_status=1
-    break
+  if [[ -f "${OUT_DIR}/${model_slug}/bf16_ppl.json" && -f "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" ]]; then
+    python3 scripts/sglang_prompt_ppl_sweep.py \
+      --compare-fp8 "${OUT_DIR}/${model_slug}/bf16_ppl.json" \
+      --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
+      --output "${OUT_DIR}/${model_slug}/compare_bf16_vs_fullnvfp4.json" || overall_status=1
   fi
-  if ! run_one "${model}" "fullnvfp4" "fp4_e2m1" "0"; then
-    overall_status=1
-    break
+  if [[ -f "${OUT_DIR}/${model_slug}/fp8_ppl.json" && -f "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" ]]; then
+    python3 scripts/sglang_prompt_ppl_sweep.py \
+      --compare-fp8 "${OUT_DIR}/${model_slug}/fp8_ppl.json" \
+      --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
+      --output "${OUT_DIR}/${model_slug}/compare_fp8_vs_fullnvfp4.json" || overall_status=1
   fi
-  python3 scripts/sglang_prompt_ppl_sweep.py \
-    --compare-fp8 "${OUT_DIR}/${model_slug}/bf16_ppl.json" \
-    --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
-    --output "${OUT_DIR}/${model_slug}/compare_bf16_vs_fullnvfp4.json" || overall_status=1
-  python3 scripts/sglang_prompt_ppl_sweep.py \
-    --compare-fp8 "${OUT_DIR}/${model_slug}/fp8_ppl.json" \
-    --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
-    --output "${OUT_DIR}/${model_slug}/compare_fp8_vs_fullnvfp4.json" || overall_status=1
 done
 
 python3 - <<PY
@@ -367,7 +391,8 @@ manifest = {
     "run_id": "${RUN_ID}",
     "image": "${IMAGE}",
     "image_digest": "${IMAGE_DIGEST}",
-    "scope": "SGLang Gemma 4 AR ladder; sequential bf16/auto, fp8, and full-NVFP4 K+V; graphs disabled; one server at a time",
+    "row_labels": "${ROW_LABELS}".split(),
+    "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,
 }
