@@ -44,7 +44,18 @@ if [[ "${1:-}" == "run" ]]; then
   exit 0
 fi
 if [[ "${1:-}" == "logs" ]]; then
-  echo "fake server log"
+  if [[ "${FAKE_DOCKER_E4B_FP8_RED:-0}" == "1" ]]; then
+    cat <<'LOG'
+SGLang Gemma4 FlashInfer geometry label=extend_paged_vosplit0 layer=5
+planned=FlashInferWrapperGeometry(num_qo_heads=8, num_kv_heads=2, head_dim=512, head_dim_vo=256)
+[flashinfer][prefill-debug] call_id=1 path=paged compiled={dtype_kv=__nv_fp8_e4m3,head_dim_qk=512,head_dim_vo=256} runtime={page_size=1,split_kv=1,cta_tile_q=64}
+tvm.error.InternalError: Error in function 'BatchPrefillWithPagedKVCacheDispatched'
+FlashInfer Internal Error: Invalid configuration :
+NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4 NUM_WARPS_KV=1
+LOG
+  else
+    echo "fake server log"
+  fi
   exit 0
 fi
 if [[ "${1:-}" == "inspect" ]]; then
@@ -142,3 +153,28 @@ assert audit["ladder_status"] == "blocked-known-red-dependencies"
 assert manifest["blocker_audit"].endswith("/blocker_audit.json")
 PY
 echo "PASS blocker_audit_artifacts"
+
+OUT_DIR_E4B="${TMP}/e4b_fp8_dispatch_capture"
+mkdir -p "${OUT_DIR_E4B}"
+run_case "e4b_fp8_override_writes_dispatch_audit" 1 '"model": "google/gemma-4-E4B-it"' \
+  env MODELS="google/gemma-4-E4B-it" ROW_LABELS="fp8" \
+    ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
+    SGLANG_AR_LADDER_OVERRIDE_REASON="test dispatcher fix replay" \
+    FAKE_DOCKER_EMPTY=1 \
+    FAKE_DOCKER_E4B_FP8_RED=1 \
+    OUT_DIR="${OUT_DIR_E4B}" \
+    RUN_ID="test_e4b_fp8_dispatch_capture" \
+    CORPUS="${TMP}/corpus.md" \
+    READY_TIMEOUT_S=1 \
+    bash "${RUNNER}"
+
+python3 - <<PY
+import json
+from pathlib import Path
+path = Path("${OUT_DIR_E4B}") / "google-gemma-4-e4b-it" / "fp8_dispatch_audit.json"
+audit = json.loads(path.read_text(encoding="utf-8"))
+assert audit["known_red"] is True
+assert audit["signals"]["matching_trait_count"] >= 1
+assert audit["signals"]["matching_geometry_count"] >= 1
+PY
+echo "PASS e4b_fp8_dispatch_audit_artifact"

@@ -184,6 +184,29 @@ capture_logs() {
   docker logs "${name}" >"${out}.tmp" 2>&1 && mv "${out}.tmp" "${out}" || rm -f "${out}.tmp"
 }
 
+maybe_audit_e4b_fp8_dispatch() {
+  local model="$1"
+  local label="$2"
+  local model_dir="$3"
+  local server_log="$4"
+  local install_log="$5"
+  if [[ "${model}" != "google/gemma-4-E4B-it" || "${label}" != "fp8" ]]; then
+    return 0
+  fi
+  local inputs=()
+  [[ -f "${server_log}" ]] && inputs+=("${server_log}")
+  [[ -f "${install_log}" ]] && inputs+=("${install_log}")
+  if [[ "${#inputs[@]}" == "0" ]]; then
+    echo "no logs available for E4B fp8 dispatch audit" >"${model_dir}/${label}_dispatch_audit_stderr.log"
+    return 0
+  fi
+  python3 scripts/sglang_e4b_fp8_dispatch_audit.py \
+    "${inputs[@]}" \
+    --output "${model_dir}/${label}_dispatch_audit.json" \
+    >"${model_dir}/${label}_dispatch_audit_stdout.log" \
+    2>"${model_dir}/${label}_dispatch_audit_stderr.log" || true
+}
+
 run_one() {
   local model="$1"
   local label="$2"
@@ -334,6 +357,7 @@ PY
     capture_logs "${name}" "${server_log}" || true
     docker inspect "${name}" >"${inspect_json}" 2>/dev/null || true
     docker rm -f "${name}" >/dev/null 2>&1 || true
+    maybe_audit_e4b_fp8_dispatch "${model}" "${label}" "${model_dir}" "${server_log}" "${install_log}" || true
     echo "server_not_ready" >"${model_dir}/${label}_status.txt"
     return 1
   fi
@@ -381,6 +405,7 @@ PY
     capture_logs "${name}" "${server_log}" || true
     docker inspect "${name}" >"${inspect_json}" 2>/dev/null || true
     docker rm -f "${name}" >/dev/null 2>&1 || true
+    maybe_audit_e4b_fp8_dispatch "${model}" "${label}" "${model_dir}" "${server_log}" "${install_log}" || true
     echo "ppl_request_failed" >"${model_dir}/${label}_status.txt"
     return 1
   fi
@@ -388,6 +413,7 @@ PY
   capture_logs "${name}" "${server_log}" || true
   docker inspect "${name}" >"${inspect_json}" 2>/dev/null || true
   docker rm -f "${name}" >/dev/null 2>&1 || true
+  maybe_audit_e4b_fp8_dispatch "${model}" "${label}" "${model_dir}" "${server_log}" "${install_log}" || true
 
   python3 - <<PY
 import json

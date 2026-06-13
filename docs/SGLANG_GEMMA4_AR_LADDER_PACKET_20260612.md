@@ -91,6 +91,9 @@ It records:
 
 - `blocker_audit.json`, which captures the FlashInfer/SGLang dependency refs
   used to justify the run or diagnostic override;
+- `fp8_dispatch_audit.json` for `google/gemma-4-E4B-it` fp8 rows, when logs
+  are available, to classify the known D512/VO256 `NUM_MMA_KV=1` dispatcher
+  red automatically;
 - baked-image provenance and package/binary proof lines;
 - chat determinism for a low-entropy Tokyo prompt;
 - supplied-token PPL using the repository markdown corpus;
