@@ -1,0 +1,159 @@
+{
+  "doc_checks": [
+    {
+      "count_phrases": [
+        {
+          "parsed_count": 9,
+          "phrase": "queue currently contains nine items"
+        }
+      ],
+      "findings": [],
+      "ok": true,
+      "path": "docs/LIVE_GB10_RUNBOOK.md"
+    },
+    {
+      "count_phrases": [
+        {
+          "parsed_count": 9,
+          "phrase": "live queue audit is green with nine items"
+        }
+      ],
+      "findings": [],
+      "ok": true,
+      "path": "docs/SOLUTIONS_STATUS.md"
+    }
+  ],
+  "duplicate_ids": [],
+  "live_gb10_required_count": 9,
+  "next_live_tasks": [
+    {
+      "id": "vllm_gemma3_flashinfer_prefill_debug",
+      "issue": "#6/#7",
+      "lane": "vllm-gemma-nvfp4-kv",
+      "priority": 10,
+      "task_packet": "tasks/vllm_gemma3_flashinfer_prefill_debug_packet_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "vllm_gemma_nvfp4_kv_quality_gate",
+      "issue": "#6/#7",
+      "lane": "vllm-gemma-nvfp4-kv",
+      "priority": 15,
+      "task_packet": "tasks/vllm_gemma_nvfp4_kv_quality_gate_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "sglang_gemma4_ar_ladder_after_fi_fix",
+      "issue": "#18/#20",
+      "lane": "sglang-gemma4-ar-nvfp4",
+      "priority": 20,
+      "task_packet": "docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md",
+      "task_ref": null
+    },
+    {
+      "id": "vllm_qwen_clean_ppl_32k_128k",
+      "issue": "#7/#20",
+      "lane": "vllm-qwen-nvfp4-kv-quality",
+      "priority": 30,
+      "task_packet": "tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md",
+      "task_ref": null
+    },
+    {
+      "id": "llamacpp_native_fp4_correctness_speed",
+      "issue": "#17/#20",
+      "lane": "llamacpp-native-fp4",
+      "priority": 40,
+      "task_packet": "tasks/llamacpp_nvfp4_correctness_speed_packet_20260608.md",
+      "task_ref": "tasks/counterpart_evidence_tasks.jsonl#llamacpp_native_fp4_gguf"
+    }
+  ],
+  "offline_or_non_gb10_count": 0,
+  "ok": true,
+  "priority_order_ok": true,
+  "queue": "tasks/live_gb10_queue.jsonl",
+  "row_checks": [
+    {
+      "expected_artifact_count": 3,
+      "findings": [],
+      "id": "vllm_gemma3_flashinfer_prefill_debug",
+      "line": 1,
+      "ok": true,
+      "priority": 10,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 3,
+      "findings": [],
+      "id": "vllm_gemma_nvfp4_kv_quality_gate",
+      "line": 2,
+      "ok": true,
+      "priority": 15,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 0,
+      "findings": [],
+      "id": "sglang_gemma4_ar_ladder_after_fi_fix",
+      "line": 3,
+      "ok": true,
+      "priority": 20,
+      "task_packet_artifact_mentions_checked": false
+    },
+    {
+      "expected_artifact_count": 5,
+      "findings": [],
+      "id": "vllm_qwen_clean_ppl_32k_128k",
+      "line": 4,
+      "ok": true,
+      "priority": 30,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 5,
+      "findings": [],
+      "id": "llamacpp_native_fp4_correctness_speed",
+      "line": 5,
+      "ok": true,
+      "priority": 40,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 2,
+      "findings": [],
+      "id": "flashinfer_fp4_gemm_tile_smem",
+      "line": 6,
+      "ok": true,
+      "priority": 50,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 4,
+      "findings": [],
+      "id": "llamacpp_supplied_loglikelihood_endpoint_smoke",
+      "line": 7,
+      "ok": true,
+      "priority": 60,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 6,
+      "findings": [],
+      "id": "llamacpp_larger_qwen3_gguf",
+      "line": 8,
+      "ok": true,
+      "priority": 70,
+      "task_packet_artifact_mentions_checked": true
+    },
+    {
+      "expected_artifact_count": 0,
+      "findings": [],
+      "id": "qwen_speed_lane_shared_manifest",
+      "line": 9,
+      "ok": true,
+      "priority": 80,
+      "task_packet_artifact_mentions_checked": false
+    }
+  ],
+  "schema": "live-task-queue-audit/v1",
+  "task_count": 9
+}

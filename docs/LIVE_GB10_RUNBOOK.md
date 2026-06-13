@@ -71,10 +71,13 @@ The queue currently contains nine items:
    - packet: `tasks/vllm_gemma_nvfp4_kv_quality_gate_20260609.md`
    - issue: `#6/#7`
    - why: Gemma NVFP4-KV needs Gemma-specific quality evidence before the ladder climbs.
-3. `sglang_qwen_fp4kv_dense_cache_trace`
-   - packet: `tasks/sglang_qwen_fp4kv_dense_cache_trace_probe_20260609.md`
+3. `sglang_gemma4_ar_ladder_after_fi_fix`
+   - packet: `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`
    - issue: `#18/#20`
-   - why: SGLang Qwen FP4-KV is red only when cached FP4 prefix reuse is involved.
+   - why: the packaged SGLang image has a scoped E4B multimodal-prefix
+     full-NVFP4 green row, but the claim-grade Gemma 4 AR ladder is blocked
+     by the shared 12B `+0.40` long-context NVFP4 red and the E4B fp8
+     D512/VO256 dispatcher red.
 4. `vllm_qwen_clean_ppl_32k_128k`
    - packet: `tasks/vllm_qwen_nvfp4_kv_clean_ppl_sweep_20260609.md`
    - issue: `#7/#20`
@@ -106,7 +109,9 @@ The queue currently contains nine items:
 
 Do not run these as queue items unless their blockers change:
 
-- SGLang Gemma serving rows: wait until SGLang Qwen FP4-KV quality is green.
+- SGLang Gemma 4 AR ladder rows: wait until the shared FlashInfer/numerics fix
+  for the 12B full-NVFP4 `+0.40` red and the E4B fp8 dispatcher fix land;
+  then rerun through `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
 - SGLang DFlash/EAGLE rows: wait until ordinary Qwen/SGLang quality is stable.
 - vLLM Qwen NVFP4-KV capacity row from `counterpart_evidence_tasks.jsonl`: capacity is
   already recorded; the next Qwen KV task is quality at longer context.
@@ -141,5 +146,6 @@ python3 scripts/solution_coverage_audit.py \
 - A build flag is not runtime dispatch.
 - Top-N logprobs are not supplied-token loglikelihood unless every supplied token is
   present.
-- No SGLang Gemma climb until Qwen FP4-KV quality is green.
+- No broad SGLang Gemma 4 claim until default serving behavior with
+  radix/cache reuse is green or the exclusions are explicitly labeled.
 - No upstream PRs until there is a matched before/after GB10 story.
