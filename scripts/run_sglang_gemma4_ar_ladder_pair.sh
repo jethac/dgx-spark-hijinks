@@ -139,6 +139,8 @@ run_one() {
     echo "sglang_fp4_kv_k_global_scale_multiplier=${SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER:-}"
     echo "sglang_fp4_kv_v_global_scale_multiplier=${SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER:-}"
     echo "sglang_fp4_kv_trace_global_scale=${SGLANG_FP4_KV_TRACE_GLOBAL_SCALE:-}"
+    echo "sglang_fp4_kv_trace_sf_saturation=${SGLANG_FP4_KV_TRACE_SF_SATURATION:-}"
+    echo "sglang_fp4_kv_trace_layers=${SGLANG_FP4_KV_TRACE_LAYERS:-}"
     echo "started_at=$(TZ=Asia/Tokyo date -Is)"
     free -h
   } >"${model_dir}/${label}_preflight.log"
@@ -158,6 +160,8 @@ run_one() {
     -e SGLANG_FP4_KV_TRACE_MODULE=1 \
     -e SGLANG_FP4_KV_TRACE_BACKEND="${FP4_KV_TRACE_BACKEND}" \
     -e SGLANG_FP4_KV_TRACE_GLOBAL_SCALE="${SGLANG_FP4_KV_TRACE_GLOBAL_SCALE:-}" \
+    -e SGLANG_FP4_KV_TRACE_SF_SATURATION="${SGLANG_FP4_KV_TRACE_SF_SATURATION:-}" \
+    -e SGLANG_FP4_KV_TRACE_LAYERS="${SGLANG_FP4_KV_TRACE_LAYERS:-}" \
     -e SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER:-}" \
     -e SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER:-}" \
     -e SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER:-}" \
