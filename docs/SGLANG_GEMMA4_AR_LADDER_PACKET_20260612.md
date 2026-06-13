@@ -100,6 +100,17 @@ It records:
 - bf16-vs-full-NVFP4 and fp8-vs-full-NVFP4 PPL comparisons;
 - server logs containing Gemma KV pool geometry lines.
 
+After a complete rerun, gate the claim with:
+
+```bash
+python3 scripts/sglang_gemma4_ar_claim_audit.py results/<run_id>/manifest.json \
+  --max-delta-nats 0.25 \
+  --output results/<run_id>/claim_audit.json
+```
+
+The default threshold is a conservative mechanical tripwire, not a public
+quality promise. Tighten it when the publication claim needs a stricter bar.
+
 ## Stop-On-Red
 
 Stop the ladder at the first repeated failure mode and commit the artifacts:
