@@ -69,7 +69,7 @@ Clean Spark support requires more than runtime device capability. A row should e
 1. No clean, official vLLM Spark container is blessed across Gemma and Qwen.
 2. The fastest local vLLM row is AEON's Gemma image, not a `jethac` fork or upstream official Spark release.
 3. Qwen3.6 NVFP4+DFlash now has passing AEON, AEON-FA2-derived `jethac/vllm`, and clean-FA2 `jethac/vllm` serving rows, but only with API-level thinking disabled; native-target proof exists for FA2 only, not for the FP4 weight/MoE path.
-4. SGLang has proven small-Qwen fp8/BF16 rows and scoped Gemma/DiffusionGemma checkpoints, but no official broadly-blessed Gemma path yet. Mixed-KV and full-NVFP4 rows remain scope-labeled, and the newest Gemma4 source-stack image is only a build/provenance carrier until Spark runtime gates pass.
+4. SGLang has proven small-Qwen fp8/BF16 rows and scoped Gemma/DiffusionGemma checkpoints, but no official broadly-blessed Gemma path yet. Mixed-KV and full-NVFP4 rows remain scope-labeled; the newest Gemma4 source-stack image has a scoped E4B full-NVFP4 multimodal/mm-prefix runtime gate, not a broad AR ladder claim.
 5. FlashInfer fork evidence is strong at source/JIT and standalone-kernel level, but not yet packaged as a clean runtime dependency with serving wins.
 6. llama.cpp is practical and fast, but its GGUF accuracy path and native FP4/MXFP4 path remain separate workstreams.
 

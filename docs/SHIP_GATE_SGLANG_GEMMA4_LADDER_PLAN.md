@@ -25,12 +25,14 @@ variable — the KV dtype — and share everything else:
 
 Report: `mean NLL_bf16`, `mean NLL_nvfp4`, `Δ = NLL_nvfp4 − NLL_bf16` (nats/token), and
 the per-position sweep. **A cross-artifact delta (bf16 from image A, NVFP4 from image B)
-is contaminated and must be labeled non-claim-grade.** This is exactly the open caveat on
-the SGLang 12B full-NVFP4 row (Codex 0105: `Δ=+0.403` nats/token is cross-artifact).
+is contaminated and must be labeled non-claim-grade.** The SGLang 12B row is now a matched
+red (`+0.402969` nats/token, `results/sglang_gemma4_12b_ar_matched_bf16_fullnvfp4_ctx8185_prefix4096_20260613T153712JST/STOP_SUMMARY.md`),
+and Claude's vLLM discriminator reproduced the same class of long-context loss (mail 0138).
 
-Capacity is a separate, independent claim: KV-token ratio at matched K+V byte budget
-(`~1.28x` mixed denominator for SGLang today; `~1.78x`/`3.556x` full-NVFP4 only after the
-structural route lands — do **not** quote the pre-fix allocator-token `1.78x`).
+Capacity is a separate, independent claim: KV-token ratio at matched K+V byte budget. Full
+NVFP4 K+V reports the expected `~3.556x` raw cache-token denominator versus bf16 on the
+short E4B checkpoints; long-context quality is the open blocker. Mixed-KV remains a separate
+fallback path and must not be conflated with full-NVFP4 rows.
 
 ---
 
@@ -38,9 +40,10 @@ structural route lands — do **not** quote the pre-fix allocator-token `1.78x`)
 
 | Rung | SGLang state (ledger) | Gap to claim-grade | GPU? |
 |---|---|---|---|
-| **12B** | full-NVFP4 GREEN as dispatcher diagnostic (mail 0105); PPL 144.74 / NLL 4.975 | **Matched bf16-vs-NVFP4 rerun** in one image/harness (current Δ is cross-artifact) | yes |
-| **26B-A4B (E4B)** | Rung-0 RED: D=512 decode hits `Unsupported max_mma_kv: 0`; VO-split decode routing staged (`SGLANG_FLASHINFER_VOSPLIT=1`, `jethac/sglang@9d78a007f`), static-checked only | **Rerun with VO-split decode** → first coherent serving row; then matched mixed-KV delta | yes |
-| **31B** | Writer-roundtrip GREEN at D=512 VO-split (`8d85fff9`); real-geometry probes GREEN; no serving row | **First serving bring-up** + matched delta; watch the 31B coherence open bug | yes |
+| **12B** | matched bf16-vs-full-NVFP4 row is RED by `+0.402969` nats/token at ctx 8185 / prefix 4096; multimodal short smoke is scoped green | Wait for Claude's FlashInfer/numerics fix, then rerun the matched row. Do not chase SGLang radix/merge for this red; mail 0138 exonerates it | yes, after fix |
+| **26B-A4B** | not yet claim-grade in SGLang AR ladder; same D=512 global VO-split path as E4B/31B plus MoE | run only after the long-context quality fix and current package image are ready, unless doing an explicitly scoped bring-up diagnostic | yes |
+| **31B** | no SGLang serving row banked; D=512 VO-split scaffolding/probes exist, but serving must be proven with the packaged SGLang path | first SGLang serving bring-up + matched delta after the shared quality/dispatcher blockers are resolved | yes |
+| **E4B scoped checkpoint** | bf16 and full-NVFP4 short rows are green; baked mm-prefix image row is green; fp8 comparator is red in FlashInfer dispatcher | hold fp8 comparator until D512/VO256 1-byte-KV dispatcher fix lands | yes, after fix |
 
 **vLLM anchor caveat (confirm before quoting "matches vLLM"):** the vLLM lane has
 Gemma 3 + Qwen matched-PPL claim rows and the DG-V DiffusionGemma green, **but no banked
@@ -53,18 +56,18 @@ Gemma 4 12B matched bf16-vs-NVFP4** (my lane, P520/Spark). Flagging rather than 
 
 ## 3. Critical path (priority order, lane + GPU mapped)
 
-1. **E4B rung-0 VO-split decode rerun** *(Codex / SGLang GPU window)* — graduate the staged
-   `SGLANG_FLASHINFER_VOSPLIT=1` route from scaffold to green. This is the immediate
-   blocker and the kernel+routing are already staged; it needs only the GPU window.
-   Success = D=512 global decode no longer hits `max_mma_kv: 0`; coherent generation.
-2. **vLLM Gemma 4 12B matched bf16-vs-NVFP4** *(Claude / vLLM lane, P520 or Spark)* —
-   establish the ground-truth anchor the SGLang 12B must match. Smallest tractable rung.
-3. **SGLang 12B matched rerun** *(Codex)* — paired bf16-vs-NVFP4 in one image → claim-grade.
-4. **31B serving bring-up** *(both lanes)* — gated on the 31B coherence bug being understood.
+1. **Claude FlashInfer/numerics fix for long-context NVFP4 loss** — mail 0138 proves the
+   12B `+0.40` class is general, not an SGLang structural radix bug.
+2. **SGLang 12B matched rerun** *(Codex)* — same ctx 8185 / prefix 4096 shape, same image
+   and corpus, flip only KV dtype. This is the gate that turns the current scoped red into a
+   claim-grade pass or a new blocker.
+3. **FlashInfer dispatcher fix for E4B fp8 D512/VO256 1-byte KV** *(Claude/FI)* — then rerun
+   the SGLang E4B fp8 comparator so the comparison matrix is complete.
+4. **SGLang 26B-A4B and 31B serving bring-up / matched rows** *(Codex)* — after the shared
+   quality/dispatcher blockers clear, using the current packaged-image path.
 
-Items 1 and 2 are independent → can run in parallel across the two GPUs (coordinate via
-the `agent_bus/p520_gpu_queue.md` marker; Spark is bandwidth-bound, P520 is the sm_120
-kernel bench).
+Do not spend Spark windows repeating known reds unless a dependency changed or the row is
+explicitly a scoped diagnostic.
 
 ---
 
