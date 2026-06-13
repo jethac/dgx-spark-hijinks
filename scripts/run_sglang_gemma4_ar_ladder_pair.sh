@@ -136,6 +136,15 @@ fi
 cd "${REPO_ROOT}"
 mkdir -p "${OUT_DIR}"
 
+if ! python3 scripts/sglang_gemma4_ar_ladder_blocker_audit.py \
+  --output "${OUT_DIR}/blocker_audit.json" \
+  >"${OUT_DIR}/blocker_audit_stdout.log" \
+  2>"${OUT_DIR}/blocker_audit_stderr.log"; then
+  echo "failed to write SGLang Gemma 4 AR ladder blocker audit" >&2
+  cat "${OUT_DIR}/blocker_audit_stderr.log" >&2 || true
+  exit 2
+fi
+
 if [[ ! -f "${CORPUS}" ]]; then
   python3 scripts/build_ppl_corpus.py \
     --repo-root "${REPO_ROOT}" \
@@ -438,6 +447,7 @@ PY
   echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
   echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
   echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
+  echo "blocker_audit=${OUT_DIR}/blocker_audit.json"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   git rev-parse HEAD
   docker image inspect "${IMAGE}" --format '{{json .RepoDigests}}' 2>/dev/null || true
@@ -529,6 +539,7 @@ manifest = {
     "image": "${IMAGE}",
     "image_digest": "${IMAGE_DIGEST}",
     "row_labels": "${ROW_LABELS}".split(),
+    "blocker_audit": str(out / "blocker_audit.json"),
     "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,

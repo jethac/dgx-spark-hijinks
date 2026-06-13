@@ -89,6 +89,8 @@ For each model, the packet runs three sequential servers:
 
 It records:
 
+- `blocker_audit.json`, which captures the FlashInfer/SGLang dependency refs
+  used to justify the run or diagnostic override;
 - baked-image provenance and package/binary proof lines;
 - chat determinism for a low-entropy Tokyo prompt;
 - supplied-token PPL using the repository markdown corpus;
