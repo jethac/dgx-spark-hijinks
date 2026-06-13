@@ -1,0 +1,7 @@
+{
+  "elapsed_s": 358.067,
+  "error": "RemoteDisconnected('Remote end closed connection without response')",
+  "ok": false,
+  "run_id": "sglang_gemma4_12b_ar_claim_ctx8185_prefix4096_20260613T105511JST_google-gemma-4-12b-it_fp8",
+  "schema": "sglang-prompt-ppl-sweep/v1"
+}
