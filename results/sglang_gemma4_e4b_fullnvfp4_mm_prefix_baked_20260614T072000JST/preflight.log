@@ -1,0 +1,17 @@
+run_id=sglang_gemma4_e4b_fullnvfp4_mm_prefix_baked_20260614T072000JST
+started_at=2026-06-14T07:20:00+09:00
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+tag=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-mm-prefix-f920e2d-arm64
+model=google/gemma-4-E4B-it
+kv_dtype=fp4_e2m1/full NVFP4 K+V
+context_length=512
+mem_fraction_static=0.40
+source_overlay=0
+parent_commit=b5d7e1d0e5c473c8771c8bc3aefac6dee0a5fe19
+sglang_commit=f920e2d88af68031b745494f5435efb71ac93562
+flashinfer_commit=f99323bd7d1cc88d9445202c12934070be754e2d
+marker=absent
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.8Gi        73Gi        21Mi        42Gi       114Gi
+Swap:           15Gi       503Mi        15Gi
+container_id=0fd46edc23d022ff47655f7902dfbd4b436b03e750de20caa7540a34978b38ee

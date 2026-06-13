@@ -9,23 +9,24 @@ multimodal bidirectional path — coordinating with Claude (vLLM/FlashInfer lane
 - The **global-scale "≈2× too small" root cause is RETRACTED** (Claude mail 0132). Do not pursue
   `calculate_kv_scales`/global-scale calibration as *the* fix — it isn't (your multiplier only got
   +0.403 → +0.344, and on vLLM `calculate_kv_scales` *breaks* nvfp4).
-- The +0.40 12B text red **does NOT reproduce at ctx 4096** (Claude). The prime suspect is the
-  **long-context prefix-reuse / ragged-suffix + paged-prefix partial-state merge under FP4-K**
-  (the Qwen-style LSE sensitivity in `SGLANG_GEMMA4_RUNG_PREP.md`) — i.e. your radix/pool path.
+- The +0.40 12B text red is **general, not SGLang-radix-specific** (Claude mail 0138).
+  vLLM reproduces it at the same ctx-8185 shape (`+0.4215` single prefill), while chunked/reuse
+  paged+ragged merge is smaller (`+0.1906`). Do **not** rewrite SGLang radix / partial-state
+  merge for this red; wait for Claude's FlashInfer/numerics fix, then rerun the matched SGLang
+  12B row.
 
 ## Tasks (priority order)
-1. **The +0.40 12B text red — the one remaining blocker.** *Wait for Claude's lane verdict*
-   (general bug vs SGLang-radix-specific). If **SGLang-radix-specific**: fix the partial-state-merge
-   / radix-reuse path (make cached+suffix attention behave like one paged attention over the full
-   cache, per the rung-prep "structural route"). If **general**: apply Claude's fix and verify on
-   SGLang. Confirm with a matched bf16-vs-NVFP4 12B row at the failing shape (ctx 8185, prefix 4096).
+1. **The +0.40 12B text red — FlashInfer/numerics lane blocker.** Claude owns the mechanism/fix.
+   Once it lands, apply the FlashInfer update and verify with a matched bf16-vs-NVFP4 SGLang
+   12B row at the failing shape (ctx 8185, prefix 4096). Keep the current SGLang row scoped red
+   until then.
 2. **Complete the SGLang Gemma-4 AR ladder (Task #40, the ship gate):** matched bf16-vs-NVFP4
    12B / 26B-A4B / 31B once the quality red clears. Matched-claim rule: one image/corpus/shape per
    pair, flip only the KV dtype.
 3. **Clear the E4B fp8 comparator red.**
-4. **Multimodal bidirectional path:** SGLang images currently fall back to causal
-   (`requires TritonAttnBackend`). Wire Claude's FlashInfer mm-prefix bidirectional masking into
-   SGLang's image path so image spans attend bidirectionally on FlashInfer (not Triton-causal).
+4. **Multimodal bidirectional path:** E4B full-NVFP4 is green on a baked SGLang package image
+   carrying `jethac/sglang@f920e2d88a` (mail 0139). Extend/reuse this path for remaining Gemma 4
+   rows as needed, preserving scope labels until matched quality/capacity gates are complete.
 
 ## When/how to communicate with Claude
 Channel: committed `mail/NNNN_codex-to-claude_subject.md`. **Before writing, run

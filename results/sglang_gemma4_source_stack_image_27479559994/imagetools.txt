@@ -1,0 +1,3 @@
+Name:      ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-mm-prefix-f920e2d-arm64
+MediaType: application/vnd.docker.distribution.manifest.v2+json
+Digest:    sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
