@@ -33,6 +33,10 @@ rows after the Ubicloud-built source-stack image.
 - Short smoke or single-arm diagnostic rows are still allowed when they answer a
   new question, but label them as scoped diagnostics and do not quote capacity or
   quality as ladder-complete.
+- The runner enforces this state by refusing known-blocked 12B full-NVFP4 and
+  E4B fp8 rows unless `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` is set. Use that
+  override only after a relevant FlashInfer/SGLang dependency changes or for an
+  explicitly labeled diagnostic replay.
 
 ## Run
 
@@ -44,6 +48,13 @@ git fetch origin
 git checkout epoch2
 git pull --ff-only
 
+bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+```
+
+After the shared quality or dispatcher fix lands, make the rerun intent explicit:
+
+```bash
+ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 ```
 

@@ -35,6 +35,49 @@ MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-1}"
 CLAUDE_MARKER="${CLAUDE_MARKER:-/home/jethac/spark_tmp/CLAUDE_WINDOW_OPEN}"
 FP4_KV_TRACE_BACKEND="${SGLANG_FP4_KV_TRACE_BACKEND:-0}"
 SOURCE_OVERLAY="${SGLANG_SOURCE_OVERLAY:-0}"
+ALLOW_KNOWN_BLOCKED="${ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER:-0}"
+
+contains_item() {
+  local haystack="$1"
+  local needle="$2"
+  local item
+  for item in ${haystack}; do
+    if [[ "${item}" == "${needle}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+if [[ "${ALLOW_KNOWN_BLOCKED}" != "1" ]]; then
+  if contains_item "${MODELS}" "google/gemma-4-12B-it" \
+    && contains_item "${ROW_LABELS}" "fullnvfp4"; then
+    cat >&2 <<'EOF'
+Refusing known-blocked SGLang Gemma 4 12B full-NVFP4 AR row.
+
+Current evidence: matched 12B ctx8185/prefix4096 is red by +0.402969
+nats/token, and mail/0138 classifies that as a shared FlashInfer/numerics
+blocker, not an SGLang radix/merge fix. Re-run only after the dependency changes
+or for an explicitly labeled diagnostic:
+
+  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+EOF
+    exit 2
+  fi
+  if contains_item "${MODELS}" "google/gemma-4-E4B-it" \
+    && contains_item "${ROW_LABELS}" "fp8"; then
+    cat >&2 <<'EOF'
+Refusing known-blocked SGLang Gemma 4 E4B fp8 comparator row.
+
+Current evidence: E4B fp8 reaches readiness but fails in FlashInfer D512/VO256
+1-byte-KV paged prefill. Re-run only after the dispatcher dependency changes or
+for an explicitly labeled diagnostic:
+
+  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+EOF
+    exit 2
+  fi
+fi
 
 if [[ -e "${CLAUDE_MARKER}" ]]; then
   echo "CLAUDE_WINDOW_OPEN present; yielding" >&2
