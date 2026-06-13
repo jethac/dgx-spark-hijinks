@@ -4,7 +4,8 @@
 # Runs one or more Gemma 4 autoregressive sizes through sequential bf16/auto-KV,
 # fp8, and full-NVFP4 K+V servers. The baked source-stack image keeps its editable
 # SGLang/FlashInfer sources under /work, so this script mounts the hijinks repo
-# at /hijinks and never overlays /work.
+# at /hijinks. Set SGLANG_SOURCE_OVERLAY=1 only for diagnostic rows that need
+# to replace /work/third_party/sglang with the checked-out source tree.
 set -euo pipefail
 
 REPO_ROOT="${REPO_ROOT:-/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live}"
@@ -33,6 +34,7 @@ LOGPROB_START_LEN="${LOGPROB_START_LEN:-${REUSE_PREFIX_LEN}}"
 MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-1}"
 CLAUDE_MARKER="${CLAUDE_MARKER:-/home/jethac/spark_tmp/CLAUDE_WINDOW_OPEN}"
 FP4_KV_TRACE_BACKEND="${SGLANG_FP4_KV_TRACE_BACKEND:-0}"
+SOURCE_OVERLAY="${SGLANG_SOURCE_OVERLAY:-0}"
 
 if [[ -e "${CLAUDE_MARKER}" ]]; then
   echo "CLAUDE_WINDOW_OPEN present; yielding" >&2
@@ -105,6 +107,10 @@ run_one() {
   local ppl_stderr="${model_dir}/${label}_ppl_stderr.log"
   local inspect_json="${model_dir}/${label}_container_inspect.json"
   local flashinfer_cache_dir="/tmp/flashinfer-cache-${name}"
+  local docker_mount_args=(
+    -v "${REPO_ROOT}:/hijinks"
+    -v "${HF_CACHE}:/root/.cache/huggingface"
+  )
 
   mkdir -p "${model_dir}"
   docker rm -f "${name}" >/dev/null 2>&1 || true
@@ -112,6 +118,9 @@ run_one() {
   local kv_args=()
   if [[ "${kv_dtype}" != "auto" ]]; then
     kv_args+=(--kv-cache-dtype "${kv_dtype}")
+  fi
+  if [[ "${SOURCE_OVERLAY}" == "1" ]]; then
+    docker_mount_args+=(-v "${REPO_ROOT}/third_party/sglang:/work/third_party/sglang")
   fi
 
   {
@@ -125,6 +134,11 @@ run_one() {
     echo "mem_fraction_static=${MEM_FRACTION_STATIC}"
     echo "page_size=${PAGE_SIZE}"
     echo "context_length=${CONTEXT_LENGTH}"
+    echo "sglang_source_overlay=${SOURCE_OVERLAY}"
+    echo "sglang_fp4_kv_global_scale_multiplier=${SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER:-}"
+    echo "sglang_fp4_kv_k_global_scale_multiplier=${SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER:-}"
+    echo "sglang_fp4_kv_v_global_scale_multiplier=${SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER:-}"
+    echo "sglang_fp4_kv_trace_global_scale=${SGLANG_FP4_KV_TRACE_GLOBAL_SCALE:-}"
     echo "started_at=$(TZ=Asia/Tokyo date -Is)"
     free -h
   } >"${model_dir}/${label}_preflight.log"
@@ -132,8 +146,7 @@ run_one() {
   docker run -d --name "${name}" --gpus all --ipc=host --network=host \
     --memory "${GB10_DOCKER_MEMORY}" --memory-swap "${GB10_DOCKER_MEMORY_SWAP}" \
     -w /hijinks \
-    -v "${REPO_ROOT}:/hijinks" \
-    -v "${HF_CACHE}:/root/.cache/huggingface" \
+    "${docker_mount_args[@]}" \
     -e TORCH_CUDA_ARCH_LIST=12.1a \
     -e FLASHINFER_CACHE_DIR="${flashinfer_cache_dir}" \
     -e FLASHINFER_EXTRA_CUDAFLAGS="-gencode=arch=compute_121a,code=sm_121a" \
@@ -144,6 +157,10 @@ run_one() {
     -e SGLANG_FP4_KV_MIXED_KV="${mixed_kv}" \
     -e SGLANG_FP4_KV_TRACE_MODULE=1 \
     -e SGLANG_FP4_KV_TRACE_BACKEND="${FP4_KV_TRACE_BACKEND}" \
+    -e SGLANG_FP4_KV_TRACE_GLOBAL_SCALE="${SGLANG_FP4_KV_TRACE_GLOBAL_SCALE:-}" \
+    -e SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER:-}" \
+    -e SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER:-}" \
+    -e SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER="${SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER:-}" \
     -e TRANSFORMERS_OFFLINE=1 \
     -e HF_HUB_OFFLINE=1 \
     -e HF_TOKEN="${HF_TOKEN:-}" \
@@ -155,6 +172,7 @@ run_one() {
 import hashlib
 import importlib
 import importlib.metadata as md
+import subprocess
 from pathlib import Path
 
 import flashinfer
@@ -182,6 +200,16 @@ print("flashinfer_include", jit_env.FLASHINFER_INCLUDE_DIR, flush=True)
 print("flashinfer_cutlass", jit_env.CUTLASS_INCLUDE_DIRS, flush=True)
 print("flashinfer_cccl", jit_env.CCCL_INCLUDE_DIRS, flush=True)
 print("flashinfer_spdlog", jit_env.SPDLOG_INCLUDE_DIR, flush=True)
+for repo in ("/work/third_party/sglang", "/work/third_party/flashinfer"):
+    path = Path(repo)
+    if path.exists():
+        try:
+            rev = subprocess.check_output(
+                ["git", "-C", repo, "rev-parse", "HEAD"], text=True
+            ).strip()
+        except Exception as exc:
+            rev = f"unavailable:{type(exc).__name__}:{exc}"
+        print(f"source_git_rev {repo} {rev}", flush=True)
 PY
       exec python3 -m sglang.launch_server "$@"
     ' -- \
