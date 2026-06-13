@@ -112,6 +112,8 @@ Do not run these as queue items unless their blockers change:
 - SGLang Gemma 4 AR ladder rows: wait until the shared FlashInfer/numerics fix
   for the 12B full-NVFP4 `+0.40` red and the E4B fp8 dispatcher fix land;
   then rerun through `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
+  Use `python3 scripts/sglang_gemma4_ar_ladder_blocker_audit.py` before
+  claiming a dependency change is enough to justify a diagnostic override.
 - SGLang DFlash/EAGLE rows: wait until ordinary Qwen/SGLang quality is stable.
 - vLLM Qwen NVFP4-KV capacity row from `counterpart_evidence_tasks.jsonl`: capacity is
   already recorded; the next Qwen KV task is quality at longer context.

@@ -42,6 +42,13 @@ rows after the Ubicloud-built source-stack image.
   `SGLANG_AR_LADDER_OVERRIDE_REASON`, which the runner records in preflight
   artifacts. The offline regression check for these guards is
   `bash scripts/test_sglang_gemma4_ar_ladder_guard.sh`.
+- To check whether the dependency state has changed enough to justify a
+  diagnostic override, run
+  `python3 scripts/sglang_gemma4_ar_ladder_blocker_audit.py`. A changed ref is
+  not a green result; it only means the smallest matched red row is worth
+  replaying with an explicit override reason and fresh package provenance.
+  Current audit:
+  `results/sglang_gemma4_ar_ladder_blocker_audit_20260614T0826JST.json`.
 
 ## Run
 
