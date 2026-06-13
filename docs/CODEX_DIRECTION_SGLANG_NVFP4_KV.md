@@ -5,6 +5,16 @@
 > with radix-cache quality green under the prefix-cache graph guard. Full NVFP4 K+V
 > remains the parked stretch route.
 
+> 2026-06-14 epoch-2 note: the active Gemma 4 ship gate has moved to
+> `docs/GOAL_CODEX_SGLANG_LANE.md` and
+> `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`. The SGLang baked
+> mm-prefix image has a scoped E4B full-NVFP4 multimodal green row, but broad
+> Gemma 4 AR claim-grade serving is still blocked by (1) the shared 12B
+> long-context full-NVFP4 `+0.40` FlashInfer/numerics red from mail 0138, and
+> (2) the E4B fp8 D512/VO256 1-byte-KV FlashInfer dispatcher red. Do not use
+> older Qwen/mixed-KV sections below to justify rerunning known-red Gemma 4
+> rows or chasing the retracted global-scale calibration path.
+
 ## 2026-06-11 update — Gemma 4 E4B rung 0 D=512 decode workaround staged
 
 Artifact: `results/sglang_gemma4_e4b_rung0_20260611T141256JST/summary.md`.
@@ -73,8 +83,11 @@ So do not continue chasing a vLLM deswizzle macro leak as the current root cause
 a real corruption mechanism and a runbook guardrail, but it is not active in the reproduced
 SGLang cached-prefix failure.
 
-The active SGLang bug remains in the cached-prefix paged read / scale-feed convention handed
-to FlashInfer, or in the FP4-K attention behavior reached by that path.
+Historical note: at this point in the Qwen investigation, the leading live SGLang bug was
+the cached-prefix paged read / scale-feed convention handed to FlashInfer, or the FP4-K
+attention behavior reached by that path. That is no longer the active Gemma 4 ship-gate
+diagnosis; mail 0138 classifies the 12B long-context red as shared FlashInfer/numerics,
+not SGLang radix/merge.
 
 ## 2026-06-10 update — vLLM proves FP4-K reuse; keep full-NVFP4 open
 
@@ -348,11 +361,14 @@ packed data plus scale buffers in `HybridSWAPoolConfigurator`. The fixed row rep
 tokens `715,185` (`1.7814x`). Before the fix, full NVFP4 received only `716,992`
 tokens and used only `16.15 GB` of KV memory, so it had quality but not capacity.
 
-Do not over-claim the fp8 quality comparison. The fp8 comparator is still red:
-SGLang allocates fp8 KV, warns that no fp8 scaling factors were provided, then times
-out internally after 600 seconds and returns `Internal Server Error`. The current
-claim is full-NVFP4 E4B short quality green versus bf16/auto plus allocator capacity
-green versus fp8; fp8 quality remains a separate open issue.
+Do not over-claim the fp8 quality comparison. The fp8 comparator remains red, but
+the current diagnosis supersedes the earlier missing-scale/timeout symptom:
+`results/sglang_e4b_fp8_dispatch_analysis_20260614T054129JST/STOP_SUMMARY.md`
+shows the D512/VO256 fp8 paged-prefill path reaches FlashInfer VO-split and lands
+on an invalid 1-byte-KV layout (`NUM_MMA_Q=1`, `NUM_MMA_D_QK=32`,
+`NUM_MMA_D_VO=16`, `NUM_MMA_KV=1`, `NUM_WARPS_Q=4`). The current claim is
+full-NVFP4 E4B short/scoped quality green versus bf16/auto plus allocator capacity
+green versus fp8; fp8 quality remains a separate FlashInfer dispatcher blocker.
 
 Two upstream draft issues are banked for later filing:
 
