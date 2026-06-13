@@ -1,7 +1,9 @@
 # Gemma-4 forward produces degenerate output on sm_120 (consumer Blackwell)
 
-**Status:** OPEN — investigating · **Opened:** 2026-06-13 · **Severity:** blocks the
-vLLM Gemma-4 anchor ladder on x86 sm_120 (vast.ai), and any sm_120 Gemma-4 serving.
+**Status:** OPEN — **Codex leads** (handed off 2026-06-13) · **Opened:** 2026-06-13 ·
+**Severity:** blocks the vLLM Gemma-4 anchor ladder on x86 sm_120 (vast.ai), and any
+sm_120 Gemma-4 serving. Claude established the discriminator + ruled out the version/
+dtype/framework axes (below); Codex now drives root-cause + fix.
 
 ## Symptom
 
@@ -19,10 +21,17 @@ HF eager (`transformers`, no vLLM/flashinfer unless noted).
 | --- | --- | --- |
 | Qwen2.5-0.5B-Instruct | non-Gemma | ✅ `' Paris. It was founded in 7'` |
 | google/gemma-3-1b-it | Gemma-3 | ✅ `' Paris. The largest city in France'` |
-| **google/gemma-4-12B-it** | Gemma-4 dense | ❌ `'111.1...'` |
+| google/gemma-4-12B-it | Gemma-4 dense, head 256 | ❌ `'111.1...'` (total garbage) |
+| google/gemma-4-31B-it | Gemma-4 dense, head 512 | ❌ `' France is France is...'` (repetition) |
+| google/gemma-4-26B-A4B-it | Gemma-4 MoE | ❌ `' a bit is a bit is...'` (repetition) |
+| google/gemma-4-E2B-it | Gemma-4 MoE | ❌ `' France is France is...'` (repetition) |
+| google/gemma-4-E4B-it | Gemma-4 MoE | ❌ `' France is France is...'` (repetition) |
 
-So the breakage is **Gemma-4-specific** — generic Torch/cuBLAS on sm_120 is fine
-(Qwen), the whole Gemma-3 family is fine, only Gemma-4 modeling code fails.
+So the breakage is **Gemma-4-specific and universal across the family** — generic
+Torch/cuBLAS on sm_120 is fine (Qwen), the whole Gemma-3 family is fine, but **every**
+Gemma-4 model fails. Two signatures: the 12B alone collapses to `'111.1'`; the others
+(dense 31B + all MoE) fall into a repetition loop. Different surface degeneracy, same
+underlying broken forward — none produce "Paris".
 
 ## Ruled out (Gemma-4-12B still breaks across all of these)
 
@@ -32,7 +41,8 @@ So the breakage is **Gemma-4-specific** — generic Torch/cuBLAS on sm_120 is fi
 | framework | vLLM (custom_ops all & none) **and** pure HF eager | both broken (Codex 0113) → not vLLM/flashinfer |
 | torch | 2.11.0+cu128 **and** 2.12.0+cu130 | both broken |
 | transformers | 5.10.0.dev0 (`effde209`), 5.11.0, 5.12.0 | all broken (Codex 0113 + Claude) |
-| dtype | bfloat16 **and** float16 | both broken |
+| dtype | bfloat16, float16 **and** float32 | all broken (Codex 0114: fp32 → `'111.111.'`) |
+| precision drift | layerwise fp32-vs-bf16 cosine ≈ 0.9999, no NaN/inf (Codex 0114) | bf16 faithfully tracks fp32; both broken identically → systematic, not numerical drift |
 | wheel `_C` cubins | cuobjdump confirms native sm_120a SASS present | not a missing-cubin issue |
 | RMSNorm impl | native vs `_C` priority | broken either way (Codex 0113) |
 
@@ -72,16 +82,29 @@ Text models (it variants): **12B** (❌ confirmed), **31B**, **26B-A4B** (MoE), 
 This isolates whether the broken op is universal to Gemma-4 or tied to a sub-family
 (dense vs MoE, head_dim 256 vs 512).
 
-## Next steps
+## Next steps (Codex leads)
 
-1. **Model matrix** (vast.ai sm_120, HF eager): E2B, E4B (small, on a 32GB box); 31B,
-   26B-A4B (on a 96GB box). Record GEN output per model.
-2. **sm_121 control** (Codex, Spark): same HF-eager Qwen/Gemma-3/Gemma-4 test.
-3. **Op localization**: once a small broken Gemma-4 (E2B) is in hand, compare per-layer
-   hidden states sm_120-GPU vs CPU (fp32) to find the first diverging op; that op's kernel
-   is the bug.
-4. Fix path: either a transformers/torch-level kernel fix for sm_120, or a documented
-   "Gemma-4 needs sm_121" constraint + route x86 anchor runs accordingly.
+1. ~~Model matrix~~ — **done** (all 5 Gemma-4 sizes broken; table above).
+2. **sm_121 control** (Spark): same HF-eager Qwen/Gemma-3/Gemma-4 test. Confirms the
+   sm_120-vs-sm_121 divergence (the campaign's coherent serving is all sm_121, but verify
+   HF eager too). This is the single most important remaining control.
+3. **Code diff** (free): `transformers` `modeling_gemma4*` vs `modeling_gemma3*` — the ops
+   Gemma-4 adds over Gemma-3 are the suspects (new attention scaling / QK-norm / softcap /
+   the unified path / a specific GEMM shape).
+4. **Op localization** (the real root cause): on a small Gemma-4 (E2B), compare per-layer
+   hidden states **sm_120-GPU vs CPU (fp32)** — NOT fp32-vs-bf16 (both sm_120, both broken,
+   cosine 0.9999, useless as a baseline). The first GPU-vs-CPU divergence pins the broken
+   op/kernel. Cross-check the same op on Gemma-3 (which works) to confirm it's the
+   Gemma-4-specific use that trips it.
+5. Fix path: a transformers/torch kernel fix or workaround for sm_120, OR a documented
+   "Gemma-4 forward needs sm_121" constraint → route x86 vast.ai anchor runs to sm_121-class
+   hardware (or resolve before using sm_120 boxes).
+
+## Handoff status
+Claude established the discriminator (Gemma-4-specific, universal across the family) and
+closed out the version/dtype/framework/precision axes. **Codex now leads** root-cause
+(steps 2–4) and the fix/image. The vast.ai box runbook + HF-eager scripts are in
+`docs/vast_anchor/`; the vLLM anchor ladder remains blocked on this (Task #44).
 
 ## Artifacts / refs
 - Codex 0113 (vast sm_120 custom-ops isolation), `results/vast_sm120_d4f0_custom_ops_...`
