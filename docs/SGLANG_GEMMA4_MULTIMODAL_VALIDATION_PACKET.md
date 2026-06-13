@@ -37,6 +37,7 @@ Audio assets are already banked:
 Image asset policy:
 
 - Prefer a banked local image passed to `scripts/sglang_gemma4_multimodal_chat_probe.py --image-path`.
+- Use a deterministic shape/color card for strict bf16-vs-NVFP4 gates. The natural SGLang yellow-cab image is useful as a request-path smoke, but small Gemma 4 checkpoints can miss the fine-grained action label under bf16.
 - If no local image is banked yet, use the SGLang test image URL only as a bootstrap smoke and bank a copy in the result directory before making any claim.
 - Default bootstrap URL: `https://raw.githubusercontent.com/sgl-project/sgl-test-files/refs/heads/main/images/man_ironing_on_back_of_suv.png`
 
@@ -77,10 +78,27 @@ Run after the server is ready:
 ```bash
 python3 scripts/sglang_gemma4_multimodal_chat_probe.py \
   --url http://127.0.0.1:30000 \
+    --model google/gemma-4-E4B-it \
+    --repeat 2 \
+    --image-path results/<run_id>/assets/man_ironing_on_back_of_suv.png \
+    --image-prompt "What unusual activity is the man doing on the back of the yellow cab? Answer in one short sentence." \
+    --image-keywords "iron,ironing" \
+    --audio-url /hijinks/results/p520_audio_mm_20260612/assets/speech_librispeech_1272-128104-0000.wav \
+    --output results/<run_id>/multimodal_probe.json
+```
+
+For the strict shape/color card gate, use `--keyword-mode all` and phrase keywords:
+
+```bash
+python3 scripts/sglang_gemma4_multimodal_chat_probe.py \
+  --url http://127.0.0.1:30000 \
   --model google/gemma-4-E4B-it \
   --repeat 2 \
-  --image-path results/<run_id>/assets/man_ironing_on_back_of_suv.png \
+  --image-path results/<run_id>/assets/red_square_blue_triangle.png \
+  --image-prompt "Identify the two colored shapes. Answer with a short phrase." \
+  --image-keywords "red square,blue triangle" \
   --audio-url /hijinks/results/p520_audio_mm_20260612/assets/speech_librispeech_1272-128104-0000.wav \
+  --keyword-mode all \
   --output results/<run_id>/multimodal_probe.json
 ```
 

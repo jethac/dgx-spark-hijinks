@@ -26,6 +26,16 @@ DEFAULT_AUDIO_TRANSCRIPT = (
     "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO "
     "WELCOME HIS GOSPEL"
 )
+DEFAULT_TEXT_PROMPT = "Answer with only the capital city of Japan."
+DEFAULT_IMAGE_PROMPT = (
+    "Describe the image in one short sentence. Mention the main object or activity."
+)
+DEFAULT_AUDIO_PROMPT = (
+    "Transcribe this audio in English. Keep the original words as closely as possible."
+)
+DEFAULT_TEXT_KEYWORDS = ["tokyo"]
+DEFAULT_IMAGE_KEYWORDS = ["iron", "car", "suv", "vehicle", "person"]
+DEFAULT_AUDIO_KEYWORDS = ["quilter", "apostle", "middle", "gospel"]
 
 
 def _read_data_uri(path: Path) -> str:
@@ -81,9 +91,14 @@ def _chat_payload(model: str, content: list[dict[str, Any]], max_tokens: int) ->
     }
 
 
-def _keyword_hit(text: str, keywords: list[str]) -> bool:
+def _keyword_hit(text: str, keywords: list[str], mode: str) -> bool:
     lower = text.lower()
-    return any(keyword.lower() in lower for keyword in keywords)
+    checks = [keyword.lower() in lower for keyword in keywords]
+    return all(checks) if mode == "all" else any(checks)
+
+
+def _split_csv(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
 
 
 def run_probe(args: argparse.Namespace) -> dict[str, Any]:
@@ -97,8 +112,8 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         probes.append(
             (
                 "text",
-                [{"type": "text", "text": "Answer with only the capital city of Japan."}],
-                ["tokyo"],
+                [{"type": "text", "text": args.text_prompt}],
+                args.text_keywords,
             )
         )
     if args.include_image:
@@ -107,15 +122,9 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
                 "image",
                 [
                     {"type": "image_url", "image_url": {"url": image_ref}},
-                    {
-                        "type": "text",
-                        "text": (
-                            "Describe the image in one short sentence. Mention the main "
-                            "object or activity."
-                        ),
-                    },
+                    {"type": "text", "text": args.image_prompt},
                 ],
-                ["iron", "car", "suv", "vehicle", "person"],
+                args.image_keywords,
             )
         )
     if args.include_audio:
@@ -124,15 +133,9 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
                 "audio",
                 [
                     {"type": "audio_url", "audio_url": {"url": audio_ref}},
-                    {
-                        "type": "text",
-                        "text": (
-                            "Transcribe this audio in English. Keep the original words "
-                            "as closely as possible."
-                        ),
-                    },
+                    {"type": "text", "text": args.audio_prompt},
                 ],
-                ["quilter", "apostle", "middle", "gospel"],
+                args.audio_keywords,
             )
         )
 
@@ -147,7 +150,7 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
                     "round": round_idx + 1,
                     "response": response,
                     "text": text,
-                    "keyword_hit": _keyword_hit(text, keywords),
+                    "keyword_hit": _keyword_hit(text, keywords, args.keyword_mode),
                     "usage": _usage(response),
                 }
             )
@@ -170,6 +173,10 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "image_ref_kind": "path_data_uri" if args.image_path else "url",
         "image_path": str(args.image_path) if args.image_path else None,
         "image_url": args.image_url if not args.image_path else None,
+        "text_prompt": args.text_prompt,
+        "image_prompt": args.image_prompt,
+        "audio_prompt": args.audio_prompt,
+        "keyword_mode": args.keyword_mode,
         "audio_url": audio_ref,
         "audio_reference_transcript": args.audio_reference_transcript,
         "rows": rows,
@@ -189,6 +196,33 @@ def main() -> int:
     parser.add_argument("--image-path", type=Path)
     parser.add_argument("--audio-url", default=DEFAULT_AUDIO_SERVER_PATH)
     parser.add_argument("--audio-reference-transcript", default=DEFAULT_AUDIO_TRANSCRIPT)
+    parser.add_argument("--text-prompt", default=DEFAULT_TEXT_PROMPT)
+    parser.add_argument("--image-prompt", default=DEFAULT_IMAGE_PROMPT)
+    parser.add_argument("--audio-prompt", default=DEFAULT_AUDIO_PROMPT)
+    parser.add_argument(
+        "--text-keywords",
+        type=_split_csv,
+        default=DEFAULT_TEXT_KEYWORDS,
+        help="Comma-separated keyword substrings; any hit passes the text row.",
+    )
+    parser.add_argument(
+        "--image-keywords",
+        type=_split_csv,
+        default=DEFAULT_IMAGE_KEYWORDS,
+        help="Comma-separated keyword substrings; any hit passes the image row.",
+    )
+    parser.add_argument(
+        "--audio-keywords",
+        type=_split_csv,
+        default=DEFAULT_AUDIO_KEYWORDS,
+        help="Comma-separated keyword substrings; any hit passes the audio row.",
+    )
+    parser.add_argument(
+        "--keyword-mode",
+        choices=["any", "all"],
+        default="any",
+        help="Whether each row requires any listed keyword or all listed keywords.",
+    )
     parser.add_argument("--no-text", dest="include_text", action="store_false")
     parser.add_argument("--no-image", dest="include_image", action="store_false")
     parser.add_argument("--no-audio", dest="include_audio", action="store_false")

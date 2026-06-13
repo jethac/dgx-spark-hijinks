@@ -1,0 +1,330 @@
+{
+  "audio_reference_transcript": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+  "audio_url": "/hijinks/results/p520_audio_mm_20260612/assets/speech_librispeech_1272-128104-0000.wav",
+  "image_path": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-mmprobe/results/sglang_gemma4_e4b_bf16_multimodal_smoke_20260614T041251JST/assets/man_ironing_on_back_of_suv.png",
+  "image_ref_kind": "path_data_uri",
+  "image_url": null,
+  "model": "google/gemma-4-E4B-it",
+  "ok": true,
+  "repeat": 2,
+  "rows": [
+    {
+      "all_http_200": true,
+      "all_keyword_hit": true,
+      "content_equal": true,
+      "keywords": [
+        "tokyo"
+      ],
+      "label": "text",
+      "outputs": [
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "TOKYO",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378173,
+              "id": "eed73698838b4a2fbebea407a8833185",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 3,
+                "prompt_tokens": 18,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 21
+              }
+            },
+            "elapsed_s": 51.20874118595384,
+            "status": 200
+          },
+          "round": 1,
+          "text": "TOKYO",
+          "usage": {
+            "completion_tokens": 3,
+            "prompt_tokens": 18,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 21
+          }
+        },
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "TOKYO",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378174,
+              "id": "e7388ea335774220afe4f1b00762c152",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 3,
+                "prompt_tokens": 18,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 21
+              }
+            },
+            "elapsed_s": 0.25144947099033743,
+            "status": 200
+          },
+          "round": 2,
+          "text": "TOKYO",
+          "usage": {
+            "completion_tokens": 3,
+            "prompt_tokens": 18,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 21
+          }
+        }
+      ]
+    },
+    {
+      "all_http_200": true,
+      "all_keyword_hit": false,
+      "content_equal": true,
+      "keywords": [
+        "iron",
+        "car",
+        "suv",
+        "vehicle",
+        "person"
+      ],
+      "label": "image",
+      "outputs": [
+        {
+          "keyword_hit": false,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "A man is washing a yellow taxi cab on the side of a city street.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378175,
+              "id": "bb5cbc8f52d8465a907ad3a61fef9809",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 17,
+                "prompt_tokens": 286,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 303
+              }
+            },
+            "elapsed_s": 1.1914369369624183,
+            "status": 200
+          },
+          "round": 1,
+          "text": "A man is washing a yellow taxi cab on the side of a city street.",
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 286,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 303
+          }
+        },
+        {
+          "keyword_hit": false,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "A man is washing a yellow taxi cab on the side of a city street.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378176,
+              "id": "5014be4da46848ac88bb55f77a0dc536",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 17,
+                "prompt_tokens": 286,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 303
+              }
+            },
+            "elapsed_s": 1.0249066789983772,
+            "status": 200
+          },
+          "round": 2,
+          "text": "A man is washing a yellow taxi cab on the side of a city street.",
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 286,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 303
+          }
+        }
+      ]
+    },
+    {
+      "all_http_200": true,
+      "all_keyword_hit": true,
+      "content_equal": true,
+      "keywords": [
+        "quilter",
+        "apostle",
+        "middle",
+        "gospel"
+      ],
+      "label": "audio",
+      "outputs": [
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378178,
+              "id": "086765e9464b4760a276db13cc99dd21",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 20,
+                "prompt_tokens": 174,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 194
+              }
+            },
+            "elapsed_s": 1.8782739320304245,
+            "status": 200
+          },
+          "round": 1,
+          "text": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 174,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 194
+          }
+        },
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781378179,
+              "id": "b0df335894a3422bab8e5ac761dff7e9",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 20,
+                "prompt_tokens": 174,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 194
+              }
+            },
+            "elapsed_s": 1.1850528129725717,
+            "status": 200
+          },
+          "round": 2,
+          "text": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 174,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 194
+          }
+        }
+      ]
+    }
+  ],
+  "schema": "sglang-gemma4-multimodal-chat-probe/v1",
+  "url": "http://127.0.0.1:30000"
+}

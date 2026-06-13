@@ -1,0 +1,289 @@
+[
+    {
+        "Id": "f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc",
+        "Created": "2026-06-13T19:32:05.113154433Z",
+        "Path": "/opt/nvidia/nvidia_entrypoint.sh",
+        "Args": [
+            "bash",
+            "-lc",
+            "cd /hijinks && python3 -m sglang.launch_server --model-path google/gemma-4-E4B-it --served-model-name google/gemma-4-E4B-it --trust-remote-code --dtype bfloat16 --attention-backend flashinfer --page-size 1 --context-length 512 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port 30000"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 2541569,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-06-13T19:32:05.131480248Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:60068fa1efc96be95eb3e857b4f55266a1c96eedb022afaa4f3e2a08f5a867b4",
+        "ResolvConfPath": "/var/lib/docker/containers/f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc/hostname",
+        "HostsPath": "/var/lib/docker/containers/f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc/hosts",
+        "LogPath": "/var/lib/docker/containers/f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc/f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc-json.log",
+        "Name": "/sglang_gemma4_e4b_bf16_multimodal_shape_20260614T0442JST_server",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-mmprobe:/hijinks",
+                "/home/jethac/.cache/huggingface:/root/.cache/huggingface"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "host",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 107374182400,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": [
+                {
+                    "Driver": "",
+                    "Count": -1,
+                    "DeviceIDs": null,
+                    "Capabilities": [
+                        [
+                            "gpu"
+                        ]
+                    ],
+                    "Options": {}
+                }
+            ],
+            "MemoryReservation": 0,
+            "MemorySwap": 107374182400,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "ID": "f19ff8b0f05b372f1e0ad31831339962662794d41bf0a0a048e321d3d20940fc",
+                "LowerDir": "/var/lib/docker/overlay2/e6dd9b7ee80e6fb6ee18c8c3d4f1341eb840c3aa5ac01f9d27c1f081f4889582-init/diff:/var/lib/docker/overlay2/95ec1b6da90c3574e795455a533b0d6f243695a8712b831486634b0111467e64/diff:/var/lib/docker/overlay2/cdde89c203b495acdd62769778f4e2a772b0c59aec37b05fe64f5fee202cb0e3/diff:/var/lib/docker/overlay2/9d85f9172e6d576407afcb226f6db87860d84afef9b015e966ed7a98d49273e0/diff:/var/lib/docker/overlay2/d828ad707f805dd6d4adc101a85fbfbdbfe8dd7beb5ac9ca7f6d1a145e360ba7/diff:/var/lib/docker/overlay2/cfb04cadb1b6a21165ec241a99c328ae3a2030c750125bf1330fc989c280933f/diff:/var/lib/docker/overlay2/b4777e73adfb0374c35a9fa97e6f861bbc677a998175041ffc695fe089577fc8/diff:/var/lib/docker/overlay2/173f54f8570ad641b6d67efb43979cc63f4635ab1a0d1a31e5dac2d1605d9bea/diff:/var/lib/docker/overlay2/a12bbfd4384325018f1c2409981391e5e5a7965dbd0950c1154ab4567f673c78/diff:/var/lib/docker/overlay2/9202e82b97a3af47f94cc7c2ca37bc528611cca575afd2ffc0daabbbb1d99b4d/diff:/var/lib/docker/overlay2/3f8de7691e9842677528ae4cb35c1afbef41ee9d2988c7002b3f417fac277d3e/diff:/var/lib/docker/overlay2/e3865ccbdbb6244253eb93cb95110193f2dce5eb34dbbc07161aa535c46b3aa5/diff:/var/lib/docker/overlay2/e481623a90655123cfc6124e159bf5f5b952c6205f8b9d1cccd2664004e33147/diff:/var/lib/docker/overlay2/74d398061205510514b7ba874da32e5ecc90622a9afb43ffb813033ea81750d4/diff:/var/lib/docker/overlay2/b2a29253d9c27867642db9b794589111c813d62343db9638cdf45c09c524d429/diff:/var/lib/docker/overlay2/1105c2ae58bc6e0fdc2c9060ff8c67eef174be5ab44182e3303d3e4ee846db2c/diff:/var/lib/docker/overlay2/01df97db9581c12ab4f4cd734cdc8c148521dfa1b49a4476acb69b6a6dffe5ef/diff:/var/lib/docker/overlay2/8b88de50fd9944764b50e51f307a6c47c2f4dd30bbfc08e5375255b78595b2c6/diff:/var/lib/docker/overlay2/78f7839ff840889551d576f33f9af668ceff874c9455b80d1847425f10f05ac7/diff:/var/lib/docker/overlay2/4ff063e04f9edd2d717c06bd4bcd7f6cea8defcc5d91ed90778985141065e391/diff:/var/lib/docker/overlay2/2d56ef16606146c1c99c6a63d0d8385c6805b16c8b1605e1b672730e870ca156/diff:/var/lib/docker/overlay2/305631a5da02c2c5286f42dd8f5e3d0704e6661af103e1319582903eb0b394b6/diff:/var/lib/docker/overlay2/322d89ee5e7dc1b39994f31cc2fd46d46568358cc921aa536a3ca692dc58acb0/diff:/var/lib/docker/overlay2/46ae7cceb934058c0ea6e5a5fffd2d44288a1694e8501636a94e079a62dc7ebc/diff:/var/lib/docker/overlay2/56060c68be5e791b059468263375e7b1df9f09b3337abc462f6836633022ea83/diff:/var/lib/docker/overlay2/abd3984a003c181dd2c733d76ce90d077c8053e25fb6a5ab542505c263fb71f0/diff:/var/lib/docker/overlay2/ae7f9bea994babd164bc70836720595728e34a3d16be89dd6229434eb326bebb/diff:/var/lib/docker/overlay2/ef3a11f2aa3e9487390eaf5f4b20040b0c357a8fb8d3571678bcc0fcdfc71ba9/diff",
+                "MergedDir": "/var/lib/docker/overlay2/e6dd9b7ee80e6fb6ee18c8c3d4f1341eb840c3aa5ac01f9d27c1f081f4889582/merged",
+                "UpperDir": "/var/lib/docker/overlay2/e6dd9b7ee80e6fb6ee18c8c3d4f1341eb840c3aa5ac01f9d27c1f081f4889582/diff",
+                "WorkDir": "/var/lib/docker/overlay2/e6dd9b7ee80e6fb6ee18c8c3d4f1341eb840c3aa5ac01f9d27c1f081f4889582/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/jethac/.cache/huggingface",
+                "Destination": "/root/.cache/huggingface",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-mmprobe",
+                "Destination": "/hijinks",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "thinkstationpgx-00b4",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "SGLANG_GEMMA_KV_GEOMETRY=1",
+                "HUGGINGFACE_HUB_CACHE=/root/.cache/huggingface/hub",
+                "TRANSFORMERS_OFFLINE=1",
+                "HF_HUB_OFFLINE=1",
+                "FLASHINFER_CACHE_DIR=/tmp/flashinfer-cache-sglang_gemma4_e4b_bf16_multimodal_shape_20260614T0442JST",
+                "FLASHINFER_EXTRA_CUDAFLAGS=-gencode=arch=compute_121a,code=sm_121a",
+                "HF_HOME=/root/.cache/huggingface",
+                "TORCH_CUDA_ARCH_LIST=12.1a",
+                "FLASHINFER_PREFILL_DEBUG_ONCE=1",
+                "SGLANG_FLASHINFER_VOSPLIT=1",
+                "SGLANG_GEMMA4_TRACE_GEOMETRY=1",
+                "PATH=/root/.cargo/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NVARCH=sbsa",
+                "NVIDIA_REQUIRE_CUDA=cuda>=13.0 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=vapps,driver>=535,driver<536 brand=vpc,driver>=535,driver<536 brand=vcs,driver>=535,driver<536 brand=vws,driver>=535,driver<536 brand=cloudgaming,driver>=535,driver<536 brand=unknown,driver>=550,driver<551 brand=grid,driver>=550,driver<551 brand=tesla,driver>=550,driver<551 brand=nvidia,driver>=550,driver<551 brand=quadro,driver>=550,driver<551 brand=quadrortx,driver>=550,driver<551 brand=nvidiartx,driver>=550,driver<551 brand=vapps,driver>=550,driver<551 brand=vpc,driver>=550,driver<551 brand=vcs,driver>=550,driver<551 brand=vws,driver>=550,driver<551 brand=cloudgaming,driver>=550,driver<551 brand=unknown,driver>=565,driver<566 brand=grid,driver>=565,driver<566 brand=tesla,driver>=565,driver<566 brand=nvidia,driver>=565,driver<566 brand=quadro,driver>=565,driver<566 brand=quadrortx,driver>=565,driver<566 brand=nvidiartx,driver>=565,driver<566 brand=vapps,driver>=565,driver<566 brand=vpc,driver>=565,driver<566 brand=vcs,driver>=565,driver<566 brand=vws,driver>=565,driver<566 brand=cloudgaming,driver>=565,driver<566 brand=unknown,driver>=570,driver<571 brand=grid,driver>=570,driver<571 brand=tesla,driver>=570,driver<571 brand=nvidia,driver>=570,driver<571 brand=quadro,driver>=570,driver<571 brand=quadrortx,driver>=570,driver<571 brand=nvidiartx,driver>=570,driver<571 brand=vapps,driver>=570,driver<571 brand=vpc,driver>=570,driver<571 brand=vcs,driver>=570,driver<571 brand=vws,driver>=570,driver<571 brand=cloudgaming,driver>=570,driver<571 brand=unknown,driver>=575,driver<576 brand=grid,driver>=575,driver<576 brand=tesla,driver>=575,driver<576 brand=nvidia,driver>=575,driver<576 brand=quadro,driver>=575,driver<576 brand=quadrortx,driver>=575,driver<576 brand=nvidiartx,driver>=575,driver<576 brand=vapps,driver>=575,driver<576 brand=vpc,driver>=575,driver<576 brand=vcs,driver>=575,driver<576 brand=vws,driver>=575,driver<576 brand=cloudgaming,driver>=575,driver<576",
+                "NV_CUDA_CUDART_VERSION=13.0.96-1",
+                "CUDA_VERSION=13.0.2",
+                "LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "NV_CUDA_LIB_VERSION=13.0.2-1",
+                "NV_NVTX_VERSION=13.0.85-1",
+                "NV_LIBNPP_VERSION=13.0.1.2-1",
+                "NV_LIBNPP_PACKAGE=libnpp-13-0=13.0.1.2-1",
+                "NV_LIBCUSPARSE_VERSION=12.6.3.3-1",
+                "NV_LIBCUBLAS_PACKAGE_NAME=libcublas-13-0",
+                "NV_LIBCUBLAS_VERSION=13.1.0.3-1",
+                "NV_LIBCUBLAS_PACKAGE=libcublas-13-0=13.1.0.3-1",
+                "NV_LIBNCCL_PACKAGE_NAME=libnccl2",
+                "NV_LIBNCCL_PACKAGE_VERSION=2.28.3-1",
+                "NCCL_VERSION=2.28.3-1",
+                "NV_LIBNCCL_PACKAGE=libnccl2=2.28.3-1+cuda13.0",
+                "NVIDIA_PRODUCT_NAME=CUDA",
+                "NV_CUDA_CUDART_DEV_VERSION=13.0.96-1",
+                "NV_NVML_DEV_VERSION=13.0.87-1",
+                "NV_LIBCUSPARSE_DEV_VERSION=12.6.3.3-1",
+                "NV_LIBNPP_DEV_VERSION=13.0.1.2-1",
+                "NV_LIBNPP_DEV_PACKAGE=libnpp-dev-13-0=13.0.1.2-1",
+                "NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-13-0",
+                "NV_LIBCUBLAS_DEV_VERSION=13.1.0.3-1",
+                "NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-13-0=13.1.0.3-1",
+                "NV_CUDA_NSIGHT_COMPUTE_VERSION=13.0.2-1",
+                "NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-13-0=13.0.2-1",
+                "NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev",
+                "NV_LIBNCCL_DEV_PACKAGE_VERSION=2.28.3-1",
+                "NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.28.3-1+cuda13.0",
+                "LIBRARY_PATH=/usr/local/cuda/lib64/stubs",
+                "CUDA_HOME=/usr/local/cuda",
+                "CCACHE_DIR=/root/.cache/ccache",
+                "CMAKE_BUILD_PARALLEL_LEVEL=20",
+                "MAX_JOBS=20",
+                "SGLANG_SKIP_SGL_KERNEL_VERSION_CHECK=1",
+                "DEBIAN_FRONTEND=noninteractive",
+                "TZ=Etc/UTC"
+            ],
+            "Cmd": [
+                "bash",
+                "-lc",
+                "cd /hijinks && python3 -m sglang.launch_server --model-path google/gemma-4-E4B-it --served-model-name google/gemma-4-E4B-it --trust-remote-code --dtype bfloat16 --attention-backend flashinfer --page-size 1 --context-length 512 --mem-fraction-static 0.40 --disable-cuda-graph --disable-piecewise-cuda-graph --host 0.0.0.0 --port 30000"
+            ],
+            "Image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e",
+            "Volumes": null,
+            "WorkingDir": "/work",
+            "Entrypoint": [
+                "/opt/nvidia/nvidia_entrypoint.sh"
+            ],
+            "Labels": {
+                "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.source": "https://github.com/jethac/dgx-spark-hijinks",
+                "org.opencontainers.image.version": "22.04",
+                "spark.flashinfer_ref": "f99323bd7d1cc88d9445202c12934070be754e2d",
+                "spark.hijinks_ref": "055c5ff21983c5ab844680fc6268283a20607a1d",
+                "spark.image_generation": "sglang-gemma4-source-stack-tf511",
+                "spark.sglang_ref": "42ce5dad84ddf75da56282bc556d6df9f5c81303",
+                "spark.torch_index_url": "https://download.pytorch.org/whl/cu130",
+                "spark.torch_version": "2.11.0",
+                "spark.torchvision_version": "0.26.0",
+                "spark.transformers_pin": "5.11.0"
+            }
+        },
+        "NetworkSettings": {
+            "SandboxID": "fce14705865c4816ffdfa4b01e61c47ddde649e259a880c4ab0e73681b8ea8da",
+            "SandboxKey": "/var/run/docker/netns/default",
+            "Ports": {},
+            "Networks": {
+                "host": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "7593e083b0a3741729611d6d92f802030518e40de2942935ed1b912a3652cfd0",
+                    "EndpointID": "7da6ab4842221938fab9091b20d5839e3bee47f24a6e9f2e2d0348ac074634d9",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "MacAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]
