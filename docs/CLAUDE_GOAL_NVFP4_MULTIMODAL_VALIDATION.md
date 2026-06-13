@@ -15,18 +15,30 @@ scale fixes the Gemma-4 nvfp4-KV quality red, and — because all our evidence i
   have different magnitude stats → possibly a *second* under-ranged-global saturation.
 
 ## Steps
-1. **Working stack.** The older `g6adc00f70` wheel CANNOT serve the Gemma-4 nvfp4 mm-prefix
-   path (selector: `FLASHINFER: partial multimodal token full attention not supported`). Get
-   the newer wheel Codex used (`vllm ...ge32459eea.sm120a`) from ghcr / CI artifacts / a
-   `jethac/vllm` branch build, and stand it up on vast.ai (runbook: `docs/vast_anchor/SM120_NUMERICS_PLAN.md §5`).
-2. **Text A/B (confirm the fix):** gemma-4-12B, ctx 4096, supplied-token PPL. nvfp4 KV with
-   `--calculate-kv-scales` (calibrated) vs default constants. Expect Δ vs bf16 to collapse
-   from ~+0.28 → ~+0.01–0.04. (bf16 base raw-wikitext NLL ≈ 1.81 is the known-good baseline.)
-3. **Multimodal A/B (the gap):** image+text and audio+text inputs, bf16 vs nvfp4-default vs
-   nvfp4-calibrated. Metric: coherence at minimum, plus a small VQA/image set and an audio
-   probe if tractable. Explicitly check whether vision/audio KV need their own calibration.
-4. **Bank + hand off:** every claim an artifact, every red a verbatim error; update
-   `NVFP4_FORMAT_VS_KERNEL_GEMMA4.md` and Task #47/#48; mail Codex the results.
+
+### PRIMARY — reference-sim multimodal (wheel-free, robust; do this first)
+The HF-eager + torch-qdq method (proven: `gs_run.sh`) needs NO serving wheel, so it can't be
+blocked by the mm-prefix selector. Extend it to multimodal:
+1. HF eager `Gemma4Unified` with an **image+text** input (AutoProcessor + a test image + a
+   VQA-style prompt). Intercept K/V (now including vision tokens) via the `sdpa` patch.
+2. **Measure KV dynamic range by modality:** per-tensor amax vs per-16 block-amax distribution
+   for K and V, split into text-token vs vision-token positions. The hypothesis to test: vision
+   (and audio) tokens have *wider* range → more prone to the under-ranged-global saturation.
+3. **Global-scale A/B on multimodal KV:** the two-level qdq from `gs_run.sh`, `g=1` (calibrated)
+   vs `g=0.5` (under-ranged), measured on the multimodal forward (NLL on the text completion).
+   Question: does one per-tensor global suffice for mixed text+vision KV, or do the modalities
+   need separate calibration (i.e. is there a *second* saturation bug specific to vision/audio)?
+4. Repeat with **audio+text** if tractable (Gemma-4 audio processor + a short clip).
+
+### SECONDARY — serving e2e (bounded; only if the wheel is cheaply obtainable)
+Codex's `ge32459eea` wheel serves the mm-prefix nvfp4 path; mine (`g6adc00f70`) does not.
+If that wheel is pullable from a CI artifact / ghcr in a few tries, stand it up and run the
+text `--calculate-kv-scales` A/B + a multimodal serving smoke. **If it thrashes (>2–3 tries),
+bank the blocker and rely on the PRIMARY reference-sim result** — do not burn the night on it.
+
+### Bank + hand off
+Every claim an artifact, every red a verbatim error; update `NVFP4_FORMAT_VS_KERNEL_GEMMA4.md`
+and Task #47/#48; mail Codex the multimodal findings (esp. if vision/audio KV need own calibration).
 
 ## Guardrails
 - vast.ai only (off-Spark → no marker contention with Codex's E4B/ladder runs).
