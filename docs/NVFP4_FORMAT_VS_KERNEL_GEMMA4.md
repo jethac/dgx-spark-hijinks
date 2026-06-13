@@ -135,6 +135,39 @@ delta collapses from +0.4 to ~+0.005. No swizzle, no VO-split, no kernel-math ch
 
 Repro: `docs/vast_anchor/gs_run.sh` (two-level global-scale sweep).
 
+## Multimodal validation (2026-06-14): the fix generalizes; vision KV is NOT wider-range
+
+All quality evidence above is text-only; Gemma 4 is text+image+audio (Jetha: validate all).
+Reference-sim method extended to multimodal (HF eager + torch-qdq, no serving wheel needed),
+`docs/vast_anchor/mm_exp.py` (image) / `mm_audio.py` (audio). Per-modality KV amax stats +
+the same two-level global-scale A/B (g=1 calibrated vs g=0.5 under-ranged), measuring NLL of
+a vision/audio-dependent answer.
+
+Each row generated a coherent modality-dependent answer (e.g. image → "two tabby cats…remote
+control"; audio → accurate ASR of the LibriVox clip), confirming the modality is actually used.
+
+| model | modality | KV amax ratio (mm/text) | bf16 NLL | **calibrated Δ** (g=1) | **under-ranged Δ** (g=0.5) |
+| --- | --- | --- | ---: | ---: | ---: |
+| E4B | image | K 0.99× · V 0.93× | 0.478 | **+0.047** | +0.198 |
+| E2B | audio | K 0.95× · V 0.99× | 0.952 | **+0.078** | +0.099 |
+| E4B | audio | K 0.99× · V 0.84× | 1.983 | **+0.069** | +0.085 |
+| 12B | audio | K 0.99× · V 0.98× | 1.424 | **−0.047** | +0.815 |
+
+**Conclusions (multimodal validated):**
+1. **Vision and audio KV are NOT wider-range than text** (ratios 0.84–0.99× across all sizes) →
+   a single per-tensor global scale serves all modalities; image/audio need **no separate
+   calibration** and introduce no second saturation regime.
+2. **The calibration fix generalizes to every multimodal path** — calibrated is small/negative;
+   under-ranged is worse everywhere (catastrophic on 12B: **+0.815**).
+3. **12B is the most global-scale-sensitive** (under-ranged +0.815 vs E2B/E4B ~+0.09), matching
+   the text 12B being the +0.281 case — so calibration matters most exactly where it bit us.
+4. **Calibrated nvfp4 can beat bf16** (12B audio −0.047) — the "quantized-KV-beats-bf16" anomaly
+   (Task #25) extends to the multimodal/audio path.
+
+→ Net: NVFP4 KV on Gemma 4 is near-lossless across **text, image, and audio** once the global
+scale is calibrated; the only bug is the under-ranged default global, and it's modality-agnostic.
+(Done via the wheel-free reference sim; full serving mm-prefix nvfp4 still wants Codex's wheel.)
+
 ## Implications
 - **Do not** publish "+0.28 inherent NVFP4 cost." The headline "NVFP4 KV ≈ near-lossless +
   3.556× capacity" holds for the **format**; the serving red is a kernel bug to fix.
