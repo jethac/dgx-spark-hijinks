@@ -1,0 +1,115 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO 06-13 10:33:38 [api_utils.py:273] non-default args: {'trust_remote_code': True, 'kv_cache_dtype': 'bfloat16', 'max_model_len': 8192, 'enable_prefix_caching': True, 'gpu_memory_utilization': 0.72, 'max_num_batched_tokens': 4096, 'disable_log_stats': True, 'model': 'google/gemma-4-12B-it'}
+INFO 06-13 10:33:40 [model.py:609] Resolved architecture: Gemma4UnifiedForConditionalGeneration
+INFO 06-13 10:33:40 [model.py:1752] Using max model len 8192
+INFO 06-13 10:33:40 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=4096.
+INFO 06-13 10:33:40 [config.py:148] Gemma4 multimodal prefix spans will run on the FlashInfer FA2 custom-mask path (VLLM_FLASHINFER_MM_PREFIX, default-on; set =0 to keep the Triton mm route).
+INFO 06-13 10:33:40 [config.py:157] Gemma4 with bf16 KV cache on CC 12.0 and VLLM_FLASHINFER_BF16_GEMMA enabled (default-on; set =0 to disable): forcing FLASHINFER (head sizes > 256 use the FA2 two-pass VO split); retiring the TRITON_ATTN fallback.
+INFO 06-13 10:33:40 [vllm.py:995] Asynchronous scheduling is enabled.
+INFO 06-13 10:33:40 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+WARNING 06-13 10:33:40 [cuda.py:266] Forcing --disable_chunked_mm_input for models with multimodal-bidirectional attention.
+(EngineCore pid=9449) INFO 06-13 10:34:19 [core.py:113] Initializing a V1 LLM engine (v0.1.dev1+ge32459eea.sm120a) with config: model='google/gemma-4-12B-it', speculative_config=None, tokenizer='google/gemma-4-12B-it', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=bfloat16, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=google/gemma-4-12B-it, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::qwen_gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [4096], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=9449) INFO 06-13 10:34:19 [parallel_state.py:1568] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.5:42341 backend=nccl
+(EngineCore pid=9449) INFO 06-13 10:34:20 [parallel_state.py:1903] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=9449) INFO 06-13 10:34:20 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=9449) INFO 06-13 10:34:20 [gpu_model_runner.py:5122] Starting to load model google/gemma-4-12B-it...
+(EngineCore pid=9449) INFO 06-13 10:34:21 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=9449) INFO 06-13 10:34:21 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=9449) INFO 06-13 10:34:21 [cuda.py:341] Using AttentionBackendEnum.FLASHINFER backend.
+(EngineCore pid=9449) INFO 06-13 10:34:22 [weight_utils.py:630] No model.safetensors.index.json found in remote.
+(EngineCore pid=9449) INFO 06-13 10:34:22 [weight_utils.py:905] Filesystem type for checkpoints: OVERLAY. Checkpoint size: 22.28 GiB. Available RAM: 1062.59 GiB.
+(EngineCore pid=9449) INFO 06-13 10:34:22 [weight_utils.py:928] Auto-prefetch is disabled because the filesystem (OVERLAY) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+(EngineCore pid=9449) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+(EngineCore pid=9449) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.33s/it]
+(EngineCore pid=9449) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.33s/it]
+(EngineCore pid=9449) 
+(EngineCore pid=9449) INFO 06-13 10:34:25 [default_loader.py:397] Loading weights took 2.87 seconds
+(EngineCore pid=9449) INFO 06-13 10:34:26 [gpu_model_runner.py:5217] Model loading took 22.68 GiB memory and 4.446051 seconds
+(EngineCore pid=9449) INFO 06-13 10:34:26 [gpu_model_runner.py:6230] Encoder cache will be initialized with a budget of 4096 tokens, and profiled with 1 video items of the maximum feature size.
+(EngineCore pid=9449) INFO 06-13 10:34:41 [caching.py:335] reconstructed serializable fn from standalone compile artifacts. num_artifacts=6 num_submods=49
+(EngineCore pid=9449) INFO 06-13 10:34:41 [decorators.py:311] Directly load AOT compilation from path /root/.cache/vllm/torch_compile_cache/torch_aot_compile/16799f53bd0e9f790e0c3166ab11fbd0be739159837b66fa4f833c76f0b1e356/rank_0_0/model
+(EngineCore pid=9449) INFO 06-13 10:34:41 [monitor.py:53] torch.compile took 0.34 s in total
+(EngineCore pid=9449) INFO 06-13 10:34:41 [monitor.py:81] Initial profiling/warmup run took 0.02 s
+(EngineCore pid=9449) WARNING 06-13 10:34:42 [compilation.py:1396] CUDAGraphMode.FULL_AND_PIECEWISE is not supported with FlashInferBackend backend (support: AttentionCGSupport.NEVER); setting cudagraph_mode=PIECEWISE because attention is compiled piecewise
+(EngineCore pid=9449) INFO 06-13 10:34:42 [flashinfer.py:1739] FlashInfer mm-prefix: image-token spans of multimodal requests run with FA2 packed custom masks on a second prefill wrapper (layer group window_left=1023).
+(EngineCore pid=9449) INFO 06-13 10:34:42 [flashinfer.py:1681] FA2 VO split (auto KV): head_size 512 runs as 2 passes of head_dim_vo=256; decode requests use the prefill wrapper.
+(EngineCore pid=9449) INFO 06-13 10:34:42 [gpu_model_runner.py:6442] Profiling CUDA graph memory: PIECEWISE=51 (largest=512)
+(EngineCore pid=9449) INFO 06-13 10:34:43 [gpu_model_runner.py:6547] Estimated CUDA graph memory: 0.44 GiB total
+(EngineCore pid=9449) INFO 06-13 10:34:44 [gpu_worker.py:480] Available KV cache memory: 41.25 GiB
+(EngineCore pid=9449) INFO 06-13 10:34:44 [gpu_worker.py:495] CUDA graph memory profiling is enabled (default since v0.21.0). The current --gpu-memory-utilization=0.7200 is equivalent to --gpu-memory-utilization=0.7154 without CUDA graph memory profiling. To maintain the same effective KV cache size as before, increase --gpu-memory-utilization to 0.7246. To disable, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0.
+(EngineCore pid=9449) INFO 06-13 10:34:44 [kv_cache_utils.py:1790] GPU KV cache size: 199,661 tokens
+(EngineCore pid=9449) INFO 06-13 10:34:44 [kv_cache_utils.py:1791] Maximum concurrency for 8,192 tokens per request: 24.37x
+(EngineCore pid=9449) 2026-06-13 10:34:44,220 - INFO - autotuner.py:651 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=9449) 2026-06-13 10:34:44,230 - INFO - autotuner.py:674 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=9449) INFO 06-13 10:34:44 [kernel_warmup.py:97] Warming up FlashInfer attention.
+(EngineCore pid=9449) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:02, 18.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:02, 18.17it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:02, 18.65it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▌        | 8/51 [00:00<00:02, 18.90it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:00<00:01, 20.21it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  27%|██▋       | 14/51 [00:00<00:01, 21.39it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  33%|███▎      | 17/51 [00:00<00:01, 21.93it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  39%|███▉      | 20/51 [00:00<00:01, 22.80it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  45%|████▌     | 23/51 [00:01<00:01, 23.31it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  51%|█████     | 26/51 [00:01<00:01, 24.08it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  57%|█████▋    | 29/51 [00:01<00:00, 24.36it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  63%|██████▎   | 32/51 [00:01<00:00, 23.76it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  69%|██████▊   | 35/51 [00:01<00:00, 24.42it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  75%|███████▍  | 38/51 [00:01<00:00, 24.50it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  80%|████████  | 41/51 [00:01<00:00, 25.21it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  86%|████████▋ | 44/51 [00:01<00:00, 26.20it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  92%|█████████▏| 47/51 [00:02<00:00, 26.18it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  98%|█████████▊| 50/51 [00:02<00:00, 26.21it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:02<00:00, 23.60it/s]
+(EngineCore pid=9449) INFO 06-13 10:34:47 [gpu_model_runner.py:6615] Graph capturing finished in 3 secs, took 0.45 GiB
+(EngineCore pid=9449) INFO 06-13 10:34:47 [gpu_worker.py:639] CUDA graph pool memory: 0.45 GiB (actual), 0.44 GiB (estimated), difference: 0.01 GiB (2.2%).
+(EngineCore pid=9449) INFO 06-13 10:34:47 [jit_monitor.py:54] Kernel JIT monitor activated — Triton JIT compilations during inference will be logged as warnings.
+(EngineCore pid=9449) INFO 06-13 10:34:48 [core.py:310] init engine (profile, create kv cache, warmup model) took 21.61 s (compilation: 0.34 s)
+(EngineCore pid=9449) INFO 06-13 10:34:48 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+Rendering prompts:   0%|          | 0/1 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 1/1 [00:00<00:00, 136.52it/s]
+Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s](EngineCore pid=9449) WARNING 06-13 10:34:48 [jit_monitor.py:103] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.77it/s, est. speed input: 144.16 toks/s, output: 11.53 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.77it/s, est. speed input: 144.16 toks/s, output: 11.53 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.76it/s, est. speed input: 144.16 toks/s, output: 11.53 toks/s]
+Rendering prompts:   0%|          | 0/1 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 1/1 [00:00<00:00, 1471.17it/s]
+Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.43it/s, est. speed input: 14053.50 toks/s, output: 3.43 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.43it/s, est. speed input: 14053.50 toks/s, output: 3.43 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.43it/s, est. speed input: 14053.50 toks/s, output: 3.43 toks/s]
+Rendering prompts:   0%|          | 0/1 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 1/1 [00:00<00:00, 773.86it/s]
+Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.01it/s, est. speed input: 8250.16 toks/s, output: 1.01 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.01it/s, est. speed input: 8250.16 toks/s, output: 1.01 toks/s]Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.01it/s, est. speed input: 8250.16 toks/s, output: 1.01 toks/s]
+(EngineCore pid=9449) INFO 06-13 10:34:49 [core.py:1182] [shutdown] EngineCore: trigger received signal=SIGTERM
+(EngineCore pid=9449) INFO 06-13 10:34:49 [core.py:1301] [shutdown] EngineCore: start mode=abort timeout=0s
+(EngineCore pid=9449) INFO 06-13 10:34:49 [core.py:1332] [shutdown] EngineCore: request processing complete; starting resource teardown
+(EngineCore pid=9449) INFO 06-13 10:34:49 [core.py:1195] [shutdown] EngineCore: exiting busy loop
+{
+  "available_tokens": 88113,
+  "capability": [
+    12,
+    0
+  ],
+  "chat_smoke": {
+    "contains_tokyo_or_paris": true,
+    "generated": "Tokyo",
+    "model": "google/gemma-4-12B-it",
+    "prompt": "What is the capital of Japan? Answer in one word."
+  },
+  "corpus": "/root/ppl_corpus.md",
+  "ctx": 8185,
+  "cuda": "13.0",
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "elapsed_s": 73.9113100169925,
+  "env": {
+    "PYTHONPATH": "/root/flashinfer",
+    "VLLM_FLASHINFER_BF16_GEMMA": "1",
+    "VLLM_FLASHINFER_VOSPLIT": "1",
+    "VLLM_NVFP4_KV_LINEAR_V_SF": "1",
+    "VLLM_NVFP4_KV_VOSPLIT": "1"
+  },
+  "kv_cache_dtype": "bfloat16",
+  "model": "google/gemma-4-12B-it",
+  "ok": true,
+  "prefix_len": 4096,
+  "schema": "vllm-matched-kv-anchor/v1",
+  "score": {
+    "mean_logprob": -4.555228970943781,
+    "mean_nll_nats": 4.555228970943781,
+    "missing_positions_preview": [],
+    "num_missing_tokens": 0,
+    "num_prompt_tokens": 8185,
+    "num_scored_tokens": 4088,
+    "ok": true,
+    "ppl": 95.12853441238842,
+    "score_start_index": 4097
+  },
+  "score_request": {
+    "elapsed_s": 0.9942332719801925,
+    "generated": "e",
+    "prompt_tokens": 8185
+  },
+  "text_chars": 249998,
+  "tokenizer": "google/gemma-4-12B-it",
+  "torch": "2.12.0+cu130",
+  "warmup": {
+    "elapsed_s": 0.29572793503757566,
+    "generated": "c",
+    "prompt_tokens": 4096
+  }
+}

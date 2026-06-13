@@ -1,0 +1,54 @@
+{
+  "available_tokens": 88113,
+  "capability": [
+    12,
+    0
+  ],
+  "chat_smoke": {
+    "contains_tokyo_or_paris": false,
+    "generated": "11111111",
+    "model": "google/gemma-4-12B-it",
+    "prompt": "What is the capital of Japan? Answer in one word."
+  },
+  "corpus": "/root/ppl_corpus.md",
+  "ctx": 8185,
+  "cuda": "13.0",
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "elapsed_s": 73.50090535904747,
+  "env": {
+    "PYTHONPATH": "/root/flashinfer",
+    "VLLM_FLASHINFER_BF16_GEMMA": "1",
+    "VLLM_FLASHINFER_VOSPLIT": "1",
+    "VLLM_NVFP4_KV_LINEAR_V_SF": "1",
+    "VLLM_NVFP4_KV_VOSPLIT": "1"
+  },
+  "kv_cache_dtype": "bfloat16",
+  "model": "google/gemma-4-12B-it",
+  "ok": false,
+  "prefix_len": 4096,
+  "schema": "vllm-matched-kv-anchor/v1",
+  "score": {
+    "mean_logprob": -4.555228970943781,
+    "mean_nll_nats": 4.555228970943781,
+    "missing_positions_preview": [],
+    "num_missing_tokens": 0,
+    "num_prompt_tokens": 8185,
+    "num_scored_tokens": 4088,
+    "ok": true,
+    "ppl": 95.12853441238842,
+    "score_start_index": 4097
+  },
+  "score_request": {
+    "elapsed_s": 1.388874977012165,
+    "generated": "e",
+    "prompt_tokens": 8185
+  },
+  "text_chars": 249998,
+  "tokenizer": "google/gemma-4-12B-it",
+  "torch": "2.12.0+cu130",
+  "warmup": {
+    "elapsed_s": 0.29252548998920247,
+    "generated": "c",
+    "prompt_tokens": 4096
+  }
+}

@@ -1,0 +1,10 @@
+instance_id=40808770
+gpu=NVIDIA RTX PRO 6000 Blackwell Server Edition, 12.0, 97887 MiB
+python=Python 3.12.13
+torch=2.12.0+cu130
+cuda=13.0
+vllm=0.1.dev1+ge32459eea.sm120a
+transformers=5.12.0
+flashinfer_file=/root/venv/lib/python3.12/site-packages/flashinfer/__init__.py
+flashinfer_git=7d5d477b7725943c8f1242490d38e88aa3d99e19
+flashinfer_branch=
