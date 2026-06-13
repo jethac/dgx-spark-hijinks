@@ -1,0 +1,19 @@
+run_id=sglang_0513_fix_gemma4_e4b_fp8_comparator_ctx512_prefix256_20260614T032241JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live-0513
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e
+models=google/gemma-4-E4B-it
+row_labels=fp8
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+ctx_list=512
+chat_timeout_s=120
+request_timeout_s=1800
+ppl_timeout_s=1800
+started_at=2026-06-14T03:22:41+09:00
+7cc1a7a6010e3f75e88b2d78e54c0d4d7c8aa52d
+["ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e"]
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.8Gi        94Gi        21Mi        22Gi       114Gi
+Swap:           15Gi       466Mi        15Gi

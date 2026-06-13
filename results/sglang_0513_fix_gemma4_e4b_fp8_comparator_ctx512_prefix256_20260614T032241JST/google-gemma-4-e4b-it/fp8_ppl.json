@@ -1,0 +1,7 @@
+{
+  "elapsed_s": 3.1,
+  "error": "FileNotFoundError(2, 'No such file or directory')",
+  "ok": false,
+  "run_id": "sglang_0513_fix_gemma4_e4b_fp8_comparator_ctx512_prefix256_20260614T032241JST_google-gemma-4-e4b-it_fp8",
+  "schema": "sglang-prompt-ppl-sweep/v1"
+}
