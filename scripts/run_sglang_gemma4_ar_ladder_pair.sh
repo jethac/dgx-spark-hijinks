@@ -343,6 +343,12 @@ for model in ${MODELS}; do
           break
         fi
         ;;
+      mixedkv)
+        if ! run_one "${model}" "mixedkv" "fp4_e2m1" "1"; then
+          overall_status=1
+          break
+        fi
+        ;;
       *)
         echo "unknown ROW_LABELS entry: ${row_label}" >&2
         overall_status=2
@@ -358,6 +364,12 @@ for model in ${MODELS}; do
       --compare-fp8 "${OUT_DIR}/${model_slug}/bf16_ppl.json" \
       --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
       --output "${OUT_DIR}/${model_slug}/compare_bf16_vs_fullnvfp4.json" || overall_status=1
+  fi
+  if [[ -f "${OUT_DIR}/${model_slug}/bf16_ppl.json" && -f "${OUT_DIR}/${model_slug}/mixedkv_ppl.json" ]]; then
+    python3 scripts/sglang_prompt_ppl_sweep.py \
+      --compare-fp8 "${OUT_DIR}/${model_slug}/bf16_ppl.json" \
+      --compare-candidate "${OUT_DIR}/${model_slug}/mixedkv_ppl.json" \
+      --output "${OUT_DIR}/${model_slug}/compare_bf16_vs_mixedkv.json" || overall_status=1
   fi
   if [[ -f "${OUT_DIR}/${model_slug}/fp8_ppl.json" && -f "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" ]]; then
     python3 scripts/sglang_prompt_ppl_sweep.py \
@@ -379,10 +391,10 @@ for model in models:
         slug = slug.replace("--", "-")
     model_dir = out / slug
     row = {"model": model, "dir": str(model_dir)}
-    for label in ("bf16", "fp8", "fullnvfp4"):
+    for label in ("bf16", "fp8", "fullnvfp4", "mixedkv"):
         path = model_dir / f"{label}_summary.json"
         row[label] = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
-    for name in ("compare_bf16_vs_fullnvfp4", "compare_fp8_vs_fullnvfp4"):
+    for name in ("compare_bf16_vs_fullnvfp4", "compare_bf16_vs_mixedkv", "compare_fp8_vs_fullnvfp4"):
         compare = model_dir / f"{name}.json"
         row[name] = json.loads(compare.read_text(encoding="utf-8")) if compare.exists() else None
     rows.append(row)
