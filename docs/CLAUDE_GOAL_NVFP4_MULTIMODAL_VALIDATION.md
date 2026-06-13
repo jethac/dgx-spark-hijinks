@@ -28,7 +28,10 @@ blocked by the mm-prefix selector. Extend it to multimodal:
    vs `g=0.5` (under-ranged), measured on the multimodal forward (NLL on the text completion).
    Question: does one per-tensor global suffice for mixed text+vision KV, or do the modalities
    need separate calibration (i.e. is there a *second* saturation bug specific to vision/audio)?
-4. Repeat with **audio+text** if tractable (Gemma-4 audio processor + a short clip).
+4. **Audio is required, not optional — cover E2B, E4B, AND 12B** (per Jetha). Gemma-4 audio
+   processor + a short speech clip; same per-modality KV amax stats + global-scale A/B on each.
+   Vision: cover at least one size (E4B); audio: all three sizes (E2B/E4B/12B). The validation
+   claim is incomplete until every multimodal size has its image AND audio KV checked.
 
 ### SECONDARY — serving e2e (bounded; only if the wheel is cheaply obtainable)
 Codex's `ge32459eea` wheel serves the mm-prefix nvfp4 path; mine (`g6adc00f70`) does not.
