@@ -1,0 +1,39 @@
+{
+  "image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e",
+  "image_digest": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e",
+  "models": [
+    "google/gemma-4-12B-it"
+  ],
+  "row_labels": [
+    "fullnvfp4"
+  ],
+  "rows": [
+    {
+      "bf16": null,
+      "compare_bf16_vs_fullnvfp4": null,
+      "compare_bf16_vs_mixedkv": null,
+      "compare_fp8_vs_fullnvfp4": null,
+      "dir": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live-0513/results/sglang_0513_fix_gemma4_12b_fullnvfp4_only_ctx8185_prefix4096_20260614T024920JST/google-gemma-4-12b-it",
+      "fp8": null,
+      "fullnvfp4": {
+        "chat_1": "Tokyo",
+        "chat_2": "Tokyo",
+        "chat_bitwise_equal": false,
+        "chat_content_equal": true,
+        "chat_tokyo": true,
+        "chat_transport_ok": true,
+        "kv_cache_dtype": "fp4_e2m1",
+        "label": "fullnvfp4",
+        "mixed_kv": false,
+        "model": "google/gemma-4-12B-it",
+        "ppl_ok": true,
+        "ppl_rows": null
+      },
+      "mixedkv": null,
+      "model": "google/gemma-4-12B-it"
+    }
+  ],
+  "run_id": "sglang_0513_fix_gemma4_12b_fullnvfp4_only_ctx8185_prefix4096_20260614T024920JST",
+  "schema": "sglang-gemma4-ar-ladder-pair/v1",
+  "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time"
+}
