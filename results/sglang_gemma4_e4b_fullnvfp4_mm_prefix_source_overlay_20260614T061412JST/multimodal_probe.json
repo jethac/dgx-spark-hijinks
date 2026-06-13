@@ -1,0 +1,331 @@
+{
+  "audio_prompt": "Transcribe this audio in English. Keep the original words as closely as possible.",
+  "audio_reference_transcript": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+  "audio_url": "/hijinks/results/p520_audio_mm_20260612/assets/speech_librispeech_1272-128104-0000.wav",
+  "image_path": "/hijinks/results/sglang_gemma4_e4b_fullnvfp4_mm_prefix_source_overlay_20260614T061412JST/assets/red_square_blue_triangle.png",
+  "image_prompt": "Identify the two colored shapes. Answer with a short phrase.",
+  "image_ref_kind": "path_data_uri",
+  "image_url": null,
+  "keyword_mode": "all",
+  "model": "google/gemma-4-E4B-it",
+  "ok": true,
+  "repeat": 2,
+  "rows": [
+    {
+      "all_http_200": true,
+      "all_keyword_hit": true,
+      "content_equal": true,
+      "keywords": [
+        "tokyo"
+      ],
+      "label": "text",
+      "outputs": [
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "TOKYO",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385527,
+              "id": "360edba9e81d46aca4d9d88927491184",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 3,
+                "prompt_tokens": 18,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 21
+              }
+            },
+            "elapsed_s": 18.430516024993267,
+            "status": 200
+          },
+          "round": 1,
+          "text": "TOKYO",
+          "usage": {
+            "completion_tokens": 3,
+            "prompt_tokens": 18,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 21
+          }
+        },
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "TOKYO",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385528,
+              "id": "ed2bd3900c364b6bb9d2fab7abb8af2d",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 3,
+                "prompt_tokens": 18,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 21
+              }
+            },
+            "elapsed_s": 0.2620712710195221,
+            "status": 200
+          },
+          "round": 2,
+          "text": "TOKYO",
+          "usage": {
+            "completion_tokens": 3,
+            "prompt_tokens": 18,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 21
+          }
+        }
+      ]
+    },
+    {
+      "all_http_200": true,
+      "all_keyword_hit": true,
+      "content_equal": true,
+      "keywords": [
+        "red square",
+        "blue triangle"
+      ],
+      "label": "image",
+      "outputs": [
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "red square, blue triangle",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385528,
+              "id": "b311e682cd8248d6848352ff581a4605",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 6,
+                "prompt_tokens": 287,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 293
+              }
+            },
+            "elapsed_s": 0.5763669000007212,
+            "status": 200
+          },
+          "round": 1,
+          "text": "red square, blue triangle",
+          "usage": {
+            "completion_tokens": 6,
+            "prompt_tokens": 287,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 293
+          }
+        },
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "red square, blue triangle",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385529,
+              "id": "3e30975ce64a4700bbb64858ca57bb93",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 6,
+                "prompt_tokens": 287,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 293
+              }
+            },
+            "elapsed_s": 0.4154853119980544,
+            "status": 200
+          },
+          "round": 2,
+          "text": "red square, blue triangle",
+          "usage": {
+            "completion_tokens": 6,
+            "prompt_tokens": 287,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 293
+          }
+        }
+      ]
+    },
+    {
+      "all_http_200": true,
+      "all_keyword_hit": true,
+      "content_equal": true,
+      "keywords": [
+        "quilter",
+        "apostle",
+        "middle",
+        "gospel"
+      ],
+      "label": "audio",
+      "outputs": [
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385530,
+              "id": "e91fe1a28b6349f3b68951b5090aca68",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 20,
+                "prompt_tokens": 174,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 194
+              }
+            },
+            "elapsed_s": 1.8266109070391394,
+            "status": 200
+          },
+          "round": 1,
+          "text": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 174,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 194
+          }
+        },
+        {
+          "keyword_hit": true,
+          "response": {
+            "body": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "index": 0,
+                  "logprobs": null,
+                  "matched_stop": 106,
+                  "message": {
+                    "content": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+                    "reasoning_content": null,
+                    "role": "assistant",
+                    "tool_calls": null
+                  }
+                }
+              ],
+              "created": 1781385532,
+              "id": "b6ce3a8638474ea8afb7347a47bb75bb",
+              "metadata": {
+                "weight_version": "default"
+              },
+              "model": "google/gemma-4-E4B-it",
+              "object": "chat.completion",
+              "usage": {
+                "completion_tokens": 20,
+                "prompt_tokens": 174,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0,
+                "total_tokens": 194
+              }
+            },
+            "elapsed_s": 1.2099040790344588,
+            "status": 200
+          },
+          "round": 2,
+          "text": "Mr Quilter is the apostle of the middle classes and we are glad to welcome his gospel.",
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 174,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0,
+            "total_tokens": 194
+          }
+        }
+      ]
+    }
+  ],
+  "schema": "sglang-gemma4-multimodal-chat-probe/v1",
+  "text_prompt": "Answer with only the capital city of Japan.",
+  "url": "http://127.0.0.1:30000"
+}

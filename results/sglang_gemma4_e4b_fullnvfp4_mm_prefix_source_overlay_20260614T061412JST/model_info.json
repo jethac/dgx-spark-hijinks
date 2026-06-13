@@ -1,0 +1,1 @@
+{"model_path":"google/gemma-4-E4B-it","tokenizer_path":"google/gemma-4-E4B-it","is_generation":true,"preferred_sampling_params":null,"weight_version":"default","has_image_understanding":true,"has_audio_understanding":true,"model_type":"gemma4","architectures":["Gemma4ForConditionalGeneration"]}
