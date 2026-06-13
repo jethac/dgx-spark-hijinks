@@ -1,0 +1,37 @@
+{
+  "image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94",
+  "image_digest": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94",
+  "models": [
+    "google/gemma-4-E4B-it"
+  ],
+  "row_labels": [
+    "bf16"
+  ],
+  "rows": [
+    {
+      "bf16": {
+        "chat_1": "TOKYO",
+        "chat_2": "TOKYO",
+        "chat_bitwise_equal": false,
+        "chat_content_equal": true,
+        "chat_tokyo": true,
+        "chat_transport_ok": true,
+        "kv_cache_dtype": "auto",
+        "label": "bf16",
+        "mixed_kv": false,
+        "model": "google/gemma-4-E4B-it",
+        "ppl_ok": true,
+        "ppl_rows": null
+      },
+      "compare_bf16_vs_fullnvfp4": null,
+      "compare_fp8_vs_fullnvfp4": null,
+      "dir": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live/results/sglang_gemma4_e4b_packaged_vosplit_bf16_smoke_20260613T153208JST/google-gemma-4-e4b-it",
+      "fp8": null,
+      "fullnvfp4": null,
+      "model": "google/gemma-4-E4B-it"
+    }
+  ],
+  "run_id": "sglang_gemma4_e4b_packaged_vosplit_bf16_smoke_20260613T153208JST",
+  "schema": "sglang-gemma4-ar-ladder-pair/v1",
+  "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time"
+}

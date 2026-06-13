@@ -1,0 +1,14 @@
+{
+  "chat_1": "TOKYO",
+  "chat_2": "TOKYO",
+  "chat_bitwise_equal": false,
+  "chat_content_equal": true,
+  "chat_tokyo": true,
+  "chat_transport_ok": true,
+  "kv_cache_dtype": "auto",
+  "label": "bf16",
+  "mixed_kv": false,
+  "model": "google/gemma-4-E4B-it",
+  "ppl_ok": true,
+  "ppl_rows": null
+}
