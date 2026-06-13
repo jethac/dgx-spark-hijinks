@@ -1,0 +1,14 @@
+run_id=sglang_gemma4_12b_ar_nvfp4_only_ctx8185_prefix4096_20260613T113248JST
+model=google/gemma-4-12B-it
+label=fullnvfp4
+kv_cache_dtype=fp4_e2m1
+mixed_kv=0
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0d5e160cf83db43e1e024a8300ed2858b426b4a0f38289210dc51d8c7b6def94
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+started_at=2026-06-13T11:32:49+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       3.9Gi        98Gi        12Mi        18Gi       115Gi
+Swap:           15Gi       491Mi        15Gi
