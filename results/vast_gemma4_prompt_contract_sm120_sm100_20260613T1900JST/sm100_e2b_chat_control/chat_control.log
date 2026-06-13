@@ -1,0 +1,4 @@
+Loading weights:   0%|          | 0/1951 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 511/1951 [00:00<00:00, 5035.90it/s]Loading weights:  52%|█████▏    | 1015/1951 [00:03<00:04, 219.57it/s]Loading weights:  63%|██████▎   | 1231/1951 [00:04<00:02, 248.76it/s]Loading weights:  70%|███████   | 1366/1951 [00:04<00:02, 258.00it/s]Loading weights:  95%|█████████▌| 1860/1951 [00:05<00:00, 489.54it/s]Loading weights: 100%|██████████| 1951/1951 [00:05<00:00, 384.49it/s]
+RAW_GEN ' France is France is France is France is France is France is France is France is'
+CHAT_GEN 'Paris'
+OUT /root/results/gemma4_e2b_chat_control_sm100_20260613/chat_control.json

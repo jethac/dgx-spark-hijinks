@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "model": "google/gemma-4-E2B-it",
+    "torch": "2.12.0+cu130",
+    "cuda": "13.0",
+    "device": "NVIDIA GeForce RTX 5090",
+    "capability": [
+      12,
+      0
+    ],
+    "dtype": "torch.float32",
+    "run_device": "cuda",
+    "raw_prompt": "The capital of France is",
+    "chat_prompt": "What is the capital of France? Answer in one word."
+  },
+  "raw": {
+    "label": "raw",
+    "prompt_len": 5,
+    "generated": " France is France is France is France is France is France is France is France is",
+    "top_tokens": [
+      {
+        "token_id": 7001,
+        "token": " France",
+        "logit": -9.057204246520996
+      },
+      {
+        "token_id": 711,
+        "token": " not",
+        "logit": -17.105409622192383
+      },
+      {
+        "token_id": 531,
+        "token": " to",
+        "logit": -18.816822052001953
+      },
+      {
+        "token_id": 532,
+        "token": " and",
+        "logit": -18.855379104614258
+      },
+      {
+        "token_id": 5279,
+        "token": " capital",
+        "logit": -18.865388870239258
+      },
+      {
+        "token_id": 496,
+        "token": " a",
+        "logit": -18.943662643432617
+      },
+      {
+        "token_id": 236761,
+        "token": ".",
+        "logit": -19.003456115722656
+      },
+      {
+        "token_id": 563,
+        "token": " is",
+        "logit": -19.433006286621094
+      }
+    ]
+  },
+  "chat": {
+    "label": "chat_template",
+    "prompt_len": 21,
+    "generated": "Paris",
+    "top_tokens": [
+      {
+        "token_id": 50429,
+        "token": "Paris",
+        "logit": 11.125930786132812
+      },
+      {
+        "token_id": 1018,
+        "token": "**",
+        "logit": -10.587769508361816
+      },
+      {
+        "token_id": 9079,
+        "token": " Paris",
+        "logit": -17.063892364501953
+      },
+      {
+        "token_id": 3128,
+        "token": "Par",
+        "logit": -17.353750228881836
+      },
+      {
+        "token_id": 123389,
+        "token": " \u09aa\u09cd\u09af\u09be\u09b0",
+        "logit": -18.526227951049805
+      },
+      {
+        "token_id": 236832,
+        "token": "7",
+        "logit": -18.76112937927246
+      },
+      {
+        "token_id": 2717,
+        "token": "```",
+        "logit": -18.768009185791016
+      },
+      {
+        "token_id": 142253,
+        "token": "\u5df4\u9ece",
+        "logit": -18.804170608520508
+      }
+    ]
+  }
+}

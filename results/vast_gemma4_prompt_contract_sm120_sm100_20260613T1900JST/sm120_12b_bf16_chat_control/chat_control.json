@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "model": "google/gemma-4-12B-it",
+    "torch": "2.12.0+cu130",
+    "cuda": "13.0",
+    "device": "NVIDIA GeForce RTX 5090",
+    "capability": [
+      12,
+      0
+    ],
+    "dtype": "torch.bfloat16",
+    "run_device": "cuda",
+    "raw_prompt": "The capital of France is",
+    "chat_prompt": "What is the capital of France? Answer in one word."
+  },
+  "raw": {
+    "label": "raw",
+    "prompt_len": 5,
+    "generated": "111.1......11111",
+    "top_tokens": [
+      {
+        "token_id": 236770,
+        "token": "1",
+        "logit": 19.75
+      },
+      {
+        "token_id": 236772,
+        "token": "-",
+        "logit": 17.25
+      },
+      {
+        "token_id": 236761,
+        "token": ".",
+        "logit": 17.125
+      },
+      {
+        "token_id": 236771,
+        "token": "0",
+        "logit": 15.6875
+      },
+      {
+        "token_id": 236779,
+        "token": "_",
+        "logit": 15.375
+      },
+      {
+        "token_id": 236764,
+        "token": ",",
+        "logit": 13.875
+      },
+      {
+        "token_id": 236778,
+        "token": "2",
+        "logit": 12.875
+      },
+      {
+        "token_id": 236800,
+        "token": "3",
+        "logit": 12.5625
+      }
+    ]
+  },
+  "chat": {
+    "label": "chat_template",
+    "prompt_len": 25,
+    "generated": "Paris",
+    "top_tokens": [
+      {
+        "token_id": 50429,
+        "token": "Paris",
+        "logit": 21.875
+      },
+      {
+        "token_id": 9079,
+        "token": " Paris",
+        "logit": 0.9453125
+      },
+      {
+        "token_id": 16808,
+        "token": "PAR",
+        "logit": 0.734375
+      },
+      {
+        "token_id": 119213,
+        "token": " \u041f\u0430\u0440\u0438",
+        "logit": 0.4765625
+      },
+      {
+        "token_id": 236791,
+        "token": "P",
+        "logit": -0.19921875
+      },
+      {
+        "token_id": 100,
+        "token": "<|channel>",
+        "logit": -1.1171875
+      },
+      {
+        "token_id": 236774,
+        "token": "T",
+        "logit": -1.4921875
+      },
+      {
+        "token_id": 236785,
+        "token": "\\",
+        "logit": -2.140625
+      }
+    ]
+  }
+}
