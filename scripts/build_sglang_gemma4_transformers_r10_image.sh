@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Historical local derivative builder only. The current SGLang Spark carrier is
+# built by .github/workflows/hijinks-sglang-gemma4-source-stack-image.yml and
+# already bakes Transformers 5.11 plus the mm-prefix SGLang changes
+# (`epoch2-sglang-mm-prefix-f920e2d-arm64`,
+# sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714).
+# Refuse by default so we do not accidentally derive a new image from the older
+# 0d5e160 base and lose the mm-prefix fix.
+if [[ "${ALLOW_SUPERSEDED_SGLANG_R10_BUILDER:-0}" != "1" ]]; then
+  cat >&2 <<'EOF'
+build_sglang_gemma4_transformers_r10_image.sh is superseded and disabled.
+
+Use the GitHub/Ubicloud source-stack workflow:
+  .github/workflows/hijinks-sglang-gemma4-source-stack-image.yml
+
+Only replay this local derivative builder with
+ALLOW_SUPERSEDED_SGLANG_R10_BUILDER=1 when intentionally reproducing the old
+r10 Transformers-overlay image from the pre-mm-prefix source stack.
+EOF
+  exit 2
+fi
+
 usage() {
   cat >&2 <<'EOF'
 usage: scripts/build_sglang_gemma4_transformers_r10_image.sh [IMAGE_TAG]
