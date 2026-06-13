@@ -222,7 +222,9 @@ while SGLang supplies split K/V tensors (`K=torch.float8_e4m3fn`,
 split-K/V paged-prefill module keying, but it is no longer a headline or
 ship-blocking rung. The packet remains staged in
 `docs/SGLANG_DIFFUSIONGEMMA_DGR4_MIXEDKV_PACKET_20260612.md` for future
-split-dtype work.
+split-dtype work. As of FlashInfer `3fa0775c`, the temporary
+`k_data_type`/`v_data_type` plan kwargs are removed entirely; future DG-R4 work
+needs real split-K/V module identity rather than replaying the old API shim.
 
 ### DG-R5: Full NVFP4 K+V
 

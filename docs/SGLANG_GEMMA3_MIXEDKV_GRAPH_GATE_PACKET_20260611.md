@@ -2,9 +2,19 @@
 
 Date: 2026-06-11 JST
 
-Purpose: retry the SGLang Gemma 3 27B mixed FP8-K + NVFP4-V CUDA graph
-re-enable gate after `jethac/flashinfer@f99323bd` added plan support for the
-validated mixed pair `(k_data_type=torch.float8_e4m3fn, v_data_type=torch.uint8)`.
+Purpose: record the SGLang Gemma 3 27B mixed FP8-K + NVFP4-V CUDA graph
+re-enable gate packet that was staged after `jethac/flashinfer@f99323bd`
+temporarily accepted the validated mixed pair
+`(k_data_type=torch.float8_e4m3fn, v_data_type=torch.uint8)`.
+
+Status update, 2026-06-14: **parked, do not run as written.** FlashInfer branch
+`spark/hijinks-022-fa2-d512` later moved to `3fa0775c`, intentionally removing
+the temporary `k_data_type` / `v_data_type` kwargs from the public `plan()` API.
+That does not affect full-NVFP4 K+V (`kv_data_type=torch.uint8`), but it means
+mixed FP8-K/NVFP4-V still requires real split-K/V module keying before this
+graph gate can become a claim-grade runtime row. A setup-only rerun must either
+pin FlashInfer to `f99323bd` to reproduce the old API experiment, or wait for
+the proper split-dtype implementation.
 
 This packet is for the next free Spark window. Do not run while
 `/home/jethac/spark_tmp/CLAUDE_WINDOW_OPEN` exists.
@@ -14,6 +24,9 @@ This packet is for the next free Spark window. Do not run while
 - Branch: `epoch2`
 - Main repo head includes the FlashInfer submodule pointer bump to
   `jethac/flashinfer@spark/hijinks-022-fa2-d512@f99323bd`.
+  Do not silently substitute the current branch tip (`3fa0775c` as of
+  2026-06-14) for this packet: that tip removed the split-dtype kwargs and
+  should fail old mixed-KV callers immediately.
 - SGLang submodule remains on the DiffusionGemma/SGLang lane head
   `jethac/sglang@spark/hijinks-023-gemma4-fullnvfp4-denominator@3a2e15153`.
 - Spark memory guardrails: single server at a time, Docker cgroup
@@ -31,9 +44,11 @@ BatchPrefillWithPagedKVCacheWrapper.plan() got an unexpected keyword argument 'k
 BatchDecodeWithPagedKVCacheWrapper.plan() got an unexpected keyword argument 'k_data_type'
 ```
 
-Mail `0016_claude-to-codex_graph-gate-unparked.md` reports that the FlashInfer
-branch now accepts this exact mixed pair at plan level. The retry must therefore
-prove both the Python package and JIT source are the branch copy:
+Mail `0016_claude-to-codex_graph-gate-unparked.md` reported that the FlashInfer
+branch accepted this exact mixed pair at plan level at `f99323bd`. That was a
+temporary API experiment and is now superseded by the split-dtype de-scope
+decision. If this historical packet is deliberately replayed, it must prove both
+the Python package and JIT source are the pinned `f99323bd` branch copy:
 
 - `flashinfer.__file__` must resolve under `/work/third_party/flashinfer`.
 - `flashinfer.jit.env.FLASHINFER_DATA` and `FLASHINFER_CSRC_DIR` must resolve
@@ -55,7 +70,7 @@ docker ps
 git pull --rebase
 git submodule update --init third_party/sglang third_party/flashinfer
 git -C third_party/flashinfer fetch origin spark/hijinks-022-fa2-d512
-git -C third_party/flashinfer checkout -B spark/hijinks-022-fa2-d512 origin/spark/hijinks-022-fa2-d512
+git -C third_party/flashinfer checkout f99323bd
 git -C third_party/flashinfer rev-parse HEAD
 git -C third_party/sglang rev-parse HEAD
 
