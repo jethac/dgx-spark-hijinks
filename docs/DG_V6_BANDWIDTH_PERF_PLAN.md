@@ -100,3 +100,103 @@ lever" into a measured curve) and the SGLang lane (Codex can mirror for DG-R6).
 - TPOT semantics for diffusion: vLLM reports per-output-token latency; that already folds the
   per-step re-reads across the block, which is exactly what we want to measure.
 - Keep util / max-model-len identical across dtypes so the only variable is KV bytes/read.
+
+---
+
+# Runner context & runbook (self-contained — for a fresh agent)
+
+You have NO prior conversation context. Everything you need is here. This is the
+**dgx-spark-hijinks** campaign: adding NVFP4 KV cache support for Gemma on consumer/Spark
+Blackwell. Two agent lanes coordinate: Claude (vLLM/FlashInfer) and Codex (SGLang/infra),
+via committed `mail/` files. This task is a self-contained perf experiment; do it, bank it,
+mail a one-line result.
+
+## Repos & branches
+- Campaign repo (this one): `github.com/jethac/dgx-spark-hijinks`, branch **`epoch2`**. Results
+  + docs + `mail/` live here. Work in the worktree you're already in.
+- vLLM: `github.com/jethac/vllm`, branch `spark/hijinks-e2-vllm` (== `e2-dgv`). The e2-dgv
+  arm64 wheel release is `sm121a-arm64-wheels-3d6a0d507`.
+- FlashInfer: `github.com/jethac/flashinfer`, branch `spark/hijinks-022-fa2-d512` (source-tree
+  JIT, baked into the serving image).
+
+## Spark access (the GPU)
+- Host: **`jethac@100.113.98.11`** (Tailscale). SSH is **key-based / passwordless** —
+  `ssh -o BatchMode=yes jethac@100.113.98.11` works; you do NOT need a password. GB10, sm_121,
+  ~119 GiB unified. nvfp4 is clean on Spark (the sm_120 nvfp4 read defect is 5060-Ti/WSL2-only).
+- Triple-nested quoting (local-bash -> ssh -> remote-bash) mangles `$` and quotes. **Stage
+  remote scripts to a file and pipe**: `ssh ... bash -s < /tmp/script.sh`. Don't inline complex
+  remote commands.
+
+## GPU marker contract (MANDATORY — shared single GPU)
+1. Before any GPU use: check `ls ~/spark_tmp/MARKER_*` on Spark AND
+   `nvidia-smi --query-compute-apps=pid --format=csv,noheader`. If another agent's marker
+   exists OR a compute app is running, **do not touch the GPU** — wait / coordinate via `mail/`.
+   (Stale-marker rule: a marker with no active process for >30 min may be struck.)
+2. Claim: `echo "codex dg-v6 $(date -u +%FT%TZ)" > ~/spark_tmp/MARKER_codex_dgv6`.
+3. Release on completion/abort: `rm -f ~/spark_tmp/MARKER_codex_dgv6` and verify the GPU is
+   free (no compute apps). One server at a time; `docker rm -f` the container after each.
+
+## The serving image
+- Use **`jethac-vllm-aeon-gemma4:e2-dgv-3d6a0d507-sm121a-r11`** (already on Spark from DG-V5):
+  r10 stack (Ubuntu 22.04 / torch 2.11 / flashinfer 76af7982 = the 022-fa2-d512 family) + the
+  e2-dgv vLLM wheel. `docker images | grep e2-dgv` to confirm. If absent, bake it: `docker build`
+  with `docker/Dockerfile.r11` from the e2-dgv vLLM checkout, `--build-arg BASE_IMAGE=...r10
+  --build-arg VLLM_WHEEL=<the sm121a-arm64-wheels-3d6a0d507 .whl>` (download via
+  `gh release download sm121a-arm64-wheels-3d6a0d507 --repo jethac/vllm`).
+- **Warm CUTLASS-MoE cache (avoid the ~20 min cold compile):** the 26B-A4B MoE JIT-compiles a
+  CUTLASS fused-MoE kernel on first serve (97 targets, ~20 min). A warm cache from DG-V5 is at
+  **`~/spark_tmp/fi_cache`** (~120-140 `.o`). **Mount it**: `-v ~/spark_tmp/fi_cache:/root/.cache/flashinfer`
+  (mount preserves mtimes; baking into the image via COPY does NOT — it triggers a partial
+  recompile). If `fi_cache` is gone, the first serve will recompile (wait it out — it's
+  progressing if `nvidia-smi` shows `nvcc` procs and `find /root/.cache/flashinfer -name '*.o'`
+  grows; do NOT kill it as a "hang", that was an earlier mistake).
+- Models (cached on Spark, ~49 GB DG / ~52 GB AR): `google/diffusiongemma-26B-A4B-it`,
+  `google/gemma-4-26B-A4B-it`. HF token at `~/.cache/huggingface/token` (gated models). Mount
+  `-v ~/.cache/huggingface:/root/.cache/huggingface`.
+
+## Proven serve config (from DG-V5 — copy exactly)
+```bash
+docker run -d --name dgv6_nvfp4 --gpus all --net host --ipc host \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  -v ~/spark_tmp/fi_cache:/root/.cache/flashinfer \
+  -e VLLM_NVFP4_KV_LINEAR_V_SF=1 \
+  jethac-vllm-aeon-gemma4:e2-dgv-3d6a0d507-sm121a-r11 \
+  bash -lc "vllm serve google/diffusiongemma-26B-A4B-it --served-model-name dg \
+    --host 127.0.0.1 --port 8000 --attention-backend FLASHINFER --kv-cache-dtype nvfp4 \
+    --max-num-seqs 4 --gpu-memory-utilization 0.6 --max-model-len 8704 \
+    --enforce-eager --no-enable-prefix-caching --no-enable-chunked-prefill"
+```
+- **bf16 row:** identical but `--kv-cache-dtype auto` and drop `-e VLLM_NVFP4_KV_LINEAR_V_SF=1`.
+- **AR control:** swap the model to `google/gemma-4-26B-A4B-it` (drop the diffusion-specific
+  flags are fine to keep; it serves AR). Same dtype pair.
+- `--enforce-eager` (cudagraph OOMs the 26B MoE) and `--no-enable-prefix-caching
+  --no-enable-chunked-prefill` (block-diffusion) are REQUIRED for DiffusionGemma.
+- Wait-ready: poll `curl -fsS http://127.0.0.1:8000/v1/models`. Model load ~6 min; if cache is
+  warm there's no 20-min compile after. Proof lines to grep in `docker logs`: `Using nvfp4 data
+  type to store kv cache` and `VLLM_NVFP4_KV_LINEAR_V_SF=1: NVFP4 V scale factors are linear`.
+- **Coherence sanity** (not the perf metric, just a smoke): block-diffusion needs the CHAT
+  endpoint — `POST /v1/chat/completions` with a `messages` list returns coherent text
+  ("...Tokyo."); raw `/v1/completions` returns gibberish by design. For TIMING use the bench
+  below (random prompts are fine — the denoise loop runs regardless of coherence).
+
+## The bench (TPOT vs context, conc=1)
+For each (model, dtype), with the server up, sweep input len:
+```bash
+docker exec dgv6_nvfp4 bash -lc "vllm bench serve --model dg --base-url http://127.0.0.1:8000 \
+  --dataset-name random --random-input-len <CTX> --random-output-len 256 \
+  --max-concurrency 1 --num-prompts 16 --ignore-eos --save-result \
+  --result-filename /spark_tmp/dgv6_<model>_<dtype>_ctx<CTX>.json"
+```
+Sweep `<CTX>` = 512 1024 2048 4096 8192. Pull `mean_tpot_ms` / `output_throughput` from each
+JSON. If `vllm bench serve` flags differ in this wheel, `vllm bench serve --help` inside the
+container; the key knobs are dataset=random, input/output len, max-concurrency, save-result.
+
+## Banking & coordination (stop-point hygiene)
+- Pull results off Spark to `results/dg_v6_bandwidth_<YYYYMMDD>/` in this repo (scp the bench
+  JSONs + server logs). Write `SUMMARY.md`: the `speedup(ctx) = TPOT_bf16/TPOT_nvfp4` table for
+  DiffusionGemma AND the AR control, plus the roofline overlay; state P1/P2 verdicts + whether
+  the kill criterion fired.
+- Campaign rules: **every claim an artifact; every red a verbatim error; a stop point = clean
+  tree + pushed summary.** Commit + push to `epoch2`. Then write `mail/<NNNN>_codex-to-claude_dg-v6-result.md`
+  (next free number via `ls mail/`) with the one-line verdict + the artifact path.
+- Free the GPU + remove your marker before you stop.
