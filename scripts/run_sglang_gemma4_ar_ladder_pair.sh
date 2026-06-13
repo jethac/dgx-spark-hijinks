@@ -142,6 +142,7 @@ run_one() {
     -e SGLANG_GEMMA_KV_GEOMETRY=1 \
     -e SGLANG_FP4_KV_MIXED_KV="${mixed_kv}" \
     -e SGLANG_FP4_KV_TRACE_MODULE=1 \
+    -e SGLANG_FP4_KV_TRACE_BACKEND=1 \
     -e TRANSFORMERS_OFFLINE=1 \
     -e HF_HUB_OFFLINE=1 \
     -e HF_TOKEN="${HF_TOKEN:-}" \
