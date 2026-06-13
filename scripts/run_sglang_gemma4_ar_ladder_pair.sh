@@ -50,15 +50,28 @@ contains_item() {
 }
 
 if [[ "${ALLOW_KNOWN_BLOCKED}" != "1" ]]; then
-  if contains_item "${MODELS}" "google/gemma-4-12B-it" \
-    && contains_item "${ROW_LABELS}" "fullnvfp4"; then
+  if contains_item "${ROW_LABELS}" "fullnvfp4" \
+    && { contains_item "${MODELS}" "google/gemma-4-12B-it" \
+      || contains_item "${MODELS}" "google/gemma-4-26B-A4B-it" \
+      || contains_item "${MODELS}" "google/gemma-4-31B-it"; }; then
+    blocked_fullnvfp4_models=()
+    for candidate in \
+      "google/gemma-4-12B-it" \
+      "google/gemma-4-26B-A4B-it" \
+      "google/gemma-4-31B-it"; do
+      if contains_item "${MODELS}" "${candidate}"; then
+        blocked_fullnvfp4_models+=("${candidate}")
+      fi
+    done
+    printf 'Refusing known-blocked SGLang Gemma 4 full-NVFP4 AR ladder row(s): %s\n\n' \
+      "${blocked_fullnvfp4_models[*]}" >&2
     cat >&2 <<'EOF'
-Refusing known-blocked SGLang Gemma 4 12B full-NVFP4 AR row.
-
 Current evidence: matched 12B ctx8185/prefix4096 is red by +0.402969
 nats/token, and mail/0138 classifies that as a shared FlashInfer/numerics
-blocker, not an SGLang radix/merge fix. Re-run only after the dependency changes
-or for an explicitly labeled diagnostic:
+blocker, not an SGLang radix/merge fix. The 26B-A4B and 31B full-NVFP4 AR
+ship-gate rows wait behind the same shared fix to avoid producing
+non-claim-grade ladder evidence. Re-run only after the dependency changes or
+for an explicitly labeled diagnostic:
 
   ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 EOF

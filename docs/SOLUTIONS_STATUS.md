@@ -25,9 +25,10 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   FlashInfer/numerics blocker rather than SGLang radix/merge; E4B fp8 comparator
   remains a FlashInfer D512/VO256 1-byte-KV dispatcher blocker.
 - Current live packet: `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
-  `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses the known-blocked rows
-  by default; set `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant
-  dependency fix or for an explicitly labeled diagnostic replay.
+  `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses full-NVFP4
+  12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row by default;
+  set `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant dependency
+  fix or for an explicitly labeled diagnostic replay.
 
 ## Status Map
 
