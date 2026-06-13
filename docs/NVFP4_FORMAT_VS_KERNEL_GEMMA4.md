@@ -42,6 +42,37 @@ under-quantizing. (If anything, real 2-level NVFP4 with a global scale is ≤ th
   (head_dim 256 + sliding-window pattern + GQA; VO-split for the 512-head sizes). So this is
   a **Gemma-4-geometry-specific FlashInfer nvfp4 kernel bug** — squarely Task #25.
 
+## Localization (2026-06-13): the kernel behaves like a PER-TENSOR scale
+
+Scale-granularity sweep on gemma-4-12B (ctx 4096, same kernel-free reference, varying the
+NVFP4 block size + K-vs-V):
+
+| scheme | Δ nats/token |
+| --- | ---: |
+| **block-16 (NVFP4 spec)** K+V | **+0.013** |
+| block-32 / 64 / 128 | +0.014 / +0.018 / +0.027 |
+| block-256 (per-head-row) | +0.071 |
+| **per-tensor (single global scale)** | **+0.235** |
+| block-16 **K-only** | +0.0004 |
+| block-16 **V-only** | +0.004 |
+
+`per-tensor` scaling reproduces the served magnitude (+0.235 at ctx 4096 ≈ Codex's +0.281
+at ctx 8185; the format-loss *decreases* with ctx while per-tensor *grows*, so per-tensor at
+8192 lands right on +0.281). **So the served nvfp4 KV path is effectively applying a coarse
+(≈per-tensor) scale, not the per-16-block scale the NVFP4 format mandates.** That is the bug:
+a scale-factor *granularity* defect, not the format and not the attention math.
+
+- K quantization is essentially free (+0.0004); V is the slightly sensitive term — consistent
+  with the per-block V scale-factor (SF) being the thing that's collapsing. Prime suspect:
+  the **V-SF tensor layout/stride** (swizzled-vs-linear; `VLLM_NVFP4_KV_LINEAR_V_SF`), where a
+  wrong stride makes per-block scales read as effectively one scale.
+- Why Qwen/Gemma-3 were near-lossless even if their path is equally coarse: their KV has less
+  cross-block dynamic range, so a coarse scale barely hurts; Gemma-4's KV needs the per-16
+  granularity.
+
+**Fix direction:** verify/repair per-16-block SF application in the nvfp4 KV read path (esp.
+V-SF layout/stride). Proper block-16 recovers ~+0.22 nats/token (→ +0.013, near-lossless).
+
 ## Implications
 - **Do not** publish "+0.28 inherent NVFP4 cost." The headline "NVFP4 KV ≈ near-lossless +
   3.556× capacity" holds for the **format**; the serving red is a kernel bug to fix.
