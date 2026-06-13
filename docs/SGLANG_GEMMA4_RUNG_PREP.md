@@ -41,9 +41,11 @@ PPL pair against bf16/auto (`ctx=512`, `reuse_prefix_len=256`,
 `delta_nats_per_token=-0.190174`). `jethac/sglang@96a9ff9ce` fixes the hybrid
 full-NVFP4 denominator, raising full NVFP4 capacity to `1,274,008` tokens at the
 same memory fraction: `3.5668x` versus bf16/auto and `1.7814x` versus the fp8
-allocator row. fp8 serving itself is still red with an internal SGLang request/warmup
-timeout plus a missing-fp8-scale warning, so fp8 quality remains an open comparator
-issue even though the allocator capacity ratio is now green.
+allocator row. fp8 serving itself remains red, but the current diagnosis supersedes
+the earlier timeout/missing-scale symptom: the latest dispatcher analysis shows the
+D512/VO256 fp8 paged-prefill path reaches FlashInfer VO-split and lands on an
+invalid 1-byte-KV layout. Keep fp8 quality as an open comparator issue until the
+FlashInfer dispatcher scheduling fix lands.
 
 ## SGLang Code Surfaces
 
@@ -144,11 +146,12 @@ next E4B rung-0 serving retry before it graduates from scaffold to green row.
 5. Writer-roundtrip gate at head 512: write via SGLang's real cache writer, read via the real FlashInfer kernel, and compare against dequant/reference output. Probes that fabricate the cache can miss writer/reader disagreements; the new vLLM 31B coherence bug is exactly "writer and reader meet at D=512 for the first time."
 6. Standalone FlashInfer probe matching the real SGLang workload signature, not toy head geometry.
 7. fp8 comparator row. Current E4B fp8 quality is formally red in
-   `results/sglang_gemma4_e4b_fp8_comparator_red_20260611TmanualJST.md`: the run
-   reaches SWA and global VO-split prefill without the old `max_mma_kv` wall, but
-   returns timeout/HTTP-500 symptoms before any D=512 decode proof. It cannot serve
-   as the final quality baseline yet. The allocator ratio after `96a9ff9ce` is green
-   at `1.7814x` versus fp8 tokens.
+   `results/sglang_e4b_fp8_dispatch_analysis_20260614T054129JST/STOP_SUMMARY.md`:
+   the run reaches the intended FlashInfer D512/VO256 VO-split paged-prefill route,
+   but the generated fp8 layout selects invalid `NUM_MMA_KV=1` with
+   `NUM_WARPS_Q=4`. It cannot serve as the final quality baseline until the
+   FlashInfer dispatcher scheduling fix lands. The allocator ratio after
+   `96a9ff9ce` is green at `1.7814x` versus fp8 tokens.
 8. mixed-KV serving row first when full NVFP4 is blocked.
 9. full NVFP4 K+V: E4B has a short green checkpoint, but the generic SGLang full-NVFP4
    radix structural route remains open for Qwen and other models where the partial-state
