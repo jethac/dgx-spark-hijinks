@@ -28,7 +28,9 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses full-NVFP4
   12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row by default;
   set `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant dependency
-  fix or for an explicitly labeled diagnostic replay.
+  fix or for an explicitly labeled diagnostic replay, and set
+  `SGLANG_AR_LADDER_OVERRIDE_REASON` so the reason is recorded in preflight
+  artifacts.
 
 ## Status Map
 

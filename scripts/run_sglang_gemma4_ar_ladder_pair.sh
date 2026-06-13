@@ -36,6 +36,7 @@ CLAUDE_MARKER="${CLAUDE_MARKER:-/home/jethac/spark_tmp/CLAUDE_WINDOW_OPEN}"
 FP4_KV_TRACE_BACKEND="${SGLANG_FP4_KV_TRACE_BACKEND:-0}"
 SOURCE_OVERLAY="${SGLANG_SOURCE_OVERLAY:-0}"
 ALLOW_KNOWN_BLOCKED="${ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER:-0}"
+OVERRIDE_REASON="${SGLANG_AR_LADDER_OVERRIDE_REASON:-}"
 
 contains_item() {
   local haystack="$1"
@@ -73,7 +74,9 @@ ship-gate rows wait behind the same shared fix to avoid producing
 non-claim-grade ladder evidence. Re-run only after the dependency changes or
 for an explicitly labeled diagnostic:
 
-  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+  SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: shared quality fix' \
+  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
+  bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 EOF
     exit 2
   fi
@@ -86,7 +89,35 @@ Current evidence: E4B fp8 reaches readiness but fails in FlashInfer D512/VO256
 1-byte-KV paged prefill. Re-run only after the dispatcher dependency changes or
 for an explicitly labeled diagnostic:
 
-  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+  SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: D512 fp8 dispatcher fix' \
+  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
+  bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+EOF
+    exit 2
+  fi
+fi
+if [[ "${ALLOW_KNOWN_BLOCKED}" == "1" ]]; then
+  override_touches_blocked=0
+  if contains_item "${ROW_LABELS}" "fullnvfp4" \
+    && { contains_item "${MODELS}" "google/gemma-4-12B-it" \
+      || contains_item "${MODELS}" "google/gemma-4-26B-A4B-it" \
+      || contains_item "${MODELS}" "google/gemma-4-31B-it"; }; then
+    override_touches_blocked=1
+  fi
+  if contains_item "${MODELS}" "google/gemma-4-E4B-it" \
+    && contains_item "${ROW_LABELS}" "fp8"; then
+    override_touches_blocked=1
+  fi
+  if [[ "${override_touches_blocked}" == "1" && -z "${OVERRIDE_REASON}" ]]; then
+    cat >&2 <<'EOF'
+ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 touches a known-blocked row, but
+SGLANG_AR_LADDER_OVERRIDE_REASON is empty.
+
+Set a short reason naming the dependency change or diagnostic replay, for example:
+
+  SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: D512 fp8 dispatcher fix' \
+  ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
+  bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 EOF
     exit 2
   fi
@@ -197,6 +228,8 @@ run_one() {
     echo "sglang_fp4_kv_trace_global_scale=${SGLANG_FP4_KV_TRACE_GLOBAL_SCALE:-}"
     echo "sglang_fp4_kv_trace_sf_saturation=${SGLANG_FP4_KV_TRACE_SF_SATURATION:-}"
     echo "sglang_fp4_kv_trace_layers=${SGLANG_FP4_KV_TRACE_LAYERS:-}"
+    echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
+    echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
     echo "started_at=$(TZ=Asia/Tokyo date -Is)"
     free -h
   } >"${model_dir}/${label}_preflight.log"
@@ -403,6 +436,8 @@ PY
   echo "chat_timeout_s=${CHAT_TIMEOUT_S}"
   echo "request_timeout_s=${REQUEST_TIMEOUT_S}"
   echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
+  echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
+  echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   git rev-parse HEAD
   docker image inspect "${IMAGE}" --format '{{json .RepoDigests}}' 2>/dev/null || true

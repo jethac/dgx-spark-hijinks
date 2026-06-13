@@ -30,7 +30,8 @@ and `root`. Live validation is no longer blocked by host access.
   `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`; the runner refuses
   full-NVFP4 12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row
   unless `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` is set after a relevant
-  dependency change or for a labeled diagnostic.
+  dependency change or for a labeled diagnostic. Override runs must also set
+  `SGLANG_AR_LADDER_OVERRIDE_REASON`, which is recorded in preflight artifacts.
 - `jethac/flashinfer@spark/hijinks-021-prefill-debug` commit `96be2fa8` adds inactive
   `FLASHINFER_PREFILL_DEBUG_ONCE=1` C++/JIT identity and tensor logging for the Gemma 3 NVFP4-KV
   FlashInfer paged-prefill failure. Run packet:

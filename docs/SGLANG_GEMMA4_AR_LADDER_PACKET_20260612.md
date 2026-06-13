@@ -38,7 +38,9 @@ rows after the Ubicloud-built source-stack image.
   and by refusing the known-blocked E4B fp8 row. Set
   `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant
   FlashInfer/SGLang dependency changes or for an explicitly labeled diagnostic
-  replay.
+  replay. Override runs that touch blocked rows must also set
+  `SGLANG_AR_LADDER_OVERRIDE_REASON`, which the runner records in preflight
+  artifacts.
 
 ## Run
 
@@ -56,6 +58,7 @@ bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 After the shared quality or dispatcher fix lands, make the rerun intent explicit:
 
 ```bash
+SGLANG_AR_LADDER_OVERRIDE_REASON="flashinfer <ref>: shared quality or fp8 dispatcher fix" \
 ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 ```
