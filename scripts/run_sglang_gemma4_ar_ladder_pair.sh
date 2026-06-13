@@ -206,6 +206,7 @@ PY
 
   capture_logs "${name}" "${install_log}" || true
 
+  local chat_transport_ok=1
   for idx in 1 2; do
     if ! curl -sS --max-time "${REQUEST_TIMEOUT_S}" "http://127.0.0.1:${PORT}/v1/chat/completions" \
       -H 'Content-Type: application/json' \
@@ -215,13 +216,11 @@ PY
         "temperature": 0,
         "max_tokens": 16
       }' >"${model_dir}/${label}_chat_${idx}.json"; then
-      capture_logs "${name}" "${server_log}" || true
-      docker inspect "${name}" >"${inspect_json}" 2>/dev/null || true
-      docker rm -f "${name}" >/dev/null 2>&1 || true
-      echo "chat_request_failed" >"${model_dir}/${label}_status.txt"
-      return 1
+      chat_transport_ok=0
+      echo "chat_${idx}_request_failed" >>"${model_dir}/${label}_chat_status.txt"
     fi
   done
+  echo "${chat_transport_ok}" >"${model_dir}/${label}_chat_transport_ok.txt"
 
   ctx_args=()
   for ctx in ${CTX_LIST}; do
@@ -261,17 +260,31 @@ import json
 from pathlib import Path
 model_dir = Path("${model_dir}")
 def load(name):
-    return json.loads((model_dir / name).read_text(encoding="utf-8"))
+    path = model_dir / name
+    if not path.exists() or path.stat().st_size == 0:
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"_parse_error": str(exc), "_path": str(path)}
 chat1 = load("${label}_chat_1.json")
 chat2 = load("${label}_chat_2.json")
 ppl = load("${label}_ppl.json")
-content1 = chat1["choices"][0]["message"].get("content", "")
-content2 = chat2["choices"][0]["message"].get("content", "")
+def content(payload):
+    try:
+        return payload["choices"][0]["message"].get("content", "")
+    except Exception:
+        return ""
+content1 = content(chat1)
+content2 = content(chat2)
+chat_transport_ok_path = model_dir / "${label}_chat_transport_ok.txt"
+chat_transport_ok = chat_transport_ok_path.read_text(encoding="utf-8").strip() == "1" if chat_transport_ok_path.exists() else False
 summary = {
     "label": "${label}",
     "model": "${model}",
     "kv_cache_dtype": "${kv_dtype}",
     "mixed_kv": "${mixed_kv}" == "1",
+    "chat_transport_ok": chat_transport_ok,
     "chat_1": content1,
     "chat_2": content2,
     "chat_bitwise_equal": chat1 == chat2,
