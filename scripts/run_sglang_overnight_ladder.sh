@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 # SGLang Spark ladder block for docs/OVERNIGHT_LADDER_PLAN_20260612.md.
 #
+# Historical runner only. The current SGLang Gemma 4 AR ladder entry point is
+# scripts/run_sglang_gemma4_ar_ladder_pair.sh, with
+# docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md as the run packet.
+#
+# This script predates the baked mm-prefix image, the mail/0138 +0.40
+# FlashInfer/numerics verdict, and the current marker convention. It also claims
+# CLAUDE_WINDOW_OPEN for Codex, which is no longer the protocol. Refuse by
+# default so a stale overnight command cannot consume a Spark window or repeat a
+# known-red row by accident.
+if [[ "${ALLOW_SUPERSEDED_SGLANG_OVERNIGHT:-0}" != "1" ]]; then
+  cat >&2 <<'EOF'
+run_sglang_overnight_ladder.sh is superseded and disabled by default.
+
+Use scripts/run_sglang_gemma4_ar_ladder_pair.sh with
+docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md for current SGLang AR rows.
+Only replay this historical runner with ALLOW_SUPERSEDED_SGLANG_OVERNIGHT=1
+when intentionally reproducing docs/OVERNIGHT_LADDER_PLAN_20260612.md.
+EOF
+  exit 2
+fi
+#
 # This is deliberately conservative: one server at a time, write marker first,
 # refuse to run if Docker is already busy, and record RED rows instead of
 # promoting weak evidence.
