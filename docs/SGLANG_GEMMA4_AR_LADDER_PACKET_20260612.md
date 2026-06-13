@@ -40,7 +40,8 @@ rows after the Ubicloud-built source-stack image.
   FlashInfer/SGLang dependency changes or for an explicitly labeled diagnostic
   replay. Override runs that touch blocked rows must also set
   `SGLANG_AR_LADDER_OVERRIDE_REASON`, which the runner records in preflight
-  artifacts.
+  artifacts. The offline regression check for these guards is
+  `bash scripts/test_sglang_gemma4_ar_ladder_guard.sh`.
 
 ## Run
 
