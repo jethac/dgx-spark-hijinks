@@ -41,9 +41,10 @@ bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 
 ## What The Packet Proves
 
-For each model, the packet runs two sequential servers:
+For each model, the packet runs three sequential servers:
 
 - `bf16`: FlashInfer VO-split, BF16 weights, auto KV.
+- `fp8`: FlashInfer VO-split, BF16 weights, fp8 KV.
 - `fullnvfp4`: FlashInfer VO-split, BF16 weights, full NVFP4 K+V
   (`--kv-cache-dtype fp4_e2m1`, `SGLANG_FP4_KV_MIXED_KV=0`).
 
@@ -52,7 +53,7 @@ It records:
 - baked-image provenance and package/binary proof lines;
 - chat determinism for a low-entropy Tokyo prompt;
 - supplied-token PPL using the repository markdown corpus;
-- bf16-vs-full-NVFP4 PPL comparison;
+- bf16-vs-full-NVFP4 and fp8-vs-full-NVFP4 PPL comparisons;
 - server logs containing Gemma KV pool geometry lines.
 
 ## Stop-On-Red

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # SGLang Gemma 4 AR ladder packet.
 #
-# Runs one or more Gemma 4 autoregressive sizes through sequential bf16/auto-KV
-# and full-NVFP4 K+V servers. The baked source-stack image keeps its editable
+# Runs one or more Gemma 4 autoregressive sizes through sequential bf16/auto-KV,
+# fp8, and full-NVFP4 K+V servers. The baked source-stack image keeps its editable
 # SGLang/FlashInfer sources under /work, so this script mounts the hijinks repo
 # at /hijinks and never overlays /work.
 set -euo pipefail
@@ -308,6 +308,10 @@ for model in ${MODELS}; do
     overall_status=1
     break
   fi
+  if ! run_one "${model}" "fp8" "fp8_e4m3" "0"; then
+    overall_status=1
+    break
+  fi
   if ! run_one "${model}" "fullnvfp4" "fp4_e2m1" "0"; then
     overall_status=1
     break
@@ -315,7 +319,11 @@ for model in ${MODELS}; do
   python3 scripts/sglang_prompt_ppl_sweep.py \
     --compare-fp8 "${OUT_DIR}/${model_slug}/bf16_ppl.json" \
     --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
-    --output "${OUT_DIR}/${model_slug}/compare.json" || overall_status=1
+    --output "${OUT_DIR}/${model_slug}/compare_bf16_vs_fullnvfp4.json" || overall_status=1
+  python3 scripts/sglang_prompt_ppl_sweep.py \
+    --compare-fp8 "${OUT_DIR}/${model_slug}/fp8_ppl.json" \
+    --compare-candidate "${OUT_DIR}/${model_slug}/fullnvfp4_ppl.json" \
+    --output "${OUT_DIR}/${model_slug}/compare_fp8_vs_fullnvfp4.json" || overall_status=1
 done
 
 python3 - <<PY
@@ -330,18 +338,19 @@ for model in models:
         slug = slug.replace("--", "-")
     model_dir = out / slug
     row = {"model": model, "dir": str(model_dir)}
-    for label in ("bf16", "fullnvfp4"):
+    for label in ("bf16", "fp8", "fullnvfp4"):
         path = model_dir / f"{label}_summary.json"
         row[label] = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
-    compare = model_dir / "compare.json"
-    row["compare"] = json.loads(compare.read_text(encoding="utf-8")) if compare.exists() else None
+    for name in ("compare_bf16_vs_fullnvfp4", "compare_fp8_vs_fullnvfp4"):
+        compare = model_dir / f"{name}.json"
+        row[name] = json.loads(compare.read_text(encoding="utf-8")) if compare.exists() else None
     rows.append(row)
 manifest = {
     "schema": "sglang-gemma4-ar-ladder-pair/v1",
     "run_id": "${RUN_ID}",
     "image": "${IMAGE}",
     "image_digest": "${IMAGE_DIGEST}",
-    "scope": "SGLang Gemma 4 AR ladder; sequential bf16/auto and full-NVFP4 K+V; graphs disabled; one server at a time",
+    "scope": "SGLang Gemma 4 AR ladder; sequential bf16/auto, fp8, and full-NVFP4 K+V; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,
 }
