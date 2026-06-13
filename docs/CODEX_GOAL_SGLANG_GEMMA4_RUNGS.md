@@ -1,5 +1,15 @@
 # Codex /goal: Gemma 4 serving on SGLang (rung 0 -> rung 1)
 
+Status update, 2026-06-14: this original bring-up goal is no longer the active
+front door. Rung-0/rung-1 style checkpoints have been banked as scoped evidence
+on the packaged SGLang images, including the baked mm-prefix carrier
+`sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`.
+The active ship gate is now `docs/GOAL_CODEX_SGLANG_LANE.md` plus
+`docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`: wait for Claude's shared
+FlashInfer/numerics fix for the 12B `+0.40` long-context red, then rerun matched
+12B / 26B-A4B / 31B rows on the packaged image. Do not use this file to justify
+repeating known-red AR ladder rows or the retracted global-scale path.
+
 Mission: bring Gemma 4 serving up on SGLang on the validated VO-split
 foundation, with the campaign's evidence discipline.
 

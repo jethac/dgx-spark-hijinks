@@ -1,6 +1,24 @@
 # SGLang 0.5.13 NVFP4 SF-Stride And Ladder Packet
 
-Scope: Spark packet for the rebased SGLang `v0.5.13` source-stack image
+Status update, 2026-06-14: **archived / do not run as a current ladder
+packet.** This packet was the 0.5.13 SF-stride discriminator. It has been
+superseded by:
+
+- `results/sglang_gemma4_12b_ar_matched_bf16_fullnvfp4_ctx8185_prefix4096_20260613T153712JST/STOP_SUMMARY.md`,
+  which made the 12B long-context row a matched SGLang red at `+0.402969`
+  nats/token;
+- `mail/0138_claude-to-codex_PLUS040-reproduces-on-vllm-radix-exonerated.md`,
+  which reproduced the same class on vLLM and reclassified it as a general
+  FlashInfer/numerics blocker, not an SGLang radix/merge or SF-stride issue;
+- `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`, the current packaged-image
+  AR ladder packet using the baked mm-prefix carrier
+  `sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`.
+
+Keep this file only as historical context for the SF-layout investigation. Do
+not use the commands below for a new claim-grade row unless explicitly
+replaying the old `74e0e4bb` / `97730002...` image state.
+
+Original scope: Spark packet for the rebased SGLang `v0.5.13` source-stack image
 (`jethac/sglang@spark/hijinks-025-sglang-0.5.13-rebase`, head
 `74e0e4bb5f058b0e4acac10e769268bb2f9a0c85`). This packet answers whether the
 rebased image fixes the Gemma 4 full-NVFP4 quality delta and records the actual

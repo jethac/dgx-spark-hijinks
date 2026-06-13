@@ -2,20 +2,31 @@
 
 Purpose: close the SGLang text-only evidence gap for Gemma 4 NVFP4 KV on DGX Spark. Claude's vast.ai reference-sim lane measures modality-specific KV ranges; this packet turns those findings into SGLang serving evidence with real multimodal requests and cache reuse.
 
+Status update, 2026-06-14: the first package-level gate is complete. The baked
+mm-prefix carrier
+`ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`
+serves E4B full-NVFP4 text/image/audio with FlashInfer image-prefix masking
+active and no old Triton-only/bidirectional fallback warning; see
+`results/sglang_gemma4_e4b_fullnvfp4_mm_prefix_baked_20260614T072000JST/STOP_SUMMARY.md`.
+The remaining work is broader matched quality/capacity after the shared 12B
+long-context FlashInfer/numerics red is fixed, not another global-scale
+calibration pass.
+
 ## Scope
 
 - Runtime: SGLang on DGX Spark / GB10 (`sm_121`)
 - Branch: `epoch2`
-- Packaged image baseline: `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-0513-42ce5dad-arm64`
-- Current packaged digest: `sha256:97730002ac89ab95495c36fd7f189b3d1c648c7819fecb283ab07043d5be619e`
-- Diagnostic source overlay for SF saturation trace: `jethac/sglang@58a39849fc`
+- Packaged image baseline: `ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack:epoch2-sglang-mm-prefix-f920e2d-arm64`
+- Current packaged digest: `sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714`
+- Diagnostic SF-saturation overlays are historical only unless a new failure
+  specifically needs them; the current text red is not a global-scale root cause.
 - Models, in order:
   - `google/gemma-4-E4B-it` first, because it is already text scoped-green on full NVFP4.
   - `google/gemma-4-12B-it` only after E4B establishes the multimodal request path.
 - Rows:
   - bf16 / auto KV baseline
-  - full NVFP4 K+V with `SGLANG_FP4_KV_TRACE_SF_SATURATION=1`
-  - optional full NVFP4 K+V with calibrated/global-scale fix once the text row is repaired
+  - full NVFP4 K+V from the baked mm-prefix package image
+  - future claim-grade matched rows after the shared text-quality red is fixed
 
 ## Why This Exists
 
@@ -23,7 +34,7 @@ Current SGLang Gemma 4 evidence is text-only. Gemma 4 serving includes image and
 
 - multimodal prefix writes use correct KV and scale-factor storage,
 - repeated multimodal prompts reuse cache safely,
-- global-scale calibration based on text covers vision/audio KV,
+- text-path calibration or numerics choices cover vision/audio KV,
 - NVFP4 block scale factors avoid saturation for vision/audio tokens.
 
 ## Assets
@@ -49,19 +60,24 @@ Image asset policy:
    - Gate: HTTP 200 for all probes, non-empty text, expected keyword hit for image/audio, same request repeated without server crash.
    - If red, stop; this is not an NVFP4 bug yet.
 
-2. **full NVFP4 E4B multimodal smoke + SF saturation trace**
+2. **full NVFP4 E4B multimodal smoke from the baked mm-prefix package**
    - Launch E4B full NVFP4 K+V.
    - Enable:
-     - `SGLANG_FP4_KV_TRACE_SF_SATURATION=1`
-     - `SGLANG_FP4_KV_TRACE_GLOBAL_SCALE=1`
-     - `SGLANG_FP4_KV_TRACE_LAYERS=0,5` initially to limit log size; widen if red.
+     - `SGLANG_FLASHINFER_VOSPLIT=1`
+     - `SGLANG_FP4_KV_MIXED_KV=0`
+     - `FLASHINFER_PREFILL_DEBUG_ONCE=1`
    - Run the same client payload twice.
-   - Gate: same functional gates as bf16, plus server log contains `FP4 KV SF saturation trace` for the exercised layers.
-   - Compare block-scale saturation stats between text-only and multimodal requests. A vision/audio-specific saturation increase is a calibration bug candidate.
+   - Gate: same functional gates as bf16, plus server log proves the mm-prefix
+     custom mask, no old fallback warning, and FP4 prefill module selection.
+   - The current E4B baked row is green for this scope; rerun only after the
+     packaged image changes or when extending to a matched claim row.
 
 3. **12B multimodal after E4B**
    - Repeat bf16 then full NVFP4 on 12B.
-   - Carry the known text caveat: 12B full NVFP4 is still red by `+0.3436` nats/token even with a scale multiplier, so a multimodal smoke can only be scoped as request-path evidence until the text quality bug is fixed.
+   - Carry the known text caveat: 12B full NVFP4 is still red by `+0.402969`
+     nats/token on the matched long-context row, and mail 0138 classifies that
+     red as a shared FlashInfer/numerics issue. A 12B multimodal smoke can only
+     be scoped as request-path evidence until the text quality bug is fixed.
 
 4. **Claim-grade rerun**
    - Once text full-NVFP4 quality is fixed, rerun bf16 vs full NVFP4 with identical multimodal prompts and record:
@@ -113,7 +129,10 @@ Use one server at a time and keep the GB10 memory rules:
 - Check `/home/jethac/spark_tmp/CLAUDE_WINDOW_OPEN` and `docker ps` before launch
 - Keep >=15-20 GiB OS headroom
 
-For diagnostic source-overlay rows that need `58a39849fc`, label the row explicitly as source-overlay. Packaged-image claim rows need a rebuilt image carrying the same SGLang change, not a mounted source tree.
+For diagnostic source-overlay rows, label the row explicitly as source-overlay.
+Packaged-image claim rows need a rebuilt image carrying the same SGLang change,
+not a mounted source tree. Do not revive the retracted global-scale multiplier
+path as a claim fix.
 
 ## Evidence Requirements
 
@@ -121,7 +140,8 @@ Each row must produce:
 
 - `preflight.log` with image digest, parent commit, SGLang commit, model, KV dtype, graph settings, and memory.
 - raw request/response JSON from `sglang_gemma4_multimodal_chat_probe.py`.
-- server log with routing lines and, for NVFP4, `FP4 KV SF saturation trace`.
+- server log with routing lines and, for NVFP4, proof of FP4 prefill module
+  selection plus the Gemma 4 FlashInfer image-prefix custom-mask line.
 - `STOP_SUMMARY.md` stating whether the row is:
   - functional multimodal request-path evidence,
   - cache/reuse evidence,
