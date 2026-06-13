@@ -1,0 +1,6 @@
+/root/venv/lib/python3.12/site-packages/vllm/_C.abi3.so
+/root/venv/lib/python3.12/site-packages/vllm/_C_stable_libtorch.abi3.so
+/root/venv/lib/python3.12/site-packages/vllm/_moe_C_stable_libtorch.abi3.so
+/root/venv/lib/python3.12/site-packages/vllm/_rust_tool_parser.abi3.so
+/root/venv/lib/python3.12/site-packages/vllm/cumem_allocator.abi3.so
+/root/venv/lib/python3.12/site-packages/vllm/spinloop.abi3.so

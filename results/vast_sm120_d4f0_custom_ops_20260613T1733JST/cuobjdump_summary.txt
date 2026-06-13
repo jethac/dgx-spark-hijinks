@@ -1,0 +1,16 @@
+=== _C.abi3.so
+     26 sm_120a
+      4 sm_80
+=== _C_stable_libtorch.abi3.so
+     42 sm_120a
+      1 sm_89
+      1 sm_90
+=== _moe_C_stable_libtorch.abi3.so
+     26 sm_120a
+      1 sm_80
+=== _rust_tool_parser.abi3.so
+      1 does not contain device code
+=== cumem_allocator.abi3.so
+      1 does not contain device code
+=== spinloop.abi3.so
+      1 does not contain device code

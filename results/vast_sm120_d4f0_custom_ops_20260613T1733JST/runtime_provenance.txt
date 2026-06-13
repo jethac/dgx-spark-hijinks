@@ -1,0 +1,10 @@
+torch 2.12.0+cu130 13.0
+device NVIDIA RTX PRO 6000 Blackwell Workstation Edition (12, 0)
+vllm 0.1.dev1+gd4f0f79c3.sm120a /root/venv/lib/python3.12/site-packages/vllm
+transformers 5.10.0.dev0 /root/venv/lib/python3.12/site-packages/transformers/__init__.py
+flashinfer 0.6.12 /root/venv/lib/python3.12/site-packages/flashinfer/__init__.py
+vllm._C OK /root/venv/lib/python3.12/site-packages/vllm/_C.abi3.so
+vllm._C_stable_libtorch OK /root/venv/lib/python3.12/site-packages/vllm/_C_stable_libtorch.abi3.so
+vllm._moe_C ERR ModuleNotFoundError("No module named 'vllm._moe_C'")
+tokenspeed_mla OK /root/venv/lib/python3.12/site-packages/tokenspeed_mla/__init__.py
+humming_kernels ERR ModuleNotFoundError("No module named 'humming_kernels'")
