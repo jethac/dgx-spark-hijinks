@@ -102,7 +102,36 @@ head-256) is the bug. **Free prediction:** the 31B/E4B (already forced linear V-
 **Fix:** either repair the head-256 swizzle/de-swizzle, or default head-256 nvfp4 KV to linear
 V-SF (as VO-split already does).
 
-## CORRECTED localization (2026-06-14): the per-tensor GLOBAL scale is ~2× too small
+## ⚠️ E2E SERVING CORRECTION (2026-06-14, late) — the global-scale story below is WRONG
+
+End-to-end on the real vLLM serving stack (base + -it gemma-4-12B, `VLLM_FLASHINFER_MM_PREFIX=1`
+so nvfp4 actually serves — it was a flag, not a wheel limit) refutes the global-scale hypothesis:
+
+| arm (12B, ctx 4096) | NLL | Δ vs bf16 |
+| --- | ---: | ---: |
+| base, bf16 | 1.8069 | — |
+| base, **nvfp4 DEFAULT (constants)** | 1.8142 | **+0.0073 (near-lossless)** |
+| base, nvfp4 `--calculate-kv-scales` | 16.55 | **+14.7 (catastrophic)** |
+| -it, bf16 (raw text) | 8.0396 | — |
+| -it, **nvfp4 DEFAULT** | 8.0716 | **+0.032 (near-lossless)** |
+
+Plus: multimodal nvfp4 **serves coherently** (image → "two tabby cats…remote controls").
+
+**What this means:**
+1. The default per-tensor global scale is **NOT under-ranged** — vLLM nvfp4 default is near-lossless
+   at ctx 4096 (matches the format-optimal +0.013). The "≈2× too small" claim below is **wrong**;
+   my reference `g=0.5` sweep showed only what *would* happen *if* under-ranged, not what does.
+2. **`calculate_kv_scales` CATASTROPHICALLY BREAKS nvfp4** (NLL 16.5). It is **not a fix** — do not
+   enable it for nvfp4. (Mail 0130's "calibrate the global scale" advice is **retracted**.)
+3. **The +0.281/+0.403 does NOT reproduce at ctx 4096.** It is specific to Codex's **ctx 8185 +
+   4096-prefix-reuse (radix)** path → the real suspect is the **prefix-cache / partial-state-merge
+   under nvfp4** (the known FP4-K LSE-sensitivity from the Qwen work, per `SGLANG_GEMMA4_RUNG_PREP.md`),
+   NOT the per-tensor scale. That path needs testing directly (long ctx + prefix reuse).
+
+Everything in the global-scale section below is **superseded** by this. (The *format-is-near-lossless*
+headline still stands — it's now confirmed end-to-end: default nvfp4 +0.007.)
+
+## ~~CORRECTED localization (2026-06-14): the per-tensor GLOBAL scale is ~2× too small~~ — SUPERSEDED (see above)
 
 A faithful **two-level** reference sim (per-tensor global scale + per-16 fp8 e4m3 block SF,
 with realistic fp8 saturation — matching `cvt_warp_fp16_to_fp4(in_vec, global_scale, sf_out)`
