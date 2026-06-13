@@ -73,7 +73,14 @@ a scale-factor *granularity* defect, not the format and not the attention math.
 **Fix direction:** verify/repair per-16-block SF application in the nvfp4 KV read path (esp.
 V-SF layout/stride). Proper block-16 recovers ~+0.22 nats/token (→ +0.013, near-lossless).
 
-## Code localization (2026-06-13): the swizzled V-SF path on head-256
+## Code localization (2026-06-13): the swizzled V-SF path on head-256 — ❌ REFUTED 2026-06-14
+
+> **This hypothesis is wrong.** Codex (mail 0128) ran the v0.5.13 SGLang image with
+> `deswizzle_macro_active=False` (i.e. **already on linear V-SF**) and VO-split engaged, and
+> still measured **+0.403** on the 12B. So it is *not* the swizzle, not the head-256 default
+> path, and "force linear V-SF" is not the fix. The real cause is the **global scale** — see
+> the corrected section below. (Also: the 12B *does* have 512-wide globals and goes through
+> VO-split; the earlier "head 256, no VO-split" read was incomplete.) Section kept for honesty.
 
 Traced the per-tensor signature to the **V scale-factor swizzle** in the vLLM nvfp4 KV path
 (`vllm/v1/attention/backends/flashinfer.py`, `reshape_and_cache_nvfp4` writer):
@@ -94,6 +101,39 @@ head-256) is the bug. **Free prediction:** the 31B/E4B (already forced linear V-
 
 **Fix:** either repair the head-256 swizzle/de-swizzle, or default head-256 nvfp4 KV to linear
 V-SF (as VO-split already does).
+
+## CORRECTED localization (2026-06-14): the per-tensor GLOBAL scale is ~2× too small
+
+A faithful **two-level** reference sim (per-tensor global scale + per-16 fp8 e4m3 block SF,
+with realistic fp8 saturation — matching `cvt_warp_fp16_to_fp4(in_vec, global_scale, sf_out)`
+in `csrc/.../nvfp4_kv_cache_kernels.cu`, where the per-tensor `k_scale`/`v_scale` *is* the
+quantizer's `global_scale`). Swept the global-scale multiplier `g` on gemma-4-12B (ctx 4096),
+`g=1` = calibrated to fit fp8 range:
+
+| `g` (×calibrated) | Δ nats/token |
+| --- | ---: |
+| 1, 2, 4, 8, 16 | **+0.0056** (flat, near-lossless) |
+| **0.5** (global ~2× too small) | **+0.2574** ≈ vLLM served +0.281 |
+| 0.25 (4× too small) | +1.556 (catastrophic) |
+
+**Mechanism (decisive):** the sensitivity is *asymmetric*. Over-scaling the global is free;
+**under-scaling it forces the per-16 fp8 block SFs to saturate at 448** → the largest-magnitude
+blocks get a clipped (too-small) effective scale → their values compress → quality collapses.
+The served +0.28–0.4 corresponds to an effective `g ≈ 0.4–0.5`: **the global scale is roughly
+2× too small.** It is **V-driven** — V-only is +0.0049 vs K-only +0.0007 at safe `g`, because V
+has the wider cross-block dynamic range, so V's outlier blocks saturate first. (This subsumes
+the earlier "per-tensor +0.235" granularity finding: it wasn't granularity, it was an
+under-ranged global.)
+
+**Root cause + fix:** the served path's per-tensor `k_scale`/`v_scale` (the quantizer's
+`global_scale`) is **fixed/under-calibrated** — vLLM defaults `calculate_kv_scales=False` with
+constants `K_SCALE_CONSTANT=200`, `V_SCALE_CONSTANT=100`, and warns "may cause accuracy drop
+without a proper scaling factor"; SGLang reverted its `SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER`
+at the rebase tip. **Calibrate the global scale per tensor (amax-based, big enough that no
+per-16 block SF saturates fp8 — `global ≥ tensor_amax / (6·448)`), especially for V,** and the
+delta collapses from +0.4 to ~+0.005. No swizzle, no VO-split, no kernel-math change required.
+
+Repro: `docs/vast_anchor/gs_run.sh` (two-level global-scale sweep).
 
 ## Implications
 - **Do not** publish "+0.28 inherent NVFP4 cost." The headline "NVFP4 KV ≈ near-lossless +
