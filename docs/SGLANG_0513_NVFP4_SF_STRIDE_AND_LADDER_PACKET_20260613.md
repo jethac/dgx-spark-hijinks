@@ -90,7 +90,11 @@ bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 The runner sets:
 
 - `SGLANG_FP4_KV_TRACE_MODULE=1`
-- `SGLANG_FP4_KV_TRACE_BACKEND=1`
+- `SGLANG_FP4_KV_TRACE_BACKEND=0` by default; set it to `1` only for a
+  diagnostic row. On the packaged `74e0e4bb` image, the backend trace hook
+  prints useful SF shape/stride evidence and then crashes with
+  `NameError: _fp4_kv_module_trace_enabled`, so it is not claim-row safe until
+  fixed.
 - `SGLANG_GEMMA4_TRACE_GEOMETRY=1`
 - `FLASHINFER_PREFILL_DEBUG_ONCE=1`
 - `FLASHINFER_EXTRA_CUDAFLAGS=-gencode=arch=compute_121a,code=sm_121a`
@@ -99,7 +103,9 @@ Gate:
 
 - `bf16`, `fp8`, and `fullnvfp4` all serve and produce supplied-token PPL.
 - Full NVFP4 first token is coherent and stable against bf16/fp8.
-- Server logs contain the module/backend trace with K/V SF shape and stride.
+- Server logs contain module trace/provenance. A separate backend-trace
+  diagnostic row may be used to capture K/V SF shape and stride, but do not use
+  that row for quality because the current hook crashes after printing.
 - SGLang trace shows linear SF buffers and no active vLLM deswizzle macro.
 
 Interpretation:
