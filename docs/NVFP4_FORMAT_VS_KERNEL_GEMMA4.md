@@ -73,6 +73,28 @@ a scale-factor *granularity* defect, not the format and not the attention math.
 **Fix direction:** verify/repair per-16-block SF application in the nvfp4 KV read path (esp.
 V-SF layout/stride). Proper block-16 recovers ~+0.22 nats/token (→ +0.013, near-lossless).
 
+## Code localization (2026-06-13): the swizzled V-SF path on head-256
+
+Traced the per-tensor signature to the **V scale-factor swizzle** in the vLLM nvfp4 KV path
+(`vllm/v1/attention/backends/flashinfer.py`, `reshape_and_cache_nvfp4` writer):
+
+- `VLLM_NVFP4_KV_LINEAR_V_SF=1` makes writer+reader use a **linear** V-SF (no swizzle).
+  **Unset (default) = swizzled writer + in-kernel de-swizzle** (`FLASHINFER_PAGED_V_SF_DESWIZZLE=1`).
+- The VO-split path (head_size > 256 → 31B/E4B) **forces** `LINEAR_V_SF=1`. The **dense 12B is
+  head 256**, so it is **not** VO-split → it takes the **default swizzled V-SF path**.
+- vLLM's own comment: the *"trtllm 4-token swizzle does not commute with head-dim slicing"* and
+  *"spreads each 4-token group across the full scale row."* A swizzle/de-swizzle bug or mismatch
+  on the head-256 path scrambles which per-16 block each V value reads → the per-tensor-like
+  coarseness. Matches the K-free / V-sensitive asymmetry (K-SF is always linear).
+
+**One-flag confirmation:** rerun the 12B nvfp4 matched anchor with `VLLM_NVFP4_KV_LINEAR_V_SF=1`.
+If Δ drops from +0.281 toward ~+0.01–0.04, the swizzled-V-SF de-swizzle path (default for
+head-256) is the bug. **Free prediction:** the 31B/E4B (already forced linear V-SF) should be
+**near-lossless already** — if 31B nvfp4 is green while 12B is red, that confirms it.
+
+**Fix:** either repair the head-256 swizzle/de-swizzle, or default head-256 nvfp4 KV to linear
+V-SF (as VO-split already does).
+
 ## Implications
 - **Do not** publish "+0.28 inherent NVFP4 cost." The headline "NVFP4 KV ≈ near-lossless +
   3.556× capacity" holds for the **format**; the serving red is a kernel bug to fix.
