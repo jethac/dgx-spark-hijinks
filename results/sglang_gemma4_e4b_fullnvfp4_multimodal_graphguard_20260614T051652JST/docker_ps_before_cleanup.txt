@@ -1,0 +1,2 @@
+NAMES                                                                  STATUS         IMAGE
+sglang_gemma4_e4b_fullnvfp4_multimodal_graphguard_20260614T051652JST   Up 4 minutes   ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack

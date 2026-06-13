@@ -1,0 +1,7 @@
+run_id=sglang_gemma4_e4b_fullnvfp4_multimodal_graphguard_20260614T051652JST
+Sun Jun 14 05:16:52 AM JST 2026
+marker_absent
+NAMES     STATUS    IMAGE
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.7Gi        76Gi        21Mi        40Gi       114Gi
+Swap:           15Gi       504Mi        15Gi
