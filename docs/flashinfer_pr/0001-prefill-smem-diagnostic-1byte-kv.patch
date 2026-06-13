@@ -1,0 +1,85 @@
+diff --git a/include/flashinfer/attention/prefill.cuh b/include/flashinfer/attention/prefill.cuh
+index ed9abda..7835a9b 100644
+--- a/include/flashinfer/attention/prefill.cuh
++++ b/include/flashinfer/attention/prefill.cuh
+@@ -2011,7 +2011,25 @@ cudaError_t SinglePrefillWithKVCacheDispatched(Params params, typename Params::D
+         (max_smem_per_threadblock - CTA_TILE_Q * HEAD_DIM_QK * sizeof(DTypeQ)) / kKVSmemPerMmaKV;
+ 
+     // control NUM_MMA_KV for maximum warp occupancy
+-    DISPATCH_NUM_MMA_KV(min(max_num_mma_kv_smem, max_num_mma_kv_reg), NUM_MMA_KV, {
++    // Round the fitted tile down to the nearest valid NUM_MMA_KV. 1-byte KV
++    // (FP8/FP4) requires NUM_MMA_KV*2 % NUM_WARPS_Q == 0 (>= kMinValidMmaKV);
++    // the largest tile that fits smem+regs can be 1 while kMinValidMmaKV==2, and
++    // dispatching it hits the IsInvalid() "please file an issue" path even though
++    // the real cause is a shared-memory shortfall on this arch. Surface that.
++    const uint32_t fitted_num_mma_kv = min(max_num_mma_kv_smem, max_num_mma_kv_reg);
++    if (fitted_num_mma_kv < kMinValidMmaKV) {
++      std::ostringstream err_msg;
++      err_msg << "FlashInfer: insufficient shared memory on this GPU ("
++              << (max_smem_per_sm >> 10) << " KB/SM) for prefill with head_dim_qk="
++              << HEAD_DIM_QK << ", head_dim_vo=" << HEAD_DIM_VO << " and "
++              << sizeof(DTypeKV) << "-byte KV cache. This configuration needs "
++              << "NUM_MMA_KV>=" << kMinValidMmaKV << " (CTA_TILE_Q=" << CTA_TILE_Q
++              << ", NUM_WARPS_Q=" << NUM_WARPS_Q << ") to satisfy the 1-byte-KV "
++              << "tiling constraint, but only " << fitted_num_mma_kv << " fits in "
++              << "shared memory. Use a smaller head_dim or a 2-byte (bf16/fp16) KV cache.";
++      FLASHINFER_ERROR(err_msg.str());
++    }
++    DISPATCH_NUM_MMA_KV(fitted_num_mma_kv, NUM_MMA_KV, {
+       using KTraits =
+           KernelTraits<MASK_MODE, CTA_TILE_Q, NUM_MMA_Q, NUM_MMA_KV, NUM_MMA_D_QK, NUM_MMA_D_VO,
+                        NUM_WARPS_Q, NUM_WARPS_KV, POS_ENCODING_MODE, DTypeQ, DTypeKV, DTypeO,
+@@ -3007,7 +3025,25 @@ cudaError_t BatchPrefillWithRaggedKVCacheDispatched(Params params, typename Para
+   const uint32_t max_num_mma_kv_smem =
+       (max_smem_per_threadblock - CTA_TILE_Q * HEAD_DIM_QK * sizeof(DTypeQ)) / kKVSmemPerMmaKV;
+ 
+-  DISPATCH_NUM_MMA_KV(min(max_num_mma_kv_smem, max_num_mma_kv_reg), NUM_MMA_KV, {
++  // Round the fitted tile down to the nearest valid NUM_MMA_KV. 1-byte KV
++  // (FP8/FP4) requires NUM_MMA_KV*2 % NUM_WARPS_Q == 0 (>= kMinValidMmaKV);
++  // the largest tile that fits smem+regs can be 1 while kMinValidMmaKV==2, and
++  // dispatching it hits the IsInvalid() "please file an issue" path even though
++  // the real cause is a shared-memory shortfall on this arch. Surface that.
++  const uint32_t fitted_num_mma_kv = min(max_num_mma_kv_smem, max_num_mma_kv_reg);
++  if (fitted_num_mma_kv < kMinValidMmaKV) {
++    std::ostringstream err_msg;
++    err_msg << "FlashInfer: insufficient shared memory on this GPU ("
++            << (max_smem_per_sm >> 10) << " KB/SM) for prefill with head_dim_qk="
++            << HEAD_DIM_QK << ", head_dim_vo=" << HEAD_DIM_VO << " and "
++            << sizeof(DTypeKV) << "-byte KV cache. This configuration needs "
++            << "NUM_MMA_KV>=" << kMinValidMmaKV << " (CTA_TILE_Q=" << CTA_TILE_Q
++            << ", NUM_WARPS_Q=" << NUM_WARPS_Q << ") to satisfy the 1-byte-KV "
++            << "tiling constraint, but only " << fitted_num_mma_kv << " fits in "
++            << "shared memory. Use a smaller head_dim or a 2-byte (bf16/fp16) KV cache.";
++    FLASHINFER_ERROR(err_msg.str());
++  }
++  DISPATCH_NUM_MMA_KV(fitted_num_mma_kv, NUM_MMA_KV, {
+     using KTraits =
+         KernelTraits<MASK_MODE, CTA_TILE_Q, NUM_MMA_Q, NUM_MMA_KV, NUM_MMA_D_QK, NUM_MMA_D_VO,
+                      NUM_WARPS_Q, NUM_WARPS_KV, POS_ENCODING_MODE, DTypeQ, DTypeKV, DTypeO,
+@@ -3149,7 +3185,25 @@ cudaError_t BatchPrefillWithPagedKVCacheDispatched(Params params, typename Param
+   const uint32_t max_num_mma_kv_smem =
+       (max_smem_per_threadblock - CTA_TILE_Q * HEAD_DIM_QK * sizeof(DTypeQ)) / kKVSmemPerMmaKV;
+ 
+-  DISPATCH_NUM_MMA_KV(min(max_num_mma_kv_smem, max_num_mma_kv_reg), NUM_MMA_KV, {
++  // Round the fitted tile down to the nearest valid NUM_MMA_KV. 1-byte KV
++  // (FP8/FP4) requires NUM_MMA_KV*2 % NUM_WARPS_Q == 0 (>= kMinValidMmaKV);
++  // the largest tile that fits smem+regs can be 1 while kMinValidMmaKV==2, and
++  // dispatching it hits the IsInvalid() "please file an issue" path even though
++  // the real cause is a shared-memory shortfall on this arch. Surface that.
++  const uint32_t fitted_num_mma_kv = min(max_num_mma_kv_smem, max_num_mma_kv_reg);
++  if (fitted_num_mma_kv < kMinValidMmaKV) {
++    std::ostringstream err_msg;
++    err_msg << "FlashInfer: insufficient shared memory on this GPU ("
++            << (max_smem_per_sm >> 10) << " KB/SM) for prefill with head_dim_qk="
++            << HEAD_DIM_QK << ", head_dim_vo=" << HEAD_DIM_VO << " and "
++            << sizeof(DTypeKV) << "-byte KV cache. This configuration needs "
++            << "NUM_MMA_KV>=" << kMinValidMmaKV << " (CTA_TILE_Q=" << CTA_TILE_Q
++            << ", NUM_WARPS_Q=" << NUM_WARPS_Q << ") to satisfy the 1-byte-KV "
++            << "tiling constraint, but only " << fitted_num_mma_kv << " fits in "
++            << "shared memory. Use a smaller head_dim or a 2-byte (bf16/fp16) KV cache.";
++    FLASHINFER_ERROR(err_msg.str());
++  }
++  DISPATCH_NUM_MMA_KV(fitted_num_mma_kv, NUM_MMA_KV, {
+     using KTraits =
+         KernelTraits<MASK_MODE, CTA_TILE_Q, NUM_MMA_Q, NUM_MMA_KV, NUM_MMA_D_QK, NUM_MMA_D_VO,
+                      NUM_WARPS_Q, NUM_WARPS_KV, POS_ENCODING_MODE, DTypeQ, DTypeKV, DTypeO,

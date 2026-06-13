@@ -1,74 +1,67 @@
-# FlashInfer prefill dispatcher `NUM_MMA_KV=1` floor — stock-upstream repro verdict
+# FlashInfer prefill dispatcher `NUM_MMA_KV=1` — stock-upstream repro verdict
 
 **Date:** 2026-06-13 · **Goal:** build a repro of the FA2 prefill `NUM_MMA_KV`
 dispatch red on **stock upstream main**, and *if it reproduces* write the atomic
 fix as a standalone PR fileable ahead of the campaign work.
 
-## Verdict: does NOT reproduce on stock upstream → no standalone PR.
+> **REVISED (supersedes the earlier "does NOT reproduce" verdict).** The first
+> pass concluded the bug couldn't be expressed on upstream because the *paged*
+> `plan()` I used takes a single `head_dim`. That was wrong: `head_dim_vo` is a
+> **documented public parameter** on both prefill wrappers, and the **ragged**
+> wrapper accepts asymmetric `QK≠VO` directly. With it, **the bug reproduces on
+> stock upstream `c15ac84`** — so the atomic fix IS warranted and is written.
 
-The red is **narrow: fp8 KV + `head_dim_qk=512` (asymmetric QK≠VO, our VO-split)**.
-Stock upstream cannot reach it on two independent axes, so a maintainer could not
-reproduce a standalone PR. The `NUM_MMA_KV` floor fix stays **campaign-local**,
-guarding only the fp8 *comparator* path. Our headline full-NVFP4 path is unaffected.
+## Verdict: REPRODUCES on stock upstream → atomic PR written.
 
-## Repro environment (artifact-grade)
-
-- Stock upstream clone: `flashinfer-ai/flashinfer @ c15ac84` (== `upstream/main`),
-  submodules incl. `3rdparty/cccl`, `3rdparty/cutlass` checked out.
-- Host: P520 WSL2, sm_120 (RTX 5060 Ti), CUDA 13.0, torch 2.11, JIT for `sm_120f`.
-- Driver scripts: `~/fi_sweep.py` (head_dim × qo_len sweep), `~/fi_probe192.py`.
-- API: `BatchPrefillWithPagedKVCacheWrapper("NHD")`, GQA 8/1, page 16, causal,
-  `q=bf16`, `kv=float8_e4m3fn`, kv_len 8192.
+- **Repro:** `BatchPrefillWithRaggedKVCacheWrapper.plan(..., head_dim_qk=512,
+  head_dim_vo=256, kv_data_type=fp8_e4m3)` on sm_120 (~100 KB/SM) throws
+  `Invalid configuration : … NUM_MMA_KV=1 NUM_WARPS_Q=4 … please create an issue`
+  at every `qo_len` (8…512). Pure stock upstream, public API, no campaign code.
+- **Fix:** floor the *dispatched* `NUM_MMA_KV` against `kMinValidMmaKV` (which
+  upstream already computes but only applies to the occupancy budget); when no
+  valid tile fits, raise a clear shared-memory diagnostic instead of the
+  "please file an issue" path. 3 sites, +57/-3. See `docs/flashinfer_pr/`.
+- **Scope (honest):** diagnostic correctness, not functional enablement. The
+  config genuinely exceeds sm_120 shared memory; the fix replaces a misleading
+  internal-error with the real reason + workaround. Making it *run* needs the
+  V/O-split (the larger, separate campaign PR).
 
 ## Evidence
 
-### 1. Head-dim axis — head 128/256 fp8 all PASS (no red at any qo_len)
+### Why the first pass missed it
+The paged wrapper requires K/V stride match (symmetric head dims), so passing a
+single positional `head_dim` to `plan()` only ever tested `qk==vo`. Head 128/256
+fp8 all pass there. But `plan()` also takes `head_dim_vo: Optional[int]` (docs:
+"head_dim_vo != head_dim_qk"), and the **ragged** path takes separate k/v tensors
+→ asymmetric `qk=512/vo=256` is expressible and is exactly the VO-split shape.
 
-`FA2DetermineCtaTileQ` (upstream `utils.cuh:384`) is 2-arg / symmetric. The red
-condition is `IsInvalid()`'s `sizeof(DTypeKV)==1 && NUM_MMA_KV*2 % NUM_WARPS_Q != 0`
-(`prefill.cuh:182`), reachable only when `min(max_num_mma_kv_smem, max_num_mma_kv_reg)`
-lands on 1 with `NUM_WARPS_Q=4` (`cta_tile_q ∈ {64,128}`, i.e. `qo_len>16`).
+### Root cause
+`c15ac84` defines `kMinValidMmaKV` (smallest `NUM_MMA_KV` satisfying the 1-byte
+alignment `NUM_MMA_KV*2 % NUM_WARPS_Q == 0`) and uses it for `num_ctas_per_sm`,
+but the **dispatched** value `min(max_num_mma_kv_smem, max_num_mma_kv_reg)` is NOT
+floored. `DISPATCH_NUM_MMA_KV` snaps to a power of two `{8,4,2,1}`; the only one
+that fails the alignment is `1`, dispatched exactly when smem admits one KV tile
+but the minimum valid tile needs two (`reg` floors at 2, so smem always binds).
 
-| head_dim | qo_len ∈ {17..512} | cta_tile_q | NUM_WARPS_Q | result |
-|---|---|---|---|---|
-| 256 | all | 64 | 4 | **OK** (smem/reg fit NUM_MMA_KV ≥ 2) |
-| 128 | all | 64/128 | 4 | **OK** |
-| 192 | all >16 | 64/128 | 4 | ERROR — *different* invariant (below) |
+### Verification (sm_120, RTX 5060 Ti, CUDA 13.0)
+- `qk=512 vo=256` fp8 → clean "insufficient shared memory … needs NUM_MMA_KV>=2
+  … use a smaller head_dim or 2-byte KV" (was "please create an issue").
+- head 256 / head 128 fp8, qo_len 17–512 → OK (no regression).
+- `qk=512 vo=256` **bf16** → OK (2-byte path unaffected; `kMinValidMmaKV=1`).
 
-At the upstream-supported head dims (128/256), smem/reg always admit
-`NUM_MMA_KV ≥ 2`. Squeezing the dispatched value to 1 requires `head_dim_qk=512`,
-which doubles the QK smem term — and upstream's symmetric `plan(head_dim)` API
-**cannot express QK≠VO**. So the targeted red is unreachable on stock upstream.
+### Dtype axis (Codex 0105, still valid)
+On SGLang at the same VO-split shape, full-NVFP4 K+V is GREEN; only the fp8
+comparator reds. Consistent: nvfp4's packed-uint8 accounting lands on a valid
+`NUM_MMA_KV`; fp8 does not. The upstream fix covers any 1-byte KV (fp8 and fp4).
 
-### 2. head 192 throw is a *different* family (and broadly unsupported)
+## Disposition
+- **Atomic PR materials written** (`docs/flashinfer_pr/`: patch, PR_DESCRIPTION,
+  repro scripts). **Not filed** — opening an upstream PR is outward-facing and is
+  Jetha's call.
+- Independent of the campaign's VO-split FlashInfer PR (which is held behind the
+  SGLang AR ladder). This diagnostic fix can land ahead of it.
 
-head 192 + fp8/bf16, `qo_len>16` → `Invalid configuration ... NUM_MMA_D_VO=12
-NUM_MMA_KV=4 NUM_WARPS_Q=4` — fails the `NUM_MMA_D_VO % (2·NUM_WARPS_Q)` invariant
-(`prefill.cuh:180`), **not** the 1-byte `NUM_MMA_KV` floor (KV=4 here, not 1).
-The 1-warp path (`qo_len≤16`) *also* errors for head 192 (both dtypes), so head 192
-is broadly unsupported, not a clean selector bug. Not a viable PR vehicle.
-
-### 3. Dtype axis — even at d512, only fp8 reds (Codex 0105)
-
-Independent SGLang confirmation on the *same* VO-split shape (ctx 8185, prefix
-4096, head_dim_qk=512, page 1, graphs off), image
-`sglang-gemma4-source-stack@sha256:0d5e160c…`, commit `660f1c38`:
-**full-NVFP4 K+V is GREEN** (no `Invalid configuration` / `NUM_MMA_KV=1`), chat
-smoke Tokyo/Tokyo, cached_tokens 4096. Only the **fp8** comparator reds (0103).
-
-This **corrects mail 0104's over-claim** ("affects fp8 AND nvfp4"): the red is
-**fp8-specific** at d512. nvfp4's packed-uint8 smem accounting lands on a valid
-`NUM_MMA_KV`; fp8's does not.
-
-## Consequences
-
-- **No standalone upstream PR.** The "file ahead of everything" premise (clean
-  standalone upstream bug) is false — the trigger is unreachable on upstream.
-- The `NUM_MMA_KV`/`max_mma_kv=0` floor + smem-aware 3-arg `FA2DetermineCtaTileQ`
-  stay **campaign-local** (Task #17, branch `spark/hijinks-022-fa2-d512`), guarding
-  the fp8 *comparator* path at head_dim_qk=512. Headline full-NVFP4 is unaffected.
-- Optional future: a *defensive* upstream PR making `FA2DetermineCtaTileQ`
-  constraint-aware (fall back to 1-warp when the 4-warp layout is invalid for the
-  head dim) would also fix the head-192 throw — but that is a "harden the
-  dispatcher" improvement, not a reproducible bug-fix, and is a maintainer/Jetha
-  call (outward-facing). Not filed.
+### Companion finding (out of scope)
+head 192 + fp8/bf16 `qo_len>16` throws a *different* invariant
+(`NUM_MMA_D_VO % (2·NUM_WARPS_Q)`, `NUM_MMA_KV=4` not 1) and head 192 is broadly
+unsupported (1-warp path errors too). Not addressed by this PR.
