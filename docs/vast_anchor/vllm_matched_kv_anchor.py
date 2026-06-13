@@ -161,6 +161,11 @@ def main() -> int:
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
     parser.add_argument("--attention-backend", default=None)
     parser.add_argument("--enforce-eager", action="store_true")
+    # Decisive knob for the +0.40 root-cause: when set, do NOT warm the prefix.
+    # The full ctx is scored in one request, so scored positions attend to prefix
+    # KV computed in-pass (single-chunk if max_num_batched_tokens>=ctx) instead of
+    # the cross-request radix/partial-state-merge path. Scored token set is identical.
+    parser.add_argument("--skip-warmup", action="store_true")
     args = parser.parse_args()
 
     started = time.perf_counter()
@@ -172,10 +177,14 @@ def main() -> int:
     chat = chat_smoke(llm, tokenizer, args.model)
 
     warm_started = time.perf_counter()
-    warm = llm.generate(
-        token_ids[: args.prefix_len],
-        SamplingParams(max_tokens=1, temperature=0.0),
-    )[0]
+    if args.skip_warmup:
+        warm = None
+        warm_elapsed_s = 0.0
+    else:
+        warm = llm.generate(
+            token_ids[: args.prefix_len],
+            SamplingParams(max_tokens=1, temperature=0.0),
+        )[0]
     warm_elapsed_s = time.perf_counter() - warm_started
 
     score_started = time.perf_counter()
@@ -198,6 +207,12 @@ def main() -> int:
         "kv_cache_dtype": args.kv_cache_dtype,
         "ctx": args.ctx,
         "prefix_len": args.prefix_len,
+        "run_mode": {
+            "skip_warmup": bool(args.skip_warmup),
+            "max_num_batched_tokens": args.max_num_batched_tokens,
+            "single_chunk": args.max_num_batched_tokens >= args.ctx,
+            "reuse_path": (not args.skip_warmup),
+        },
         "corpus": args.corpus,
         "text_chars": len(text),
         "available_tokens": len(tokenizer.encode(text, add_special_tokens=False)),
@@ -219,9 +234,10 @@ def main() -> int:
         },
         "chat_smoke": chat,
         "warmup": {
+            "skipped": bool(args.skip_warmup),
             "elapsed_s": warm_elapsed_s,
-            "prompt_tokens": args.prefix_len,
-            "generated": warm.outputs[0].text,
+            "prompt_tokens": 0 if warm is None else args.prefix_len,
+            "generated": None if warm is None else warm.outputs[0].text,
         },
         "score_request": {
             "elapsed_s": score_elapsed_s,
