@@ -45,7 +45,7 @@ fallback path and must not be conflated with full-NVFP4 rows.
 | **12B** | matched bf16-vs-full-NVFP4 row is RED by `+0.402969` nats/token at ctx 8185 / prefix 4096; multimodal short smoke is scoped green | Wait for Claude's FlashInfer large-prefill accumulation fix, then rerun the matched row; expected corrected delta is near `+0.19`. Do not chase SGLang radix/merge or global-scale calibration for this red; mail 0140 exonerates them | yes, after fix |
 | **26B-A4B** | not yet claim-grade in SGLang AR ladder; same D=512 global VO-split path as E4B/31B plus MoE | run only after the long-context quality fix and current package image are ready, unless doing an explicitly scoped bring-up diagnostic | yes |
 | **31B** | no SGLang serving row banked; D=512 VO-split scaffolding/probes exist, but serving must be proven with the packaged SGLang path | first SGLang serving bring-up + matched delta after the shared quality/dispatcher blockers are resolved | yes |
-| **E4B scoped checkpoint** | bf16 and full-NVFP4 short rows are green; baked mm-prefix image row is green; fp8 comparator is red in FlashInfer dispatcher | hold fp8 comparator until D512/VO256 1-byte-KV dispatcher fix lands | yes, after fix |
+| **E4B scoped checkpoint** | bf16 and full-NVFP4 short rows are green; baked mm-prefix image row is green; fp8 comparator is red in FlashInfer dispatcher | fp8 D512/VO256 is now scoped as a clean-reject row on CC-12.x in our fork, caused by the fp8->bf16 repack staging buffer exceeding shared memory; do not wait for a runnable fp8 comparator unless a real fp8 in-loop-dequant kernel change lands | no, unless kernel semantics change |
 
 **vLLM anchor caveat (confirm before quoting "matches vLLM"):** the vLLM lane has
 Gemma 3 + Qwen matched-PPL claim rows and the DG-V DiffusionGemma green, **but no banked
@@ -66,8 +66,10 @@ Gemma 4 12B matched bf16-vs-NVFP4** (my lane, P520/Spark). Flagging rather than 
    claim-grade pass or a new blocker. A deliberately scoped chunked/merge
    diagnostic may run earlier if it directly checks whether SGLang can avoid the
    large-prefill artifact and recover the `+0.19` reference path.
-3. **FlashInfer dispatcher fix for E4B fp8 D512/VO256 1-byte KV** *(Claude/FI)* — then rerun
-   the SGLang E4B fp8 comparator so the comparison matrix is complete.
+3. **FlashInfer clean reject for E4B fp8 D512/VO256 1-byte KV** *(Claude/FI)* — landed per
+   mail 0158 as an actionable shared-memory rejection, not an enablement fix. The comparison
+   matrix should use bf16-vs-NVFP4 for this D512 shape unless fp8 gets an nvfp4-style
+   in-loop-dequant kernel that removes the repack staging buffer.
 4. **SGLang 26B-A4B and 31B serving bring-up / matched rows** *(Codex)* — after the shared
    quality/dispatcher blockers clear, using the current packaged-image path.
 
@@ -84,8 +86,8 @@ The FlashInfer dispatcher fix (3 sites, `docs/flashinfer_pr/`) converts both
 fits"* message. **Recommended:** carry the 3-line guard onto the SGLang/campaign
 FlashInfer branch (`jethac/flashinfer@8d85fff9`) so any VO-split routing misfire in the
 E4B rerun reads cleanly instead of opaquely. (Claude's parked FlashInfer task; does not
-touch SGLang serving code.) It does **not** enable any config — enablement is the VO-split
-route already staged.
+touch SGLang serving code.) It does **not** enable the fp8 D512/VO256 comparator on CC-12.x;
+nvfp4 remains runnable because it dequants in-loop and avoids the fp8 repack staging buffer.
 
 ---
 

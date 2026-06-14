@@ -24,8 +24,10 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   `+0.402969` nats/token, now classified by mail 0140 as a FlashInfer
   single-/large-prefill accumulation blocker rather than SGLang radix/merge;
   exact SDPA and vLLM chunked/reuse put the true NVFP4 cost near `+0.19`.
-  E4B fp8 comparator remains a FlashInfer D512/VO256 1-byte-KV dispatcher
-  blocker.
+  E4B fp8 comparator is now a scoped clean-reject: mail 0158 retracts the
+  GB10-specific framing and classifies fp8 D512/VO256 1-byte KV as a CC-12.x
+  shared-memory infeasibility in our fork because the fp8->bf16 repack staging
+  buffer does not fit; nvfp4 remains the runnable D512 path.
 - Current live packet: `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
   `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses full-NVFP4
   12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row by default;

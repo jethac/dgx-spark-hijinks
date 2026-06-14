@@ -13,7 +13,10 @@
 > long-context full-NVFP4 FlashInfer single-/large-prefill accumulation red
 > refined in mail 0140 (`+0.402969` observed on SGLang, true exact/chunked cost
 > near `+0.19`), and
-> (2) the E4B fp8 D512/VO256 1-byte-KV FlashInfer dispatcher red. Do not use
+> (2) the E4B fp8 D512/VO256 1-byte-KV FlashInfer clean-reject red: mail 0158
+> retracts the "GB10-specific" framing and classifies fp8 D512 as a CC-12.x
+> shared-memory infeasibility in our fork caused by the fp8->bf16 repack staging
+> buffer. Do not use
 > older Qwen/mixed-KV sections below to justify rerunning known-red Gemma 4
 > rows or chasing the retracted global-scale calibration path.
 
