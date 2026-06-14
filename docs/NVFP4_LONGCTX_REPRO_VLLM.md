@@ -50,6 +50,29 @@ not by the NVFP4 format.
   format floor at ctx 8185 is +0.19. The achievable fix recovers the single-prefill inflation
   (+0.42 → +0.19), i.e. a kernel-correctness fix, not a format improvement.
 
+## Kernel localization progress (open — needs a focused session)
+Findings from `VLLM_SPARK_KV_TRACE` + an instrumented FlashInfer build on vast PRO6000
+(artifacts `pfx_results/trace_multi_*.log`, `disp_*` rerun reproduced single 8.7031 / chunked 8.467):
+1. **single = one 8185-token prefill call; chunked = 4096 + 4089 calls.** Same model/ctx, only the
+   scheduler batching differs.
+2. **Layer 0 is a sliding-window layer** (`window_left=1023`, window 1024) — there a query attends
+   ≤1024 recent KV, identical in both paths. The gap must live in the **global (full-causal)
+   layers**.
+3. **The nvfp4 VO-split attention does NOT go through the stock
+   `BatchPrefillWithPagedKVCacheDispatched`** — an env-gated log inserted at that dispatch (3 sites)
+   never fired during the nvfp4 run. The VO-split uses a separate FA2-nvfp4 kernel entry
+   (`flashinfer/prefill.py: get_batch_prefill_module(backend="fa2", ...)` / custom two-pass), which
+   is where the fix must go. **Next: find and bisect that kernel.**
+4. **Cross-runtime (Codex mail 0142):** SGLang `--chunked-prefill-size 2048` only moved the red
+   +0.403 → +0.355 (−0.048), nowhere near vLLM-chunked's +0.19. So vLLM-chunked's recovery is
+   **not merely smaller chunks** — vLLM and SGLang route chunked/extend attention differently and
+   only vLLM's path recovers. The fix is not a one-line chunk-size change; it is in the
+   FA2-nvfp4 accumulation / how the recent-KV block is attended.
+
+**Status:** diagnosis (true cost +0.19; +0.40 = single/large-prefill FA2-nvfp4 artifact) is
+delivered and banked; the kernel-correctness fix is localized to the FA2-nvfp4 prefill path but
+not yet pinned to the exact precision/tiling site — a focused follow-up session.
+
 ## Setup
 - Box: vast.ai RTX PRO 6000 S (sm_120, 96 GB), wheel `vllm 0.1.dev1+g6adc00f70.sm120a`,
   torch 2.12.0+cu130, FlashInfer `jethac@7d5d477b`.
