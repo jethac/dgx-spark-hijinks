@@ -175,3 +175,24 @@ explains Codex's 0142 (SGLang chunk-2048 stays at +0.355).
 Every number here is the real vLLM serving path (not a reference sim). The context-length
 control was added specifically to rule out a VO-split fixed tax / -it artifact before declaring
 the verdict.
+
+## Localization update (2026-06-14, vast PRO6000, wget-wheel box) — split_kv ruled out
+`fipath_sitecustomize.py` path logging on single (nbt8192) vs chunked (nbt4096) nvfp4:
+- single: ONE `BatchPrefillWithPagedKVCacheWrapper` call, qo=8185 → NLL 8.7031 (+0.42)
+- chunked: TWO paged calls, qo=4096 + 4089 → NLL 8.467 (+0.19)
+- **Both pure PAGED nvfp4 — no bf16/RAGGED cascade.** (Refutes the "chunked attends recent KV in
+  bf16" idea.)
+
+`split_kv` hypothesis TESTED and RULED OUT: the nvfp4 path's `disable_split_kv` is gated on
+`VLLM_BATCH_INVARIANT` (unset in my runs → `disable_split_kv=False`, binary-search). Forcing
+`prefill_fixed_split_size=4096` on the single prefill (so it splits KV + fp32 partial-state merges)
+left it at **8.7031, unchanged** — a KV-split merge is numerically equivalent to the single pass, so
+the fp32 merge is NOT the corrector.
+
+**Refined mechanism:** the inflation tracks the **query-batch size in one paged-prefill kernel call**
+(8185 queries with long KV → +0.42; splitting the *query* dimension into separate prefill calls →
++0.19; nbt sweep monotonic 4096→+0.19, 6144→+0.385, 8192→+0.42). So it's the kernel's
+online-softmax / `o_frag` accumulation across the large query-tile × long-KV grid for nvfp4 — not
+split_kv, not a cascade. **Practical mitigation: chunked prefill (nbt ≤ 4096), which is vLLM's
+default for long sequences → +0.19.** The exact one-line kernel fix needs per-tile accumulation
+instrumentation (next).
