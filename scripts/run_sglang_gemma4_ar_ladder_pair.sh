@@ -71,13 +71,14 @@ if [[ "${ALLOW_KNOWN_BLOCKED}" != "1" ]]; then
       "${blocked_fullnvfp4_models[*]}" >&2
     cat >&2 <<'EOF'
 Current evidence: matched 12B ctx8185/prefix4096 is red by +0.402969
-nats/token, and mail/0138 classifies that as a shared FlashInfer/numerics
-blocker, not an SGLang radix/merge fix. The 26B-A4B and 31B full-NVFP4 AR
-ship-gate rows wait behind the same shared fix to avoid producing
-non-claim-grade ladder evidence. Re-run only after the dependency changes or
-for an explicitly labeled diagnostic:
+nats/token, and mail/0140 classifies that as a shared FlashInfer
+single-/large-prefill accumulation artifact. Exact SDPA and vLLM chunked/reuse
+put the true NVFP4 cost near +0.19, so this is not an SGLang radix/merge or
+global-scale fix. The 26B-A4B and 31B full-NVFP4 AR ship-gate rows wait behind
+the same shared fix to avoid producing non-claim-grade ladder evidence. Re-run
+only after the dependency changes or for an explicitly labeled diagnostic:
 
-  SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: shared quality fix' \
+  SGLANG_AR_LADDER_OVERRIDE_REASON='mail 0140 scoped chunked/merge diagnostic' \
   ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
   bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 EOF

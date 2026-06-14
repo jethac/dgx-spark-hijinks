@@ -114,7 +114,7 @@ run_case() {
   echo "PASS ${name}"
 }
 
-run_case "fullnvfp4_block" 2 "SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: shared quality fix'" \
+run_case "fullnvfp4_block" 2 "mail 0140 scoped chunked/merge diagnostic" \
   env MODELS="google/gemma-4-26B-A4B-it" ROW_LABELS="fullnvfp4" bash "${RUNNER}"
 
 run_case "e4b_fp8_block" 2 "D512 fp8 dispatcher fix" \

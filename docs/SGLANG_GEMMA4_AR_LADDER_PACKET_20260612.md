@@ -54,6 +54,10 @@ rows after the Ubicloud-built source-stack image.
   replaying with an explicit override reason and fresh package provenance.
   Current audit:
   `results/sglang_gemma4_ar_ladder_blocker_audit_20260614T0826JST.json`.
+- Scoped 12B replay scaffold for the mail 0140 chunked/merge question:
+  `docs/SGLANG_12B_CHUNKED_MERGE_DIAGNOSTIC_PACKET_20260614.md`. As written it
+  is a safe known-red replay scaffold; add a concrete SGLang serving-path knob
+  before using it as a true chunked/merge discriminator.
 
 ## Run
 
