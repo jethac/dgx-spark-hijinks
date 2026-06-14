@@ -4,6 +4,24 @@
 (+0.003 nats/token at ctx 8192). The +0.281 (vLLM) / +0.403 (SGLang) serving quality red
 is the **FlashInfer nvfp4 kernel/serving path** — a fixable bug (Task #25), not inherent.
 
+## ⚠️ Long-context correction (2026-06-14) — use `NVFP4_LONGCTX_REPRO_VLLM.md` for the active blocker
+
+The active ctx-8185 ship-gate interpretation is now refined by
+`docs/NVFP4_LONGCTX_REPRO_VLLM.md` and `mail/0140`:
+
+- exact HF SDPA with nvfp4-qdq K+V at the same scored suffix gives about
+  `+0.1932` nats/token;
+- vLLM chunked / prefix-reuse paged+ragged merge gives `+0.1906`;
+- vLLM single-prefill inflates to `+0.4215`;
+- SGLang's current large-prefill-shaped row inflates similarly to
+  `+0.402969`.
+
+So the current SGLang AR blocker is a FlashInfer single-/large-prefill
+accumulation artifact on top of a real `~+0.19` long-context NVFP4 cost. It is
+not a SGLang radix/partial-state-merge bug, and it is not the retracted
+global-scale calibration issue. Treat the older sections below as historical
+localization work unless they are consistent with this correction.
+
 ## The question
 Codex's matched vLLM 12B anchor (mail 0117) measured full-NVFP4 K+V at `Δ=+0.281`
 nats/token — ~50× the near-lossless ledger results for Qwen (+0.005) and Gemma-3-27B
@@ -102,7 +120,7 @@ head-256) is the bug. **Free prediction:** the 31B/E4B (already forced linear V-
 **Fix:** either repair the head-256 swizzle/de-swizzle, or default head-256 nvfp4 KV to linear
 V-SF (as VO-split already does).
 
-## ⚠️ E2E SERVING CORRECTION (2026-06-14, late) — the global-scale story below is WRONG
+## ⚠️ E2E SERVING CORRECTION (2026-06-14, late) — the global-scale story below is WRONG; prefix-cache suspicion later superseded
 
 End-to-end on the real vLLM serving stack (base + -it gemma-4-12B, `VLLM_FLASHINFER_MM_PREFIX=1`
 so nvfp4 actually serves — it was a flag, not a wheel limit) refutes the global-scale hypothesis:
@@ -123,10 +141,11 @@ Plus: multimodal nvfp4 **serves coherently** (image → "two tabby cats…remote
    my reference `g=0.5` sweep showed only what *would* happen *if* under-ranged, not what does.
 2. **`calculate_kv_scales` CATASTROPHICALLY BREAKS nvfp4** (NLL 16.5). It is **not a fix** — do not
    enable it for nvfp4. (Mail 0130's "calibrate the global scale" advice is **retracted**.)
-3. **The +0.281/+0.403 does NOT reproduce at ctx 4096.** It is specific to Codex's **ctx 8185 +
-   4096-prefix-reuse (radix)** path → the real suspect is the **prefix-cache / partial-state-merge
-   under nvfp4** (the known FP4-K LSE-sensitivity from the Qwen work, per `SGLANG_GEMMA4_RUNG_PREP.md`),
-   NOT the per-tensor scale. That path needs testing directly (long ctx + prefix reuse).
+3. **The +0.281/+0.403 does NOT reproduce at ctx 4096.** At the time this suggested the
+   **ctx 8185 + 4096-prefix-reuse (radix)** path as the next suspect. That suspicion is now
+   superseded by the long-context correction above: vLLM chunked/reuse matches exact SDPA at
+   about `+0.19`, while single-/large-prefill inflates to about `+0.42`. Do not use this
+   paragraph to justify rewriting SGLang radix/partial-state merge.
 
 Everything in the global-scale section below is **superseded** by this. (The *format-is-near-lossless*
 headline still stands — it's now confirmed end-to-end: default nvfp4 +0.007.)

@@ -6,8 +6,11 @@ SGLang lane by `docs/GOAL_CODEX_SGLANG_LANE.md`,
 `docs/SHIP_GATE_SGLANG_GEMMA4_LADDER_PLAN.md`. Do not use the older queue below
 to justify rerunning known-red rows. Current blockers are:
 
-- 12B long-context full-NVFP4 is a shared FlashInfer/numerics red, not an
-  SGLang radix/partial-state-merge red (`mail/0138`).
+- 12B long-context full-NVFP4 is a shared FlashInfer single-/large-prefill
+  accumulation red, not an SGLang radix/partial-state-merge red (`mail/0140`,
+  refining `mail/0138`). Exact SDPA and vLLM chunked/reuse put the true
+  full-NVFP4 long-context cost near `+0.19`; current SGLang large-prefill row
+  inflates to `+0.402969`.
 - E4B fp8 is a FlashInfer D512/VO256 1-byte-KV paged-prefill dispatcher red,
   documented in
   `results/sglang_e4b_fp8_dispatch_analysis_20260614T054129JST/STOP_SUMMARY.md`.
