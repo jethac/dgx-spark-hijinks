@@ -196,3 +196,34 @@ online-softmax / `o_frag` accumulation across the large query-tile × long-KV gr
 split_kv, not a cascade. **Practical mitigation: chunked prefill (nbt ≤ 4096), which is vLLM's
 default for long sequences → +0.19.** The exact one-line kernel fix needs per-tile accumulation
 instrumentation (next).
+
+## Parallel kernel-fix session (2026-06-14) — it's a structural FA2-nvfp4 BUG, not precision
+Per-position NLL (single vs chunked): inflation is **uniform** across all scored positions
+(+0.12..+0.35), not concentrated at the chunk boundary. So every query inflates systematically in
+the 8185-query call vs the 4089-query call — a **batch-size-dependent** difference. +0.23 nats is
+**far too large for reduction-order rounding** (~1e-5), so the single large-prefill is computing
+nvfp4 attention *incorrectly* above some query-count/KV threshold; chunked (= exact reference) is
+correct. This is a genuine FA2-nvfp4 kernel bug.
+
+Ruled out (all tested on real serving):
+- bf16 cascade — fipath: single + chunked are BOTH pure `BatchPrefillWithPagedKVCacheWrapper`.
+- split_kv / fp32 partial-state merge — forcing `prefill_fixed_split_size=4096` on single: 8.7031,
+  unchanged.
+- `VLLM_BATCH_INVARIANT` — selector rejects ("FLASHINFER: batch invariance not supported").
+- per-call quantization — the paged nvfp4 KV is nbt-independent (constant global scale + per-16
+  block SF; same bytes regardless of batch).
+- per-element V precision — fp32 V scale-factor application (`__hmul2`→fp32, 8 sites): 8.7031,
+  unchanged.
+
+**Open (needs a dedicated deep session): the exact bug site** — a batch-size-dependent
+miscomputation in the FA2-nvfp4 large-prefill (suspects: the VO-split two-pass merge, or a
+smem/register reuse across query tiles that leaks for nvfp4 above a threshold). Pinning it needs
+per-tile attention-output dumps (single vs chunked for the same query) — not random patches.
+
+**Practical mitigation (shippable, verified): chunked prefill (`max_num_batched_tokens ≤ 4096`) →
++0.19**, which is vLLM's default for long sequences. The +0.42 only occurs when chunking is
+disabled (nbt ≥ seqlen). For SGLang (which can't recover via vLLM-chunked), the fix waits on the
+kernel bug.
+
+**Infra win this session:** the wheel is a public GitHub release (`sm120a-wheels-6adc00f70`); boxes
+`wget` it at 3 Gbps instead of scp through the throttled vast proxy (`docs/vast_anchor/e2e_setup_wget.sh`).
