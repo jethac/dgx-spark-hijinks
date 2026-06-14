@@ -132,6 +132,7 @@ run_case "override_with_reason_reaches_docker_gate" 99 "docker is not empty; yie
 OUT_DIR_CAPTURE="${TMP}/audit_capture"
 mkdir -p "${OUT_DIR_CAPTURE}"
 printf 'short corpus\n' >"${TMP}/corpus.md"
+printf '{"schema":"ppl-corpus-manifest/v1","actual_chars":13}\n' >"${TMP}/corpus_manifest.json"
 run_case "override_writes_blocker_audit_before_serving" 1 '"blocker_audit":' \
   env MODELS="google/gemma-4-26B-A4B-it" ROW_LABELS="fullnvfp4" \
     ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
@@ -140,6 +141,7 @@ run_case "override_writes_blocker_audit_before_serving" 1 '"blocker_audit":' \
     OUT_DIR="${OUT_DIR_CAPTURE}" \
     RUN_ID="test_audit_capture" \
     CORPUS="${TMP}/corpus.md" \
+    CORPUS_MANIFEST="${TMP}/corpus_manifest.json" \
     READY_TIMEOUT_S=1 \
     bash "${RUNNER}"
 
@@ -153,8 +155,16 @@ claim_audit = json.loads((out / "claim_audit.json").read_text(encoding="utf-8"))
 assert audit["ladder_status"] == "blocked-known-red-dependencies"
 assert manifest["blocker_audit"].endswith("/blocker_audit.json")
 assert manifest["claim_audit"].endswith("/claim_audit.json")
+assert manifest["corpus"] == "${TMP}/corpus.md"
+assert manifest["corpus_manifest"] == "${TMP}/corpus_manifest.json"
+assert manifest["ctx_list"] == [512]
+assert manifest["reuse_prefix_len"] == 256
+assert manifest["logprob_start_len"] == 256
+assert manifest["graphs"] == "disabled"
 assert claim_audit["ok"] is False
 assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
+assert "manifest missing corpus artifact" not in claim_audit["findings"]
+assert "manifest missing corpus_manifest artifact" not in claim_audit["findings"]
 PY
 echo "PASS blocker_and_claim_audit_artifacts"
 
@@ -170,6 +180,7 @@ run_case "strict_claim_audit_red_fails" 1 "SGLang Gemma 4 AR claim audit is not 
     OUT_DIR="${OUT_DIR_STRICT}" \
     RUN_ID="test_claim_audit_strict_capture" \
     CORPUS="${TMP}/corpus.md" \
+    CORPUS_MANIFEST="${TMP}/corpus_manifest.json" \
     READY_TIMEOUT_S=1 \
     bash "${RUNNER}"
 
@@ -197,6 +208,7 @@ run_case "e4b_fp8_override_writes_dispatch_audit" 1 '"model": "google/gemma-4-E4
     OUT_DIR="${OUT_DIR_E4B}" \
     RUN_ID="test_e4b_fp8_dispatch_capture" \
     CORPUS="${TMP}/corpus.md" \
+    CORPUS_MANIFEST="${TMP}/corpus_manifest.json" \
     READY_TIMEOUT_S=1 \
     bash "${RUNNER}"
 

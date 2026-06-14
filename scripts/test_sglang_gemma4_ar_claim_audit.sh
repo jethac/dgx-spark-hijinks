@@ -41,6 +41,8 @@ import sys
 
 manifest_path = pathlib.Path(sys.argv[1])
 blocker_path = pathlib.Path(sys.argv[2])
+corpus_path = manifest_path.parent / "corpus.md"
+corpus_manifest_path = manifest_path.parent / "corpus_manifest.json"
 models = [
     "google/gemma-4-12B-it",
     "google/gemma-4-26B-A4B-it",
@@ -86,6 +88,11 @@ blocker_path.write_text(
     ),
     encoding="utf-8",
 )
+corpus_path.write_text("short deterministic corpus\n", encoding="utf-8")
+corpus_manifest_path.write_text(
+    json.dumps({"schema": "ppl-corpus-manifest/v1", "actual_chars": 27}),
+    encoding="utf-8",
+)
 manifest_path.write_text(
     json.dumps(
         {
@@ -95,6 +102,15 @@ manifest_path.write_text(
             "image_digest": "image@sha256:abc",
             "row_labels": ["bf16", "fp8", "fullnvfp4"],
             "blocker_audit": blocker_path.name,
+            "corpus": corpus_path.name,
+            "corpus_manifest": corpus_manifest_path.name,
+            "ctx_list": [8185],
+            "reuse_prefix_len": 4096,
+            "logprob_start_len": 4096,
+            "max_new_tokens": 1,
+            "context_length": 8192,
+            "page_size": 1,
+            "graphs": "disabled",
             "models": models,
             "rows": rows,
         }

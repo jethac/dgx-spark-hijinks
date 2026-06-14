@@ -99,6 +99,9 @@ It records:
 - supplied-token PPL using the repository markdown corpus;
 - bf16-vs-full-NVFP4 and fp8-vs-full-NVFP4 PPL comparisons;
 - server logs containing Gemma KV pool geometry lines.
+- corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
+  `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
+  `max_new_tokens`, graphs disabled).
 
 The runner writes `results/<run_id>/claim_audit.json` after every manifest. For
 an explicit post-run gate or to regenerate it manually:

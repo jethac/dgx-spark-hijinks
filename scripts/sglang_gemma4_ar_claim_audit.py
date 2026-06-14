@@ -20,6 +20,13 @@ REQUIRED_COMPARISONS = [
     "compare_bf16_vs_fullnvfp4",
     "compare_fp8_vs_fullnvfp4",
 ]
+REQUIRED_POSITIVE_INT_FIELDS = [
+    "reuse_prefix_len",
+    "logprob_start_len",
+    "max_new_tokens",
+    "context_length",
+    "page_size",
+]
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -84,6 +91,25 @@ def audit_manifest(
         findings.append("manifest missing image or image_digest")
     if isinstance(image_digest, str) and "sha256:" not in image_digest:
         findings.append("image_digest does not include sha256")
+
+    for artifact_name in ("corpus", "corpus_manifest"):
+        artifact_path = normalize_path(manifest.get(artifact_name), manifest_path)
+        if not artifact_path or not artifact_path.exists():
+            findings.append(f"manifest missing {artifact_name} artifact")
+
+    ctx_list = manifest.get("ctx_list")
+    if not isinstance(ctx_list, list) or not ctx_list:
+        findings.append("manifest ctx_list is missing or empty")
+    elif not all(isinstance(value, int) and value > 0 for value in ctx_list):
+        findings.append("manifest ctx_list must contain positive integers")
+
+    for field in REQUIRED_POSITIVE_INT_FIELDS:
+        value = manifest.get(field)
+        if not isinstance(value, int) or value <= 0:
+            findings.append(f"manifest {field} must be a positive integer")
+
+    if manifest.get("graphs") != "disabled":
+        findings.append("manifest graphs must be disabled for the current AR claim gate")
 
     blocker_audit_path = normalize_path(manifest.get("blocker_audit"), manifest_path)
     if not blocker_audit_path or not blocker_audit_path.exists():
@@ -165,6 +191,7 @@ def audit_manifest(
         "required_models": REQUIRED_MODELS,
         "required_rows": REQUIRED_ROWS,
         "required_comparisons": REQUIRED_COMPARISONS,
+        "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
         "warnings": warnings,
         "model_results": model_results,
