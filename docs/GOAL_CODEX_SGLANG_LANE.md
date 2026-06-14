@@ -55,6 +55,11 @@ python3 scripts/sglang_lane_state_poll.py \
 It records local/remote mail, dependency refs, and whether the lane is still in the
 known-red hold pattern. If it reports `new-remote-mail` or a dependency change, read the
 mail/diff before launching any live Spark row.
+When editing the poll logic, run:
+
+```bash
+bash scripts/test_sglang_lane_state_poll.sh
+```
 
 ## Discipline (campaign rules)
 Every claim an artifact, every red a verbatim error, every binary its provenance. Don't conclude a

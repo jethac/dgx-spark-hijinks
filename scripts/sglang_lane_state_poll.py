@@ -74,7 +74,11 @@ def origin_refs(repo_root: pathlib.Path) -> list[str]:
         repo_root,
         ["for-each-ref", "--format=%(refname:short)", "refs/remotes/origin"],
     )
-    return sorted(line for line in out.splitlines() if line and line != "origin/HEAD")
+    return sorted(
+        line
+        for line in out.splitlines()
+        if line.startswith("origin/") and line != "origin/HEAD"
+    )
 
 
 def parse_mail(path: str) -> dict[str, Any] | None:
@@ -120,7 +124,20 @@ def dependency_state(name: str, current: str, known_blocked: str) -> dict[str, A
     }
 
 
-def audit(repo_root: pathlib.Path, *, scan_all_origin_mail: bool) -> dict[str, Any]:
+def git_status_short(repo_root: pathlib.Path) -> str:
+    try:
+        return run_git(repo_root, ["status", "--short"])
+    except RuntimeError as exc:
+        return f"unavailable: {exc}"
+
+
+def audit(
+    repo_root: pathlib.Path,
+    *,
+    scan_all_origin_mail: bool,
+    flashinfer_ref_override: str | None = None,
+    sglang_ref_override: str | None = None,
+) -> dict[str, Any]:
     local_paths = local_mail_paths(repo_root)
     epoch2_paths = mail_paths_in_tree(repo_root, "origin/epoch2")
     refs = origin_refs(repo_root) if scan_all_origin_mail else ["origin/epoch2"]
@@ -136,8 +153,12 @@ def audit(repo_root: pathlib.Path, *, scan_all_origin_mail: bool) -> dict[str, A
     remote_max = int(remote_any_latest["number"]) if remote_any_latest else 0
     new_remote_mail = remote_max > local_max
 
-    flashinfer_ref = ls_remote_ref(repo_root, "flashinfer", FLASHINFER_BRANCH)
-    sglang_ref = ls_remote_ref(repo_root, "sglang", SGLANG_BRANCH)
+    flashinfer_ref = flashinfer_ref_override or ls_remote_ref(
+        repo_root, "flashinfer", FLASHINFER_BRANCH
+    )
+    sglang_ref = sglang_ref_override or ls_remote_ref(
+        repo_root, "sglang", SGLANG_BRANCH
+    )
     dependencies = [
         dependency_state("flashinfer", flashinfer_ref, KNOWN_BLOCKED_FLASHINFER_REF),
         dependency_state("sglang", sglang_ref, KNOWN_BLOCKED_SGLANG_REF),
@@ -165,7 +186,7 @@ def audit(repo_root: pathlib.Path, *, scan_all_origin_mail: bool) -> dict[str, A
         "schema": "sglang-lane-state-poll/v1",
         "timestamp_jst": now.isoformat(),
         "repo_root": str(repo_root),
-        "git_status_short": run_git(repo_root, ["status", "--short"]),
+        "git_status_short": git_status_short(repo_root),
         "mail": {
             "local_latest": local_latest,
             "remote_epoch2_latest": remote_epoch2_latest,
@@ -201,11 +222,21 @@ def main() -> int:
         action="store_true",
         help="skip scanning all origin branches for accidentally committed mail",
     )
+    parser.add_argument(
+        "--flashinfer-ref",
+        help="override FlashInfer ref; intended for offline transition tests",
+    )
+    parser.add_argument(
+        "--sglang-ref",
+        help="override SGLang ref; intended for offline transition tests",
+    )
     args = parser.parse_args()
 
     result = audit(
         args.repo_root.resolve(),
         scan_all_origin_mail=not args.epoch2_only_mail,
+        flashinfer_ref_override=args.flashinfer_ref,
+        sglang_ref_override=args.sglang_ref,
     )
     text = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:
