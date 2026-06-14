@@ -16,6 +16,14 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from huggingface_hub import hf_hub_download
 import pyarrow.parquet as pq
 
+if os.environ.get("TF32_OFF") == "1":
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
+    try:
+        torch.backends.cuda.matmul.fp32_precision = "ieee"
+    except Exception:
+        pass
+
 tk = os.environ["HF_TOKEN"]
 MID = os.environ.get("REFMID", "google/gemma-4-12B-it")
 CTX = int(os.environ.get("REFCTX", "8185"))
@@ -101,9 +109,18 @@ text = "\n".join(x for x in pq.read_table(fp).column("text").to_pylist() if x an
 ids = tok(text)["input_ids"][:CTX]
 inp = torch.tensor([ids], device="cuda")
 
+import contextlib
+def _fwd_ctx():
+    # SDPA_MATH=1 forces the pure-fp32 math backend -> hardware/stack-independent reference,
+    # isolating whether the +0.19(vast)-vs-+0.69(Spark) gap is a flash/mem-efficient backend artifact.
+    if os.environ.get("SDPA_MATH") == "1":
+        from torch.nn.attention import sdpa_kernel, SDPBackend
+        return sdpa_kernel([SDPBackend.MATH])
+    return contextlib.nullcontext()
+
 def per_pos(mode):
     MODE[0] = mode
-    with torch.no_grad():
+    with torch.no_grad(), _fwd_ctx():
         lg = m(inp).logits[0].float()
     lp = torch.log_softmax(lg[:-1], -1)
     return -lp[range(len(ids) - 1), torch.tensor(ids[1:], device="cuda")]

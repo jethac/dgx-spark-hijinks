@@ -6,6 +6,27 @@ and vLLM's chunked/merge path agree the true long-ctx cost is ≈ +0.19. The sin
 kernel inflates it to +0.42; SGLang's +0.403 is the same inflation. Not SGLang-radix; the
 prefix-reuse/merge path is exonerated AND is the numerically correct path.**
 
+## ⚠️ Cross-stack reference fragility (2026-06-14, Spark/GB10) — read this before quoting +0.19
+The exact-reference delta is **NOT hardware/stack-invariant**, which weakens any single-number
+"true cost" claim. Same `refsim_longctx.py`, suffix-matched 12B-it ctx 8185:
+- **vast (sm_120, Torch 2.12):** +0.1932 — and it *agrees with* vast vLLM-chunked serving (+0.1906).
+- **Spark (sm_121/GB10, Torch 2.11):** +0.6949 (Codex 0145, reproduced).
+
+Ruled out as the cause (`docs/vast_anchor/refsim_disc.py` on the Spark): the fp8-e4m3 block-scale
+conversion is **bit-identical** to a manual e4m3 table (selfcheck maxabs 0); **tf32-off is
+unchanged** (+0.6949); forcing the **MATH SDPA backend** moves it only +0.69→+0.60. So it is a
+deeper Torch-2.11/GB10 numerical difference, plausibly the recursive q/dq path amplifying
+stack-level noise across 48 layers (bf16 baseline matches to ~0.02; only the q/dq side diverges).
+
+**Interpretation:** the Spark refsim (+0.60–0.69) is *worse than SGLang serving on the same box*
+(+0.40), which is impossible for a true exact reference — so the **Spark refsim is pathological**
+on that stack, not a revised cost. **+0.19 remains the best estimate** because on the vast stack the
+exact reference and the chunked serving path independently agree. BUT: do not present +0.19 as a
+hardware-invariant "true cost." The defensible claim is the *within-stack* one (below): on a given
+stack, single-prefill inflates nvfp4 error vs chunked. The absolute long-ctx nvfp4 cost is
+stack-sensitive and the refsim is fragile on some stacks — quote it with the stack, and treat
+SGLang's +0.40 on GB10 as possibly closer to that box's real cost than +0.19.
+
 ## Ground-truth disambiguation (the decisive arm)
 Exact HF eager SDPA with nvfp4-qdq K+V (no FlashInfer kernel, no tiling, no VO split), same
 12B-it model, same scored suffix [4097..8184] @ ctx 8185 (`docs/vast_anchor/refsim_longctx.py`,
