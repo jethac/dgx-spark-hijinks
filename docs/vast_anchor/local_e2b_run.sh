@@ -28,7 +28,7 @@ run(){ # kv nbt name
   $PY vllm_matched_kv_anchor.py --model "$MODEL" --tokenizer "$MODEL" --corpus "$CORPUS" \
     --kv-cache-dtype "$1" --ctx 8185 --prefix-len 4096 --max-model-len 8192 \
     --max-num-batched-tokens "$2" --skip-warmup --gpu-memory-utilization 0.45 \
-    --output /tmp/e2bout/$3.json --enforce-eager > /tmp/e2bout/$3.log 2>--output /tmp/e2bout/$4.json --enforce-eager > /tmp/e2bout/$4.log 2>&11
+    --output /tmp/e2bout/$3.json --enforce-eager > /tmp/e2bout/$3.log 2>&1
   echo "rc=$?"
 }
 run auto   8192 single_bf16
