@@ -172,6 +172,9 @@ audit = json.loads((out / "blocker_audit.json").read_text(encoding="utf-8"))
 manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
 claim_audit = json.loads((out / "claim_audit.json").read_text(encoding="utf-8"))
 assert audit["ladder_status"] == "blocked-known-red-dependencies"
+assert audit["diagnostic_override_allowed"] is True
+assert audit["diagnostic_override_reason"] == "test dependency change"
+assert "diagnostic-only" in audit["next_action"]
 assert manifest["blocker_audit"].endswith("/blocker_audit.json")
 assert manifest["claim_audit"].endswith("/claim_audit.json")
 assert manifest["corpus"] == "${TMP}/corpus.md"

@@ -181,6 +181,7 @@ cd "${REPO_ROOT}"
 mkdir -p "${OUT_DIR}"
 
 if ! python3 scripts/sglang_gemma4_ar_ladder_blocker_audit.py \
+  --diagnostic-override-reason "${OVERRIDE_REASON}" \
   --output "${OUT_DIR}/blocker_audit.json" \
   >"${OUT_DIR}/blocker_audit_stdout.log" \
   2>"${OUT_DIR}/blocker_audit_stderr.log"; then

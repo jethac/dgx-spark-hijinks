@@ -84,10 +84,19 @@ def main() -> int:
     )
     parser.add_argument("--flashinfer-ref", help="override FlashInfer ref")
     parser.add_argument("--sglang-ref", help="override SGLang ref")
+    parser.add_argument(
+        "--diagnostic-override-reason",
+        default="",
+        help=(
+            "non-empty reason from SGLANG_AR_LADDER_OVERRIDE_REASON when a "
+            "known-blocked row is intentionally replayed as a scoped diagnostic"
+        ),
+    )
     parser.add_argument("--output", type=pathlib.Path)
     args = parser.parse_args()
 
     repo_root = args.repo_root.resolve()
+    diagnostic_override_reason = args.diagnostic_override_reason.strip()
     flashinfer_ref = args.flashinfer_ref or ls_remote(
         repo_root / "third_party" / "flashinfer", FLASHINFER_BRANCH
     )
@@ -121,13 +130,20 @@ def main() -> int:
     else:
         ladder_status = "blocked-known-red-dependencies"
         can_run_claim_ladder = False
-        diagnostic_override_allowed = False
-        next_action = (
-            "Do not rerun the known-red SGLang Gemma 4 AR ladder rows. Wait for "
-            "the shared FlashInfer large-prefill accumulation fix for the 12B "
-            "ctx8185 artifact, an explicitly scoped chunked/merge diagnostic, "
-            "or the D512/VO256 fp8 dispatcher fix."
-        )
+        diagnostic_override_allowed = bool(diagnostic_override_reason)
+        if diagnostic_override_allowed:
+            next_action = (
+                "Known-blocked dependency refs are unchanged, but this artifact "
+                "records an explicit diagnostic override. Keep it scoped as "
+                "diagnostic-only; do not promote it to a claim ladder row."
+            )
+        else:
+            next_action = (
+                "Do not rerun the known-red SGLang Gemma 4 AR ladder rows. Wait for "
+                "the shared FlashInfer large-prefill accumulation fix for the 12B "
+                "ctx8185 artifact, an explicitly scoped chunked/merge diagnostic, "
+                "or the D512/VO256 fp8 dispatcher fix."
+            )
 
     now = _dt.datetime.now(_dt.timezone(_dt.timedelta(hours=9)))
     result: dict[str, Any] = {
@@ -155,6 +171,7 @@ def main() -> int:
         "ladder_status": ladder_status,
         "can_run_claim_ladder": can_run_claim_ladder,
         "diagnostic_override_allowed": diagnostic_override_allowed,
+        "diagnostic_override_reason": diagnostic_override_reason,
         "next_action": next_action,
     }
 
