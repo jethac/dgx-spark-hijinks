@@ -158,6 +158,32 @@ assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
 PY
 echo "PASS blocker_and_claim_audit_artifacts"
 
+OUT_DIR_STRICT="${TMP}/claim_audit_strict_capture"
+mkdir -p "${OUT_DIR_STRICT}"
+run_case "strict_claim_audit_red_fails" 1 "SGLang Gemma 4 AR claim audit is not green" \
+  env MODELS="google/gemma-4-26B-A4B-it" ROW_LABELS="fullnvfp4" \
+    ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
+    SGLANG_AR_LADDER_OVERRIDE_REASON="test dependency change" \
+    SGLANG_AR_CLAIM_AUDIT_STRICT=1 \
+    FAKE_DOCKER_EMPTY=1 \
+    OUT_DIR="${OUT_DIR_STRICT}" \
+    RUN_ID="test_claim_audit_strict_capture" \
+    CORPUS="${TMP}/corpus.md" \
+    READY_TIMEOUT_S=1 \
+    bash "${RUNNER}"
+
+python3 - <<PY
+import json
+from pathlib import Path
+out = Path("${OUT_DIR_STRICT}")
+claim_audit = json.loads((out / "claim_audit.json").read_text(encoding="utf-8"))
+status = (out / "claim_audit_status.txt").read_text(encoding="utf-8").strip()
+assert status == "1"
+assert claim_audit["ok"] is False
+assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
+PY
+echo "PASS strict_claim_audit_artifacts"
+
 OUT_DIR_E4B="${TMP}/e4b_fp8_dispatch_capture"
 mkdir -p "${OUT_DIR_E4B}"
 run_case "e4b_fp8_override_writes_dispatch_audit" 1 '"model": "google/gemma-4-E4B-it"' \
