@@ -117,6 +117,10 @@ quality promise. Tighten it with `SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS=<n>`
 when the publication claim needs a stricter bar.
 Set `SGLANG_AR_CLAIM_AUDIT_STRICT=1` when a full claim-grade ladder run should
 fail the shell process if the audit is red.
+The runner refuses `SGLANG_FP4_KV_*GLOBAL_SCALE_MULTIPLIER` env vars by default:
+that calibration hypothesis was retracted in mail/0132. Use
+`SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC=1` plus
+`SGLANG_AR_LADDER_OVERRIDE_REASON=...` only for a clearly labeled diagnostic replay.
 Before editing either the runner manifest contract or the claim audit, run:
 
 ```bash

@@ -129,6 +129,24 @@ run_case "override_with_reason_reaches_docker_gate" 99 "docker is not empty; yie
     ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
     SGLANG_AR_LADDER_OVERRIDE_REASON="test dependency change" bash "${RUNNER}"
 
+run_case "retracted_global_scale_refused" 2 "Refusing SGLang Gemma 4 AR ladder run with retracted global-scale multiplier knobs set" \
+  env MODELS="google/gemma-4-E4B-it" ROW_LABELS="bf16" \
+    SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER=2 \
+    bash "${RUNNER}"
+
+run_case "retracted_global_scale_diag_requires_reason" 2 "SGLANG_AR_LADDER_OVERRIDE_REASON is empty" \
+  env MODELS="google/gemma-4-E4B-it" ROW_LABELS="bf16" \
+    SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER=2 \
+    SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC=1 \
+    bash "${RUNNER}"
+
+run_case "retracted_global_scale_diag_reaches_docker_gate" 99 "docker is not empty; yielding" \
+  env MODELS="google/gemma-4-E4B-it" ROW_LABELS="bf16" \
+    SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER=2 \
+    SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC=1 \
+    SGLANG_AR_LADDER_OVERRIDE_REASON="diagnostic replay of retracted scale probe" \
+    bash "${RUNNER}"
+
 OUT_DIR_CAPTURE="${TMP}/audit_capture"
 mkdir -p "${OUT_DIR_CAPTURE}"
 printf 'short corpus\n' >"${TMP}/corpus.md"

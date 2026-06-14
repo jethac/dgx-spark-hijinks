@@ -39,6 +39,7 @@ ALLOW_KNOWN_BLOCKED="${ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER:-0}"
 OVERRIDE_REASON="${SGLANG_AR_LADDER_OVERRIDE_REASON:-}"
 CLAIM_AUDIT_STRICT="${SGLANG_AR_CLAIM_AUDIT_STRICT:-0}"
 CLAIM_AUDIT_MAX_DELTA_NATS="${SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS:-0.25}"
+ALLOW_RETRACTED_SCALE_DIAGNOSTIC="${SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC:-0}"
 
 contains_item() {
   local haystack="$1"
@@ -120,6 +121,39 @@ Set a short reason naming the dependency change or diagnostic replay, for exampl
   SGLANG_AR_LADDER_OVERRIDE_REASON='flashinfer <ref>: D512 fp8 dispatcher fix' \
   ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
   bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
+EOF
+    exit 2
+  fi
+fi
+
+if [[ -n "${SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER:-}" \
+  || -n "${SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER:-}" \
+  || -n "${SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER:-}" ]]; then
+  if [[ "${ALLOW_RETRACTED_SCALE_DIAGNOSTIC}" != "1" ]]; then
+    cat >&2 <<'EOF'
+Refusing SGLang Gemma 4 AR ladder run with retracted global-scale multiplier knobs set.
+
+The global-scale calibration hypothesis was retracted in mail/0132 and must not
+contaminate claim rows. Remove these env vars for claim work:
+
+  SGLANG_FP4_KV_GLOBAL_SCALE_MULTIPLIER
+  SGLANG_FP4_KV_K_GLOBAL_SCALE_MULTIPLIER
+  SGLANG_FP4_KV_V_GLOBAL_SCALE_MULTIPLIER
+
+For an explicitly scoped diagnostic only, set:
+
+  SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC=1
+  SGLANG_AR_LADDER_OVERRIDE_REASON='<why this diagnostic is being replayed>'
+EOF
+    exit 2
+  fi
+  if [[ -z "${OVERRIDE_REASON}" ]]; then
+    cat >&2 <<'EOF'
+SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC=1 is set, but
+SGLANG_AR_LADDER_OVERRIDE_REASON is empty.
+
+Global-scale multiplier rows are diagnostic-only after mail/0132; provide a
+short reason so the artifact cannot be mistaken for claim evidence.
 EOF
     exit 2
   fi
@@ -475,6 +509,7 @@ PY
   echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
   echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
   echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
+  echo "sglang_allow_retracted_global_scale_diagnostic=${ALLOW_RETRACTED_SCALE_DIAGNOSTIC}"
   echo "sglang_ar_claim_audit_strict=${CLAIM_AUDIT_STRICT}"
   echo "sglang_ar_claim_audit_max_delta_nats=${CLAIM_AUDIT_MAX_DELTA_NATS}"
   echo "blocker_audit=${OUT_DIR}/blocker_audit.json"
