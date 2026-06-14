@@ -105,6 +105,10 @@ It records:
   `fp8_e4m3`, and `fullnvfp4` uses `fp4_e2m1`;
 - exact comparison coverage: every required comparison must include the same
   contexts as manifest `ctx_list`;
+- PPL artifact provenance: every row's `*_ppl.json` must match the manifest
+  image, expected KV dtype, tokenizer/model, context list, reuse-prefix length,
+  logprob start, max-new-tokens, positive scored-token count, zero missing or
+  mismatched tokens, and GB10 `sm_121` hardware evidence.
 - backing artifact presence: every claim row must retain its chat, PPL,
   preflight, provenance, server, inspect, summary, and comparison JSON/log
   files. The audit accepts Spark absolute paths when run on Spark and falls

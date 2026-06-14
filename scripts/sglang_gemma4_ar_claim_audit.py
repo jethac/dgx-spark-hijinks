@@ -67,6 +67,7 @@ REQUIRED_CAPACITY_FIELDS = [
     "swa_per_token_bytes",
     "cell_size_bytes",
 ]
+REQUIRED_HARDWARE_COMPARISON_KEY_PREFIX = "NVIDIA_GB10:sm_121"
 REQUIRED_POSITIVE_INT_FIELDS = [
     "reuse_prefix_len",
     "logprob_start_len",
@@ -146,6 +147,83 @@ def capacity_total(payload: dict[str, Any] | None) -> int | None:
         return None
     value = capacity.get("total_token_slots")
     return int(value) if isinstance(value, int) and value > 0 else None
+
+
+def audit_ppl_report(
+    report: dict[str, Any],
+    *,
+    label: str,
+    model: str,
+    expected_dtype: str,
+    expected_ctxs: set[int],
+    manifest: dict[str, Any],
+    findings: list[str],
+) -> None:
+    if report.get("schema") != "sglang-prompt-ppl-sweep/v1":
+        findings.append(f"{label} ppl report schema mismatch")
+    if report.get("ok") is not True:
+        findings.append(f"{label} ppl report ok is not true")
+    if report.get("tokenizer") != model:
+        findings.append(f"{label} ppl report tokenizer mismatch")
+    if report.get("kv_cache_dtype") != expected_dtype:
+        findings.append(f"{label} ppl report kv_cache_dtype is not {expected_dtype}")
+    if report.get("container_image") != manifest.get("image"):
+        findings.append(f"{label} ppl report container_image does not match manifest image")
+
+    contexts = report.get("contexts")
+    if not isinstance(contexts, list) or not contexts:
+        findings.append(f"{label} ppl report has no contexts")
+        return
+    ctxs = {
+        row.get("ctx")
+        for row in contexts
+        if isinstance(row, dict) and isinstance(row.get("ctx"), int)
+    }
+    if expected_ctxs and ctxs != expected_ctxs:
+        findings.append(
+            f"{label} ppl report ctx coverage {sorted(ctxs)} "
+            f"does not match manifest ctx_list {sorted(expected_ctxs)}"
+        )
+
+    for row in contexts:
+        if not isinstance(row, dict):
+            findings.append(f"{label} ppl report contains non-object context row")
+            continue
+        ctx = row.get("ctx")
+        payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+        score = row.get("score") if isinstance(row.get("score"), dict) else {}
+        hardware = report.get("hardware") if isinstance(report.get("hardware"), dict) else {}
+
+        if payload.get("prompt_token_count") != ctx:
+            findings.append(f"{label} ctx {ctx}: prompt_token_count mismatch")
+        for field in ("max_new_tokens", "reuse_prefix_len", "logprob_start_len"):
+            if payload.get(field) != manifest.get(field):
+                findings.append(f"{label} ctx {ctx}: payload {field} mismatch")
+        if payload.get("score_start_index") != manifest.get("logprob_start_len"):
+            findings.append(f"{label} ctx {ctx}: score_start_index mismatch")
+        if score.get("ok") is not True:
+            findings.append(f"{label} ctx {ctx}: score ok is not true")
+        if score.get("cached_tokens") != manifest.get("reuse_prefix_len"):
+            findings.append(f"{label} ctx {ctx}: cached_tokens mismatch")
+        if not isinstance(score.get("num_scored_tokens"), int) or score["num_scored_tokens"] <= 0:
+            findings.append(f"{label} ctx {ctx}: num_scored_tokens must be positive")
+        if score.get("num_missing_tokens") != 0:
+            findings.append(f"{label} ctx {ctx}: num_missing_tokens is not zero")
+        if score.get("num_mismatched_tokens") != 0:
+            findings.append(f"{label} ctx {ctx}: num_mismatched_tokens is not zero")
+        if hardware.get("cuda_available") is not True:
+            findings.append(f"{label} ppl report hardware cuda_available is not true")
+        devices = hardware.get("devices")
+        if not isinstance(devices, list) or not devices:
+            findings.append(f"{label} ppl report hardware devices missing")
+        else:
+            comparison_key = devices[0].get("comparison_key") if isinstance(devices[0], dict) else None
+            if not isinstance(comparison_key, str) or not comparison_key.startswith(
+                REQUIRED_HARDWARE_COMPARISON_KEY_PREFIX
+            ):
+                findings.append(
+                    f"{label} ppl report hardware comparison_key is not GB10 sm_121"
+                )
 
 
 def audit_manifest(
@@ -279,6 +357,21 @@ def audit_manifest(
                     model_result["findings"].append(
                         f"{label} server log missing marker {marker!r}"
                     )
+                ppl_report_path = row_dir_path / f"{label}_ppl.json"
+                try:
+                    ppl_report = load_json(ppl_report_path)
+                except (OSError, json.JSONDecodeError):
+                    model_result["findings"].append(f"{label} ppl report is unreadable")
+                else:
+                    audit_ppl_report(
+                        ppl_report,
+                        label=label,
+                        model=model,
+                        expected_dtype=EXPECTED_ROW_KV_DTYPES[label],
+                        expected_ctxs=expected_ctxs,
+                        manifest=manifest,
+                        findings=model_result["findings"],
+                    )
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
             if payload.get("label") != label:
@@ -371,6 +464,7 @@ def audit_manifest(
         "required_server_markers": REQUIRED_SERVER_MARKERS,
         "required_fullnvfp4_server_markers": REQUIRED_FULLNVFP4_SERVER_MARKERS,
         "required_capacity_fields": REQUIRED_CAPACITY_FIELDS,
+        "required_hardware_comparison_key_prefix": REQUIRED_HARDWARE_COMPARISON_KEY_PREFIX,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
         "warnings": warnings,

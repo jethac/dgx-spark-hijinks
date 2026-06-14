@@ -110,7 +110,48 @@ for model in models:
             "container_inspect.json",
         ):
             artifact = row_dir / f"{label}_{suffix}"
-            if suffix.endswith(".json"):
+            if suffix == "ppl.json":
+                artifact.write_text(
+                    json.dumps(
+                        {
+                            "schema": "sglang-prompt-ppl-sweep/v1",
+                            "ok": True,
+                            "tokenizer": model,
+                            "kv_cache_dtype": dtype,
+                            "container_image": "image",
+                            "hardware": {
+                                "cuda_available": True,
+                                "devices": [
+                                    {
+                                        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+                                    }
+                                ],
+                            },
+                            "contexts": [
+                                {
+                                    "ctx": 8185,
+                                    "payload": {
+                                        "prompt_token_count": 8185,
+                                        "max_new_tokens": 1,
+                                        "reuse_prefix_len": 4096,
+                                        "logprob_start_len": 4096,
+                                        "score_start_index": 4096,
+                                    },
+                                    "score": {
+                                        "ok": True,
+                                        "cached_tokens": 4096,
+                                        "num_scored_tokens": 4088,
+                                        "num_missing_tokens": 0,
+                                        "num_mismatched_tokens": 0,
+                                    },
+                                }
+                            ],
+                        }
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+            elif suffix.endswith(".json"):
                 artifact.write_text("{}\n", encoding="utf-8")
             elif suffix == "provenance.log":
                 artifact.write_text(
@@ -471,4 +512,39 @@ needle = "google/gemma-4-12B-it: capacity token slots must increase bf16 < fp8 <
 if needle not in findings:
     raise SystemExit(f"missing expected capacity finding\n{findings}")
 print("PASS bad_capacity_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_ppl_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "fp8_ppl.json"
+report = json.loads(path.read_text(encoding="utf-8"))
+report["kv_cache_dtype"] = "auto"
+path.write_text(json.dumps(report), encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_ppl_manifest.json" \
+  >"${TMP_DIR}/bad_ppl_audit.json" 2>"${TMP_DIR}/bad_ppl_audit.err"; then
+  echo "FAIL bad-ppl manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_ppl_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: fp8 ppl report kv_cache_dtype is not fp8_e4m3"
+if needle not in findings:
+    raise SystemExit(f"missing expected ppl finding\n{findings}")
+print("PASS bad_ppl_manifest_fails")
 PY
