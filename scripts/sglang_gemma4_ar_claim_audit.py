@@ -35,6 +35,30 @@ REQUIRED_ROW_ARTIFACTS = [
     "{label}_server.log",
     "{label}_container_inspect.json",
 ]
+REQUIRED_PROVENANCE_MARKERS = [
+    "transformers ",
+    "sglang ",
+    "flashinfer ",
+    "flashinfer_python ",
+    "sglang_kernel ",
+    "binary_md5 sgl_kernel ",
+    "flashinfer_data ",
+    "flashinfer_csrc ",
+    "flashinfer_include ",
+]
+REQUIRED_SERVER_MARKERS = [
+    "server_args=ServerArgs",
+    "attention_backend='flashinfer'",
+    "SGLANG_GEMMA_KV_GEOMETRY",
+    "SGLang FlashInfer VO split enabled",
+]
+REQUIRED_FULLNVFP4_SERVER_MARKERS = [
+    "FP4 KV FlashInfer module trace",
+    "deswizzle_macro_active=False",
+    "fp4_kv=1",
+    "k_sf=",
+    "v_sf=",
+]
 REQUIRED_POSITIVE_INT_FIELDS = [
     "reuse_prefix_len",
     "logprob_start_len",
@@ -96,6 +120,14 @@ def comparison_ctxs(compare: dict[str, Any] | None) -> list[int]:
         if isinstance(row, dict) and isinstance(row.get("ctx"), int):
             result.append(row["ctx"])
     return result
+
+
+def missing_markers(path: pathlib.Path, markers: list[str]) -> list[str]:
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return markers
+    return [marker for marker in markers if marker not in text]
 
 
 def audit_manifest(
@@ -215,6 +247,19 @@ def audit_manifest(
                         model_result["findings"].append(
                             f"missing {label} artifact {artifact.name}"
                         )
+                provenance_log = row_dir_path / f"{label}_provenance.log"
+                for marker in missing_markers(provenance_log, REQUIRED_PROVENANCE_MARKERS):
+                    model_result["findings"].append(
+                        f"{label} provenance log missing marker {marker!r}"
+                    )
+                server_log = row_dir_path / f"{label}_server.log"
+                server_markers = list(REQUIRED_SERVER_MARKERS)
+                if label == "fullnvfp4":
+                    server_markers.extend(REQUIRED_FULLNVFP4_SERVER_MARKERS)
+                for marker in missing_markers(server_log, server_markers):
+                    model_result["findings"].append(
+                        f"{label} server log missing marker {marker!r}"
+                    )
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
             if payload.get("label") != label:
@@ -276,6 +321,9 @@ def audit_manifest(
         "expected_row_kv_dtypes": EXPECTED_ROW_KV_DTYPES,
         "required_comparisons": REQUIRED_COMPARISONS,
         "required_row_artifacts": REQUIRED_ROW_ARTIFACTS,
+        "required_provenance_markers": REQUIRED_PROVENANCE_MARKERS,
+        "required_server_markers": REQUIRED_SERVER_MARKERS,
+        "required_fullnvfp4_server_markers": REQUIRED_FULLNVFP4_SERVER_MARKERS,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
         "warnings": warnings,

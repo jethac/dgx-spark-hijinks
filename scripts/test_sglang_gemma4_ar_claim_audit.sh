@@ -85,7 +85,42 @@ for model in models:
             "container_inspect.json",
         ):
             artifact = row_dir / f"{label}_{suffix}"
-            artifact.write_text("{}\n" if suffix.endswith(".json") else "ok\n", encoding="utf-8")
+            if suffix.endswith(".json"):
+                artifact.write_text("{}\n", encoding="utf-8")
+            elif suffix == "provenance.log":
+                artifact.write_text(
+                    "\n".join(
+                        [
+                            "transformers 5.11.0",
+                            "sglang 0.0.0 /work/third_party/sglang/python/sglang/__init__.py",
+                            "flashinfer 0.6.13 /work/third_party/flashinfer/flashinfer/__init__.py",
+                            "flashinfer_python 0.6.13",
+                            "sglang_kernel 0.4.3",
+                            "binary_md5 sgl_kernel /usr/local/lib/python3.12/dist-packages/sgl_kernel/__init__.py abc",
+                            "flashinfer_data /work/third_party/flashinfer/flashinfer/data",
+                            "flashinfer_csrc /work/third_party/flashinfer/flashinfer/data/csrc",
+                            "flashinfer_include /work/third_party/flashinfer/flashinfer/data/include",
+                        ]
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+            elif suffix == "server.log":
+                lines = [
+                    "server_args=ServerArgs(attention_backend='flashinfer')",
+                    "SGLANG_GEMMA_KV_GEOMETRY layer=0 heads=16 kv_heads=8 head_dim=256 v_head_dim=256",
+                    "SGLang FlashInfer VO split enabled: D=512 paged prefill and decode-as-prefill use two D_VO=256 passes.",
+                ]
+                if label == "fullnvfp4":
+                    lines.extend(
+                        [
+                            "FP4 KV FlashInfer module trace label=extend_paged deswizzle_macro_active=False k_sf={} v_sf={}",
+                            "[flashinfer][prefill-debug] compiled={require_fp4_kv=1,fp4_kv=1}",
+                        ]
+                    )
+                artifact.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            else:
+                artifact.write_text("ok\n", encoding="utf-8")
     for name, delta in [
         ("compare_bf16_vs_fullnvfp4", 0.02),
         ("compare_fp8_vs_fullnvfp4", 0.03),
@@ -346,4 +381,38 @@ needle = "google/gemma-4-12B-it: missing fullnvfp4 artifact fullnvfp4_provenance
 if needle not in findings:
     raise SystemExit(f"missing expected artifact finding\n{findings}")
 print("PASS missing_artifact_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/missing_marker_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "bf16_provenance.log"
+text = path.read_text(encoding="utf-8").replace("binary_md5 sgl_kernel", "binary_md5_missing")
+path.write_text(text, encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/missing_marker_manifest.json" \
+  >"${TMP_DIR}/missing_marker_audit.json" 2>"${TMP_DIR}/missing_marker_audit.err"; then
+  echo "FAIL missing-marker manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/missing_marker_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: bf16 provenance log missing marker 'binary_md5 sgl_kernel '"
+if needle not in findings:
+    raise SystemExit(f"missing expected marker finding\n{findings}")
+print("PASS missing_marker_manifest_fails")
 PY

@@ -110,6 +110,11 @@ It records:
   files. The audit accepts Spark absolute paths when run on Spark and falls
   back to manifest-relative paths when a result bundle has been copied into the
   repo.
+- provenance markers: every claim row's provenance/server logs must include
+  package versions, `binary_md5 sgl_kernel`, resolved FlashInfer source paths,
+  `attention_backend='flashinfer'`, running-model Gemma KV geometry, and the
+  VO-split route marker. Full-NVFP4 rows must additionally show FP4 module
+  trace markers, scale-factor tensors, and `deswizzle_macro_active=False`.
 - corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
   `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
   `max_new_tokens`, graphs disabled).
