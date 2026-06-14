@@ -275,7 +275,8 @@ def audit(
     else:
         next_action = (
             "Do not rerun known-red SGLang Gemma 4 AR rows. Wait for Claude's "
-            "FlashInfer/numerics or D512 fp8 dispatcher fix."
+            "FlashInfer large-prefill accumulation fix, an explicitly scoped "
+            "chunked/merge diagnostic, or the D512 fp8 dispatcher fix."
         )
         lane_status = "blocked-known-red-dependencies"
 

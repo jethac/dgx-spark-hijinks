@@ -124,8 +124,9 @@ def main() -> int:
         diagnostic_override_allowed = False
         next_action = (
             "Do not rerun the known-red SGLang Gemma 4 AR ladder rows. Wait for "
-            "the shared FlashInfer/numerics fix for the 12B +0.40 red or the "
-            "D512/VO256 fp8 dispatcher fix."
+            "the shared FlashInfer large-prefill accumulation fix for the 12B "
+            "ctx8185 artifact, an explicitly scoped chunked/merge diagnostic, "
+            "or the D512/VO256 fp8 dispatcher fix."
         )
 
     now = _dt.datetime.now(_dt.timezone(_dt.timedelta(hours=9)))
@@ -142,7 +143,9 @@ def main() -> int:
         "known_blockers": {
             "full_nvfp4_12b_26b_31b": (
                 "12B ctx8185/prefix4096 full-NVFP4 matched row is red by "
-                "+0.402969 nats/token; mail/0138 reproduced the class on vLLM."
+                "+0.402969 nats/token, but mail/0140 classifies that as a "
+                "FlashInfer single-/large-prefill accumulation artifact. Exact "
+                "SDPA and vLLM chunked/reuse put the true NVFP4 cost near +0.19."
             ),
             "e4b_fp8_comparator": (
                 "E4B fp8 comparator is red in FlashInfer D512/VO256 "

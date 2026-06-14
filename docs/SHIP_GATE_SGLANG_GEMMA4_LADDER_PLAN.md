@@ -26,8 +26,10 @@ variable — the KV dtype — and share everything else:
 Report: `mean NLL_bf16`, `mean NLL_nvfp4`, `Δ = NLL_nvfp4 − NLL_bf16` (nats/token), and
 the per-position sweep. **A cross-artifact delta (bf16 from image A, NVFP4 from image B)
 is contaminated and must be labeled non-claim-grade.** The SGLang 12B row is now a matched
-red (`+0.402969` nats/token, `results/sglang_gemma4_12b_ar_matched_bf16_fullnvfp4_ctx8185_prefix4096_20260613T153712JST/STOP_SUMMARY.md`),
-and Claude's vLLM discriminator reproduced the same class of long-context loss (mail 0138).
+red (`+0.402969` nats/token, `results/sglang_gemma4_12b_ar_matched_bf16_fullnvfp4_ctx8185_prefix4096_20260613T153712JST/STOP_SUMMARY.md`).
+Claude's ground-truth discriminator refined the diagnosis in mail 0140: exact SDPA and vLLM
+chunked/reuse put the true NVFP4 cost near `+0.19`, while large single-prefill FlashInfer
+inflates to `+0.40`.
 
 Capacity is a separate, independent claim: KV-token ratio at matched K+V byte budget. Full
 NVFP4 K+V reports the expected `~3.556x` raw cache-token denominator versus bf16 on the
@@ -40,7 +42,7 @@ fallback path and must not be conflated with full-NVFP4 rows.
 
 | Rung | SGLang state (ledger) | Gap to claim-grade | GPU? |
 |---|---|---|---|
-| **12B** | matched bf16-vs-full-NVFP4 row is RED by `+0.402969` nats/token at ctx 8185 / prefix 4096; multimodal short smoke is scoped green | Wait for Claude's FlashInfer/numerics fix, then rerun the matched row. Do not chase SGLang radix/merge for this red; mail 0138 exonerates it | yes, after fix |
+| **12B** | matched bf16-vs-full-NVFP4 row is RED by `+0.402969` nats/token at ctx 8185 / prefix 4096; multimodal short smoke is scoped green | Wait for Claude's FlashInfer large-prefill accumulation fix, then rerun the matched row; expected corrected delta is near `+0.19`. Do not chase SGLang radix/merge or global-scale calibration for this red; mail 0140 exonerates them | yes, after fix |
 | **26B-A4B** | not yet claim-grade in SGLang AR ladder; same D=512 global VO-split path as E4B/31B plus MoE | run only after the long-context quality fix and current package image are ready, unless doing an explicitly scoped bring-up diagnostic | yes |
 | **31B** | no SGLang serving row banked; D=512 VO-split scaffolding/probes exist, but serving must be proven with the packaged SGLang path | first SGLang serving bring-up + matched delta after the shared quality/dispatcher blockers are resolved | yes |
 | **E4B scoped checkpoint** | bf16 and full-NVFP4 short rows are green; baked mm-prefix image row is green; fp8 comparator is red in FlashInfer dispatcher | hold fp8 comparator until D512/VO256 1-byte-KV dispatcher fix lands | yes, after fix |
@@ -56,11 +58,14 @@ Gemma 4 12B matched bf16-vs-NVFP4** (my lane, P520/Spark). Flagging rather than 
 
 ## 3. Critical path (priority order, lane + GPU mapped)
 
-1. **Claude FlashInfer/numerics fix for long-context NVFP4 loss** — mail 0138 proves the
-   12B `+0.40` class is general, not an SGLang structural radix bug.
+1. **Claude FlashInfer large-prefill accumulation fix** — mail 0140 proves the
+   12B `+0.40` class is a single-/large-prefill kernel artifact. The true NVFP4
+   long-context cost is about `+0.19` by exact SDPA and vLLM chunked/reuse.
 2. **SGLang 12B matched rerun** *(Codex)* — same ctx 8185 / prefix 4096 shape, same image
    and corpus, flip only KV dtype. This is the gate that turns the current scoped red into a
-   claim-grade pass or a new blocker.
+   claim-grade pass or a new blocker. A deliberately scoped chunked/merge
+   diagnostic may run earlier if it directly checks whether SGLang can avoid the
+   large-prefill artifact and recover the `+0.19` reference path.
 3. **FlashInfer dispatcher fix for E4B fp8 D512/VO256 1-byte KV** *(Claude/FI)* — then rerun
    the SGLang E4B fp8 comparator so the comparison matrix is complete.
 4. **SGLang 26B-A4B and 31B serving bring-up / matched rows** *(Codex)* — after the shared

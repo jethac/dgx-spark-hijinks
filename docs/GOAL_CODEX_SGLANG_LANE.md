@@ -1,7 +1,8 @@
 # Goal — Codex (SGLang + infra lane)
 
 **Mission:** clear the SGLang NVFP4-KV quality reds, complete the Gemma-4 AR ladder, and wire the
-multimodal bidirectional path — coordinating with Claude (vLLM/FlashInfer lane) on the +0.40 red.
+multimodal bidirectional path — coordinating with Claude (vLLM/FlashInfer lane) on the long-context
+large-prefill FlashInfer artifact.
 
 ## Context (what's already settled — don't re-derive)
 - NVFP4 KV **format/default is near-lossless** (Claude e2e + reference sim, text+image+audio).
@@ -9,17 +10,20 @@ multimodal bidirectional path — coordinating with Claude (vLLM/FlashInfer lane
 - The **global-scale "≈2× too small" root cause is RETRACTED** (Claude mail 0132). Do not pursue
   `calculate_kv_scales`/global-scale calibration as *the* fix — it isn't (your multiplier only got
   +0.403 → +0.344, and on vLLM `calculate_kv_scales` *breaks* nvfp4).
-- The +0.40 12B text red is **general, not SGLang-radix-specific** (Claude mail 0138).
-  vLLM reproduces it at the same ctx-8185 shape (`+0.4215` single prefill), while chunked/reuse
-  paged+ragged merge is smaller (`+0.1906`). Do **not** rewrite SGLang radix / partial-state
-  merge for this red; wait for Claude's FlashInfer/numerics fix, then rerun the matched SGLang
-  12B row.
+- The 12B text red is a **FlashInfer single-/large-prefill accumulation artifact, not the true
+  NVFP4 format cost and not SGLang radix-specific** (Claude mail 0140, refining 0138).
+  Exact HF eager SDPA with nvfp4-qdq K+V gives about `+0.1932` nats/token, and vLLM chunked /
+  reuse paged+ragged merge gives `+0.1906`; vLLM single-prefill inflates to `+0.4215` and the
+  SGLang ctx-8185 row inflates similarly to `+0.402969`. Do **not** chase global-scale
+  calibration or rewrite SGLang radix / partial-state merge for this red. Wait for Claude's
+  FlashInfer large-prefill kernel fix, or run only an explicitly scoped chunked/merge diagnostic.
 
 ## Tasks (priority order)
-1. **The +0.40 12B text red — FlashInfer/numerics lane blocker.** Claude owns the mechanism/fix.
-   Once it lands, apply the FlashInfer update and verify with a matched bf16-vs-NVFP4 SGLang
-   12B row at the failing shape (ctx 8185, prefix 4096). Keep the current SGLang row scoped red
-   until then.
+1. **The 12B large-prefill artifact — FlashInfer/numerics lane blocker.** Claude owns the
+   mechanism/fix. Once it lands, apply the FlashInfer update and verify with a matched
+   bf16-vs-NVFP4 SGLang 12B row at the failing shape (ctx 8185, prefix 4096). Expected post-fix
+   delta is near the exact/chunked reference, about `+0.19` nats/token. Keep the current SGLang
+   row scoped red until then.
 2. **Complete the SGLang Gemma-4 AR ladder (Task #40, the ship gate):** matched bf16-vs-NVFP4
    12B / 26B-A4B / 31B once the quality red clears. Matched-claim rule: one image/corpus/shape per
    pair, flip only the KV dtype.

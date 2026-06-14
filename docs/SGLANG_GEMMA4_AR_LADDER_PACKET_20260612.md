@@ -24,9 +24,13 @@ rows after the Ubicloud-built source-stack image.
 ## Current Blocker State
 
 - Do not run the full matched AR ladder for a broad claim until Claude's
-  FlashInfer/numerics fix lands for the long-context NVFP4 red. Mail 0138
-  reproduced the `+0.40` 12B loss on vLLM, exonerating SGLang radix/merge for
-  that red.
+  FlashInfer large-prefill accumulation fix lands for the long-context NVFP4
+  red, or until an explicitly scoped chunked/merge diagnostic is requested.
+  Mail 0140 refines 0138: exact SDPA ground truth and vLLM chunked/reuse both
+  put the true 12B ctx-8185 NVFP4 cost near `+0.19` nats/token, while vLLM
+  single-prefill and SGLang's current row inflate to about `+0.40`. This
+  exonerates SGLang radix/merge and reclassifies the row as a FlashInfer
+  large-prefill kernel artifact.
 - Keep the E4B fp8 comparator scoped red until the FlashInfer dispatcher fix
   for D512/VO256 1-byte KV lands. Re-running the existing fp8 row before that
   fix should reproduce the same dispatcher wall, not create a new claim.
@@ -34,11 +38,12 @@ rows after the Ubicloud-built source-stack image.
   new question, but label them as scoped diagnostics and do not quote capacity or
   quality as ladder-complete.
 - The runner enforces this state by refusing full-NVFP4 12B/26B-A4B/31B
-  claim-ladder rows while the shared 12B long-context quality blocker is open,
+  claim-ladder rows while the shared 12B large-prefill kernel artifact is open,
   and by refusing the known-blocked E4B fp8 row. Set
   `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` only after a relevant
   FlashInfer/SGLang dependency changes or for an explicitly labeled diagnostic
-  replay. Override runs that touch blocked rows must also set
+  replay, such as a chunked/merge probe intended to verify the `+0.19` reference
+  path. Override runs that touch blocked rows must also set
   `SGLANG_AR_LADDER_OVERRIDE_REASON`, which the runner records in preflight
   artifacts. The offline regression check for these guards is
   `bash scripts/test_sglang_gemma4_ar_ladder_guard.sh`.
