@@ -220,7 +220,9 @@ def audit_run_preflight(
                 findings.append(f"run preflight {field} must be an integer")
 
 
-def audit_blocker_audit(payload: dict[str, Any], findings: list[str]) -> None:
+def audit_blocker_audit(
+    payload: dict[str, Any], findings: list[str]
+) -> dict[str, str]:
     if payload.get("schema") != "sglang-gemma4-ar-ladder-blocker-audit/v1":
         findings.append("blocker_audit schema mismatch")
     if payload.get("can_run_claim_ladder") is not False:
@@ -239,7 +241,7 @@ def audit_blocker_audit(payload: dict[str, Any], findings: list[str]) -> None:
     dependencies = payload.get("dependencies")
     if not isinstance(dependencies, list):
         findings.append("blocker_audit dependencies is not a list")
-        return
+        return {}
     by_name = {
         item.get("name"): item
         for item in dependencies
@@ -247,12 +249,15 @@ def audit_blocker_audit(payload: dict[str, Any], findings: list[str]) -> None:
     }
     if set(by_name) != REQUIRED_DEPENDENCY_NAMES:
         findings.append("blocker_audit dependencies must include flashinfer and sglang")
-        return
+        return {}
 
     changed = []
+    current_refs: dict[str, str] = {}
     for name, item in by_name.items():
         current_ref = item.get("current_ref")
         known_ref = item.get("known_blocked_ref")
+        if isinstance(current_ref, str):
+            current_refs[name] = current_ref
         for field, value in (
             ("current_ref", current_ref),
             ("known_blocked_ref", known_ref),
@@ -272,6 +277,41 @@ def audit_blocker_audit(payload: dict[str, Any], findings: list[str]) -> None:
         findings.append("blocker_audit records dependency-changed status without changed dependency")
     if payload.get("diagnostic_override_allowed") is not True:
         findings.append("blocker_audit diagnostic_override_allowed must be true")
+    return current_refs
+
+
+def provenance_source_refs(path: pathlib.Path) -> dict[str, str]:
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return {}
+    result: dict[str, str] = {}
+    for line in text.splitlines():
+        parts = line.split()
+        if len(parts) != 3 or parts[0] != "source_git_rev":
+            continue
+        if parts[1] == "/work/third_party/sglang":
+            result["sglang"] = parts[2]
+        elif parts[1] == "/work/third_party/flashinfer":
+            result["flashinfer"] = parts[2]
+    return result
+
+
+def audit_provenance_source_refs(
+    path: pathlib.Path,
+    *,
+    label: str,
+    expected_refs: dict[str, str],
+    findings: list[str],
+) -> None:
+    refs = provenance_source_refs(path)
+    for name, expected_ref in expected_refs.items():
+        actual_ref = refs.get(name)
+        if actual_ref != expected_ref:
+            findings.append(
+                f"{label} provenance {name} source ref {actual_ref!r} "
+                f"does not match blocker current_ref {expected_ref}"
+            )
 
 
 def audit_row_preflight(
@@ -653,12 +693,13 @@ def audit_manifest(
         )
     audit_run_preflight(manifest_path, manifest=manifest, findings=findings)
 
+    blocker_dependency_refs: dict[str, str] = {}
     blocker_audit_path = normalize_path(manifest.get("blocker_audit"), manifest_path)
     if not blocker_audit_path or not blocker_audit_path.exists():
         findings.append("manifest missing blocker_audit artifact")
     else:
         blocker_audit = load_json(blocker_audit_path)
-        audit_blocker_audit(blocker_audit, findings)
+        blocker_dependency_refs = audit_blocker_audit(blocker_audit, findings)
 
     rows = manifest.get("rows")
     if not isinstance(rows, list):
@@ -706,6 +747,12 @@ def audit_manifest(
                     model_result["findings"].append(
                         f"{label} provenance log missing marker {marker!r}"
                     )
+                audit_provenance_source_refs(
+                    provenance_log,
+                    label=label,
+                    expected_refs=blocker_dependency_refs,
+                    findings=model_result["findings"],
+                )
                 server_log = row_dir_path / f"{label}_server.log"
                 server_markers = list(REQUIRED_SERVER_MARKERS)
                 if label == "fullnvfp4":

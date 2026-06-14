@@ -705,6 +705,47 @@ if needle not in findings:
 print("PASS missing_marker_manifest_fails")
 PY
 
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_source_ref_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "bf16_provenance.log"
+text = path.read_text(encoding="utf-8").replace(
+    "source_git_rev /work/third_party/flashinfer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_git_rev /work/third_party/flashinfer cccccccccccccccccccccccccccccccccccccccc",
+)
+path.write_text(text, encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_source_ref_manifest.json" \
+  >"${TMP_DIR}/bad_source_ref_audit.json" 2>"${TMP_DIR}/bad_source_ref_audit.err"; then
+  echo "FAIL bad-source-ref manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_source_ref_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = (
+    "google/gemma-4-12B-it: bf16 provenance flashinfer source ref "
+    "'cccccccccccccccccccccccccccccccccccccccc' does not match blocker current_ref "
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+)
+if needle not in findings:
+    raise SystemExit(f"missing expected source-ref finding\n{findings}")
+print("PASS bad_source_ref_manifest_fails")
+PY
+
 python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_capacity_manifest.json" <<'PY'
 import json
 import pathlib

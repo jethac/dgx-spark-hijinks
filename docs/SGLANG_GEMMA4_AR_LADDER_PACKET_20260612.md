@@ -96,7 +96,8 @@ It records:
   The blocker audit must use schema
   `sglang-gemma4-ar-ladder-blocker-audit/v1`, include full git SHAs for both
   FlashInfer and SGLang, and record at least one changed dependency before a
-  rerun can be considered claim-auditable;
+  rerun can be considered claim-auditable. Row provenance `source_git_rev`
+  lines must match those blocker-audit current refs;
 - `fp8_dispatch_audit.json` for `google/gemma-4-E4B-it` fp8 rows, when logs
   are available, to classify the known D512/VO256 `NUM_MMA_KV=1` dispatcher
   red automatically;
