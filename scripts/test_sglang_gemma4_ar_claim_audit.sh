@@ -180,6 +180,75 @@ for model in models:
                     + "\n",
                     encoding="utf-8",
                 )
+            elif suffix == "container_inspect.json":
+                args = [
+                    "bash",
+                    "-lc",
+                    "exec python3 -m sglang.launch_server \"$@\"",
+                    "--",
+                    "--model-path",
+                    model,
+                    "--served-model-name",
+                    model,
+                    "--trust-remote-code",
+                    "--dtype",
+                    "bfloat16",
+                    "--attention-backend",
+                    "flashinfer",
+                    "--page-size",
+                    "1",
+                    "--context-length",
+                    "8192",
+                    "--mem-fraction-static",
+                    "0.72",
+                    "--disable-cuda-graph",
+                    "--disable-piecewise-cuda-graph",
+                    "--host",
+                    "0.0.0.0",
+                    "--port",
+                    "30000",
+                ]
+                if dtype != "auto":
+                    args.extend(["--kv-cache-dtype", dtype])
+                artifact.write_text(
+                    json.dumps(
+                        [
+                            {
+                                "Args": args,
+                                "Config": {
+                                    "Image": "image",
+                                    "WorkingDir": "/hijinks",
+                                    "Env": [
+                                        "TORCH_CUDA_ARCH_LIST=12.1a",
+                                        "FLASHINFER_CACHE_DIR=/tmp/flashinfer-cache-test",
+                                        "FLASHINFER_EXTRA_CUDAFLAGS=-gencode=arch=compute_121a,code=sm_121a",
+                                        "FLASHINFER_PREFILL_DEBUG_ONCE=1",
+                                        "SGLANG_FLASHINFER_VOSPLIT=1",
+                                        "SGLANG_GEMMA4_TRACE_GEOMETRY=1",
+                                        "SGLANG_GEMMA_KV_GEOMETRY=1",
+                                        "SGLANG_FP4_KV_MIXED_KV=0",
+                                        "SGLANG_FP4_KV_TRACE_MODULE=1",
+                                        "TRANSFORMERS_OFFLINE=1",
+                                        "HF_HUB_OFFLINE=1",
+                                    ],
+                                },
+                                "HostConfig": {
+                                    "Binds": [
+                                        "/tmp/repo:/hijinks",
+                                        "/tmp/hf:/root/.cache/huggingface",
+                                    ],
+                                    "IpcMode": "host",
+                                    "Memory": 107374182400,
+                                    "MemorySwap": 107374182400,
+                                    "NetworkMode": "host",
+                                },
+                                "State": {"OOMKilled": False},
+                            }
+                        ]
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
             elif suffix.endswith(".json"):
                 artifact.write_text("{}\n", encoding="utf-8")
             elif suffix == "provenance.log":
@@ -257,6 +326,7 @@ manifest_path.write_text(
             "logprob_start_len": 4096,
             "max_new_tokens": 1,
             "context_length": 8192,
+            "mem_fraction_static": "0.72",
             "page_size": 1,
             "graphs": "disabled",
             "source_overlay": False,
@@ -611,4 +681,39 @@ needle = "google/gemma-4-12B-it: bf16 chat artifact content mismatch"
 if needle not in findings:
     raise SystemExit(f"missing expected chat finding\n{findings}")
 print("PASS bad_chat_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_container_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "fp8_container_inspect.json"
+report = json.loads(path.read_text(encoding="utf-8"))
+report[0]["HostConfig"]["Memory"] = 0
+path.write_text(json.dumps(report), encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_container_manifest.json" \
+  >"${TMP_DIR}/bad_container_audit.json" 2>"${TMP_DIR}/bad_container_audit.err"; then
+  echo "FAIL bad-container manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_container_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: fp8 container memory is not 100g"
+if needle not in findings:
+    raise SystemExit(f"missing expected container finding\n{findings}")
+print("PASS bad_container_manifest_fails")
 PY

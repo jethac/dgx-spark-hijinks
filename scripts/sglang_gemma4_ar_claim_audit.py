@@ -76,6 +76,22 @@ REQUIRED_POSITIVE_INT_FIELDS = [
     "page_size",
 ]
 REQUIRED_CHAT_CONTENT_SUBSTRING = "tokyo"
+REQUIRED_DOCKER_MEMORY_BYTES = 100 * 1024 * 1024 * 1024
+REQUIRED_CONTAINER_ENV = {
+    "TORCH_CUDA_ARCH_LIST": "12.1a",
+    "FLASHINFER_PREFILL_DEBUG_ONCE": "1",
+    "SGLANG_FLASHINFER_VOSPLIT": "1",
+    "SGLANG_GEMMA4_TRACE_GEOMETRY": "1",
+    "SGLANG_GEMMA_KV_GEOMETRY": "1",
+    "SGLANG_FP4_KV_MIXED_KV": "0",
+    "SGLANG_FP4_KV_TRACE_MODULE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "HF_HUB_OFFLINE": "1",
+}
+REQUIRED_CONTAINER_CUDA_FLAG_MARKERS = [
+    "compute_121a",
+    "sm_121a",
+]
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -148,6 +164,130 @@ def capacity_total(payload: dict[str, Any] | None) -> int | None:
         return None
     value = capacity.get("total_token_slots")
     return int(value) if isinstance(value, int) and value > 0 else None
+
+
+def env_map(record: dict[str, Any]) -> dict[str, str]:
+    config = record.get("Config") if isinstance(record.get("Config"), dict) else {}
+    raw_env = config.get("Env")
+    result: dict[str, str] = {}
+    if not isinstance(raw_env, list):
+        return result
+    for item in raw_env:
+        if isinstance(item, str) and "=" in item:
+            key, value = item.split("=", 1)
+            result[key] = value
+    return result
+
+
+def container_args(record: dict[str, Any]) -> list[str]:
+    raw_args = record.get("Args")
+    if isinstance(raw_args, list):
+        return [str(item) for item in raw_args]
+    config = record.get("Config") if isinstance(record.get("Config"), dict) else {}
+    raw_cmd = config.get("Cmd")
+    if isinstance(raw_cmd, list):
+        return [str(item) for item in raw_cmd]
+    return []
+
+
+def arg_value(args: list[str], key: str) -> str | None:
+    for index, item in enumerate(args):
+        if item == key and index + 1 < len(args):
+            return args[index + 1]
+    return None
+
+
+def load_container_inspect(path: pathlib.Path) -> dict[str, Any] | None:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(raw, list) and raw and isinstance(raw[0], dict):
+        return raw[0]
+    if isinstance(raw, dict):
+        return raw
+    return None
+
+
+def audit_container_inspect(
+    row_dir_path: pathlib.Path,
+    *,
+    label: str,
+    model: str,
+    expected_dtype: str,
+    manifest: dict[str, Any],
+    findings: list[str],
+) -> None:
+    path = row_dir_path / f"{label}_container_inspect.json"
+    try:
+        record = load_container_inspect(path)
+    except (OSError, json.JSONDecodeError):
+        findings.append(f"{label} container inspect is unreadable")
+        return
+    if not isinstance(record, dict):
+        findings.append(f"{label} container inspect has no record")
+        return
+
+    config = record.get("Config") if isinstance(record.get("Config"), dict) else {}
+    host_config = (
+        record.get("HostConfig") if isinstance(record.get("HostConfig"), dict) else {}
+    )
+    state = record.get("State") if isinstance(record.get("State"), dict) else {}
+    args = container_args(record)
+    env = env_map(record)
+
+    expected_image = manifest.get("image")
+    if config.get("Image") != expected_image:
+        findings.append(f"{label} container image does not match manifest image")
+    if config.get("WorkingDir") != "/hijinks":
+        findings.append(f"{label} container working dir is not /hijinks")
+    if host_config.get("Memory") != REQUIRED_DOCKER_MEMORY_BYTES:
+        findings.append(f"{label} container memory is not 100g")
+    if host_config.get("MemorySwap") != REQUIRED_DOCKER_MEMORY_BYTES:
+        findings.append(f"{label} container memory-swap is not 100g")
+    if host_config.get("NetworkMode") != "host":
+        findings.append(f"{label} container network mode is not host")
+    if host_config.get("IpcMode") != "host":
+        findings.append(f"{label} container ipc mode is not host")
+    if state.get("OOMKilled") is not False:
+        findings.append(f"{label} container OOMKilled is not false")
+
+    binds = host_config.get("Binds")
+    if manifest.get("source_overlay") is False and isinstance(binds, list):
+        if any(isinstance(item, str) and ":/work/third_party/sglang" in item for item in binds):
+            findings.append(f"{label} container unexpectedly mounts SGLang source overlay")
+
+    for key, expected_value in REQUIRED_CONTAINER_ENV.items():
+        if env.get(key) != expected_value:
+            findings.append(f"{label} container env {key} is not {expected_value}")
+    cuda_flags = env.get("FLASHINFER_EXTRA_CUDAFLAGS", "")
+    for marker in REQUIRED_CONTAINER_CUDA_FLAG_MARKERS:
+        if marker not in cuda_flags:
+            findings.append(
+                f"{label} container FLASHINFER_EXTRA_CUDAFLAGS missing {marker}"
+            )
+    cache_dir = env.get("FLASHINFER_CACHE_DIR", "")
+    if not cache_dir.startswith("/tmp/flashinfer-cache-"):
+        findings.append(f"{label} container FLASHINFER_CACHE_DIR is not per-run /tmp cache")
+
+    expected_args = {
+        "--model-path": model,
+        "--served-model-name": model,
+        "--dtype": "bfloat16",
+        "--attention-backend": "flashinfer",
+        "--page-size": str(manifest.get("page_size")),
+        "--context-length": str(manifest.get("context_length")),
+        "--mem-fraction-static": str(manifest.get("mem_fraction_static")),
+    }
+    for key, expected_value in expected_args.items():
+        if arg_value(args, key) != expected_value:
+            findings.append(f"{label} container arg {key} is not {expected_value}")
+    for flag in ("--disable-cuda-graph", "--disable-piecewise-cuda-graph"):
+        if flag not in args:
+            findings.append(f"{label} container missing arg {flag}")
+    kv_arg = arg_value(args, "--kv-cache-dtype")
+    if expected_dtype == "auto":
+        if kv_arg is not None:
+            findings.append(f"{label} container unexpectedly sets --kv-cache-dtype")
+    elif kv_arg != expected_dtype:
+        findings.append(f"{label} container --kv-cache-dtype is not {expected_dtype}")
 
 
 def chat_content(payload: dict[str, Any]) -> str | None:
@@ -446,6 +586,14 @@ def audit_manifest(
                     summary=payload,
                     findings=model_result["findings"],
                 )
+                audit_container_inspect(
+                    row_dir_path,
+                    label=label,
+                    model=model,
+                    expected_dtype=EXPECTED_ROW_KV_DTYPES[label],
+                    manifest=manifest,
+                    findings=model_result["findings"],
+                )
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
             if payload.get("label") != label:
@@ -540,6 +688,10 @@ def audit_manifest(
         "required_capacity_fields": REQUIRED_CAPACITY_FIELDS,
         "required_hardware_comparison_key_prefix": REQUIRED_HARDWARE_COMPARISON_KEY_PREFIX,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
+        "required_docker_memory_bytes": REQUIRED_DOCKER_MEMORY_BYTES,
+        "required_container_env": REQUIRED_CONTAINER_ENV,
+        "required_container_cuda_flag_markers": REQUIRED_CONTAINER_CUDA_FLAG_MARKERS,
+        "required_chat_content_substring": REQUIRED_CHAT_CONTENT_SUBSTRING,
         "findings": findings,
         "warnings": warnings,
         "model_results": model_results,

@@ -118,6 +118,11 @@ It records:
   files. The audit accepts Spark absolute paths when run on Spark and falls
   back to manifest-relative paths when a result bundle has been copied into the
   repo.
+- container inspect provenance: every row must prove it ran the manifest image
+  digest from `/hijinks`, with the 100g Docker memory and swap limits, host
+  network/IPC, no source-overlay mount for claim rows, Spark `sm_121a` JIT
+  flags, offline HF mode, FlashInfer VO-split enabled, graphs disabled, and the
+  expected `--kv-cache-dtype` argument for the row.
 - provenance markers: every claim row's provenance/server logs must include
   package versions, `binary_md5 sgl_kernel`, resolved FlashInfer source paths,
   `attention_backend='flashinfer'`, running-model Gemma KV geometry, and the
