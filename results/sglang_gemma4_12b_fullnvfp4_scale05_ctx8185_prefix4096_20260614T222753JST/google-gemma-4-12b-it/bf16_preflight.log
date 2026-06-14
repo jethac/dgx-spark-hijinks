@@ -1,0 +1,24 @@
+run_id=sglang_gemma4_12b_fullnvfp4_scale05_ctx8185_prefix4096_20260614T222753JST
+model=google/gemma-4-12B-it
+label=bf16
+kv_cache_dtype=auto
+mixed_kv=0
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+sglang_source_overlay=0
+sglang_fp4_kv_global_scale_multiplier=0.5
+sglang_fp4_kv_k_global_scale_multiplier=
+sglang_fp4_kv_v_global_scale_multiplier=
+sglang_fp4_kv_trace_global_scale=1
+sglang_fp4_kv_trace_sf_saturation=
+sglang_fp4_kv_trace_layers=
+allow_known_blocked_sglang_ar_ladder=1
+sglang_ar_ladder_override_reason=mail 0153 calibrated global-scale diagnostic; multiplier 0.5
+sglang_ar_server_extra_args=
+started_at=2026-06-14T22:27:54+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.1Gi        89Gi        21Mi        27Gi       115Gi
+Swap:           15Gi       552Mi        15Gi

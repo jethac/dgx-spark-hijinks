@@ -1,0 +1,92 @@
+{
+  "add_special_tokens": false,
+  "available_tokens": 88055,
+  "container_image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714",
+  "contexts": [
+    {
+      "ctx": 8185,
+      "elapsed_s": 3.4520441810018383,
+      "endpoint": "http://127.0.0.1:30000/generate",
+      "payload": {
+        "logprob_start_len": 4096,
+        "max_new_tokens": 1,
+        "prompt_token_count": 8185,
+        "return_logprob": true,
+        "reuse_prefix_len": 4096,
+        "score_start_index": 4096,
+        "top_logprobs_num": 0
+      },
+      "score": {
+        "cached_tokens": 4096,
+        "finish_reason": {
+          "length": 1,
+          "type": "length"
+        },
+        "mean_logprob": -4.571989822602299,
+        "mean_nll_nats": 4.571989822602299,
+        "mismatched_positions_preview": [],
+        "missing_positions_preview": [],
+        "num_mismatched_tokens": 0,
+        "num_missing_tokens": 0,
+        "num_prompt_tokens": 8185,
+        "num_scored_tokens": 4088,
+        "num_skipped_boundary_tokens": 1,
+        "ok": true,
+        "ppl": 96.7364066795068,
+        "relative_logprob_entries": true,
+        "score_start_index": 4096,
+        "skipped_boundary_positions": [
+          4096
+        ],
+        "usage": null
+      },
+      "warmup": {
+        "cached_tokens": 0,
+        "elapsed_s": 1.7191376950358972,
+        "enabled": true,
+        "finish_reason": {
+          "length": 1,
+          "type": "length"
+        },
+        "prefix_len": 4096
+      }
+    }
+  ],
+  "elapsed_s": 8.92,
+  "finished_utc": "2026-06-14T13:31:44Z",
+  "hardware": {
+    "cuda_available": true,
+    "devices": [
+      {
+        "capability": [
+          12,
+          1
+        ],
+        "comparison_key": "NVIDIA_GB10:sm_121:sms_48",
+        "index": 0,
+        "multi_processor_count": 48,
+        "name": "NVIDIA GB10",
+        "total_memory": 128452018176
+      }
+    ],
+    "reference_sm_count": 48,
+    "schema": "spark-hardware/v1",
+    "torch_available": true,
+    "torch_cuda": "13.0",
+    "torch_version": "2.11.0+cu130",
+    "warnings": []
+  },
+  "kv_cache_dtype": "auto",
+  "ok": true,
+  "run_id": "sglang_gemma4_12b_fullnvfp4_scale05_ctx8185_prefix4096_20260614T222753JST_google-gemma-4-12b-it_bf16",
+  "runtime_ref": "SGLang ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714; Gemma4 AR VO-split; bf16; graphs disabled",
+  "schema": "sglang-prompt-ppl-sweep/v1",
+  "scope": "SGLang Gemma 4 AR ladder supplied-token PPL; sequential bf16/full-NVFP4 servers; graphs disabled",
+  "started_utc": "2026-06-14T13:31:39Z",
+  "text_chars": 249998,
+  "text_files": [
+    "/hijinks/results/sglang_gemma4_12b_fullnvfp4_scale05_ctx8185_prefix4096_20260614T222753JST/ppl_corpus.md"
+  ],
+  "tokenizer": "google/gemma-4-12B-it",
+  "url": "http://127.0.0.1:30000"
+}

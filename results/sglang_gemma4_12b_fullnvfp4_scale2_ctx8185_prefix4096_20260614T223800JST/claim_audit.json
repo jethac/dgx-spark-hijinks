@@ -1,0 +1,138 @@
+{
+  "expected_row_kv_dtypes": {
+    "bf16": "auto",
+    "fp8": "fp8_e4m3",
+    "fullnvfp4": "fp4_e2m1"
+  },
+  "findings": [
+    "manifest row_labels must be exactly ['bf16', 'fp8', 'fullnvfp4'], got ['fullnvfp4']",
+    "manifest row_labels missing required row bf16",
+    "manifest row_labels missing required row fp8",
+    "manifest models must be exactly ['google/gemma-4-12B-it', 'google/gemma-4-26B-A4B-it', 'google/gemma-4-31B-it'], got ['google/gemma-4-12B-it']",
+    "manifest allow_retracted_global_scale_diagnostic must be false for claim-grade rows",
+    "blocker_audit still records known-blocked dependency refs",
+    "google/gemma-4-12B-it: missing bf16 summary",
+    "google/gemma-4-12B-it: missing fp8 summary",
+    "google/gemma-4-12B-it: fullnvfp4 provenance flashinfer source ref None does not match blocker current_ref 3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+    "google/gemma-4-12B-it: fullnvfp4 provenance sglang source ref None does not match blocker current_ref f920e2d88af68031b745494f5435efb71ac93562",
+    "google/gemma-4-12B-it: fullnvfp4 preflight sglang_fp4_kv_global_scale_multiplier must be empty",
+    "google/gemma-4-12B-it: missing compare_bf16_vs_fullnvfp4",
+    "google/gemma-4-12B-it: missing compare_fp8_vs_fullnvfp4",
+    "google/gemma-4-26B-A4B-it: missing model row",
+    "google/gemma-4-31B-it: missing model row"
+  ],
+  "manifest": "/home/jethac/spark_tmp/dgx-spark-hijinks-epoch2-scale/results/sglang_gemma4_12b_fullnvfp4_scale2_ctx8185_prefix4096_20260614T223800JST/manifest.json",
+  "max_delta_nats": 0.25,
+  "model_results": {
+    "google/gemma-4-12B-it": {
+      "findings": [
+        "missing bf16 summary",
+        "missing fp8 summary",
+        "fullnvfp4 provenance flashinfer source ref None does not match blocker current_ref 3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+        "fullnvfp4 provenance sglang source ref None does not match blocker current_ref f920e2d88af68031b745494f5435efb71ac93562",
+        "fullnvfp4 preflight sglang_fp4_kv_global_scale_multiplier must be empty",
+        "missing compare_bf16_vs_fullnvfp4",
+        "missing compare_fp8_vs_fullnvfp4"
+      ],
+      "warnings": []
+    },
+    "google/gemma-4-26B-A4B-it": {
+      "findings": [
+        "missing model row"
+      ],
+      "warnings": []
+    },
+    "google/gemma-4-31B-it": {
+      "findings": [
+        "missing model row"
+      ],
+      "warnings": []
+    }
+  },
+  "ok": false,
+  "required_capacity_fields": [
+    "full_tokens",
+    "swa_tokens",
+    "total_token_slots",
+    "full_per_token_bytes",
+    "swa_per_token_bytes",
+    "cell_size_bytes"
+  ],
+  "required_chat_content_substring": "tokyo",
+  "required_comparisons": [
+    "compare_bf16_vs_fullnvfp4",
+    "compare_fp8_vs_fullnvfp4"
+  ],
+  "required_container_cuda_flag_markers": [
+    "compute_121a",
+    "sm_121a"
+  ],
+  "required_container_env": {
+    "FLASHINFER_PREFILL_DEBUG_ONCE": "1",
+    "HF_HUB_OFFLINE": "1",
+    "SGLANG_FLASHINFER_VOSPLIT": "1",
+    "SGLANG_FP4_KV_MIXED_KV": "0",
+    "SGLANG_FP4_KV_TRACE_MODULE": "1",
+    "SGLANG_GEMMA4_TRACE_GEOMETRY": "1",
+    "SGLANG_GEMMA_KV_GEOMETRY": "1",
+    "TORCH_CUDA_ARCH_LIST": "12.1a",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "required_docker_memory_bytes": 107374182400,
+  "required_fullnvfp4_server_markers": [
+    "FP4 KV FlashInfer module trace",
+    "deswizzle_macro_active=False",
+    "fp4_kv=1",
+    "k_sf=",
+    "v_sf="
+  ],
+  "required_hardware_comparison_key_prefix": "NVIDIA_GB10:sm_121",
+  "required_models": [
+    "google/gemma-4-12B-it",
+    "google/gemma-4-26B-A4B-it",
+    "google/gemma-4-31B-it"
+  ],
+  "required_positive_int_fields": [
+    "reuse_prefix_len",
+    "logprob_start_len",
+    "max_new_tokens",
+    "context_length",
+    "page_size"
+  ],
+  "required_provenance_markers": [
+    "transformers ",
+    "sglang ",
+    "flashinfer ",
+    "flashinfer_python ",
+    "sglang_kernel ",
+    "binary_md5 sgl_kernel ",
+    "flashinfer_data ",
+    "flashinfer_csrc ",
+    "flashinfer_include ",
+    "source_git_rev /work/third_party/sglang ",
+    "source_git_rev /work/third_party/flashinfer "
+  ],
+  "required_row_artifacts": [
+    "{label}_summary.json",
+    "{label}_ppl.json",
+    "{label}_chat_1.json",
+    "{label}_chat_2.json",
+    "{label}_preflight.log",
+    "{label}_provenance.log",
+    "{label}_server.log",
+    "{label}_container_inspect.json"
+  ],
+  "required_rows": [
+    "bf16",
+    "fp8",
+    "fullnvfp4"
+  ],
+  "required_server_markers": [
+    "server_args=ServerArgs",
+    "attention_backend='flashinfer'",
+    "SGLANG_GEMMA_KV_GEOMETRY",
+    "SGLang FlashInfer VO split enabled"
+  ],
+  "schema": "sglang-gemma4-ar-claim-audit/v1",
+  "warnings": []
+}

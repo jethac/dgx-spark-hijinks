@@ -1,0 +1,26 @@
+run_id=sglang_gemma4_12b_fullnvfp4_scale05_ctx8185_prefix4096_20260614T222753JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-epoch2-scale
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+models=google/gemma-4-12B-it
+row_labels=bf16 fullnvfp4
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+ctx_list=8185
+chat_timeout_s=120
+request_timeout_s=1800
+ppl_timeout_s=1800
+allow_known_blocked_sglang_ar_ladder=1
+sglang_ar_ladder_override_reason=mail 0153 calibrated global-scale diagnostic; multiplier 0.5
+sglang_ar_server_extra_args=
+sglang_allow_retracted_global_scale_diagnostic=1
+sglang_ar_claim_audit_strict=0
+sglang_ar_claim_audit_max_delta_nats=0.25
+blocker_audit=/home/jethac/spark_tmp/dgx-spark-hijinks-epoch2-scale/results/sglang_gemma4_12b_fullnvfp4_scale05_ctx8185_prefix4096_20260614T222753JST/blocker_audit.json
+started_at=2026-06-14T22:27:54+09:00
+1df89b9cbba8c0a4d9577ff3eafdd161eebb9de1
+["ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714"]
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.1Gi        89Gi        21Mi        27Gi       115Gi
+Swap:           15Gi       552Mi        15Gi
