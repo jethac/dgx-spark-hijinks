@@ -251,6 +251,31 @@ for model in models:
                 )
             elif suffix.endswith(".json"):
                 artifact.write_text("{}\n", encoding="utf-8")
+            elif suffix == "preflight.log":
+                artifact.write_text(
+                    "\n".join(
+                        [
+                            "run_id=synthetic",
+                            f"model={model}",
+                            f"label={label}",
+                            f"kv_cache_dtype={dtype}",
+                            "mixed_kv=0",
+                            "image=image",
+                            "image_digest=image@sha256:abc",
+                            "mem_fraction_static=0.72",
+                            "page_size=1",
+                            "context_length=8192",
+                            "sglang_source_overlay=0",
+                            "sglang_fp4_kv_global_scale_multiplier=",
+                            "sglang_fp4_kv_k_global_scale_multiplier=",
+                            "sglang_fp4_kv_v_global_scale_multiplier=",
+                            "allow_known_blocked_sglang_ar_ladder=0",
+                            "sglang_ar_ladder_override_reason=",
+                        ]
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
             elif suffix == "provenance.log":
                 artifact.write_text(
                     "\n".join(
@@ -308,6 +333,27 @@ blocker_path.write_text(
 corpus_path.write_text("short deterministic corpus\n", encoding="utf-8")
 corpus_manifest_path.write_text(
     json.dumps({"schema": "ppl-corpus-manifest/v1", "actual_chars": 27}),
+    encoding="utf-8",
+)
+(manifest_path.parent / "preflight.log").write_text(
+    "\n".join(
+        [
+            "run_id=synthetic",
+            "repo_root=/tmp/repo",
+            "image=image",
+            "image_digest=image@sha256:abc",
+            "models=google/gemma-4-12B-it google/gemma-4-26B-A4B-it google/gemma-4-31B-it",
+            "row_labels=bf16 fp8 fullnvfp4",
+            "mem_fraction_static=0.72",
+            "page_size=1",
+            "context_length=8192",
+            "ctx_list=8185",
+            "chat_timeout_s=120",
+            "request_timeout_s=1800",
+            "ppl_timeout_s=1800",
+        ]
+    )
+    + "\n",
     encoding="utf-8",
 )
 manifest_path.write_text(
@@ -716,4 +762,40 @@ needle = "google/gemma-4-12B-it: fp8 container memory is not 100g"
 if needle not in findings:
     raise SystemExit(f"missing expected container finding\n{findings}")
 print("PASS bad_container_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_preflight_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "bf16_preflight.log"
+text = path.read_text(encoding="utf-8").replace(
+    "sglang_source_overlay=0", "sglang_source_overlay=1"
+)
+path.write_text(text, encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_preflight_manifest.json" \
+  >"${TMP_DIR}/bad_preflight_audit.json" 2>"${TMP_DIR}/bad_preflight_audit.err"; then
+  echo "FAIL bad-preflight manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_preflight_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: bf16 preflight sglang_source_overlay is not 0"
+if needle not in findings:
+    raise SystemExit(f"missing expected preflight finding\n{findings}")
+print("PASS bad_preflight_manifest_fails")
 PY

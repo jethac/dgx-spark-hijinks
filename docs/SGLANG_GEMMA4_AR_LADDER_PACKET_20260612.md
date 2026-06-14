@@ -118,6 +118,10 @@ It records:
   files. The audit accepts Spark absolute paths when run on Spark and falls
   back to manifest-relative paths when a result bundle has been copied into the
   repo.
+- preflight integrity: the run-level and per-row preflight logs must match the
+  manifest run id, model list, row labels, image digest, context/page/memory
+  knobs, row KV dtype, `source_overlay=0`, and empty retracted global-scale
+  multiplier knobs.
 - container inspect provenance: every row must prove it ran the manifest image
   digest from `/hijinks`, with the 100g Docker memory and swap limits, host
   network/IPC, no source-overlay mount for claim rows, Spark `sm_121a` JIT

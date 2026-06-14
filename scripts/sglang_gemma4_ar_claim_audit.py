@@ -156,6 +156,18 @@ def missing_markers(path: pathlib.Path, markers: list[str]) -> list[str]:
     return [marker for marker in markers if marker not in text]
 
 
+def parse_key_value_log(path: pathlib.Path) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if key:
+            result[key] = value.strip()
+    return result
+
+
 def capacity_total(payload: dict[str, Any] | None) -> int | None:
     if not isinstance(payload, dict):
         return None
@@ -164,6 +176,88 @@ def capacity_total(payload: dict[str, Any] | None) -> int | None:
         return None
     value = capacity.get("total_token_slots")
     return int(value) if isinstance(value, int) and value > 0 else None
+
+
+def audit_run_preflight(
+    manifest_path: pathlib.Path,
+    *,
+    manifest: dict[str, Any],
+    findings: list[str],
+) -> None:
+    path = manifest_path.parent / "preflight.log"
+    try:
+        fields = parse_key_value_log(path)
+    except OSError:
+        findings.append("manifest missing run preflight artifact")
+        return
+    expected = {
+        "run_id": manifest.get("run_id"),
+        "image": manifest.get("image"),
+        "image_digest": manifest.get("image_digest"),
+        "models": " ".join(manifest.get("models") or []),
+        "row_labels": " ".join(manifest.get("row_labels") or []),
+        "mem_fraction_static": str(manifest.get("mem_fraction_static")),
+        "page_size": str(manifest.get("page_size")),
+        "context_length": str(manifest.get("context_length")),
+        "ctx_list": " ".join(str(value) for value in manifest.get("ctx_list") or []),
+    }
+    for key, expected_value in expected.items():
+        if fields.get(key) != expected_value:
+            findings.append(f"run preflight {key} is not {expected_value}")
+    for field in ("chat_timeout_s", "request_timeout_s", "ppl_timeout_s"):
+        value = fields.get(field)
+        if value is None:
+            findings.append(f"run preflight missing {field}")
+        else:
+            try:
+                if int(value) <= 0:
+                    findings.append(f"run preflight {field} must be positive")
+            except ValueError:
+                findings.append(f"run preflight {field} must be an integer")
+
+
+def audit_row_preflight(
+    row_dir_path: pathlib.Path,
+    *,
+    label: str,
+    model: str,
+    expected_dtype: str,
+    manifest: dict[str, Any],
+    findings: list[str],
+) -> None:
+    path = row_dir_path / f"{label}_preflight.log"
+    try:
+        fields = parse_key_value_log(path)
+    except OSError:
+        findings.append(f"{label} preflight is unreadable")
+        return
+    expected = {
+        "run_id": manifest.get("run_id"),
+        "model": model,
+        "label": label,
+        "kv_cache_dtype": expected_dtype,
+        "mixed_kv": "0",
+        "image": manifest.get("image"),
+        "image_digest": manifest.get("image_digest"),
+        "mem_fraction_static": str(manifest.get("mem_fraction_static")),
+        "page_size": str(manifest.get("page_size")),
+        "context_length": str(manifest.get("context_length")),
+        "sglang_source_overlay": "0",
+    }
+    for key, expected_value in expected.items():
+        if fields.get(key) != expected_value:
+            findings.append(f"{label} preflight {key} is not {expected_value}")
+    for key in (
+        "sglang_fp4_kv_global_scale_multiplier",
+        "sglang_fp4_kv_k_global_scale_multiplier",
+        "sglang_fp4_kv_v_global_scale_multiplier",
+    ):
+        if fields.get(key, ""):
+            findings.append(f"{label} preflight {key} must be empty")
+    if fields.get("allow_known_blocked_sglang_ar_ladder") == "1":
+        reason = fields.get("sglang_ar_ladder_override_reason", "")
+        if not reason:
+            findings.append(f"{label} preflight override reason is empty")
 
 
 def env_map(record: dict[str, Any]) -> dict[str, str]:
@@ -499,6 +593,7 @@ def audit_manifest(
         findings.append(
             "manifest allow_retracted_global_scale_diagnostic must be false for claim-grade rows"
         )
+    audit_run_preflight(manifest_path, manifest=manifest, findings=findings)
 
     blocker_audit_path = normalize_path(manifest.get("blocker_audit"), manifest_path)
     if not blocker_audit_path or not blocker_audit_path.exists():
@@ -587,6 +682,14 @@ def audit_manifest(
                     findings=model_result["findings"],
                 )
                 audit_container_inspect(
+                    row_dir_path,
+                    label=label,
+                    model=model,
+                    expected_dtype=EXPECTED_ROW_KV_DTYPES[label],
+                    manifest=manifest,
+                    findings=model_result["findings"],
+                )
+                audit_row_preflight(
                     row_dir_path,
                     label=label,
                     model=model,
