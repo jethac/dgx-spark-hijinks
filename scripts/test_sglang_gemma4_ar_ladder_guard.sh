@@ -179,6 +179,8 @@ assert manifest["ctx_list"] == [512]
 assert manifest["reuse_prefix_len"] == 256
 assert manifest["logprob_start_len"] == 256
 assert manifest["graphs"] == "disabled"
+assert manifest["source_overlay"] is False
+assert manifest["allow_retracted_global_scale_diagnostic"] is False
 assert claim_audit["ok"] is False
 assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
 assert "manifest missing corpus artifact" not in claim_audit["findings"]

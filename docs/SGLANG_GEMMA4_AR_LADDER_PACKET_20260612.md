@@ -102,6 +102,8 @@ It records:
 - corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
   `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
   `max_new_tokens`, graphs disabled).
+- packaged-image provenance: `source_overlay=false` and
+  `allow_retracted_global_scale_diagnostic=false` for claim-grade rows.
 
 The runner writes `results/<run_id>/claim_audit.json` after every manifest. For
 an explicit post-run gate or to regenerate it manually:

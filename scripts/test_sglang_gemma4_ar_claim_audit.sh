@@ -111,6 +111,8 @@ manifest_path.write_text(
             "context_length": 8192,
             "page_size": 1,
             "graphs": "disabled",
+            "source_overlay": False,
+            "allow_retracted_global_scale_diagnostic": False,
             "models": models,
             "rows": rows,
         }
@@ -133,4 +135,35 @@ if not payload.get("ok"):
 if payload.get("findings"):
     raise SystemExit(f"unexpected findings: {payload['findings']}")
 print("PASS synthetic_complete_manifest_passes")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/overlay_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+payload["source_overlay"] = True
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/overlay_manifest.json" \
+  >"${TMP_DIR}/overlay_audit.json" 2>"${TMP_DIR}/overlay_audit.err"; then
+  echo "FAIL source-overlay manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/overlay_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "manifest source_overlay must be false for claim-grade rows"
+if needle not in findings:
+    raise SystemExit(f"missing expected source-overlay finding\n{findings}")
+print("PASS source_overlay_manifest_fails")
 PY

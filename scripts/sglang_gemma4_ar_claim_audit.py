@@ -110,6 +110,12 @@ def audit_manifest(
 
     if manifest.get("graphs") != "disabled":
         findings.append("manifest graphs must be disabled for the current AR claim gate")
+    if manifest.get("source_overlay") is not False:
+        findings.append("manifest source_overlay must be false for claim-grade rows")
+    if manifest.get("allow_retracted_global_scale_diagnostic") is not False:
+        findings.append(
+            "manifest allow_retracted_global_scale_diagnostic must be false for claim-grade rows"
+        )
 
     blocker_audit_path = normalize_path(manifest.get("blocker_audit"), manifest_path)
     if not blocker_audit_path or not blocker_audit_path.exists():

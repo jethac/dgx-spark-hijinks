@@ -616,6 +616,8 @@ manifest = {
     "page_size": int("${PAGE_SIZE}"),
     "mem_fraction_static": "${MEM_FRACTION_STATIC}",
     "graphs": "disabled",
+    "source_overlay": "${SOURCE_OVERLAY}" == "1",
+    "allow_retracted_global_scale_diagnostic": "${ALLOW_RETRACTED_SCALE_DIAGNOSTIC}" == "1",
     "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,
