@@ -316,7 +316,14 @@ for model in models:
         ("compare_bf16_vs_fullnvfp4", 0.02),
         ("compare_fp8_vs_fullnvfp4", 0.03),
     ]:
+        fp8_artifact = {
+            "compare_bf16_vs_fullnvfp4": row_dir / "bf16_ppl.json",
+            "compare_fp8_vs_fullnvfp4": row_dir / "fp8_ppl.json",
+        }[name]
         row[name] = {
+            "schema": "sglang-prompt-ppl-comparison/v1",
+            "fp8_report": str(fp8_artifact),
+            "candidate_report": str(row_dir / "fullnvfp4_ppl.json"),
             "ok": True,
             "rows": [{"ctx": 8185, "delta_nats_per_token": delta}],
         }
@@ -810,6 +817,42 @@ needle = "google/gemma-4-12B-it: fp8 ppl report kv_cache_dtype is not fp8_e4m3"
 if needle not in findings:
     raise SystemExit(f"missing expected ppl finding\n{findings}")
 print("PASS bad_ppl_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_compare_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+payload["rows"][0]["compare_fp8_vs_fullnvfp4"]["candidate_report"] = str(
+    pathlib.Path(payload["rows"][0]["dir"]) / "fp8_ppl.json"
+)
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_compare_manifest.json" \
+  >"${TMP_DIR}/bad_compare_audit.json" 2>"${TMP_DIR}/bad_compare_audit.err"; then
+  echo "FAIL bad-compare manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_compare_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = (
+    "google/gemma-4-12B-it: compare_fp8_vs_fullnvfp4 "
+    "candidate_report does not point at fullnvfp4_ppl.json"
+)
+if needle not in findings:
+    raise SystemExit(f"missing expected comparison finding\n{findings}")
+print("PASS bad_compare_manifest_fails")
 PY
 
 python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_chat_manifest.json" <<'PY'

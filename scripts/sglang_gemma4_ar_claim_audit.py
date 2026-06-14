@@ -25,6 +25,10 @@ REQUIRED_COMPARISONS = [
     "compare_bf16_vs_fullnvfp4",
     "compare_fp8_vs_fullnvfp4",
 ]
+EXPECTED_COMPARISON_REPORTS = {
+    "compare_bf16_vs_fullnvfp4": ("bf16_ppl.json", "fullnvfp4_ppl.json"),
+    "compare_fp8_vs_fullnvfp4": ("fp8_ppl.json", "fullnvfp4_ppl.json"),
+}
 REQUIRED_ROW_ARTIFACTS = [
     "{label}_summary.json",
     "{label}_ppl.json",
@@ -150,6 +154,22 @@ def comparison_ctxs(compare: dict[str, Any] | None) -> list[int]:
         if isinstance(row, dict) and isinstance(row.get("ctx"), int):
             result.append(row["ctx"])
     return result
+
+
+def path_matches_artifact(
+    path_value: Any,
+    expected_artifact: pathlib.Path,
+    manifest_path: pathlib.Path,
+) -> bool:
+    if not isinstance(path_value, str):
+        return False
+    normalized = normalize_path(path_value, manifest_path)
+    if normalized is None:
+        return False
+    try:
+        return normalized.resolve() == expected_artifact.resolve()
+    except OSError:
+        return False
 
 
 def missing_markers(path: pathlib.Path, markers: list[str]) -> list[str]:
@@ -847,11 +867,28 @@ def audit_manifest(
             if not isinstance(compare, dict):
                 model_result["findings"].append(f"missing {comparison_name}")
                 continue
+            if compare.get("schema") != "sglang-prompt-ppl-comparison/v1":
+                model_result["findings"].append(f"{comparison_name} schema mismatch")
             if row_dir_path and row_dir_path.exists():
                 artifact = row_dir_path / f"{comparison_name}.json"
                 if not artifact.exists():
                     model_result["findings"].append(
                         f"missing comparison artifact {artifact.name}"
+                    )
+                expected_reports = EXPECTED_COMPARISON_REPORTS[comparison_name]
+                expected_fp8 = row_dir_path / expected_reports[0]
+                expected_candidate = row_dir_path / expected_reports[1]
+                if not path_matches_artifact(
+                    compare.get("fp8_report"), expected_fp8, manifest_path
+                ):
+                    model_result["findings"].append(
+                        f"{comparison_name} fp8_report does not point at {expected_reports[0]}"
+                    )
+                if not path_matches_artifact(
+                    compare.get("candidate_report"), expected_candidate, manifest_path
+                ):
+                    model_result["findings"].append(
+                        f"{comparison_name} candidate_report does not point at {expected_reports[1]}"
                     )
             if compare.get("ok") is not True:
                 model_result["findings"].append(f"{comparison_name} ok is not true")

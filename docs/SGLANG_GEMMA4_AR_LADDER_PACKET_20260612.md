@@ -109,7 +109,9 @@ It records:
 - exact row identities: `bf16` uses `kv_cache_dtype=auto`, `fp8` uses
   `fp8_e4m3`, and `fullnvfp4` uses `fp4_e2m1`;
 - exact comparison coverage: every required comparison must include the same
-  contexts as manifest `ctx_list`;
+  contexts as manifest `ctx_list`, use schema
+  `sglang-prompt-ppl-comparison/v1`, and point `fp8_report` /
+  `candidate_report` at the row's actual `*_ppl.json` artifacts;
 - PPL artifact provenance: every row's `*_ppl.json` must match the manifest
   image, expected KV dtype, tokenizer/model, context list, reuse-prefix length,
   logprob start, max-new-tokens, positive scored-token count, zero missing or
