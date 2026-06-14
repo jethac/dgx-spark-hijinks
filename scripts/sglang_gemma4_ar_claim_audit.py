@@ -16,6 +16,11 @@ REQUIRED_MODELS = [
     "google/gemma-4-31B-it",
 ]
 REQUIRED_ROWS = ["bf16", "fp8", "fullnvfp4"]
+EXPECTED_ROW_KV_DTYPES = {
+    "bf16": "auto",
+    "fp8": "fp8_e4m3",
+    "fullnvfp4": "fp4_e2m1",
+}
 REQUIRED_COMPARISONS = [
     "compare_bf16_vs_fullnvfp4",
     "compare_fp8_vs_fullnvfp4",
@@ -159,6 +164,13 @@ def audit_manifest(
                 continue
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
+            if payload.get("label") != label:
+                model_result["findings"].append(f"{label} summary label mismatch")
+            expected_dtype = EXPECTED_ROW_KV_DTYPES[label]
+            if payload.get("kv_cache_dtype") != expected_dtype:
+                model_result["findings"].append(
+                    f"{label} kv_cache_dtype is not {expected_dtype}"
+                )
             if payload.get("ppl_ok") is not True:
                 model_result["findings"].append(f"{label} ppl_ok is not true")
             if payload.get("chat_transport_ok") is not True:
@@ -196,6 +208,7 @@ def audit_manifest(
         "max_delta_nats": max_delta_nats,
         "required_models": REQUIRED_MODELS,
         "required_rows": REQUIRED_ROWS,
+        "expected_row_kv_dtypes": EXPECTED_ROW_KV_DTYPES,
         "required_comparisons": REQUIRED_COMPARISONS,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
