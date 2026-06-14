@@ -1,5 +1,27 @@
 # DRAFT — E4B fp8 D512/VO256 dispatcher fix (mail 0136 / 0140)
 
+## ⚠️ RETRACTION (2026-06-14, GB10 verify): cta→16 is NOT the fix
+I built the `cta_tile_q→16` fix into the baked flashinfer in an ephemeral GB10 container and reran
+`repro_d512_ragged.py`. It **changed the error but did not fix it**:
+- before: `Invalid configuration NUM_MMA_KV=1 NUM_WARPS_Q=4` (cta=64, line 3073)
+- after (cta→16): **`Unsupported max_mma_kv: 0`** (line 3059) — cta=16 ALSO doesn't fit GB10 smem.
+
+My smem arithmetic (`65536`) was an **underestimate**: the fork's real `kKVSmemPerMmaKV` for the
+nvfp4/fp8 VO-split path includes the SF + split-V buffers, so even NUM_MMA_KV=1 at cta=16 needs
+more than the ~86 KB left after the Q tile. **So the fp8 D512/VO256 shape exceeds GB10's 100 KB/SM
+at BOTH cta=64 and cta=16 — cta→16 is not a fix.** (Verification caught a wrong fix; the 0130
+lesson. Mail 0148's "fix premise proven" is retracted; see 0149.)
+
+**Open question for the real fix (GB10, Codex's lane):** nvfp4 KV at D512/VO256 *does* serve on GB10
+(SGLang 12B, +0.40) — also 1-byte — so its VO-split/LINEAR_V_SF path must reduce per-step smem in a
+way the fp8 path doesn't. The fp8 comparator likely needs the same per-step-smem reduction
+(split-V / split_kv) or a clean "unsupported on this arch, use a different fp8 config" rejection.
+Needs the fork's exact smem accounting on GB10 — deeper than a dispatcher tweak.
+
+---
+(Original draft below — superseded by the retraction above.)
+
+
 > Status: **GB10/Spark-specific; authored + scope-corrected on local sm_120, NOT yet verified on
 > GB10.** Local sm_120 evidence below corrected two things in the original draft. The GB10
 > verification (the only arch where it fails) belongs to the Spark lane (Codex) — see mail 0144.
