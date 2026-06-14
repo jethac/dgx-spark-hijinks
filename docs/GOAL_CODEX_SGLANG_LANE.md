@@ -45,6 +45,17 @@ cross-lane result.**
 **Do NOT mail:** routine same-lane serving smokes/progress, or speculative direction into Claude's
 active GPU window — wait for a confirmed/banked result before sending direction (Jetha's rule).
 
+Use this mechanical poll at session start and after banking cross-lane artifacts:
+
+```bash
+python3 scripts/sglang_lane_state_poll.py \
+  --output results/sglang_lane_state_poll_<timestamp>.json
+```
+
+It records local/remote mail, dependency refs, and whether the lane is still in the
+known-red hold pattern. If it reports `new-remote-mail` or a dependency change, read the
+mail/diff before launching any live Spark row.
+
 ## Discipline (campaign rules)
 Every claim an artifact, every red a verbatim error, every binary its provenance. Don't conclude a
 root cause without serving the real path. Stop point = clean tree + pushed summary, marker absent.
