@@ -173,7 +173,7 @@ def audit_manifest(
         if blocker_audit.get("can_run_claim_ladder") is not False:
             warnings.append("blocker_audit did not explicitly keep can_run_claim_ladder=false")
         if blocker_audit.get("ladder_status") == "blocked-known-red-dependencies":
-            warnings.append("blocker_audit still records known-blocked dependency refs")
+            findings.append("blocker_audit still records known-blocked dependency refs")
 
     rows = manifest.get("rows")
     if not isinstance(rows, list):

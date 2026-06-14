@@ -90,7 +90,9 @@ For each model, the packet runs three sequential servers:
 It records:
 
 - `blocker_audit.json`, which captures the FlashInfer/SGLang dependency refs
-  used to justify the run or diagnostic override;
+  used to justify the run or diagnostic override. Claim audit hard-fails
+  `blocked-known-red-dependencies`; dependency-changed reruns can be audited,
+  but unchanged known-red refs cannot become claim-grade by filling in row JSON;
 - `fp8_dispatch_audit.json` for `google/gemma-4-E4B-it` fp8 rows, when logs
   are available, to classify the known D512/VO256 `NUM_MMA_KV=1` dispatcher
   red automatically;

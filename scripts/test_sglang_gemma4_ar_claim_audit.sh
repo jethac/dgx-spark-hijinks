@@ -155,6 +155,47 @@ if payload.get("findings"):
 print("PASS synthetic_complete_manifest_passes")
 PY
 
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/known_blocked_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+blocker_path = dst.parent / "known_blocked_blocker.json"
+blocker_path.write_text(
+    json.dumps(
+        {
+            "can_run_claim_ladder": False,
+            "ladder_status": "blocked-known-red-dependencies",
+        }
+    ),
+    encoding="utf-8",
+)
+payload["blocker_audit"] = blocker_path.name
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/known_blocked_manifest.json" \
+  >"${TMP_DIR}/known_blocked_audit.json" 2>"${TMP_DIR}/known_blocked_audit.err"; then
+  echo "FAIL known-blocked complete manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/known_blocked_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "blocker_audit still records known-blocked dependency refs"
+if needle not in findings:
+    raise SystemExit(f"missing expected blocker finding\n{findings}")
+print("PASS known_blocked_complete_manifest_fails")
+PY
+
 python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/copied_bundle_manifest.json" <<'PY'
 import json
 import pathlib
