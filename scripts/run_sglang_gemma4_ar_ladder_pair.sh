@@ -40,6 +40,13 @@ OVERRIDE_REASON="${SGLANG_AR_LADDER_OVERRIDE_REASON:-}"
 CLAIM_AUDIT_STRICT="${SGLANG_AR_CLAIM_AUDIT_STRICT:-0}"
 CLAIM_AUDIT_MAX_DELTA_NATS="${SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS:-0.25}"
 ALLOW_RETRACTED_SCALE_DIAGNOSTIC="${SGLANG_ALLOW_RETRACTED_GLOBAL_SCALE_DIAGNOSTIC:-0}"
+SERVER_EXTRA_ARGS_RAW="${SGLANG_AR_SERVER_EXTRA_ARGS:-}"
+SERVER_EXTRA_ARGS=()
+if [[ -n "${SERVER_EXTRA_ARGS_RAW}" ]]; then
+  # Diagnostic passthrough for simple whitespace-separated launch_server args.
+  # Do not use for claim rows that require shell-quoted values with spaces.
+  read -r -a SERVER_EXTRA_ARGS <<<"${SERVER_EXTRA_ARGS_RAW}"
+fi
 
 contains_item() {
   local haystack="$1"
@@ -299,6 +306,7 @@ run_one() {
     echo "sglang_fp4_kv_trace_layers=${SGLANG_FP4_KV_TRACE_LAYERS:-}"
     echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
     echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
+    echo "sglang_ar_server_extra_args=${SERVER_EXTRA_ARGS_RAW}"
     echo "started_at=$(TZ=Asia/Tokyo date -Is)"
     free -h
   } >"${model_dir}/${label}_preflight.log"
@@ -388,6 +396,7 @@ PY
       --host 0.0.0.0 \
       --port "${PORT}" \
       "${kv_args[@]}" \
+      "${SERVER_EXTRA_ARGS[@]}" \
       >"${model_dir}/${label}_container_id.txt"
 
   if ! wait_ready "${name}"; then
@@ -557,6 +566,7 @@ PY
   echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
   echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
   echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
+  echo "sglang_ar_server_extra_args=${SERVER_EXTRA_ARGS_RAW}"
   echo "sglang_allow_retracted_global_scale_diagnostic=${ALLOW_RETRACTED_SCALE_DIAGNOSTIC}"
   echo "sglang_ar_claim_audit_strict=${CLAIM_AUDIT_STRICT}"
   echo "sglang_ar_claim_audit_max_delta_nats=${CLAIM_AUDIT_MAX_DELTA_NATS}"
@@ -666,6 +676,7 @@ manifest = {
     "graphs": "disabled",
     "source_overlay": "${SOURCE_OVERLAY}" == "1",
     "allow_retracted_global_scale_diagnostic": "${ALLOW_RETRACTED_SCALE_DIAGNOSTIC}" == "1",
+    "server_extra_args": "${SERVER_EXTRA_ARGS_RAW}",
     "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,

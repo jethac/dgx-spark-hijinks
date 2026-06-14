@@ -1,9 +1,10 @@
 # SGLang 12B Chunked/Merge Diagnostic Packet
 
-Purpose: scoped Spark packet for replaying the known-red 12B row under an
-explicit diagnostic label while we decide whether a real SGLang chunked/merge
-path knob exists. This is **not** a claim ladder row and must not be quoted as
-broad SGLang Gemma 4 NVFP4 support.
+Purpose: scoped Spark packet for replaying the known-red 12B row with SGLang's
+explicit chunked-prefill knob. This tests whether reducing the prefill chunk
+size avoids the FlashInfer single-/large-prefill accumulation artifact from
+mail 0140. This is **not** a claim ladder row and must not be quoted as broad
+SGLang Gemma 4 NVFP4 support.
 
 ## Background
 
@@ -20,11 +21,14 @@ Mail 0140 reclassifies that red:
 - current SGLang single-/large-prefill-shaped row: `+0.402969`
 
 So the diagnostic question is narrow: can SGLang be driven, without source
-overlays or global-scale changes, through a route that lands near the `+0.19`
-reference instead of the large-prefill `+0.40` artifact? The command below is
-only the safe replay scaffold using the current runner. If a concrete
-SGLang-side chunking knob is identified later, add it to this packet before
-running and record it in the override reason.
+overlays or global-scale changes, through a smaller prefill chunk that lands
+near the `+0.19` reference instead of the large-prefill `+0.40` artifact?
+
+Code anchor: SGLang exposes `--chunked-prefill-size` in
+`third_party/sglang/python/sglang/srt/server_args.py`; `-1` disables chunked
+prefill, while positive values bound the maximum tokens in a prefill chunk. The
+scheduler stores this as `self.chunked_prefill_size` and passes it into
+`PrefillAdder` when selecting the next prefill batch.
 
 ## Preconditions
 
@@ -38,14 +42,14 @@ running and record it in the override reason.
 - Do not set any `SGLANG_FP4_KV_*GLOBAL_SCALE_MULTIPLIER` knobs.
 - Keep CUDA graphs disabled.
 
-## Candidate Replay Scaffold
+## Candidate Chunked Diagnostic
 
 This uses the existing AR ladder runner in its explicit known-blocked diagnostic
 mode. It runs only the already-red 12B full-NVFP4 arm and records the blocker
 audit and override reason, so the artifact cannot be mistaken for a claim row.
-As written, it is expected to reproduce the current path; it becomes a
-chunked/merge discriminator only after a concrete serving-path knob is added to
-the command.
+It uses `SGLANG_AR_SERVER_EXTRA_ARGS` to append `--chunked-prefill-size 2048`
+to `sglang.launch_server`. This keeps the packaged image and source refs fixed
+while changing only the serving prefill chunk size.
 
 ```bash
 cd /home/jethac/spark_tmp/dgx-spark-hijinks-sglang-live
@@ -62,8 +66,9 @@ LOGPROB_START_LEN=4096 \
 CONTEXT_LENGTH=8192 \
 PAGE_SIZE=1 \
 MEM_FRACTION_STATIC=0.72 \
+SGLANG_AR_SERVER_EXTRA_ARGS='--chunked-prefill-size 2048' \
 ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
-SGLANG_AR_LADDER_OVERRIDE_REASON='mail 0140 scoped replay scaffold; not claim-grade; add concrete chunked/merge knob before using as discriminator' \
+SGLANG_AR_LADDER_OVERRIDE_REASON='mail 0140 scoped chunked-prefill diagnostic; --chunked-prefill-size 2048; not claim-grade' \
 bash scripts/run_sglang_gemma4_ar_ladder_pair.sh
 ```
 
@@ -81,13 +86,12 @@ Stop immediately and commit artifacts if any of these happen:
 ## Interpretation Rules
 
 - If the replay still reports NLL near `4.974959` / delta near `+0.402969` against
-  the banked bf16 baseline, it confirms the current SGLang serving route is
-  still exercising the large-prefill artifact at unchanged dependencies.
-- If a future run with an explicit chunked/merge path knob lands near the mail
-  0140 reference cost (`~+0.19` against the banked bf16 baseline), it is a
-  **scoped diagnostic lead only**. Mail Claude with the artifact and do not
-  promote it into the ladder until a matched bf16 / full-NVFP4 rerun with the
-  same route and claim audit passes.
+  the banked bf16 baseline, it shows `--chunked-prefill-size 2048` is not enough
+  to avoid the large-prefill artifact on the current SGLang route.
+- If the run lands near the mail 0140 reference cost (`~+0.19` against the
+  banked bf16 baseline), it is a **scoped diagnostic lead only**. Mail Claude
+  with the artifact and do not promote it into the ladder until a matched bf16 /
+  full-NVFP4 rerun with the same route and claim audit passes.
 - If it exposes a new FlashInfer/vLLM-facing red, mail Claude with the verbatim
   error and keep the SGLang ladder blocked.
 
@@ -98,6 +102,8 @@ The stop summary must include:
 - image digest and SGLang / FlashInfer refs;
 - `blocker_audit.json` path and override reason;
 - model, ctx, prefix, page size, graph state, and KV dtype;
+- `sglang_ar_server_extra_args=--chunked-prefill-size 2048` from run and row
+  preflight logs;
 - chat smoke result;
 - `cached_tokens`;
 - NLL/PPL result and comparison against the banked bf16 baseline;

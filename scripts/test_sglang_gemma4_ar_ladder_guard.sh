@@ -155,6 +155,7 @@ run_case "override_writes_blocker_audit_before_serving" 1 '"blocker_audit":' \
   env MODELS="google/gemma-4-26B-A4B-it" ROW_LABELS="fullnvfp4" \
     ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
     SGLANG_AR_LADDER_OVERRIDE_REASON="test dependency change" \
+    SGLANG_AR_SERVER_EXTRA_ARGS="--chunked-prefill-size 2048" \
     FAKE_DOCKER_EMPTY=1 \
     OUT_DIR="${OUT_DIR_CAPTURE}" \
     RUN_ID="test_audit_capture" \
@@ -181,6 +182,9 @@ assert manifest["logprob_start_len"] == 256
 assert manifest["graphs"] == "disabled"
 assert manifest["source_overlay"] is False
 assert manifest["allow_retracted_global_scale_diagnostic"] is False
+assert manifest["server_extra_args"] == "--chunked-prefill-size 2048"
+preflight = (out / "preflight.log").read_text(encoding="utf-8")
+assert "sglang_ar_server_extra_args=--chunked-prefill-size 2048" in preflight
 assert claim_audit["ok"] is False
 assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
 assert "manifest missing corpus artifact" not in claim_audit["findings"]
