@@ -103,6 +103,11 @@ It records:
   `fp8_e4m3`, and `fullnvfp4` uses `fp4_e2m1`;
 - exact comparison coverage: every required comparison must include the same
   contexts as manifest `ctx_list`;
+- backing artifact presence: every claim row must retain its chat, PPL,
+  preflight, provenance, server, inspect, summary, and comparison JSON/log
+  files. The audit accepts Spark absolute paths when run on Spark and falls
+  back to manifest-relative paths when a result bundle has been copied into the
+  repo.
 - corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
   `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
   `max_new_tokens`, graphs disabled).

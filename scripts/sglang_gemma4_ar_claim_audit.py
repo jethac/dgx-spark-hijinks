@@ -25,6 +25,16 @@ REQUIRED_COMPARISONS = [
     "compare_bf16_vs_fullnvfp4",
     "compare_fp8_vs_fullnvfp4",
 ]
+REQUIRED_ROW_ARTIFACTS = [
+    "{label}_summary.json",
+    "{label}_ppl.json",
+    "{label}_chat_1.json",
+    "{label}_chat_2.json",
+    "{label}_preflight.log",
+    "{label}_provenance.log",
+    "{label}_server.log",
+    "{label}_container_inspect.json",
+]
 REQUIRED_POSITIVE_INT_FIELDS = [
     "reuse_prefix_len",
     "logprob_start_len",
@@ -42,7 +52,12 @@ def normalize_path(path: str | None, manifest_path: pathlib.Path) -> pathlib.Pat
     if not path:
         return None
     p = pathlib.Path(path)
+    if p.is_absolute() and p.exists():
+        return p
     if p.is_absolute():
+        copied_path = manifest_path.parent / p.name
+        if copied_path.exists():
+            return copied_path.resolve()
         return p
     return (manifest_path.parent / p).resolve()
 
@@ -99,9 +114,21 @@ def audit_manifest(
     if not isinstance(row_labels, list):
         findings.append("manifest row_labels is missing or not a list")
         row_labels = []
+    elif set(row_labels) != set(REQUIRED_ROWS):
+        findings.append(
+            f"manifest row_labels must be exactly {REQUIRED_ROWS}, got {row_labels}"
+        )
     for label in REQUIRED_ROWS:
         if label not in row_labels:
             findings.append(f"manifest row_labels missing required row {label}")
+
+    models = manifest.get("models")
+    if not isinstance(models, list):
+        findings.append("manifest models is missing or not a list")
+    elif set(models) != set(REQUIRED_MODELS):
+        findings.append(
+            f"manifest models must be exactly {REQUIRED_MODELS}, got {models}"
+        )
 
     image = manifest.get("image")
     image_digest = manifest.get("image_digest")
@@ -168,16 +195,26 @@ def audit_manifest(
 
         expected_slug = row_slug(model)
         row_dir = row.get("dir")
+        row_dir_path = normalize_path(row_dir, manifest_path) if isinstance(row_dir, str) else None
         if isinstance(row_dir, str) and not row_dir.replace("\\", "/").endswith(expected_slug):
             model_result["warnings"].append(
                 f"row dir does not end with expected slug {expected_slug}: {row_dir}"
             )
+        if not row_dir_path or not row_dir_path.exists() or not row_dir_path.is_dir():
+            model_result["findings"].append("row dir artifact is missing")
 
         for label in REQUIRED_ROWS:
             payload = row.get(label)
             if not isinstance(payload, dict):
                 model_result["findings"].append(f"missing {label} summary")
                 continue
+            if row_dir_path and row_dir_path.exists():
+                for artifact_template in REQUIRED_ROW_ARTIFACTS:
+                    artifact = row_dir_path / artifact_template.format(label=label)
+                    if not artifact.exists():
+                        model_result["findings"].append(
+                            f"missing {label} artifact {artifact.name}"
+                        )
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
             if payload.get("label") != label:
@@ -199,6 +236,12 @@ def audit_manifest(
             if not isinstance(compare, dict):
                 model_result["findings"].append(f"missing {comparison_name}")
                 continue
+            if row_dir_path and row_dir_path.exists():
+                artifact = row_dir_path / f"{comparison_name}.json"
+                if not artifact.exists():
+                    model_result["findings"].append(
+                        f"missing comparison artifact {artifact.name}"
+                    )
             if compare.get("ok") is not True:
                 model_result["findings"].append(f"{comparison_name} ok is not true")
             deltas = iter_deltas(compare)
@@ -232,6 +275,7 @@ def audit_manifest(
         "required_rows": REQUIRED_ROWS,
         "expected_row_kv_dtypes": EXPECTED_ROW_KV_DTYPES,
         "required_comparisons": REQUIRED_COMPARISONS,
+        "required_row_artifacts": REQUIRED_ROW_ARTIFACTS,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
         "warnings": warnings,

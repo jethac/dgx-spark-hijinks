@@ -50,9 +50,14 @@ models = [
 ]
 rows = []
 for model in models:
+    slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in model).strip("-")
+    while "--" in slug:
+        slug = slug.replace("--", "-")
+    row_dir = manifest_path.parent / slug
+    row_dir.mkdir(parents=True, exist_ok=True)
     row = {
         "model": model,
-        "dir": model.lower().replace("/", "-").replace(".", "-"),
+        "dir": str(row_dir),
         "mixedkv": None,
         "compare_bf16_vs_mixedkv": None,
     }
@@ -69,6 +74,18 @@ for model in models:
             "chat_transport_ok": True,
             "chat_content_equal": True,
         }
+        for suffix in (
+            "summary.json",
+            "ppl.json",
+            "chat_1.json",
+            "chat_2.json",
+            "preflight.log",
+            "provenance.log",
+            "server.log",
+            "container_inspect.json",
+        ):
+            artifact = row_dir / f"{label}_{suffix}"
+            artifact.write_text("{}\n" if suffix.endswith(".json") else "ok\n", encoding="utf-8")
     for name, delta in [
         ("compare_bf16_vs_fullnvfp4", 0.02),
         ("compare_fp8_vs_fullnvfp4", 0.03),
@@ -77,6 +94,7 @@ for model in models:
             "ok": True,
             "rows": [{"ctx": 8185, "delta_nats_per_token": delta}],
         }
+        (row_dir / f"{name}.json").write_text(json.dumps(row[name]), encoding="utf-8")
     rows.append(row)
 
 blocker_path.write_text(
@@ -135,6 +153,33 @@ if not payload.get("ok"):
 if payload.get("findings"):
     raise SystemExit(f"unexpected findings: {payload['findings']}")
 print("PASS synthetic_complete_manifest_passes")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/copied_bundle_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+for row in payload["rows"]:
+    row["dir"] = f"/home/jethac/spark_tmp/copied-results/{pathlib.Path(row['dir']).name}"
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/copied_bundle_manifest.json" \
+  >"${TMP_DIR}/copied_bundle_audit.json"
+
+python3 - "${TMP_DIR}/copied_bundle_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+if not payload.get("ok"):
+    raise SystemExit(json.dumps(payload, indent=2, sort_keys=True))
+print("PASS copied_bundle_absolute_paths_fallback")
 PY
 
 python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/overlay_manifest.json" <<'PY'
@@ -228,4 +273,36 @@ needle = "ctx coverage [8185] does not match manifest ctx_list [512, 8185]"
 if needle not in findings:
     raise SystemExit(f"missing expected ctx coverage finding\n{findings}")
 print("PASS missing_ctx_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/missing_artifact_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+(row_dir / "fullnvfp4_provenance.log").unlink()
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/missing_artifact_manifest.json" \
+  >"${TMP_DIR}/missing_artifact_audit.json" 2>"${TMP_DIR}/missing_artifact_audit.err"; then
+  echo "FAIL missing-artifact manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/missing_artifact_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: missing fullnvfp4 artifact fullnvfp4_provenance.log"
+if needle not in findings:
+    raise SystemExit(f"missing expected artifact finding\n{findings}")
+print("PASS missing_artifact_manifest_fails")
 PY
