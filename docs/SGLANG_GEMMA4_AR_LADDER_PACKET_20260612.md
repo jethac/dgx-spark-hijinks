@@ -46,20 +46,26 @@ rows after the Ubicloud-built source-stack image.
   path. Override runs that touch blocked rows must also set
   `SGLANG_AR_LADDER_OVERRIDE_REASON`, which the runner records in preflight
   artifacts. The offline regression check for these guards is
-  `bash scripts/test_sglang_gemma4_ar_ladder_guard.sh`.
+  `bash scripts/test_sglang_gemma4_ar_ladder_guard.sh`. When editing the
+  blocker audit itself, also run
+  `bash scripts/test_sglang_gemma4_ar_blocker_audit.sh`; this directly checks
+  unchanged-known-red, diagnostic-override, and dependency-changed states.
 - To check whether the dependency state has changed enough to justify a
   diagnostic override, run
   `python3 scripts/sglang_gemma4_ar_ladder_blocker_audit.py`. A changed ref is
   not a green result; it only means the smallest matched red row is worth
   replaying with an explicit override reason and fresh package provenance.
-  Current audit:
-  `results/sglang_gemma4_ar_ladder_blocker_audit_20260614T0826JST.json`.
+  Current no-override audit:
+  `results/sglang_gemma4_ar_ladder_blocker_audit_20260614T114800JST.json`.
 - Scoped 12B replay scaffold for the mail 0140 chunked/merge question:
   `docs/SGLANG_12B_CHUNKED_MERGE_DIAGNOSTIC_PACKET_20260614.md`. It uses
   `SGLANG_AR_SERVER_EXTRA_ARGS='--chunked-prefill-size 2048'` to append
   SGLang's documented chunked-prefill knob while keeping the packaged image and
   source refs fixed. Treat any result as diagnostic-only until rerun as a
-  matched claim row.
+  matched claim row. The executed 2048-token replay is
+  `results/sglang_12b_chunked_merge_diag_20260614T112106JST/STOP_SUMMARY.md`;
+  it remained red at `+0.354864` nats/token versus the banked bf16 baseline, so
+  it does not unblock the ladder.
 
 ## Run
 
@@ -184,6 +190,7 @@ that calibration hypothesis was retracted in mail/0132. Use
 Before editing either the runner manifest contract or the claim audit, run:
 
 ```bash
+bash scripts/test_sglang_gemma4_ar_blocker_audit.sh
 bash scripts/test_sglang_gemma4_ar_claim_audit.sh
 ```
 

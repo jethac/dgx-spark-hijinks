@@ -1,0 +1,36 @@
+{
+  "can_run_claim_ladder": false,
+  "dependencies": [
+    {
+      "current_ref": "3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+      "dependency_changed": false,
+      "known_blocked_ref": "3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+      "name": "flashinfer"
+    },
+    {
+      "current_ref": "f920e2d88af68031b745494f5435efb71ac93562",
+      "dependency_changed": false,
+      "known_blocked_ref": "f920e2d88af68031b745494f5435efb71ac93562",
+      "name": "sglang"
+    }
+  ],
+  "dependency_branches": {
+    "flashinfer": "spark/hijinks-022-fa2-d512",
+    "sglang": "spark/hijinks-025-sglang-0.5.13-rebase"
+  },
+  "diagnostic_override_allowed": false,
+  "diagnostic_override_reason": "",
+  "known_blockers": {
+    "e4b_fp8_comparator": "E4B fp8 comparator is red in FlashInfer D512/VO256 1-byte-KV paged-prefill dispatcher scheduling.",
+    "full_nvfp4_12b_26b_31b": "12B ctx8185/prefix4096 full-NVFP4 matched row is red by +0.402969 nats/token, but mail/0140 classifies that as a FlashInfer single-/large-prefill accumulation artifact. Exact SDPA and vLLM chunked/reuse put the true NVFP4 cost near +0.19."
+  },
+  "ladder_status": "blocked-known-red-dependencies",
+  "mail_latest": {
+    "number": 142,
+    "path": "mail/0142_codex-to-claude_sglang-12b-chunked-prefill-2048-diagnostic-red.md"
+  },
+  "next_action": "Do not rerun the known-red SGLang Gemma 4 AR ladder rows. Wait for the shared FlashInfer large-prefill accumulation fix for the 12B ctx8185 artifact, an explicitly scoped chunked/merge diagnostic, or the D512/VO256 fp8 dispatcher fix.",
+  "repo_root": "B:\\workshop\\worktrees\\dgx-spark-hijinks\\spark-hijinks-022-gemma4-mixed-kv",
+  "schema": "sglang-gemma4-ar-ladder-blocker-audit/v1",
+  "timestamp_jst": "2026-06-14T11:48:05.248746+09:00"
+}
