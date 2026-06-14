@@ -101,6 +101,8 @@ It records:
 - server logs containing Gemma KV pool geometry lines.
 - exact row identities: `bf16` uses `kv_cache_dtype=auto`, `fp8` uses
   `fp8_e4m3`, and `fullnvfp4` uses `fp4_e2m1`;
+- exact comparison coverage: every required comparison must include the same
+  contexts as manifest `ctx_list`;
 - corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
   `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
   `max_new_tokens`, graphs disabled).

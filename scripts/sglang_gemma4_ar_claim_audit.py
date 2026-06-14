@@ -70,6 +70,19 @@ def iter_deltas(compare: dict[str, Any] | None) -> list[float]:
     return deltas
 
 
+def comparison_ctxs(compare: dict[str, Any] | None) -> list[int]:
+    if not isinstance(compare, dict):
+        return []
+    rows = compare.get("rows")
+    if not isinstance(rows, list):
+        return []
+    result = []
+    for row in rows:
+        if isinstance(row, dict) and isinstance(row.get("ctx"), int):
+            result.append(row["ctx"])
+    return result
+
+
 def audit_manifest(
     manifest_path: pathlib.Path,
     *,
@@ -103,10 +116,13 @@ def audit_manifest(
             findings.append(f"manifest missing {artifact_name} artifact")
 
     ctx_list = manifest.get("ctx_list")
+    expected_ctxs: set[int] = set()
     if not isinstance(ctx_list, list) or not ctx_list:
         findings.append("manifest ctx_list is missing or empty")
     elif not all(isinstance(value, int) and value > 0 for value in ctx_list):
         findings.append("manifest ctx_list must contain positive integers")
+    else:
+        expected_ctxs = set(ctx_list)
 
     for field in REQUIRED_POSITIVE_INT_FIELDS:
         value = manifest.get(field)
@@ -189,6 +205,12 @@ def audit_manifest(
             if not deltas:
                 model_result["findings"].append(f"{comparison_name} has no delta rows")
                 continue
+            ctxs = set(comparison_ctxs(compare))
+            if expected_ctxs and ctxs != expected_ctxs:
+                model_result["findings"].append(
+                    f"{comparison_name} ctx coverage {sorted(ctxs)} "
+                    f"does not match manifest ctx_list {sorted(expected_ctxs)}"
+                )
             max_abs_delta = max(abs(value) for value in deltas)
             model_result[f"{comparison_name}_max_abs_delta_nats"] = max_abs_delta
             if max_abs_delta > max_delta_nats:

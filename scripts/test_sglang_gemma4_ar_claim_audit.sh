@@ -198,3 +198,34 @@ if needle not in findings:
     raise SystemExit(f"missing expected dtype finding\n{findings}")
 print("PASS wrong_dtype_manifest_fails")
 PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/missing_ctx_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+payload["ctx_list"] = [512, 8185]
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/missing_ctx_manifest.json" \
+  >"${TMP_DIR}/missing_ctx_audit.json" 2>"${TMP_DIR}/missing_ctx_audit.err"; then
+  echo "FAIL missing-ctx manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/missing_ctx_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "ctx coverage [8185] does not match manifest ctx_list [512, 8185]"
+if needle not in findings:
+    raise SystemExit(f"missing expected ctx coverage finding\n{findings}")
+print("PASS missing_ctx_manifest_fails")
+PY
