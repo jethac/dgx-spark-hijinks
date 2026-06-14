@@ -100,7 +100,8 @@ It records:
 - bf16-vs-full-NVFP4 and fp8-vs-full-NVFP4 PPL comparisons;
 - server logs containing Gemma KV pool geometry lines.
 
-After a complete rerun, gate the claim with:
+The runner writes `results/<run_id>/claim_audit.json` after every manifest. For
+an explicit post-run gate or to regenerate it manually:
 
 ```bash
 python3 scripts/sglang_gemma4_ar_claim_audit.py results/<run_id>/manifest.json \
@@ -110,6 +111,8 @@ python3 scripts/sglang_gemma4_ar_claim_audit.py results/<run_id>/manifest.json \
 
 The default threshold is a conservative mechanical tripwire, not a public
 quality promise. Tighten it when the publication claim needs a stricter bar.
+Set `SGLANG_AR_CLAIM_AUDIT_STRICT=1` when a full claim-grade ladder run should
+fail the shell process if the audit is red.
 Before editing either the runner manifest contract or the claim audit, run:
 
 ```bash

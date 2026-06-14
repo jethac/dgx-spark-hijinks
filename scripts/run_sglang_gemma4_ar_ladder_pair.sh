@@ -37,6 +37,7 @@ FP4_KV_TRACE_BACKEND="${SGLANG_FP4_KV_TRACE_BACKEND:-0}"
 SOURCE_OVERLAY="${SGLANG_SOURCE_OVERLAY:-0}"
 ALLOW_KNOWN_BLOCKED="${ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER:-0}"
 OVERRIDE_REASON="${SGLANG_AR_LADDER_OVERRIDE_REASON:-}"
+CLAIM_AUDIT_STRICT="${SGLANG_AR_CLAIM_AUDIT_STRICT:-0}"
 
 contains_item() {
   local haystack="$1"
@@ -473,6 +474,7 @@ PY
   echo "ppl_timeout_s=${PPL_TIMEOUT_S}"
   echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
   echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
+  echo "sglang_ar_claim_audit_strict=${CLAIM_AUDIT_STRICT}"
   echo "blocker_audit=${OUT_DIR}/blocker_audit.json"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   git rev-parse HEAD
@@ -566,6 +568,7 @@ manifest = {
     "image_digest": "${IMAGE_DIGEST}",
     "row_labels": "${ROW_LABELS}".split(),
     "blocker_audit": str(out / "blocker_audit.json"),
+    "claim_audit": str(out / "claim_audit.json"),
     "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
     "models": models,
     "rows": rows,
@@ -573,6 +576,22 @@ manifest = {
 (out / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 print(json.dumps(manifest, indent=2, sort_keys=True))
 PY
+
+set +e
+python3 scripts/sglang_gemma4_ar_claim_audit.py \
+  "${OUT_DIR}/manifest.json" \
+  --output "${OUT_DIR}/claim_audit.json" \
+  >"${OUT_DIR}/claim_audit_stdout.log" \
+  2>"${OUT_DIR}/claim_audit_stderr.log"
+claim_audit_status=$?
+set -e
+echo "${claim_audit_status}" >"${OUT_DIR}/claim_audit_status.txt"
+if [[ "${claim_audit_status}" != "0" ]]; then
+  echo "SGLang Gemma 4 AR claim audit is not green; see ${OUT_DIR}/claim_audit.json" >&2
+  if [[ "${CLAIM_AUDIT_STRICT}" == "1" ]]; then
+    overall_status=1
+  fi
+fi
 
 docker ps >"${OUT_DIR}/docker_ps_after.txt" 2>&1 || true
 free -h >"${OUT_DIR}/free_after.txt" 2>&1 || true

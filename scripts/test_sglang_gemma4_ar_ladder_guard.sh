@@ -149,10 +149,14 @@ from pathlib import Path
 out = Path("${OUT_DIR_CAPTURE}")
 audit = json.loads((out / "blocker_audit.json").read_text(encoding="utf-8"))
 manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+claim_audit = json.loads((out / "claim_audit.json").read_text(encoding="utf-8"))
 assert audit["ladder_status"] == "blocked-known-red-dependencies"
 assert manifest["blocker_audit"].endswith("/blocker_audit.json")
+assert manifest["claim_audit"].endswith("/claim_audit.json")
+assert claim_audit["ok"] is False
+assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
 PY
-echo "PASS blocker_audit_artifacts"
+echo "PASS blocker_and_claim_audit_artifacts"
 
 OUT_DIR_E4B="${TMP}/e4b_fp8_dispatch_capture"
 mkdir -p "${OUT_DIR_E4B}"
