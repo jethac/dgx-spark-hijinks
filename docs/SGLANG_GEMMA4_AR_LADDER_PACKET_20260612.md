@@ -109,6 +109,10 @@ It records:
   image, expected KV dtype, tokenizer/model, context list, reuse-prefix length,
   logprob start, max-new-tokens, positive scored-token count, zero missing or
   mismatched tokens, and GB10 `sm_121` hardware evidence.
+- chat artifact integrity: every row's repeated `*_chat_1.json` and
+  `*_chat_2.json` artifacts must be OpenAI `chat.completion` responses for the
+  manifest model, finish with `stop`, include positive usage counts, agree with
+  each other, and contain the expected deterministic `Tokyo` answer.
 - backing artifact presence: every claim row must retain its chat, PPL,
   preflight, provenance, server, inspect, summary, and comparison JSON/log
   files. The audit accepts Spark absolute paths when run on Spark and falls

@@ -75,6 +75,7 @@ REQUIRED_POSITIVE_INT_FIELDS = [
     "context_length",
     "page_size",
 ]
+REQUIRED_CHAT_CONTENT_SUBSTRING = "tokyo"
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -147,6 +148,72 @@ def capacity_total(payload: dict[str, Any] | None) -> int | None:
         return None
     value = capacity.get("total_token_slots")
     return int(value) if isinstance(value, int) and value > 0 else None
+
+
+def chat_content(payload: dict[str, Any]) -> str | None:
+    choices = payload.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return None
+    first = choices[0]
+    if not isinstance(first, dict):
+        return None
+    message = first.get("message")
+    if not isinstance(message, dict):
+        return None
+    content = message.get("content")
+    return content if isinstance(content, str) else None
+
+
+def audit_chat_artifacts(
+    row_dir_path: pathlib.Path,
+    *,
+    label: str,
+    model: str,
+    summary: dict[str, Any],
+    findings: list[str],
+) -> None:
+    contents: list[str] = []
+    for index in (1, 2):
+        path = row_dir_path / f"{label}_chat_{index}.json"
+        try:
+            report = load_json(path)
+        except (OSError, json.JSONDecodeError):
+            findings.append(f"{label} chat_{index} artifact is unreadable")
+            continue
+        if report.get("object") != "chat.completion":
+            findings.append(f"{label} chat_{index} object is not chat.completion")
+        if report.get("model") != model:
+            findings.append(f"{label} chat_{index} model mismatch")
+        content = chat_content(report)
+        if not isinstance(content, str) or not content.strip():
+            findings.append(f"{label} chat_{index} content is missing")
+        else:
+            contents.append(content.strip())
+        choices = report.get("choices")
+        first = choices[0] if isinstance(choices, list) and choices else None
+        finish_reason = first.get("finish_reason") if isinstance(first, dict) else None
+        if finish_reason != "stop":
+            findings.append(f"{label} chat_{index} finish_reason is not stop")
+        usage = report.get("usage")
+        if not isinstance(usage, dict):
+            findings.append(f"{label} chat_{index} usage is missing")
+        else:
+            for field in ("prompt_tokens", "completion_tokens", "total_tokens"):
+                value = usage.get(field)
+                if not isinstance(value, int) or value <= 0:
+                    findings.append(f"{label} chat_{index} usage {field} must be positive")
+
+    if len(contents) == 2:
+        if contents[0] != contents[1]:
+            findings.append(f"{label} chat artifact content mismatch")
+        if REQUIRED_CHAT_CONTENT_SUBSTRING not in contents[0].casefold():
+            findings.append(
+                f"{label} chat content does not contain {REQUIRED_CHAT_CONTENT_SUBSTRING!r}"
+            )
+        for summary_key, content in (("chat_1", contents[0]), ("chat_2", contents[1])):
+            summary_value = summary.get(summary_key)
+            if isinstance(summary_value, str) and summary_value.strip() != content:
+                findings.append(f"{label} summary {summary_key} does not match chat artifact")
 
 
 def audit_ppl_report(
@@ -372,6 +439,13 @@ def audit_manifest(
                         manifest=manifest,
                         findings=model_result["findings"],
                     )
+                audit_chat_artifacts(
+                    row_dir_path,
+                    label=label,
+                    model=model,
+                    summary=payload,
+                    findings=model_result["findings"],
+                )
             if payload.get("model") != model:
                 model_result["findings"].append(f"{label} summary model mismatch")
             if payload.get("label") != label:

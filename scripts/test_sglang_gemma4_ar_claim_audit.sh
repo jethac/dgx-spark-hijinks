@@ -78,6 +78,8 @@ for model in models:
             "ppl_ok": True,
             "chat_transport_ok": True,
             "chat_content_equal": True,
+            "chat_1": "Tokyo",
+            "chat_2": "Tokyo",
             "kv_capacity": {
                 "full_tokens": capacity_total // 2,
                 "swa_tokens": capacity_total - capacity_total // 2,
@@ -146,6 +148,33 @@ for model in models:
                                     },
                                 }
                             ],
+                        }
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+            elif suffix.startswith("chat_"):
+                artifact.write_text(
+                    json.dumps(
+                        {
+                            "id": f"chatcmpl-{label}-{suffix}",
+                            "object": "chat.completion",
+                            "model": model,
+                            "choices": [
+                                {
+                                    "index": 0,
+                                    "message": {
+                                        "role": "assistant",
+                                        "content": "Tokyo",
+                                    },
+                                    "finish_reason": "stop",
+                                }
+                            ],
+                            "usage": {
+                                "prompt_tokens": 22,
+                                "completion_tokens": 2,
+                                "total_tokens": 24,
+                            },
                         }
                     )
                     + "\n",
@@ -547,4 +576,39 @@ needle = "google/gemma-4-12B-it: fp8 ppl report kv_cache_dtype is not fp8_e4m3"
 if needle not in findings:
     raise SystemExit(f"missing expected ppl finding\n{findings}")
 print("PASS bad_ppl_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_chat_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+row_dir = pathlib.Path(payload["rows"][0]["dir"])
+path = row_dir / "bf16_chat_2.json"
+report = json.loads(path.read_text(encoding="utf-8"))
+report["choices"][0]["message"]["content"] = "Kyoto"
+path.write_text(json.dumps(report), encoding="utf-8")
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_chat_manifest.json" \
+  >"${TMP_DIR}/bad_chat_audit.json" 2>"${TMP_DIR}/bad_chat_audit.err"; then
+  echo "FAIL bad-chat manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_chat_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: bf16 chat artifact content mismatch"
+if needle not in findings:
+    raise SystemExit(f"missing expected chat finding\n{findings}")
+print("PASS bad_chat_manifest_fails")
 PY
