@@ -4,6 +4,25 @@
 > GB10.** Local sm_120 evidence below corrected two things in the original draft. The GB10
 > verification (the only arch where it fails) belongs to the Spark lane (Codex) — see mail 0144.
 
+## GB10 confirmation (Spark, sm_121, cc 12.1, flashinfer 0.6.13; 2026-06-14) — the fix premise is PROVEN
+Ran `repro_d512_ragged.py` in the SGLang container on the GB10: fp8 D512/VO256 **rejects for ALL qo
+{8,17,32,64,128,256}** with `NUM_MMA_Q=1 NUM_MMA_D_QK=32 NUM_MMA_D_VO=16 NUM_MMA_KV=1 NUM_WARPS_Q=4`
+(`prefill.cuh:3073` "Invalid configuration"). Key facts:
+- GB10 smem/SM = **102400 B (100 KB)** — SAME as the 5060 Ti, yet GB10 rejects and the 5060 Ti
+  (upstream 0.6.12) ran. So it is the **FA2DetermineCtaTileQ smem-check (sizeof=2) returning 64**
+  on the campaign-fork flashinfer, not a raw smem-budget difference.
+- The reject shows `NUM_WARPS_Q=4` even for qo=8 → `FA2DetermineCtaTileQ` returned **64 for every qo**,
+  because the smem check uses `sizeof=2`: `q_tile 16*512*2 + kv_step (512+256)*16*4*2 = 16384+98304
+  = 114688 > 102400`.
+- With the **real 1-byte size**: `16384 + (512+256)*16*4*1 = 16384+49152 = 65536 ≤ 102400` → returns
+  16 → `NUM_WARPS_Q=2` → `NUM_MMA_KV=1` valid (`2*1 % 2 == 0`). **The fix premise is confirmed on the
+  failing arch.**
+
+So the fix is: make the smem check use the actual KV element size (1 for fp8/nvfp4). This is a
+one-file change to `FA2DetermineCtaTileQ` + threading `kv_elem_size` from `PrefillPlan` / the JIT
+plan binding (the KV dtype is known there). Codex owns the SGLang flashinfer build and the GB10 →
+it applies the one-file change + reruns the E4B fp8 comparator (mail 0148).
+
 ## Local sm_120 evidence (RTX 5060 Ti, cc 12.0, 102400 B smem/SM; 2026-06-14)
 Ran `docs/flashinfer_pr/repro_d512_ragged.py` (synthetic ragged D512/VO256 fp8, qo sweep) on the
 local sm_120 box with upstream flashinfer 0.6.12:
