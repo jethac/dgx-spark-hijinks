@@ -110,6 +110,11 @@ python3 scripts/sglang_gemma4_ar_claim_audit.py results/<run_id>/manifest.json \
 
 The default threshold is a conservative mechanical tripwire, not a public
 quality promise. Tighten it when the publication claim needs a stricter bar.
+Before editing either the runner manifest contract or the claim audit, run:
+
+```bash
+bash scripts/test_sglang_gemma4_ar_claim_audit.sh
+```
 
 ## Stop-On-Red
 
