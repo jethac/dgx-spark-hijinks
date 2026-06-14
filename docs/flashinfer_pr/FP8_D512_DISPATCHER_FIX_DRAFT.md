@@ -1,9 +1,30 @@
-# DRAFT (UNVERIFIED) — E4B fp8 D512/VO256 dispatcher fix (mail 0136 / 0140)
+# DRAFT — E4B fp8 D512/VO256 dispatcher fix (mail 0136 / 0140)
 
-> Status: **authored from source reading, NOT built or tested.** Must be built + verified on a
-> CC 12.x box (the E4B fp8 comparator at ctx 512 / prefix 256 must run, not reject) before it is
-> claimed or filed. Do not promote to a real PR until green. This exists to make the next box
-> session fast.
+> Status: **GB10/Spark-specific; authored + scope-corrected on local sm_120, NOT yet verified on
+> GB10.** Local sm_120 evidence below corrected two things in the original draft. The GB10
+> verification (the only arch where it fails) belongs to the Spark lane (Codex) — see mail 0144.
+
+## Local sm_120 evidence (RTX 5060 Ti, cc 12.0, 102400 B smem/SM; 2026-06-14)
+Ran `docs/flashinfer_pr/repro_d512_ragged.py` (synthetic ragged D512/VO256 fp8, qo sweep) on the
+local sm_120 box with upstream flashinfer 0.6.12:
+- **fp8 D512/VO256 dispatches OK for ALL qo {8,17,32,64,128,256}** — including qo>16 → cta_tile_q=64.
+  So **the reject is NOT a general FA2-nvfp4/fp8 bug; it is GB10/Spark (sm_121, tighter usable smem)
+  specific.** sm_120 consumer Blackwell (100 KB/SM) runs cta_tile_q=64 fp8 D512 fine.
+- **cta_tile_q=16 also dispatches OK for fp8 D512** (qo=8 → OK) → the fix direction (force 16 on the
+  tight-smem arch) is sound.
+
+## CORRECTION to the original draft fix (a regression it would have caused)
+The first draft returned `cta_tile_q=16` for 1-byte D512 *whenever 16 fits smem* — but 16 always
+fits, so it would have **forced 16 even on sm_120 where 64 works and is faster** (a perf regression).
+The fix must be **smem-conditional**: keep `cta_tile_q=64` when it yields a VALID 1-byte
+`NUM_MMA_KV` (≥2 for NUM_WARPS_Q=4) given the SM's smem; only fall to 16 when 64 is invalid (GB10).
+Concretely, replicate the dispatch's `max_num_mma_kv_smem` test for cta=64 and return 16 iff it is
+`< kMinValidMmaKV`. This needs the dispatch's `kKVSmemPerMmaKV` accounting, which must be confirmed
+against the GB10 build — do NOT hard-code a guessed step size.
+
+> Status: **authored from source reading, NOT built or tested.** Must be built + verified on
+> GB10/Spark (the E4B fp8 comparator at ctx 512 / prefix 256 must run, not reject; sm_120 must NOT
+> regress — cta_tile_q stays 64) before it is claimed or filed.
 
 ## The bug (Codex mail 0136, confirmed against source)
 For the E4B fp8 comparator, the FA2 D512/VO256 (`head_dim_qk=512, head_dim_vo=256`) 1-byte-KV
