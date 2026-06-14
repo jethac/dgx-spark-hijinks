@@ -1,8 +1,54 @@
-# The +0.40 long-context NVFP4-KV red — reproduced on vLLM, localized
+# The +0.40 long-context NVFP4-KV red — reproduced on vLLM, localized to a kernel artifact
 
-**Verdict: the +0.40 reproduces on vLLM. It is a GENERAL NVFP4 long-context attention
-issue, NOT SGLang-radix/partial-state-merge-specific. The prefix-reuse / merge path is
-exonerated.**
+**Verdict (refined by ground-truth reference): the +0.40 is a FlashInfer SINGLE-PREFILL
+online-softmax accumulation artifact, NOT the true NVFP4 cost. Exact-softmax ground truth
+and vLLM's chunked/merge path agree the true long-ctx cost is ≈ +0.19. The single-prefill
+kernel inflates it to +0.42; SGLang's +0.403 is the same inflation. Not SGLang-radix; the
+prefix-reuse/merge path is exonerated AND is the numerically correct path.**
+
+## Ground-truth disambiguation (the decisive arm)
+Exact HF eager SDPA with nvfp4-qdq K+V (no FlashInfer kernel, no tiling, no VO split), same
+12B-it model, same scored suffix [4097..8184] @ ctx 8185 (`docs/vast_anchor/refsim_longctx.py`,
+log `pfx_results/refsim_longctx_ctx8185.log`):
+
+| path | Δ (nvfp4 − bf16) |
+| --- | ---: |
+| **exact SDPA reference (ground truth)** | **+0.1932** |
+| vLLM chunked / reuse (paged+ragged merge) | +0.1906  ← matches truth |
+| vLLM single-prefill (one online-softmax pass) | +0.4215  ← inflated kernel artifact |
+| SGLang extend/merge (Codex) | +0.403   ← same inflation |
+
+Exact penalty binned by position is ~flat (+0.15–0.23/token beyond the first 1K) — it does
+**NOT** grow with context. So the serving "+0.036 @4096 → +0.42 @8185 growth" is the kernel
+inflating with KV-tile count, not the format. The true nvfp4 long-ctx cost is ~+0.19, flat.
+
+## Chunk-size sweep (confirms the kernel mechanism)
+Single 8185-token nvfp4 request, varying `max_num_batched_tokens` (the prefill chunk size),
+same scored suffix; bf16 ≈ 8.28 flat across nbt (`docs/vast_anchor/nbt_sweep.sh`):
+
+| max_num_batched_tokens | nvfp4 NLL | Δ vs bf16 |
+| ---: | ---: | ---: |
+| 4096 | 8.467 | **+0.19** (= ground truth) |
+| 6144 | 8.661 | +0.385 |
+| 8192 (single chunk) | 8.703 | +0.42 |
+
+nvfp4 error rises monotonically with prefill chunk size; the smallest chunk matches the exact
+reference. (nbt 2048 not run — model mm items need ≥2496 batched tokens.) → the inflation is
+driven by the FlashInfer per-kernel-call online-softmax accumulation over more KV/query tiles,
+not by the NVFP4 format.
+
+## Refined conclusion & fix target
+- **True NVFP4 long-ctx cost ≈ +0.19** (exact reference + chunked serving agree). It is a real
+  format cost, **not** near-lossless and **not** zero — the headline must say +0.19, not "free".
+- **The +0.40 is a FlashInfer single-/large-chunk-prefill accumulation artifact** (adds ~+0.23
+  on top of the true +0.19). vLLM's chunked-prefill default avoids it; SGLang's extend path
+  hits it (+0.403).
+- **Fix target:** the single/large-prefill online-softmax accumulation in `prefill.cuh`
+  (`update_mdo_states` o_frag rescaling / nvfp4 V dequant accumulation) — make a single large
+  prefill pass match the chunked/exact result. Stopgap for SGLang: smaller extend chunks.
+- **Goal-premise correction:** "return long-ctx nvfp4 to near-lossless" is not achievable — the
+  format floor at ctx 8185 is +0.19. The achievable fix recovers the single-prefill inflation
+  (+0.42 → +0.19), i.e. a kernel-correctness fix, not a format improvement.
 
 ## Setup
 - Box: vast.ai RTX PRO 6000 S (sm_120, 96 GB), wheel `vllm 0.1.dev1+g6adc00f70.sm120a`,

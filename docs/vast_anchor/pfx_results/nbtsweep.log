@@ -1,0 +1,16 @@
+=== ARM nbt2048_nvfp4 (kv=nvfp4 nbt=2048) ===
+    raise ValueError(
+ValueError: Chunked MM input disabled but max_tokens_per_mm_item (2496) is larger than max_num_batched_tokens (2048). Please increase max_num_batched_tokens.
+=== ARM nbt4096_nvfp4 (kv=nvfp4 nbt=4096) ===
+  }
+}
+=== ARM nbt6144_nvfp4 (kv=nvfp4 nbt=6144) ===
+  }
+}
+=== ARM nbt8192_nvfp4 (kv=nvfp4 nbt=8192) ===
+  }
+}
+=== ARM nbt2048_bf16 (kv=auto nbt=2048) ===
+    raise ValueError(
+ValueError: Chunked MM input disabled but max_tokens_per_mm_item (2496) is larger than max_num_batched_tokens (2048). Please increase max_num_batched_tokens.
+=== ARM nbt8192_bf16 (kv=auto nbt=8192) ===
