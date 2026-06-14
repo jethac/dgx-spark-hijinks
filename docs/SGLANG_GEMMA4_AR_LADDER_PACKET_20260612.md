@@ -115,6 +115,11 @@ It records:
   `attention_backend='flashinfer'`, running-model Gemma KV geometry, and the
   VO-split route marker. Full-NVFP4 rows must additionally show FP4 module
   trace markers, scale-factor tensors, and `deswizzle_macro_active=False`.
+- capacity provenance: row summaries extract `full_tokens`, `swa_tokens`,
+  per-token byte geometry, cell size, pool dtype, and pool class from the
+  running server's `SGLANG_GEMMA_KV_POOL_CONFIG` / `SGLANG_GEMMA_KV_SWAKVPOOL`
+  lines. The claim audit requires positive capacity fields and the expected
+  token-slot ordering `bf16 < fp8 < fullnvfp4` per model.
 - corpus/corpus-manifest paths and the exact shape knobs (`ctx_list`,
   `reuse_prefix_len`, `logprob_start_len`, `page_size`, `context_length`,
   `max_new_tokens`, graphs disabled).

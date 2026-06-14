@@ -59,6 +59,14 @@ REQUIRED_FULLNVFP4_SERVER_MARKERS = [
     "k_sf=",
     "v_sf=",
 ]
+REQUIRED_CAPACITY_FIELDS = [
+    "full_tokens",
+    "swa_tokens",
+    "total_token_slots",
+    "full_per_token_bytes",
+    "swa_per_token_bytes",
+    "cell_size_bytes",
+]
 REQUIRED_POSITIVE_INT_FIELDS = [
     "reuse_prefix_len",
     "logprob_start_len",
@@ -128,6 +136,16 @@ def missing_markers(path: pathlib.Path, markers: list[str]) -> list[str]:
     except OSError:
         return markers
     return [marker for marker in markers if marker not in text]
+
+
+def capacity_total(payload: dict[str, Any] | None) -> int | None:
+    if not isinstance(payload, dict):
+        return None
+    capacity = payload.get("kv_capacity")
+    if not isinstance(capacity, dict):
+        return None
+    value = capacity.get("total_token_slots")
+    return int(value) if isinstance(value, int) and value > 0 else None
 
 
 def audit_manifest(
@@ -235,6 +253,7 @@ def audit_manifest(
         if not row_dir_path or not row_dir_path.exists() or not row_dir_path.is_dir():
             model_result["findings"].append("row dir artifact is missing")
 
+        capacity_totals: dict[str, int] = {}
         for label in REQUIRED_ROWS:
             payload = row.get(label)
             if not isinstance(payload, dict):
@@ -275,6 +294,33 @@ def audit_manifest(
                 model_result["findings"].append(f"{label} chat_transport_ok is not true")
             if payload.get("chat_content_equal") is not True:
                 model_result["findings"].append(f"{label} chat content is not repeat-stable")
+            capacity = payload.get("kv_capacity")
+            if not isinstance(capacity, dict):
+                model_result["findings"].append(f"{label} missing kv_capacity")
+            else:
+                for field in REQUIRED_CAPACITY_FIELDS:
+                    value = capacity.get(field)
+                    if not isinstance(value, (int, float)) or value <= 0:
+                        model_result["findings"].append(
+                            f"{label} kv_capacity {field} must be positive"
+                        )
+                total = capacity_total(payload)
+                if total is not None:
+                    capacity_totals[label] = total
+
+        if all(label in capacity_totals for label in REQUIRED_ROWS):
+            bf16_total = capacity_totals["bf16"]
+            fp8_total = capacity_totals["fp8"]
+            fullnvfp4_total = capacity_totals["fullnvfp4"]
+            model_result["capacity_token_slots"] = capacity_totals
+            model_result["fp8_vs_bf16_capacity_ratio"] = fp8_total / bf16_total
+            model_result["fullnvfp4_vs_bf16_capacity_ratio"] = (
+                fullnvfp4_total / bf16_total
+            )
+            if not (bf16_total < fp8_total < fullnvfp4_total):
+                model_result["findings"].append(
+                    "capacity token slots must increase bf16 < fp8 < fullnvfp4"
+                )
 
         for comparison_name in REQUIRED_COMPARISONS:
             compare = row.get(comparison_name)
@@ -324,6 +370,7 @@ def audit_manifest(
         "required_provenance_markers": REQUIRED_PROVENANCE_MARKERS,
         "required_server_markers": REQUIRED_SERVER_MARKERS,
         "required_fullnvfp4_server_markers": REQUIRED_FULLNVFP4_SERVER_MARKERS,
+        "required_capacity_fields": REQUIRED_CAPACITY_FIELDS,
         "required_positive_int_fields": REQUIRED_POSITIVE_INT_FIELDS,
         "findings": findings,
         "warnings": warnings,

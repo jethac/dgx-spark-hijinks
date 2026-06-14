@@ -66,6 +66,11 @@ for model in models:
         ("fp8", "fp8_e4m3"),
         ("fullnvfp4", "fp4_e2m1"),
     ]:
+        capacity_total = {
+            "bf16": 1000,
+            "fp8": 1900,
+            "fullnvfp4": 3550,
+        }[label]
         row[label] = {
             "model": model,
             "label": label,
@@ -73,6 +78,26 @@ for model in models:
             "ppl_ok": True,
             "chat_transport_ok": True,
             "chat_content_equal": True,
+            "kv_capacity": {
+                "full_tokens": capacity_total // 2,
+                "swa_tokens": capacity_total - capacity_total // 2,
+                "total_token_slots": capacity_total,
+                "full_per_token_bytes": {
+                    "bf16": 2048,
+                    "fp8": 1024,
+                    "fullnvfp4": 576,
+                }[label],
+                "swa_per_token_bytes": {
+                    "bf16": 8192,
+                    "fp8": 4096,
+                    "fullnvfp4": 2304,
+                }[label],
+                "cell_size_bytes": {
+                    "bf16": 278528,
+                    "fp8": 139264,
+                    "fullnvfp4": 78336,
+                }[label],
+            },
         }
         for suffix in (
             "summary.json",
@@ -415,4 +440,35 @@ needle = "google/gemma-4-12B-it: bf16 provenance log missing marker 'binary_md5 
 if needle not in findings:
     raise SystemExit(f"missing expected marker finding\n{findings}")
 print("PASS missing_marker_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_capacity_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+payload["rows"][0]["fullnvfp4"]["kv_capacity"]["total_token_slots"] = 900
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_capacity_manifest.json" \
+  >"${TMP_DIR}/bad_capacity_audit.json" 2>"${TMP_DIR}/bad_capacity_audit.err"; then
+  echo "FAIL bad-capacity manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_capacity_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "google/gemma-4-12B-it: capacity token slots must increase bf16 < fp8 < fullnvfp4"
+if needle not in findings:
+    raise SystemExit(f"missing expected capacity finding\n{findings}")
+print("PASS bad_capacity_manifest_fails")
 PY

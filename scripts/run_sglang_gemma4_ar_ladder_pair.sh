@@ -453,6 +453,7 @@ PY
 
   python3 - <<PY
 import json
+import re
 from pathlib import Path
 model_dir = Path("${model_dir}")
 def load(name):
@@ -471,6 +472,51 @@ def content(payload):
         return payload["choices"][0]["message"].get("content", "")
     except Exception:
         return ""
+def parse_kv_capacity():
+    server_log = model_dir / "${label}_server.log"
+    if not server_log.exists():
+        return None
+    text = server_log.read_text(encoding="utf-8", errors="replace")
+    config_matches = re.findall(r"SGLANG_GEMMA_KV_POOL_CONFIG ([^\n]+)", text)
+    alloc_matches = re.findall(r"SGLANG_GEMMA_KV_SWAKVPOOL ([^\n]+)", text)
+    if not config_matches or not alloc_matches:
+        return None
+    def parse_fields(line):
+        result = {}
+        for key, value in re.findall(r"([A-Za-z_][A-Za-z0-9_]*)=(\S+)", line):
+            result[key] = value.rstrip(",")
+        return result
+    config = parse_fields(config_matches[-1])
+    alloc = parse_fields(alloc_matches[-1])
+    def to_int(name):
+        try:
+            return int(float(alloc[name]))
+        except Exception:
+            return None
+    def to_float(name):
+        try:
+            return float(config[name])
+        except Exception:
+            return None
+    full_tokens = to_int("full_tokens")
+    swa_tokens = to_int("swa_tokens")
+    full_per_token_bytes = to_float("full_per_token_bytes")
+    swa_per_token_bytes = to_float("swa_per_token_bytes")
+    cell_size_bytes = to_float("cell_size_bytes")
+    if full_tokens is None or swa_tokens is None:
+        return None
+    return {
+        "full_tokens": full_tokens,
+        "swa_tokens": swa_tokens,
+        "total_token_slots": full_tokens + swa_tokens,
+        "full_per_token_bytes": full_per_token_bytes,
+        "swa_per_token_bytes": swa_per_token_bytes,
+        "cell_size_bytes": cell_size_bytes,
+        "mixed_kv": config.get("mixed_kv"),
+        "dtype": alloc.get("dtype"),
+        "full_pool": alloc.get("full_pool"),
+        "swa_pool": alloc.get("swa_pool"),
+    }
 content1 = content(chat1)
 content2 = content(chat2)
 chat_transport_ok_path = model_dir / "${label}_chat_transport_ok.txt"
@@ -488,6 +534,7 @@ summary = {
     "chat_tokyo": "tokyo" in content1.lower(),
     "ppl_ok": bool(ppl.get("ok")),
     "ppl_rows": ppl.get("results") or ppl.get("rows"),
+    "kv_capacity": parse_kv_capacity(),
 }
 (model_dir / "${label}_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 PY
