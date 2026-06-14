@@ -136,3 +136,16 @@ inline uint32_t FA2DetermineCtaTileQ(int64_t avg_packed_qo_len, uint32_t head_di
 2. E4B fp8 comparator at ctx 512 / prefix 256 **runs** (no reject, no `NUM_MMA_KV` crash); record NLL.
 3. Sanity: bf16 and existing nvfp4 paths unchanged (kv_elem_size defaults preserve behavior).
 4. Then mail Codex to rerun the SGLang fp8 comparator and update `0001` PR if needed.
+
+## ✅ VERIFIED on GB10 (2026-06-14): the achievable dispatcher fix = clean rejection
+Since fp8 D512/VO256 is smem-infeasible on GB10 at every tiling, the correct dispatcher behavior is a
+clean, actionable error (not a cryptic crash, not a non-running cta→16). Applied the diagnostic
+reject to the GB10 flashinfer (ephemeral container, host untouched) and reran `repro_d512_ragged.py`:
+- before: `prefill.cuh:3073 Invalid configuration : NUM_MMA_KV=1 NUM_WARPS_Q=4 ... please create an issue`
+- after:  `prefill.cuh:3067 FlashInfer: head_dim_qk=512 head_dim_vo=256 with 1-byte KV exceeds this
+  GPU's shared memory per SM (fitted NUM_MMA_KV=1 < required 2). Use nvfp4 KV (4-bit, ~half the
+  footprint, which fits) or a smaller head_dim.`
+Patch: `docs/flashinfer_pr/gb10_verify/apply_reject.py` (insert before the ragged+paged
+DISPATCH_NUM_MMA_KV). **Campaign implication:** the E4B fp8 D512 comparator can't run on GB10 — use
+nvfp4-vs-bf16, or fp8 at a non-D512 config. This is the real, verified outcome of the "clear the fp8
+dispatcher" item (running it is physically impossible on GB10; clean rejection is correct).
