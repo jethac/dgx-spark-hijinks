@@ -73,6 +73,28 @@ Findings from `VLLM_SPARK_KV_TRACE` + an instrumented FlashInfer build on vast P
 delivered and banked; the kernel-correctness fix is localized to the FA2-nvfp4 prefill path but
 not yet pinned to the exact precision/tiling site — a focused follow-up session.
 
+### Source map of the nvfp4 prefill paths (next-session starting point)
+vLLM's FlashInfer backend has MULTIPLE prefill paths; my +0.42/+0.19 anchor's exact path is not
+yet runtime-confirmed (the instrumented stock `BatchPrefillWithPagedKVCacheDispatched` never fired,
+so it's not that one). Candidates in
+`vllm/v1/attention/backends/flashinfer.py`:
+- `BatchDCPPrefillWrapper` (L1031): a **cascade** — `_context` = `BatchPrefillWithPagedKVCacheWrapper`
+  (nvfp4 paged), `_new_tokens` = `BatchPrefillWithRaggedKVCacheWrapper` run on **fresh bf16
+  key/value**, merged by `merge_attn_states` (LSE). Recent KV is bf16 here. BUT this requires a DCP
+  group (`get_dcp_group()`), so single-GPU anchor runs likely do NOT use it.
+- `use_cascade = common_prefix_len > 0` (L2237) — a separate cascade mode for shared prefixes.
+- The FA2-nvfp4 custom entry via `get_batch_prefill_module(backend="fa2", ...)` + the
+  `_fa2_nvfp4_prefill_jit_args` (L825) two-pass VO split — the prime suspect for the monolithic
+  single path.
+- `TRTLLMPrefill` (L1417) / `trtllm_batch_context_with_kv_cache`.
+
+**Decisive next step (no kernel rebuild):** add Python-level prints in each `*.run()` path in the
+backend, run single (nbt 8192) vs chunked (nbt 4096) nvfp4, and log which path + which kernel module
+each takes. That pins whether the +0.19-vs-+0.42 split is (a) different paths (cascade/bf16-recent
+vs monolithic-nvfp4) or (b) same path different tiling — then target that kernel. Cross-runtime: if
+vLLM-chunked routes recent KV through bf16 (cascade) while SGLang reads it nvfp4, that alone
+explains Codex's 0142 (SGLang chunk-2048 stays at +0.355).
+
 ## Setup
 - Box: vast.ai RTX PRO 6000 S (sm_120, 96 GB), wheel `vllm 0.1.dev1+g6adc00f70.sm120a`,
   torch 2.12.0+cu130, FlashInfer `jethac@7d5d477b`.
