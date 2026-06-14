@@ -24,9 +24,10 @@ and `root`. Live validation is no longer blocked by host access.
   with SGLang `f920e2d88a` and FlashInfer `f99323bd`. It has a scoped E4B
   full-NVFP4 multimodal/mm-prefix baked-image green row, but **not** a broad
   Gemma 4 AR blessing. The 12B long-context full-NVFP4 red is now a shared
-  FlashInfer/numerics blocker (`+0.402969` nats/token in SGLang, reproduced by
-  Claude's vLLM discriminator in mail 0138), and the E4B fp8 comparator remains
-  a FlashInfer D512/VO256 1-byte-KV dispatcher blocker. The active run packet is
+  FlashInfer single-/large-prefill accumulation blocker: SGLang observes
+  `+0.402969` nats/token, while mail 0140's exact SDPA and vLLM chunked/reuse
+  references put the true cost near `+0.19`. The E4B fp8 comparator remains a
+  FlashInfer D512/VO256 1-byte-KV dispatcher blocker. The active run packet is
   `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`; the runner refuses
   full-NVFP4 12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row
   unless `ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1` is set after a relevant

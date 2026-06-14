@@ -21,9 +21,11 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
 - Scoped green: E4B full-NVFP4 text/image/audio mm-prefix baked-image row,
   `results/sglang_gemma4_e4b_fullnvfp4_mm_prefix_baked_20260614T072000JST/STOP_SUMMARY.md`.
 - Still red / not claim-grade: 12B long-context full-NVFP4 matched row
-  `+0.402969` nats/token, now classified by mail 0138 as a shared
-  FlashInfer/numerics blocker rather than SGLang radix/merge; E4B fp8 comparator
-  remains a FlashInfer D512/VO256 1-byte-KV dispatcher blocker.
+  `+0.402969` nats/token, now classified by mail 0140 as a FlashInfer
+  single-/large-prefill accumulation blocker rather than SGLang radix/merge;
+  exact SDPA and vLLM chunked/reuse put the true NVFP4 cost near `+0.19`.
+  E4B fp8 comparator remains a FlashInfer D512/VO256 1-byte-KV dispatcher
+  blocker.
 - Current live packet: `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`.
   `scripts/run_sglang_gemma4_ar_ladder_pair.sh` refuses full-NVFP4
   12B/26B-A4B/31B AR ladder rows and the known-blocked E4B fp8 row by default;

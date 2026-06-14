@@ -10,7 +10,9 @@
 > `docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md`. The SGLang baked
 > mm-prefix image has a scoped E4B full-NVFP4 multimodal green row, but broad
 > Gemma 4 AR claim-grade serving is still blocked by (1) the shared 12B
-> long-context full-NVFP4 `+0.40` FlashInfer/numerics red from mail 0138, and
+> long-context full-NVFP4 FlashInfer single-/large-prefill accumulation red
+> refined in mail 0140 (`+0.402969` observed on SGLang, true exact/chunked cost
+> near `+0.19`), and
 > (2) the E4B fp8 D512/VO256 1-byte-KV FlashInfer dispatcher red. Do not use
 > older Qwen/mixed-KV sections below to justify rerunning known-red Gemma 4
 > rows or chasing the retracted global-scale calibration path.
@@ -86,8 +88,9 @@ SGLang cached-prefix failure.
 Historical note: at this point in the Qwen investigation, the leading live SGLang bug was
 the cached-prefix paged read / scale-feed convention handed to FlashInfer, or the FP4-K
 attention behavior reached by that path. That is no longer the active Gemma 4 ship-gate
-diagnosis; mail 0138 classifies the 12B long-context red as shared FlashInfer/numerics,
-not SGLang radix/merge.
+diagnosis; mail 0140 refines the 12B long-context red as a FlashInfer single-/large-prefill
+accumulation artifact, with exact SDPA and vLLM chunked/reuse putting the true cost near
+`+0.19`. It is not an SGLang radix/merge target.
 
 ## 2026-06-10 update — vLLM proves FP4-K reuse; keep full-NVFP4 open
 
