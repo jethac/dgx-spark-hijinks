@@ -1,0 +1,5 @@
+label	chunk	radix	status	run_id
+c1024_radixon	1024	on	0	sglang_12b_recovery_c1024_radixon_20260614T124138JST
+c1024_radixoff	1024	off	0	sglang_12b_recovery_c1024_radixoff_20260614T124138JST
+c512_radixon	512	on	0	sglang_12b_recovery_c512_radixon_20260614T124138JST
+c512_radixoff	512	off	0	sglang_12b_recovery_c512_radixoff_20260614T124138JST

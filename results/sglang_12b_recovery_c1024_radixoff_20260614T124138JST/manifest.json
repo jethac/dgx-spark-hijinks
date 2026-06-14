@@ -1,0 +1,68 @@
+{
+  "allow_retracted_global_scale_diagnostic": false,
+  "blocker_audit": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/blocker_audit.json",
+  "claim_audit": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/claim_audit.json",
+  "context_length": 8192,
+  "corpus": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/ppl_corpus.md",
+  "corpus_manifest": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/ppl_corpus_manifest.json",
+  "ctx_list": [
+    8185
+  ],
+  "graphs": "disabled",
+  "image": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714",
+  "image_digest": "ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714",
+  "logprob_start_len": 4096,
+  "max_new_tokens": 1,
+  "mem_fraction_static": "0.72",
+  "models": [
+    "google/gemma-4-12B-it"
+  ],
+  "page_size": 1,
+  "reuse_prefix_len": 4096,
+  "row_labels": [
+    "fullnvfp4"
+  ],
+  "rows": [
+    {
+      "bf16": null,
+      "compare_bf16_vs_fullnvfp4": null,
+      "compare_bf16_vs_mixedkv": null,
+      "compare_fp8_vs_fullnvfp4": null,
+      "dir": "/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/google-gemma-4-12b-it",
+      "fp8": null,
+      "fullnvfp4": {
+        "chat_1": "Tokyo",
+        "chat_2": "Tokyo",
+        "chat_bitwise_equal": false,
+        "chat_content_equal": true,
+        "chat_tokyo": true,
+        "chat_transport_ok": true,
+        "kv_cache_dtype": "fp4_e2m1",
+        "kv_capacity": {
+          "cell_size_bytes": 78336.0,
+          "dtype": "torch.float4_e2m1fn_x2",
+          "full_per_token_bytes": 576.0,
+          "full_pool": "MHATokenToKVPoolFP4",
+          "full_tokens": 766452,
+          "mixed_kv": "False",
+          "swa_per_token_bytes": 2304.0,
+          "swa_pool": "MHATokenToKVPoolFP4",
+          "swa_tokens": 613161,
+          "total_token_slots": 1379613
+        },
+        "label": "fullnvfp4",
+        "mixed_kv": false,
+        "model": "google/gemma-4-12B-it",
+        "ppl_ok": true,
+        "ppl_rows": null
+      },
+      "mixedkv": null,
+      "model": "google/gemma-4-12B-it"
+    }
+  ],
+  "run_id": "sglang_12b_recovery_c1024_radixoff_20260614T124138JST",
+  "schema": "sglang-gemma4-ar-ladder-pair/v1",
+  "scope": "SGLang Gemma 4 AR ladder; selected row labels from ROW_LABELS; graphs disabled; one server at a time",
+  "server_extra_args": "--chunked-prefill-size 1024 --disable-radix-cache",
+  "source_overlay": false
+}

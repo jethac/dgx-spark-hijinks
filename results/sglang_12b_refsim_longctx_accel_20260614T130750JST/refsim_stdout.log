@@ -1,0 +1,24 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.0.2
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+model=google/gemma-4-12b-it ctx=8185 score_suffix=[4097..8184] (4088 tokens)
+SUFFIX  bf16=8.3357  nvfp4=9.0306  DELTA=+0.6949
+position-bin   bf16     nvfp4    delta
+[    0,  512)  7.8158  8.6990  +0.8832
+[  512, 1024)  6.7672  7.2117  +0.4445
+[ 1024, 2048)  7.8000  8.4055  +0.6056
+[ 2048, 4096)  8.3779  9.0467  +0.6687
+[ 4096, 6144)  8.8602  9.5165  +0.6563
+[ 6144, 8184)  7.8091  8.5428  +0.7337

@@ -1,0 +1,26 @@
+run_id=sglang_12b_recovery_c1024_radixoff_20260614T124138JST
+repo_root=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+models=google/gemma-4-12B-it
+row_labels=fullnvfp4
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+ctx_list=8185
+chat_timeout_s=180
+request_timeout_s=1800
+ppl_timeout_s=1800
+allow_known_blocked_sglang_ar_ladder=1
+sglang_ar_ladder_override_reason=mail 0143 scoped SGLang recovery curve diagnostic; chunk=1024; radix=off; fullnvfp4 single-arm; not claim-grade
+sglang_ar_server_extra_args=--chunked-prefill-size 1024 --disable-radix-cache
+sglang_allow_retracted_global_scale_diagnostic=0
+sglang_ar_claim_audit_strict=0
+sglang_ar_claim_audit_max_delta_nats=0.25
+blocker_audit=/home/jethac/spark_tmp/dgx-spark-hijinks-sglang-recovery-20260614T1239JST/results/sglang_12b_recovery_c1024_radixoff_20260614T124138JST/blocker_audit.json
+started_at=2026-06-14T12:46:47+09:00
+6fad98dedd976354887e64caa55d7069fd855266
+["ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714"]
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.4Gi        94Gi        21Mi        21Gi       115Gi
+Swap:           15Gi       551Mi        15Gi

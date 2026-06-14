@@ -1,0 +1,24 @@
+run_id=sglang_12b_recovery_c1024_radixon_20260614T124138JST
+model=google/gemma-4-12B-it
+label=fullnvfp4
+kv_cache_dtype=fp4_e2m1
+mixed_kv=0
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+sglang_source_overlay=0
+sglang_fp4_kv_global_scale_multiplier=
+sglang_fp4_kv_k_global_scale_multiplier=
+sglang_fp4_kv_v_global_scale_multiplier=
+sglang_fp4_kv_trace_global_scale=
+sglang_fp4_kv_trace_sf_saturation=
+sglang_fp4_kv_trace_layers=
+allow_known_blocked_sglang_ar_ladder=1
+sglang_ar_ladder_override_reason=mail 0143 scoped SGLang recovery curve diagnostic; chunk=1024; radix=on; fullnvfp4 single-arm; not claim-grade
+sglang_ar_server_extra_args=--chunked-prefill-size 1024
+started_at=2026-06-14T12:41:39+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       4.1Gi        96Gi        21Mi        20Gi       115Gi
+Swap:           15Gi       552Mi        15Gi
