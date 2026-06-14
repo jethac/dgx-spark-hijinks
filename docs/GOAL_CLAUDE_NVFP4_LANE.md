@@ -1,24 +1,35 @@
 # Goal — Claude (vLLM + FlashInfer lane)
 
-**Mission:** close the last NVFP4-KV quality blocker from the vLLM/FlashInfer side, and deliver
-the FlashInfer pieces the SGLang lane needs. Coordinate tightly with Codex (SGLang lane) via mail.
+**Mission (phase 2 — localize & fix):** the +0.40 is reproduced and the lane is decided
+(mail 0138). Now LOCALIZE the long-context NVFP4 accumulation mechanism and SHIP a FlashInfer-side
+fix, plus the remaining FlashInfer pieces the SGLang lane needs. Coordinate with Codex via mail.
 
 ## Context (what's already settled — don't re-derive)
 - NVFP4 KV **format/default is near-lossless** across text + image + audio, confirmed e2e on vLLM
   (base 12B default +0.0073, -it +0.032 @ ctx 4096) and reference sim. Capacity 3.5556× exact.
-- The **global-scale "≈2× too small" root cause was WRONG and is retracted** (mail 0132).
-  `--calculate-kv-scales` *breaks* nvfp4 (NLL 16.5) — never enable it. Codex's scale-multiplier
-  only nudged the red +0.403 → +0.344 (partial, not a fix).
-- mm-prefix nvfp4 serves on vLLM via `VLLM_FLASHINFER_MM_PREFIX=1` (a flag, not a wheel limit).
-- Full state: `docs/NVFP4_FORMAT_VS_KERNEL_GEMMA4.md`. Serving runbook: `docs/vast_anchor/SM120_NUMERICS_PLAN.md §5`.
+- **The +0.40 is REPRODUCED on vLLM and lane-decided** (`docs/NVFP4_LONGCTX_REPRO_VLLM.md`,
+  mail 0138): single-prefill long-ctx +0.4215, chunked/reuse merge +0.1906, ctx-4096 +0.0359.
+  → **general nvfp4 long-context accumulation, NOT SGLang-radix.** Radix/partial-state-merge is
+  EXONERATED (it is the *better* path). VO-split is not a fixed tax. Global-scale retracted (0132);
+  `--calculate-kv-scales` *breaks* nvfp4 — never enable it.
+- mm-prefix nvfp4 serves on vLLM via `VLLM_FLASHINFER_MM_PREFIX=1`. Codex landed the SGLang-side
+  FlashInfer image-prefix mask (mail 0137, source-overlay green).
+- Repro env gotchas: full-vocab prompt_logprobs spikes ~8 GiB → `--gpu-memory-utilization 0.5`;
+  12B nvfp4 needs BOTH `VLLM_NVFP4_KV_VOSPLIT=1` and `VLLM_NVFP4_KV_LINEAR_V_SF=1` (else Triton
+  fallback rejects nvfp4). Full state: `docs/NVFP4_FORMAT_VS_KERNEL_GEMMA4.md`.
 
 ## Tasks (priority order)
-1. **Root-cause the +0.40 long-context red — the one remaining blocker.** It does NOT reproduce
-   at ctx 4096 (near-lossless). Reproduce on vLLM at **ctx 8185 + 4096-prefix-reuse** vs
-   ctx-4096-no-prefix; sweep prefix length. Decide: **does it reproduce on vLLM (general bug) or
-   is vLLM clean (SGLang-radix/partial-state-merge specific)?** Then localize the mechanism
-   (FP4-K partial-state-merge / long-ctx accumulation) and the fix. **TEST the real serving path
-   before concluding — that is the whole lesson of the 0130 retraction.**
+1. **Localize & fix the long-context NVFP4 accumulation.** The lever: single-pass online-softmax
+   over all KV (+0.4215) is worse than chunked partial-state renormalization (+0.1906). Find why
+   the single-prefill path accumulates NVFP4 dequant noise worse (LSE / unnormalized sum / running
+   max), and ship a FlashInfer-side change that brings long-ctx nvfp4 back toward near-lossless.
+   Confirm on the real serving path at ctx 8185 (the 0130 lesson). **Also re-check whether the
+   campaign's "12B intrinsically +0.39" headline (Task #25) is just this long-ctx effect** before
+   it ships in the blog — 12B is near-lossless at ctx 4096.
+2. **E4B fp8 D512/VO256 dispatcher (mail 0136).** My current patch *rejects* this shape; the real
+   fix is to bias `CTA_TILE_Q→16` (→ `NUM_WARPS_Q=2`, making `NUM_MMA_KV=1` valid, q-tile smem
+   65536→16384) for 1-byte-KV D512 on tight-smem archs, instead of rejecting. Build + test, then
+   tell Codex so it can rerun the fp8 comparator.
 2. **FlashInfer mm-prefix bidirectional masking (Task #31).** SGLang's image path falls back to
    causal (`Bidirectional attention for image tokens requires TritonAttnBackend`). Make the
    FlashInfer bidirectional mm-prefix support usable on SGLang's FlashInfer path; deliver the
