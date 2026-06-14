@@ -305,6 +305,7 @@ run_one() {
     echo "sglang_fp4_kv_global_scale_policy=${SGLANG_FP4_KV_GLOBAL_SCALE_POLICY:-}"
     echo "sglang_fp4_kv_k_global_scale_policy=${SGLANG_FP4_KV_K_GLOBAL_SCALE_POLICY:-}"
     echo "sglang_fp4_kv_v_global_scale_policy=${SGLANG_FP4_KV_V_GLOBAL_SCALE_POLICY:-}"
+    echo "sglang_nvfp4_kv_calib=${SGLANG_NVFP4_KV_CALIB:-}"
     echo "sglang_fp4_kv_fixed_global_scale=${SGLANG_FP4_KV_FIXED_GLOBAL_SCALE:-}"
     echo "sglang_fp4_kv_k_fixed_global_scale=${SGLANG_FP4_KV_K_FIXED_GLOBAL_SCALE:-}"
     echo "sglang_fp4_kv_v_fixed_global_scale=${SGLANG_FP4_KV_V_FIXED_GLOBAL_SCALE:-}"
@@ -341,6 +342,7 @@ run_one() {
     -e SGLANG_FP4_KV_GLOBAL_SCALE_POLICY="${SGLANG_FP4_KV_GLOBAL_SCALE_POLICY:-}" \
     -e SGLANG_FP4_KV_K_GLOBAL_SCALE_POLICY="${SGLANG_FP4_KV_K_GLOBAL_SCALE_POLICY:-}" \
     -e SGLANG_FP4_KV_V_GLOBAL_SCALE_POLICY="${SGLANG_FP4_KV_V_GLOBAL_SCALE_POLICY:-}" \
+    -e SGLANG_NVFP4_KV_CALIB="${SGLANG_NVFP4_KV_CALIB:-}" \
     -e SGLANG_FP4_KV_FIXED_GLOBAL_SCALE="${SGLANG_FP4_KV_FIXED_GLOBAL_SCALE:-}" \
     -e SGLANG_FP4_KV_K_FIXED_GLOBAL_SCALE="${SGLANG_FP4_KV_K_FIXED_GLOBAL_SCALE:-}" \
     -e SGLANG_FP4_KV_V_FIXED_GLOBAL_SCALE="${SGLANG_FP4_KV_V_FIXED_GLOBAL_SCALE:-}" \
