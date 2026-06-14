@@ -53,4 +53,5 @@ Interpretation: `--chunked-prefill-size 2048` improves the known-red 12B row mod
 
 - `blocker_audit.json` still records the known blocked FlashInfer/SGLang dependency refs, as expected.
 - `claim_audit.json` is not green because this run intentionally excludes the full bf16/fp8/full-NVFP4 matched ladder and only executes one full-NVFP4 diagnostic arm.
+- Provenance caveat: this run predates commit `e36578a2af8450f0e0bdc058fb3e31214a1121ba`, which fixed the runner to pass `SGLANG_AR_LADDER_OVERRIDE_REASON` into `sglang_gemma4_ar_ladder_blocker_audit.py`. Therefore this artifact's `blocker_audit.json` incorrectly records `diagnostic_override_allowed=false` even though the run preflight records `allow_known_blocked_sglang_ar_ladder=1` and the explicit diagnostic override reason. The raw JSON is left unchanged; future diagnostic replays should record the override directly in `blocker_audit.json`.
 - The packaged image does not expose Git metadata under `/work/third_party/{sglang,flashinfer}`, so the claim audit also reports source-ref provenance as unavailable. This does not affect the diagnostic NLL result, but it is another reason this artifact is not claim-grade.
