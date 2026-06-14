@@ -65,6 +65,8 @@ When editing the poll logic, run:
 bash scripts/test_sglang_lane_state_poll.sh
 ```
 
+Latest requirement audit: `results/sglang_goal_completion_audit_20260614T1057JST.md`.
+
 ## Discipline (campaign rules)
 Every claim an artifact, every red a verbatim error, every binary its provenance. Don't conclude a
 root cause without serving the real path. Stop point = clean tree + pushed summary, marker absent.
