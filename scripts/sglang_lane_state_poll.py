@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import hashlib
 import json
 import pathlib
 import re
@@ -24,13 +25,20 @@ KNOWN_BLOCKED_FLASHINFER_REF = "3fa0775cafaf88da5e0fc3b987afa6bd75d9510c"
 KNOWN_BLOCKED_SGLANG_REF = "f920e2d88af68031b745494f5435efb71ac93562"
 FLASHINFER_BRANCH = "spark/hijinks-022-fa2-d512"
 SGLANG_BRANCH = "spark/hijinks-025-sglang-0.5.13-rebase"
+COORDINATION_DOCS = [
+    "docs/GOAL_CODEX_SGLANG_LANE.md",
+    "docs/GOAL_CLAUDE_NVFP4_LANE.md",
+    "docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md",
+    "docs/SHIP_GATE_SGLANG_GEMMA4_LADDER_PLAN.md",
+]
 
 
 def run_git(repo_root: pathlib.Path, args: list[str], *, check: bool = True) -> str:
     proc = subprocess.run(
         ["git", *args],
         cwd=str(repo_root),
-        text=True,
+        encoding="utf-8",
+        errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         check=False,
@@ -131,6 +139,87 @@ def git_status_short(repo_root: pathlib.Path) -> str:
         return f"unavailable: {exc}"
 
 
+def git_ref(repo_root: pathlib.Path, ref: str) -> str | None:
+    try:
+        value = run_git(repo_root, ["rev-parse", "--verify", ref], check=False)
+    except OSError:
+        return None
+    return value if re.fullmatch(r"[0-9a-f]{40}", value) else None
+
+
+def git_is_ancestor(repo_root: pathlib.Path, ancestor: str, descendant: str) -> bool | None:
+    proc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=str(repo_root),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if proc.returncode == 0:
+        return True
+    if proc.returncode == 1:
+        return False
+    return None
+
+
+def git_relation(repo_root: pathlib.Path, local_head: str | None, remote_head: str | None) -> dict[str, Any]:
+    if local_head is None or remote_head is None:
+        return {
+            "head": local_head,
+            "origin_epoch2": remote_head,
+            "local_matches_origin_epoch2": None,
+            "local_contains_origin_epoch2": None,
+            "origin_epoch2_contains_local": None,
+            "relation": "unavailable",
+        }
+    local_contains_remote = git_is_ancestor(repo_root, remote_head, local_head)
+    remote_contains_local = git_is_ancestor(repo_root, local_head, remote_head)
+    if local_head == remote_head:
+        relation = "equal"
+    elif local_contains_remote is True and remote_contains_local is False:
+        relation = "ahead"
+    elif local_contains_remote is False and remote_contains_local is True:
+        relation = "behind"
+    elif local_contains_remote is False and remote_contains_local is False:
+        relation = "diverged"
+    else:
+        relation = "unavailable"
+    return {
+        "head": local_head,
+        "origin_epoch2": remote_head,
+        "local_matches_origin_epoch2": local_head == remote_head,
+        "local_contains_origin_epoch2": local_contains_remote,
+        "origin_epoch2_contains_local": remote_contains_local,
+        "relation": relation,
+    }
+
+
+def coordination_doc_state(repo_root: pathlib.Path) -> list[dict[str, Any]]:
+    docs: list[dict[str, Any]] = []
+    for rel_path in COORDINATION_DOCS:
+        path = repo_root / rel_path
+        entry: dict[str, Any] = {
+            "path": rel_path,
+            "exists": path.exists(),
+        }
+        if path.exists():
+            data = path.read_bytes()
+            entry["sha256"] = hashlib.sha256(data).hexdigest()
+            entry["bytes"] = len(data)
+            entry["last_commit"] = run_git(
+                repo_root,
+                ["log", "-1", "--format=%H", "--", rel_path],
+                check=False,
+            ) or None
+            entry["last_subject"] = run_git(
+                repo_root,
+                ["log", "-1", "--format=%s", "--", rel_path],
+                check=False,
+            ) or None
+        docs.append(entry)
+    return docs
+
+
 def audit(
     repo_root: pathlib.Path,
     *,
@@ -140,8 +229,8 @@ def audit(
 ) -> dict[str, Any]:
     local_paths = local_mail_paths(repo_root)
     epoch2_paths = mail_paths_in_tree(repo_root, "origin/epoch2")
-    refs = origin_refs(repo_root) if scan_all_origin_mail else ["origin/epoch2"]
-    remote_by_ref = remote_mail_by_ref(repo_root, refs)
+    scanned_refs = origin_refs(repo_root) if scan_all_origin_mail else ["origin/epoch2"]
+    remote_by_ref = remote_mail_by_ref(repo_root, scanned_refs)
     all_remote_paths = sorted({path for paths in remote_by_ref.values() for path in paths})
 
     local_latest = latest_mail(local_paths)
@@ -164,8 +253,17 @@ def audit(
         dependency_state("sglang", sglang_ref, KNOWN_BLOCKED_SGLANG_REF),
     ]
     dependency_changed = any(item["dependency_changed"] for item in dependencies)
+    local_head = git_ref(repo_root, "HEAD")
+    origin_epoch2_head = git_ref(repo_root, "origin/epoch2")
+    git_refs = git_relation(repo_root, local_head, origin_epoch2_head)
 
-    if new_remote_mail:
+    if git_refs["relation"] in {"behind", "diverged"}:
+        next_action = (
+            "Inspect and fast-forward/rebase to origin/epoch2 before running anything; "
+            "coordination docs or mail may have changed."
+        )
+        lane_status = "repo-not-at-origin-epoch2"
+    elif new_remote_mail:
         next_action = "Read and merge/fetch the newer remote mail before running anything."
         lane_status = "new-remote-mail"
     elif dependency_changed:
@@ -187,13 +285,15 @@ def audit(
         "timestamp_jst": now.isoformat(),
         "repo_root": str(repo_root),
         "git_status_short": git_status_short(repo_root),
+        "git_refs": git_refs,
+        "coordination_docs": coordination_doc_state(repo_root),
         "mail": {
             "local_latest": local_latest,
             "remote_epoch2_latest": remote_epoch2_latest,
             "remote_any_latest": remote_any_latest,
             "remote_claude_latest": remote_claude_latest,
             "new_remote_mail": new_remote_mail,
-            "remote_refs_scanned": refs,
+            "remote_refs_scanned": scanned_refs,
         },
         "dependency_branches": {
             "flashinfer": FLASHINFER_BRANCH,

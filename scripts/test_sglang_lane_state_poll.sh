@@ -24,9 +24,20 @@ import sys
 
 payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
 assert payload["lane_status"] == "blocked-known-red-dependencies", payload
+assert payload["git_refs"]["relation"] in ("equal", "ahead", "unavailable"), payload["git_refs"]
+assert payload["git_refs"]["local_contains_origin_epoch2"] in (True, None), payload["git_refs"]
 assert payload["mail"]["new_remote_mail"] is False, payload["mail"]
 assert payload["mail"]["remote_refs_scanned"] == ["origin/epoch2"], payload["mail"]
 assert all(not item["dependency_changed"] for item in payload["dependencies"]), payload
+docs = {item["path"]: item for item in payload["coordination_docs"]}
+for expected in (
+    "docs/GOAL_CODEX_SGLANG_LANE.md",
+    "docs/GOAL_CLAUDE_NVFP4_LANE.md",
+    "docs/SGLANG_GEMMA4_AR_LADDER_PACKET_20260612.md",
+    "docs/SHIP_GATE_SGLANG_GEMMA4_LADDER_PLAN.md",
+):
+    assert docs[expected]["exists"] is True, docs
+    assert len(docs[expected]["sha256"]) == 64, docs[expected]
 print("PASS known_blocked_state")
 PY
 
