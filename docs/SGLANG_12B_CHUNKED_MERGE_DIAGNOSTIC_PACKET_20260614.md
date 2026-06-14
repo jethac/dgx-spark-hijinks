@@ -95,6 +95,17 @@ Stop immediately and commit artifacts if any of these happen:
 - If it exposes a new FlashInfer/vLLM-facing red, mail Claude with the verbatim
   error and keep the SGLang ladder blocked.
 
+## Executed Result
+
+Run: `results/sglang_12b_chunked_merge_diag_20260614T112106JST/STOP_SUMMARY.md`
+
+The server reached readiness, both chat smokes returned `Tokyo`, and the
+supplied-token PPL probe succeeded with `cached_tokens=4096`. The row landed at
+mean NLL `4.926853552137`, or `+0.354863729534` nats/token against the banked
+bf16 baseline. This improves the old full-NVFP4 red by `0.048105486504`
+nats/token, but it does not approach the mail 0140 reference cost of about
+`+0.19`. Treat it as diagnostic red; it does not unblock the claim ladder.
+
 ## Required Artifact Notes
 
 The stop summary must include:

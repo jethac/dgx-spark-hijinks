@@ -1,0 +1,26 @@
+{
+  "chat_1": "Tokyo",
+  "chat_2": "Tokyo",
+  "chat_bitwise_equal": false,
+  "chat_content_equal": true,
+  "chat_tokyo": true,
+  "chat_transport_ok": true,
+  "kv_cache_dtype": "fp4_e2m1",
+  "kv_capacity": {
+    "cell_size_bytes": 78336.0,
+    "dtype": "torch.float4_e2m1fn_x2",
+    "full_per_token_bytes": 576.0,
+    "full_pool": "MHATokenToKVPoolFP4",
+    "full_tokens": 767030,
+    "mixed_kv": "False",
+    "swa_per_token_bytes": 2304.0,
+    "swa_pool": "MHATokenToKVPoolFP4",
+    "swa_tokens": 613624,
+    "total_token_slots": 1380654
+  },
+  "label": "fullnvfp4",
+  "mixed_kv": false,
+  "model": "google/gemma-4-12B-it",
+  "ppl_ok": true,
+  "ppl_rows": null
+}
