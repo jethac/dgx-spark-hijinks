@@ -38,6 +38,7 @@ SOURCE_OVERLAY="${SGLANG_SOURCE_OVERLAY:-0}"
 ALLOW_KNOWN_BLOCKED="${ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER:-0}"
 OVERRIDE_REASON="${SGLANG_AR_LADDER_OVERRIDE_REASON:-}"
 CLAIM_AUDIT_STRICT="${SGLANG_AR_CLAIM_AUDIT_STRICT:-0}"
+CLAIM_AUDIT_MAX_DELTA_NATS="${SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS:-0.25}"
 
 contains_item() {
   local haystack="$1"
@@ -475,6 +476,7 @@ PY
   echo "allow_known_blocked_sglang_ar_ladder=${ALLOW_KNOWN_BLOCKED}"
   echo "sglang_ar_ladder_override_reason=${OVERRIDE_REASON}"
   echo "sglang_ar_claim_audit_strict=${CLAIM_AUDIT_STRICT}"
+  echo "sglang_ar_claim_audit_max_delta_nats=${CLAIM_AUDIT_MAX_DELTA_NATS}"
   echo "blocker_audit=${OUT_DIR}/blocker_audit.json"
   echo "started_at=$(TZ=Asia/Tokyo date -Is)"
   git rev-parse HEAD
@@ -580,6 +582,7 @@ PY
 set +e
 python3 scripts/sglang_gemma4_ar_claim_audit.py \
   "${OUT_DIR}/manifest.json" \
+  --max-delta-nats "${CLAIM_AUDIT_MAX_DELTA_NATS}" \
   --output "${OUT_DIR}/claim_audit.json" \
   >"${OUT_DIR}/claim_audit_stdout.log" \
   2>"${OUT_DIR}/claim_audit_stderr.log"

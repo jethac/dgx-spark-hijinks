@@ -165,6 +165,7 @@ run_case "strict_claim_audit_red_fails" 1 "SGLang Gemma 4 AR claim audit is not 
     ALLOW_KNOWN_BLOCKED_SGLANG_AR_LADDER=1 \
     SGLANG_AR_LADDER_OVERRIDE_REASON="test dependency change" \
     SGLANG_AR_CLAIM_AUDIT_STRICT=1 \
+    SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS=0.125 \
     FAKE_DOCKER_EMPTY=1 \
     OUT_DIR="${OUT_DIR_STRICT}" \
     RUN_ID="test_claim_audit_strict_capture" \
@@ -180,6 +181,7 @@ claim_audit = json.loads((out / "claim_audit.json").read_text(encoding="utf-8"))
 status = (out / "claim_audit_status.txt").read_text(encoding="utf-8").strip()
 assert status == "1"
 assert claim_audit["ok"] is False
+assert claim_audit["max_delta_nats"] == 0.125
 assert "google/gemma-4-12B-it: missing model row" in claim_audit["findings"]
 PY
 echo "PASS strict_claim_audit_artifacts"

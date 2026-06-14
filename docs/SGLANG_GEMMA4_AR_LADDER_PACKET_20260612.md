@@ -110,7 +110,8 @@ python3 scripts/sglang_gemma4_ar_claim_audit.py results/<run_id>/manifest.json \
 ```
 
 The default threshold is a conservative mechanical tripwire, not a public
-quality promise. Tighten it when the publication claim needs a stricter bar.
+quality promise. Tighten it with `SGLANG_AR_CLAIM_AUDIT_MAX_DELTA_NATS=<n>`
+when the publication claim needs a stricter bar.
 Set `SGLANG_AR_CLAIM_AUDIT_STRICT=1` when a full claim-grade ladder run should
 fail the shell process if the audit is red.
 Before editing either the runner manifest contract or the claim audit, run:
