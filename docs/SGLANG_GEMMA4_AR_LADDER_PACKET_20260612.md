@@ -92,7 +92,11 @@ It records:
 - `blocker_audit.json`, which captures the FlashInfer/SGLang dependency refs
   used to justify the run or diagnostic override. Claim audit hard-fails
   `blocked-known-red-dependencies`; dependency-changed reruns can be audited,
-  but unchanged known-red refs cannot become claim-grade by filling in row JSON;
+  but unchanged known-red refs cannot become claim-grade by filling in row JSON.
+  The blocker audit must use schema
+  `sglang-gemma4-ar-ladder-blocker-audit/v1`, include full git SHAs for both
+  FlashInfer and SGLang, and record at least one changed dependency before a
+  rerun can be considered claim-auditable;
 - `fp8_dispatch_audit.json` for `google/gemma-4-E4B-it` fp8 rows, when logs
   are available, to classify the known D512/VO256 `NUM_MMA_KV=1` dispatcher
   red automatically;
@@ -129,7 +133,9 @@ It records:
   expected `--kv-cache-dtype` argument for the row.
 - provenance markers: every claim row's provenance/server logs must include
   package versions, `binary_md5 sgl_kernel`, resolved FlashInfer source paths,
-  `attention_backend='flashinfer'`, running-model Gemma KV geometry, and the
+  source git refs for `/work/third_party/sglang` and
+  `/work/third_party/flashinfer`, `attention_backend='flashinfer'`,
+  running-model Gemma KV geometry, and the
   VO-split route marker. Full-NVFP4 rows must additionally show FP4 module
   trace markers, scale-factor tensors, and `deswizzle_macro_active=False`.
 - capacity provenance: row summaries extract `full_tokens`, `swa_tokens`,

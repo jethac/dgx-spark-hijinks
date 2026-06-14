@@ -45,6 +45,8 @@ REQUIRED_PROVENANCE_MARKERS = [
     "flashinfer_data ",
     "flashinfer_csrc ",
     "flashinfer_include ",
+    "source_git_rev /work/third_party/sglang ",
+    "source_git_rev /work/third_party/flashinfer ",
 ]
 REQUIRED_SERVER_MARKERS = [
     "server_args=ServerArgs",
@@ -92,6 +94,8 @@ REQUIRED_CONTAINER_CUDA_FLAG_MARKERS = [
     "compute_121a",
     "sm_121a",
 ]
+REQUIRED_DEPENDENCY_NAMES = {"flashinfer", "sglang"}
+REQUIRED_DEPENDENCY_REF_LENGTH = 40
 
 
 def load_json(path: pathlib.Path) -> dict[str, Any]:
@@ -214,6 +218,60 @@ def audit_run_preflight(
                     findings.append(f"run preflight {field} must be positive")
             except ValueError:
                 findings.append(f"run preflight {field} must be an integer")
+
+
+def audit_blocker_audit(payload: dict[str, Any], findings: list[str]) -> None:
+    if payload.get("schema") != "sglang-gemma4-ar-ladder-blocker-audit/v1":
+        findings.append("blocker_audit schema mismatch")
+    if payload.get("can_run_claim_ladder") is not False:
+        findings.append("blocker_audit can_run_claim_ladder must be false")
+
+    status = payload.get("ladder_status")
+    if status == "blocked-known-red-dependencies":
+        findings.append("blocker_audit still records known-blocked dependency refs")
+    elif status != "dependency-changed-review-before-rerun":
+        findings.append("blocker_audit ladder_status is not dependency-changed-review-before-rerun")
+
+    branches = payload.get("dependency_branches")
+    if not isinstance(branches, dict) or set(branches) != REQUIRED_DEPENDENCY_NAMES:
+        findings.append("blocker_audit dependency_branches must include flashinfer and sglang")
+
+    dependencies = payload.get("dependencies")
+    if not isinstance(dependencies, list):
+        findings.append("blocker_audit dependencies is not a list")
+        return
+    by_name = {
+        item.get("name"): item
+        for item in dependencies
+        if isinstance(item, dict) and isinstance(item.get("name"), str)
+    }
+    if set(by_name) != REQUIRED_DEPENDENCY_NAMES:
+        findings.append("blocker_audit dependencies must include flashinfer and sglang")
+        return
+
+    changed = []
+    for name, item in by_name.items():
+        current_ref = item.get("current_ref")
+        known_ref = item.get("known_blocked_ref")
+        for field, value in (
+            ("current_ref", current_ref),
+            ("known_blocked_ref", known_ref),
+        ):
+            if not (
+                isinstance(value, str)
+                and len(value) == REQUIRED_DEPENDENCY_REF_LENGTH
+                and all(ch in "0123456789abcdef" for ch in value.lower())
+            ):
+                findings.append(f"blocker_audit {name} {field} is not a full git sha")
+        dependency_changed = item.get("dependency_changed")
+        if dependency_changed != (current_ref != known_ref):
+            findings.append(f"blocker_audit {name} dependency_changed mismatch")
+        changed.append(bool(dependency_changed))
+
+    if status == "dependency-changed-review-before-rerun" and not any(changed):
+        findings.append("blocker_audit records dependency-changed status without changed dependency")
+    if payload.get("diagnostic_override_allowed") is not True:
+        findings.append("blocker_audit diagnostic_override_allowed must be true")
 
 
 def audit_row_preflight(
@@ -600,10 +658,7 @@ def audit_manifest(
         findings.append("manifest missing blocker_audit artifact")
     else:
         blocker_audit = load_json(blocker_audit_path)
-        if blocker_audit.get("can_run_claim_ladder") is not False:
-            warnings.append("blocker_audit did not explicitly keep can_run_claim_ladder=false")
-        if blocker_audit.get("ladder_status") == "blocked-known-red-dependencies":
-            findings.append("blocker_audit still records known-blocked dependency refs")
+        audit_blocker_audit(blocker_audit, findings)
 
     rows = manifest.get("rows")
     if not isinstance(rows, list):

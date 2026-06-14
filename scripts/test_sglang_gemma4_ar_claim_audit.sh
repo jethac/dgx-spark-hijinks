@@ -289,6 +289,8 @@ for model in models:
                             "flashinfer_data /work/third_party/flashinfer/flashinfer/data",
                             "flashinfer_csrc /work/third_party/flashinfer/flashinfer/data/csrc",
                             "flashinfer_include /work/third_party/flashinfer/flashinfer/data/include",
+                            "source_git_rev /work/third_party/sglang bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                            "source_git_rev /work/third_party/flashinfer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                         ]
                     )
                     + "\n",
@@ -324,7 +326,27 @@ for model in models:
 blocker_path.write_text(
     json.dumps(
         {
+            "schema": "sglang-gemma4-ar-ladder-blocker-audit/v1",
             "can_run_claim_ladder": False,
+            "dependency_branches": {
+                "flashinfer": "spark/hijinks-022-fa2-d512",
+                "sglang": "spark/hijinks-025-sglang-0.5.13-rebase",
+            },
+            "dependencies": [
+                {
+                    "name": "flashinfer",
+                    "current_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "known_blocked_ref": "0000000000000000000000000000000000000000",
+                    "dependency_changed": True,
+                },
+                {
+                    "name": "sglang",
+                    "current_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "known_blocked_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "dependency_changed": False,
+                },
+            ],
+            "diagnostic_override_allowed": True,
             "ladder_status": "dependency-changed-review-before-rerun",
         }
     ),
@@ -413,7 +435,27 @@ blocker_path = dst.parent / "known_blocked_blocker.json"
 blocker_path.write_text(
     json.dumps(
         {
+            "schema": "sglang-gemma4-ar-ladder-blocker-audit/v1",
             "can_run_claim_ladder": False,
+            "dependency_branches": {
+                "flashinfer": "spark/hijinks-022-fa2-d512",
+                "sglang": "spark/hijinks-025-sglang-0.5.13-rebase",
+            },
+            "dependencies": [
+                {
+                    "name": "flashinfer",
+                    "current_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "known_blocked_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "dependency_changed": False,
+                },
+                {
+                    "name": "sglang",
+                    "current_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "known_blocked_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "dependency_changed": False,
+                },
+            ],
+            "diagnostic_override_allowed": False,
             "ladder_status": "blocked-known-red-dependencies",
         }
     ),
@@ -440,6 +482,41 @@ needle = "blocker_audit still records known-blocked dependency refs"
 if needle not in findings:
     raise SystemExit(f"missing expected blocker finding\n{findings}")
 print("PASS known_blocked_complete_manifest_fails")
+PY
+
+python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/bad_blocker_manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+src = pathlib.Path(sys.argv[1])
+dst = pathlib.Path(sys.argv[2])
+payload = json.loads(src.read_text(encoding="utf-8"))
+blocker_path = dst.parent / "bad_blocker.json"
+blocker = json.loads((dst.parent / payload["blocker_audit"]).read_text(encoding="utf-8"))
+blocker["dependencies"][0]["dependency_changed"] = False
+blocker_path.write_text(json.dumps(blocker), encoding="utf-8")
+payload["blocker_audit"] = blocker_path.name
+dst.write_text(json.dumps(payload), encoding="utf-8")
+PY
+
+if python3 scripts/sglang_gemma4_ar_claim_audit.py "${TMP_DIR}/bad_blocker_manifest.json" \
+  >"${TMP_DIR}/bad_blocker_audit.json" 2>"${TMP_DIR}/bad_blocker_audit.err"; then
+  echo "FAIL bad-blocker manifest unexpectedly passed claim audit" >&2
+  exit 1
+fi
+
+python3 - "${TMP_DIR}/bad_blocker_audit.json" <<'PY'
+import json
+import pathlib
+import sys
+
+payload = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+findings = "\n".join(payload.get("findings", []))
+needle = "blocker_audit flashinfer dependency_changed mismatch"
+if needle not in findings:
+    raise SystemExit(f"missing expected blocker metadata finding\n{findings}")
+print("PASS bad_blocker_manifest_fails")
 PY
 
 python3 - "${TMP_DIR}/manifest.json" "${TMP_DIR}/copied_bundle_manifest.json" <<'PY'
