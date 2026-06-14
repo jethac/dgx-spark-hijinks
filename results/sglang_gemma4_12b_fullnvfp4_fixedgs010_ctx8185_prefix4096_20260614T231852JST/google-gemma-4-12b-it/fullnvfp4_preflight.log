@@ -1,0 +1,27 @@
+run_id=sglang_gemma4_12b_fullnvfp4_fixedgs010_ctx8185_prefix4096_20260614T231852JST
+model=google/gemma-4-12B-it
+label=fullnvfp4
+kv_cache_dtype=fp4_e2m1
+mixed_kv=0
+image=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+image_digest=ghcr.io/jethac/dgx-spark-hijinks/sglang-gemma4-source-stack@sha256:0bacd437f9917928a9bd7ba0dafbb37516f8e05b4b9727bbff796556c2cc7714
+mem_fraction_static=0.72
+page_size=1
+context_length=8192
+sglang_source_overlay=1
+sglang_fp4_kv_global_scale_multiplier=
+sglang_fp4_kv_k_global_scale_multiplier=
+sglang_fp4_kv_v_global_scale_multiplier=
+sglang_fp4_kv_fixed_global_scale=0.1
+sglang_fp4_kv_k_fixed_global_scale=
+sglang_fp4_kv_v_fixed_global_scale=
+sglang_fp4_kv_trace_global_scale=1
+sglang_fp4_kv_trace_sf_saturation=
+sglang_fp4_kv_trace_layers=
+allow_known_blocked_sglang_ar_ladder=1
+sglang_ar_ladder_override_reason=mail 0153 fixed literal global-scale diagnostic; fixed 0.1
+sglang_ar_server_extra_args=
+started_at=2026-06-14T23:18:53+09:00
+               total        used        free      shared  buff/cache   available
+Mem:           119Gi       6.5Gi        95Gi        20Mi        19Gi       113Gi
+Swap:           15Gi       641Mi        15Gi

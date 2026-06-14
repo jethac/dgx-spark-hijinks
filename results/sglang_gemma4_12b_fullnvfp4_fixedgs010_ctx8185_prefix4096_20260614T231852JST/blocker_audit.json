@@ -1,0 +1,36 @@
+{
+  "can_run_claim_ladder": false,
+  "dependencies": [
+    {
+      "current_ref": "3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+      "dependency_changed": false,
+      "known_blocked_ref": "3fa0775cafaf88da5e0fc3b987afa6bd75d9510c",
+      "name": "flashinfer"
+    },
+    {
+      "current_ref": "794c8517a92010245fbe394294ad31743603825f",
+      "dependency_changed": true,
+      "known_blocked_ref": "f920e2d88af68031b745494f5435efb71ac93562",
+      "name": "sglang"
+    }
+  ],
+  "dependency_branches": {
+    "flashinfer": "spark/hijinks-022-fa2-d512",
+    "sglang": "spark/hijinks-025-sglang-0.5.13-rebase"
+  },
+  "diagnostic_override_allowed": true,
+  "diagnostic_override_reason": "mail 0153 fixed literal global-scale diagnostic; fixed 0.1",
+  "known_blockers": {
+    "e4b_fp8_comparator": "E4B fp8 comparator is red in FlashInfer D512/VO256 1-byte-KV paged-prefill dispatcher scheduling.",
+    "full_nvfp4_12b_26b_31b": "12B ctx8185/prefix4096 full-NVFP4 matched row is red by +0.402969 nats/token, but mail/0140 classifies that as a FlashInfer single-/large-prefill accumulation artifact. Exact SDPA and vLLM chunked/reuse put the true NVFP4 cost near +0.19."
+  },
+  "ladder_status": "dependency-changed-review-before-rerun",
+  "mail_latest": {
+    "number": 154,
+    "path": "mail/0154_codex-to-claude_sglang-12b-scale-diagnostic.md"
+  },
+  "next_action": "Review the dependency delta, build or select a packaged image with the changed dependency, then rerun only the smallest matched red row with SGLANG_AR_LADDER_OVERRIDE_REASON naming the fix/ref.",
+  "repo_root": "/home/jethac/spark_tmp/dgx-spark-hijinks-epoch2-scale",
+  "schema": "sglang-gemma4-ar-ladder-blocker-audit/v1",
+  "timestamp_jst": "2026-06-14T23:18:53.140462+09:00"
+}
