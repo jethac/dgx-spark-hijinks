@@ -21,12 +21,17 @@ if _DIR:
     def _save(key, value):
         if _n[0] >= _MAX:
             return
-        if not (torch.is_tensor(key) and key.dim() == 3):
+        if not torch.is_tensor(key):
             return
-        if abs(int(key.shape[0]) - _QO) > 16:
+        # permissive: capture the first _MAX writer calls whose token dim is "large" (prefill, not decode).
+        ntok = int(key.shape[0]) if key.dim() >= 1 else 0
+        if ntok < 64:
             return
+        print("PHASE0 capture call %d key.shape=%s value.shape=%s" % (
+            _n[0], tuple(key.shape), tuple(value.shape)), flush=True)
         torch.save(
-            {"i": _n[0], "key": key.detach().to("cpu"), "value": value.detach().to("cpu")},
+            {"i": _n[0], "key": key.detach().to("cpu"), "value": value.detach().to("cpu"),
+             "key_shape": tuple(key.shape)},
             os.path.join(_DIR, f"wkv_{_n[0]:03d}.pt"),
         )
         _n[0] += 1

@@ -83,6 +83,42 @@ global qk — both powers of 2, exact FWHT).
   mirrors the model-path rotation on SGLang once Phase 2 lands and integrates the fused kernel from the shared
   FlashInfer ref. fp8 stays the interim 26B ship until rotated-nvfp4 is claim-grade.
 
+## PHASE 0 RESULT (2026-06-16): GATE FAILED — rotation thesis FALSIFIED, NOT built
+
+Captured TRUE post-RoPE bf16 K (the cache-writer `key` arg, pre-paging/pre-quant) for 26B + 12B layers
+0-7 (vast PRO-6000, e3 layercalib wheel; `results/phase0_hadamard_gate_20260616/`). Both pre-registered
+gate criteria FAIL:
+
+| | 26B L0-4 within-block K spread | 12B L0-4 | nvfp4 round-trip rel-L2 | + Hadamard rot | improve |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| typical | ~3.5 (worst-block max/median) | ~2.9 | 0.093 | 0.094 | ~1.0x |
+
+1. **26B's K outliers are NOT worse than 12B's** — within-block spread comparable (12B layer 0 is actually
+   higher). The descriptive premise is false.
+2. **Hadamard rotation flattens the spread (3-6 -> ~1.3) but does NOT reduce the nvfp4 round-trip error**
+   (~0.093 either way, marginally worse). The ~9% error is **e2m1 MANTISSA-bound** (4-bit has ~1 mantissa
+   bit; relative error is scale-invariant), **not block-scale-clip-bound**. Rotation only helps clipping, so
+   it gives nothing here.
+
+**Conclusion: per the gate, the rotation kernel effort is NOT built (phases 1/3 deleted).** The gate did its
+job — we did not build on a wrong thesis.
+
+## REVISED MECHANISM + PATH (post-gate)
+
+Per-tensor 4-bit quant of 26B's K/V is *equally fine* as 12B's (rel-L2 0.093, outliers comparable, reader
+faithful). Yet 26B collapses and 12B (calibrated) does not. So the divergence is **not in the KV
+representation** — it is 26B's **MoE-router sensitivity to the irreducible ~9% 4-bit seed**, localized to
+layers 0-4, with a **discrete** knife-edge (k 0.100->0.103 swings 1.7 nats = routing flips, not smooth
+clipping). No encoding trick (rotation) or scale (calibration) reduces a mantissa-bound seed or tames a
+discrete flip.
+
+**Realistic "4-bit KV cache support" for 26B = mixed precision: layers 0-4 fp8 (seed ~2-3%, under the
+routing-flip threshold), the other ~30 layers nvfp4.** Keeps ~90% of the 4-bit memory win, directly
+motivated by the localization, and doubles as the mechanism-confirming experiment (if L0-4-fp8 recovers
+claim-grade quality, the MoE-seed-sensitivity story is proven). Task #58. True ALL-4-bit MoE-26B appears
+**infeasible** (the seed is irreducible at 4-bit and the router amplifies it discretely) — to be stated with
+receipts if mixed-precision is accepted.
+
 ## Done =
 26B-A4B serves **full NVFP4 KV** (Hadamard-rotated) at claim-grade long-context quality (matched anchor
 near-parity vs HF truth, robust, coherent) on the e3 stack, both runtimes; 12B/31B unaffected; DiffusionGemma
