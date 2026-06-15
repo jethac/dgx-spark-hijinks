@@ -1,6 +1,6 @@
 # vLLM Gemma 4 26B-A4B position-attribution attempt
 
-Status: **RED / no quality row produced**.
+Status: **INCONCLUSIVE / no quality row produced**.
 
 This artifact records a failed attempt to run the staged per-position logprob attribution packet for
 `google/gemma-4-26B-A4B-it` on a fresh Vast sm120 instance. The instance was destroyed after artifact pull.
@@ -35,17 +35,17 @@ This artifact records a failed attempt to run the staged per-position logprob at
 
 ## Interpretation
 
-This run did not advance the 26B-A4B NVFP4 quality diagnosis. It did surface a startup/init blocker on this
-Vast host or this exact Python invocation path: the vLLM offline `LLM` constructor can stall around Gemma 4
-multimodal/encoder-cache setup before any text-only scoring happens.
+This run did not advance the 26B-A4B NVFP4 quality diagnosis. Follow-up log review showed the attempt was
+stopped too early to prove a true startup/init blocker: prior successful bf16 rows often remained at the same
+`Encoder cache will be initialized...` line for 5-7 minutes before logging KV-cache size and continuing.
 
-The least invasive mitigation is `skip_mm_profiling=True`; it reaches the explicit skip line and should be the
-default for future text-only attribution packets. `language_model_only=True` is more invasive and changes the
-model configuration surface, so it should not be used for claim-path attribution unless separately justified.
+`skip_mm_profiling=True` remains a useful discriminator, but it should not be the default claim-path mode
+because the existing calibration rows ran through the normal Gemma 4 initialization path. `language_model_only`
+is more invasive and changes the model configuration surface, so it should not be used for claim-path
+attribution unless separately justified.
 
-Next useful step: reproduce the same `skip_mm_profiling=True` startup row on a different sm120 offer or switch
-the attribution packet to the exact already-working matched-anchor launcher mode before spending on more
-calibration rows.
+Next useful step: rerun the attribution packet in the normal matched-anchor launch mode with enough patience:
+allow at least 10 minutes after model load for the first bf16 row before calling it stuck.
 
 ## Cleanup
 

@@ -121,7 +121,7 @@ def main() -> int:
 
     score_started = time.perf_counter()
     scored = llm.generate(
-        [{"prompt_token_ids": token_ids}],
+        token_ids,
         SamplingParams(max_tokens=1, temperature=0.0, prompt_logprobs=1),
     )[0]
     score_elapsed_s = time.perf_counter() - score_started
