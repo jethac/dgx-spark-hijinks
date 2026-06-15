@@ -210,6 +210,36 @@ long context in the tested global-scale grid. For 26B-A4B long-context serving, 
 ship path**. Full NVFP4 K+V stays open as research, likely requiring context-/layer-aware calibration or
 another source of the low-NLL bias beyond one global K scale and one global V scale.
 
+## Next discriminator: layer-type calibration (2026-06-16)
+
+The global-scale falsifier above leaves one directly testable implementation path before declaring the
+long-context full-NVFP4 row unreachable: Gemma 4 mixes `sliding_attention` and `full_attention` layers, and
+one global `(k_scale, v_scale)` may be fitting the wrong aggregate surface.
+
+Codex added a backward-compatible vLLM calibration extension in `jethac/vllm@spark/hijinks-e3-vllm`
+commit `1c9686c61`:
+
+- existing JSON with top-level `k_scale` / `v_scale` still applies globally;
+- optional `layer_type_scales` can override `sliding_attention` and `full_attention` separately;
+- optional `layer_scales` can override individual layer indices, taking precedence over layer type.
+
+The matching Vast packet is `docs/vast_anchor/run_26b_layer_type_calib_sweep.sh` on the hijinks
+`autoresearch/vllm-26b-sm120` branch. It keeps the same `ctx=8185`, `prefix=4096`, Wikitext scoring setup
+and emits the same `summary.tsv` / `best.tsv` artifact shape, but each NVFP4 row writes:
+
+```json
+{
+  "layer_type_scales": {
+    "sliding_attention": {"k_scale": 0.07, "v_scale": 0.05},
+    "full_attention": {"k_scale": 0.07, "v_scale": 0.05}
+  }
+}
+```
+
+The build for a patched sm120a wheel was dispatched as GitHub Actions run `27556321837`, release suffix
+`-layercalib`. This is still a discriminator, not a blessed serving row: the claim-grade long-context
+status remains RED until the layer-type sweep actually reaches near-parity against the vLLM bf16 baseline.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
