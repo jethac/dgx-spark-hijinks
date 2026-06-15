@@ -247,6 +247,14 @@ The patched sm120a wheel build is green:
 This is still a discriminator, not a blessed serving row: the claim-grade long-context status remains RED
 until the layer-type sweep actually reaches near-parity against the vLLM bf16 baseline.
 
+**Layer-type sweep verdict:** RED but informative. Ran the packet on Vast instance `41069113` with the
+patched wheel, then destroyed the instance after pulling artifacts. The prior global-grid best was reproduced
+at `sliding=(0.07,0.05)`, `full=(0.07,0.05)` with delta `-0.388143` nats/token. The best tested layer-type
+point improved to `sliding=(0.10,0.08)`, `full=(0.07,0.05)`, NLL `7.785053609`, delta `-0.148306801` vs
+vLLM bf16. This is still not claim-grade, but it proves the calibration surface is materially
+layer-type-dependent and keeps finer layer/band calibration alive as the next research path. Artifact:
+`results/vast_26b_layer_type_20260615T1545Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
