@@ -318,6 +318,26 @@ line before continuing. Artifact: `results/vast_26b_position_attr_attempts_20260
 packet was revised back to the normal matched-anchor launch mode; the next live run should allow at least 10
 minutes after model load for the first bf16 row before judging it stuck.
 
+**Short position-attribution discriminator (2026-06-15 UTC):** completed on Vast instance `41096054` after a
+failed low-RAM attempt (`41093069`) showed FlashInfer `fused_moe_120` JIT can exit `137` on ~84 GiB host RAM.
+The successful run used the same vLLM/FlashInfer stack with `MAX_JOBS=4` for JIT build throttling only.
+
+Rows at `ctx=8185`, `prefix=4096`, 4088 scored tokens:
+
+| row | mean NLL | delta vs bf16 | key result |
+| --- | ---: | ---: | --- |
+| `bf16` | `7.933360410` | `0` | baseline |
+| `k100` | `7.815396153` | `-0.117964257` | prior best reproduced |
+| `k103` | `6.246659276` | `-1.686701135` | collapse reproduced |
+
+Bucket deltas show the `k103` collapse is **distributed**, not a single bad token/page/band: `-2.5787`
+for relative positions `0-256`, `-2.2502` for `256-1024`, `-1.9097` for `1024-2048`, `-1.3114` for
+`2048-3072`, and `-1.1895` through the tail. This sharpens the K-refinement verdict: the scalar
+crossing path is not useful, and another narrow K sweep is unlikely to produce a claim-grade row.
+If full NVFP4 continues, the next useful work is layer/activation attribution of the systematic low-NLL
+shift or a different calibration model. Artifact:
+`results/vast_26b_position_attr_short_20260615T1952Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
