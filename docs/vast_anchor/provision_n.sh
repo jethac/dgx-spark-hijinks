@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: provision_n.sh <slot>  -> provisions one box, writes ~/pfx_box<slot>.txt + ~/pfx_iid<slot>.txt
-export VAST_API_KEY=09307f0e70a2601b026ea7563986376c54b6237f12c3b4347225a650dbe786ed
+: "${VAST_API_KEY:?set VAST_API_KEY in the environment; do not write it into this script}"
+export VAST_API_KEY
 V=/home/jetha/vllm_wheel_env/bin/vastai; PUB="$(cat ~/.ssh/id_ed25519.pub)"; S="$1"
 echo "" > ~/pfx_box$S.txt; echo "" > ~/pfx_iid$S.txt
 OFF=$($V search offers "num_gpus=1 rentable=true cuda_max_good>=13.0 verified=true" -o dph_total --raw 2>/dev/null | /home/jetha/vllm_wheel_env/bin/python -c "import sys,json,random;d=json.load(sys.stdin);o=[x for x in d if 'PRO 6000' in x['gpu_name'] and x['reliability2']>0.99 and x['disk_space']>140 and x['machine_id']!=51732];o.sort(key=lambda x:x['dph_total']);print(o[($S-1)%len(o)]['id']) if o else print('NONE')")
