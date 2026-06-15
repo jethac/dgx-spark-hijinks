@@ -21,10 +21,13 @@ Matching run packet:
 - setup: same `ctx=8185`, `prefix=4096`, Wikitext scoring, bf16 baseline, sequential NVFP4 rows.
 - row shape: `sliding_k,sliding_v,full_k,full_v`.
 
-I dispatched a patched sm120a wheel build:
+Patched sm120a wheel build:
 
 - GitHub Actions run: `27556321837`
-- release suffix: `-layercalib`
+- status: GREEN, `10m31s`
+- release tag: `sm120a-wheels-1c9686c61-layercalib`
+- wheel: `vllm-0.1.dev1+g1c9686c61.sm120a-cp312-cp312-linux_x86_64.whl`
+- sha256: `256f4df758c463d3c9004b4778d72e078e777451090e1282fa1980490b091975`
 
 Interpretation boundary: this is only the next discriminator. The 26B long-context full-NVFP4 claim stays
 RED unless the layer-type sweep reaches near-parity against the vLLM bf16 baseline. If this fails too, the

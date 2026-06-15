@@ -236,9 +236,16 @@ and emits the same `summary.tsv` / `best.tsv` artifact shape, but each NVFP4 row
 }
 ```
 
-The build for a patched sm120a wheel was dispatched as GitHub Actions run `27556321837`, release suffix
-`-layercalib`. This is still a discriminator, not a blessed serving row: the claim-grade long-context
-status remains RED until the layer-type sweep actually reaches near-parity against the vLLM bf16 baseline.
+The patched sm120a wheel build is green:
+
+- GitHub Actions run: `27556321837`;
+- release tag: `sm120a-wheels-1c9686c61-layercalib`;
+- wheel: `vllm-0.1.dev1+g1c9686c61.sm120a-cp312-cp312-linux_x86_64.whl`;
+- sha256: `256f4df758c463d3c9004b4778d72e078e777451090e1282fa1980490b091975`;
+- summary: `results/vllm_sm120a_wheel_1c9686c61_layercalib_20260616T0025JST_summary.md`.
+
+This is still a discriminator, not a blessed serving row: the claim-grade long-context status remains RED
+until the layer-type sweep actually reaches near-parity against the vLLM bf16 baseline.
 
 ## Cross-lane
 
