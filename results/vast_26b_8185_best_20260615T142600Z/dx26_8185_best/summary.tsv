@@ -1,0 +1,3 @@
+label	k_scale	v_scale	mean_nll	delta_vs_bf16	ppl	ok	chat	status
+nvfp4_k0p10_v0p05	0.10	0.05	6.293517816	-1.639842594	541.0533112028742	True	Tokyo	ok
+nvfp4_k0p10_v0p10	0.10	0.10	6.293517816	-1.639842594	541.0533112028742	True	Tokyo	ok

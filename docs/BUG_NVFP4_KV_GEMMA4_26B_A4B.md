@@ -158,12 +158,57 @@ a per-K/per-V 2D sweep has NOT been run. Until it is, "26B nvfp4 is unreachable"
   residual sensitivity in the MoE FFN/router readout (the logits responding to ~29% attention
   drift more than 12B's dense FFN does)? Capture lm_head logits bf16-vs-nvfp4 to test.
 
-## Ship decision (current, pending the 2D sweep)
+## Ship decision (current after the 2D sweep)
 
-- **26B-A4B**: ship **fp8 KV** (near-lossless, correct) as the safe path TODAY. Whether full-nvfp4
-  is reachable via 2D per-K/V calibration is being tested (do NOT yet claim it's impossible).
+- **26B-A4B**: ship **fp8 KV** (near-lossless, correct) as the safe long-context path TODAY. Full NVFP4
+  K+V has a short-context calibration point but no claim-grade long-context point in the tested global K/V grid.
 - **12B / 31B**: nvfp4 GREEN (calibrated) — dense decoders — unaffected.
 - **DiffusionGemma**: 26B-A4B base → same question; fp8 KV safe today, truth-gate any nvfp4 claim.
+
+## 2D calibration sweep verdict (2026-06-15, Codex Vast sm120)
+
+Ran the per-K/per-V calibration sweep on a native sm120 RTX PRO 6000 WS box using the E3 vLLM wheel
+`0.1.dev1+ge99078ddf.sm120a` (wheel sha256
+`3d92d14d3c6f7f802eb381c6a68f84028978f70ed16055fc046407ca16b4036a`) and FlashInfer source overlay
+`1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a`.
+
+**Short context falsifier:** at `ctx=2048`, `prefix=1024`, the 25-point K/V grid found a near-parity full
+NVFP4 point:
+
+| row | NLL | delta vs vLLM bf16 | verdict |
+| --- | ---: | ---: | --- |
+| vLLM bf16 | 5.164656 | 0 | baseline |
+| NVFP4 `k=0.10, v=0.05` | 5.173155 | **+0.008499** | short-context GREEN |
+| NVFP4 `k=0.10, v=0.10` | 5.173155 | **+0.008499** | short-context GREEN |
+
+Artifact: `results/vast_26b_2d_calib_20260615T142000Z/summary.md`.
+
+**Long context gate:** the short-context best candidates were then re-run at `ctx=8185`, `prefix=4096`;
+both collapsed to the old low-NLL failure:
+
+| row | NLL | delta vs vLLM bf16 | verdict |
+| --- | ---: | ---: | --- |
+| vLLM bf16 | 7.933360 | 0 | baseline |
+| NVFP4 `k=0.10, v=0.05` | 6.293518 | **-1.639843** | RED |
+| NVFP4 `k=0.10, v=0.10` | 6.293518 | **-1.639843** | RED |
+
+Artifact: `results/vast_26b_8185_best_20260615T142600Z/summary.md`.
+
+**Full long-context grid:** a direct 25-point `ctx=8185` grid improved the best point but still did not find
+a claim-grade full-NVFP4 calibration:
+
+| row | NLL | delta vs vLLM bf16 | verdict |
+| --- | ---: | ---: | --- |
+| vLLM bf16 | 7.933360 | 0 | baseline |
+| best NVFP4 `k=0.07, v=0.05` | 7.545217 | **-0.388143** | RED |
+| tied best NVFP4 `k=0.07, v=0.10` | 7.545217 | **-0.388143** | RED |
+
+Artifact: `results/vast_26b_8185_grid_20260615T145900Z/summary.md`.
+
+**Updated decision:** full NVFP4 K+V is calibration-reachable at short context, but not claim-grade for
+long context in the tested global-scale grid. For 26B-A4B long-context serving, **fp8 KV remains the honest
+ship path**. Full NVFP4 K+V stays open as research, likely requiring context-/layer-aware calibration or
+another source of the low-NLL bias beyond one global K scale and one global V scale.
 
 ## Cross-lane
 
