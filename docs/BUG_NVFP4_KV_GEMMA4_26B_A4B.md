@@ -47,16 +47,29 @@ head_dim_qk=512 VO-split path. RULED OUT: GQA-ratio, head geometry, rope (the `r
 **MoE** (26B-A4B experts vs 12B dense MLP).
 
 Since fp8 KV works on 26B through the same MoE+attention path and only nvfp4 breaks, this is NOT an
-attention-kernel-geometry bug. The most likely cause is a **4-bit quantizability limit**: 26B-A4B's K/V
-activation distribution (heavier per-channel/per-token outliers, plausibly an MoE training artifact)
-exceeds what nvfp4's per-16-block e4m3 scale can represent without saturation/underflow, while fp8's
-wider per-element range copes. This matches every observation: nvfp4-specific, fp8/bf16 fine, broken at
-EVERY global scale (a global scale can't fix per-channel outliers), deterministic.
+attention-kernel-geometry bug. **WHY nvfp4 specifically breaks is UNRESOLVED** — two candidate causes:
 
-If confirmed, the resolution is permanent: **26B-A4B uses fp8 KV** (4-bit nvfp4 is intrinsically
-insufficient for this model's KV); a full-nvfp4 26B would need per-channel/outlier-aware KV quant, not a
-kernel fix. CONFIRM with a box: per-layer nvfp4 round-trip L2/max-error on captured 26B vs 12B K/V
-(expect 26B >> 12B, outlier-driven) — task #55. Until then fp8 is the correct ship and a defensible
+(A) **4-bit quantizability limit**: 26B-A4B's K/V activations have per-channel outliers that exceed what
+nvfp4's per-16-block e4m3 scale can represent (clip/underflow), while fp8's wider per-element range copes.
+
+(B) **An nvfp4-path kernel bug** (numerical pathology), with 4-bit precision NOT actually the limiter.
+
+**The evidence currently LEANS (B), not (A)** — earlier writeups (and SOLUTIONS_STATUS) over-claimed (A);
+this is the corrected reading:
+- nvfp4 scores BELOW the bf16/HF truth at every scale (overconfident), with degenerate generation (a 0.07
+  smoke loops "Wait, I'm not sure"). A precision/clipping limit makes predictions WORSE (higher NLL) and
+  keeps them roughly coherent; below-truth + degenerate = the attention COLLAPSING (wrong-but-peaked
+  output) = a kernel signature, not bits running out.
+- It is NON-MONOTONIC in the global scale: _k=0.05→7.31, _k=0.07→**5.80** (worst), _k=0.10→7.37. A genuine
+  clip/underflow limit moves monotonically with the scale; a sharp dip at one middle scale is a numerical
+  pathology, not a precision ceiling.
+
+DISCRIMINATING EXPERIMENT (task #55): capture the real 26B K/V, quantize->dequantize in numpy (the E2M1 +
+per-16-block e4m3 simulator), measure round-trip L2/max-error vs 12B. **Large round-trip error -> (A)
+quantizability. Small round-trip error but still-broken serving -> (B) the cache bytes are fine and the
+kernel mishandles them -> kernel bug.** Until resolved, BOTH point to the same interim ship:
+**26B-A4B uses fp8 KV** (vLLM) / bf16 (SGLang, where fp8 D512 is also blocked). If (B), a kernel fix could
+restore full-nvfp4 26B on both stacks; if (A), 26B needs outlier-aware KV quant. fp8 is the defensible
 permanent answer.
 
 ## Ship decision
