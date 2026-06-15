@@ -2,15 +2,24 @@
 # E3 vLLM/FlashInfer setup for native sm_120 Vast boxes.
 #
 # Required env:
-#   VLLM_WHEEL_URL  GitHub release asset URL for the E3 sm120a vLLM wheel.
+#   VLLM_WHEEL_URL   GitHub release asset URL for the E3 sm120a vLLM wheel.
+#     or
+#   VLLM_WHEEL_PATH  Existing local wheel path, useful when the release is private and the wheel was scp'd in.
 # Optional env:
 #   FLASHINFER_REF  jethac/flashinfer ref; defaults to the shared E3 ref.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
-: "${VLLM_WHEEL_URL:?set VLLM_WHEEL_URL to the E3 sm120a wheel release asset}"
+if [ -z "${VLLM_WHEEL_URL:-}" ] && [ -z "${VLLM_WHEEL_PATH:-}" ]; then
+  echo "set VLLM_WHEEL_URL or VLLM_WHEEL_PATH" >&2
+  exit 2
+fi
 FLASHINFER_REF="${FLASHINFER_REF:-1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a}"
-WHEEL="/root/$(basename "${VLLM_WHEEL_URL}" | sed 's/%2B/+/g')"
+if [ -n "${VLLM_WHEEL_PATH:-}" ]; then
+  WHEEL="${VLLM_WHEEL_PATH}"
+else
+  WHEEL="/root/$(basename "${VLLM_WHEEL_URL}" | sed 's/%2B/+/g')"
+fi
 
 echo "=== apt ==="
 apt-get update -q >/dev/null 2>&1
@@ -29,7 +38,9 @@ python3.12 -m venv /root/v
 /root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub 2>&1 | tail -1
 
 echo "=== download + install vLLM wheel ==="
-wget -q -O "${WHEEL}" "${VLLM_WHEEL_URL}"
+if [ -n "${VLLM_WHEEL_URL:-}" ]; then
+  wget -q -O "${WHEEL}" "${VLLM_WHEEL_URL}"
+fi
 ls -la "${WHEEL}" | awk '{print "wheel size:",$5}'
 /root/v/bin/pip install -q "${WHEEL}" 2>&1 | tail -2
 
