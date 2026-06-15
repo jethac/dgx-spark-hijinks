@@ -31,14 +31,33 @@ HF transformers eager bf16 is the dtype/kernel-independent ground truth.
    MoE serving path and only differs in the KV dtype/dequant, the break is **NVFP4-SPECIFIC**, not MoE
    and not the general quantized-KV path. The MoE-pool hypothesis is weakened: MoE would break fp8 too.
 
-## Scope / what's special about 26B-A4B
+## Scope / what's special about 26B-A4B (config analysis, 2026-06-15)
 
-26B-A4B (`Gemma4ForConditionalGeneration-L30-H2816-D256-KV16`... arch sig L30/H2816/KV8) takes the same
-head_dim_qk=512 FA2 VO-split nvfp4 path as 12B/31B (confirmed: `FA2 VO split (nvfp4 KV): head_size 512
-runs as 2 passes`), yet 12B (k=0.1,v=0.06) and 31B (k=v=0.05) nvfp4 are near-lossless while 26B-A4B is
-broken. The distinguishing axis is the 26B-A4B geometry (L30 / H2816 / its GQA ratio) and/or the MoE
-block layout interacting with the nvfp4 KV scale-factor tiling. Localizing the exact kernel cause
-(layer-wise nvfp4-vs-bf16 logit diff; GQA-ratio / SF-stride ablation) is the open follow-up.
+Fetched + compared the three text_configs. The attention path is NOT the differentiator:
+
+| | heads | kv_heads | GQA ratio | head_dim | text rope (sliding/full) | layer_types | MoE |
+| --- | ---: | ---: | ---: | ---: | --- | --- | --- |
+| 12B (nvfp4 OK) | 16 | 8 | 2 | 256 | 10000 / 1000000 | 5:1 global | dense (inter 15360) |
+| 31B (nvfp4 OK) | 32 | 16 | 2 | 256 | 10000 / 1000000 | 5:1 global | dense |
+| **26B-A4B (broken)** | **16** | **8** | **2** | **256** | **10000 / 1000000** | 25 sliding + 5 full | **MoE (inter 2112/4304)** |
+
+12B and 26B-A4B have **identical** attention head geometry (16/8/256, GQA 2), identical text rope, same
+head_dim_qk=512 VO-split path. RULED OUT: GQA-ratio, head geometry, rope (the `rope_theta=100` is in
+`vision_config`, not the decoder — does not touch the KV cache). The ONLY architectural difference is
+**MoE** (26B-A4B experts vs 12B dense MLP).
+
+Since fp8 KV works on 26B through the same MoE+attention path and only nvfp4 breaks, this is NOT an
+attention-kernel-geometry bug. The most likely cause is a **4-bit quantizability limit**: 26B-A4B's K/V
+activation distribution (heavier per-channel/per-token outliers, plausibly an MoE training artifact)
+exceeds what nvfp4's per-16-block e4m3 scale can represent without saturation/underflow, while fp8's
+wider per-element range copes. This matches every observation: nvfp4-specific, fp8/bf16 fine, broken at
+EVERY global scale (a global scale can't fix per-channel outliers), deterministic.
+
+If confirmed, the resolution is permanent: **26B-A4B uses fp8 KV** (4-bit nvfp4 is intrinsically
+insufficient for this model's KV); a full-nvfp4 26B would need per-channel/outlier-aware KV quant, not a
+kernel fix. CONFIRM with a box: per-layer nvfp4 round-trip L2/max-error on captured 26B vs 12B K/V
+(expect 26B >> 12B, outlier-driven) — task #55. Until then fp8 is the correct ship and a defensible
+permanent answer.
 
 ## Ship decision
 

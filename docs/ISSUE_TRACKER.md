@@ -4,7 +4,8 @@ This file maps the solution plan to GitHub Issues. Issue numbers are filled in a
 
 | plan id(s) | area | status | issue |
 |---|---|---|---|
-| `e2-bug-1` | FlashInfer serving numerics at Gemma 3 1B geometry (d256/SWA-512/1kv) | OPEN - evidence banked, bisect queued; docs/BUG_FLASHINFER_GEMMA3_1B_SERVING_NUMERICS.md | local, upstream filing after root cause |
+| `e2-bug-1` | FlashInfer serving numerics at Gemma 3 1B geometry (d256/SWA-512/1kv) | RESOLVED 2026-06-15 - the nvfp4 "gibberish" is a P520 WSL2/WDDM artifact, not an sm_120 kernel defect; 270M repro COHERENT on native-Linux GB202 (+0.065) AND GB206 (+0.053, same die as P520). docs/BUG_FLASHINFER_GEMMA3_1B_SERVING_NUMERICS.md (RESOLVED header). Red retired to WSL2-dev-box caveat | local |
+| `e2-bug-2` | FlashInfer nvfp4 KV broken on Gemma-4-26B-A4B geometry (shared by vLLM + SGLang — same FlashInfer FA2 nvfp4 kernel) | OPEN - HF-truth-adjudicated real nvfp4-specific kernel bug (all scales below truth = repetition-collapse; fp8 + bf16 correct). 12B/31B nvfp4 fine. INTERIM SHIP = fp8 KV on both stacks; full-nvfp4 26B blocked on the kernel fix. docs/BUG_NVFP4_KV_GEMMA4_26B_A4B.md; localization = task #55. Explains the SGLang 26B numerics arm (mail 0171) | local, FlashInfer fix benefits both stacks |
 | `1` | `sm_121` target naming and build flags | build/JIT target log audit added | [#1](https://github.com/jethac/dgx-spark-hijinks/issues/1) |
 | `2` | ARM64 + CUDA 13 wheel/container matrix | first matrix added; clean blessed stack still missing | [#2](https://github.com/jethac/dgx-spark-hijinks/issues/2) |
 | `6` | Gemma 4 12B vLLM support | source/precompiled probe serves; clean release container pending | [#3](https://github.com/jethac/dgx-spark-hijinks/issues/3) |
