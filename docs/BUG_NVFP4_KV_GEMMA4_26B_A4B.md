@@ -279,6 +279,15 @@ layers `[5,11,17,23,29]` kept at the base `0.07/0.05`. The default packet replay
 `0.10/0.07`, `0.10/0.09`, `0.09/0.08`, `0.11/0.08`. This is the narrow calibration search implied by the
 band result.
 
+**Sub-band sweep verdict:** still RED, but now bracketed. Ran the packet on Vast instance `41077335` and
+destroyed the instance after artifact pull. No single/pair/drop-one block subset beat the previous
+early+mid-all-four row (`-0.117964257`). The decisive new point is scalar: all four early+mid blocks at
+`0.11/0.08` overshoot to `+0.162258904`, while `0.10/0.08` is low by `-0.117964257`. The target is therefore
+bracketed near `k≈0.104` at `v=0.08` for early+mid sliding, with late sliding and full layers left at
+`0.07/0.05`. `0.10/0.09` and `0.09/0.08` collapse badly. One row (`0.10/0.07`) failed from an HF Hub
+processor-list timeout during vLLM startup, not from model quality. Artifact:
+`results/vast_26b_subband_20260615T1815Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he

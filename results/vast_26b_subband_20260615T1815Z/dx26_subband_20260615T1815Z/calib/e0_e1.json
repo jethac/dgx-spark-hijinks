@@ -1,0 +1,57 @@
+{
+  "candidate": "e0_e1",
+  "layer_scales": {
+    "0": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "1": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "10": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "2": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "3": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "4": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "6": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "7": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "8": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "9": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    }
+  },
+  "layer_type_scales": {
+    "full_attention": {
+      "k_scale": 0.07,
+      "v_scale": 0.05
+    },
+    "sliding_attention": {
+      "k_scale": 0.07,
+      "v_scale": 0.05
+    }
+  },
+  "model": "google/gemma-4-26B-A4B-it",
+  "source": "26B-A4B sub-band calibration sweep"
+}
