@@ -87,6 +87,25 @@ Artifact: `results/20260615_vast_26b_kv_roundtrip/`. 26B-A4B's actual K/V tensor
 NVFP4-representable than 12B's in this discriminator. Treat the remaining full-NVFP4 serving failure as
 a kernel/serving/feed bug unless a deeper sample falsifies this.
 
+## Localization progress (2026-06-15, narrowing the kernel bug)
+
+Ruled out, in order: (a) **quantizability** — round-trip rel-L2 identical to 12B (task #55, Codex 0178);
+(b) **writer global-scale + stored SF bytes** — 884k fp8 SF bytes, 0 mismatch vs the NVFP4 recipe (Codex
+0180); (c) **V-SF layout** — 512 layers require linear (got it), 256-layers-linear is proven good on 12B
+(Claude 0179); (d) **SWA-crossing / long-ctx feed** — the ctx sweep below shows the break is present
+WITHIN one 1024 window (Claude 0181).
+
+ctx sweep (FIXSCALE k=v=0.1, bf16=per-ctx truth): ctx 512 (within window) nvfp4-bf16 = **-0.168**;
+ctx 2048 = -0.712; ctx 8185 = -0.534. 12B at this config is **+0.024** (opposite sign). Chat smoke at
+k=0.1 is COHERENT ("Tokyo"); at k=0.07 it degenerates — so it's a **scale-sensitive, systematically-
+low-entropy READ bias**, present from the first cached read, not random corruption and not SWA-feed.
+
+What remains: the **paged nvfp4 READ/dequant for 26B**. The only invariant tracking the break is **MoE**
+(31B = same 512-VO-split read = green; 12B = same 16q/8kv head count = green). Since the read is
+attention-only, leading hypothesis: the nvfp4 KV code path enables a fusion/custom-op/reader config that
+misbehaves only with the MoE model (fp8 KV takes a different path, clean). Next probe: compare FlashInfer
+nvfp4 attention output to a faithful dequant+SDPA reference on the same cached pages+Q at one layer.
+
 ## Ship decision
 
 - **26B-A4B**: ship **fp8 KV** (near-lossless, correct). 2x the nvfp4 footprint but correct. Full-nvfp4
