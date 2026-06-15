@@ -1,8 +1,14 @@
-# BUG: NVFP4 KV read-path broken on Gemma-4-26B-A4B (MoE) — fp8 KV is the interim ship path
+# BUG: Gemma-4-26B-A4B full-NVFP4 KV calibration reachability is still open
 
-Status: OPEN (real kernel bug, precisely characterized 2026-06-15). nvfp4-SPECIFIC. NOT calibratable.
-26B-A4B ships with **fp8 KV** (correct, near-lossless) until the nvfp4 kernel bug is fixed; 12B/31B
-nvfp4 are unaffected (GREEN, calibrated).
+Status: OPEN (reader/kernel read path falsified as the root cause on 2026-06-15). NVFP4-specific at the
+serving quality level, but **not yet proven uncalibratable**. 26B-A4B ships with **fp8 KV** (correct,
+near-lossless) until a per-K/per-V NVFP4 calibration sweep either finds a green point or proves fp8 is the
+honest floor; 12B/31B NVFP4 remain unaffected (GREEN, calibrated).
+
+Note: the early sections below preserve the original tied-scale evidence and hypotheses. The
+`LOCALIZATION (2026-06-15)` and `READ-CAPTURE VERDICT` sections supersede the earlier "reader bug" claim:
+FlashInfer's NVFP4 paged reader faithfully matches dequant+SDPA for 26B. The active question is calibration
+reachability, not a reader fix.
 
 ## Evidence (vast PRO 6000 / GB202 / sm_120, `google/gemma-4-26b-a4b-it`, ctx 8185 / prefix 4096, wikitext, 4088 scored tokens)
 
