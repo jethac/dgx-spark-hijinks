@@ -72,6 +72,21 @@ kernel mishandles them -> kernel bug.** Until resolved, BOTH point to the same i
 restore full-nvfp4 26B on both stacks; if (A), 26B needs outlier-aware KV quant. fp8 is the defensible
 permanent answer.
 
+**Task #55 result (2026-06-15, Codex vast PRO 6000): points to (B).** Kernel-free HF eager
+`past_key_values` capture at `ctx=2048`, tail `512` tokens, layers `0,1,2,12,24,last`, then NVFP4
+quantize/dequantize simulation:
+
+| model | tensor | n | mean best rel-L2 | max best rel-L2 |
+| --- | --- | ---: | ---: | ---: |
+| 12B | K | 6 | 0.093636 | 0.095294 |
+| 12B | V | 6 | 0.092361 | 0.093938 |
+| **26B-A4B** | **K** | **6** | **0.093285** | **0.095096** |
+| **26B-A4B** | **V** | **6** | **0.092020** | **0.093281** |
+
+Artifact: `results/20260615_vast_26b_kv_roundtrip/`. 26B-A4B's actual K/V tensors are not less
+NVFP4-representable than 12B's in this discriminator. Treat the remaining full-NVFP4 serving failure as
+a kernel/serving/feed bug unless a deeper sample falsifies this.
+
 ## Ship decision
 
 - **26B-A4B**: ship **fp8 KV** (near-lossless, correct). 2x the nvfp4 footprint but correct. Full-nvfp4
