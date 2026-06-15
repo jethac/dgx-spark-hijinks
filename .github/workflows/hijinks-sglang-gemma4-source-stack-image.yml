@@ -14,7 +14,7 @@ on:
       image_tag:
         description: "Tag suffix for the GHCR image"
         required: false
-        default: "epoch2-sglang-spark-u22-torch211"
+        default: "epoch3-sglang-spark-u22-torch211"
       base_image:
         description: "Base CUDA/toolchain image; must be Ubuntu 22.04 / glibc <= 2.35 for Spark portability"
         required: false
@@ -62,7 +62,7 @@ jobs:
     timeout-minutes: 355
     env:
       CUDA_HOME: /usr/local/cuda
-      IMAGE_TAG: ${{ inputs.image_tag || 'epoch2-sglang-spark-u22-torch211' }}
+      IMAGE_TAG: ${{ inputs.image_tag || 'epoch3-sglang-spark-u22-torch211' }}
       BASE_IMAGE: ${{ inputs.base_image || 'nvidia/cuda:13.0.2-devel-ubuntu22.04' }}
       TRANSFORMERS_PIN: ${{ inputs.transformers_pin || '5.11.0' }}
       TARGET_PLATFORM: ${{ inputs.target_platform || 'linux/arm64' }}
