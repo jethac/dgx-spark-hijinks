@@ -293,6 +293,24 @@ processor-list timeout during vLLM startup, not from model quality. Artifact:
 `v=0.08`, late/full at `0.07/0.05`, and sweeps early+mid K through `0.102,0.103,0.104,0.105,0.106,0.108`,
 with `0.100` and `0.110` replay rows. This directly tests the bracket implied by the previous run.
 
+**K-refinement partial-stop verdict:** the smooth crossing hypothesis is falsified. The run was interrupted
+after `k105_v08`, but the captured rows are enough to show the scalar surface is not locally smooth:
+`k=0.100` replays the prior best at `-0.117964257`, `k=0.102` overshoots to `+0.203127729`, then adjacent
+`k=0.103` and `k=0.104` collapse to `-1.686701135` and `-1.141697134`. `k105_v08` failed/incompleted and
+`k106_v08` was killed mid-row during the stop. Artifact:
+`results/vast_26b_krefine_20260615T1910Z_partial_stop/summary.md`.
+
+Implication: do not treat the `0.10`→`0.11` bracket as a tunable one-dimensional calibration. If full NVFP4
+26B continues, the next useful discriminator is targeted attribution of the collapse source
+(per-layer/per-position logits or K/V contribution), not another broad scalar K grid. The current claim-grade
+ship path for 26B-A4B remains fp8 KV.
+
+**Next packet staged:** `docs/vast_anchor/run_26b_position_attribution.sh` runs a bf16 per-token logprob
+baseline plus selected NVFP4 rows (`k=0.100`, `0.102`, `0.103`, `0.104` at the same early+mid/late/full
+layer map) and emits `delta_report.tsv` plus top per-position delta JSON. It is intentionally an attribution
+packet, not another calibration search: the expected answer is whether the low-NLL collapse is localized to
+specific score-position bands/tokens or spread across the continuation.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
