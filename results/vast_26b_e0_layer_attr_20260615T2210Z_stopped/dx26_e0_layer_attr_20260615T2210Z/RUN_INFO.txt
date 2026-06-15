@@ -1,0 +1,13 @@
+schema=vllm-26b-a4b-e0-layer-attribution/v1
+model=google/gemma-4-26B-A4B-it
+ctx=8185
+prefix=4096
+max_model_len=8192
+max_num_batched_tokens=4096
+gpu_memory_utilization=0.82
+purpose=e0 layer attribution: base k100 versus one layer 0-4 at k103
+torch=2.12.0+cu130
+cuda=13.0
+device=NVIDIA RTX PRO 6000 Blackwell Workstation Edition
+capability=(12, 0)
+MAX_JOBS=4
