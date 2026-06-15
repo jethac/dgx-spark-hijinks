@@ -38,6 +38,21 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   per-architecture (no shared constant), which is why the loader keys by arch signature.
   vLLM AR-ladder references for the SGLang match (task #40): 12B + 31B done (both
   dense, clean smooth sweeps). Mails 0165, 0167.
+- SGLang AR ladder (task #40, on Spark/GB10, 2026-06-15, Claude drove with Codex paused):
+  - 12B full-NVFP4: GREEN (Codex deferred-sidecar, mail 0163).
+  - **31B full-NVFP4: GREEN** — Claude built the SGLang calib (k_global_scale=v_global_scale=0.05,
+    arch sig Gemma4ForConditionalGeneration-L60-H5376-D256-KV16) and ran it on Spark: bf16=6.5843
+    vs nvfp4=6.4559 (delta -0.128, within the 0.25 claim gate), chat smoke "Tokyo" COHERENT,
+    calib applied (`layers=0 pools=2`, matching Codex's working deferred path). SGLang dequant_global
+    = vLLM `_k_scale` (12B=0.1 cross-checked). Results: Spark
+    `results/sglang_gemma4_31b_{nvfp4_calib005,bf16}_claude_20260615T12*`.
+  - **26B-A4B: quantized-KV BLOCKED (bf16-only)** — bf16=4.6644 (correct). fp8 FAILS with a raw
+    FlashInfer `Invalid configuration: NUM_MMA_KV=1` at prefill.cuh:3215 (dtype_kv=fp8_e4m3,
+    head_dim_qk=512) = the **fp8 D512/VO256 infeasibility** (tasks #42/#51); this image's FlashInfer
+    (`3fa0775c`, fa2-nosplit) lacks Claude's FA2_REJECT clean-reject so it crashes cryptically instead
+    of rejecting. nvfp4 broken (the 26B quantizability limit, BUG_NVFP4_KV_GEMMA4_26B_A4B.md). So SGLang
+    26B-A4B has NO viable quantized KV until a kernel fix; ships bf16. (vLLM 26B fp8 ran because its
+    chunked-prefill tiling avoids the NUM_MMA_KV=1 config SGLang's page-size-1 paged path hits.) Mail 0173.
 - 26B-A4B (vLLM, 2026-06-15): RESOLVED by adjudication + ship-path decision. HF eager bf16
   TRUTH = 7.9923 on the same 4088 tokens. vLLM bf16 = 7.9027 (-0.09, CORRECT) and vLLM **fp8
   = 7.7903 (-0.20, CORRECT/near-lossless)**, but vLLM **nvfp4 scores BELOW truth at every
