@@ -288,6 +288,11 @@ bracketed near `k≈0.104` at `v=0.08` for early+mid sliding, with late sliding 
 processor-list timeout during vLLM startup, not from model quality. Artifact:
 `results/vast_26b_subband_20260615T1815Z/summary.md`.
 
+**Next discriminator: narrow early+mid K refinement.** Added
+`docs/vast_anchor/run_26b_subband_krefine_sweep.sh`, a wrapper over the sub-band packet. It fixes early+mid
+`v=0.08`, late/full at `0.07/0.05`, and sweeps early+mid K through `0.102,0.103,0.104,0.105,0.106,0.108`,
+with `0.100` and `0.110` replay rows. This directly tests the bracket implied by the previous run.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
