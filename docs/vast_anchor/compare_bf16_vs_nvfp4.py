@@ -38,20 +38,31 @@ def load_qout(capdir):
 
 
 def analyze(model_tag, label):
-    nv = load_qout(f"/root/cap_{model_tag}")
+    nv_dir = f"/root/cap_{model_tag}_small" if os.path.isdir(f"/root/cap_{model_tag}_small") else f"/root/cap_{model_tag}"
+    nv = load_qout(nv_dir)
     bf = load_qout(f"/root/cap_{model_tag}_bf16")
     common = sorted(set(nv) & set(bf))
     print(f"\n===== {label}: bf16-cache vs nvfp4-cache  (layers {common}) =====")
     print(f"{'layer':>5} {'q_shape':>16} | {'q nv-vs-bf cos':>14} {'q maxabs':>9} "
           f"| {'OUT nv-vs-bf cos':>16} {'out relerr':>10} {'out maxabs':>10}")
+    seed_relerr = final_relerr = None
+    qdrift_final = None
     for ci in common:
         qnv, onv = nv[ci]
         qbf, obf = bf[ci]
         qcos, qmx, _, _ = rel(qnv, qbf)
         ocos, omx, _, orel = rel(onv, obf)
+        if ci == 0:
+            seed_relerr = orel
+        final_relerr = orel
+        qdrift_final = (qcos, qmx)
         tag = "  <- layer0: KV-indep q (pure quant)" if ci == 0 else ""
         print(f"{ci:>5} {str(tuple(qnv.shape)):>16} | {qcos:>14.6f} {qmx:>9.4f} "
               f"| {ocos:>16.6f} {orel:>10.4%} {omx:>10.4f}{tag}")
+    if seed_relerr and final_relerr:
+        print(f"  SUMMARY {label}: seed(L0)={seed_relerr:.2%}  final(L{common[-1]})={final_relerr:.2%}  "
+              f"amplification={final_relerr/seed_relerr:.2f}x  q-traj final cos={qdrift_final[0]:.5f} "
+              f"maxabs={qdrift_final[1]:.2f}")
 
 
 if __name__ == "__main__":

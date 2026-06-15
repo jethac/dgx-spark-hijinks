@@ -106,11 +106,58 @@ attention-only, leading hypothesis: the nvfp4 KV code path enables a fusion/cust
 misbehaves only with the MoE model (fp8 KV takes a different path, clean). Next probe: compare FlashInfer
 nvfp4 attention output to a faithful dequant+SDPA reference on the same cached pages+Q at one layer.
 
-## Ship decision
+## LOCALIZATION (2026-06-15): reader is faithful; what's left is calibration-reachability
 
-- **26B-A4B**: ship **fp8 KV** (near-lossless, correct). 2x the nvfp4 footprint but correct. Full-nvfp4
-  26B is BLOCKED on this kernel fix.
-- **12B / 31B**: nvfp4 GREEN (calibrated) — unaffected.
+Two captures on the e3 stack (vast PRO-6000), exact serving `wrapper.run()` I/O via
+`docs/vast_anchor/sitecustomize.py`, ctx 512 scoring prefill, 26B vs 12B:
+
+**(1) Reader faithfulness — `compare_fi_vs_ref.py` (SOLID).** Dequantized the SAME cached nvfp4
+pages (validated roundtrip-probe math) + a faithful end-aligned-causal/SWA SDPA reference, vs the
+FlashInfer output, every captured layer. Result: cosine **1.00000**, mean rel-err ~0.2%, max-abs
+~0.1 on one element of 2M — identical residual for 26B and 12B, sliding AND global layers. **The
+FlashInfer nvfp4 paged READER is mathematically correct for 26B. Not a kernel/reader bug.**
+This overturns the earlier "paged nvfp4 READER math bug" hypothesis.
+
+**(2) Pure quant perturbation — `compare_bf16_vs_nvfp4.py` (SOLID, but read carefully).** Layer-0
+q is KV-independent, so it is IDENTICAL across a bf16 run and an nvfp4 run (cosine 1.000003,
+max-abs 0.0000); layer-0 attention-output difference is then the PURE nvfp4 KV perturbation. It is
+**~12.8% for 26B vs ~10.4% for 12B — essentially the same.** 26B's in-situ K/V is NOT meaningfully
+less nvfp4-representable than 12B's (consistent with the round-trip rel-L2 == 12B from task #55).
+
+**(3) Full-depth attention drift (CORRECTS an earlier over-claim).** An interim 8-layer read
+suggested "26B amplifies the drift, 12B stays flat" -> MoE router amplification. **The full-depth
+curve does NOT support that:**
+
+| model | layers | seed L0 | final | amplification | q-traj final cos | q-traj final max-abs |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 26B-A4B | 35 | 12.8% | 29.7% | 2.32x | 0.963 | 12.41 |
+| 12B (k=v=0.1) | 56 | 10.4% | 28.7% | 2.75x | 0.964 | 7.06 |
+
+Both trajectories drift to nearly the SAME attention error (~29%) and q-cosine (~0.96). 26B drifts
+modestly FASTER per layer (29.7% in 35 layers vs 12B's 28.7% in 56; worst-case q max-abs 12.4 vs
+7.1) — a weak MoE-sensitivity signal at most, NOT the clean 10x amplification the 8-layer slice
+implied. **So differential attention-trajectory drift does NOT explain 26B's collapse.**
+
+**CONFOUND / what is still genuinely OPEN.** This 12B "control" ran at k=v=0.1, which is 12B's
+*degraded* config (12B is GREEN only at calibrated k=0.1, **v=0.06**: +0.024; uncalibrated k=v=0.1
+is ~+0.42, itself off). So (3) compares two degraded configs and cannot isolate the real
+differentiator, which is **calibration-reachability**: 12B HAS a green (k,v) sweet spot; does 26B?
+The only 26B sweep on record is 3 points with k==v (0.05/0.07/0.1, all below-truth degenerate) —
+a per-K/per-V 2D sweep has NOT been run. Until it is, "26B nvfp4 is unreachable" is unproven.
+
+**What is settled vs open:**
+- SETTLED: not a FlashInfer reader bug; not a quantizability/representability bug; per-layer seed
+  perturbation == 12B; attention-trajectory drift ~== 12B at matched scale.
+- OPEN: (a) does any (k,v) calibrate 26B near truth? (2D sweep, not yet run); (b) if not, is the
+  residual sensitivity in the MoE FFN/router readout (the logits responding to ~29% attention
+  drift more than 12B's dense FFN does)? Capture lm_head logits bf16-vs-nvfp4 to test.
+
+## Ship decision (current, pending the 2D sweep)
+
+- **26B-A4B**: ship **fp8 KV** (near-lossless, correct) as the safe path TODAY. Whether full-nvfp4
+  is reachable via 2D per-K/V calibration is being tested (do NOT yet claim it's impossible).
+- **12B / 31B**: nvfp4 GREEN (calibrated) — dense decoders — unaffected.
+- **DiffusionGemma**: 26B-A4B base → same question; fp8 KV safe today, truth-gate any nvfp4 claim.
 
 ## Cross-lane
 
