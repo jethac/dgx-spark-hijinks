@@ -38,7 +38,7 @@ python3.12 -m venv /root/v
 /root/v/bin/pip install -q -U pip >/dev/null 2>&1
 /root/v/bin/pip install -q torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
 /root/v/bin/pip install -q torchvision --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
-/root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub 2>&1 | tail -1
+/root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub apache-tvm-ffi 2>&1 | tail -1
 
 echo "=== download + install vLLM wheel ==="
 if [ "${SKIP_VLLM_INSTALL:-0}" = "1" ]; then
