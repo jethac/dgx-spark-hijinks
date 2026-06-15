@@ -129,3 +129,27 @@ HF truth 7.9923:
 | nvfp4 k=v=0.10 | 6.2935 | -1.70 (chat "Tokyo" coherent) |
 The break PERSISTS unchanged on the newer FlashInfer — confirms a real kernel bug, not a version artifact
 that main happened to fix. Proceeding to the read-vs-dequant+SDPA capture (mail 0182) on the e3 stack.
+
+## READ-CAPTURE VERDICT (2026-06-15): the FlashInfer nvfp4 READER is NOT the bug
+Captured the EXACT serving `BatchPrefillWithPagedKVCacheWrapper.run()` inputs+output for the ctx-512 scoring
+prefill, layers 0-7, for 26B AND 12B (control), via `docs/vast_anchor/sitecustomize.py` (wraps run(), saves
+q + paged nvfp4 split views k_data/v_data + fp8 block-scales + plan state). Then dequantized the SAME cached
+pages (E2M1 LUT x per-16-block fp8 SF x global scale, the validated `nvfp4_writer_roundtrip_probe` math) and
+ran a faithful end-aligned-causal + sliding-window SDPA reference (`docs/vast_anchor/compare_fi_vs_ref.py`).
+
+Result — FlashInfer nvfp4 output vs dequant+SDPA reference, per layer:
+| model | layers | cosine | mean-abs | ref mean-|.| | rel mean err |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 26B-A4B | sliding 0-4,7 | 1.00000 | 0.00069-0.00079 | 0.30-0.38 | ~0.2% |
+| 26B-A4B | global 5-6 | 1.00001 | 0.00103 | 0.49 | ~0.2% |
+| 12B (control) | sliding | 1.00000 | 0.00069-0.00082 | 0.33-0.39 | ~0.2% |
+| 12B (control) | global | 1.00002 | 0.00074-0.00081 | 0.35-0.38 | ~0.2% |
+
+**The kernel faithfully reproduces dequant+SDPA over the cached pages for 26B, identical residual to 12B
+(pure bf16 rounding, max-abs ~0.1 on one element of 2M, same in both models).** This OVERTURNS the leading
+"paged nvfp4 READER math bug" hypothesis (the localization section above). The reader is correct; the bias is
+**outside reader math** — it is in the cache CONTENTS (what the writer/quantization stores for 26B's specific
+K/V distribution at this global scale) or downstream of attention. Per the goal decision tree this is the
+"both match reference -> trace outside reader" branch. Next probe (running): capture a bf16 run and compare
+layer-0 attention (q is KV-independent at layer 0, so identical across bf16/nvfp4 runs) between bf16-cache and
+nvfp4-cache to measure pure per-layer quantization perturbation for 26B vs 12B.
