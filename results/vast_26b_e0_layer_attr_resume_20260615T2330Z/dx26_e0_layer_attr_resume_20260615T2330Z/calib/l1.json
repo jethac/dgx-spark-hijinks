@@ -1,0 +1,96 @@
+{
+  "source": "26B-A4B e0 layer attribution resume l1-l4",
+  "mode": "l1",
+  "layer_type_scales": {
+    "sliding_attention": {
+      "k_scale": 0.07,
+      "v_scale": 0.05
+    },
+    "full_attention": {
+      "k_scale": 0.07,
+      "v_scale": 0.05
+    }
+  },
+  "layer_scales": {
+    "0": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "1": {
+      "k_scale": 0.103,
+      "v_scale": 0.08
+    },
+    "2": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "3": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "4": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "6": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "7": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "8": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "9": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "10": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "12": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "13": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "14": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "15": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "16": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "18": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "19": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "20": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "21": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    },
+    "22": {
+      "k_scale": 0.1,
+      "v_scale": 0.08
+    }
+  }
+}

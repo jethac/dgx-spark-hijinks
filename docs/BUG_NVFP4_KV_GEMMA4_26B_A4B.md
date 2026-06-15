@@ -360,6 +360,27 @@ early/mid blocks. Bucket deltas remain negative across the whole scored suffix (
 inside `e0` or an activation/logit capture around the first sliding stack. A broad scalar K sweep remains
 the wrong search. Artifact: `results/vast_26b_block_attr_20260615T2110Z/summary.md`.
 
+**e0 layer-attribution resume (2026-06-15 UTC):** completed the interrupted split of layers `0-4` on Vast
+instance `41113137` (destroyed after artifact pull), merging its `l1-l4` rows with the prior stopped
+baseline. Same `ctx=8185`, `prefix=4096`, 4088 scored-token setup and `g1c9686c61.sm120a` layer-aware wheel.
+
+| row | hot layer(s) | mean NLL | delta vs bf16 |
+| --- | --- | ---: | ---: |
+| `bf16` | none | `7.933360410` | `+0.000000000` |
+| `base_k100` | none | `7.815396153` | `-0.117964257` |
+| `e0_all` | `0-4` | `6.125525339` | `-1.807835071` |
+| `l0` | `0` | `6.853853891` | `-1.079506519` |
+| `l1` | `1` | `6.806950847` | `-1.126409564` |
+| `l2` | `2` | `7.131197863` | `-0.802162547` |
+| `l3` | `3` | `7.444459589` | `-0.488900821` |
+| `l4` | `4` | `7.384541935` | `-0.548818476` |
+
+Verdict: the first sliding block collapse is not a single bad layer. Layers `0` and `1` are largest, but all
+five layers move the score materially, and the all-hot `0-4` row is worse than any individual layer. Bucket
+deltas remain negative across the scored suffix for every single-layer hot row. Next branch should be
+activation/logit attribution around layers `0-4` or a different early-sliding calibration model, not another
+broad scalar sweep. Artifact: `results/vast_26b_e0_layer_attr_resume_20260615T2330Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
