@@ -263,6 +263,14 @@ vary early/mid/late sliding bands over the known 26B-A4B layer map: early slidin
 layer-type best and then tests which sliding band(s) actually need the higher `0.10/0.08` scale. This is the
 next bounded reachability test before deeper per-layer search.
 
+**Layer-band sweep verdict:** RED but improved again. Ran the packet on Vast instance `41072927` and destroyed
+the instance after pulling artifacts. The `all_high` replay reproduced the layer-type best exactly
+(`-0.148306801`). The best tested band row applies the higher `0.10/0.08` scale only to early+mid sliding
+layers, leaving late sliding and all full layers at `0.07/0.05`: NLL `7.815396153`, delta `-0.117964257` vs
+vLLM bf16. Still not claim-grade, but the bias is now demonstrably depth-sensitive. Next useful search is a
+narrow per-layer/sub-band screen inside early+mid sliding layers, not a broad whole-model grid. Artifact:
+`results/vast_26b_layer_band_20260615T1718Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he

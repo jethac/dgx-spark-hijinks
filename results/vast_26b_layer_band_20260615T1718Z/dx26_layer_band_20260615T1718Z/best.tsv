@@ -1,0 +1,11 @@
+label	base_sk	base_sv	base_fk	base_fv	early	mid	late	mean_nll	delta_vs_bf16	ok	status
+early_mid_high	0.07	0.05	0.07	0.05	0.10,0.08	0.10,0.08	NA	7.815396153	-0.117964257	True	ok
+all_high	0.10	0.08	0.07	0.05	NA	NA	NA	7.785053609	-0.148306801	True	ok
+early_late_high	0.07	0.05	0.07	0.05	0.10,0.08	NA	0.10,0.08	7.711891613	-0.221468798	True	ok
+early_high	0.07	0.05	0.07	0.05	0.10,0.08	NA	NA	7.708026323	-0.225334087	True	ok
+mid_only_k10_v05	0.07	0.05	0.07	0.05	NA	0.10,0.05	NA	7.588040499	-0.345319912	True	ok
+late_high	0.07	0.05	0.07	0.05	NA	NA	0.10,0.08	7.562140858	-0.371219552	True	ok
+late_only_k10_v05	0.07	0.05	0.07	0.05	NA	NA	0.10,0.05	7.549492551	-0.383867859	True	ok
+mid_late_high	0.07	0.05	0.07	0.05	NA	0.10,0.08	0.10,0.08	7.537111599	-0.396248812	True	ok
+mid_high	0.07	0.05	0.07	0.05	NA	0.10,0.08	NA	7.494763016	-0.438597394	True	ok
+early_only_k10_v05	0.07	0.05	0.07	0.05	0.10,0.05	NA	NA	6.984043063	-0.949317347	True	ok
