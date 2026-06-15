@@ -14,10 +14,15 @@ WHEEL="/root/$(basename "${VLLM_WHEEL_URL}" | sed 's/%2B/+/g')"
 
 echo "=== apt ==="
 apt-get update -q >/dev/null 2>&1
-apt-get install -y -q python3.12-venv python3.12-dev build-essential git wget ca-certificates >/dev/null 2>&1
+apt-get install -y -q software-properties-common ca-certificates >/dev/null 2>&1
+if ! apt-cache policy python3.12-venv | grep -q 'Candidate: [^()]*[0-9]'; then
+  add-apt-repository -y ppa:deadsnakes/ppa >/dev/null 2>&1
+  apt-get update -q >/dev/null 2>&1
+fi
+apt-get install -y -q python3.12 python3.12-venv python3.12-dev build-essential git wget ca-certificates >/dev/null 2>&1
 
 echo "=== venv + torch ==="
-python3 -m venv /root/v
+python3.12 -m venv /root/v
 /root/v/bin/pip install -q -U pip >/dev/null 2>&1
 /root/v/bin/pip install -q torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
 /root/v/bin/pip install -q torchvision --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
