@@ -44,6 +44,12 @@ and `root`. Live validation is no longer blocked by host access.
   gate. The current Gemma 3 NVFP4 candidate is machine-rejected in
   `results/gemma3_nvfp4_kv_quality_gate_current_red_20260609.json`, so capacity/routing
   evidence cannot accidentally promote the known-corrupt row.
+- UPDATE 2026-06-15: that Gemma 3 NVFP4 red was a **P520 WSL2/WDDM runtime artifact**, not a
+  kernel/sm_120 defect. The 270M minimal repro (d256/SWA-512/1-kv-head) is COHERENT and
+  near-lossless on native-Linux sm_120 on two dies — GB202 (+0.065) and the SAME GB206 die as
+  the P520 (+0.053) — vs the P520's WSL2 +8.12 gibberish. nvfp4 KV is coherent on every native
+  deployment target (sm_120 GB202/GB206, sm_121 GB10); the red is retired to a WSL2-dev-box
+  caveat. See `docs/BUG_FLASHINFER_GEMMA3_1B_SERVING_NUMERICS.md` (RESOLVED header).
 - `results/gemma_compatibility_plan_audit_20260609.json` verifies that
   `docs/GEMMA_COMPATIBILITY_PLAN.md` still records the Gemma-specific PPL/quality rule, the
   outlier-risk caveat, the audited rung order, and capacity-not-speed framing.

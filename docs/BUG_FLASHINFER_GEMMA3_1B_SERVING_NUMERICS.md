@@ -1,5 +1,34 @@
 # BUG: FlashInfer serving-path numerics wrong at Gemma 3 1B geometry (d256 / SWA-512 / 1 KV head)
 
+## RESOLVED 2026-06-15 (native-Linux sm_120, two dies): nvfp4 arm is a WSL2/WDDM ARTIFACT — defect ABSENT
+
+Task #37 closed. The last-open arm — the nvfp4 KV read-path "deterministic gibberish"
+(+1.587 nats @ 1B / +8.12 @ 270M on the P520) — **does NOT reproduce on native-Linux
+sm_120**, on the minimal 270M repro (d256 / SWA-512 / 1-kv-head), on TWO different dies:
+
+| box | GPU | die | OS | nvfp4 - bf16 (270M, ctx 8191 chunked, wikitext) | verdict |
+|---|---|---|---|---:|---|
+| vast A | RTX PRO 6000 WS | GB202 | native Ubuntu 24.04 | **+0.065** (4.0693 vs 4.0041) | COHERENT |
+| vast B | RTX 5060 Ti | **GB206** | native Ubuntu 24.04 | **+0.053** (4.0572 vs 4.0041) | COHERENT |
+| P520 (prior) | RTX 5060 Ti | **GB206** | **WSL2 / WDDM** | +8.12 (gibberish) | GIBBERISH |
+
+Same wheel (`g6adc00f70.sm120a`) + FlashInfer source-JIT (`7d5d477b`) as the P520
+wheel-disambig. **Box B is the SAME GB206 die as the P520** — the only changed variable
+is WSL2/WDDM vs native Linux. Native Linux → coherent, near-lossless nvfp4 (the FlashInfer
+FA2 NVFP4 backend engaged on SM12x and produced +0.05 nats, not gibberish). So the gibberish
+is a **P520 WSL2/WDDM runtime artifact** (driver/runtime passthrough in the nvfp4 path), NOT
+an sm_120 kernel defect and NOT the d256/SWA-512/1-kv-head geometry. This is consistent with
+the bf16-inflation and engine-wedge arms already being ruled WSL/util artifacts.
+
+Ship consequence: **nvfp4 KV is coherent on all native sm_120 (GB202, GB206) and sm_121 (GB10).**
+The only red was the WSL2 dev box. Gemma 3 1B/270M NVFP4-KV row is GREEN-class on every native
+deployment target; the RED bank is retired to a WSL2-environment caveat. (Box A bf16=box B
+bf16=4.0041 bitwise-equal cross-die, confirming the harness is sound.)
+Artifacts: vast A `/root/g3repro_A.log` + `/root/g3repro/{bf16,nvfp4}.json`; vast B `/root/g3repro3.log`.
+
+--- original (pre-2026-06-15) below ---
+
+
 Status (UPDATED 2026-06-12 by the 1B RIGOROUS re-test, § below): the **bf16 arm
 is NOT a bug — defect (A) is REFUTED. It was an ENVIRONMENTAL / false-green
 ARTIFACT.** A controlled 1B re-run (same `g6adc00f70` wheel, same FlashInfer

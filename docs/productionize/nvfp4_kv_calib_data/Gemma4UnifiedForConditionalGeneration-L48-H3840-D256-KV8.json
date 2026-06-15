@@ -1,0 +1,14 @@
+{
+  "arch_signature": "Gemma4UnifiedForConditionalGeneration-L48-H3840-D256-KV8",
+  "model": "google/gemma-4-12b-it",
+  "k_scale": 0.1,
+  "v_scale": 0.06,
+  "source": "green_ladder_coorddescent_2d",
+  "method": "2-D coordinate-descent over suffix-NLL on wikitext, ctx 8185 / prefix 4096, vast PRO 6000 (GB202/sm_120)",
+  "verified": {
+    "bf16_single": 8.2816, "bf16_chunk": 8.2764,
+    "nvfp4_single": 8.2409, "nvfp4_chunk": 8.3003,
+    "delta_single": -0.0407, "delta_chunk": 0.0239,
+    "note": "production chunked-prefill regime is +0.024 nats/token vs bf16 (near-lossless); single-pass dips to -0.041 (the quantized<=bf16 anomaly). Was +0.40 uncalibrated. K wants a smaller global scale (1/0.1=10) than V (1/0.06=16.7) -- V distribution is wider."
+  }
+}
