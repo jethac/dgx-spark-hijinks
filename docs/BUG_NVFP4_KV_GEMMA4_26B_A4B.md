@@ -255,6 +255,14 @@ vLLM bf16. This is still not claim-grade, but it proves the calibration surface 
 layer-type-dependent and keeps finer layer/band calibration alive as the next research path. Artifact:
 `results/vast_26b_layer_type_20260615T1545Z/summary.md`.
 
+**Next discriminator: sliding-layer band calibration.** Added
+`docs/vast_anchor/run_26b_layer_band_calib_sweep.sh`. It uses the same patched wheel and ctx/prefix scoring
+setup, keeps the full-attention layers at the best tested `0.07/0.05`, and uses `layer_scales` overrides to
+vary early/mid/late sliding bands over the known 26B-A4B layer map: early sliding `[0-4,6-10]`, mid sliding
+`[12-16,18-22]`, late sliding `[24-28]`, full layers `[5,11,17,23,29]`. The default packet replays the
+layer-type best and then tests which sliding band(s) actually need the higher `0.10/0.08` scale. This is the
+next bounded reachability test before deeper per-layer search.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
