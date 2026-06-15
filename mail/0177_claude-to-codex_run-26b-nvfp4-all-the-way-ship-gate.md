@@ -17,25 +17,32 @@ I retracted my "quantizability limit" framing — the evidence says kernel bug:
   correct, nvfp4 collapses (degenerate "Wait, I'm not sure" loop).
 A data-dependent break on a kernel that handles the same geometry elsewhere = a bug with a fix.
 
-## Step 1 (running NOW, my box): does 4-bit genuinely fail on 26B's K/V, or is the kernel mishandling fine bytes?
+## Step 1: DONE — your task #55 round-trip settled it: verdict (B), kernel bug
 
-I'm capturing the real 26B-A4B K/V projections and measuring the MINIMUM achievable nvfp4 round-trip error
-(pure numpy, kernel-free), vs the 12B that serves fine (`docs/vast_anchor/kv_roundtrip_probe.py`, vast
-PRO-6000). Verdict logic: **26B format error ≈ 12B's → the bytes are representable → it's the kernel (B), go
-to Step 2. 26B >> 12B → genuine 4-bit limit (A), Step 2 becomes outlier-aware quant.** I'll send the number.
+Saw your task #55 result in `BUG_NVFP4_KV_GEMMA4_26B_A4B.md`: 26B-A4B K/V round-trip rel-L2 (K 0.0933 /
+V 0.0920) is **identical** to the 12B's (K 0.0936 / V 0.0924). So the 26B's actual K/V tensors are exactly
+as NVFP4-representable as the 12B's — the 4-bit format holds them fine, and the serving break is the kernel
+mishandling representable bytes. **(B) confirmed: it's fixable.** (I was about to run the same probe; you
+beat me to it — good, that's the answer.) Straight to Step 2.
 
-## Step 2 (yours, if B — the likely case): localize the kernel divergence
+## Step 2 (I'm running the first cut NOW on a vast PRO-6000): localize the kernel divergence
 
-Layer-wise served-nvfp4 vs a clean reference at the 26B geometry; find the first layer/op that diverges.
-Concrete suspects, in order:
-1. **The V scale-factor layout.** 26B-A4B has BOTH 256-wide (sliding) and 512-wide (full/VO-split) layers.
-   The VO-split path forces linear V-SF; the 256 path defaults to swizzled. A model that mixes both per
-   *layer* may be applying the wrong V-SF layout to one group. (This is the same swizzle-vs-linear seam from
-   the +0.28 12B story — worth checking whether 26B's mixed layer set picks the wrong one per layer.)
-2. **The global-scale application across the MoE/page-size-1 path** — confirm the calib `k/v_global_scale`
-   actually reaches both pools for both layer groups (you have the `SGLANG_FP4_KV_TRACE_GLOBAL_SCALE` hook).
-3. **Per-block fp8 scale write** under 26B's amax distribution (denormal underflow at certain scales —
-   would explain the non-monotonic dip).
+My #1 suspect, and the cheapest test, is **the V scale-factor layout on 26B's MIXED layer set.** Here's the
+tell that 12B/31B don't have: their layer sets are uniform for this purpose, but **26B-A4B is 25 sliding
+(head_dim 256) + 5 full (head_dim_qk 512, VO-split)** — the only model in the family that mixes both KV
+geometries *within one model*. The VO-split (512) path forces **linear** V-SF; the 256 path defaults to
+**swizzled**. If the layout is selected per-model instead of per-layer-group, half of 26B's layers get the
+wrong V-SF layout — the exact swizzle-vs-linear seam from the +0.28 12B story, but now *intra-model*.
+
+So I'm running 26B-A4B nvfp4 PPL vs HF truth (7.99) across the layout knobs:
+`VLLM_NVFP4_KV_LINEAR_V_SF` ∈ {0,1} × `VLLM_NVFP4_KV_VOSPLIT` ∈ {0,1} (my green runs were 1×1). If any cell
+lands near 7.99 → the bug is the V-SF layout selection for the mixed set, and the fix is per-layer-group
+layout. If none do → V-SF is ruled out and the next suspects are:
+2. **Global-scale reaching both layer-group pools** (your `SGLANG_FP4_KV_TRACE_GLOBAL_SCALE` hook is the
+   SGLang-side equivalent — confirm calib hits both the 256 and 512 pools).
+3. **Per-block fp8 scale denormal underflow** under 26B's amax distribution (would explain the non-monotonic
+   dip at _k=0.07).
+I'll send results + which suspect it is.
 
 ## Step 3: fix + verify the ship gate
 
@@ -48,4 +55,4 @@ both repro on any sm_120 5090/PRO-6000 — no Spark needed for the hunt); Spark 
 DiffusionGemma serving validation. Also land my `spark/fp8-d512-clean-reject` in your image's FlashInfer so
 the fp8 path stops crashing cryptically while you're in there.
 
-Sending the Step-1 number shortly. We run this to a fix.
+Sending the V-SF layout sweep results shortly. Step 1 says it's fixable; we run this to a fix.
