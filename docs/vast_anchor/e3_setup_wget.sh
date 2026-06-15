@@ -7,18 +7,21 @@
 #   VLLM_WHEEL_PATH  Existing local wheel path, useful when the release is private and the wheel was scp'd in.
 # Optional env:
 #   FLASHINFER_REF  jethac/flashinfer ref; defaults to the shared E3 ref.
+#   SKIP_VLLM_INSTALL=1  install Python/Torch/FlashInfer only, then exit after non-vLLM verification.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
-if [ -z "${VLLM_WHEEL_URL:-}" ] && [ -z "${VLLM_WHEEL_PATH:-}" ]; then
+if [ "${SKIP_VLLM_INSTALL:-0}" != "1" ] && [ -z "${VLLM_WHEEL_URL:-}" ] && [ -z "${VLLM_WHEEL_PATH:-}" ]; then
   echo "set VLLM_WHEEL_URL or VLLM_WHEEL_PATH" >&2
   exit 2
 fi
 FLASHINFER_REF="${FLASHINFER_REF:-1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a}"
 if [ -n "${VLLM_WHEEL_PATH:-}" ]; then
   WHEEL="${VLLM_WHEEL_PATH}"
-else
+elif [ -n "${VLLM_WHEEL_URL:-}" ]; then
   WHEEL="/root/$(basename "${VLLM_WHEEL_URL}" | sed 's/%2B/+/g')"
+else
+  WHEEL=""
 fi
 
 echo "=== apt ==="
@@ -38,11 +41,15 @@ python3.12 -m venv /root/v
 /root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub 2>&1 | tail -1
 
 echo "=== download + install vLLM wheel ==="
-if [ -n "${VLLM_WHEEL_URL:-}" ]; then
-  wget -q -O "${WHEEL}" "${VLLM_WHEEL_URL}"
+if [ "${SKIP_VLLM_INSTALL:-0}" = "1" ]; then
+  echo "SKIP_VLLM_INSTALL=1; skipping vLLM wheel install"
+else
+  if [ -n "${VLLM_WHEEL_URL:-}" ]; then
+    wget -q -O "${WHEEL}" "${VLLM_WHEEL_URL}"
+  fi
+  ls -la "${WHEEL}" | awk '{print "wheel size:",$5}'
+  /root/v/bin/pip install -q "${WHEEL}" 2>&1 | tail -2
 fi
-ls -la "${WHEEL}" | awk '{print "wheel size:",$5}'
-/root/v/bin/pip install -q "${WHEEL}" 2>&1 | tail -2
 
 echo "=== flashinfer source ==="
 cd /root
@@ -62,12 +69,15 @@ echo "=== verify ==="
 PYTHONPATH=/root/flashinfer /root/v/bin/python - <<'PY'
 import importlib.metadata
 import torch
-import vllm
 import flashinfer
 
-print("OK vllm", vllm.__version__)
 print("OK torch", torch.__version__, torch.version.cuda)
 print("OK flashinfer", getattr(flashinfer, "__file__", None))
-print("vllm_dist", importlib.metadata.version("vllm"))
+try:
+    import vllm
+    print("OK vllm", vllm.__version__)
+    print("vllm_dist", importlib.metadata.version("vllm"))
+except Exception as exc:
+    print("SKIP_OR_MISSING_vllm", type(exc).__name__, str(exc)[:200])
 PY
 echo DONE_E3_SETUP
