@@ -271,6 +271,14 @@ vLLM bf16. Still not claim-grade, but the bias is now demonstrably depth-sensiti
 narrow per-layer/sub-band screen inside early+mid sliding layers, not a broad whole-model grid. Artifact:
 `results/vast_26b_layer_band_20260615T1718Z/summary.md`.
 
+**Next discriminator: early+mid five-layer sub-bands.** Added
+`docs/vast_anchor/run_26b_subband_calib_sweep.sh`. It splits the winning early+mid sliding region into four
+five-layer blocks: `e0=[0-4]`, `e1=[6-10]`, `m0=[12-16]`, `m1=[18-22]`, with late sliding `[24-28]` and full
+layers `[5,11,17,23,29]` kept at the base `0.07/0.05`. The default packet replays the prior best
+`all_four_high`, tests single/pair/drop-one block combinations, and probes nearby all-four scales
+`0.10/0.07`, `0.10/0.09`, `0.09/0.08`, `0.11/0.08`. This is the narrow calibration search implied by the
+band result.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
