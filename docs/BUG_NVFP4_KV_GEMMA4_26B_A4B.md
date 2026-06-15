@@ -117,3 +117,15 @@ nvfp4 attention output to a faithful dequant+SDPA reference on the same cached p
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
 should fp8-vs-nvfp4 his 26B against an HF-eager truth to check (mail 0171). Artifacts: vast
 `/root/dx26/*` (hfref2.out, bf16/fp8/nv0{5,7,7b,1}.json + logs).
+
+## e3 re-check (2026-06-15): STILL BROKEN on FlashInfer-main
+Re-ran on the epoch-3 stack (vLLM v0.23.0 + FlashInfer main, e3 wheel ge99078ddf), ctx 8185 chunked,
+HF truth 7.9923:
+| | NLL | vs truth |
+| --- | ---: | ---: |
+| bf16 | 7.9334 | -0.06 (correct) |
+| nvfp4 k=v=0.05 | 6.3877 | -1.60 |
+| nvfp4 k=v=0.07 | 7.1592 | -0.83 |
+| nvfp4 k=v=0.10 | 6.2935 | -1.70 (chat "Tokyo" coherent) |
+The break PERSISTS unchanged on the newer FlashInfer — confirms a real kernel bug, not a version artifact
+that main happened to fix. Proceeding to the read-vs-dequant+SDPA capture (mail 0182) on the e3 stack.
