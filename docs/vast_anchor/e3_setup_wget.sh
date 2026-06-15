@@ -38,7 +38,7 @@ python3.12 -m venv /root/v
 /root/v/bin/pip install -q -U pip >/dev/null 2>&1
 /root/v/bin/pip install -q torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
 /root/v/bin/pip install -q torchvision --index-url https://download.pytorch.org/whl/cu130 2>&1 | tail -1
-/root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub apache-tvm-ffi nvidia-ml-py 2>&1 | tail -1
+/root/v/bin/pip install -q ninja transformers pyarrow accelerate huggingface_hub 2>&1 | tail -1
 
 echo "=== download + install vLLM wheel ==="
 if [ "${SKIP_VLLM_INSTALL:-0}" = "1" ]; then
@@ -58,6 +58,7 @@ git clone -q https://github.com/jethac/flashinfer
 git -C flashinfer fetch -q origin "${FLASHINFER_REF}" || git -C flashinfer fetch -q --all
 git -C flashinfer checkout -q "${FLASHINFER_REF}"
 git -C flashinfer submodule update --init --recursive --depth 1 >/dev/null 2>&1
+/root/v/bin/pip install -q -r <(grep -v '^torch$' /root/flashinfer/requirements.txt) 2>&1 | tail -1
 mkdir -p flashinfer/flashinfer/data
 ln -sfn ../../csrc flashinfer/flashinfer/data/csrc
 ln -sfn ../../include flashinfer/flashinfer/data/include
