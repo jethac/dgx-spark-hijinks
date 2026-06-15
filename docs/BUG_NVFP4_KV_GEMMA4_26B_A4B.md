@@ -338,6 +338,28 @@ If full NVFP4 continues, the next useful work is layer/activation attribution of
 shift or a different calibration model. Artifact:
 `results/vast_26b_position_attr_short_20260615T1952Z/summary.md`.
 
+**Block attribution discriminator (2026-06-15 UTC):** completed on Vast instance `41102885` (destroyed
+after artifact pull) with the same `ctx=8185`, `prefix=4096`, 4088-token scoring setup and the
+`g1c9686c61.sm120a` layer-aware wheel. This row tested whether the `k=0.103` collapse comes from one
+early/mid sliding block by holding late sliding/full at `0.07/0.05`, holding non-tested early/mid blocks at
+`0.100/0.080`, and hotting one five-layer block at a time to `K=0.103,V=0.080`.
+
+| row | hot block | mean NLL | delta vs bf16 |
+| --- | --- | ---: | ---: |
+| `bf16` | none | `7.933360410` | `+0.000000000` |
+| `base_k100` | none; early+mid all `0.100/0.080` | `7.815396153` | `-0.117964257` |
+| `e0` | layers `0-4` | `6.125525339` | `-1.807835071` |
+| `e1` | layers `6-10` | `7.391867353` | `-0.541493057` |
+| `m0` | layers `12-16` | `7.749327096` | `-0.184033314` |
+| `m1` | layers `18-22` | `7.833110515` | `-0.100249896` |
+| `all_k103` | layers `0-4,6-10,12-16,18-22` | `6.246659276` | `-1.686701135` |
+
+The collapse is now localized: hotting `e0` (`layers 0-4`) alone is even worse than hotting all four
+early/mid blocks. Bucket deltas remain negative across the whole scored suffix (`e0` tail still
+`-1.461658259`), so this is not one bad token or page. The next useful discriminator is a layer-level split
+inside `e0` or an activation/logit capture around the first sliding stack. A broad scalar K sweep remains
+the wrong search. Artifact: `results/vast_26b_block_attr_20260615T2110Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
