@@ -1,0 +1,6 @@
+26B position attribution attempt on Vast instance 41087840.
+- setup green: vLLM 0.1.dev1+g1c9686c61.sm120a, FlashInfer 1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a.
+- original packet without text-only knobs stalled after model load at: Encoder cache will be initialized with budget 4096 and profiled with 1 video items.
+- text-only packet with language_model_only+skip_mm_profiling avoided encoder profiling but stalled after model loading.
+- single-row skip_mm_profiling-only discriminator printed 'Skipping memory profiling for multimodal encoder and encoder cache' but did not reach JSON output before manual stop.
+No quality row produced.

@@ -86,6 +86,8 @@ def main() -> int:
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.82)
     parser.add_argument("--enforce-eager", action="store_true")
     parser.add_argument("--skip-warmup", action="store_true")
+    parser.add_argument("--language-model-only", action="store_true")
+    parser.add_argument("--skip-mm-profiling", action="store_true")
     args = parser.parse_args()
 
     if args.calib_json:
@@ -107,6 +109,8 @@ def main() -> int:
         enforce_eager=args.enforce_eager,
         enable_prefix_caching=True,
         max_num_batched_tokens=args.max_num_batched_tokens,
+        language_model_only=args.language_model_only,
+        skip_mm_profiling=args.skip_mm_profiling,
     )
 
     warm_elapsed_s = 0.0

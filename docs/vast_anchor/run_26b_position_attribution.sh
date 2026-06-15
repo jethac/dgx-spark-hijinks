@@ -91,6 +91,7 @@ run_row() {
     --output "${OUT}/rows/${label}.json"
     --enforce-eager
     --skip-warmup
+    --skip-mm-profiling
   )
   if [ -n "${calib}" ]; then
     args+=(--calib-json "${calib}")

@@ -311,6 +311,15 @@ layer map) and emits `delta_report.tsv` plus top per-position delta JSON. It is 
 packet, not another calibration search: the expected answer is whether the low-NLL collapse is localized to
 specific score-position bands/tokens or spread across the continuation.
 
+**Attribution packet startup blocker (2026-06-15 UTC):** first live attempt on Vast instance `41087840`
+produced no quality row. The default Gemma 4 init stalled after model load in multimodal encoder-cache
+profiling; `language_model_only+skip_mm_profiling` avoided that line but also failed to reach scoring;
+`skip_mm_profiling` alone reached the explicit "Skipping memory profiling for multimodal encoder and encoder
+cache" line but still did not produce JSON before manual stop. Artifact:
+`results/vast_26b_position_attr_attempts_20260615T1902Z/summary.md`. The packet now uses the less invasive
+`skip_mm_profiling` knob only, but the next live run should either use a different sm120 offer or first prove
+the startup row reaches scoring before running all NVFP4 candidates.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
