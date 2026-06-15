@@ -1,0 +1,14 @@
+{
+  "arch_signature": "Gemma4ForConditionalGeneration-L60-H5376-D256-KV16",
+  "model": "google/gemma-4-31b-it",
+  "k_scale": 0.05,
+  "v_scale": 0.05,
+  "source": "green_ladder_coorddescent_2d",
+  "method": "2-D coordinate-descent over suffix-NLL on wikitext, ctx 8185 / prefix 4096 CHUNKED (nbt=4096; 31B single-pass 8185 OOMs the FA2 two-pass workspace), vast PRO 6000 (GB202/sm_120)",
+  "verified": {
+    "bf16_chunk": 9.1789,
+    "nvfp4_chunk": 9.1693,
+    "delta_chunk": -0.0096,
+    "note": "production chunked-prefill nvfp4 is -0.010 nats/token vs bf16 (near-lossless, at/below bf16 -- the quantized<=bf16 anomaly). 31B optimum is symmetric (k=v=0.05), a SMALLER scale (=larger global scale 1/0.05=20) than 12B's (0.1,0.06) -- confirms per-architecture calibration is required, not a shared constant. Loader-applied (VLLM_NVFP4_KV_CALIB) confirmed."
+  }
+}

@@ -29,8 +29,15 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   `+0.40`; the joint `0.1/0.1` value gives `+0.039` chunk / `+0.072` single. The
   `+0.19` "true cost" figure was the *uncalibrated single-pass* artifact; with the
   calibrated scale the matched row is near-lossless. 2-D coordinate descent found V
-  wants a larger global scale than K (V distribution is wider). SGLang arm still
-  open (Codex lane) — same calibration applies; sidecar-calib 0.1 run in flight.
+  wants a larger global scale than K (V distribution is wider). SGLang arm CLOSED by
+  Codex (mail 0163, deferred-sidecar routes scales through the warmup calibration write).
+- GREEN (vLLM, 2026-06-15): 12B AND 31B long-ctx full-NVFP4 matched rows. 31B
+  (`google/gemma-4-31b-it`, chunked) nvfp4 `k=v=0.05` = `-0.010` nats vs bf16
+  (`docs/productionize/nvfp4_kv_calib_data/Gemma4ForConditionalGeneration-L60-H5376-D256-KV16.json`).
+  31B's optimum (k=v=0.05) differs from 12B's (k=0.1,v=0.06) — the global scale is
+  per-architecture (no shared constant), which is why the loader keys by arch signature.
+  vLLM AR-ladder references for the SGLang match (task #40): 12B + 31B done, 26B-A4B
+  available on request. Mails 0165, 0167.
   E4B fp8 comparator is now a scoped clean-reject: mail 0158 retracts the
   GB10-specific framing and classifies fp8 D512/VO256 1-byte KV as a CC-12.x
   shared-memory infeasibility in our fork because the fp8->bf16 repack staging
