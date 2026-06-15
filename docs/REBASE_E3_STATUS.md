@@ -28,3 +28,20 @@ Triggered 2026-06-15: vLLM v0.23.0 dropped. Identity for all our commits = `Jeth
 3. Resume the paused 26B read-capture on the fresh stack.
 
 Tooling: `docs/vast_anchor/{resolve_additive,take_theirs}.py`.
+
+## VALIDATED (2026-06-15) — both rebases serve green
+Built the e3 wheel on the Ubicloud build machine (hijinks-build-x64, compile needs no GPU) and serve-tested
+on a vast sm_120 box with FlashInfer-e3 (JIT). Two runtime API-drift issues surfaced (compile couldn't catch
+them) and were fixed (commit e99078ddf):
+1. `FlashInferBackend.supports_combination()` — make `device_capability` optional (v0.23.0's caller omits it).
+2. `CommonAttentionMetadata.mm_req_doc_ranges` — re-add the field def (dropped in cherry-pick; flashinfer.py
+   reference survived).
+
+Matched green ladder on e3 (v0.23.0 + FlashInfer-main), BITWISE-IDENTICAL to pre-rebase:
+| model | bf16 | nvfp4 (calibrated) | delta |
+| --- | ---: | ---: | ---: |
+| 12B | 8.2764 | 8.3003 (k=0.1,v=0.06) | +0.024 |
+| 31B | 9.1789 | 9.1693 (k=v=0.05) | -0.010 |
+
+The epoch-3 rebase is DONE and validated. Wheel rebuilding with the 2 fixes (warm ccache). FlashInfer ref
+for SGLang to pin: `jethac/flashinfer@spark/hijinks-e3-flashinfer` (main + 20 nvfp4-KV commits).
