@@ -38,15 +38,16 @@ This file maps `docs/DGX_SPARK_SOLUTIONS.md` to current evidence. It is intentio
   per-architecture (no shared constant), which is why the loader keys by arch signature.
   vLLM AR-ladder references for the SGLang match (task #40): 12B + 31B done (both
   dense, clean smooth sweeps). Mails 0165, 0167.
-- RED / NOT shipped (vLLM, 2026-06-15): 26B-A4B (MoE) nvfp4 long-ctx is NOT a valid
-  calibration target on this stack. The PPL sweep is non-physical — nvfp4 scores up to
-  -2.1 nats BELOW bf16 on identical 4088 tokens, non-monotonic across scales (5.80-8.01),
-  the broken-but-overconfident signature (a 0.07 chat smoke loops "Wait, I'm not sure").
-  The bf16 baseline itself is impaired (degenerate greedy output; vLLM logs a MISSING tuned
-  fused_moe config for the PRO 6000: `E=128,N=704,device_name=NVIDIA_RTX_PRO_6000`). So this
-  is a 26B-A4B MoE serving issue on the vLLM/sm_120 stack, independent of nvfp4 KV — it
-  parallels Codex's SGLang 26B-A4B MoE pool red. Needs the MoE path fixed before any 26B
-  calibration claim. NO 26B calibration JSON shipped. Mail 0169.
+- 26B-A4B (vLLM, 2026-06-15): RESOLVED by adjudication + ship-path decision. HF eager bf16
+  TRUTH = 7.9923 on the same 4088 tokens. vLLM bf16 = 7.9027 (-0.09, CORRECT) and vLLM **fp8
+  = 7.7903 (-0.20, CORRECT/near-lossless)**, but vLLM **nvfp4 scores BELOW truth at every
+  scale** (7.31/5.80/7.37 vs 7.99 = -0.6 to -2.2), deterministically — a repetition-collapse,
+  not calibratable. Since fp8 (same serving/MoE path, only KV dtype differs) is correct, the
+  break is **NVFP4-SPECIFIC**, not the MoE pool and not the bf16 baseline (my earlier "MoE
+  serving / missing fused_moe config" guess is RETRACTED — that was a perf warning, bf16 is
+  correct). **Ship path: 26B-A4B uses fp8 KV** (near-lossless); full-nvfp4 26B is BLOCKED on a
+  real nvfp4 kernel bug, tracked in `docs/BUG_NVFP4_KV_GEMMA4_26B_A4B.md`. NO 26B nvfp4
+  calibration shipped (would be garbage). 12B/31B nvfp4 unaffected. Mails 0169, 0171.
   E4B fp8 comparator is now a scoped clean-reject: mail 0158 retracts the
   GB10-specific framing and classifies fp8 D512/VO256 1-byte KV as a CC-12.x
   shared-memory infeasibility in our fork because the fp8->bf16 repack staging
