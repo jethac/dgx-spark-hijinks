@@ -1,0 +1,9 @@
+=== HARDENED MULTI-NEEDLE SWEEP (4 needles, ctx 7600) ===
+26B bf16:              
+26B fp8:               recall=1.000 all-needles=1.000
+26B nvfp4(base_k100):  recall=1.000 all-needles=1.000
+12B bf16:              recall=0.625 all-needles=0.250
+12B nvfp4(k.1/v.06):   recall=0.594 all-needles=0.375
+31B bf16:              recall=1.000 all-needles=1.000
+31B nvfp4(k.05/v.05):  recall=1.000 all-needles=1.000
+DONE_HSWEEP
