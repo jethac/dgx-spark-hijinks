@@ -471,3 +471,37 @@ No bf16 or NVFP4 row completed, no prompt-logprob JSON exists, and the empty `to
 must not be treated as a red quality row. Artifact:
 `results/vast_stop_26b_toplogprob_20260616T014002Z/summary.md`. The Vast instance was destroyed after pulling
 the stop artifact.
+
+## Top-logprob attribution result: broad distribution drift (2026-06-16)
+
+Completed the hardened top-logprob packet on Vast RTX PRO 6000 Blackwell Server Edition (`sm_120`) with the
+`g1c9686c61.sm120a` wheel and FlashInfer ref `1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a`. Same scoring setup:
+`ctx=8185`, `prefix=4096`, `prompt_logprobs=20`, sampled positions `496`.
+
+| row | mean NLL | delta vs bf16 | PPL | sampled positions |
+| --- | ---: | ---: | ---: | ---: |
+| bf16 | `7.933360410` | `+0.000000000` | `2788.782530` | `496` |
+| NVFP4 `base_k100` | `7.815396153` | `-0.117964257` | `2478.468612` | `496` |
+
+Capacity proof lines on the same settings:
+
+| row | KV cache tokens | max concurrency @ 8192 |
+| --- | ---: | ---: |
+| bf16 / auto KV | `183,468` | `22.40x` |
+| NVFP4 `base_k100` | `652,335` | `79.63x` |
+
+The NVFP4 target-token NLL improvement is not a correctness signal; it is the same broad calibration bias seen
+in the layer-band rows. Distribution metrics confirm broad drift:
+
+| bucket | target delta | top-k Jaccard | top-1 match |
+| --- | ---: | ---: | ---: |
+| `0-256` | `-0.248220337` | `0.541004748` | `0.691406250` |
+| `256-1024` | `-0.138702851` | `0.507458563` | `0.708333333` |
+| `1024-2048` | `-0.070406208` | `0.507187984` | `0.546875000` |
+| `2048-3072` | `-0.152492993` | `0.546192486` | `0.718750000` |
+| `3072-end` | `-0.082599317` | `0.503665190` | `0.671875000` |
+
+This argues against a single bad token/page and supports the already-staged hidden/readout capture packet as
+the next discriminator: find whether the drift is already present in final hidden states, appears at lm_head
+readout, or starts earlier around the first sliding MoE/router stack. Artifact:
+`results/vast_26b_toplogprob_attr_20260616T021036Z/summary.md`.

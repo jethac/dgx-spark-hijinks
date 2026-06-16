@@ -1,0 +1,3 @@
+label	dtype	status
+bf16	auto	ok
+base_k100	nvfp4	ok
