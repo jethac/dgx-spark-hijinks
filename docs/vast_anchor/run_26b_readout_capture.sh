@@ -25,6 +25,9 @@ READOUT_TOPK="${READOUT_TOPK:-64}"
 READOUT_DENSE_ROWS="${READOUT_DENSE_ROWS:-64}"
 READOUT_ROW_STRIDE="${READOUT_ROW_STRIDE:-64}"
 READOUT_MAX_CALLS="${READOUT_MAX_CALLS:-16}"
+LAYER_CAPTURE="${LAYER_CAPTURE:-1}"
+LAYER_CAPTURE_LAYERS="${LAYER_CAPTURE_LAYERS:-0,1,2,3,4}"
+LAYER_CAPTURE_MAX_CALLS="${LAYER_CAPTURE_MAX_CALLS:-80}"
 SKIP_MM_PROFILING="${SKIP_MM_PROFILING:-1}"
 ROWS="${ROWS:-base_k100 e0_all l0 l1}"
 ARTIFACT_CREATED=0
@@ -68,9 +71,12 @@ readout_topk=${READOUT_TOPK}
 readout_dense_rows=${READOUT_DENSE_ROWS}
 readout_row_stride=${READOUT_ROW_STRIDE}
 readout_max_calls=${READOUT_MAX_CALLS}
+layer_capture=${LAYER_CAPTURE}
+layer_capture_layers=${LAYER_CAPTURE_LAYERS}
+layer_capture_max_calls=${LAYER_CAPTURE_MAX_CALLS}
 skip_mm_profiling=${SKIP_MM_PROFILING}
 rows=${ROWS}
-purpose=hidden/readout attribution: final hidden drift + raw logits top-k bf16 vs selected NVFP4 early-block rows
+purpose=hidden/readout attribution: layer 0-4 phase drift + final hidden drift + raw logits top-k bf16 vs selected NVFP4 early-block rows
 EOF
 python - <<'PY' >>"${OUT}/RUN_INFO.txt"
 import os
@@ -131,7 +137,8 @@ run_row() {
   local calib="${3:-}"
   echo "=== ${label} (${dtype}) ===" | tee -a "${OUT}/run.log"
   local capdir="${OUT}/readout_capture/${label}"
-  mkdir -p "${capdir}"
+  local layer_capdir="${OUT}/layer_capture/${label}"
+  mkdir -p "${capdir}" "${layer_capdir}"
   local args=(
     python vllm_toplogprob_attribution.py
     --model "${MODEL}"
@@ -157,13 +164,23 @@ run_row() {
   if [ -n "${calib}" ]; then
     args+=(--calib-json "${calib}")
   fi
+  local env_args=(
+    PYTHONPATH="/root/readout_hook:/root/flashinfer:${PYTHONPATH:-}"
+    VLLM_READOUT_CAPTURE_DIR="${capdir}"
+    VLLM_READOUT_CAPTURE_TOPK="${READOUT_TOPK}"
+    VLLM_READOUT_CAPTURE_DENSE_ROWS="${READOUT_DENSE_ROWS}"
+    VLLM_READOUT_CAPTURE_ROW_STRIDE="${READOUT_ROW_STRIDE}"
+    VLLM_READOUT_CAPTURE_MAX_CALLS="${READOUT_MAX_CALLS}"
+  )
+  if [ "${LAYER_CAPTURE}" = "1" ]; then
+    env_args+=(
+      VLLM_LAYER_CAPTURE_DIR="${layer_capdir}"
+      VLLM_LAYER_CAPTURE_LAYERS="${LAYER_CAPTURE_LAYERS}"
+      VLLM_LAYER_CAPTURE_MAX_CALLS="${LAYER_CAPTURE_MAX_CALLS}"
+    )
+  fi
   if timeout "${ROW_TIMEOUT}" env \
-    PYTHONPATH="/root/readout_hook:/root/flashinfer:${PYTHONPATH:-}" \
-    VLLM_READOUT_CAPTURE_DIR="${capdir}" \
-    VLLM_READOUT_CAPTURE_TOPK="${READOUT_TOPK}" \
-    VLLM_READOUT_CAPTURE_DENSE_ROWS="${READOUT_DENSE_ROWS}" \
-    VLLM_READOUT_CAPTURE_ROW_STRIDE="${READOUT_ROW_STRIDE}" \
-    VLLM_READOUT_CAPTURE_MAX_CALLS="${READOUT_MAX_CALLS}" \
+    "${env_args[@]}" \
     "${args[@]}" 2>&1 | tee "${OUT}/rows/${label}.log"; then
     echo -e "${label}\t${dtype}\tok" >>"${OUT}/row_status.tsv"
     return 0
@@ -190,6 +207,15 @@ for mode in ${ROWS}; do
 done
 
 python compare_readout_captures.py "${compare_args[@]}" | tee "${OUT}/readout_capture_report.tsv"
+if [ "${LAYER_CAPTURE}" = "1" ]; then
+  layer_compare_args=(--base "${OUT}/layer_capture/bf16")
+  for mode in ${ROWS}; do
+    if [ -d "${OUT}/layer_capture/${mode}" ]; then
+      layer_compare_args+=(--compare "${mode}=${OUT}/layer_capture/${mode}")
+    fi
+  done
+  python compare_layer_captures.py "${layer_compare_args[@]}" | tee "${OUT}/layer_capture_report.tsv"
+fi
 
 python - "${OUT}" <<'PY' | tee "${OUT}/summary.tsv"
 import json, sys
@@ -198,14 +224,15 @@ from pathlib import Path
 out = Path(sys.argv[1])
 bf16 = json.loads((out / "rows" / "bf16.json").read_text())
 base_nll = bf16["mean_nll_nats"]
-print("label\tmean_nll\tdelta_vs_bf16\tppl\tmissing\treadout_calls")
+print("label\tmean_nll\tdelta_vs_bf16\tppl\tmissing\treadout_calls\tlayer_calls")
 for row_path in sorted((out / "rows").glob("*.json")):
     row = json.loads(row_path.read_text())
     cap_calls = len(list((out / "readout_capture" / row_path.stem).glob("readout_call_*.pt")))
+    layer_calls = len(list((out / "layer_capture" / row_path.stem).glob("layer_*_call_*.pt")))
     print(
         f"{row_path.stem}\t{row['mean_nll_nats']:.9f}\t"
         f"{row['mean_nll_nats'] - base_nll:+.9f}\t{row['ppl']:.6f}\t"
-        f"{row['num_missing_tokens']}\t{cap_calls}"
+        f"{row['num_missing_tokens']}\t{cap_calls}\t{layer_calls}"
     )
 PY
 
