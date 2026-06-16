@@ -459,3 +459,15 @@ K/V distribution at this global scale) or downstream of attention. Per the goal 
 "both match reference -> trace outside reader" branch. Next probe (running): capture a bf16 run and compare
 layer-0 attention (q is KV-independent at layer 0, so identical across bf16/nvfp4 runs) between bf16-cache and
 nvfp4-cache to measure pure per-layer quantization perturbation for 26B vs 12B.
+
+## Stop-point: top-logprob packet interrupted before quality data (2026-06-16)
+
+A later Vast allocation succeeded and the top-logprob packet was relaunched on RTX PRO 6000 Blackwell
+(`sm_120`) with the `g1c9686c61.sm120a` wheel. It reached Gemma 4 26B-A4B model load and the intended
+`--skip-mm-profiling` path, then was stopped by operator request while compiling FlashInfer `fused_moe_120`
+JIT objects.
+
+No bf16 or NVFP4 row completed, no prompt-logprob JSON exists, and the empty `toplogprob_delta_report.tsv`
+must not be treated as a red quality row. Artifact:
+`results/vast_stop_26b_toplogprob_20260616T014002Z/summary.md`. The Vast instance was destroyed after pulling
+the stop artifact.
