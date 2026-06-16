@@ -381,6 +381,17 @@ deltas remain negative across the scored suffix for every single-layer hot row. 
 activation/logit attribution around layers `0-4` or a different early-sliding calibration model, not another
 broad scalar sweep. Artifact: `results/vast_26b_e0_layer_attr_resume_20260615T2330Z/summary.md`.
 
+**Next packet staged: readout/top-logprob attribution.** Added
+`docs/vast_anchor/vllm_toplogprob_attribution.py` and
+`docs/vast_anchor/run_26b_toplogprob_attribution.sh`. This is the lowest-risk readout discriminator before
+adding heavier hidden-state hooks: it uses vLLM `prompt_logprobs` top-k output to compare bf16 against selected
+NVFP4 first-block rows at the same supplied-token positions. The default row set is `base_k100`, `e0_all`,
+`l0`, and `l1`, with `prompt_logprobs=20`, dense top-k capture for the first 256 scored positions, and stride
+16 sampling through the rest of the suffix. The artifact emits `summary.tsv` plus
+`toplogprob_delta_report.tsv`, bucketed by scored-position range with target-NLL delta, top-k Jaccard overlap,
+top-1 match rate, top-1 logprob delta, and top-k mass delta. This packet is staged only; it is not a result
+until run on a Vast sm120 box.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
