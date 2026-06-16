@@ -1,0 +1,14 @@
+{
+  "label": "bf16",
+  "kv_cache_dtype": "auto",
+  "ctx_tokens": 7200,
+  "n": 30,
+  "overall_accuracy": 1.0,
+  "per_depth_accuracy": {
+    "0.05": 1.0,
+    "0.25": 1.0,
+    "0.5": 1.0,
+    "0.75": 1.0,
+    "0.95": 1.0
+  }
+}

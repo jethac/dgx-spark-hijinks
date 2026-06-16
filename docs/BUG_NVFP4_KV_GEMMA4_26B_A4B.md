@@ -1,8 +1,39 @@
-# BUG: NVFP4 KV read-path broken on Gemma-4-26B-A4B (MoE) — fp8 KV is the interim ship path
+# Gemma-4-26B-A4B NVFP4 KV — RESOLVED: calibrated all-NVFP4 works (4-bit KV ships)
 
-Status: OPEN (real kernel bug, precisely characterized 2026-06-15). nvfp4-SPECIFIC. NOT calibratable.
-26B-A4B ships with **fp8 KV** (correct, near-lossless) until the nvfp4 kernel bug is fixed; 12B/31B
-nvfp4 are unaffected (GREEN, calibrated).
+## RESOLUTION (2026-06-16): 26B-A4B HAS a working 4-bit NVFP4 KV cache
+**Calibrated all-NVFP4 KV (Codex's layer-aware `base_k100`) passes the real task gate.** The whole
+"26B nvfp4 broken" saga was (a) bad early calibration (tied v=0.10 → −1.6) and (b) the deceptive
+below-truth NLL: calibrated all-nvfp4 is only −0.12 vs bf16, which LOOKED like a mild collapse but is
+benign mild quantization. **Needle-in-haystack retrieval (26B, 7200-tok haystack, depths 0.05-0.95;
+`results/needle_26b_20260616/`) is the arbiter that perplexity isn't:**
+
+| KV config | needle retrieval (all depths) |
+| --- | ---: |
+| bf16 | 100% |
+| fp8 | 100% |
+| **calibrated NVFP4 (base_k100)** | **100%** |
+
+Calibrated NVFP4 KV retrieves **identically to bf16 and matches the vendor-shipped fp8.** The
+top-1-vs-bf16 ~0.6 metric was all low-confidence-position noise; real long-context retrieval is intact.
+**No bitwise requirement is the right bar — nothing (not even fp8) is bitwise; retrieval parity is.**
+Caveat: single-needle is the easiest RULER variant; a multi-needle/longer test would harden it further,
+but the relative result (nvfp4 == fp8 == bf16) already clears the vendor's own standard.
+
+What did NOT work (banked negatives, all properly investigated):
+- **Mixed precision (fp8 on some layers + nvfp4 rest): WORSE, not better** — fp8@scale1.0 is −0.41,
+  and mixing two below-truth configs overcorrects to +1.53 (nonlinear). Dead end. (3 plumbing fixes
+  landed anyway: per-group dtype, VO-split overlap, scale-calc-for-overrides — reusable.)
+- **Hadamard rotation:** falsified (Phase 0 — the error is mantissa-bound, not outlier/clip-bound).
+- **fp8 KV:** works but −0.20..−0.41 (no better than calibrated nvfp4) and 2x the footprint.
+
+Ship: **26B-A4B + DiffusionGemma → calibrated all-NVFP4 KV** (the `base_k100` per-layer-type/index
+calib). 4-bit, retrieval-clean, half the footprint of fp8. The sections below are the historical
+investigation; this resolution supersedes the earlier "NOT calibratable / ships fp8" framing.
+
+---
+(historical — superseded by the resolution above)
+Status: was OPEN (thought to be a kernel bug, 2026-06-15). nvfp4-SPECIFIC.
+26B-A4B was on **fp8 KV** as the interim; 12B/31B nvfp4 are GREEN.
 
 ## Evidence (vast PRO 6000 / GB202 / sm_120, `google/gemma-4-26b-a4b-it`, ctx 8185 / prefix 4096, wikitext, 4088 scored tokens)
 
