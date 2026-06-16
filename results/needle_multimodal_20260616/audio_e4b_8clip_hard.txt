@@ -1,0 +1,5 @@
+=== HARD AUDIO-NEEDLE (8 spoken clips, audio KV) ===
+gemma-4-e4b-it bf16:          acc= 1.0
+gemma-4-e4b-it fp8:           acc= 1.0
+gemma-4-e4b-it nvfp4:         acc= 1.0
+DONE_AUDHARD
