@@ -1,0 +1,17 @@
+=== E-SERIES 4-NEEDLE (hard, ctx 7600) ===
+gemma-4-e4b-it bf16:          recall=0.938 all=0.750
+gemma-4-e4b-it fp8:           recall=0.938 all=0.750
+gemma-4-e4b-it nvfp4(.1/.06):  recall=0.938 all=0.875
+gemma-4-e2b-it bf16:          recall=0.688 all=0.250
+gemma-4-e2b-it fp8:           recall=0.625 all=0.250
+gemma-4-e2b-it nvfp4(.1/.06):  recall=0.156 all=0.000
+DONE_ESERIES4
+
+=== E2B-it NVFP4 CALIB SWEEP (4-needle; bf16=0.688, fp8=0.625) ===
+nvfp4 k=0.05 v=0.05:  recall=0.625 all=0.375
+nvfp4 k=0.05 v=0.04:  recall=0.438 all=0.125
+nvfp4 k=0.08 v=0.06:  recall=0.344 all=0.250
+nvfp4 k=0.04 v=0.03:  recall=0.375 all=0.125
+nvfp4 k=0.10 v=0.10:  recall=0.625 all=0.375
+nvfp4 k=0.15 v=0.10:  recall=0.406 all=0.125
+DONE_E2BSWEEP
