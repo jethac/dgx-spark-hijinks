@@ -694,3 +694,13 @@ materialization bug before any quality measurement. Full 26B-A4B NVFP4 remains r
 ship path; mixed whole-layer fp8 is not yet a serving row.
 
 Artifact: `results/vast_26b_mixed_layer_padding_red_20260616T064900Z/summary.md`.
+
+**Fix candidate landed (same day):** `jethac/vllm@spark/hijinks-e3-vllm` commit `d0f6221`
+(`Fix padded mixed KV standard attention pages`) changes non-divisible padded standard-attention page
+unification to keep the original `block_size` and pad each kernel-block page in place, instead of scaling
+the logical block size to a multi-kernel-block page that cannot be represented by the runner's 5D strided
+view. Added regression coverage in `tests/v1/core/test_kv_cache_utils.py` for the exact
+`65536` vs `18432` 26B-A4B mixed fp8/NVFP4 geometry. Local checks: `python -m py_compile
+vllm/v1/core/kv_cache_utils.py tests/v1/core/test_kv_cache_utils.py`, `git diff --check`, and manual
+storage math (`required=5465589760 <= raw=5465636864`). Live Vast rerun still required before this becomes
+a green row.
