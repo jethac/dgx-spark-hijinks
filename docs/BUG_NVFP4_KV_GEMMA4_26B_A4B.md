@@ -200,3 +200,25 @@ K/V distribution at this global scale) or downstream of attention. Per the goal 
 "both match reference -> trace outside reader" branch. Next probe (running): capture a bf16 run and compare
 layer-0 attention (q is KV-independent at layer 0, so identical across bf16/nvfp4 runs) between bf16-cache and
 nvfp4-cache to measure pure per-layer quantization perturbation for 26B vs 12B.
+
+## MIXED-KV VERDICT (2026-06-16): mixed is a dead end; calibrated all-NVFP4 is the best 4-bit config
+Built all mixed-precision-KV plumbing (3 proper fixes: per-group cache_dtype_str `4fcbf4c48`;
+padded VO-split overlap `d0f6221`; calculate_kv_scales-for-quantized-overrides `505513a26`). The
+fp8{0-4}+nvfp4 config runs end-to-end at ctx 8185. Long-ctx ladder (base_k100 calib, truth 7.9923,
+bf16 7.9334):
+| config | NLL | vs bf16 |
+| --- | ---: | ---: |
+| calibrated all-nvfp4 (base_k100) | 7.8154 | -0.12 (BEST 4-bit) |
+| all-fp8 (scale 1.0) | 7.5259 | -0.41 |
+| fp8{0-4}+nvfp4 (uncalibrated) | 9.4641 | +1.53 |
+| fp8{0-4,6,7}+nvfp4 | 9.5377 | +1.60 |
+
+Reads: (1) **fp8 at scale 1.0 is NOT lossless on 26B** (-0.41, worse than calibrated nvfp4 -0.12), so
+the mixed +1.53 is NOT a simple fp8-scale bug. (2) **Mixed is a genuine nonlinear interaction** — two
+below-truth configs (fp8 -0.41, nvfp4 -0.12) combine into an above-truth overcorrection (+1.53). (3)
+**Mixed-KV does NOT beat calibrated all-nvfp4** — it is worse. (4) The best 4-bit KV for 26B is
+**calibrated all-NVFP4 (base_k100, -0.12)** — coherent, far better than the badly-v-calibrated -1.6
+early baseline, but distributionally imperfect (Codex: top-1 match ~0.6-0.77), so not bitwise-claim-grade.
+Blocked side-paths: bf16+nvfp4 mixing has its own unification bug; dynamic calculate_kv_scales hangs in
+this serving path (would need static fp8 scales). Rotation falsified (Phase 0). Calibration plateaued.
+**This is at/near the quality floor for 26B 4-bit KV without a genuinely new technique.**

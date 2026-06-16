@@ -1,0 +1,3 @@
+=== fp8 DISAMBIGUATION (truth 7.9923, bf16 7.9334) ===
+all-fp8 (scale 1.0):  7.5259 chat= Tokyo  [exit/crash: 0]
+DONE_DIAG
