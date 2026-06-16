@@ -1,0 +1,8 @@
+label	dtype	override_dtype	layers	status
+bf16	auto			ok
+base_k100	nvfp4			ok
+bf16_0_4	nvfp4	auto	0 1 2 3 4	failed_rc_1
+fp8_0_4	nvfp4	fp8_e4m3	0 1 2 3 4	ok
+fp8_0_7	nvfp4	fp8_e4m3	0 1 2 3 4 5 6 7	failed_rc_1
+fp8_all_sliding	nvfp4	fp8_e4m3	0 1 2 3 4 6 7 8 9 10 12 13 14 15 16 18 19 20 21 22 24 25 26 27 28	ok
+fp8_all_global	nvfp4	fp8_e4m3	5 11 17 23 29	failed_rc_1

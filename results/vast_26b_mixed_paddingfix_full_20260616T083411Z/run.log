@@ -1,0 +1,7 @@
+=== bf16 dtype=auto override= layers= ===
+=== base_k100 dtype=nvfp4 override= layers= ===
+=== bf16_0_4 dtype=nvfp4 override=auto layers=0 1 2 3 4 ===
+=== fp8_0_4 dtype=nvfp4 override=fp8_e4m3 layers=0 1 2 3 4 ===
+=== fp8_0_7 dtype=nvfp4 override=fp8_e4m3 layers=0 1 2 3 4 5 6 7 ===
+=== fp8_all_sliding dtype=nvfp4 override=fp8_e4m3 layers=0 1 2 3 4 6 7 8 9 10 12 13 14 15 16 18 19 20 21 22 24 25 26 27 28 ===
+=== fp8_all_global dtype=nvfp4 override=fp8_e4m3 layers=5 11 17 23 29 ===

@@ -1,0 +1,11 @@
+Base wheel: sm120a-wheels-4fcbf4c48
+Base wheel sha256: 2e92cc1a0139b3b8e24a881a363098f921cd15efbeed0ab51562a1265d9fa919
+Base vLLM ref in wheel metadata: 4fcbf4c48f1a90136ca562d61d4b12241f621473
+Source patch applied in site-packages: jethac/vllm@spark/hijinks-e3-vllm d0f6221
+Patch subject: Fix padded mixed KV standard attention pages
+Patched file: /root/v/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py
+Patch marker verified before run: standard-attention padded page unification keeps block_size unchanged when storage_block_size == block_size.
+FlashInfer overlay: 1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a
+Runtime: Vast RTX PRO 6000 Blackwell Workstation Edition, sm_120, Ubuntu 22.04 CUDA 13 container, Torch 2.12.0+cu130
+Disposable Vast instance: 41161725
+Instance status: destroyed after artifact pull on 2026-06-16.

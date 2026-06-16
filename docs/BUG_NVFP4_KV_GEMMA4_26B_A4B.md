@@ -719,3 +719,26 @@ This proves `d0f6221` clears the prior mixed-page storage/stride materialization
 claim-grade 26B-A4B serving row: the full long-context mixed ladder (`ctx=8185`, `prefix=4096`) and capacity
 derivation still need to run before choosing a shippable mixed whole-layer policy. Artifact:
 `results/vast_26b_mixed_paddingfix_smoke_20260616T072211Z/summary.md`.
+
+**Full long-context mixed ladder verdict:** padding fix holds, but only when D=512 global layers remain
+NVFP4. Ran the full ladder on Vast/sm120 with the published `sm120a-wheels-4fcbf4c48` wheel plus the
+`d0f6221` source patch applied to site-packages, FlashInfer `1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a`,
+`ctx=8185`, `prefix=4096`, `max_model_len=8192`, `prompt_logprobs=20`, and `base_k100` calibration.
+Disposable Vast instance `41161725` was destroyed after artifact pull.
+
+| row | status | KV tokens | mean NLL | delta vs bf16 | distribution note |
+| --- | --- | ---: | ---: | ---: | --- |
+| `bf16` | ok | `183,556` | `7.933360410` | `0` | baseline |
+| `base_k100` | ok | `652,652` | `7.815396153` | `-0.117964257` | reproduces prior best full-NVFP4 calibration |
+| `fp8_0_4` | ok | `322,723` | `7.262490918` | `-0.670869492` | runs, but lower-NLL/overconfident; top-1 vs bf16 `0.6224` |
+| `fp8_all_sliding` | ok | `322,723` | `7.355652161` | `-0.577708249` | runs, but lower-NLL/overconfident; top-1 vs bf16 `0.6748` |
+| `bf16_0_4` | failed | `161,359` planned | n/a | n/a | per-layer `auto` override still hits the old packed-shape view path (`[...,144]`) |
+| `fp8_0_7` | failed | `330,722` planned | n/a | n/a | includes global layer `5`; FlashInfer fp8 D=512 prefill shared-memory reject |
+| `fp8_all_global` | failed | `573,730` planned | n/a | n/a | all D=512 global layers fp8; same shared-memory reject |
+
+The row clears the storage/stride bug and proves sliding-layer fp8 overrides can run at long context, but it
+does **not** produce a claim-grade 26B-A4B mixed serving policy. D=512 global layers cannot be fp8 on sm120
+with the current FlashInfer prefill kernel (`head_dim_qk=512`, `head_dim_vo=256`, 1-byte KV needs `122880 B`
+shared memory while sm120 exposes `102400 B/threadblock`). Whole-layer fp8 remains a useful discriminator and
+possible component, not a ship row. Artifact:
+`results/vast_26b_mixed_paddingfix_full_20260616T083411Z/summary.md`.
