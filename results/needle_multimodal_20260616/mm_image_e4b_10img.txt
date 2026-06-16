@@ -1,0 +1,5 @@
+=== E4B MM IMAGE-NEEDLE (10 imgs, vision KV) ===
+bf16:          img-needle acc= 1.0
+fp8:           img-needle acc= 1.0
+nvfp4(.1/.06): img-needle acc= 1.0
+DONE_MM
