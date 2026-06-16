@@ -146,6 +146,8 @@ def build_llm(args: argparse.Namespace) -> LLM:
         kwargs["attention_backend"] = args.attention_backend
     if getattr(args, "kv_cache_dtype_skip_layers", None):
         kwargs["kv_cache_dtype_skip_layers"] = args.kv_cache_dtype_skip_layers
+    if getattr(args, "calculate_kv_scales", False):
+        kwargs["calculate_kv_scales"] = True
     return LLM(**kwargs)
 
 
@@ -164,6 +166,8 @@ def main() -> int:
     parser.add_argument("--attention-backend", default=None)
     parser.add_argument("--kv-cache-dtype-skip-layers", nargs="+", default=None,
                         help="per-layer KV dtype overrides, e.g. 0=fp8_e4m3 1=fp8_e4m3 (layer idx wins)")
+    parser.add_argument("--calculate-kv-scales", action="store_true",
+                        help="compute dynamic fp8 KV scales (needed so fp8 override layers aren't at scale 1.0)")
     parser.add_argument("--enforce-eager", action="store_true")
     # Decisive knob for the +0.40 root-cause: when set, do NOT warm the prefix.
     # The full ctx is scored in one request, so scored positions attend to prefix
