@@ -1,0 +1,22 @@
+=== GEMMA 3 4-NEEDLE SWEEP (ctx 7600) ===
+g3-27b bf16:        recall=0.750 all=0.000
+g3-27b fp8:         recall=0.750 all=0.000
+g3-27b nvfp4(.1/.06): recall=0.906 all=0.625
+g3-27b nvfp4(.05/.05):recall=0.875 all=0.625
+  --- 27b done ---
+g3-12b bf16:        recall=0.750 all=0.000
+g3-12b fp8:         recall=0.750 all=0.000
+g3-12b nvfp4(.1/.06): recall=0.750 all=0.000
+g3-12b nvfp4(.05/.05):recall=0.750 all=0.000
+  --- 12b done ---
+g3-4b bf16:        recall=1.000 all=1.000
+g3-4b fp8:         recall=0.938 all=0.875
+g3-4b nvfp4(.1/.06): recall=0.969 all=0.875
+g3-4b nvfp4(.05/.05):recall=0.969 all=0.875
+  --- 4b done ---
+g3-1b bf16:        
+g3-1b fp8:         recall=0.281 all=0.000
+g3-1b nvfp4(.1/.06): recall=0.156 all=0.000
+g3-1b nvfp4(.05/.05):recall=0.062 all=0.000
+  --- 1b done ---
+DONE_G3
