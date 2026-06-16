@@ -1,0 +1,6 @@
+=== LONG-CTX MIXED-KV LADDER (truth 7.9923, bf16 ref) ===
+bf16:                       7.9334 chat= Tokyo
+all-nvfp4(base_k100):       7.8154 chat= Tokyo
+fp8{0-4}+nvfp4:             9.4641 chat= Tokyo
+fp8{0-4,6,7}+nvfp4:         9.5377 chat= Tokyo
+DONE_LADDER
