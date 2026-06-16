@@ -399,6 +399,22 @@ encoder cache`. The retry reached that proof line, but the Vast host stopped/exi
 and could not be restarted to recover artifacts. Artifact:
 `results/vast_26b_toplogprob_attempt_20260616T0029Z/summary.md`.
 
+**Follow-up packet staged: hidden/readout capture.** The public `prompt_logprobs` top-k packet answers how the
+visible distribution changes, but not whether the amplifier is already present in the final hidden states or
+only appears after the lm_head/readout projection. Added the opt-in packet:
+
+- `docs/vast_anchor/vllm_readout_capture_sitecustomize.py`
+- `docs/vast_anchor/compare_readout_captures.py`
+- `docs/vast_anchor/run_26b_readout_capture.sh`
+- `docs/vast_anchor/launch_26b_readout_capture_live.sh`
+
+It wraps `Gemma4ForCausalLM.compute_logits()` through `sitecustomize`, skips one-row sample/decode calls, and
+saves sampled final hidden rows plus raw top-k logits for each prompt-logprob chunk. The comparator aligns
+bf16 vs selected NVFP4 rows by `(compute_logits call, local row)` and reports hidden cosine/rel-L2, hidden
+norm deltas, top-1 match, top-k Jaccard, and logit max/LSE deltas. This should be the next live Vast run after
+the hardened top-logprob packet if the first distribution-level result still points at a readout collapse.
+No live result exists yet; current blocker remains Vast allocation credit.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
