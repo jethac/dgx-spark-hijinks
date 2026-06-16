@@ -1,0 +1,9 @@
+call	q_shape	kv_tokens	window_left	sm_scale	nvfp4_kv_cos	nvfp4_kv_rel_l2	bf16k_nvfp4v_cos	bf16k_nvfp4v_rel_l2	nvfp4k_bf16v_cos	nvfp4k_bf16v_rel_l2	dominant
+0	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'
+1	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'
+2	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'
+3	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'
+4	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'
+5	(4096, 16, 512)	4096	-1	1.00000000	0.995843351	0.117013252	0.997456551	0.102539937	1.000154734	0.072383685	V
+6	(4096, 16, 512)	4096	-1	1.00000000	0.996346772	0.113974661	0.997990429	0.098553602	1.000389814	0.070764879	V
+7	SKIP	0	0	nan	ERROR	'could not locate bf16 active K/V tensors'

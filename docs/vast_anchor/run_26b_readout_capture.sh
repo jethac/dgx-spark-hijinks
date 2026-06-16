@@ -199,6 +199,12 @@ fi
 
 compare_args=(--base "${OUT}/readout_capture/bf16")
 for mode in ${ROWS}; do
+  if [ "${mode}" = "fp8" ]; then
+    if run_row "${mode}" fp8_e4m3; then
+      compare_args+=(--compare "${mode}=${OUT}/readout_capture/${mode}")
+    fi
+    continue
+  fi
   calib="${OUT}/calib/${mode}.json"
   write_calib "${calib}" "${mode}"
   if run_row "${mode}" nvfp4 "${calib}"; then

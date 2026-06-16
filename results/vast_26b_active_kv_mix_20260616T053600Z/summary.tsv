@@ -1,0 +1,3 @@
+label	mean_nll	delta_vs_bf16	ppl	missing	active_kv_calls
+base_k100	7.815396153	-0.117964257	2478.468612	0	8
+bf16	7.933360410	+0.000000000	2788.782530	0	8

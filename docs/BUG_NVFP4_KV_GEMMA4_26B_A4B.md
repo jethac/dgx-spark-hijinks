@@ -591,3 +591,33 @@ downstream casualty of accumulated hidden drift.
 The next useful discriminator is an FP8-K or mixed-K deep capture at the same layer taps. That should separate
 K-driven attention drift from V/downstream MoE amplification before any more full-NVFP4 calibration tuning.
 Artifact: `results/vast_26b_deep_layer_capture_20260616T034500Z/summary.md`.
+
+## Active-KV mix attribution partial result (2026-06-16)
+
+Staged and ran a new active-page FlashInfer capture packet:
+
+- `docs/vast_anchor/active_kv_capture_sitecustomize.py`
+- `docs/vast_anchor/compare_active_kv_mixed_ref.py`
+- `docs/vast_anchor/run_26b_active_kv_mix_probe.sh`
+- `docs/vast_anchor/launch_26b_active_kv_mix_probe_live.sh`
+
+The packet captures only active request pages from FlashInfer prefill calls, allowing offline references with
+bf16 K + NVFP4 V and NVFP4 K + bf16 V. Live run on Vast instance `41139265` reproduced the standard row:
+bf16 NLL `7.933360410`; NVFP4 `base_k100` NLL `7.815396153` (`-0.117964257`); bf16 KV cache `183,455`
+tokens; NVFP4 KV cache `652,291` tokens. The instance was destroyed after derived artifacts were pulled.
+
+First comparator verdict is **partial**:
+
+| call | q shape | KV tokens | NVFP4 K+V rel-L2 | bf16 K + NVFP4 V rel-L2 | NVFP4 K + bf16 V rel-L2 | dominant |
+| ---: | --- | ---: | ---: | ---: | ---: | --- |
+| `5` | `(4096, 16, 512)` | `4096` | `0.117013252` | `0.102539937` | `0.072383685` | V |
+| `6` | `(4096, 16, 512)` | `4096` | `0.113974661` | `0.098553602` | `0.070764879` | V |
+
+For the captured global `D=512` calls, V quantization contributes more local attention-output drift than K
+quantization. This does NOT close the full failure, because calls `0-4` and `7` (sliding/local shape) were
+captured but skipped by the first comparator due to an unrecognized bf16 active-K/V layout. The scripts were
+hardened after this run: default capture target is now `qo_len=4096`, large q tensors are saved by default,
+and bf16 K/V layout detection tries tuple, packed `[2,P,T,H,D]`, packed `[P,2,T,H,D]`, and generic active
+pairs. Next live rerun should produce the sliding-layer K-vs-V split.
+
+Artifact: `results/vast_26b_active_kv_mix_20260616T053600Z/summary.md`.
