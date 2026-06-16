@@ -554,3 +554,40 @@ not currently look like a primary expert-routing flip. Since layer-4 output rel-
 final hidden rel-L2 is `~0.197`, the next discriminator should extend layer capture deeper or introduce a
 mixed-K/FP8-K control to isolate K/V perturbation from downstream accumulation. Artifact:
 `results/vast_26b_readout_capture_20260616T025500Z/summary.md`.
+
+## Deep layer capture result: drift accumulates through the middle stack (2026-06-16)
+
+Completed the deeper capture requested by the previous branch on a fresh Vast RTX PRO 6000 Blackwell Max-Q
+Workstation Edition (`sm_120`) with the same `g1c9686c61.sm120a` wheel and FlashInfer ref
+`1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a`. The run used the Ubuntu 22 CUDA 13 container
+`nvidia/cuda:13.0.1-devel-ubuntu22.04`, `ctx=8185`, `prefix=4096`, bf16 vs NVFP4 `base_k100`, and requested
+layers `0,4,8,12,16,20,24,28,32,36,40`. The hook emitted layers `0,4,8,12,16,20,24,28`.
+
+Mean NLL reproduced the prior result:
+
+| row | mean NLL | delta vs bf16 | readout calls | layer calls |
+| --- | ---: | ---: | ---: | ---: |
+| bf16 | `7.933360410` | `+0.000000000` | `4` | `40` |
+| NVFP4 `base_k100` | `7.815396153` | `-0.117964257` | `4` | `40` |
+
+Nonzero layer summary (`all` bucket; raw report still includes zero/zero cosine rows):
+
+| layer | input rel-L2 | attention rel-L2 | MoE rel-L2 | output rel-L2 | router rel-L2 | router top-1 |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `0` | `0.000000000` | `0.060645558` | `0.085261208` | `0.037239009` | `0.023324556` | `0.960937500` |
+| `4` | `0.053168669` | `0.111771240` | `0.141605817` | `0.062629446` | `0.026655196` | `0.902343750` |
+| `8` | `0.097610840` | `0.191567439` | `0.208625158` | `0.120631172` | `0.051521078` | `0.886718750` |
+| `12` | `0.154590047` | `0.316604443` | `0.422641794` | `0.162862977` | `0.084291879` | `0.808593750` |
+| `16` | `0.208417865` | `0.313635364` | `0.468606157` | `0.204482948` | `0.118675822` | `0.687500000` |
+| `20` | `0.323810218` | `0.270760557` | `0.385326693` | `0.297251057` | `0.119151612` | `0.671875000` |
+| `24` | `0.368327853` | `0.255562018` | `0.409718721` | `0.385122949` | `0.119406001` | `0.710937500` |
+| `28` | `0.400962559` | `0.270923220` | `0.371406624` | `0.380914924` | `0.192313564` | `0.792968750` |
+
+This closes the narrow "layer 4 to final hidden" gap: the drift accumulates through the middle/deep decoder
+stack. It is not readout-only, and it is not a primary layer-0 router flip. Router logits are initially stable,
+but by the middle stack router top-1 match is only `0.67-0.71` around layers `16-24`, so routing becomes a
+downstream casualty of accumulated hidden drift.
+
+The next useful discriminator is an FP8-K or mixed-K deep capture at the same layer taps. That should separate
+K-driven attention drift from V/downstream MoE amplification before any more full-NVFP4 calibration tuning.
+Artifact: `results/vast_26b_deep_layer_capture_20260616T034500Z/summary.md`.
