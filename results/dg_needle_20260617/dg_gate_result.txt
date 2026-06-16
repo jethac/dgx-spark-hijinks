@@ -1,0 +1,4 @@
+=== DIFFUSIONGEMMA NEEDLE GATE (single, ctx200, 16 trials) ===
+bf16:   recall= 0.125 all= 0.125
+nvfp4:  recall= 0.188 all= 0.188
+DONE_DGGATE3

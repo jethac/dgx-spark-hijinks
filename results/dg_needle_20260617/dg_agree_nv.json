@@ -1,0 +1,50 @@
+[
+  {
+    "prompt": "What is the capital of France? Answer in one word.",
+    "out": "Paris"
+  },
+  {
+    "prompt": "List three primary colors.",
+    "out": " three colors colors are:\n\n1. ********..."
+  },
+  {
+    "prompt": "Write one sentence about the ocean.",
+    "out": " vast ocean ocean, the vast vast vast planet and life life teeming with life"
+  },
+  {
+    "prompt": "What is 7 times 8?",
+    "out": " times  856."
+  },
+  {
+    "prompt": "Name a fruit that is yellow.",
+    "out": ""
+  },
+  {
+    "prompt": "Complete: The quick brown fox jumps over the lazy",
+    "out": "dog\n"
+  },
+  {
+    "prompt": "What gas do plants absorb from the air?",
+    "out": " primarily **carbon dioxide ($ ($CO_2$) from from the.\n\n\n\nThey a process called called ** ** photosynthesis they photosynthesis"
+  },
+  {
+    "prompt": "Translate to French: good morning.",
+    "out": ".."
+  },
+  {
+    "prompt": "What is the chemical symbol for water?",
+    "out": " chemical symbol ( water is **H\u2082O**.\n\n"
+  },
+  {
+    "prompt": "Give a synonym for happy.",
+    "out": " synonyms synonyms are on the context, depending you you"
+  },
+  {
+    "prompt": "How many days are in a week?",
+    "out": " are **7 days in a a week."
+  },
+  {
+    "prompt": "Name the largest planet in our solar system.",
+    "out": " planet in our solar system is **Jupiter**."
+  }
+]

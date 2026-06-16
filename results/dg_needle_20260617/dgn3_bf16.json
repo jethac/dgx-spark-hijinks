@@ -1,0 +1,8 @@
+{
+  "kv_cache_dtype": "auto",
+  "ctx_tokens": 200,
+  "num_needles": 1,
+  "n_queries": 16,
+  "needle_recall": 0.125,
+  "all_needles_acc": 0.125
+}

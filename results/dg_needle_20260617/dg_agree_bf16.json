@@ -1,0 +1,50 @@
+[
+  {
+    "prompt": "What is the capital of France? Answer in one word.",
+    "out": ""
+  },
+  {
+    "prompt": "List three primary colors.",
+    "out": " the primary\n\n\n\n1. ********\n2.  ****\n3.  ****"
+  },
+  {
+    "prompt": "Write one sentence about the ocean.",
+    "out": " and \u0928\u0940 blue ocean mysteries mysteries of of the planet, teeming with life life and."
+  },
+  {
+    "prompt": "What is 7 times 8?",
+    "out": " times times   8 is"
+  },
+  {
+    "prompt": "Name a fruit that is yellow.",
+    "out": ""
+  },
+  {
+    "prompt": "Complete: The quick brown fox jumps over the lazy",
+    "out": "dog"
+  },
+  {
+    "prompt": "What gas do plants absorb from the air?",
+    "out": " primarily **carbon dioxide dioxide (CO)** from the air air."
+  },
+  {
+    "prompt": "Translate to French: good morning.",
+    "out": ".."
+  },
+  {
+    "prompt": "What is the chemical symbol for water?",
+    "out": "Note is symbol water **"
+  },
+  {
+    "prompt": "Give a synonym for happy.",
+    "out": "There are many synonyms for ** ****, on the the the the:\n\n\n\n\n\n******** Joy** cheerful, content,,*\n*   ******,,,,,,,****** ecstatic, thrilled\n*   ****:**:**,,,,,,"
+  },
+  {
+    "prompt": "How many days are in a week?",
+    "out": " 7**** in a week."
+  },
+  {
+    "prompt": "Name the largest planet in our solar system.",
+    "out": " largest planet in our solar system is **Jupiter**."
+  }
+]
