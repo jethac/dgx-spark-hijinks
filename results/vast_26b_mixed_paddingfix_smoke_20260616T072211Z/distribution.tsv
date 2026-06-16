@@ -1,0 +1,3 @@
+label	mean_nll	delta_vs_bf16	delta_vs_base_k100	ppl	ok	bf16_top1	bf16_jaccard5	bf16_abs_target_nll	base_top1	base_jaccard5	base_abs_target_nll
+bf16	3.792652191	+0.000000000	+nan	44.373932	True	1.000000000	1.000000000	0.000000000	nan	nan	nan
+fp8_0_4	3.701871942	-0.090780248	+nan	40.523090	True	0.789473684	0.536549708	0.572143935	nan	nan	nan

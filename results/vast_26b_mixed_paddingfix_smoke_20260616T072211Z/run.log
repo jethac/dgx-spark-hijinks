@@ -1,0 +1,2 @@
+=== bf16 dtype=auto override= layers= ===
+=== fp8_0_4 dtype=nvfp4 override=fp8_e4m3 layers=0 1 2 3 4 ===

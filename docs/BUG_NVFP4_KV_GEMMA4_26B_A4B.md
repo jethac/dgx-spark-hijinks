@@ -702,5 +702,20 @@ the logical block size to a multi-kernel-block page that cannot be represented b
 view. Added regression coverage in `tests/v1/core/test_kv_cache_utils.py` for the exact
 `65536` vs `18432` 26B-A4B mixed fp8/NVFP4 geometry. Local checks: `python -m py_compile
 vllm/v1/core/kv_cache_utils.py tests/v1/core/test_kv_cache_utils.py`, `git diff --check`, and manual
-storage math (`required=5465589760 <= raw=5465636864`). Live Vast rerun still required before this becomes
-a green row.
+storage math (`required=5465589760 <= raw=5465636864`).
+
+**Live Vast smoke verdict:** GREEN for the padded-page blocker. Re-ran the short mixed ladder on a fresh
+Vast RTX PRO 6000 WS (`sm_120`) instance with the published `sm120a-wheels-4fcbf4c48` wheel plus the
+`d0f6221` `kv_cache_utils.py` source patch applied in site-packages. The same smoke shape that previously
+failed before quality (`ctx=512`, `prefix=256`, `max_model_len=1024`, rows `bf16` and `fp8_0_4`) completed
+both rows:
+
+| row | status | mean NLL | PPL | note |
+| --- | --- | ---: | ---: | --- |
+| `bf16` | ok | `3.7926521906438246` | `44.373932476731696` | control replay |
+| `fp8_0_4` | ok | `3.701871942475048` | `40.52309029842815` | global NVFP4, layers `0..4=fp8_e4m3` |
+
+This proves `d0f6221` clears the prior mixed-page storage/stride materialization crash. It is not yet a
+claim-grade 26B-A4B serving row: the full long-context mixed ladder (`ctx=8185`, `prefix=4096`) and capacity
+derivation still need to run before choosing a shippable mixed whole-layer policy. Artifact:
+`results/vast_26b_mixed_paddingfix_smoke_20260616T072211Z/summary.md`.

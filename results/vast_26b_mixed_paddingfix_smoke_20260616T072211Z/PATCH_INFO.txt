@@ -1,0 +1,9 @@
+vllm_base_wheel=sm120a-wheels-4fcbf4c48
+vllm_base_ref=4fcbf4c48f1a90136ca562d61d4b12241f621473
+python_patch_ref=d0f6221
+python_patch_commit=Fix padded mixed KV standard attention pages
+patched_file=/root/v/lib/python3.12/site-packages/vllm/v1/core/kv_cache_utils.py
+patch_marker=layer_spec.storage_block_size == layer_spec.block_size
+verification=py_compile passed; import vllm.v1.core.kv_cache_utils passed
+vast_instance=41154753
+vast_instance_status=destroyed_after_artifact_pull

@@ -1,0 +1,3849 @@
+{
+  "schema": "vllm-26b-toplogprob-attribution/v1",
+  "model": "google/gemma-4-26B-A4B-it",
+  "tokenizer": "google/gemma-4-26B-A4B-it",
+  "kv_cache_dtype": "nvfp4",
+  "kv_cache_dtype_skip_layers": [
+    "0=fp8_e4m3",
+    "1=fp8_e4m3",
+    "2=fp8_e4m3",
+    "3=fp8_e4m3",
+    "4=fp8_e4m3"
+  ],
+  "calib_json": "/root/dx26_mixed_paddingfix_smoke_20260616T072211Z/calib/base_k100.json",
+  "ctx": 512,
+  "prefix_len": 256,
+  "score_start_index": 257,
+  "num_scored_tokens": 255,
+  "num_missing_tokens": 0,
+  "missing_positions_preview": [],
+  "prompt_logprobs": 5,
+  "keep_topk": 5,
+  "position_stride": 64,
+  "dense_prefix_positions": 16,
+  "mean_nll_nats": 3.701871942475048,
+  "ppl": 40.52309029842815,
+  "run_mode": {
+    "skip_warmup": true,
+    "max_num_batched_tokens": 4096,
+    "single_chunk": true,
+    "reuse_path": false
+  },
+  "timing_s": {
+    "warm": 0.0,
+    "score": 0.9182812030194327,
+    "total": 170.30897756299237
+  },
+  "torch": "2.12.0+cu130",
+  "cuda": "13.0",
+  "device": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+  "capability": [
+    12,
+    0
+  ],
+  "position_summaries": [
+    {
+      "index": 257,
+      "rel_index": 0,
+      "token_id": 236832,
+      "token": "7",
+      "target_logprob": -2.828845500946045,
+      "target_nll": 2.828845500946045,
+      "top1_token_id": 236825,
+      "top1_token": "6",
+      "top1_logprob": -0.7038455009460449,
+      "topk_mass": 0.998114920354045
+    },
+    {
+      "index": 258,
+      "rel_index": 1,
+      "token_id": 26470,
+      "token": " theatre",
+      "target_logprob": -1.9327960014343262,
+      "target_nll": 1.9327960014343262,
+      "top1_token_id": 11635,
+      "top1_token": " episode",
+      "top1_logprob": -1.8077960014343262,
+      "topk_mass": 0.5240466049986255
+    },
+    {
+      "index": 259,
+      "rel_index": 2,
+      "token_id": 3719,
+      "token": " production",
+      "target_logprob": -0.1920488029718399,
+      "target_nll": 0.1920488029718399,
+      "top1_token_id": 3719,
+      "top1_token": " production",
+      "top1_logprob": -0.1920488029718399,
+      "topk_mass": 0.9483790520747432
+    },
+    {
+      "index": 260,
+      "rel_index": 3,
+      "token_id": 529,
+      "token": " of",
+      "target_logprob": -0.09027308225631714,
+      "target_nll": 0.09027308225631714,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.09027308225631714,
+      "topk_mass": 0.9880274946233228
+    },
+    {
+      "index": 261,
+      "rel_index": 4,
+      "token_id": 2088,
+      "token": " How",
+      "target_logprob": -18.534873962402344,
+      "target_nll": 18.534873962402344,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.22237326204776764,
+      "topk_mass": 0.9213209599913378
+    },
+    {
+      "index": 262,
+      "rel_index": 5,
+      "token_id": 531,
+      "token": " to",
+      "target_logprob": -1.8485556840896606,
+      "target_nll": 1.8485556840896606,
+      "top1_token_id": 531,
+      "top1_token": " to",
+      "top1_logprob": -1.8485556840896606,
+      "topk_mass": 0.5369588032641568
+    },
+    {
+      "index": 263,
+      "rel_index": 6,
+      "token_id": 158661,
+      "token": " Curse",
+      "target_logprob": -15.247003555297852,
+      "target_nll": 15.247003555297852,
+      "top1_token_id": 577,
+      "top1_token": " be",
+      "top1_logprob": -0.6845036149024963,
+      "topk_mass": 0.809971192472854
+    },
+    {
+      "index": 264,
+      "rel_index": 7,
+      "token_id": 12078,
+      "token": " directed",
+      "target_logprob": -10.993300437927246,
+      "target_nll": 10.993300437927246,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -1.118300437927246,
+      "topk_mass": 0.8281000584358603
+    },
+    {
+      "index": 265,
+      "rel_index": 8,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.02501562424004078,
+      "target_nll": 0.02501562424004078,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.02501562424004078,
+      "topk_mass": 0.9989198795028265
+    },
+    {
+      "index": 266,
+      "rel_index": 9,
+      "token_id": 205943,
+      "token": " Josie",
+      "target_logprob": -14.452219009399414,
+      "target_nll": 14.452219009399414,
+      "top1_token_id": 4534,
+      "top1_token": " Mark",
+      "top1_logprob": -0.6709694266319275,
+      "topk_mass": 0.6520673461258414
+    },
+    {
+      "index": 267,
+      "rel_index": 10,
+      "token_id": 630,
+      "token": " R",
+      "target_logprob": -8.685269355773926,
+      "target_nll": 8.685269355773926,
+      "top1_token_id": 2222,
+      "top1_token": " _",
+      "top1_logprob": -2.060269355773926,
+      "topk_mass": 0.3583087974521115
+    },
+    {
+      "index": 268,
+      "rel_index": 11,
+      "token_id": 155272,
+      "token": "ourke",
+      "target_logprob": -8.38956069946289,
+      "target_nll": 8.38956069946289,
+      "top1_token_id": 236761,
+      "top1_token": ".",
+      "top1_logprob": -1.0458106994628906,
+      "topk_mass": 0.7442323039269088
+    },
+    {
+      "index": 269,
+      "rel_index": 12,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.19248510897159576,
+      "target_nll": 0.19248510897159576,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.19248510897159576,
+      "topk_mass": 0.978626672712942
+    },
+    {
+      "index": 270,
+      "rel_index": 13,
+      "token_id": 2088,
+      "token": " How",
+      "target_logprob": -8.7645845413208,
+      "target_nll": 8.7645845413208,
+      "top1_token_id": 1293,
+      "top1_token": " He",
+      "top1_logprob": -0.38958442211151123,
+      "topk_mass": 0.9865537893878228
+    },
+    {
+      "index": 271,
+      "rel_index": 14,
+      "token_id": 531,
+      "token": " to",
+      "target_logprob": -0.047452036291360855,
+      "target_nll": 0.047452036291360855,
+      "top1_token_id": 531,
+      "top1_token": " to",
+      "top1_logprob": -0.047452036291360855,
+      "topk_mass": 0.988096759297711
+    },
+    {
+      "index": 272,
+      "rel_index": 15,
+      "token_id": 158661,
+      "token": " Curse",
+      "target_logprob": -0.037814509123563766,
+      "target_nll": 0.037814509123563766,
+      "top1_token_id": 158661,
+      "top1_token": " Curse",
+      "top1_logprob": -0.037814509123563766,
+      "topk_mass": 0.9862223332936211
+    },
+    {
+      "index": 273,
+      "rel_index": 16,
+      "token_id": 691,
+      "token": " was",
+      "target_logprob": -0.15930017828941345,
+      "target_nll": 0.15930017828941345,
+      "top1_token_id": 691,
+      "top1_token": " was",
+      "top1_logprob": -0.15930017828941345,
+      "topk_mass": 0.9758057506115945
+    },
+    {
+      "index": 274,
+      "rel_index": 17,
+      "token_id": 6984,
+      "token": " performed",
+      "target_logprob": -6.139528274536133,
+      "target_nll": 6.139528274536133,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.1395280361175537,
+      "topk_mass": 0.978295503651051
+    },
+    {
+      "index": 275,
+      "rel_index": 18,
+      "token_id": 657,
+      "token": " at",
+      "target_logprob": -0.2814813256263733,
+      "target_nll": 0.2814813256263733,
+      "top1_token_id": 657,
+      "top1_token": " at",
+      "top1_logprob": -0.2814813256263733,
+      "topk_mass": 0.9959527023109417
+    },
+    {
+      "index": 276,
+      "rel_index": 19,
+      "token_id": 24196,
+      "token": " Bush",
+      "target_logprob": -18.62969970703125,
+      "target_nll": 18.62969970703125,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.0047002071514725685,
+      "topk_mass": 0.9989582486455102
+    },
+    {
+      "index": 277,
+      "rel_index": 20,
+      "token_id": 25239,
+      "token": " Theatre",
+      "target_logprob": -0.4126894176006317,
+      "target_nll": 0.4126894176006317,
+      "top1_token_id": 25239,
+      "top1_token": " Theatre",
+      "top1_logprob": -0.4126894176006317,
+      "topk_mass": 0.879893609880381
+    },
+    {
+      "index": 278,
+      "rel_index": 21,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.1464662253856659,
+      "target_nll": 0.1464662253856659,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.1464662253856659,
+      "topk_mass": 0.9865246673464269
+    },
+    {
+      "index": 279,
+      "rel_index": 22,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -4.725570201873779,
+      "target_nll": 4.725570201873779,
+      "top1_token_id": 5860,
+      "top1_token": " London",
+      "top1_logprob": -0.10057026892900467,
+      "topk_mass": 0.9979897534420835
+    },
+    {
+      "index": 280,
+      "rel_index": 23,
+      "token_id": 5860,
+      "token": " London",
+      "target_logprob": -5.191683769226074,
+      "target_nll": 5.191683769226074,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.066683828830719,
+      "topk_mass": 0.9771541583260392
+    },
+    {
+      "index": 281,
+      "rel_index": 24,
+      "token_id": 66137,
+      "token": " Borough",
+      "target_logprob": -9.009039878845215,
+      "target_nll": 9.009039878845215,
+      "top1_token_id": 532,
+      "top1_token": " and",
+      "top1_logprob": -0.3840397298336029,
+      "topk_mass": 0.9083613419073325
+    },
+    {
+      "index": 282,
+      "rel_index": 25,
+      "token_id": 529,
+      "token": " of",
+      "target_logprob": -0.032878272235393524,
+      "target_nll": 0.032878272235393524,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.032878272235393524,
+      "topk_mass": 0.9906741276877691
+    },
+    {
+      "index": 283,
+      "rel_index": 26,
+      "token_id": 140953,
+      "token": " Hammers",
+      "target_logprob": -5.980578422546387,
+      "target_nll": 5.980578422546387,
+      "top1_token_id": 5860,
+      "top1_token": " London",
+      "top1_logprob": -1.2305783033370972,
+      "topk_mass": 0.788737922475578
+    },
+    {
+      "index": 284,
+      "rel_index": 27,
+      "token_id": 49811,
+      "token": "mith",
+      "target_logprob": -0.008455547504127026,
+      "target_nll": 0.008455547504127026,
+      "top1_token_id": 49811,
+      "top1_token": "mith",
+      "top1_logprob": -0.008455547504127026,
+      "topk_mass": 0.9989298193354827
+    },
+    {
+      "index": 285,
+      "rel_index": 28,
+      "token_id": 532,
+      "token": " and",
+      "target_logprob": -0.555580735206604,
+      "target_nll": 0.555580735206604,
+      "top1_token_id": 532,
+      "top1_token": " and",
+      "top1_logprob": -0.555580735206604,
+      "topk_mass": 0.9510869163459991
+    },
+    {
+      "index": 286,
+      "rel_index": 29,
+      "token_id": 138802,
+      "token": " Fulham",
+      "target_logprob": -1.3178739547729492,
+      "target_nll": 1.3178739547729492,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -1.1928739547729492,
+      "topk_mass": 0.8889461447709726
+    },
+    {
+      "index": 287,
+      "rel_index": 30,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.800360918045044,
+      "target_nll": 0.800360918045044,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.800360918045044,
+      "topk_mass": 0.9671612772416057
+    },
+    {
+      "index": 288,
+      "rel_index": 31,
+      "token_id": 151936,
+      "token": " Boul",
+      "target_logprob": -19.161291122436523,
+      "target_nll": 19.161291122436523,
+      "top1_token_id": 1293,
+      "top1_token": " He",
+      "top1_logprob": -0.41129133105278015,
+      "topk_mass": 0.9871103497245395
+    },
+    {
+      "index": 289,
+      "rel_index": 32,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.00011884459672728553,
+      "target_nll": 0.00011884459672728553,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.00011884459672728553,
+      "topk_mass": 0.9999581451885123
+    },
+    {
+      "index": 290,
+      "rel_index": 33,
+      "token_id": 63844,
+      "token": " starred",
+      "target_logprob": -1.220049500465393,
+      "target_nll": 1.220049500465393,
+      "top1_token_id": 63844,
+      "top1_token": " starred",
+      "top1_logprob": -1.220049500465393,
+      "topk_mass": 0.8582577244696876
+    },
+    {
+      "index": 291,
+      "rel_index": 34,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.2736116051673889,
+      "target_nll": 0.2736116051673889,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.2736116051673889,
+      "topk_mass": 0.9952347037557405
+    },
+    {
+      "index": 292,
+      "rel_index": 35,
+      "token_id": 1156,
+      "token": " two",
+      "target_logprob": -12.459427833557129,
+      "target_nll": 12.459427833557129,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.08442743122577667,
+      "topk_mass": 0.9931915681758972
+    },
+    {
+      "index": 293,
+      "rel_index": 36,
+      "token_id": 11847,
+      "token": " films",
+      "target_logprob": -8.675318717956543,
+      "target_nll": 8.675318717956543,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.4253186583518982,
+      "topk_mass": 0.8551890298482706
+    },
+    {
+      "index": 294,
+      "rel_index": 37,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.5946440696716309,
+      "target_nll": 0.5946440696716309,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.5946440696716309,
+      "topk_mass": 0.8409524396213283
+    },
+    {
+      "index": 295,
+      "rel_index": 38,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.8554315567016602,
+      "target_nll": 0.8554315567016602,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.6054315567016602,
+      "topk_mass": 0.9918895562447178
+    },
+    {
+      "index": 296,
+      "rel_index": 39,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.023542052134871483,
+      "target_nll": 0.023542052134871483,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.023542052134871483,
+      "topk_mass": 0.999985192485793
+    },
+    {
+      "index": 297,
+      "rel_index": 40,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.00027044929447583854,
+      "target_nll": 0.00027044929447583854,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.00027044929447583854,
+      "topk_mass": 0.999851046303808
+    },
+    {
+      "index": 298,
+      "rel_index": 41,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.00624822499230504,
+      "target_nll": 0.00624822499230504,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.00624822499230504,
+      "topk_mass": 0.9999337269502189
+    },
+    {
+      "index": 299,
+      "rel_index": 42,
+      "token_id": 236828,
+      "token": "8",
+      "target_logprob": -2.1928770542144775,
+      "target_nll": 2.1928770542144775,
+      "top1_token_id": 236812,
+      "top1_token": "4",
+      "top1_logprob": -0.4428771436214447,
+      "topk_mass": 0.9751382954220126
+    },
+    {
+      "index": 300,
+      "rel_index": 43,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -1.6810064315795898,
+      "target_nll": 1.6810064315795898,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.9310064315795898,
+      "topk_mass": 0.870543666098654
+    },
+    {
+      "index": 301,
+      "rel_index": 44,
+      "token_id": 202225,
+      "token": " Daylight",
+      "target_logprob": -26.570972442626953,
+      "target_nll": 26.570972442626953,
+      "top1_token_id": 837,
+      "top1_token": " which",
+      "top1_logprob": -0.6256603002548218,
+      "topk_mass": 0.8622444844542921
+    },
+    {
+      "index": 302,
+      "rel_index": 45,
+      "token_id": 8142,
+      "token": " Rob",
+      "target_logprob": -25.05116844177246,
+      "target_nll": 25.05116844177246,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.6292942762374878,
+      "topk_mass": 0.9696891485233086
+    },
+    {
+      "index": 303,
+      "rel_index": 46,
+      "token_id": 33172,
+      "token": "bery",
+      "target_logprob": -0.016605030745267868,
+      "target_nll": 0.016605030745267868,
+      "top1_token_id": 33172,
+      "top1_token": "bery",
+      "top1_logprob": -0.016605030745267868,
+      "topk_mass": 0.9988792386960931
+    },
+    {
+      "index": 304,
+      "rel_index": 47,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -6.155198097229004,
+      "target_nll": 6.155198097229004,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.7801981568336487,
+      "topk_mass": 0.8794740622184891
+    },
+    {
+      "index": 305,
+      "rel_index": 48,
+      "token_id": 74432,
+      "token": " filmmaker",
+      "target_logprob": -6.748398780822754,
+      "target_nll": 6.748398780822754,
+      "top1_token_id": 20420,
+      "top1_token": " Simon",
+      "top1_logprob": -0.623399019241333,
+      "topk_mass": 0.8279199195141628
+    },
+    {
+      "index": 306,
+      "rel_index": 49,
+      "token_id": 9079,
+      "token": " Paris",
+      "target_logprob": -14.899314880371094,
+      "target_nll": 14.899314880371094,
+      "top1_token_id": 3415,
+      "top1_token": " John",
+      "top1_logprob": -1.6493149995803833,
+      "topk_mass": 0.44900587441505496
+    },
+    {
+      "index": 307,
+      "rel_index": 50,
+      "token_id": 1834,
+      "token": " Le",
+      "target_logprob": -11.069154739379883,
+      "target_nll": 11.069154739379883,
+      "top1_token_id": 532,
+      "top1_token": " and",
+      "top1_logprob": -0.6941551566123962,
+      "topk_mass": 0.6384213475999013
+    },
+    {
+      "index": 308,
+      "rel_index": 51,
+      "token_id": 59596,
+      "token": "onti",
+      "target_logprob": -9.028921127319336,
+      "target_nll": 9.028921127319336,
+      "top1_token_id": 109515,
+      "top1_token": " Monde",
+      "top1_logprob": -1.7164206504821777,
+      "topk_mass": 0.37305564171595024
+    },
+    {
+      "index": 309,
+      "rel_index": 52,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -1.2263212203979492,
+      "target_nll": 1.2263212203979492,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.9763211607933044,
+      "topk_mass": 0.9245649836914909
+    },
+    {
+      "index": 310,
+      "rel_index": 53,
+      "token_id": 532,
+      "token": " and",
+      "target_logprob": -0.8758196830749512,
+      "target_nll": 0.8758196830749512,
+      "top1_token_id": 532,
+      "top1_token": " and",
+      "top1_logprob": -0.8758196830749512,
+      "topk_mass": 0.8361647506675557
+    },
+    {
+      "index": 311,
+      "rel_index": 54,
+      "token_id": 179434,
+      "token": " Donkey",
+      "target_logprob": -12.380393981933594,
+      "target_nll": 12.380393981933594,
+      "top1_token_id": 2088,
+      "top1_token": " How",
+      "top1_logprob": -0.3803938329219818,
+      "topk_mass": 0.9280903621901846
+    },
+    {
+      "index": 312,
+      "rel_index": 55,
+      "token_id": 80659,
+      "token": " Punch",
+      "target_logprob": -15.151573181152344,
+      "target_nll": 15.151573181152344,
+      "top1_token_id": 8142,
+      "top1_token": " Rob",
+      "top1_logprob": -0.9640734791755676,
+      "topk_mass": 0.8238756586644261
+    },
+    {
+      "index": 313,
+      "rel_index": 56,
+      "token_id": 12078,
+      "token": " directed",
+      "target_logprob": -8.048025131225586,
+      "target_nll": 8.048025131225586,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.04802529886364937,
+      "topk_mass": 0.9826813345089047
+    },
+    {
+      "index": 314,
+      "rel_index": 57,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.009188862517476082,
+      "target_nll": 0.009188862517476082,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.009188862517476082,
+      "topk_mass": 0.997522072234137
+    },
+    {
+      "index": 315,
+      "rel_index": 58,
+      "token_id": 11733,
+      "token": " Ol",
+      "target_logprob": -16.370752334594727,
+      "target_nll": 16.370752334594727,
+      "top1_token_id": 9079,
+      "top1_token": " Paris",
+      "top1_logprob": -0.5895021557807922,
+      "topk_mass": 0.6319496484044608
+    },
+    {
+      "index": 316,
+      "rel_index": 59,
+      "token_id": 586,
+      "token": "ly",
+      "target_logprob": -5.585143566131592,
+      "target_nll": 5.585143566131592,
+      "top1_token_id": 14930,
+      "top1_token": "ivi",
+      "top1_logprob": -0.2726435363292694,
+      "topk_mass": 0.8637262240152616
+    },
+    {
+      "index": 317,
+      "rel_index": 60,
+      "token_id": 95066,
+      "token": " Blackburn",
+      "target_logprob": -17.68450927734375,
+      "target_nll": 17.68450927734375,
+      "top1_token_id": 4472,
+      "top1_token": " Pe",
+      "top1_logprob": -0.8720088005065918,
+      "topk_mass": 0.7939122619741148
+    },
+    {
+      "index": 318,
+      "rel_index": 61,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.19713112711906433,
+      "target_nll": 0.19713112711906433,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.19713112711906433,
+      "topk_mass": 0.9844877367373818
+    },
+    {
+      "index": 319,
+      "rel_index": 62,
+      "token_id": 799,
+      "token": " In",
+      "target_logprob": -1.8569549322128296,
+      "target_nll": 1.8569549322128296,
+      "top1_token_id": 1293,
+      "top1_token": " He",
+      "top1_logprob": -0.356954962015152,
+      "topk_mass": 0.9626639023606527
+    },
+    {
+      "index": 320,
+      "rel_index": 63,
+      "token_id": 3353,
+      "token": " May",
+      "target_logprob": -16.191810607910156,
+      "target_nll": 16.191810607910156,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.004311551805585623,
+      "topk_mass": 0.9988057548104563
+    },
+    {
+      "index": 321,
+      "rel_index": 64,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.06266866624355316,
+      "target_nll": 0.06266866624355316,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.06266866624355316,
+      "topk_mass": 0.994857936765752
+    },
+    {
+      "index": 322,
+      "rel_index": 65,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.002589208772405982,
+      "target_nll": 0.002589208772405982,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.002589208772405982,
+      "topk_mass": 0.9999877933625483
+    },
+    {
+      "index": 323,
+      "rel_index": 66,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0005296258023008704,
+      "target_nll": 0.0005296258023008704,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0005296258023008704,
+      "topk_mass": 0.9999284990790577
+    },
+    {
+      "index": 324,
+      "rel_index": 67,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0019919094629585743,
+      "target_nll": 0.0019919094629585743,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0019919094629585743,
+      "topk_mass": 0.9999304268263223
+    },
+    {
+      "index": 325,
+      "rel_index": 68,
+      "token_id": 236828,
+      "token": "8",
+      "target_logprob": -0.029789181426167488,
+      "target_nll": 0.029789181426167488,
+      "top1_token_id": 236828,
+      "top1_token": "8",
+      "top1_logprob": -0.029789181426167488,
+      "topk_mass": 0.9971185498006693
+    },
+    {
+      "index": 326,
+      "rel_index": 69,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -0.5586926341056824,
+      "target_nll": 0.5586926341056824,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.5586926341056824,
+      "topk_mass": 0.9949666703324699
+    },
+    {
+      "index": 327,
+      "rel_index": 70,
+      "token_id": 151936,
+      "token": " Boul",
+      "target_logprob": -0.3385920524597168,
+      "target_nll": 0.3385920524597168,
+      "top1_token_id": 151936,
+      "top1_token": " Boul",
+      "top1_logprob": -0.3385920524597168,
+      "topk_mass": 0.9855367573505465
+    },
+    {
+      "index": 328,
+      "rel_index": 71,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.00020001317898277193,
+      "target_nll": 0.00020001317898277193,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.00020001317898277193,
+      "topk_mass": 0.9999389432714039
+    },
+    {
+      "index": 329,
+      "rel_index": 72,
+      "token_id": 1603,
+      "token": " made",
+      "target_logprob": -7.207150936126709,
+      "target_nll": 7.207150936126709,
+      "top1_token_id": 63844,
+      "top1_token": " starred",
+      "top1_logprob": -0.33215075731277466,
+      "topk_mass": 0.9413191419856227
+    },
+    {
+      "index": 330,
+      "rel_index": 73,
+      "token_id": 496,
+      "token": " a",
+      "target_logprob": -1.0585100650787354,
+      "target_nll": 1.0585100650787354,
+      "top1_token_id": 914,
+      "top1_token": " his",
+      "top1_logprob": -0.5585100054740906,
+      "topk_mass": 0.971635041499015
+    },
+    {
+      "index": 331,
+      "rel_index": 74,
+      "token_id": 15083,
+      "token": " guest",
+      "target_logprob": -3.6075997352600098,
+      "target_nll": 3.6075997352600098,
+      "top1_token_id": 3853,
+      "top1_token": " role",
+      "top1_logprob": -1.3575998544692993,
+      "topk_mass": 0.6447209656912949
+    },
+    {
+      "index": 332,
+      "rel_index": 75,
+      "token_id": 10086,
+      "token": " appearance",
+      "target_logprob": -0.3531179130077362,
+      "target_nll": 0.3531179130077362,
+      "top1_token_id": 10086,
+      "top1_token": " appearance",
+      "top1_logprob": -0.3531179130077362,
+      "topk_mass": 0.9390608035716094
+    },
+    {
+      "index": 333,
+      "rel_index": 76,
+      "token_id": 580,
+      "token": " on",
+      "target_logprob": -2.7191355228424072,
+      "target_nll": 2.7191355228424072,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.09413562715053558,
+      "topk_mass": 0.9936049626223119
+    },
+    {
+      "index": 334,
+      "rel_index": 77,
+      "token_id": 496,
+      "token": " a",
+      "target_logprob": -0.3366122841835022,
+      "target_nll": 0.3366122841835022,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.3366122841835022,
+      "topk_mass": 0.9929879024320598
+    },
+    {
+      "index": 335,
+      "rel_index": 78,
+      "token_id": 1156,
+      "token": " two",
+      "target_logprob": -15.086771965026855,
+      "target_nll": 15.086771965026855,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.024272069334983826,
+      "topk_mass": 0.9899818994395778
+    },
+    {
+      "index": 336,
+      "rel_index": 79,
+      "token_id": 1392,
+      "token": " @",
+      "target_logprob": -11.084643363952637,
+      "target_nll": 11.084643363952637,
+      "top1_token_id": 236772,
+      "top1_token": "-",
+      "top1_logprob": -0.20964321494102478,
+      "topk_mass": 0.9632922565671181
+    },
+    {
+      "index": 337,
+      "rel_index": 80,
+      "token_id": 236772,
+      "token": "-",
+      "target_logprob": -10.039719581604004,
+      "target_nll": 10.039719581604004,
+      "top1_token_id": 11635,
+      "top1_token": " episode",
+      "top1_logprob": -0.6647197008132935,
+      "topk_mass": 0.8085264830032288
+    },
+    {
+      "index": 338,
+      "rel_index": 81,
+      "token_id": 236940,
+      "token": "@",
+      "target_logprob": -1.1547119617462158,
+      "target_nll": 1.1547119617462158,
+      "top1_token_id": 236940,
+      "top1_token": "@",
+      "top1_logprob": -1.1547119617462158,
+      "topk_mass": 0.8493272966694105
+    },
+    {
+      "index": 339,
+      "rel_index": 82,
+      "token_id": 912,
+      "token": " part",
+      "target_logprob": -1.7237179279327393,
+      "target_nll": 1.7237179279327393,
+      "top1_token_id": 11635,
+      "top1_token": " episode",
+      "top1_logprob": -1.0987179279327393,
+      "topk_mass": 0.8296329200340297
+    },
+    {
+      "index": 340,
+      "rel_index": 83,
+      "token_id": 11635,
+      "token": " episode",
+      "target_logprob": -1.7195360660552979,
+      "target_nll": 1.7195360660552979,
+      "top1_token_id": 3605,
+      "top1_token": " series",
+      "top1_logprob": -0.5945360064506531,
+      "topk_mass": 0.8962740370041277
+    },
+    {
+      "index": 341,
+      "rel_index": 84,
+      "token_id": 15812,
+      "token": " arc",
+      "target_logprob": -13.38764762878418,
+      "target_nll": 13.38764762878418,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.012647891417145729,
+      "topk_mass": 0.9953190978865909
+    },
+    {
+      "index": 342,
+      "rel_index": 85,
+      "token_id": 529,
+      "token": " of",
+      "target_logprob": -0.25208941102027893,
+      "target_nll": 0.25208941102027893,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.25208941102027893,
+      "topk_mass": 0.9728110323306892
+    },
+    {
+      "index": 343,
+      "rel_index": 86,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.7970727682113647,
+      "target_nll": 0.7970727682113647,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.6720727682113647,
+      "topk_mass": 0.9836507492655024
+    },
+    {
+      "index": 344,
+      "rel_index": 87,
+      "token_id": 13617,
+      "token": " television",
+      "target_logprob": -0.5487233996391296,
+      "target_nll": 0.5487233996391296,
+      "top1_token_id": 13617,
+      "top1_token": " television",
+      "top1_logprob": -0.5487233996391296,
+      "topk_mass": 0.96366295233132
+    },
+    {
+      "index": 345,
+      "rel_index": 88,
+      "token_id": 3605,
+      "token": " series",
+      "target_logprob": -0.009953743778169155,
+      "target_nll": 0.009953743778169155,
+      "top1_token_id": 3605,
+      "top1_token": " series",
+      "top1_logprob": -0.009953743778169155,
+      "topk_mass": 0.995940282275923
+    },
+    {
+      "index": 346,
+      "rel_index": 89,
+      "token_id": 649,
+      "token": " W",
+      "target_logprob": -16.159793853759766,
+      "target_nll": 16.159793853759766,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.15979360044002533,
+      "topk_mass": 0.9808359280816733
+    },
+    {
+      "index": 347,
+      "rel_index": 90,
+      "token_id": 1557,
+      "token": "aking",
+      "target_logprob": -3.902311325073242,
+      "target_nll": 3.902311325073242,
+      "top1_token_id": 616,
+      "top1_token": "ers",
+      "top1_logprob": -1.5898114442825317,
+      "topk_mass": 0.5228094894762935
+    },
+    {
+      "index": 348,
+      "rel_index": 91,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -3.53193998336792,
+      "target_nll": 3.53193998336792,
+      "top1_token_id": 5827,
+      "top1_token": " Up",
+      "top1_logprob": -0.6569398641586304,
+      "topk_mass": 0.9005643218369399
+    },
+    {
+      "index": 349,
+      "rel_index": 92,
+      "token_id": 21918,
+      "token": " Dead",
+      "target_logprob": -7.570852279663086,
+      "target_nll": 7.570852279663086,
+      "top1_token_id": 8099,
+      "top1_token": " Long",
+      "top1_logprob": -1.5708523988723755,
+      "topk_mass": 0.5736401638165051
+    },
+    {
+      "index": 350,
+      "rel_index": 93,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -1.000349521636963,
+      "target_nll": 1.000349521636963,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -1.000349521636963,
+      "topk_mass": 0.863856953581801
+    },
+    {
+      "index": 351,
+      "rel_index": 94,
+      "token_id": 6641,
+      "token": " followed",
+      "target_logprob": -4.387750625610352,
+      "target_nll": 4.387750625610352,
+      "top1_token_id": 837,
+      "top1_token": " which",
+      "top1_logprob": -0.637750506401062,
+      "topk_mass": 0.7603916068293219
+    },
+    {
+      "index": 352,
+      "rel_index": 95,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.0010314626852050424,
+      "target_nll": 0.0010314626852050424,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.0010314626852050424,
+      "topk_mass": 0.9995181100685608
+    },
+    {
+      "index": 353,
+      "rel_index": 96,
+      "token_id": 614,
+      "token": " an",
+      "target_logprob": -5.637446403503418,
+      "target_nll": 5.637446403503418,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.01244623214006424,
+      "topk_mass": 0.9958558437904502
+    },
+    {
+      "index": 354,
+      "rel_index": 97,
+      "token_id": 10086,
+      "token": " appearance",
+      "target_logprob": -2.4627933502197266,
+      "target_nll": 2.4627933502197266,
+      "top1_token_id": 7234,
+      "top1_token": " entry",
+      "top1_logprob": -1.462793231010437,
+      "topk_mass": 0.7116716265451071
+    },
+    {
+      "index": 355,
+      "rel_index": 98,
+      "token_id": 580,
+      "token": " on",
+      "target_logprob": -0.48462140560150146,
+      "target_nll": 0.48462140560150146,
+      "top1_token_id": 580,
+      "top1_token": " on",
+      "top1_logprob": -0.48462140560150146,
+      "topk_mass": 0.9977750224914118
+    },
+    {
+      "index": 356,
+      "rel_index": 99,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -1.0232617855072021,
+      "target_nll": 1.0232617855072021,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.5232618451118469,
+      "topk_mass": 0.9945553989153632
+    },
+    {
+      "index": 357,
+      "rel_index": 100,
+      "token_id": 13617,
+      "token": " television",
+      "target_logprob": -0.6763678193092346,
+      "target_nll": 0.6763678193092346,
+      "top1_token_id": 13617,
+      "top1_token": " television",
+      "top1_logprob": -0.6763678193092346,
+      "topk_mass": 0.9325266544107784
+    },
+    {
+      "index": 358,
+      "rel_index": 101,
+      "token_id": 3605,
+      "token": " series",
+      "target_logprob": -0.014944619499146938,
+      "target_nll": 0.014944619499146938,
+      "top1_token_id": 3605,
+      "top1_token": " series",
+      "top1_logprob": -0.014944619499146938,
+      "topk_mass": 0.9942331210471708
+    },
+    {
+      "index": 359,
+      "rel_index": 102,
+      "token_id": 169355,
+      "token": " Survivors",
+      "target_logprob": -12.288917541503906,
+      "target_nll": 12.288917541503906,
+      "top1_token_id": 649,
+      "top1_token": " W",
+      "top1_logprob": -0.038917332887649536,
+      "topk_mass": 0.9821750311594954
+    },
+    {
+      "index": 360,
+      "rel_index": 103,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -3.6043357849121094,
+      "target_nll": 3.6043357849121094,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.4793356955051422,
+      "topk_mass": 0.985972092745283
+    },
+    {
+      "index": 361,
+      "rel_index": 104,
+      "token_id": 6243,
+      "token": " November",
+      "target_logprob": -13.524682998657227,
+      "target_nll": 13.524682998657227,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.024682819843292236,
+      "topk_mass": 0.996431575352516
+    },
+    {
+      "index": 362,
+      "rel_index": 105,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.012820558622479439,
+      "target_nll": 0.012820558622479439,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.012820558622479439,
+      "topk_mass": 0.999351868963142
+    },
+    {
+      "index": 363,
+      "rel_index": 106,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.004163170233368874,
+      "target_nll": 0.004163170233368874,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.004163170233368874,
+      "topk_mass": 0.9999853346928507
+    },
+    {
+      "index": 364,
+      "rel_index": 107,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.00036090059438720345,
+      "target_nll": 0.00036090059438720345,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.00036090059438720345,
+      "topk_mass": 0.9998069624230543
+    },
+    {
+      "index": 365,
+      "rel_index": 108,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0015612567076459527,
+      "target_nll": 0.0015612567076459527,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0015612567076459527,
+      "topk_mass": 0.9999691027926169
+    },
+    {
+      "index": 366,
+      "rel_index": 109,
+      "token_id": 236828,
+      "token": "8",
+      "target_logprob": -0.022925568744540215,
+      "target_nll": 0.022925568744540215,
+      "top1_token_id": 236828,
+      "top1_token": "8",
+      "top1_logprob": -0.022925568744540215,
+      "topk_mass": 0.996665139360501
+    },
+    {
+      "index": 367,
+      "rel_index": 110,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.007689755409955978,
+      "target_nll": 0.007689755409955978,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.007689755409955978,
+      "topk_mass": 0.9990032768545875
+    },
+    {
+      "index": 368,
+      "rel_index": 111,
+      "token_id": 1293,
+      "token": " He",
+      "target_logprob": -2.5749711990356445,
+      "target_nll": 2.5749711990356445,
+      "top1_token_id": 799,
+      "top1_token": " In",
+      "top1_logprob": -0.19997121393680573,
+      "topk_mass": 0.9909365928820034
+    },
+    {
+      "index": 369,
+      "rel_index": 112,
+      "token_id": 1053,
+      "token": " had",
+      "target_logprob": -2.597198486328125,
+      "target_nll": 2.597198486328125,
+      "top1_token_id": 691,
+      "top1_token": " was",
+      "top1_logprob": -0.472198486328125,
+      "topk_mass": 0.954720172085828
+    },
+    {
+      "index": 370,
+      "rel_index": 113,
+      "token_id": 496,
+      "token": " a",
+      "target_logprob": -0.03349672257900238,
+      "target_nll": 0.03349672257900238,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.03349672257900238,
+      "topk_mass": 0.9815922597060757
+    },
+    {
+      "index": 371,
+      "rel_index": 114,
+      "token_id": 53552,
+      "token": " recurring",
+      "target_logprob": -9.905513763427734,
+      "target_nll": 9.905513763427734,
+      "top1_token_id": 15083,
+      "top1_token": " guest",
+      "top1_logprob": -0.030513843521475792,
+      "topk_mass": 0.9855890571638852
+    },
+    {
+      "index": 372,
+      "rel_index": 115,
+      "token_id": 3853,
+      "token": " role",
+      "target_logprob": -0.929151177406311,
+      "target_nll": 0.929151177406311,
+      "top1_token_id": 3853,
+      "top1_token": " role",
+      "top1_logprob": -0.929151177406311,
+      "topk_mass": 0.7135504030779162
+    },
+    {
+      "index": 373,
+      "rel_index": 116,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.45448967814445496,
+      "target_nll": 0.45448967814445496,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.45448967814445496,
+      "topk_mass": 0.9847508209065519
+    },
+    {
+      "index": 374,
+      "rel_index": 117,
+      "token_id": 3595,
+      "token": " ten",
+      "target_logprob": -14.746596336364746,
+      "target_nll": 14.746596336364746,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.12159617245197296,
+      "topk_mass": 0.9826346989896482
+    },
+    {
+      "index": 375,
+      "rel_index": 118,
+      "token_id": 24111,
+      "token": " episodes",
+      "target_logprob": -1.9710941314697266,
+      "target_nll": 1.9710941314697266,
+      "top1_token_id": 1392,
+      "top1_token": " @",
+      "top1_logprob": -0.3460940718650818,
+      "topk_mass": 0.9503914657559113
+    },
+    {
+      "index": 376,
+      "rel_index": 119,
+      "token_id": 529,
+      "token": " of",
+      "target_logprob": -0.06646979600191116,
+      "target_nll": 0.06646979600191116,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.06646979600191116,
+      "topk_mass": 0.9804374428991909
+    },
+    {
+      "index": 377,
+      "rel_index": 120,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.07230484485626221,
+      "target_nll": 0.07230484485626221,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.07230484485626221,
+      "topk_mass": 0.990063469155353
+    },
+    {
+      "index": 378,
+      "rel_index": 121,
+      "token_id": 13617,
+      "token": " television",
+      "target_logprob": -0.09666220098733902,
+      "target_nll": 0.09666220098733902,
+      "top1_token_id": 13617,
+      "top1_token": " television",
+      "top1_logprob": -0.09666220098733902,
+      "topk_mass": 0.9699040643754182
+    },
+    {
+      "index": 379,
+      "rel_index": 122,
+      "token_id": 3605,
+      "token": " series",
+      "target_logprob": -0.005902716424316168,
+      "target_nll": 0.005902716424316168,
+      "top1_token_id": 3605,
+      "top1_token": " series",
+      "top1_logprob": -0.005902716424316168,
+      "topk_mass": 0.99735054720523
+    },
+    {
+      "index": 380,
+      "rel_index": 123,
+      "token_id": 148157,
+      "token": " Casualty",
+      "target_logprob": -22.27886199951172,
+      "target_nll": 22.27886199951172,
+      "top1_token_id": 649,
+      "top1_token": " W",
+      "top1_logprob": -0.09136222302913666,
+      "topk_mass": 0.9793508325656965
+    },
+    {
+      "index": 381,
+      "rel_index": 124,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.1843605786561966,
+      "target_nll": 0.1843605786561966,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.1843605786561966,
+      "topk_mass": 0.981795668842012
+    },
+    {
+      "index": 382,
+      "rel_index": 125,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.037133023142814636,
+      "target_nll": 0.037133023142814636,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.037133023142814636,
+      "topk_mass": 0.995294253075489
+    },
+    {
+      "index": 383,
+      "rel_index": 126,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.005344151984900236,
+      "target_nll": 0.005344151984900236,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.005344151984900236,
+      "topk_mass": 0.9999832235304433
+    },
+    {
+      "index": 384,
+      "rel_index": 127,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -1.5139465176616795e-05,
+      "target_nll": 1.5139465176616795e-05,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -1.5139465176616795e-05,
+      "topk_mass": 0.9999934783277196
+    },
+    {
+      "index": 385,
+      "rel_index": 128,
+      "token_id": 236770,
+      "token": "1",
+      "target_logprob": -5.379659652709961,
+      "target_nll": 5.379659652709961,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.004659509286284447,
+      "topk_mass": 0.999979007179863
+    },
+    {
+      "index": 386,
+      "rel_index": 129,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.008376110345125198,
+      "target_nll": 0.008376110345125198,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.008376110345125198,
+      "topk_mass": 0.9998911676660521
+    },
+    {
+      "index": 387,
+      "rel_index": 130,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -6.763770580291748,
+      "target_nll": 6.763770580291748,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.013770812191069126,
+      "topk_mass": 0.9979604047873916
+    },
+    {
+      "index": 388,
+      "rel_index": 131,
+      "token_id": 618,
+      "token": " as",
+      "target_logprob": -4.093949317932129,
+      "target_nll": 4.093949317932129,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -1.8439490795135498,
+      "topk_mass": 0.5758658752870539
+    },
+    {
+      "index": 389,
+      "rel_index": 132,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.14355315268039703,
+      "target_nll": 0.14355315268039703,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.14355315268039703,
+      "topk_mass": 0.9483016682456111
+    },
+    {
+      "index": 390,
+      "rel_index": 133,
+      "token_id": 751,
+      "token": " K",
+      "target_logprob": -14.557943344116211,
+      "target_nll": 14.557943344116211,
+      "top1_token_id": 35359,
+      "top1_token": " Craig",
+      "top1_logprob": -0.4329436123371124,
+      "topk_mass": 0.9972745807344731
+    },
+    {
+      "index": 391,
+      "rel_index": 134,
+      "token_id": 16577,
+      "token": "ieron",
+      "target_logprob": -21.33329963684082,
+      "target_nll": 21.33329963684082,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.11454951763153076,
+      "topk_mass": 0.9943415839598235
+    },
+    {
+      "index": 392,
+      "rel_index": 135,
+      "token_id": 69303,
+      "token": " Fletcher",
+      "target_logprob": -17.900497436523438,
+      "target_nll": 17.900497436523438,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.08799756318330765,
+      "topk_mass": 0.981355774379204
+    },
+    {
+      "index": 393,
+      "rel_index": 136,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.8329983353614807,
+      "target_nll": 0.8329983353614807,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.8329983353614807,
+      "topk_mass": 0.9079862635651127
+    },
+    {
+      "index": 394,
+      "rel_index": 137,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -1.2058076858520508,
+      "target_nll": 1.2058076858520508,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.4558076858520508,
+      "topk_mass": 0.9775571479480193
+    },
+    {
+      "index": 395,
+      "rel_index": 138,
+      "token_id": 151936,
+      "token": " Boul",
+      "target_logprob": -8.984102249145508,
+      "target_nll": 8.984102249145508,
+      "top1_token_id": 799,
+      "top1_token": " In",
+      "top1_logprob": -0.7341022491455078,
+      "topk_mass": 0.9786175832304536
+    },
+    {
+      "index": 396,
+      "rel_index": 139,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.019552938640117645,
+      "target_nll": 0.019552938640117645,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.019552938640117645,
+      "topk_mass": 0.9987395865579826
+    },
+    {
+      "index": 397,
+      "rel_index": 140,
+      "token_id": 63844,
+      "token": " starred",
+      "target_logprob": -1.5918399095535278,
+      "target_nll": 1.5918399095535278,
+      "top1_token_id": 1603,
+      "top1_token": " made",
+      "top1_logprob": -0.9668399095535278,
+      "topk_mass": 0.8532050761658692
+    },
+    {
+      "index": 398,
+      "rel_index": 141,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.10275876522064209,
+      "target_nll": 0.10275876522064209,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.10275876522064209,
+      "topk_mass": 0.9971438469754943
+    },
+    {
+      "index": 399,
+      "rel_index": 142,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -1.0604933500289917,
+      "target_nll": 1.0604933500289917,
+      "top1_token_id": 1156,
+      "top1_token": " two",
+      "top1_logprob": -0.5604933500289917,
+      "topk_mass": 0.9829975106969537
+    },
+    {
+      "index": 400,
+      "rel_index": 143,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.8241322636604309,
+      "target_nll": 0.8241322636604309,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.8241322636604309,
+      "topk_mass": 0.8518932786442321
+    },
+    {
+      "index": 401,
+      "rel_index": 144,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.0038228780031204224,
+      "target_nll": 0.0038228780031204224,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.0038228780031204224,
+      "topk_mass": 0.9999040494234396
+    },
+    {
+      "index": 402,
+      "rel_index": 145,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -9.381330892210826e-05,
+      "target_nll": 9.381330892210826e-05,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -9.381330892210826e-05,
+      "topk_mass": 0.9999548848606834
+    },
+    {
+      "index": 403,
+      "rel_index": 146,
+      "token_id": 236770,
+      "token": "1",
+      "target_logprob": -2.812046527862549,
+      "target_nll": 2.812046527862549,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.062046490609645844,
+      "topk_mass": 0.9999712662260319
+    },
+    {
+      "index": 404,
+      "rel_index": 147,
+      "token_id": 236770,
+      "token": "1",
+      "target_logprob": -1.0548310279846191,
+      "target_nll": 1.0548310279846191,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.42983096837997437,
+      "topk_mass": 0.9999138438663813
+    },
+    {
+      "index": 405,
+      "rel_index": 148,
+      "token_id": 4103,
+      "token": " film",
+      "target_logprob": -3.8918087482452393,
+      "target_nll": 3.8918087482452393,
+      "top1_token_id": 26470,
+      "top1_token": " theatre",
+      "top1_logprob": -0.14180877804756165,
+      "topk_mass": 0.9277350454548141
+    },
+    {
+      "index": 406,
+      "rel_index": 149,
+      "token_id": 24006,
+      "token": " Merc",
+      "target_logprob": -13.636720657348633,
+      "target_nll": 13.636720657348633,
+      "top1_token_id": 50144,
+      "top1_token": " Mercury",
+      "top1_logprob": -1.2617206573486328,
+      "topk_mass": 0.7061537452490423
+    },
+    {
+      "index": 407,
+      "rel_index": 150,
+      "token_id": 140356,
+      "token": "enaries",
+      "target_logprob": -4.968128681182861,
+      "target_nll": 4.968128681182861,
+      "top1_token_id": 51281,
+      "top1_token": "enary",
+      "top1_logprob": -0.718128502368927,
+      "topk_mass": 0.7797917933671419
+    },
+    {
+      "index": 408,
+      "rel_index": 151,
+      "token_id": 12078,
+      "token": " directed",
+      "target_logprob": -5.550787448883057,
+      "target_nll": 5.550787448883057,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -1.1757875680923462,
+      "topk_mass": 0.8604465019960311
+    },
+    {
+      "index": 409,
+      "rel_index": 152,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.005814305506646633,
+      "target_nll": 0.005814305506646633,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.005814305506646633,
+      "topk_mass": 0.9994049934663496
+    },
+    {
+      "index": 410,
+      "rel_index": 153,
+      "token_id": 9079,
+      "token": " Paris",
+      "target_logprob": -5.039649963378906,
+      "target_nll": 5.039649963378906,
+      "top1_token_id": 5947,
+      "top1_token": " Ben",
+      "top1_logprob": -2.1646502017974854,
+      "topk_mass": 0.39060908472461225
+    },
+    {
+      "index": 411,
+      "rel_index": 154,
+      "token_id": 1834,
+      "token": " Le",
+      "target_logprob": -0.071751669049263,
+      "target_nll": 0.071751669049263,
+      "top1_token_id": 1834,
+      "top1_token": " Le",
+      "top1_logprob": -0.071751669049263,
+      "topk_mass": 0.9828420823350152
+    },
+    {
+      "index": 412,
+      "rel_index": 155,
+      "token_id": 59596,
+      "token": "onti",
+      "target_logprob": -0.011588283814489841,
+      "target_nll": 0.011588283814489841,
+      "top1_token_id": 59596,
+      "top1_token": "onti",
+      "top1_logprob": -0.011588283814489841,
+      "topk_mass": 0.9997594937258123
+    },
+    {
+      "index": 413,
+      "rel_index": 156,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -1.4279203414916992,
+      "target_nll": 1.4279203414916992,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.42792031168937683,
+      "topk_mass": 0.9681231990817565
+    },
+    {
+      "index": 414,
+      "rel_index": 157,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -2.393019676208496,
+      "target_nll": 2.393019676208496,
+      "top1_token_id": 1293,
+      "top1_token": " He",
+      "top1_logprob": -0.8930195569992065,
+      "topk_mass": 0.9535581257814183
+    },
+    {
+      "index": 415,
+      "rel_index": 158,
+      "token_id": 108,
+      "token": "\n\n",
+      "target_logprob": -0.00043442347669042647,
+      "target_nll": 0.00043442347669042647,
+      "top1_token_id": 108,
+      "top1_token": "\n\n",
+      "top1_logprob": -0.00043442347669042647,
+      "topk_mass": 0.9999354305822447
+    },
+    {
+      "index": 416,
+      "rel_index": 159,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -14.392696380615234,
+      "target_nll": 14.392696380615234,
+      "top1_token_id": 799,
+      "top1_token": " In",
+      "top1_logprob": -0.08019667863845825,
+      "topk_mass": 0.9797114330082003
+    },
+    {
+      "index": 417,
+      "rel_index": 160,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -3.767505645751953,
+      "target_nll": 3.767505645751953,
+      "top1_token_id": 6977,
+      "top1_token": "================",
+      "top1_logprob": -0.6425055861473083,
+      "topk_mass": 0.7555540891757407
+    },
+    {
+      "index": 418,
+      "rel_index": 161,
+      "token_id": 44987,
+      "token": " Career",
+      "target_logprob": -18.11382293701172,
+      "target_nll": 18.11382293701172,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.00444816192612052,
+      "topk_mass": 0.9974562268896828
+    },
+    {
+      "index": 419,
+      "rel_index": 162,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -1.9420270919799805,
+      "target_nll": 1.9420270919799805,
+      "top1_token_id": 108,
+      "top1_token": "\n\n",
+      "top1_logprob": -0.6920270323753357,
+      "topk_mass": 0.8850406060178359
+    },
+    {
+      "index": 420,
+      "rel_index": 163,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -1.9611725807189941,
+      "target_nll": 1.9611725807189941,
+      "top1_token_id": 799,
+      "top1_token": " In",
+      "top1_logprob": -1.4611725807189941,
+      "topk_mass": 0.637576304357551
+    },
+    {
+      "index": 421,
+      "rel_index": 164,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -3.8986053466796875,
+      "target_nll": 3.8986053466796875,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -1.023605465888977,
+      "topk_mass": 0.6999747651480837
+    },
+    {
+      "index": 422,
+      "rel_index": 165,
+      "token_id": 108,
+      "token": "\n\n",
+      "target_logprob": -1.165024757385254,
+      "target_nll": 1.165024757385254,
+      "top1_token_id": 107,
+      "top1_token": "\n",
+      "top1_logprob": -0.5400247573852539,
+      "topk_mass": 0.9893706822409032
+    },
+    {
+      "index": 423,
+      "rel_index": 166,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -0.589566707611084,
+      "target_nll": 0.589566707611084,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.589566707611084,
+      "topk_mass": 0.9131786244662613
+    },
+    {
+      "index": 424,
+      "rel_index": 167,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -0.051147229969501495,
+      "target_nll": 0.051147229969501495,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.051147229969501495,
+      "topk_mass": 0.9707771652104933
+    },
+    {
+      "index": 425,
+      "rel_index": 168,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -1.4852290153503418,
+      "target_nll": 1.4852290153503418,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -1.4852290153503418,
+      "topk_mass": 0.7243794275227249
+    },
+    {
+      "index": 426,
+      "rel_index": 169,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -8.15738582611084,
+      "target_nll": 8.15738582611084,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.03238559141755104,
+      "topk_mass": 0.9777867010547225
+    },
+    {
+      "index": 427,
+      "rel_index": 170,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -1.7431330680847168,
+      "target_nll": 1.7431330680847168,
+      "top1_token_id": 107,
+      "top1_token": "\n",
+      "top1_logprob": -0.6806330680847168,
+      "topk_mass": 0.9476596753279197
+    },
+    {
+      "index": 428,
+      "rel_index": 171,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.00039748396375216544,
+      "target_nll": 0.00039748396375216544,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.00039748396375216544,
+      "topk_mass": 0.9997878088820572
+    },
+    {
+      "index": 429,
+      "rel_index": 172,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.016335679218173027,
+      "target_nll": 0.016335679218173027,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.016335679218173027,
+      "topk_mass": 0.9979047698953247
+    },
+    {
+      "index": 430,
+      "rel_index": 173,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.5791317820549011,
+      "target_nll": 0.5791317820549011,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.5791317820549011,
+      "topk_mass": 0.9677410155864279
+    },
+    {
+      "index": 431,
+      "rel_index": 174,
+      "token_id": 1271,
+      "token": " \u2013",
+      "target_logprob": -5.819772243499756,
+      "target_nll": 5.819772243499756,
+      "top1_token_id": 753,
+      "top1_token": " -",
+      "top1_logprob": -1.3197721242904663,
+      "topk_mass": 0.9560262130850204
+    },
+    {
+      "index": 432,
+      "rel_index": 175,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.00119304982945323,
+      "target_nll": 0.00119304982945323,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.00119304982945323,
+      "topk_mass": 0.9994177312885233
+    },
+    {
+      "index": 433,
+      "rel_index": 176,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.0003912875254172832,
+      "target_nll": 0.0003912875254172832,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.0003912875254172832,
+      "topk_mass": 0.9999673663001338
+    },
+    {
+      "index": 434,
+      "rel_index": 177,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0023557788226753473,
+      "target_nll": 0.0023557788226753473,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0023557788226753473,
+      "topk_mass": 0.9998270153508011
+    },
+    {
+      "index": 435,
+      "rel_index": 178,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.31369808316230774,
+      "target_nll": 0.31369808316230774,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.31369808316230774,
+      "topk_mass": 0.9998003802078398
+    },
+    {
+      "index": 436,
+      "rel_index": 179,
+      "token_id": 236810,
+      "token": "5",
+      "target_logprob": -2.630915403366089,
+      "target_nll": 2.630915403366089,
+      "top1_token_id": 236770,
+      "top1_token": "1",
+      "top1_logprob": -0.25591543316841125,
+      "topk_mass": 0.9812444434048553
+    },
+    {
+      "index": 437,
+      "rel_index": 180,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -0.0013102050870656967,
+      "target_nll": 0.0013102050870656967,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.0013102050870656967,
+      "topk_mass": 0.9991692581471074
+    },
+    {
+      "index": 438,
+      "rel_index": 181,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -0.0011014830088242888,
+      "target_nll": 0.0011014830088242888,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.0011014830088242888,
+      "topk_mass": 0.9998261825928937
+    },
+    {
+      "index": 439,
+      "rel_index": 182,
+      "token_id": 578,
+      "token": " =",
+      "target_logprob": -0.28312331438064575,
+      "target_nll": 0.28312331438064575,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.28312331438064575,
+      "topk_mass": 0.9971581123737421
+    },
+    {
+      "index": 440,
+      "rel_index": 183,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -2.056190013885498,
+      "target_nll": 2.056190013885498,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.18119005858898163,
+      "topk_mass": 0.9979716998642105
+    },
+    {
+      "index": 441,
+      "rel_index": 184,
+      "token_id": 108,
+      "token": "\n\n",
+      "target_logprob": -0.0037783440202474594,
+      "target_nll": 0.0037783440202474594,
+      "top1_token_id": 108,
+      "top1_token": "\n\n",
+      "top1_logprob": -0.0037783440202474594,
+      "topk_mass": 0.9998375128808411
+    },
+    {
+      "index": 442,
+      "rel_index": 185,
+      "token_id": 799,
+      "token": " In",
+      "target_logprob": -1.9914321899414062,
+      "target_nll": 1.9914321899414062,
+      "top1_token_id": 578,
+      "top1_token": " =",
+      "top1_logprob": -0.24143221974372864,
+      "topk_mass": 0.9620703198437167
+    },
+    {
+      "index": 443,
+      "rel_index": 186,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.15859098732471466,
+      "target_nll": 0.15859098732471466,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.15859098732471466,
+      "topk_mass": 0.9889089083329904
+    },
+    {
+      "index": 444,
+      "rel_index": 187,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.0011431594612076879,
+      "target_nll": 0.0011431594612076879,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.0011431594612076879,
+      "topk_mass": 0.9999763823312606
+    },
+    {
+      "index": 445,
+      "rel_index": 188,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.021557534113526344,
+      "target_nll": 0.021557534113526344,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.021557534113526344,
+      "topk_mass": 0.9947513054438089
+    },
+    {
+      "index": 446,
+      "rel_index": 189,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0002033503697020933,
+      "target_nll": 0.0002033503697020933,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0002033503697020933,
+      "topk_mass": 0.9999900410274721
+    },
+    {
+      "index": 447,
+      "rel_index": 190,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.012529820203781128,
+      "target_nll": 0.012529820203781128,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.012529820203781128,
+      "topk_mass": 0.9998052428020953
+    },
+    {
+      "index": 448,
+      "rel_index": 191,
+      "token_id": 151936,
+      "token": " Boul",
+      "target_logprob": -3.129344940185547,
+      "target_nll": 3.129344940185547,
+      "top1_token_id": 236764,
+      "top1_token": ",",
+      "top1_logprob": -0.6293448805809021,
+      "topk_mass": 0.9701260162895583
+    },
+    {
+      "index": 449,
+      "rel_index": 192,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.002600504318252206,
+      "target_nll": 0.002600504318252206,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.002600504318252206,
+      "topk_mass": 0.9995284639099443
+    },
+    {
+      "index": 450,
+      "rel_index": 193,
+      "token_id": 1053,
+      "token": " had",
+      "target_logprob": -4.663608074188232,
+      "target_nll": 4.663608074188232,
+      "top1_token_id": 63844,
+      "top1_token": " starred",
+      "top1_logprob": -0.9136082530021667,
+      "topk_mass": 0.7874222562629676
+    },
+    {
+      "index": 451,
+      "rel_index": 194,
+      "token_id": 496,
+      "token": " a",
+      "target_logprob": -0.09837903082370758,
+      "target_nll": 0.09837903082370758,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.09837903082370758,
+      "topk_mass": 0.9810632922429786
+    },
+    {
+      "index": 452,
+      "rel_index": 195,
+      "token_id": 15083,
+      "token": " guest",
+      "target_logprob": -0.3339104652404785,
+      "target_nll": 0.3339104652404785,
+      "top1_token_id": 15083,
+      "top1_token": " guest",
+      "top1_logprob": -0.3339104652404785,
+      "topk_mass": 0.8940941990458864
+    },
+    {
+      "index": 453,
+      "rel_index": 196,
+      "token_id": 1392,
+      "token": " @",
+      "target_logprob": -1.576782464981079,
+      "target_nll": 1.576782464981079,
+      "top1_token_id": 10086,
+      "top1_token": " appearance",
+      "top1_logprob": -0.7017825245857239,
+      "topk_mass": 0.970054950266996
+    },
+    {
+      "index": 454,
+      "rel_index": 197,
+      "token_id": 236772,
+      "token": "-",
+      "target_logprob": -0.0019833433907479048,
+      "target_nll": 0.0019833433907479048,
+      "top1_token_id": 236772,
+      "top1_token": "-",
+      "top1_logprob": -0.0019833433907479048,
+      "topk_mass": 0.9990992845974542
+    },
+    {
+      "index": 455,
+      "rel_index": 198,
+      "token_id": 236940,
+      "token": "@",
+      "target_logprob": -0.016258038580417633,
+      "target_nll": 0.016258038580417633,
+      "top1_token_id": 236940,
+      "top1_token": "@",
+      "top1_logprob": -0.016258038580417633,
+      "topk_mass": 0.9998763314022499
+    },
+    {
+      "index": 456,
+      "rel_index": 199,
+      "token_id": 44116,
+      "token": " starring",
+      "target_logprob": -1.3091084957122803,
+      "target_nll": 1.3091084957122803,
+      "top1_token_id": 912,
+      "top1_token": " part",
+      "top1_logprob": -0.5591084361076355,
+      "topk_mass": 0.9735749397535548
+    },
+    {
+      "index": 457,
+      "rel_index": 200,
+      "token_id": 3853,
+      "token": " role",
+      "target_logprob": -0.010972874239087105,
+      "target_nll": 0.010972874239087105,
+      "top1_token_id": 3853,
+      "top1_token": " role",
+      "top1_logprob": -0.010972874239087105,
+      "topk_mass": 0.9953364948741612
+    },
+    {
+      "index": 458,
+      "rel_index": 201,
+      "token_id": 580,
+      "token": " on",
+      "target_logprob": -0.905422031879425,
+      "target_nll": 0.905422031879425,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.530422031879425,
+      "topk_mass": 0.9990280537679974
+    },
+    {
+      "index": 459,
+      "rel_index": 202,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.03958442807197571,
+      "target_nll": 0.03958442807197571,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.03958442807197571,
+      "topk_mass": 0.9990341560884647
+    },
+    {
+      "index": 460,
+      "rel_index": 203,
+      "token_id": 13617,
+      "token": " television",
+      "target_logprob": -0.015161274932324886,
+      "target_nll": 0.015161274932324886,
+      "top1_token_id": 13617,
+      "top1_token": " television",
+      "top1_logprob": -0.015161274932324886,
+      "topk_mass": 0.9911999178449764
+    },
+    {
+      "index": 461,
+      "rel_index": 204,
+      "token_id": 3605,
+      "token": " series",
+      "target_logprob": -0.002731641987338662,
+      "target_nll": 0.002731641987338662,
+      "top1_token_id": 3605,
+      "top1_token": " series",
+      "top1_logprob": -0.002731641987338662,
+      "topk_mass": 0.9984932084481344
+    },
+    {
+      "index": 462,
+      "rel_index": 205,
+      "token_id": 669,
+      "token": " The",
+      "target_logprob": -0.6835371851921082,
+      "target_nll": 0.6835371851921082,
+      "top1_token_id": 669,
+      "top1_token": " The",
+      "top1_logprob": -0.6835371851921082,
+      "topk_mass": 0.9347487718957064
+    },
+    {
+      "index": 463,
+      "rel_index": 206,
+      "token_id": 8599,
+      "token": " Bill",
+      "target_logprob": -0.005770690273493528,
+      "target_nll": 0.005770690273493528,
+      "top1_token_id": 8599,
+      "top1_token": " Bill",
+      "top1_logprob": -0.005770690273493528,
+      "topk_mass": 0.996280969936612
+    },
+    {
+      "index": 464,
+      "rel_index": 207,
+      "token_id": 2895,
+      "token": " ;",
+      "target_logprob": -5.91382360458374,
+      "target_nll": 5.91382360458374,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.03882353752851486,
+      "topk_mass": 0.984889075598443
+    },
+    {
+      "index": 465,
+      "rel_index": 208,
+      "token_id": 668,
+      "token": " he",
+      "target_logprob": -1.2205207347869873,
+      "target_nll": 1.2205207347869873,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.4705207347869873,
+      "topk_mass": 0.9610112055200141
+    },
+    {
+      "index": 466,
+      "rel_index": 209,
+      "token_id": 54056,
+      "token": " portrayed",
+      "target_logprob": -11.734088897705078,
+      "target_nll": 11.734088897705078,
+      "top1_token_id": 63844,
+      "top1_token": " starred",
+      "top1_logprob": -0.48408907651901245,
+      "topk_mass": 0.9743138587185223
+    },
+    {
+      "index": 467,
+      "rel_index": 210,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -6.639657974243164,
+      "target_nll": 6.639657974243164,
+      "top1_token_id": 496,
+      "top1_token": " a",
+      "top1_logprob": -0.2646579444408417,
+      "topk_mass": 0.867327247769948
+    },
+    {
+      "index": 468,
+      "rel_index": 211,
+      "token_id": 10844,
+      "token": " Scott",
+      "target_logprob": -12.930631637573242,
+      "target_nll": 12.930631637573242,
+      "top1_token_id": 669,
+      "top1_token": " The",
+      "top1_logprob": -1.368131399154663,
+      "topk_mass": 0.7067192302128398
+    },
+    {
+      "index": 469,
+      "rel_index": 212,
+      "token_id": 166744,
+      "token": " Parry",
+      "target_logprob": -24.93867301940918,
+      "target_nll": 24.93867301940918,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.1105489581823349,
+      "topk_mass": 0.9964414053689442
+    },
+    {
+      "index": 470,
+      "rel_index": 213,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.038859084248542786,
+      "target_nll": 0.038859084248542786,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.038859084248542786,
+      "topk_mass": 0.9954840104703863
+    },
+    {
+      "index": 471,
+      "rel_index": 214,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -2.061436891555786,
+      "target_nll": 2.061436891555786,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.6864368319511414,
+      "topk_mass": 0.9829805529909107
+    },
+    {
+      "index": 472,
+      "rel_index": 215,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.4338354170322418,
+      "target_nll": 0.4338354170322418,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.4338354170322418,
+      "topk_mass": 0.9673477292861
+    },
+    {
+      "index": 473,
+      "rel_index": 216,
+      "token_id": 11635,
+      "token": " episode",
+      "target_logprob": -1.7856767177581787,
+      "target_nll": 1.7856767177581787,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.9106767177581787,
+      "topk_mass": 0.7876635924814168
+    },
+    {
+      "index": 474,
+      "rel_index": 217,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -10.341049194335938,
+      "target_nll": 10.341049194335938,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.09104915708303452,
+      "topk_mass": 0.961130548629833
+    },
+    {
+      "index": 475,
+      "rel_index": 218,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.17688120901584625,
+      "target_nll": 0.17688120901584625,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.17688120901584625,
+      "topk_mass": 0.8794919865346109
+    },
+    {
+      "index": 476,
+      "rel_index": 219,
+      "token_id": 799,
+      "token": " In",
+      "target_logprob": -6.512685775756836,
+      "target_nll": 6.512685775756836,
+      "top1_token_id": 10844,
+      "top1_token": " Scott",
+      "top1_logprob": -0.38768598437309265,
+      "topk_mass": 0.9175298723256089
+    },
+    {
+      "index": 477,
+      "rel_index": 220,
+      "token_id": 30164,
+      "token": " Safe",
+      "target_logprob": -14.777398109436035,
+      "target_nll": 14.777398109436035,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -1.0898981094360352,
+      "topk_mass": 0.788953021945732
+    },
+    {
+      "index": 478,
+      "rel_index": 221,
+      "token_id": 44300,
+      "token": " Hands",
+      "target_logprob": -2.141153573989868,
+      "target_nll": 2.141153573989868,
+      "top1_token_id": 39980,
+      "top1_token": " Haven",
+      "top1_logprob": -1.1411535739898682,
+      "topk_mass": 0.6609481119298404
+    },
+    {
+      "index": 479,
+      "rel_index": 222,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.0996391698718071,
+      "target_nll": 0.0996391698718071,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.0996391698718071,
+      "topk_mass": 0.9907292264341822
+    },
+    {
+      "index": 480,
+      "rel_index": 223,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.18197552859783173,
+      "target_nll": 0.18197552859783173,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.18197552859783173,
+      "topk_mass": 0.9808118365039745
+    },
+    {
+      "index": 481,
+      "rel_index": 224,
+      "token_id": 151936,
+      "token": " Boul",
+      "target_logprob": -11.882253646850586,
+      "target_nll": 11.882253646850586,
+      "top1_token_id": 799,
+      "top1_token": " In",
+      "top1_logprob": -0.13225388526916504,
+      "topk_mass": 0.984865643886208
+    },
+    {
+      "index": 482,
+      "rel_index": 225,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.29943370819091797,
+      "target_nll": 0.29943370819091797,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.29943370819091797,
+      "topk_mass": 0.9402645406341691
+    },
+    {
+      "index": 483,
+      "rel_index": 226,
+      "token_id": 63844,
+      "token": " starred",
+      "target_logprob": -3.787003755569458,
+      "target_nll": 3.787003755569458,
+      "top1_token_id": 1053,
+      "top1_token": " had",
+      "top1_logprob": -0.1620037853717804,
+      "topk_mass": 0.9372290743812821
+    },
+    {
+      "index": 484,
+      "rel_index": 227,
+      "token_id": 618,
+      "token": " as",
+      "target_logprob": -5.671735763549805,
+      "target_nll": 5.671735763549805,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.04673568159341812,
+      "topk_mass": 0.996174969326979
+    },
+    {
+      "index": 485,
+      "rel_index": 228,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.2783706784248352,
+      "target_nll": 0.2783706784248352,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.2783706784248352,
+      "topk_mass": 0.9345395385231848
+    },
+    {
+      "index": 486,
+      "rel_index": 229,
+      "token_id": 10844,
+      "token": " Scott",
+      "target_logprob": -0.31823965907096863,
+      "target_nll": 0.31823965907096863,
+      "top1_token_id": 10844,
+      "top1_token": " Scott",
+      "top1_logprob": -0.31823965907096863,
+      "topk_mass": 0.9882411833759573
+    },
+    {
+      "index": 487,
+      "rel_index": 230,
+      "token_id": 623,
+      "token": " \"",
+      "target_logprob": -0.7887186408042908,
+      "target_nll": 0.7887186408042908,
+      "top1_token_id": 166744,
+      "top1_token": " Parry",
+      "top1_logprob": -0.6637186408042908,
+      "topk_mass": 0.9931316243139773
+    },
+    {
+      "index": 488,
+      "rel_index": 231,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.018542638048529625,
+      "target_nll": 0.018542638048529625,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.018542638048529625,
+      "topk_mass": 0.997249680899666
+    },
+    {
+      "index": 489,
+      "rel_index": 232,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.07299359887838364,
+      "target_nll": 0.07299359887838364,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.07299359887838364,
+      "topk_mass": 0.9950108025194109
+    },
+    {
+      "index": 490,
+      "rel_index": 233,
+      "token_id": 1441,
+      "token": " play",
+      "target_logprob": -4.395412921905518,
+      "target_nll": 4.395412921905518,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.2704131305217743,
+      "topk_mass": 0.9626143573126628
+    },
+    {
+      "index": 491,
+      "rel_index": 234,
+      "token_id": 5165,
+      "token": " Her",
+      "target_logprob": -5.10338020324707,
+      "target_nll": 5.10338020324707,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.9783803820610046,
+      "topk_mass": 0.8781727505739226
+    },
+    {
+      "index": 492,
+      "rel_index": 235,
+      "token_id": 1190,
+      "token": "ons",
+      "target_logprob": -0.0018805454019457102,
+      "target_nll": 0.0018805454019457102,
+      "top1_token_id": 1190,
+      "top1_token": "ons",
+      "top1_logprob": -0.0018805454019457102,
+      "topk_mass": 0.9988416173722648
+    },
+    {
+      "index": 493,
+      "rel_index": 236,
+      "token_id": 5267,
+      "token": " written",
+      "target_logprob": -0.8810539841651917,
+      "target_nll": 0.8810539841651917,
+      "top1_token_id": 5267,
+      "top1_token": " written",
+      "top1_logprob": -0.8810539841651917,
+      "topk_mass": 0.940046557472928
+    },
+    {
+      "index": 494,
+      "rel_index": 237,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.003949818201363087,
+      "target_nll": 0.003949818201363087,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.003949818201363087,
+      "topk_mass": 0.99934363185258
+    },
+    {
+      "index": 495,
+      "rel_index": 238,
+      "token_id": 20420,
+      "token": " Simon",
+      "target_logprob": -2.888237476348877,
+      "target_nll": 2.888237476348877,
+      "top1_token_id": 623,
+      "top1_token": " \"",
+      "top1_logprob": -0.7632373571395874,
+      "topk_mass": 0.641071800576966
+    },
+    {
+      "index": 496,
+      "rel_index": 239,
+      "token_id": 75474,
+      "token": " Stephens",
+      "target_logprob": -0.026182234287261963,
+      "target_nll": 0.026182234287261963,
+      "top1_token_id": 75474,
+      "top1_token": " Stephens",
+      "top1_logprob": -0.026182234287261963,
+      "topk_mass": 0.9889951044629948
+    },
+    {
+      "index": 497,
+      "rel_index": 240,
+      "token_id": 1031,
+      "token": " ,",
+      "target_logprob": -0.14427246153354645,
+      "target_nll": 0.14427246153354645,
+      "top1_token_id": 1031,
+      "top1_token": " ,",
+      "top1_logprob": -0.14427246153354645,
+      "topk_mass": 0.9926054928261724
+    },
+    {
+      "index": 498,
+      "rel_index": 241,
+      "token_id": 837,
+      "token": " which",
+      "target_logprob": -0.9750697612762451,
+      "target_nll": 0.9750697612762451,
+      "top1_token_id": 837,
+      "top1_token": " which",
+      "top1_logprob": -0.9750697612762451,
+      "topk_mass": 0.9384733848497568
+    },
+    {
+      "index": 499,
+      "rel_index": 242,
+      "token_id": 691,
+      "token": " was",
+      "target_logprob": -0.03128281235694885,
+      "target_nll": 0.03128281235694885,
+      "top1_token_id": 691,
+      "top1_token": " was",
+      "top1_logprob": -0.03128281235694885,
+      "topk_mass": 0.9909977318582769
+    },
+    {
+      "index": 500,
+      "rel_index": 243,
+      "token_id": 6984,
+      "token": " performed",
+      "target_logprob": -0.06392930448055267,
+      "target_nll": 0.06392930448055267,
+      "top1_token_id": 6984,
+      "top1_token": " performed",
+      "top1_logprob": -0.06392930448055267,
+      "topk_mass": 0.969249609272716
+    },
+    {
+      "index": 501,
+      "rel_index": 244,
+      "token_id": 528,
+      "token": " in",
+      "target_logprob": -0.17498423159122467,
+      "target_nll": 0.17498423159122467,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -0.17498423159122467,
+      "topk_mass": 0.9960884528868493
+    },
+    {
+      "index": 502,
+      "rel_index": 245,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.009446092881262302,
+      "target_nll": 0.009446092881262302,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.009446092881262302,
+      "topk_mass": 0.9984726706283701
+    },
+    {
+      "index": 503,
+      "rel_index": 246,
+      "token_id": 236778,
+      "token": "2",
+      "target_logprob": -0.001943843555636704,
+      "target_nll": 0.001943843555636704,
+      "top1_token_id": 236778,
+      "top1_token": "2",
+      "top1_logprob": -0.001943843555636704,
+      "topk_mass": 0.9999621263529924
+    },
+    {
+      "index": 504,
+      "rel_index": 247,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.0028427925426512957,
+      "target_nll": 0.0028427925426512957,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.0028427925426512957,
+      "topk_mass": 0.9987236238683224
+    },
+    {
+      "index": 505,
+      "rel_index": 248,
+      "token_id": 236771,
+      "token": "0",
+      "target_logprob": -0.00034517052699811757,
+      "target_nll": 0.00034517052699811757,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.00034517052699811757,
+      "topk_mass": 0.999958632227329
+    },
+    {
+      "index": 506,
+      "rel_index": 249,
+      "token_id": 236770,
+      "token": "1",
+      "target_logprob": -2.2378714084625244,
+      "target_nll": 2.2378714084625244,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.1128714382648468,
+      "topk_mass": 0.999972806204988
+    },
+    {
+      "index": 507,
+      "rel_index": 250,
+      "token_id": 657,
+      "token": " at",
+      "target_logprob": -0.06740197539329529,
+      "target_nll": 0.06740197539329529,
+      "top1_token_id": 657,
+      "top1_token": " at",
+      "top1_logprob": -0.06740197539329529,
+      "topk_mass": 0.995093820048773
+    },
+    {
+      "index": 508,
+      "rel_index": 251,
+      "token_id": 506,
+      "token": " the",
+      "target_logprob": -0.003274438437074423,
+      "target_nll": 0.003274438437074423,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.003274438437074423,
+      "topk_mass": 0.9995374148645101
+    },
+    {
+      "index": 509,
+      "rel_index": 252,
+      "token_id": 12194,
+      "token": " Royal",
+      "target_logprob": -0.003040098585188389,
+      "target_nll": 0.003040098585188389,
+      "top1_token_id": 12194,
+      "top1_token": " Royal",
+      "top1_logprob": -0.003040098585188389,
+      "topk_mass": 0.9982776417234458
+    },
+    {
+      "index": 510,
+      "rel_index": 253,
+      "token_id": 5762,
+      "token": " Court",
+      "target_logprob": -0.0038106462452560663,
+      "target_nll": 0.0038106462452560663,
+      "top1_token_id": 5762,
+      "top1_token": " Court",
+      "top1_logprob": -0.0038106462452560663,
+      "topk_mass": 0.9972899211465708
+    },
+    {
+      "index": 511,
+      "rel_index": 254,
+      "token_id": 25239,
+      "token": " Theatre",
+      "target_logprob": -0.006942909676581621,
+      "target_nll": 0.006942909676581621,
+      "top1_token_id": 25239,
+      "top1_token": " Theatre",
+      "top1_logprob": -0.006942909676581621,
+      "topk_mass": 0.9963056701313896
+    }
+  ],
+  "sampled_toplogprobs": [
+    {
+      "index": 257,
+      "rel_index": 0,
+      "token_id": 236832,
+      "token": "7",
+      "target_logprob": -2.828845500946045,
+      "target_nll": 2.828845500946045,
+      "top1_token_id": 236825,
+      "top1_token": "6",
+      "top1_logprob": -0.7038455009460449,
+      "topk_mass": 0.998114920354045,
+      "top": [
+        {
+          "token_id": 236825,
+          "token": "6",
+          "logprob": -0.7038455009460449
+        },
+        {
+          "token_id": 236810,
+          "token": "5",
+          "logprob": -0.8288455009460449
+        },
+        {
+          "token_id": 236832,
+          "token": "7",
+          "logprob": -2.828845500946045
+        },
+        {
+          "token_id": 236812,
+          "token": "4",
+          "logprob": -5.078845500946045
+        },
+        {
+          "token_id": 236771,
+          "token": "0",
+          "logprob": -6.453845500946045
+        }
+      ]
+    },
+    {
+      "index": 258,
+      "rel_index": 1,
+      "token_id": 26470,
+      "token": " theatre",
+      "target_logprob": -1.9327960014343262,
+      "target_nll": 1.9327960014343262,
+      "top1_token_id": 11635,
+      "top1_token": " episode",
+      "top1_logprob": -1.8077960014343262,
+      "topk_mass": 0.5240466049986255,
+      "top": [
+        {
+          "token_id": 11635,
+          "token": " episode",
+          "logprob": -1.8077960014343262
+        },
+        {
+          "token_id": 26470,
+          "token": " theatre",
+          "logprob": -1.9327960014343262
+        },
+        {
+          "token_id": 3853,
+          "token": " role",
+          "logprob": -2.557796001434326
+        },
+        {
+          "token_id": 1441,
+          "token": " play",
+          "logprob": -2.557796001434326
+        },
+        {
+          "token_id": 3605,
+          "token": " series",
+          "logprob": -2.807796001434326
+        }
+      ]
+    },
+    {
+      "index": 259,
+      "rel_index": 2,
+      "token_id": 3719,
+      "token": " production",
+      "target_logprob": -0.1920488029718399,
+      "target_nll": 0.1920488029718399,
+      "top1_token_id": 3719,
+      "top1_token": " production",
+      "top1_logprob": -0.1920488029718399,
+      "topk_mass": 0.9483790520747432,
+      "top": [
+        {
+          "token_id": 3719,
+          "token": " production",
+          "logprob": -0.1920488029718399
+        },
+        {
+          "token_id": 46332,
+          "token": " productions",
+          "logprob": -2.5670487880706787
+        },
+        {
+          "token_id": 1441,
+          "token": " play",
+          "logprob": -3.6920487880706787
+        },
+        {
+          "token_id": 3736,
+          "token": " performance",
+          "logprob": -4.317049026489258
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -4.817049026489258
+        }
+      ]
+    },
+    {
+      "index": 260,
+      "rel_index": 3,
+      "token_id": 529,
+      "token": " of",
+      "target_logprob": -0.09027308225631714,
+      "target_nll": 0.09027308225631714,
+      "top1_token_id": 529,
+      "top1_token": " of",
+      "top1_logprob": -0.09027308225631714,
+      "topk_mass": 0.9880274946233228,
+      "top": [
+        {
+          "token_id": 529,
+          "token": " of",
+          "logprob": -0.09027308225631714
+        },
+        {
+          "token_id": 111661,
+          "token": " Citizenship",
+          "logprob": -3.090273141860962
+        },
+        {
+          "token_id": 1031,
+          "token": " ,",
+          "logprob": -3.840273141860962
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -5.090272903442383
+        },
+        {
+          "token_id": 528,
+          "token": " in",
+          "logprob": -6.715272903442383
+        }
+      ]
+    },
+    {
+      "index": 261,
+      "rel_index": 4,
+      "token_id": 2088,
+      "token": " How",
+      "target_logprob": -18.534873962402344,
+      "target_nll": 18.534873962402344,
+      "top1_token_id": 506,
+      "top1_token": " the",
+      "top1_logprob": -0.22237326204776764,
+      "topk_mass": 0.9213209599913378,
+      "top": [
+        {
+          "token_id": 506,
+          "token": " the",
+          "logprob": -0.22237326204776764
+        },
+        {
+          "token_id": 111661,
+          "token": " Citizenship",
+          "logprob": -2.3473732471466064
+        },
+        {
+          "token_id": 44969,
+          "token": " Citizens",
+          "logprob": -4.0973734855651855
+        },
+        {
+          "token_id": 496,
+          "token": " a",
+          "logprob": -5.3473734855651855
+        },
+        {
+          "token_id": 14822,
+          "token": " Arts",
+          "logprob": -5.5973734855651855
+        }
+      ]
+    },
+    {
+      "index": 262,
+      "rel_index": 5,
+      "token_id": 531,
+      "token": " to",
+      "target_logprob": -1.8485556840896606,
+      "target_nll": 1.8485556840896606,
+      "top1_token_id": 531,
+      "top1_token": " to",
+      "top1_logprob": -1.8485556840896606,
+      "topk_mass": 0.5369588032641568,
+      "top": [
+        {
+          "token_id": 531,
+          "token": " to",
+          "logprob": -1.8485556840896606
+        },
+        {
+          "token_id": 506,
+          "token": " the",
+          "logprob": -1.9735556840896606
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -2.223555564880371
+        },
+        {
+          "token_id": 1031,
+          "token": " ,",
+          "logprob": -2.598555564880371
+        },
+        {
+          "token_id": 563,
+          "token": " is",
+          "logprob": -2.848555564880371
+        }
+      ]
+    },
+    {
+      "index": 263,
+      "rel_index": 6,
+      "token_id": 158661,
+      "token": " Curse",
+      "target_logprob": -15.247003555297852,
+      "target_nll": 15.247003555297852,
+      "top1_token_id": 577,
+      "top1_token": " be",
+      "top1_logprob": -0.6845036149024963,
+      "topk_mass": 0.809971192472854,
+      "top": [
+        {
+          "token_id": 577,
+          "token": " be",
+          "logprob": -0.6845036149024963
+        },
+        {
+          "token_id": 15097,
+          "token": " Live",
+          "logprob": -1.8095035552978516
+        },
+        {
+          "token_id": 13357,
+          "token": " Win",
+          "logprob": -2.6845035552978516
+        },
+        {
+          "token_id": 3892,
+          "token": " live",
+          "logprob": -3.1845035552978516
+        },
+        {
+          "token_id": 2199,
+          "token": " Be",
+          "logprob": -3.4345035552978516
+        }
+      ]
+    },
+    {
+      "index": 264,
+      "rel_index": 7,
+      "token_id": 12078,
+      "token": " directed",
+      "target_logprob": -10.993300437927246,
+      "target_nll": 10.993300437927246,
+      "top1_token_id": 528,
+      "top1_token": " in",
+      "top1_logprob": -1.118300437927246,
+      "topk_mass": 0.8281000584358603,
+      "top": [
+        {
+          "token_id": 528,
+          "token": " in",
+          "logprob": -1.118300437927246
+        },
+        {
+          "token_id": 506,
+          "token": " the",
+          "logprob": -1.618300437927246
+        },
+        {
+          "token_id": 496,
+          "token": " a",
+          "logprob": -1.743300437927246
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -2.368300437927246
+        },
+        {
+          "token_id": 1031,
+          "token": " ,",
+          "logprob": -3.368300437927246
+        }
+      ]
+    },
+    {
+      "index": 265,
+      "rel_index": 8,
+      "token_id": 684,
+      "token": " by",
+      "target_logprob": -0.02501562424004078,
+      "target_nll": 0.02501562424004078,
+      "top1_token_id": 684,
+      "top1_token": " by",
+      "top1_logprob": -0.02501562424004078,
+      "topk_mass": 0.9989198795028265,
+      "top": [
+        {
+          "token_id": 684,
+          "token": " by",
+          "logprob": -0.02501562424004078
+        },
+        {
+          "token_id": 657,
+          "token": " at",
+          "logprob": -3.7750155925750732
+        },
+        {
+          "token_id": 5645,
+          "token": " towards",
+          "logprob": -7.650015830993652
+        },
+        {
+          "token_id": 618,
+          "token": " as",
+          "logprob": -9.150015830993652
+        },
+        {
+          "token_id": 528,
+          "token": " in",
+          "logprob": -9.150015830993652
+        }
+      ]
+    },
+    {
+      "index": 266,
+      "rel_index": 9,
+      "token_id": 205943,
+      "token": " Josie",
+      "target_logprob": -14.452219009399414,
+      "target_nll": 14.452219009399414,
+      "top1_token_id": 4534,
+      "top1_token": " Mark",
+      "top1_logprob": -0.6709694266319275,
+      "topk_mass": 0.6520673461258414,
+      "top": [
+        {
+          "token_id": 4534,
+          "token": " Mark",
+          "logprob": -0.6709694266319275
+        },
+        {
+          "token_id": 1551,
+          "token": " many",
+          "logprob": -2.9209694862365723
+        },
+        {
+          "token_id": 5947,
+          "token": " Ben",
+          "logprob": -3.4209694862365723
+        },
+        {
+          "token_id": 22982,
+          "token": " Antonio",
+          "logprob": -3.5459694862365723
+        },
+        {
+          "token_id": 506,
+          "token": " the",
+          "logprob": -3.6709694862365723
+        }
+      ]
+    },
+    {
+      "index": 267,
+      "rel_index": 10,
+      "token_id": 630,
+      "token": " R",
+      "target_logprob": -8.685269355773926,
+      "target_nll": 8.685269355773926,
+      "top1_token_id": 2222,
+      "top1_token": " _",
+      "top1_logprob": -2.060269355773926,
+      "topk_mass": 0.3583087974521115,
+      "top": [
+        {
+          "token_id": 2222,
+          "token": " _",
+          "logprob": -2.060269355773926
+        },
+        {
+          "token_id": 49390,
+          "token": " Clarke",
+          "logprob": -2.685269355773926
+        },
+        {
+          "token_id": 16384,
+          "token": " Bell",
+          "logprob": -2.685269355773926
+        },
+        {
+          "token_id": 30641,
+          "token": " Carter",
+          "logprob": -2.935269355773926
+        },
+        {
+          "token_id": 115029,
+          "token": " Pearce",
+          "logprob": -3.185269355773926
+        }
+      ]
+    },
+    {
+      "index": 268,
+      "rel_index": 11,
+      "token_id": 155272,
+      "token": "ourke",
+      "target_logprob": -8.38956069946289,
+      "target_nll": 8.38956069946289,
+      "top1_token_id": 236761,
+      "top1_token": ".",
+      "top1_logprob": -1.0458106994628906,
+      "topk_mass": 0.7442323039269088,
+      "top": [
+        {
+          "token_id": 236761,
+          "token": ".",
+          "logprob": -1.0458106994628906
+        },
+        {
+          "token_id": 21660,
+          "token": "ahn",
+          "logprob": -1.7333106994628906
+        },
+        {
+          "token_id": 2865,
+          "token": "off",
+          "logprob": -2.1708106994628906
+        },
+        {
+          "token_id": 713,
+          "token": "ell",
+          "logprob": -2.8583106994628906
+        },
+        {
+          "token_id": 638,
+          "token": "ant",
+          "logprob": -3.1083106994628906
+        }
+      ]
+    },
+    {
+      "index": 269,
+      "rel_index": 12,
+      "token_id": 783,
+      "token": " .",
+      "target_logprob": -0.19248510897159576,
+      "target_nll": 0.19248510897159576,
+      "top1_token_id": 783,
+      "top1_token": " .",
+      "top1_logprob": -0.19248510897159576,
+      "topk_mass": 0.978626672712942,
+      "top": [
+        {
+          "token_id": 783,
+          "token": " .",
+          "logprob": -0.19248510897159576
+        },
+        {
+          "token_id": 1031,
+          "token": " ,",
+          "logprob": -2.5674850940704346
+        },
+        {
+          "token_id": 528,
+          "token": " in",
+          "logprob": -3.0674850940704346
+        },
+        {
+          "token_id": 236761,
+          "token": ".",
+          "logprob": -4.067485332489014
+        },
+        {
+          "token_id": 532,
+          "token": " and",
+          "logprob": -4.317485332489014
+        }
+      ]
+    },
+    {
+      "index": 270,
+      "rel_index": 13,
+      "token_id": 2088,
+      "token": " How",
+      "target_logprob": -8.7645845413208,
+      "target_nll": 8.7645845413208,
+      "top1_token_id": 1293,
+      "top1_token": " He",
+      "top1_logprob": -0.38958442211151123,
+      "topk_mass": 0.9865537893878228,
+      "top": [
+        {
+          "token_id": 1293,
+          "token": " He",
+          "logprob": -0.38958442211151123
+        },
+        {
+          "token_id": 799,
+          "token": " In",
+          "logprob": -1.3895844221115112
+        },
+        {
+          "token_id": 1174,
+          "token": " This",
+          "logprob": -3.389584541320801
+        },
+        {
+          "token_id": 236743,
+          "token": " ",
+          "logprob": -3.889584541320801
+        },
+        {
+          "token_id": 108,
+          "token": "\n\n",
+          "logprob": -5.139584541320801
+        }
+      ]
+    },
+    {
+      "index": 271,
+      "rel_index": 14,
+      "token_id": 531,
+      "token": " to",
+      "target_logprob": -0.047452036291360855,
+      "target_nll": 0.047452036291360855,
+      "top1_token_id": 531,
+      "top1_token": " to",
+      "top1_logprob": -0.047452036291360855,
+      "topk_mass": 0.988096759297711,
+      "top": [
+        {
+          "token_id": 531,
+          "token": " to",
+          "logprob": -0.047452036291360855
+        },
+        {
+          "token_id": 1003,
+          "token": " about",
+          "logprob": -4.297451972961426
+        },
+        {
+          "token_id": 668,
+          "token": " he",
+          "logprob": -4.422451972961426
+        },
+        {
+          "token_id": 691,
+          "token": " was",
+          "logprob": -5.422451972961426
+        },
+        {
+          "token_id": 528,
+          "token": " in",
+          "logprob": -5.422451972961426
+        }
+      ]
+    },
+    {
+      "index": 272,
+      "rel_index": 15,
+      "token_id": 158661,
+      "token": " Curse",
+      "target_logprob": -0.037814509123563766,
+      "target_nll": 0.037814509123563766,
+      "top1_token_id": 158661,
+      "top1_token": " Curse",
+      "top1_logprob": -0.037814509123563766,
+      "topk_mass": 0.9862223332936211,
+      "top": [
+        {
+          "token_id": 158661,
+          "token": " Curse",
+          "logprob": -0.037814509123563766
+        },
+        {
+          "token_id": 577,
+          "token": " be",
+          "logprob": -4.162814617156982
+        },
+        {
+          "token_id": 79104,
+          "token": " Curve",
+          "logprob": -5.537814617156982
+        },
+        {
+          "token_id": 57391,
+          "token": " curse",
+          "logprob": -5.912814617156982
+        },
+        {
+          "token_id": 18359,
+          "token": " Rule",
+          "logprob": -6.787814617156982
+        }
+      ]
+    },
+    {
+      "index": 321,
+      "rel_index": 64,
+      "token_id": 236743,
+      "token": " ",
+      "target_logprob": -0.06266866624355316,
+      "target_nll": 0.06266866624355316,
+      "top1_token_id": 236743,
+      "top1_token": " ",
+      "top1_logprob": -0.06266866624355316,
+      "topk_mass": 0.994857936765752,
+      "top": [
+        {
+          "token_id": 236743,
+          "token": " ",
+          "logprob": -0.06266866624355316
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -3.187668561935425
+        },
+        {
+          "token_id": 529,
+          "token": " of",
+          "logprob": -4.437668800354004
+        },
+        {
+          "token_id": 993,
+          "token": " there",
+          "logprob": -6.562668800354004
+        },
+        {
+          "token_id": 668,
+          "token": " he",
+          "logprob": -6.812668800354004
+        }
+      ]
+    },
+    {
+      "index": 385,
+      "rel_index": 128,
+      "token_id": 236770,
+      "token": "1",
+      "target_logprob": -5.379659652709961,
+      "target_nll": 5.379659652709961,
+      "top1_token_id": 236771,
+      "top1_token": "0",
+      "top1_logprob": -0.004659509286284447,
+      "topk_mass": 0.999979007179863,
+      "top": [
+        {
+          "token_id": 236771,
+          "token": "0",
+          "logprob": -0.004659509286284447
+        },
+        {
+          "token_id": 236770,
+          "token": "1",
+          "logprob": -5.379659652709961
+        },
+        {
+          "token_id": 236772,
+          "token": "-",
+          "logprob": -11.629659652709961
+        },
+        {
+          "token_id": 236761,
+          "token": ".",
+          "logprob": -12.004659652709961
+        },
+        {
+          "token_id": 236778,
+          "token": "2",
+          "logprob": -12.629659652709961
+        }
+      ]
+    },
+    {
+      "index": 449,
+      "rel_index": 192,
+      "token_id": 589,
+      "token": "ter",
+      "target_logprob": -0.002600504318252206,
+      "target_nll": 0.002600504318252206,
+      "top1_token_id": 589,
+      "top1_token": "ter",
+      "top1_logprob": -0.002600504318252206,
+      "topk_mass": 0.9995284639099443,
+      "top": [
+        {
+          "token_id": 589,
+          "token": "ter",
+          "logprob": -0.002600504318252206
+        },
+        {
+          "token_id": 839,
+          "token": "ther",
+          "logprob": -6.25260066986084
+        },
+        {
+          "token_id": 595,
+          "token": "ver",
+          "logprob": -9.31510066986084
+        },
+        {
+          "token_id": 533,
+          "token": "ent",
+          "logprob": -9.69010066986084
+        },
+        {
+          "token_id": 236764,
+          "token": ",",
+          "logprob": -9.94010066986084
+        }
+      ]
+    }
+  ]
+}
