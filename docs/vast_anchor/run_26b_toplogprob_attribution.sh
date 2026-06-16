@@ -22,6 +22,7 @@ PROMPT_LOGPROBS="${PROMPT_LOGPROBS:-20}"
 KEEP_TOPK="${KEEP_TOPK:-20}"
 POSITION_STRIDE="${POSITION_STRIDE:-16}"
 DENSE_PREFIX_POSITIONS="${DENSE_PREFIX_POSITIONS:-256}"
+SKIP_MM_PROFILING="${SKIP_MM_PROFILING:-1}"
 
 # Space-separated row labels.  Supported: base_k100 e0_all l0 l1 l2 l3 l4
 ROWS="${ROWS:-base_k100 e0_all l0 l1}"
@@ -48,6 +49,7 @@ prompt_logprobs=${PROMPT_LOGPROBS}
 keep_topk=${KEEP_TOPK}
 position_stride=${POSITION_STRIDE}
 dense_prefix_positions=${DENSE_PREFIX_POSITIONS}
+skip_mm_profiling=${SKIP_MM_PROFILING}
 rows=${ROWS}
 purpose=readout attribution: top-k prompt logprob distribution bf16 vs selected NVFP4 early-block rows
 EOF
@@ -131,6 +133,9 @@ run_row() {
     --enforce-eager
     --skip-warmup
   )
+  if [ "${SKIP_MM_PROFILING}" = "1" ]; then
+    args+=(--skip-mm-profiling)
+  fi
   if [ -n "${calib}" ]; then
     args+=(--calib-json "${calib}")
   fi

@@ -392,6 +392,13 @@ NVFP4 first-block rows at the same supplied-token positions. The default row set
 top-1 match rate, top-1 logprob delta, and top-k mass delta. This packet is staged only; it is not a result
 until run on a Vast sm120 box.
 
+**First live attempt note (2026-06-16):** no quality row produced. The initial run without
+`--skip-mm-profiling` stalled at Gemma multimodal encoder-cache profiling; the packet now defaults
+`SKIP_MM_PROFILING=1` and emits the vLLM proof line `Skipping memory profiling for multimodal encoder and
+encoder cache`. The retry reached that proof line, but the Vast host stopped/exited before `bf16` completed
+and could not be restarted to recover artifacts. Artifact:
+`results/vast_26b_toplogprob_attempt_20260616T0029Z/summary.md`.
+
 ## Cross-lane
 
 Codex's SGLang 26B-A4B MoE red may be the SAME nvfp4-specific bug rather than (only) pool-sizing — he
