@@ -22,7 +22,7 @@ collapse) but scored **100% on multi-needle retrieval = fp8 = bf16.** **Gate KV-
 | Gemma 4 **E4B** (small) | k=0.1,v=0.06 | YES (nvfp4≈bf16/fp8) | **DONE** |
 | Gemma 4 **multimodal — image KV** | k=0.1,v=0.06 (E4B), 12B | YES — E4B+12B image-needle, nvfp4=bf16=fp8 (24-img hard) | **DONE** |
 | Gemma 4 **multimodal — audio KV** | k=0.1,v=0.06 (E4B), 12B | YES — E4B+12B spoken-code audio-needle, nvfp4=bf16 (req'd 2 vLLM audio-stacking fixes) | **DONE** |
-| **DiffusionGemma** (26B-A4B base, diffusion) | inherits base_k100 | DG-V5 = coherent + 3.556x capacity (SGLang parity); **truth-gate (needle on diffusion) IN PROGRESS** | **OPEN** |
+| **DiffusionGemma** (26B-A4B base, diffusion) | LINEAR_V_SF + VO-split | YES (comparative): nvfp4≥bf16 on needle (0.188 vs 0.125) + generation coherence; DG-V5 3.556x capacity. Now serves on the INTEGRATED line (runtime overlay + `build_attn_metadata(causal)` fix). Crisp absolute gate N/A — DG generation is intrinsically noisy (bf16 too). | **DONE** |
 | Gemma 3 **1B / 4B / 12B / 27B** | k=0.1,v=0.06 | YES (nvfp4≈bf16/fp8) | **DONE** |
 | Gemma 3 **270M** | — | TABLED — NVFP4 KV has no use case at 270M (negligible KV footprint; can't use long ctx). bf16=fp8=1.0/nvfp4=0.875 at toy ctx1200; not worth a calib cycle. | **OUT OF SCOPE** |
 
