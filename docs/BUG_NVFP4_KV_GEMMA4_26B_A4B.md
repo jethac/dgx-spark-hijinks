@@ -505,3 +505,52 @@ This argues against a single bad token/page and supports the already-staged hidd
 the next discriminator: find whether the drift is already present in final hidden states, appears at lm_head
 readout, or starts earlier around the first sliding MoE/router stack. Artifact:
 `results/vast_26b_toplogprob_attr_20260616T021036Z/summary.md`.
+
+## Readout/layer capture result: drift is pre-readout, router is not primary (2026-06-16)
+
+Completed the readout/layer capture packet for bf16 vs NVFP4 `base_k100` on a Vast RTX PRO 6000 Blackwell
+Max-Q Workstation Edition (`sm_120`) with the same `g1c9686c61.sm120a` wheel and FlashInfer ref
+`1eaa1aefc8d0a17bae5eb37eb9effff7a504fa0a`. This run captured 4 `compute_logits()` readout calls and 25
+layer phase payloads per row for layers `0-4`.
+
+Mean NLL reproduced the top-logprob packet:
+
+| row | mean NLL | delta vs bf16 | readout calls | layer calls |
+| --- | ---: | ---: | ---: | ---: |
+| bf16 | `7.933360410` | `+0.000000000` | `4` | `25` |
+| NVFP4 `base_k100` | `7.815396153` | `-0.117964257` | `4` | `25` |
+
+Readout capture shows the drift is already in the final hidden state before lm_head:
+
+| bucket | hidden cosine | hidden rel-L2 | logits top-1 match | logits top-k Jaccard |
+| --- | ---: | ---: | ---: | ---: |
+| `all` | `0.965832461` | `0.196514476` | `0.771634615` | `0.686271818` |
+| `1024-end` | `0.951197733` | `0.288501285` | `0.591836735` | `0.511623651` |
+
+This falsifies the "clean final hidden state, readout-only amplification" branch.
+
+Layer capture caveat: raw `layer_capture_report.tsv` includes many zero/zero rows, and PyTorch reports
+`cosine_similarity(0,0)=0`, so quote `layer_capture_nonzero_summary.tsv` for cosine. Nonzero summary:
+
+| layer | phase | cosine | rel-L2 |
+| ---: | --- | ---: | ---: |
+| `0` | input | `1.000000461` | `0.000000000` |
+| `0` | attention_output | `0.998060661` | `0.060645558` |
+| `0` | moe_output | `0.992550026` | `0.085261208` |
+| `1` | attention_output | `0.994595091` | `0.101807841` |
+| `1` | moe_output | `0.993538929` | `0.107493976` |
+| `2` | attention_output | `0.992789651` | `0.115578366` |
+| `2` | moe_output | `0.992186355` | `0.115205889` |
+| `3` | attention_output | `0.991944402` | `0.121874186` |
+| `3` | moe_output | `0.990279242` | `0.126473372` |
+| `4` | attention_output | `0.993190454` | `0.111771240` |
+| `4` | moe_output | `0.986166848` | `0.141605817` |
+| `4` | output | `0.997235950` | `0.062629446` |
+| `4` | router_logits | `0.999563826` | `0.026655196` |
+
+Layer-0 input is identical, and perturbation appears first at layer-0 attention output. MoE outputs show
+larger rel-L2 perturbations through layers `0-4`, while router logits remain comparatively stable; this does
+not currently look like a primary expert-routing flip. Since layer-4 output rel-L2 is still only `~0.063` but
+final hidden rel-L2 is `~0.197`, the next discriminator should extend layer capture deeper or introduce a
+mixed-K/FP8-K control to isolate K/V perturbation from downstream accumulation. Artifact:
+`results/vast_26b_readout_capture_20260616T025500Z/summary.md`.

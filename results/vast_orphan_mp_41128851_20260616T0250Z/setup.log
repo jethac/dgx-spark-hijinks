@@ -1,0 +1,11 @@
+=== apt ===
+=== venv + torch ===
+=== download + install vLLM wheel ===
+wheel size: 459865664
+=== flashinfer source ===
+=== verify ===
+OK torch 2.12.0+cu130 13.0
+OK flashinfer /root/flashinfer/flashinfer/__init__.py
+OK vllm 0.1.dev1+g1c9686c61.sm120a
+vllm_dist 0.1.dev1+g1c9686c61.sm120a
+DONE_E3_SETUP
