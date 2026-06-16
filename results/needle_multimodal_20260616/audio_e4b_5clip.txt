@@ -1,0 +1,5 @@
+=== E4B AUDIO-NEEDLE (5 spoken clips, audio KV) ===
+bf16:          acc= 1.0
+fp8:           acc= 1.0
+nvfp4(.1/.06): acc= 1.0
+DONE_AUDCMP
