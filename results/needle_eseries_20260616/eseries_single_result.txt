@@ -1,0 +1,8 @@
+=== E-SERIES NEEDLE (single, ctx 7200, calib .1/.06) ===
+gemma-4-e4b-it bf16:          recall=1.000 all=1.000
+gemma-4-e4b-it fp8:           recall=1.000 all=1.000
+gemma-4-e4b-it nvfp4(.1/.06):  recall=1.000 all=1.000
+gemma-4-e2b-it bf16:          recall=1.000 all=1.000
+gemma-4-e2b-it fp8:           recall=1.000 all=1.000
+gemma-4-e2b-it nvfp4(.1/.06):  recall=1.000 all=1.000
+DONE_ESERIES

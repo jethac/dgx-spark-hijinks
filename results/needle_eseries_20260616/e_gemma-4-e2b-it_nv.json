@@ -1,0 +1,9 @@
+{
+  "label": "",
+  "kv_cache_dtype": "nvfp4",
+  "ctx_tokens": 7200,
+  "num_needles": 1,
+  "n_queries": 8,
+  "needle_recall": 1.0,
+  "all_needles_acc": 1.0
+}
