@@ -12,17 +12,19 @@ collapse) but scored **100% on multi-needle retrieval = fp8 = bf16.** **Gate KV-
 (`docs/vast_anchor/needle_eval.py`: single + 4-needle, ctx ~7600, vs bf16 AND fp8), not on PPL/top-1.** The
 4-needle variant is hard enough to discriminate (12B bf16 itself only ~0.62 recall), so it's a real gate.
 
-## State of the family (accurate as of 2026-06-16)
+## State of the family (accurate as of 2026-06-17)
 | model | calib | needle-hardened | status |
 | --- | --- | --- | --- |
 | Gemma 4 **12B** (dense) | k=0.1,v=0.06 | YES (nvfp4≈bf16) | **DONE** |
 | Gemma 4 **26B-A4B** (MoE) | base_k100 (layer-aware) | YES (nvfp4=fp8=100%) | **DONE** |
 | Gemma 4 **31B** (dense) | k=v=0.05 | YES (nvfp4=bf16=100%) | **DONE** |
-| Gemma 4 **E2B** (small) | — | NO | **OPEN** |
-| Gemma 4 **E4B** (small) | — | NO | **OPEN** |
-| Gemma 4 **multimodal** (image+audio KV) | partial (task #48 global-scale) | NO — text needle never touches vision/audio KV | **OPEN** |
-| **DiffusionGemma** (26B-A4B base, diffusion) | inherits base_k100? | NO (diffusion, not AR — needle N/A) | **OPEN** |
-| Gemma 3 **1B / 4B / 12B / 27B** | — (coherent on native sm_120; the WSL gibberish was an artifact) | NO | **OPEN** |
+| Gemma 4 **E2B** (small) | k=v=0.05 | YES (nvfp4≈bf16/fp8) | **DONE** |
+| Gemma 4 **E4B** (small) | k=0.1,v=0.06 | YES (nvfp4≈bf16/fp8) | **DONE** |
+| Gemma 4 **multimodal — image KV** | k=0.1,v=0.06 (E4B), 12B | YES — E4B+12B image-needle, nvfp4=bf16=fp8 (24-img hard) | **DONE** |
+| Gemma 4 **multimodal — audio KV** | k=0.1,v=0.06 (E4B), 12B | YES — E4B+12B spoken-code audio-needle, nvfp4=bf16 (req'd 2 vLLM audio-stacking fixes) | **DONE** |
+| **DiffusionGemma** (26B-A4B base, diffusion) | inherits base_k100 | DG-V5 = coherent + 3.556x capacity (SGLang parity); **truth-gate (needle on diffusion) IN PROGRESS** | **OPEN** |
+| Gemma 3 **1B / 4B / 12B / 27B** | k=0.1,v=0.06 | YES (nvfp4≈bf16/fp8) | **DONE** |
+| Gemma 3 **270M** | — | TABLED — NVFP4 KV has no use case at 270M (negligible KV footprint; can't use long ctx). bf16=fp8=1.0/nvfp4=0.875 at toy ctx1200; not worth a calib cycle. | **OUT OF SCOPE** |
 
 ## Turnkey text recipe (per OPEN text model: E2B, E4B, Gemma 3 1B/4B/12B/27B)
 1. **Per-arch NVFP4 KV calibration.** Sweep global (or layer-aware) k/v vs HF-eager bf16 truth at ctx 8185

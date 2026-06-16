@@ -341,3 +341,29 @@ Linux nvfp4 testbed lands. The NVFP4-KV contribution + serving receipt are COMPL
 ## Coordination
 vLLM = my lane. No Spark/P520 GPU touch while another agent holds the marker. Mail Codex
 the DG-V plan so SGLang DG-R5/R6 receipts are the agreed parity target.
+
+## BLOCKER FOUND (2026-06-17) — integrated wheel lacks the diffusion RUNTIME
+Ran DiffusionGemma-26B-A4B-it on the integrated line (wheel `d0f6221e6`, RTX PRO 6000 / sm120, box 41195666).
+Findings:
+- **`build_attn_metadata()` rejected `causal=`** (TypeError at engine init). The integrated line hardcoded
+  `causal=True` in `CommonAttentionMetadata`. FIXED + committed on `spark/hijinks-e3-vllm` (`b57a8975c`):
+  thread `causal: bool|torch.Tensor = True` through. Backward-compatible (every AR caller unchanged).
+  `CommonAttentionMetadata.causal` already accepts bool|tensor and slices per-request — no backend change.
+- **After that fix DG loads + generates but output is GIBBERISH** ("capital of Japan" -> `---'m not (if "HAM"...`;
+  locker code -> `11`). DG-V5 on the `e2-dgv` image produced "Tokyo." Root cause: the **diffusion runtime is
+  entirely absent from this wheel** — `grep` finds no denoise loop / `diffusion_states` / `is_encoder_phase` /
+  diffusion ModelState anywhere in `v1/worker`. Only the model *class* (`diffusion_gemma.py`) was copied in.
+  vLLM drives it autoregressively -> garbage.
+- The runtime = upstream PR `eb28452b1` ("[Model] Add DiffusionGemma Support #45163"), ~30 files in `v1/`:
+  denoise loop (`gpu/model_runner.py` +107), **mixed-causal Triton attention** (`ops/triton_unified_attention.py`
+  +70, `triton_attention_helpers.py` +57, new `triton_unified_attention_diffkv.py`, `backends/triton_attn.py` +9,
+  `test_mixed_causal_attn.py` +318), scheduler diffusion handling (`sched/scheduler.py` +22, `async_scheduler.py`),
+  `engine/core.py` +27, `input_batch.py` +23, `sample/sampler.py` +17, config/arg plumbing. **All Python + JIT-Triton
+  (no C++/CUDA rebuild)** -> transplantable onto an installed package, but a genuine multi-file reconciliation
+  against our diverged HEAD (the goal doc's predicted crux), not a one-liner.
+
+**DECISION POINT:** (A) transplant the upstream-PR diffusion runtime onto the integrated line (proper fix,
+keeps DG on the same wheel as the rest of the family; Python-only so no rebuild; real merge effort), OR
+(B) run the nvfp4-vs-bf16 DG truth-gate on the `e2-dgv` line where DG already serves coherently (delivers the
+missing DATA fastest; needs an sm120 e2-dgv build or Spark, and Spark may be Codex's), OR (C) defer the DG
+runtime merge as its own task and gate quality once it lands. The needle harness + 26B model are staged on the box.
