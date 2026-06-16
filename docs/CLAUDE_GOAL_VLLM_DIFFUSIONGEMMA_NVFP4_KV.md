@@ -367,3 +367,19 @@ keeps DG on the same wheel as the rest of the family; Python-only so no rebuild;
 (B) run the nvfp4-vs-bf16 DG truth-gate on the `e2-dgv` line where DG already serves coherently (delivers the
 missing DATA fastest; needs an sm120 e2-dgv build or Spark, and Spark may be Codex's), OR (C) defer the DG
 runtime merge as its own task and gate quality once it lands. The needle harness + 26B model are staged on the box.
+
+## RESOLVED (2026-06-17) — DiffusionGemma serves COHERENTLY on the integrated line + retrieves needle
+The diffusion runtime was already reconciled in **source HEAD** (`b57a8975c`); the installed wheel
+(`d0f6221e6`) just predated it. Since `git diff d0f6221e6..HEAD -- csrc/ CMake/ *.cu` is EMPTY (no
+compiled-extension change), the fix was to overlay source HEAD's `vllm/` **Python** tree onto the box's
+installed site-packages (preserving the 7 `.so` files) — NO C++/wheel rebuild. The full working recipe:
+1. **Overlay** source-HEAD Python (carries diffusion_gemma.py + denoise loop + mixed-causal Triton +
+   `build_attn_metadata(causal=...)` fix `b57a8975c`).
+2. **Serve**: `attention_backend="FLASHINFER"` (the DG-2 per-request causal grouping lives in the FI
+   VO-split path, NOT Triton), `VLLM_NVFP4_KV_VOSPLIT=1 VLLM_NVFP4_KV_LINEAR_V_SF=1` (FI rejects DG
+   mixed-causal without these), `enforce_eager`, `gpu_util 0.6`, `max_num_seqs 4`, no prefix-cache, no
+   chunked-prefill, `max_model_len 4096`.
+3. **Generate**: `llm.chat` (DG is instruct; needs the chat template) + `max_tokens 256` (the model's
+   block-denoise length) — DG runs its own EntropyBound sampler (t_max 0.8/t_min 0.4, 48 steps) from
+   `generation_config.json`; raw `generate`+greedy+short max_tokens degenerates to `333.../000...`.
+Smoke (bf16): "locker 42 -> 851923" retrieved correctly. Needle gate (bf16 vs nvfp4) running.

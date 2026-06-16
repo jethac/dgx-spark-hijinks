@@ -1,0 +1,3 @@
+Q: What is the capital of Japan? Answer in one w => A: 'thought\n'
+Q: What is 2+2? => A: '2+2'
+Q: The access code for locker 42 is 851923. What => A: '851923'
