@@ -17,6 +17,7 @@ CAPTURE_MAX="${CAPTURE_MAX:-8}"
 CAPTURE_QO="${CAPTURE_QO:-4096}"
 CAPTURE_SMALL_NUMEL="${CAPTURE_SMALL_NUMEL:-50000000}"
 SKIP_MM_PROFILING="${SKIP_MM_PROFILING:-1}"
+TAR_ARTIFACT="${TAR_ARTIFACT:-0}"
 ARTIFACT_CREATED=0
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -33,7 +34,9 @@ finalize_artifact() {
       date -u +"finished_utc=%Y-%m-%dT%H:%M:%SZ"
       find "${OUT}" -maxdepth 3 -type f -printf "%P\t%p\n" 2>/dev/null | sort || true
     } >"${OUT}/FINAL_STATUS.txt" || true
-    tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")" 2>/dev/null || true
+    if [ "${TAR_ARTIFACT}" = "1" ]; then
+      tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")" 2>/dev/null || true
+    fi
     ARTIFACT_CREATED=1
   fi
   return "${rc}"
@@ -58,6 +61,7 @@ capture_max=${CAPTURE_MAX}
 capture_qo=${CAPTURE_QO}
 capture_small_numel=${CAPTURE_SMALL_NUMEL}
 skip_mm_profiling=${SKIP_MM_PROFILING}
+tar_artifact=${TAR_ARTIFACT}
 purpose=active-page bf16/NVFP4 K/V mix attribution: bf16K+NVFP4V vs NVFP4K+bf16V at FlashInfer prefill taps
 EOF
 python - <<'PY' >>"${OUT}/RUN_INFO.txt"
@@ -175,6 +179,10 @@ for row_path in sorted((out / "rows").glob("*.json")):
     )
 PY
 
-tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")"
+if [ "${TAR_ARTIFACT}" = "1" ]; then
+  tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")"
+  echo "ARTIFACT ${OUT}.tgz"
+else
+  echo "ARTIFACT_DIR ${OUT}"
+fi
 ARTIFACT_CREATED=1
-echo "ARTIFACT ${OUT}.tgz"

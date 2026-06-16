@@ -78,6 +78,43 @@ def metrics(candidate: torch.Tensor, base: torch.Tensor) -> tuple[float, float, 
     return cos, rel, diff.abs().mean().item(), diff.abs().max().item()
 
 
+def scalar_gain_metrics(candidate: torch.Tensor, base: torch.Tensor) -> tuple[float, float]:
+    """Return best global gain alpha and rel-L2 of alpha * candidate vs base."""
+    a = candidate.detach().float().reshape(-1)
+    b = base.detach().float().reshape(-1)
+    denom = torch.dot(a, a).item()
+    if denom <= 1e-30:
+        return float("nan"), float("inf")
+    alpha = torch.dot(a, b).item() / denom
+    rel = (a.mul(alpha) - b).norm().item() / max(b.norm().item(), 1e-12)
+    return alpha, rel
+
+
+def per_head_gain_metrics(candidate: torch.Tensor, base: torch.Tensor) -> dict[str, float]:
+    """Fit one output gain per query head and report residual + gain stats."""
+    if candidate.shape != base.shape or candidate.dim() != 3:
+        return {
+            "rel_l2": float("nan"),
+            "alpha_mean": float("nan"),
+            "alpha_std": float("nan"),
+            "alpha_min": float("nan"),
+            "alpha_max": float("nan"),
+        }
+    a = candidate.detach().float()
+    b = base.detach().float()
+    denom = torch.sum(a * a, dim=(0, 2)).clamp_min(1e-30)
+    alpha = torch.sum(a * b, dim=(0, 2)) / denom
+    scaled = a * alpha.view(1, -1, 1)
+    rel = (scaled - b).reshape(-1).norm().item() / max(b.reshape(-1).norm().item(), 1e-12)
+    return {
+        "rel_l2": rel,
+        "alpha_mean": alpha.mean().item(),
+        "alpha_std": alpha.std(unbiased=False).item(),
+        "alpha_min": alpha.min().item(),
+        "alpha_max": alpha.max().item(),
+    }
+
+
 def first_tensor(d: dict[str, Any], names: tuple[str, ...]) -> torch.Tensor:
     for name in names:
         value = d.get(name)
@@ -180,6 +217,15 @@ def analyze_pair(bf: dict[str, Any], nv: dict[str, Any]) -> dict[str, Any]:
         out[f"{label}_rel_l2"] = rel
         out[f"{label}_mean_abs"] = mean_abs
         out[f"{label}_max_abs"] = max_abs
+        alpha, gain_rel = scalar_gain_metrics(tensor, base)
+        out[f"{label}_gain_alpha"] = alpha
+        out[f"{label}_gain_rel_l2"] = gain_rel
+        head = per_head_gain_metrics(tensor, base)
+        out[f"{label}_head_gain_rel_l2"] = head["rel_l2"]
+        out[f"{label}_head_gain_alpha_mean"] = head["alpha_mean"]
+        out[f"{label}_head_gain_alpha_std"] = head["alpha_std"]
+        out[f"{label}_head_gain_alpha_min"] = head["alpha_min"]
+        out[f"{label}_head_gain_alpha_max"] = head["alpha_max"]
     return out
 
 
@@ -195,6 +241,9 @@ def main() -> None:
     print(
         "call\tq_shape\tkv_tokens\twindow_left\tsm_scale\t"
         "nvfp4_kv_cos\tnvfp4_kv_rel_l2\t"
+        "nvfp4_kv_gain_alpha\tnvfp4_kv_gain_rel_l2\t"
+        "nvfp4_kv_head_gain_rel_l2\tnvfp4_kv_head_gain_alpha_mean\t"
+        "nvfp4_kv_head_gain_alpha_std\t"
         "bf16k_nvfp4v_cos\tbf16k_nvfp4v_rel_l2\t"
         "nvfp4k_bf16v_cos\tnvfp4k_bf16v_rel_l2\tdominant"
     )
@@ -214,6 +263,10 @@ def main() -> None:
             f"{row['call']}\t{row['q_shape']}\t{row['kv_tokens']}\t"
             f"{row['window_left']}\t{row['sm_scale']:.8f}\t"
             f"{row['nvfp4_kv_cos']:.9f}\t{row['nvfp4_kv_rel_l2']:.9f}\t"
+            f"{row['nvfp4_kv_gain_alpha']:.9f}\t{row['nvfp4_kv_gain_rel_l2']:.9f}\t"
+            f"{row['nvfp4_kv_head_gain_rel_l2']:.9f}\t"
+            f"{row['nvfp4_kv_head_gain_alpha_mean']:.9f}\t"
+            f"{row['nvfp4_kv_head_gain_alpha_std']:.9f}\t"
             f"{row['bf16k_nvfp4v_cos']:.9f}\t{row['bf16k_nvfp4v_rel_l2']:.9f}\t"
             f"{row['nvfp4k_bf16v_cos']:.9f}\t{row['nvfp4k_bf16v_rel_l2']:.9f}\t"
             f"{dominant}"
