@@ -1,0 +1,8 @@
+=== HARD MM IMAGE-NEEDLE (24 imgs, vision KV) ===
+gemma-4-e4b-it bf16:          acc= 1.0
+gemma-4-e4b-it fp8:           acc= 1.0
+gemma-4-e4b-it nvfp4:         acc= 1.0
+gemma-4-12b-it bf16:          acc= 0.833
+gemma-4-12b-it fp8:           acc= 1.0
+gemma-4-12b-it nvfp4:         acc= 0.833
+DONE_MM2
