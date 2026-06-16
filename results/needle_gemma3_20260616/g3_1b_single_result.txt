@@ -1,0 +1,6 @@
+=== GEMMA 3 1B SINGLE-NEEDLE (1B-appropriate) ===
+g3-1b bf16:          
+g3-1b fp8:           recall=1.000 all=1.000
+g3-1b nvfp4(.1/.06): recall=1.000 all=1.000
+g3-1b nvfp4(.05/.05):recall=1.000 all=1.000
+DONE_G31B
