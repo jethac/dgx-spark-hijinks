@@ -121,7 +121,11 @@ def kv_from_bf16(d: dict[str, Any]) -> tuple[torch.Tensor, torch.Tensor]:
     candidates.sort(key=lambda kv: kv[0])
     if len(candidates) >= 2:
         return candidates[0][1], candidates[1][1]
-    raise KeyError("could not locate bf16 active K/V tensors")
+    active = []
+    for key, value in sorted(d.items()):
+        if key.endswith("_active") and torch.is_tensor(value):
+            active.append(f"{key}:{tuple(value.shape)}:{value.dtype}")
+    raise KeyError("could not locate bf16 active K/V tensors; active=" + ",".join(active))
 
 
 def kv_from_nvfp4(d: dict[str, Any]) -> tuple[torch.Tensor, torch.Tensor]:

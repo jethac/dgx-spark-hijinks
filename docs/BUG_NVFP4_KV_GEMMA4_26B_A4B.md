@@ -621,3 +621,27 @@ and bf16 K/V layout detection tries tuple, packed `[2,P,T,H,D]`, packed `[P,2,T,
 pairs. Next live rerun should produce the sliding-layer K-vs-V split.
 
 Artifact: `results/vast_26b_active_kv_mix_20260616T053600Z/summary.md`.
+
+**Active-KV mix rerun verdict (2026-06-16): sliding split completed.** Re-ran the hardened packet on Vast
+instance `41143506` with the same `ctx=8185`, `prefix=4096`, bf16 vs NVFP4 `base_k100` setup, then destroyed
+the instance after pulling derived artifacts. Mean NLL reproduced again: bf16 `7.933360410`, NVFP4
+`7.815396153` (`-0.117964257`). Capacity proof lines: bf16 `183,556` tokens (`22.41x`), NVFP4 `652,652`
+tokens (`79.67x`). All eight active-KV calls now produced mixed-reference rows:
+
+| call | shape | window | all-NVFP4 rel-L2 | bf16K+NVFP4V rel-L2 | NVFP4K+bf16V rel-L2 | dominant |
+| ---: | --- | ---: | ---: | ---: | ---: | --- |
+| `0` | `(4096,16,256)` | `1023` | `0.099016505` | `0.072167768` | `0.067827347` | mixed |
+| `1` | `(4096,16,256)` | `1023` | `0.106627960` | `0.076131275` | `0.075108312` | mixed |
+| `2` | `(4096,16,256)` | `1023` | `0.143606733` | `0.091123269` | `0.111562698` | mixed |
+| `3` | `(4096,16,256)` | `1023` | `0.128243660` | `0.083340976` | `0.100394375` | mixed |
+| `4` | `(4096,16,256)` | `1023` | `0.141596498` | `0.098104365` | `0.123338749` | K |
+| `5` | `(4096,16,512)` | `-1` | `0.117013252` | `0.102539944` | `0.072383692` | V |
+| `6` | `(4096,16,512)` | `-1` | `0.113974661` | `0.098553602` | `0.070764886` | V |
+| `7` | `(4096,16,256)` | `1023` | `0.159155129` | `0.403632046` | `0.259386900` | V |
+
+Interpretation: the first sliding calls are not a clean K-only failure. Calls `0-3` are mixed, call `4` is
+K-dominant, global D512 calls `5-6` are V-dominant, and late sliding call `7` is strongly V-dominant with
+nonlinear one-sided substitution behavior. This weakens "FP8-K alone fixes the whole row" as a complete
+diagnosis, but it is still local attention-output attribution rather than a serving fix. Full 26B-A4B
+NVFP4 K+V remains RED/open. Artifact:
+`results/vast_26b_active_kv_mix_20260616T061800Z/summary.md`.
