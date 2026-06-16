@@ -18,28 +18,38 @@ from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
 
-def build_prompts(tokenizer, filler_text, depths, trials, ctx_tokens, seed=0):
+def build_prompts(tokenizer, filler_text, trials, ctx_tokens, num_needles, seed=0):
+    """Plant `num_needles` distinct codes at evenly-spread depths in an ~ctx_tokens haystack
+    and ask for all of them (multi-needle = the hard RULER variant; num_needles=1 is single)."""
     rng = random.Random(seed)
     filler_ids = tokenizer.encode(filler_text)
-    # repeat filler to reach ctx if short
-    while len(filler_ids) < ctx_tokens + 256:
+    while len(filler_ids) < ctx_tokens + 512:
         filler_ids = filler_ids + filler_ids
     items = []
-    for depth in depths:
-        for _ in range(trials):
-            locker = rng.randint(100, 999)
-            code = rng.randint(100000, 999999)
-            needle = f" The secret access code for locker {locker} is {code}. "
-            base = filler_ids[:ctx_tokens]
-            split = int(len(base) * depth)
-            pre = tokenizer.decode(base[:split])
-            post = tokenizer.decode(base[split:])
-            q = (
-                f"\n\nQuestion: What is the secret access code for locker {locker}? "
-                "Answer with only the 6-digit number.\nAnswer:"
-            )
-            items.append({"depth": depth, "locker": locker, "code": str(code),
-                          "prompt": pre + needle + post + q})
+    for _ in range(trials):
+        base = filler_ids[:ctx_tokens]
+        lockers, codes, seen = [], [], set()
+        while len(lockers) < num_needles:
+            L = rng.randint(100, 999)
+            if L in seen:
+                continue
+            seen.add(L)
+            lockers.append(L)
+            codes.append(rng.randint(100000, 999999))
+        # evenly-spread insertion positions (depth (i+1)/(N+1))
+        positions = [int(len(base) * (i + 1) / (num_needles + 1)) for i in range(num_needles)]
+        text = ""
+        prev = 0
+        for pos, L, C in zip(positions, lockers, codes):
+            text += tokenizer.decode(base[prev:pos]) + f" The access code for locker {L} is {C}. "
+            prev = pos
+        text += tokenizer.decode(base[prev:])
+        lockq = ", ".join(str(L) for L in lockers)
+        q = (
+            f"\n\nQuestion: What are the access codes for lockers {lockq}? "
+            "List each locker and its code.\nAnswer:"
+        )
+        items.append({"codes": [str(c) for c in codes], "num": num_needles, "prompt": text + q})
     return items
 
 
@@ -52,6 +62,7 @@ def main():
     p.add_argument("--ctx-tokens", type=int, default=7200)
     p.add_argument("--max-model-len", type=int, default=8192)
     p.add_argument("--trials", type=int, default=6)
+    p.add_argument("--num-needles", type=int, default=1)
     p.add_argument("--gpu-memory-utilization", type=float, default=0.85)
     p.add_argument("--output", required=True)
     p.add_argument("--label", default="")
@@ -59,8 +70,7 @@ def main():
 
     tok = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
     filler = open(args.corpus, encoding="utf-8").read()
-    depths = [0.05, 0.25, 0.5, 0.75, 0.95]
-    items = build_prompts(tok, filler, depths, args.trials, args.ctx_tokens)
+    items = build_prompts(tok, filler, args.trials, args.ctx_tokens, args.num_needles)
 
     kwargs = dict(model=args.model, kv_cache_dtype=args.kv_cache_dtype,
                   max_model_len=args.max_model_len, enforce_eager=True,
@@ -72,23 +82,22 @@ def main():
     llm = LLM(**kwargs)
 
     outs = llm.generate([it["prompt"] for it in items],
-                        SamplingParams(temperature=0.0, max_tokens=16))
-    per_depth = {}
-    n_ok = 0
+                        SamplingParams(temperature=0.0, max_tokens=24 + 14 * args.num_needles))
+    total_found = total_codes = full_hits = 0
     for it, o in zip(items, outs):
         gen = o.outputs[0].text
-        ok = it["code"] in gen
-        n_ok += ok
-        d = per_depth.setdefault(it["depth"], [0, 0])
-        d[0] += ok
-        d[1] += 1
+        found = sum(c in gen for c in it["codes"])
+        total_found += found
+        total_codes += len(it["codes"])
+        full_hits += int(found == len(it["codes"]))
     report = {
         "label": args.label,
         "kv_cache_dtype": args.kv_cache_dtype,
         "ctx_tokens": args.ctx_tokens,
-        "n": len(items),
-        "overall_accuracy": n_ok / len(items),
-        "per_depth_accuracy": {str(k): round(v[0] / v[1], 3) for k, v in sorted(per_depth.items())},
+        "num_needles": args.num_needles,
+        "n_queries": len(items),
+        "needle_recall": round(total_found / total_codes, 3),
+        "all_needles_acc": round(full_hits / len(items), 3),
     }
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2)
