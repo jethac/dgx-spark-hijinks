@@ -1,0 +1,3 @@
+label	dtype	override_dtype	layers	status
+bf16	auto			ok
+fp8_0_4	nvfp4	fp8_e4m3	0 1 2 3 4	failed_rc_0

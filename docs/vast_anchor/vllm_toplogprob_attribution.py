@@ -126,6 +126,15 @@ def main() -> int:
     parser.add_argument("--skip-warmup", action="store_true")
     parser.add_argument("--language-model-only", action="store_true")
     parser.add_argument("--skip-mm-profiling", action="store_true")
+    parser.add_argument(
+        "--kv-cache-dtype-skip-layers",
+        nargs="*",
+        default=None,
+        help=(
+            "Per-layer KV dtype skip/override entries forwarded to vLLM, "
+            "for example: 0=fp8_e4m3 1=fp8_e4m3 full_attention=fp8_e4m3"
+        ),
+    )
     args = parser.parse_args()
 
     if args.calib_json:
@@ -138,18 +147,21 @@ def main() -> int:
     if len(token_ids) < args.ctx:
         raise ValueError(f"corpus tokenized to {len(token_ids)} tokens, shorter than ctx={args.ctx}")
 
-    llm = LLM(
-        model=args.model,
-        kv_cache_dtype=args.kv_cache_dtype,
-        max_model_len=args.max_model_len,
-        gpu_memory_utilization=args.gpu_memory_utilization,
-        trust_remote_code=True,
-        enforce_eager=args.enforce_eager,
-        enable_prefix_caching=True,
-        max_num_batched_tokens=args.max_num_batched_tokens,
-        language_model_only=args.language_model_only,
-        skip_mm_profiling=args.skip_mm_profiling,
-    )
+    llm_kwargs: dict[str, Any] = {
+        "model": args.model,
+        "kv_cache_dtype": args.kv_cache_dtype,
+        "max_model_len": args.max_model_len,
+        "gpu_memory_utilization": args.gpu_memory_utilization,
+        "trust_remote_code": True,
+        "enforce_eager": args.enforce_eager,
+        "enable_prefix_caching": True,
+        "max_num_batched_tokens": args.max_num_batched_tokens,
+        "language_model_only": args.language_model_only,
+        "skip_mm_profiling": args.skip_mm_profiling,
+    }
+    if args.kv_cache_dtype_skip_layers:
+        llm_kwargs["kv_cache_dtype_skip_layers"] = args.kv_cache_dtype_skip_layers
+    llm = LLM(**llm_kwargs)
 
     warm_elapsed_s = 0.0
     if not args.skip_warmup:
@@ -204,6 +216,7 @@ def main() -> int:
         "model": args.model,
         "tokenizer": args.tokenizer,
         "kv_cache_dtype": args.kv_cache_dtype,
+        "kv_cache_dtype_skip_layers": args.kv_cache_dtype_skip_layers or [],
         "calib_json": args.calib_json,
         "ctx": args.ctx,
         "prefix_len": args.prefix_len,

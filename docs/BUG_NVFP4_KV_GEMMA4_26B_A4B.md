@@ -668,3 +668,29 @@ Implication: the residual is directional/structural, not a uniform output-amplit
 or per-head V/output gain is not a viable full-NVFP4 repair. This supports the mixed whole-layer fp8 ladder as
 the practical serving route, while full NVFP4 remains a richer research problem. Artifact:
 `results/vast_26b_active_kv_gain_20260616T064900Z/summary.md`.
+
+## Mixed whole-layer fp8 ladder blocked by vLLM padded-page materialization (2026-06-16)
+
+Tested Claude's `4fcbf4c48` mixed-dtype reshape wheel on Vast/sm120 with a smoke ladder:
+
+- `bf16`: `kv_cache_dtype=auto`
+- `fp8_0_4`: global `kv_cache_dtype=nvfp4`, layers `0 1 2 3 4 = fp8_e4m3`
+
+The `bf16` control completed at ctx 512 / prefix 256: mean NLL `3.7926521906438246`, PPL
+`44.373932476731696`, and `119,607` KV-cache tokens.
+
+The mixed row did not reach quality. vLLM accepted `kv_cache_dtype_skip_layers` and planned mixed pages, but
+engine init failed in `_reshape_kv_cache_tensors()` after page-size unification. Focused debug line:
+
+```text
+CODEX_PAD_DEBUG language_model.model.layers.5.self_attn.attn raw 5465636864 spec_page 65536 real 55296 padded 65536 num_blocks 83399 shape (250197, 2, 16, 2, 288) order (0, 1, 2, 3, 4) inv [0, 1, 2, 3, 4] dtype torch.uint8 cache_dtype nvfp4
+RuntimeError: setStorage: sizes [250197, 2, 16, 2, 288], strides [65536, 9216, 576, 288, 1], storage offset 0, and itemsize 1 requiring a storage size of 16396863488 are out of bounds for storage of size 5465636864
+```
+
+Interpretation: vLLM allocates storage for `83399` padded pages, then reshapes the same layer into `250197`
+kernel-block rows and applies the `65536`-byte padded page stride to each row. That triples the required
+storage. The whole-layer mixed route is therefore blocked by a vLLM mixed-page padded standard-attention
+materialization bug before any quality measurement. Full 26B-A4B NVFP4 remains red/open; fp8 KV remains the
+ship path; mixed whole-layer fp8 is not yet a serving row.
+
+Artifact: `results/vast_26b_mixed_layer_padding_red_20260616T064900Z/summary.md`.
