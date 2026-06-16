@@ -1,0 +1,5 @@
+=== 12B AUDIO-NEEDLE (8 clips, post-fix) ===
+bf16:          acc= 0.917
+fp8:           acc= 0.833
+nvfp4(.1/.06): acc= 0.917
+DONE_A12
