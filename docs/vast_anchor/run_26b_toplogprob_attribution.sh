@@ -26,12 +26,28 @@ SKIP_MM_PROFILING="${SKIP_MM_PROFILING:-1}"
 
 # Space-separated row labels.  Supported: base_k100 e0_all l0 l1 l2 l3 l4
 ROWS="${ROWS:-base_k100 e0_all l0 l1}"
+ARTIFACT_CREATED=0
 
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export VLLM_FLASHINFER_MM_PREFIX=1
 export VLLM_FLASHINFER_VOSPLIT=1
 export VLLM_NVFP4_KV_VOSPLIT=1
 export VLLM_NVFP4_KV_LINEAR_V_SF=1
+
+finalize_artifact() {
+  local rc=$?
+  if [ -n "${OUT:-}" ] && [ -d "${OUT:-/nonexistent}" ] && [ "${ARTIFACT_CREATED}" = "0" ]; then
+    {
+      echo "exit_code=${rc}"
+      date -u +"finished_utc=%Y-%m-%dT%H:%M:%SZ"
+      find "${OUT}/rows" -maxdepth 1 -type f -printf "%f\t%p\n" 2>/dev/null | sort || true
+    } >"${OUT}/FINAL_STATUS.txt" || true
+    tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")" 2>/dev/null || true
+    ARTIFACT_CREATED=1
+  fi
+  return "${rc}"
+}
+trap finalize_artifact EXIT
 
 cd /root
 [ -f wikitext_8k.txt ] || python corpus_fetch.py >/dev/null 2>&1
@@ -139,10 +155,21 @@ run_row() {
   if [ -n "${calib}" ]; then
     args+=(--calib-json "${calib}")
   fi
-  timeout "${ROW_TIMEOUT}" "${args[@]}" 2>&1 | tee "${OUT}/rows/${label}.log"
+  if timeout "${ROW_TIMEOUT}" "${args[@]}" 2>&1 | tee "${OUT}/rows/${label}.log"; then
+    echo -e "${label}\t${dtype}\tok" >>"${OUT}/row_status.tsv"
+    return 0
+  fi
+  local rc=$?
+  echo -e "${label}\t${dtype}\tfailed_rc_${rc}" >>"${OUT}/row_status.tsv"
+  return "${rc}"
 }
 
-run_row bf16 auto
+echo -e "label\tdtype\tstatus" >"${OUT}/row_status.tsv"
+
+if ! run_row bf16 auto; then
+  echo "bf16 row failed; stopping before NVFP4 comparisons" | tee -a "${OUT}/run.log"
+  exit 1
+fi
 
 for mode in ${ROWS}; do
   calib="${OUT}/calib/${mode}.json"
@@ -239,4 +266,5 @@ for row_path in sorted((out / "rows").glob("*.json")):
 PY
 
 tar -C "$(dirname "${OUT}")" -czf "${OUT}.tgz" "$(basename "${OUT}")"
+ARTIFACT_CREATED=1
 echo "ARTIFACT ${OUT}.tgz"
