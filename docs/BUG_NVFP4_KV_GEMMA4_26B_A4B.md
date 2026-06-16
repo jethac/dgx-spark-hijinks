@@ -411,11 +411,12 @@ only appears after the lm_head/readout projection. Added the opt-in packet:
 It wraps `Gemma4ForCausalLM.compute_logits()` through `sitecustomize`, skips one-row sample/decode calls, and
 saves sampled final hidden rows plus raw top-k logits for each prompt-logprob chunk. It can also wrap
 `Gemma4DecoderLayer.forward()` for layers `0-4` and capture the same sampled rows at layer input, attention
-output, MLP output, MoE output, and layer output. The comparators align bf16 vs selected NVFP4 rows by
-`(compute_logits call, local row)` and `(layer, layer call, local row)` and report hidden cosine/rel-L2,
-hidden norm deltas, top-1 match, top-k Jaccard, and logit max/LSE deltas. This should be the next live Vast
-run after the hardened top-logprob packet if the first distribution-level result still points at a readout
-collapse. No live result exists yet; current blocker remains Vast allocation credit.
+output, MLP output, router logits, MoE output, and layer output. The comparators align bf16 vs selected NVFP4
+rows by `(compute_logits call, local row)` and `(layer, layer call, local row)` and report hidden
+cosine/rel-L2, hidden norm deltas, router top-1/top-k stability, top-1 match, top-k Jaccard, and logit max/LSE
+deltas. This should be the next live Vast run after the hardened top-logprob packet if the first
+distribution-level result still points at a readout collapse. No live result exists yet; current blocker
+remains Vast allocation credit.
 
 ## Cross-lane
 

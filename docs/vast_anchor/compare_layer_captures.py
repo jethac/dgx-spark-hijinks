@@ -11,7 +11,14 @@ from typing import Any
 import torch
 
 
-PHASES = ("input", "attention_output", "mlp_output", "moe_output", "output")
+PHASES = (
+    "input",
+    "attention_output",
+    "mlp_output",
+    "router_logits",
+    "moe_output",
+    "output",
+)
 
 
 def load_calls(path: Path) -> dict[tuple[int, int], dict[str, Any]]:
@@ -25,6 +32,14 @@ def load_calls(path: Path) -> dict[tuple[int, int], dict[str, Any]]:
 def mean(values: list[float]) -> float:
     vals = [x for x in values if math.isfinite(x)]
     return sum(vals) / len(vals) if vals else math.nan
+
+
+def fmt(value: float) -> str:
+    return f"{value:.9f}" if math.isfinite(value) else "nan"
+
+
+def fmt_signed(value: float) -> str:
+    return f"{value:+.9f}" if math.isfinite(value) else "nan"
 
 
 def phase_rows(
@@ -48,6 +63,20 @@ def phase_rows(
         bv = b["selected"][bi].float()
         cv = c["selected"][ci].float()
         denom = torch.linalg.vector_norm(bv).item()
+        router_top1_match = math.nan
+        router_topk_jaccard = math.nan
+        router_margin_delta = math.nan
+        if phase == "router_logits":
+            topk = min(4, bv.numel(), cv.numel())
+            b_vals, b_ids = torch.topk(bv, k=topk)
+            c_vals, c_ids = torch.topk(cv, k=topk)
+            b_set = {int(x) for x in b_ids.tolist()}
+            c_set = {int(x) for x in c_ids.tolist()}
+            union = b_set | c_set
+            router_top1_match = 1.0 if int(b_ids[0]) == int(c_ids[0]) else 0.0
+            router_topk_jaccard = len(b_set & c_set) / len(union) if union else math.nan
+            if topk >= 2:
+                router_margin_delta = float((c_vals[0] - c_vals[1]) - (b_vals[0] - b_vals[1]))
         rows.append(
             {
                 "label": label,
@@ -65,6 +94,9 @@ def phase_rows(
                 "max_abs_delta": float(
                     c["row_max_abs"][local_row] - b["row_max_abs"][local_row]
                 ),
+                "router_top1_match": router_top1_match,
+                "router_topk_jaccard": router_topk_jaccard,
+                "router_margin_delta": router_margin_delta,
             }
         )
     return rows
@@ -88,7 +120,9 @@ def compare_one(label: str, base: dict[tuple[int, int], dict[str, Any]], cur: di
 def emit(rows: list[dict[str, Any]]) -> None:
     print(
         "label\tlayer\tphase\tbucket\tcount\tmean_cos\tmean_rel_l2\t"
-        "mean_rms_delta\tmean_mean_abs_delta\tmean_max_abs_delta"
+        "mean_rms_delta\tmean_mean_abs_delta\tmean_max_abs_delta\t"
+        "mean_router_top1_match\tmean_router_topk_jaccard\t"
+        "mean_router_margin_delta"
     )
     grouped: dict[tuple[str, int, str, str], list[dict[str, Any]]] = {}
     for row in rows:
@@ -100,11 +134,14 @@ def emit(rows: list[dict[str, Any]]) -> None:
     for (label, layer_idx, phase, bkt), vals in sorted(grouped.items()):
         print(
             f"{label}\t{layer_idx}\t{phase}\t{bkt}\t{len(vals)}\t"
-            f"{mean([v['cos'] for v in vals]):.9f}\t"
-            f"{mean([v['rel_l2'] for v in vals]):.9f}\t"
-            f"{mean([v['rms_delta'] for v in vals]):+.9f}\t"
-            f"{mean([v['mean_abs_delta'] for v in vals]):+.9f}\t"
-            f"{mean([v['max_abs_delta'] for v in vals]):+.9f}"
+            f"{fmt(mean([v['cos'] for v in vals]))}\t"
+            f"{fmt(mean([v['rel_l2'] for v in vals]))}\t"
+            f"{fmt_signed(mean([v['rms_delta'] for v in vals]))}\t"
+            f"{fmt_signed(mean([v['mean_abs_delta'] for v in vals]))}\t"
+            f"{fmt_signed(mean([v['max_abs_delta'] for v in vals]))}\t"
+            f"{fmt(mean([v['router_top1_match'] for v in vals]))}\t"
+            f"{fmt(mean([v['router_topk_jaccard'] for v in vals]))}\t"
+            f"{fmt_signed(mean([v['router_margin_delta'] for v in vals]))}"
         )
 
 

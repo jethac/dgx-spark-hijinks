@@ -76,7 +76,7 @@ layer_capture_layers=${LAYER_CAPTURE_LAYERS}
 layer_capture_max_calls=${LAYER_CAPTURE_MAX_CALLS}
 skip_mm_profiling=${SKIP_MM_PROFILING}
 rows=${ROWS}
-purpose=hidden/readout attribution: layer 0-4 phase drift + final hidden drift + raw logits top-k bf16 vs selected NVFP4 early-block rows
+purpose=hidden/readout attribution: layer 0-4 phase/router drift + final hidden drift + raw logits top-k bf16 vs selected NVFP4 early-block rows
 EOF
 python - <<'PY' >>"${OUT}/RUN_INFO.txt"
 import os

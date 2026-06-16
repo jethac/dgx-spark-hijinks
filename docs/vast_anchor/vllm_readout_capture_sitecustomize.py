@@ -8,7 +8,8 @@ never stores full vocab logits.
 
 Optionally also set ``VLLM_LAYER_CAPTURE_DIR`` to capture selected rows from
 Gemma4DecoderLayer layers named by ``VLLM_LAYER_CAPTURE_LAYERS``.  This is used
-for the 26B-A4B first-sliding-block attribution path.
+for the 26B-A4B first-sliding-block attribution path and includes router logits
+when the layer has an MoE router.
 """
 
 from __future__ import annotations
@@ -197,6 +198,7 @@ if _CAPTURE_DIR or _LAYER_CAPTURE_DIR:
                         for name, module_name in (
                             ("attention_output", "self_attn"),
                             ("mlp_output", "mlp"),
+                            ("router_logits", "router"),
                             ("moe_output", "moe"),
                         ):
                             module = getattr(self, module_name, None)
@@ -205,12 +207,14 @@ if _CAPTURE_DIR or _LAYER_CAPTURE_DIR:
                     except Exception as exc:
                         print(f"VLLM_LAYER_CAPTURE hook setup error: {exc}", flush=True)
 
-                    output = layer_orig(self, positions, hidden_states, *args, **kwargs)
-                    for handle in hooks:
-                        try:
-                            handle.remove()
-                        except Exception:
-                            pass
+                    try:
+                        output = layer_orig(self, positions, hidden_states, *args, **kwargs)
+                    finally:
+                        for handle in hooks:
+                            try:
+                                handle.remove()
+                            except Exception:
+                                pass
                     try:
                         out_tensor = output[0] if isinstance(output, tuple) else output
                         layer_idx = int(getattr(self, "layer_idx", -1))
