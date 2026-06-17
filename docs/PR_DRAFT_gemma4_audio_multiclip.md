@@ -1,10 +1,11 @@
 # DRAFT PR — Gemma 4 multi-clip audio stacking bugfix (NOT SUBMITTED)
 
-- **Branch:** `jethac/vllm:spark/gemma4-audio-multiclip-fix` (1 commit atop `upstream/main`)
+- **Branch:** `jethac/vllm:gemma4-multi-audio-stacking` (1 commit atop `upstream/main`)
 - **Title:** `[Bugfix][Model] Gemma 4: stack variable-length audio clips for multi-audio prompts`
-- **Author/DCO:** Jetha Chan <jethachan@gmail.com> (signed-off, no AI co-author)
-- **Status:** logic verified locally (torch helper assertions pass); CPU-only regression test added.
-  Final gate = vLLM CI on submission.
+- **Author/DCO:** Jetha Chan <jethachan@gmail.com> (signed-off); `Co-authored-by: Claude` per vLLM's
+  AI-Assisted Contributions Policy.
+- **Status:** helper logic verified locally (torch assertions pass); CPU-only regression test added.
+  **Before filing, Jetha must personally review the diff and run the test** (vLLM's no-pure-agent rule).
 
 ---
 
@@ -54,3 +55,8 @@ CPU-only, no model weights — the bug is in tensor batching, not the audio enco
 - `vllm/model_executor/models/gemma4_mm.py` — add `stack_audio_input_features()`, use it.
 - `vllm/model_executor/models/gemma4_unified.py` — import + use the helper.
 - `tests/models/multimodal/processing/test_gemma4_audio_stacking.py` — new CPU regression test.
+
+## AI assistance disclosure
+This change was developed with AI assistance (Claude). The commit carries a `Co-authored-by: Claude`
+trailer, and the human author reviewed every changed line, validated the behavior, and ran the test
+before submission — per vLLM's AI-Assisted Contributions Policy (no "pure agent" PRs).
