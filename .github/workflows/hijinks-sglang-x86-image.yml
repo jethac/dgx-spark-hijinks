@@ -343,7 +343,8 @@ jobs:
 
           RUN python3 -m pip install --no-cache-dir "transformers==${TRANSFORMERS_PIN}"
 
-          RUN EXPECTED_TORCH_VERSION="${TORCH_VERSION}" python3 - <<'PY'
+          RUN LD_LIBRARY_PATH="/usr/local/cuda/lib64/stubs:${LD_LIBRARY_PATH:-}" \
+              EXPECTED_TORCH_VERSION="${TORCH_VERSION}" python3 - <<'PY'
           import importlib.util
           import importlib.metadata as md
           import os

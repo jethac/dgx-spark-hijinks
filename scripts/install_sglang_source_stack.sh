@@ -24,6 +24,18 @@ log_sglang() {
 mkdir -p "$(dirname "${FLASHINFER_INSTALL_LOG:-/tmp/flashinfer-install.log}")"
 mkdir -p "$(dirname "${SGLANG_INSTALL_LOG:-/tmp/sglang-install.log}")"
 
+# GPU-less build containers have no libcuda.so.1 (the driver lib), so importing
+# the freshly-compiled sgl_kernel/flashinfer extensions during verification
+# fails to dlopen it. Expose the CUDA driver STUB (ships in -devel images) under
+# the .1 soname and put it on the loader path FOR THIS PROCESS ONLY -- do NOT
+# bake stubs into the image ENV, or it would shadow the real driver the
+# nvidia-container-runtime injects at runtime on the GPU box.
+CUDA_STUB_DIR="${CUDA_HOME:-/usr/local/cuda}/lib64/stubs"
+if [[ -e "${CUDA_STUB_DIR}/libcuda.so" ]]; then
+  ln -sf "${CUDA_STUB_DIR}/libcuda.so" "${CUDA_STUB_DIR}/libcuda.so.1"
+  export LD_LIBRARY_PATH="${CUDA_STUB_DIR}:${LD_LIBRARY_PATH:-}"
+fi
+
 # flashinfer nested submodules (cutlass/cccl/spdlog) are required for runtime
 # JIT. When this script runs against a real git clone we init them here; when it
 # runs inside a Docker image whose context was rsync'd WITHOUT .git, there is no
