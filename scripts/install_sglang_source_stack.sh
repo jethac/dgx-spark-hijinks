@@ -24,8 +24,24 @@ log_sglang() {
 mkdir -p "$(dirname "${FLASHINFER_INSTALL_LOG:-/tmp/flashinfer-install.log}")"
 mkdir -p "$(dirname "${SGLANG_INSTALL_LOG:-/tmp/sglang-install.log}")"
 
-git -C "${REPO_ROOT}/third_party/flashinfer" submodule update --init \
-  3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+# flashinfer nested submodules (cutlass/cccl/spdlog) are required for runtime
+# JIT. When this script runs against a real git clone we init them here; when it
+# runs inside a Docker image whose context was rsync'd WITHOUT .git, there is no
+# repo to init -- the content must already be present (pre-populated on the
+# build runner before the rsync). Guard so the content-only tree does not fatal,
+# and fail loudly if the content is genuinely missing.
+if git -C "${REPO_ROOT}/third_party/flashinfer" rev-parse --git-dir >/dev/null 2>&1; then
+  git -C "${REPO_ROOT}/third_party/flashinfer" submodule update --init \
+    3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+else
+  echo "flashinfer .git absent (content-only tree); trusting pre-populated 3rdparty submodules"
+  for d in 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog; do
+    if [[ -z "$(ls -A "${REPO_ROOT}/third_party/flashinfer/${d}" 2>/dev/null)" ]]; then
+      echo "FATAL: ${REPO_ROOT}/third_party/flashinfer/${d} is empty and no .git to init it" >&2
+      exit 3
+    fi
+  done
+fi
 
 python3 -m pip uninstall -y flashinfer-python flashinfer-cubin flashinfer-jit-cache \
   sglang-kernel || true

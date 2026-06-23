@@ -175,6 +175,16 @@ jobs:
         if: ${{ env.BASE_PROBE_ONLY != 'true' }}
         run: |
           set -euxo pipefail
+          # flashinfer's nested submodules (cutlass/cccl/spdlog) are baked as
+          # CONTENT (the in-image install runs against an rsync'd tree with no
+          # .git, so it cannot init them there). Guarantee they are populated on
+          # the runner before the rsync. Idempotent if recursive checkout did it.
+          git -C third_party/flashinfer submodule update --init \
+            3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog
+          for d in 3rdparty/cutlass 3rdparty/cccl 3rdparty/spdlog; do
+            test -n "$(ls -A "third_party/flashinfer/${d}" 2>/dev/null)" \
+              || { echo "::error::flashinfer/${d} empty after submodule init"; exit 3; }
+          done
           rm -rf /tmp/sglang-x86-image-context
           mkdir -p /tmp/sglang-x86-image-context/scripts /tmp/sglang-x86-image-context/third_party
           cp scripts/install_sglang_source_stack.sh /tmp/sglang-x86-image-context/scripts/
