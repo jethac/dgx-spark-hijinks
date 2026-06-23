@@ -53,20 +53,31 @@ rm -rf /usr/local/lib/python3.12/dist-packages/flashinfer \
        /usr/local/lib/python3.12/dist-packages/sglang_kernel-*.dist-info \
        /root/.cache/flashinfer || true
 
+# Build tooling: let the lightweight backends (scikit-build-core etc.) resolve
+# their own deps (pathspec/packaging/pyproject-metadata) -- with
+# --no-build-isolation there is no other source for them. Keep --no-deps only on
+# the heavy CUDA package so it does not drag in a conflicting cuda/torch tree.
 log_flashinfer python3 -m pip install --upgrade --no-deps \
-  "nvidia-cutlass-dsl[cu13]>=4.5.0" scikit-build-core ninja cmake wheel
-log_flashinfer python3 -m pip install --no-deps --no-build-isolation -e \
+  "nvidia-cutlass-dsl[cu13]>=4.5.0"
+log_flashinfer python3 -m pip install --upgrade \
+  scikit-build-core ninja cmake wheel setuptools-scm pathspec pyproject-metadata
+# The rsync'd tree has no .git, so setuptools-scm cannot derive flashinfer's
+# version -- pin it (scoped to this install) to match the c3dae30f nightly tag.
+log_flashinfer env SETUPTOOLS_SCM_PRETEND_VERSION=0.6.13 \
+  python3 -m pip install --no-deps --no-build-isolation -e \
   "${REPO_ROOT}/third_party/flashinfer" -v
 
 pushd "${REPO_ROOT}/third_party/sglang/sgl-kernel" >/dev/null
 log_sglang env \
+  SETUPTOOLS_SCM_PRETEND_VERSION="0.0.0.dev0" \
   CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}" \
   MAX_JOBS="${MAX_JOBS:-2}" \
   CMAKE_ARGS="${CMAKE_ARGS:--DSGL_KERNEL_COMPILE_THREADS=1 -DENABLE_BELOW_SM90=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSGL_KERNEL_BUILD_SM90=OFF -DSGL_KERNEL_BUILD_SM100=ON -DSGL_KERNEL_ENABLE_FA3=OFF -DSGL_KERNEL_ENABLE_FLASHMLA=OFF -DSGL_KERNEL_ENABLE_SPATIAL=OFF}" \
   python3 -m pip install --no-deps --no-build-isolation --force-reinstall -v .
 popd >/dev/null
 
-log_sglang python3 -m pip install --no-deps --no-build-isolation -e \
+log_sglang env SETUPTOOLS_SCM_PRETEND_VERSION="0.0.0.dev0" \
+  python3 -m pip install --no-deps --no-build-isolation -e \
   "${REPO_ROOT}/third_party/sglang/python" -v
 
 python3 - <<'PY'
