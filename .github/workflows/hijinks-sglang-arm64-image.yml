@@ -27,7 +27,7 @@ on:
         required: false
         default: "epoch3-sglang-arm64-sm121-u22-torch211"
       base_image:
-        description: "Base CUDA/toolchain image (multi-arch; amd64 manifest used)"
+        description: "Base CUDA/toolchain image (multi-arch; arm64 manifest used)"
         required: false
         default: "nvidia/cuda:13.0.2-devel-ubuntu22.04"
       transformers_pin:
@@ -37,7 +37,7 @@ on:
       target_platform:
         description: "Docker target platform for the pushed runtime image"
         required: false
-        default: "linux/amd64"
+        default: "linux/arm64"
       expected_os_version:
         description: "Required VERSION_ID from /etc/os-release"
         required: false
