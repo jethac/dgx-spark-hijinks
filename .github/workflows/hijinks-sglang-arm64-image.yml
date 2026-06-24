@@ -104,7 +104,13 @@ jobs:
       - name: Init only sglang + flashinfer submodules
         run: |
           set -euxo pipefail
-          git submodule update --init --depth 1 third_party/sglang third_party/flashinfer
+          # GitHub-hosted runners have no SSH key, but .gitmodules pins the two
+          # top-level submodules with git@github.com SSH URLs. Both repos are
+          # PUBLIC, so rewrite to anonymous HTTPS. (flashinfer's nested 3rdparty —
+          # cutlass/cccl/spdlog — already use HTTPS.) No --depth: the gitlinks
+          # point at specific non-tip commits a shallow fetch can't reach.
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init third_party/sglang third_party/flashinfer
           df -h /
 
       - name: Runner inventory
