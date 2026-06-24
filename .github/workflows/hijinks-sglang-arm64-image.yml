@@ -68,7 +68,7 @@ jobs:
     name: build SGLang Gemma4 source-stack image (arm64/aarch64)
     # x64 Ubicloud static VM (persistent self-hosted runner; has docker +
     # cuda-toolkit-13 + warm ccache). Native amd64 buildx -> no QEMU.
-    runs-on: ubicloud-standard-30-arm
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 355
     env:
       CUDA_HOME: /usr/local/cuda
@@ -90,8 +90,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Do NOT recurse: the ephemeral ubicloud-standard-30-arm runner has
-          # limited disk, and a recursive checkout pulls every heavy submodule
+          # Do NOT recurse: the ephemeral hosted arm runner has limited disk,
+          # and a recursive checkout pulls every heavy submodule
           # (vllm, llama.cpp, vllm-flash-attention -> composable_kernel/cutlass/
           # aiter, ...) the image never uses, exhausting disk during checkout.
           # The image only needs third_party/{sglang,flashinfer}; init those
