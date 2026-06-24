@@ -90,8 +90,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          # Do NOT recurse: the ephemeral ubicloud-standard-30-arm runner has
+          # limited disk, and a recursive checkout pulls every heavy submodule
+          # (vllm, llama.cpp, vllm-flash-attention -> composable_kernel/cutlass/
+          # aiter, ...) the image never uses, exhausting disk during checkout.
+          # The image only needs third_party/{sglang,flashinfer}; init those
+          # (flashinfer's nested 3rdparty is handled by "Prepare compact Docker
+          # context"). The x86 build gets away with `recursive` only because it
+          # runs on a warm persistent runner with the submodules pre-cached.
+          submodules: false
           fetch-depth: 0
+
+      - name: Init only sglang + flashinfer submodules
+        run: |
+          set -euxo pipefail
+          git submodule update --init --depth 1 third_party/sglang third_party/flashinfer
+          df -h /
 
       - name: Runner inventory
         run: |
